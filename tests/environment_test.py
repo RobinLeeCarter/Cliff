@@ -23,9 +23,15 @@ def environment_test() -> bool:
 
     state_ = environment.State(common.XY(x=4, y=2))
     action_ = environment.Action(common.XY(x=1, y=0))
-    response_ = environment_.from_state_perform_action(state_, action_)
+    observation_ = environment_.from_state_perform_action(state_, action_)
     print(state_, action_)
-    print(response_)
+    print(observation_)
+
+    state_ = environment.State(common.XY(x=6, y=1))
+    action_ = environment.Action(common.XY(x=0, y=-1))
+    observation_ = environment_.from_state_perform_action(state_, action_)
+    print(state_, action_)
+    print(observation_)
 
     return True
 

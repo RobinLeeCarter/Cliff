@@ -14,7 +14,7 @@ XY = namedtuple('XY', ['x', 'y'])
 
 class Square(enum.IntEnum):
     NORMAL = 0
-    OBSTACLE = 1
+    CLIFF = 1
     START = 2
     END = 3
     AGENT = 4

@@ -79,7 +79,7 @@ class View:
     def _build_color_lookup(self):
         self._color_lookup = {
             common.Square.NORMAL: pygame.Color('darkgrey'),
-            common.Square.OBSTACLE: pygame.Color('forestgreen'),
+            common.Square.CLIFF: pygame.Color('forestgreen'),
             common.Square.START: pygame.Color('yellow2'),
             common.Square.END: pygame.Color('goldenrod2'),
             common.Square.AGENT: pygame.Color('deepskyblue2')

@@ -13,9 +13,9 @@ class Environment:
 
         # position
         self.min_x: int = 0
-        self.max_x: int = self.grid_world.grid.max_x
+        self.max_x: int = self.grid_world.max_x
         self.min_y: int = 0
-        self.max_y: int = self.grid_world.grid.max_y
+        self.max_y: int = self.grid_world.max_y
 
         self.states_shape: tuple = (self.max_x + 1, self.max_y + 1)
         # self.action_list: List[action.Action] = [action_ for action_ in self.actions()]
@@ -40,14 +40,6 @@ class Environment:
         """set A - same for all s in this scenario"""
         for action_ in action.Actions.action_list:
             yield action_
-
-    # def get_index_from_action(self, action_: action.Action) -> tuple[int]:
-    #     tuple_index = (self.action_dict[action_], )
-    #     return tuple_index
-
-    # def get_action_from_index(self, index: int) -> action.Action:
-    #     action_ = self.action_list[index]
-    #     return action_
 
     # possible need to materialise this if it's slow since it will be at the bottom of the loop
     # noinspection PyUnusedLocal
@@ -80,27 +72,35 @@ class Environment:
         return state.State(position)
 
     def from_state_perform_action(self, state_: state.State, action_: action.Action) -> observation.Observation:
-        # if not self.is_action_compatible_with_state(state_, action_):
-        #     raise Exception(f"from_state_perform_action state {state_} incompatible with action {action_}")
+        new_state: state.State
+        # state + action move
+        actioned_position: common.XY = common.XY(
+            x=state_.position.x + action_.move.x,
+            y=state_.position.y + action_.move.y
+        )
+        # project back to grid
+        projected_position: common.XY = self._project_back_to_grid(actioned_position)
+        # defaults
 
-        wind: common.XY = self.grid_world.get_wind(state_.position)
-        combined: common.XY = common.XY(
-            x=action_.move.x + wind.x,
-            y=action_.move.y + wind.y
-        )
-        blown_position: common.XY = common.XY(
-            x=state_.position.x + combined.x,
-            y=state_.position.y + combined.y
-        )
-        projected_position: common.XY = self._project_back_to_grid(blown_position)
-        is_terminal: bool = self.grid_world.is_at_goal(projected_position)
-        new_state: state.State = state.State(projected_position, is_terminal)
-        reward: float = -1.0
+        # tests
+        square: common.Square = self.grid_world.get_square(projected_position)
+        if square == common.Square.END:
+            is_terminal = True
+        else:
+            is_terminal = False
+
+        if square == common.Square.CLIFF:
+            reward: float = -100.0
+            new_state = self.get_a_start_state()
+        else:
+            reward: float = -1.0
+            new_state: state.State = state.State(projected_position, is_terminal)
+
         return observation.Observation(reward, new_state)
 
-    def _project_back_to_grid(self, blown_position: common.XY) -> common.XY:
-        x = blown_position.x
-        y = blown_position.y
+    def _project_back_to_grid(self, requested_position: common.XY) -> common.XY:
+        x = requested_position.x
+        y = requested_position.y
         if x < 0:
             x = 0
         if y < 0:
