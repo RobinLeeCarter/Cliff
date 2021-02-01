@@ -3,11 +3,14 @@ import numpy as np
 import common
 from environment import grid
 
+TRACK_1 = np.array([
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 3]
+], dtype=np.int32)
 
 GRID_1 = grid.Grid(
-  max_x=9,
-  max_y=6,
-  start=common.XY(x=0, y=3),
-  goal=common.XY(x=7, y=3),
-  upward_wind=np.array([0, 0, 0, 1, 1, 1, 2, 2, 1, 0])
+  start=common.XY(0, 0),
+  goal=common.XY(10, 0),
+  track=TRACK_1
 )

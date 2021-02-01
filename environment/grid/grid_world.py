@@ -8,7 +8,8 @@ class GridWorld:
     def __init__(self, grid_: grid.Grid, rng: np.random.Generator):
         self.grid: grid.Grid = grid_
         self.rng: np.random.Generator = rng
-        self.random_wind_choices = np.array([-1, 0, 1], dtype=int)
+        self.max_y: int = self.grid.track.shape[0] - 1
+        self.max_x: int = self.grid.track.shape[1] - 1
 
     def get_a_start_position(self) -> common.XY:
         return self.grid.start
@@ -16,17 +17,7 @@ class GridWorld:
     def is_at_goal(self, grid_position: common.XY) -> bool:
         return grid_position == self.grid.goal
 
-    # noinspection PyUnusedLocal
-    def get_wind(self, position: common.XY) -> common.XY:
-        grid_wind = self.grid.upward_wind[position.x]
-        random_wind = self.rng.choice(self.random_wind_choices)
-        total_wind = grid_wind + random_wind
-        return common.XY(x=0, y=total_wind)
-
     def get_square(self, position: common.XY) -> common.Square:
-        if position == self.grid.start:
-            return common.Square.START
-        elif position == self.grid.goal:
-            return common.Square.END
-        else:
-            return common.Square.NORMAL
+        value: int = self.grid.track[self.max_y - position.y, position.x]
+        # noinspection PyArgumentList
+        return common.Square(value)  # pycharm inspection bug

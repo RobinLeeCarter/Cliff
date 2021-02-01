@@ -5,10 +5,9 @@ import numpy as np
 import common
 
 
+# unnecesary but maintains some consistency with Windy GridWorld
 @dataclass
 class Grid:
-    max_x: int
-    max_y: int
     start: common.XY      # x, y from bottom left
     goal: common.XY       # x, y from bottom left
-    upward_wind: np.ndarray
+    track: np.ndarray
