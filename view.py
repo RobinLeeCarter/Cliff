@@ -13,12 +13,12 @@ class View:
     def __init__(self, grid_world_: grid.GridWorld):
         self._grid_world: grid.GridWorld = grid_world_
 
-        self._max_x: int = self._grid_world.grid.max_x
-        self._max_y: int = self._grid_world.grid.max_y
+        self._max_x: int = self._grid_world.max_x
+        self._max_y: int = self._grid_world.max_y
 
         self.screen_width: int = 1500
         self.screen_height: int = 1000
-        self.title: str = "Windy Gridworld on-policy TD(0) control a.k.a. SARSA"
+        self.title: str = "Cliff Gridworld for SARSA and variants"
         self._cell_pixels: int = 10
         self._screen: Optional[pygame.Surface] = None
         self._background: Optional[pygame.Surface] = None
@@ -79,7 +79,7 @@ class View:
     def _build_color_lookup(self):
         self._color_lookup = {
             common.Square.NORMAL: pygame.Color('darkgrey'),
-            common.Square.CLIFF: pygame.Color('forestgreen'),
+            common.Square.CLIFF: pygame.Color('red2'),
             common.Square.START: pygame.Color('yellow2'),
             common.Square.END: pygame.Color('goldenrod2'),
             common.Square.AGENT: pygame.Color('deepskyblue2')
@@ -90,7 +90,7 @@ class View:
         self._grid_surface.fill(self._background_color)
         for x in range(self._max_x + 1):
             for y in range(self._max_y + 1):
-                square: common.Square = self._grid_world.get_square(position=(x, y))
+                square: common.Square = self._grid_world.get_square(position=common.XY(x, y))
                 self._draw_square(x, y, square, self._grid_surface)
         self._copy_grid_into_background()
 
@@ -99,7 +99,7 @@ class View:
 
     def _set_sizes(self):
         # size window for track and set cell_pixels
-        rows, cols = self._grid_world.grid.max_y + 1, self._grid_world.grid.max_x + 1
+        rows, cols = self._grid_world.max_y + 1, self._grid_world.max_x + 1
         self._cell_pixels = int(min(self.screen_height / rows, self.screen_width / cols))
         self.screen_width = cols * self._cell_pixels
         self.screen_height = rows * self._cell_pixels
