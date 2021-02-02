@@ -1,5 +1,6 @@
 from typing import List, Optional
 
+import constants
 import environment
 from agent import rsa
 
@@ -24,3 +25,11 @@ class Episode:
             return len(self.trajectory) - 1
         else:
             return 0
+
+    @property
+    def total_return(self) -> float:
+        g: float = 0
+        for t, rsa_ in enumerate(self.trajectory):
+            if t > 0:
+                g = rsa_.reward + constants.GAMMA * g
+        return g

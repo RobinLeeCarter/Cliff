@@ -9,7 +9,6 @@ class OnPolicyTdControl:
     def __init__(self,
                  environment_: environment.Environment,
                  agent_: agent.Agent,
-                 gamma: float = 1.0,
                  alpha: float = 0.5,
                  verbose: bool = False
                  ):
@@ -17,7 +16,6 @@ class OnPolicyTdControl:
         self.agent: agent.Agent = agent_
         assert isinstance(self.agent.policy, policy.EGreedyPolicy), "agent.policy not EGreedyPolicy"
         self.policy: policy.EGreedyPolicy = self.agent.policy
-        self.gamma = gamma
         self.alpha = alpha
         self.verbose = verbose
 
@@ -37,6 +35,8 @@ class OnPolicyTdControl:
     # noinspection PyPep8Naming
     def run(self):
         self.learning_iteration: int = 0
+        measure_episode: bool = True
+
         while self.learning_iteration <= constants.LEARNING_EPISODES:
             if self.verbose:
                 print(f"iteration = {self.learning_iteration}")
@@ -52,12 +52,18 @@ class OnPolicyTdControl:
                 self.agent.take_action()
                 sarsa = self.agent.get_sarsa()
                 delta = sarsa.reward + \
-                    self.gamma * self.Q[sarsa.next_state, sarsa.next_action] - \
+                    constants.GAMMA * self.Q[sarsa.next_state, sarsa.next_action] - \
                     self.Q[sarsa.state, sarsa.action]
                 self.Q[sarsa.state, sarsa.action] += self.alpha * delta
                 self.agent.policy[sarsa.state] = self.Q.argmax_over_actions(sarsa.state)
             if self.verbose:
                 print(f"max_t = {self.agent.t}")
+            if measure_episode:
+                total_return = self.agent.get_total_return()
+                if self.verbose:
+                    print(f"total_return = {total_return:.2f}")
+
+
             self.learning_iteration += 1
 
         # print(self.sample_iteration)

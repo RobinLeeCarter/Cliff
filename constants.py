@@ -2,6 +2,7 @@ from data import grids
 from environment import grid
 
 GRID: grid.Grid = grids.GRID_1
+GAMMA: float = 1.0
 
 ALPHA: float = 0.5
 INITIAL_Q_VALUE: float = 0.0
