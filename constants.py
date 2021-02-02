@@ -1,6 +1,3 @@
-from data import grids, settings_list
-from environment import grid
-
 GAMMA: float = 1.0
 
 ALPHA: float = 0.5
@@ -15,6 +12,3 @@ EPISODE_LENGTH_TIMEOUT: int = 10_000
 PERFORMANCE_SAMPLE_START: int = 0
 PERFORMANCE_SAMPLE_FREQUENCY: int = 1
 PERFORMANCE_SAMPLES: int = 500
-
-GRID: grid.Grid = grids.GRID_1
-SETTINGS_LIST = settings_list.SETTINGS_LIST

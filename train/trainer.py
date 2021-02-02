@@ -1,17 +1,15 @@
 import constants
 import algorithm
-from train import av_recorder
+from train import recorder
 
 
 class Trainer:
     def __init__(self,
-                 av_recorder_: av_recorder.AvRecorder,
-                 settings_: algorithm.Settings,
+                 av_recorder_: recorder.Recorder,
                  algorithm_: algorithm.EpisodicAlgorithm,
                  verbose: bool = False
                  ):
-        self.av_recorder: av_recorder.AvRecorder = av_recorder_
-        self.settings: algorithm.Settings = settings_
+        self.av_recorder: recorder.Recorder = av_recorder_
         self.algorithm: algorithm.EpisodicAlgorithm = algorithm_
         self.verbose = verbose
 
@@ -41,7 +39,7 @@ class Trainer:
 
             if self.learning_iteration >= constants.PERFORMANCE_SAMPLE_START and \
                     self.learning_iteration % constants.PERFORMANCE_SAMPLE_FREQUENCY == 0:
-                self.av_recorder[self.settings, self.learning_iteration] = total_return
+                self.av_recorder[self.algorithm, self.learning_iteration] = total_return
 
             self.learning_iteration += 1
 

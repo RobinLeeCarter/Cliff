@@ -10,6 +10,7 @@ import agent
 import algorithm
 import train
 import view
+import data
 
 
 class Controller:
@@ -17,14 +18,16 @@ class Controller:
         self.verbose: bool = verbose
 
         self.rng: np.random.Generator = np.random.default_rng()
-        self.environment = environment.Environment(constants.GRID, self.rng, verbose=False)
+        self.environment = environment.Environment(data.GRID_1, self.rng, verbose=False)
         self.greedy_policy: policy.DeterministicPolicy = policy.DeterministicPolicy(self.environment)
         self.e_greedy_policy: policy.EGreedyPolicy = policy.EGreedyPolicy(self.environment, self.rng,
                                                                           greedy_policy=self.greedy_policy)
         self.agent = agent.Agent(self.environment, self.e_greedy_policy)
 
         self.factory = algorithm.Factory(self.environment, self.agent)
-        self.av_recorder = train.AvRecorder()
+        self.algorithms: list[algorithm.EpisodicAlgorithm] =\
+            [self.factory[settings_] for settings_ in data.SETTINGS_LIST]
+        self.av_recorder = train.Recorder()
 
         self.view = view.View(self.environment.grid_world)
 
@@ -43,13 +46,11 @@ class Controller:
         #     )
 
     def run(self):
-        for settings in constants.SETTINGS_LIST:
-            algorithm_: algorithm.EpisodicAlgorithm = self.factory[settings]
+        for algorithm_ in self.algorithms:
             trainer: train.Trainer = train.Trainer(
                 self.av_recorder,
-                settings,
                 algorithm_,
-                verbose=False
+                verbose=True
             )
             trainer.train()
             algorithm_.print_q_coverage_statistics()

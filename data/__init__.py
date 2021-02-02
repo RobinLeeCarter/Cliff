@@ -1,2 +1,2 @@
-from data.grids import *
-from data.settings_list import *
+from data.grids import GRID_1
+from data.settings_list import SETTINGS_LIST
