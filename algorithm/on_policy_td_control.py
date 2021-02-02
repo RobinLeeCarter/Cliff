@@ -48,7 +48,7 @@ class OnPolicyTdControl:
             #     self.sample_target()
 
             self.agent.start_episode()
-            while (not self.agent.state.is_terminal) and self.agent.t <= 10000:
+            while (not self.agent.state.is_terminal) and self.agent.t <= constants.EPISODE_LENGTH_TIMEOUT:
                 self.agent.take_action()
                 sarsa = self.agent.get_sarsa()
                 delta = sarsa.reward + \

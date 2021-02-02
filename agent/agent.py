@@ -1,5 +1,6 @@
 from typing import Optional
 
+import constants
 import environment
 import policy
 from agent import episode, rsa, sarsa
@@ -81,11 +82,11 @@ class Agent:
 
     def generate_episode(self):
         self.start_episode()
-        while not self.state.is_terminal and self.t < 10000:
+        while not self.state.is_terminal and self.t < constants.EPISODE_LENGTH_TIMEOUT:
             if self.verbose:
                 print(f"t={self.t} \t state = {self.state} \t action = {self.action}")
             self.take_action()
-        if self.t == 10000:
+        if self.t == constants.EPISODE_LENGTH_TIMEOUT:
             print("Failed to terminate")
         if self.verbose:
             print(f"t={self.t} \t state = {self.state} (terminal)")
