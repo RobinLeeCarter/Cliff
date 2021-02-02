@@ -8,6 +8,7 @@ import environment
 import policy
 import agent
 import algorithm
+import train
 import view
 
 
@@ -22,6 +23,11 @@ class Controller:
                                                                           greedy_policy=self.greedy_policy)
         self.agent = agent.Agent(self.environment, self.e_greedy_policy)
 
+        self.factory = algorithm.Factory(self.environment, self.agent)
+        self.av_recorder = train.AvRecorder()
+
+        self.view = view.View(self.environment.grid_world)
+
         # self.target_policy: policy.DeterministicPolicy = policy.DeterministicPolicy(self.environment)
         # self.behaviour_policy: policy.EGreedyPolicy = policy.EGreedyPolicy(self.environment, self.rng,
         #                                                                    greedy_policy=self.target_policy)
@@ -29,21 +35,25 @@ class Controller:
         # self.target_agent = agent.Agent(self.environment, self.target_policy)
         # self.behaviour_agent = agent.Agent(self.environment, self.behaviour_policy)
 
-        self.algorithm_: algorithm.EpisodicAlgorithm = algorithm.Sarsa(
-                self.environment,
-                self.agent,
-                alpha=constants.ALPHA,
-                verbose=False
-            )
-        self.trainer: algorithm.Trainer = algorithm.Trainer(
-            self.algorithm_,
-            verbose=False
-        )
-        self.view = view.View(self.environment.grid_world)
+        # self.algorithm_: algorithm.EpisodicAlgorithm = algorithm.Sarsa(
+        #         self.environment,
+        #         self.agent,
+        #         alpha=constants.ALPHA,
+        #         verbose=False
+        #     )
 
     def run(self):
-        self.trainer.train()
-        self.algorithm_.print_q_coverage_statistics()
+        for settings in constants.SETTINGS_LIST:
+            algorithm_: algorithm.EpisodicAlgorithm = self.factory[settings]
+            trainer: train.Trainer = train.Trainer(
+                self.av_recorder,
+                settings,
+                algorithm_,
+                verbose=False
+            )
+            trainer.train()
+            algorithm_.print_q_coverage_statistics()
+
         # self.output_q()
         # self.graph_samples(self.algorithm_.sample_iteration, self.algorithm_.average_return)
 

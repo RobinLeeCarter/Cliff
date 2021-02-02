@@ -1,13 +1,18 @@
 import constants
-from algorithm import episodic_algorithm
+import algorithm
+from train import av_recorder
 
 
 class Trainer:
     def __init__(self,
-                 algorithm_: episodic_algorithm.EpisodicAlgorithm,
+                 av_recorder_: av_recorder.AvRecorder,
+                 settings_: algorithm.Settings,
+                 algorithm_: algorithm.EpisodicAlgorithm,
                  verbose: bool = False
                  ):
-        self.algorithm: episodic_algorithm.EpisodicAlgorithm = algorithm_
+        self.av_recorder: av_recorder.AvRecorder = av_recorder_
+        self.settings: algorithm.Settings = settings_
+        self.algorithm: algorithm.EpisodicAlgorithm = algorithm_
         self.verbose = verbose
 
         self.learning_iteration: int = 0
@@ -18,8 +23,7 @@ class Trainer:
         # self.average_return[0] = constants.INITIAL_Q_VALUE*2
 
     def train(self):
-        self.learning_iteration: int = 0
-        measure_episode: bool = True
+        self.learning_iteration = 0
 
         while self.learning_iteration < constants.LEARNING_EPISODES:
             if self.verbose:
@@ -27,15 +31,17 @@ class Trainer:
             else:
                 if self.learning_iteration % 1000 == 0:
                     print(f"iteration = {self.learning_iteration}")
-            # if self.learning_iteration >= constants.PERFORMANCE_SAMPLE_START and \
-            #         self.learning_iteration % constants.PERFORMANCE_SAMPLE_FREQUENCY == 0:
-            #     self.sample_target()
 
             self.algorithm.do_episode()
+
             max_t = self.algorithm.agent.t
             total_return = self.algorithm.agent.episode.total_return
             if self.verbose:
                 print(f"max_t = {max_t} \ttotal_return = {total_return:.2f}")
+
+            if self.learning_iteration >= constants.PERFORMANCE_SAMPLE_START and \
+                    self.learning_iteration % constants.PERFORMANCE_SAMPLE_FREQUENCY == 0:
+                self.av_recorder[self.settings, self.learning_iteration] = total_return
 
             self.learning_iteration += 1
 
