@@ -7,7 +7,7 @@ import constants
 import environment
 import policy
 import agent
-from algorithm import on_policy_td_control
+import algorithm
 import view
 
 
@@ -29,17 +29,21 @@ class Controller:
         # self.target_agent = agent.Agent(self.environment, self.target_policy)
         # self.behaviour_agent = agent.Agent(self.environment, self.behaviour_policy)
 
-        self.algorithm_: on_policy_td_control.OnPolicyTdControl = on_policy_td_control.OnPolicyTdControl(
+        self.algorithm_: algorithm.EpisodicAlgorithm = algorithm.Sarsa(
                 self.environment,
                 self.agent,
                 alpha=constants.ALPHA,
                 verbose=False
             )
+        self.trainer: algorithm.Trainer = algorithm.Trainer(
+            self.algorithm_,
+            verbose=False
+        )
         self.view = view.View(self.environment.grid_world)
 
     def run(self):
-        self.algorithm_.run()
-        self.algorithm_.Q.print_coverage_statistics()
+        self.trainer.train()
+        self.algorithm_.print_q_coverage_statistics()
         # self.output_q()
         # self.graph_samples(self.algorithm_.sample_iteration, self.algorithm_.average_return)
 

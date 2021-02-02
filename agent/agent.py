@@ -91,9 +91,6 @@ class Agent:
         if self.verbose:
             print(f"t={self.t} \t state = {self.state} (terminal)")
 
-    def get_total_return(self) -> float:
-        return self.episode.total_return
-
     # def generate_episode(self) -> episode.Episode:
     #     episode_: episode.Episode = episode.Episode()
     #     # start

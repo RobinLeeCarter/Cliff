@@ -1,1 +1,3 @@
-from algorithm.on_policy_td_control import OnPolicyTdControl
+from algorithm.trainer import Trainer
+from algorithm.episodic_algorithm import EpisodicAlgorithm
+from algorithm.sarsa import Sarsa

@@ -1,26 +1,15 @@
 import constants
-import environment
-import policy
-import agent
-from algorithm import state_action_function
+from algorithm import episodic_algorithm
 
 
-class OnPolicyTdControl:
+class Trainer:
     def __init__(self,
-                 environment_: environment.Environment,
-                 agent_: agent.Agent,
-                 alpha: float = 0.5,
+                 algorithm_: episodic_algorithm.EpisodicAlgorithm,
                  verbose: bool = False
                  ):
-        self.environment: environment.Environment = environment_
-        self.agent: agent.Agent = agent_
-        assert isinstance(self.agent.policy, policy.EGreedyPolicy), "agent.policy not EGreedyPolicy"
-        self.policy: policy.EGreedyPolicy = self.agent.policy
-        self.alpha = alpha
+        self.algorithm: episodic_algorithm.EpisodicAlgorithm = algorithm_
         self.verbose = verbose
 
-        self.Q = state_action_function.StateActionFunction(self.environment)
-        self.initialise_policy()
         self.learning_iteration: int = 0
 
         # samples = int(constants.LEARNING_EPISODES / constants.PERFORMANCE_SAMPLE_FREQUENCY)
@@ -28,16 +17,11 @@ class OnPolicyTdControl:
         # self.average_return: np.ndarray = np.zeros(shape=samples+1, dtype=float)
         # self.average_return[0] = constants.INITIAL_Q_VALUE*2
 
-    def initialise_policy(self):
-        for state_ in self.environment.states():
-            self.policy[state_] = self.Q.argmax_over_actions(state_)
-
-    # noinspection PyPep8Naming
-    def run(self):
+    def train(self):
         self.learning_iteration: int = 0
         measure_episode: bool = True
 
-        while self.learning_iteration <= constants.LEARNING_EPISODES:
+        while self.learning_iteration < constants.LEARNING_EPISODES:
             if self.verbose:
                 print(f"iteration = {self.learning_iteration}")
             else:
@@ -47,22 +31,11 @@ class OnPolicyTdControl:
             #         self.learning_iteration % constants.PERFORMANCE_SAMPLE_FREQUENCY == 0:
             #     self.sample_target()
 
-            self.agent.start_episode()
-            while (not self.agent.state.is_terminal) and self.agent.t <= constants.EPISODE_LENGTH_TIMEOUT:
-                self.agent.take_action()
-                sarsa = self.agent.get_sarsa()
-                delta = sarsa.reward + \
-                    constants.GAMMA * self.Q[sarsa.next_state, sarsa.next_action] - \
-                    self.Q[sarsa.state, sarsa.action]
-                self.Q[sarsa.state, sarsa.action] += self.alpha * delta
-                self.agent.policy[sarsa.state] = self.Q.argmax_over_actions(sarsa.state)
+            self.algorithm.do_episode()
+            max_t = self.algorithm.agent.t
+            total_return = self.algorithm.agent.episode.total_return
             if self.verbose:
-                print(f"max_t = {self.agent.t}")
-            if measure_episode:
-                total_return = self.agent.get_total_return()
-                if self.verbose:
-                    print(f"total_return = {total_return:.2f}")
-
+                print(f"max_t = {max_t} \ttotal_return = {total_return:.2f}")
 
             self.learning_iteration += 1
 

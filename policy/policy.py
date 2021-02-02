@@ -15,7 +15,7 @@ class Policy(abc.ABC):
         pass
 
     def __setitem__(self, state: environment.State, action: environment.Action):
-        pass
+        raise NotImplementedError("__setitem__ not implemented for policy")
 
     # @abc.abstractmethod
     # def get_action_given_state(self, state_: environment.State) -> environment.Action:
