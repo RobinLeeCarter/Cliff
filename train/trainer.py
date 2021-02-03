@@ -1,21 +1,21 @@
+from typing import Optional
+
 import numpy as np
-# import math
 
 import constants
 import algorithm
-import agent
 from train import recorder
 
 
 class Trainer:
     def __init__(self,
                  av_recorder_: recorder.Recorder,
-                 algorithm_: algorithm.EpisodicAlgorithm,
+                 algorithm_: algorithm.EpisodicAlgorithm = None,
                  verbose: bool = False
                  ):
         self.recorder: recorder.Recorder = av_recorder_
-        self.algorithm: algorithm.EpisodicAlgorithm = algorithm_
-        self.agent: agent.Agent = algorithm_.agent
+        self.algorithm: Optional[algorithm.EpisodicAlgorithm] = algorithm_
+        # self.agent: agent.Agent = algorithm_.agent
         self.verbose = verbose
 
         # self.array_shape = (self.total_records, )
@@ -24,6 +24,9 @@ class Trainer:
 
         self.iteration_array = np.array([], dtype=int)
         self.return_array = np.array([], dtype=float)
+
+    def set_algorithm(self, algorithm_: algorithm.EpisodicAlgorithm):
+        self.algorithm: algorithm.EpisodicAlgorithm = algorithm_
 
     def train(self):
         for run in range(constants.RUNS):

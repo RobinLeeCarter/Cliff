@@ -47,12 +47,12 @@ class Controller:
     def run(self):
         iteration_array: np.ndarray = np.array([], dtype=int)
         sarsa_array: np.ndarray = np.array([], dtype=float)
+        trainer: train.Trainer = train.Trainer(
+            self.av_recorder,
+            verbose=False
+        )
         for algorithm_ in self.algorithms:
-            trainer: train.Trainer = train.Trainer(
-                self.av_recorder,
-                algorithm_,
-                verbose=False
-            )
+            trainer.set_algorithm(algorithm_)
             trainer.train()
             iteration_array = trainer.iteration_array
             sarsa_array = trainer.return_array
