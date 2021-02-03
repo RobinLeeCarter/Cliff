@@ -1,3 +1,6 @@
+import numpy as np
+import math
+
 import constants
 import algorithm
 from train import recorder
@@ -9,26 +12,25 @@ class Trainer:
                  algorithm_: algorithm.EpisodicAlgorithm,
                  verbose: bool = False
                  ):
-        self.av_recorder: recorder.Recorder = av_recorder_
+        self.recorder: recorder.Recorder = av_recorder_
         self.algorithm: algorithm.EpisodicAlgorithm = algorithm_
         self.verbose = verbose
 
-        self.learning_iteration: int = 0
+        self.iteration: int = 0
 
-        # samples = int(constants.LEARNING_EPISODES / constants.PERFORMANCE_SAMPLE_FREQUENCY)
-        # self.sample_iteration: np.ndarray = np.zeros(shape=samples+1, dtype=int)
-        # self.average_return: np.ndarray = np.zeros(shape=samples+1, dtype=float)
-        # self.average_return[0] = constants.INITIAL_Q_VALUE*2
+        self.array_shape = (self.total_records, )
+        self.iteration_array: np.zeros(self.array_shape, dtype=int)
+        self.return_array: np.zeros(self.array_shape, dtype=float)
 
     def train(self):
-        self.learning_iteration = 0
+        self.iteration = 0
 
-        while self.learning_iteration < constants.LEARNING_EPISODES:
+        while self.iteration < constants.TRAINING_ITERATIONS:
             if self.verbose:
-                print(f"iteration = {self.learning_iteration}")
+                print(f"iteration = {self.iteration}")
             else:
-                if self.learning_iteration % 1000 == 0:
-                    print(f"iteration = {self.learning_iteration}")
+                if self.iteration % 1000 == 0:
+                    print(f"iteration = {self.iteration}")
 
             self.algorithm.do_episode()
 
@@ -37,14 +39,23 @@ class Trainer:
             if self.verbose:
                 print(f"max_t = {max_t} \ttotal_return = {total_return:.2f}")
 
-            if self.learning_iteration >= constants.PERFORMANCE_SAMPLE_START and \
-                    self.learning_iteration % constants.PERFORMANCE_SAMPLE_FREQUENCY == 0:
-                self.av_recorder[self.algorithm, self.learning_iteration] = total_return
+            if self.is_record(self.iteration):
+                self.recorder[self.algorithm, self.iteration] = total_return
 
-            self.learning_iteration += 1
+            self.iteration += 1
 
-        # print(self.sample_iteration)
-        # print(self.average_return)
+    @property
+    def total_records(self) -> int:
+        start = math.ceil(constants.PERFORMANCE_SAMPLE_START / constants.PERFORMANCE_SAMPLE_FREQUENCY)
+        stop = math.floor(constants.TRAINING_ITERATIONS / constants.PERFORMANCE_SAMPLE_FREQUENCY)
+        return stop - start + 1
+
+    def is_record(self, iteration: int) -> bool:
+        return iteration >= constants.PERFORMANCE_SAMPLE_START and \
+                iteration % constants.PERFORMANCE_SAMPLE_FREQUENCY == 0
+
+    # print(self.sample_iteration)
+    # print(self.average_return)
 
     # noinspection PyPep8Naming
     # def sample_target(self):

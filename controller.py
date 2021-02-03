@@ -84,7 +84,7 @@ class Controller:
         fig: figure.Figure = plt.figure()
         ax: figure.Axes = fig.subplots()
         ax.set_title("Average Return vs Learning Episodes")
-        ax.set_xlim(xmin=0, xmax=constants.LEARNING_EPISODES)
+        ax.set_xlim(xmin=0, xmax=constants.TRAINING_ITERATIONS)
         ax.set_xlabel("Learning Episodes")
         ax.set_ylim(ymin=constants.INITIAL_Q_VALUE*2, ymax=0)
         ax.set_ylabel("Average Return")
