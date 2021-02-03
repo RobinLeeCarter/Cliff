@@ -1,8 +1,5 @@
 import numpy as np
-import matplotlib.pyplot as plt
-from matplotlib import figure
 
-import constants
 import environment
 import policy
 import agent
@@ -29,7 +26,8 @@ class Controller:
         # print(self.algorithms)
         self.av_recorder = train.Recorder()
 
-        self.view = view.View(self.environment.grid_world)
+        self.graph = view.Graph()
+        self.grid_view = view.GridView(self.environment.grid_world)
 
         # self.target_policy: policy.DeterministicPolicy = policy.DeterministicPolicy(self.environment)
         # self.behaviour_policy: policy.EGreedyPolicy = policy.EGreedyPolicy(self.environment, self.rng,
@@ -46,7 +44,6 @@ class Controller:
         #     )
 
     def run(self):
-        iteration_array: np.ndarray = np.array([], dtype=int)
         algorithms_output: dict[algorithm.EpisodicAlgorithm, np.ndarray] = {}
         # sarsa_array: np.ndarray = np.array([], dtype=float)
         trainer: train.Trainer = train.Trainer(
@@ -60,8 +57,7 @@ class Controller:
             algorithm_.print_q_coverage_statistics()
 
         iteration_array = trainer.iteration_array
-        # self.output_q()
-        self.graph_samples(iteration_array, algorithms_output)
+        self.graph.ma_plot(iteration_array, algorithms_output)
 
         # self.behaviour_agent.set_policy(self.target_policy)
         # self.view.open_window()
@@ -77,24 +73,3 @@ class Controller:
         #     user_event: common.UserEvent = self.view.display_episode(self.agent.episode, show_trail=False)
         #     if user_event == common.UserEvent.QUIT:
         #         break
-
-    # def output_q(self):
-    #     q = self.algorithm_.Q
-    #     q_size = q.size
-    #     q_non_zero = np.count_nonzero(q)
-    #     percent_non_zero = 100.0 * q_non_zero / q_size
-    #     print(f"q_size: {q_size}\tq_non_zero: {q_non_zero}\tpercent_non_zero: {percent_non_zero:.2f}")
-
-    def graph_samples(self, iteration: np.ndarray, algorithms_output: dict[algorithm.EpisodicAlgorithm, np.ndarray]):
-        fig: figure.Figure = plt.figure()
-        ax: figure.Axes = fig.subplots()
-        ax.set_title("Average Return vs Learning Episodes")
-        ax.set_xlim(xmin=0, xmax=constants.TRAINING_ITERATIONS)
-        ax.set_xlabel("Learning Episodes")
-        ax.set_ylim(ymin=-100, ymax=0)
-        ax.set_ylabel("Average Return")
-        for algorithm_, return_array in algorithms_output.items():
-            ax.plot(iteration, return_array, label=algorithm_.title)
-        ax.legend()
-        ax.grid(True)
-        plt.show()

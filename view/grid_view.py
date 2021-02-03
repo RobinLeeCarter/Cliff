@@ -9,7 +9,7 @@ import environment
 import agent
 
 
-class View:
+class GridView:
     def __init__(self, grid_world_: grid.GridWorld):
         self._grid_world: grid.GridWorld = grid_world_
 
