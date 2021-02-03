@@ -27,6 +27,7 @@ class Trainer:
 
     def set_algorithm(self, algorithm_: algorithm.EpisodicAlgorithm):
         self.algorithm: algorithm.EpisodicAlgorithm = algorithm_
+        print(algorithm_)
 
     def train(self):
         for run in range(constants.RUNS):

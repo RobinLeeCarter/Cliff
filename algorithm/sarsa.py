@@ -11,7 +11,7 @@ class Sarsa(episodic_algorithm.EpisodicAlgorithm):
                  alpha: float = 0.5,
                  verbose: bool = False
                  ):
-        title = f"SARSA alpha={alpha}"
+        title = f"Sarsa alpha={alpha}"
         super().__init__(environment_, agent_, title, verbose)
         self._alpha = alpha
 

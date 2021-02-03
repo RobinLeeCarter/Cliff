@@ -26,6 +26,7 @@ class Controller:
         self.factory = algorithm.Factory(self.environment, self.agent)
         self.algorithms: list[algorithm.EpisodicAlgorithm] =\
             [self.factory[settings_] for settings_ in data.SETTINGS_LIST]
+        # print(self.algorithms)
         self.av_recorder = train.Recorder()
 
         self.view = view.View(self.environment.grid_world)
@@ -95,4 +96,5 @@ class Controller:
         for algorithm_, return_array in algorithms_output.items():
             ax.plot(iteration, return_array, label=algorithm_.title)
         ax.legend()
+        ax.grid(True)
         plt.show()
