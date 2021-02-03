@@ -32,8 +32,12 @@ class EpisodicAlgorithm(abc.ABC):
 
     def do_episode(self):
         self.agent.start_episode()
+        self._start_episode()
         while (not self.agent.state.is_terminal) and self.agent.t < constants.EPISODE_LENGTH_TIMEOUT:
             self._do_training_step()
+
+    def _start_episode(self):
+        pass
 
     @abc.abstractmethod
     def _do_training_step(self):

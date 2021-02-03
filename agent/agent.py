@@ -37,7 +37,7 @@ class Agent:
         self.response = self.environment.start()
         self._update_from_response()
         # special case at start
-        self._add_episode_rsa()
+        # self._add_episode_rsa()
 
     def take_action(self):
         """State and action are already set, make a copy in previous_rsa before updating.
@@ -51,7 +51,15 @@ class Agent:
         self.previous_rsa = self.episode.rsa
         self.response = self.environment.from_state_perform_action(self.state, self.action)
         self._update_from_response()
+
+    def choose_action(self):
+        if self.state.is_terminal:
+            self.action = None
+        else:
+            self.action = self.policy[self.state]
         self._add_episode_rsa()
+        if self.verbose:
+            print(f"state = {self.state} \t action = {self.action}")
 
     def get_sarsa(self) -> sarsa.Sarsa:
         if self.previous_rsa is None:
@@ -65,20 +73,13 @@ class Agent:
         )
         return sarsa_
 
-    def _add_episode_rsa(self):
-        self.episode.add_rsa(reward=self.reward, state=self.state, action=self.action)
-
     def _update_from_response(self):
         self.t += 1
         self.reward = self.response.reward
         self.state = self.response.state
-        if self.state.is_terminal:
-            self.action = None
-        else:
-            self.action = self.policy[self.state]
-        if self.verbose:
-            print("start episode:")
-            print(f"state = {self.state} \t action = {self.action}")
+
+    def _add_episode_rsa(self):
+        self.episode.add_rsa(reward=self.reward, state=self.state, action=self.action)
 
     def generate_episode(self):
         self.start_episode()

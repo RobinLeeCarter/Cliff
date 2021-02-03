@@ -83,6 +83,12 @@ class StateActionFunction:
         # print(f"best_action {best_action}")
         return best_action
 
+    def max_over_actions(self, state: environment.State) -> float:
+        """max_over_a Q[state, a]"""
+        q_slice = state.index + self._actions_slice
+        q_state: np.ndarray = self._values[q_slice]
+        return np.max(q_state)
+
     def print_coverage_statistics(self):
         q_size = self._values.size
         q_non_zero = np.count_nonzero(self._values)
