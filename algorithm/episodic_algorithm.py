@@ -15,7 +15,7 @@ class EpisodicAlgorithm(abc.ABC):
                  ):
         self.environment: environment.Environment = environment_
         self.agent: agent.Agent = agent_
-        self.title: title
+        self.title: title = title
         self.verbose = verbose
 
         # assume all episodic algorithms have a Q function and initialise policy based on it

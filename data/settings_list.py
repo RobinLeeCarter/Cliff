@@ -1,10 +1,8 @@
-import constants
-from algorithm import settings
+# import constants
 import algorithm
 
 
 SETTINGS_LIST = [
-  settings.Settings(algorithm.Sarsa, {"alpha": constants.ALPHA})
+  algorithm.Settings(algorithm.Sarsa, {"alpha": 0.5}),
+  algorithm.Settings(algorithm.Sarsa, {"alpha": 0.1})
 ]
-
-# SETTINGS_DICT = {key: value for key, value in enumerate(SETTINGS_LIST)}

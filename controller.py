@@ -46,7 +46,8 @@ class Controller:
 
     def run(self):
         iteration_array: np.ndarray = np.array([], dtype=int)
-        sarsa_array: np.ndarray = np.array([], dtype=float)
+        algorithms_output: dict[algorithm.EpisodicAlgorithm, np.ndarray] = {}
+        # sarsa_array: np.ndarray = np.array([], dtype=float)
         trainer: train.Trainer = train.Trainer(
             self.av_recorder,
             verbose=False
@@ -54,12 +55,12 @@ class Controller:
         for algorithm_ in self.algorithms:
             trainer.set_algorithm(algorithm_)
             trainer.train()
-            iteration_array = trainer.iteration_array
-            sarsa_array = trainer.return_array
+            algorithms_output[algorithm_] = trainer.return_array
             algorithm_.print_q_coverage_statistics()
 
+        iteration_array = trainer.iteration_array
         # self.output_q()
-        self.graph_samples(iteration_array, sarsa_array)
+        self.graph_samples(iteration_array, algorithms_output)
 
         # self.behaviour_agent.set_policy(self.target_policy)
         # self.view.open_window()
@@ -83,7 +84,7 @@ class Controller:
     #     percent_non_zero = 100.0 * q_non_zero / q_size
     #     print(f"q_size: {q_size}\tq_non_zero: {q_non_zero}\tpercent_non_zero: {percent_non_zero:.2f}")
 
-    def graph_samples(self, iteration: np.ndarray, average_return: np.ndarray):
+    def graph_samples(self, iteration: np.ndarray, algorithms_output: dict[algorithm.EpisodicAlgorithm, np.ndarray]):
         fig: figure.Figure = plt.figure()
         ax: figure.Axes = fig.subplots()
         ax.set_title("Average Return vs Learning Episodes")
@@ -91,5 +92,7 @@ class Controller:
         ax.set_xlabel("Learning Episodes")
         ax.set_ylim(ymin=-100, ymax=0)
         ax.set_ylabel("Average Return")
-        ax.plot(iteration, average_return)
+        for algorithm_, return_array in algorithms_output.items():
+            ax.plot(iteration, return_array, label=algorithm_.title)
+        ax.legend()
         plt.show()
