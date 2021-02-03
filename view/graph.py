@@ -27,7 +27,8 @@ class Graph:
     def ma_plot(self, iteration: np.ndarray, algorithms_output: dict[algorithm.EpisodicAlgorithm, np.ndarray]):
         algorithms_ma: dict[algorithm.EpisodicAlgorithm, np.ndarray] = {}
         for algorithm_, return_array in algorithms_output.items():
-            algorithms_ma[algorithm_] = self.moving_average(return_array, window_size=9)
+            algorithms_ma[algorithm_] = self.moving_average(return_array,
+                                                            window_size=constants.MOVING_AVERAGE_WINDOW_SIZE)
 
         fig: figure.Figure = plt.figure()
         ax: figure.Axes = fig.subplots()

@@ -11,7 +11,7 @@ class QLearning(episodic_algorithm.EpisodicAlgorithm):
                  alpha: float = 0.5,
                  verbose: bool = False
                  ):
-        title = f"Q-learning alpha={alpha}"
+        title = f"Q-learning α={alpha}"
         super().__init__(environment_, agent_, title, verbose)
         self._alpha = alpha
 
