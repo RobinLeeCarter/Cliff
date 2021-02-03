@@ -1,5 +1,5 @@
 import numpy as np
-import math
+# import math
 
 import constants
 import algorithm
@@ -16,39 +16,59 @@ class Trainer:
         self.algorithm: algorithm.EpisodicAlgorithm = algorithm_
         self.verbose = verbose
 
-        self.iteration: int = 0
+        # self.array_shape = (self.total_records, )
+        # self.iteration_array = np.zeros(self.array_shape, dtype=int)
+        # self.return_array = np.zeros(self.array_shape, dtype=float)
 
-        self.array_shape = (self.total_records, )
-        self.iteration_array: np.zeros(self.array_shape, dtype=int)
-        self.return_array: np.zeros(self.array_shape, dtype=float)
+        self.iteration_array = np.array([], dtype=int)
+        self.return_array = np.array([], dtype=float)
 
     def train(self):
-        self.iteration = 0
+        for run in range(constants.RUNS):
+            print(f"run = {run}")
+            self.algorithm.initialize()
 
-        while self.iteration < constants.TRAINING_ITERATIONS:
-            if self.verbose:
-                print(f"iteration = {self.iteration}")
-            else:
-                if self.iteration % 1000 == 0:
-                    print(f"iteration = {self.iteration}")
+            for iteration in range(constants.TRAINING_ITERATIONS):
+                if self.verbose:
+                    print(f"iteration = {iteration}")
+                # else:
+                #     if iteration % 1000 == 0:
+                #         print(f"iteration = {iteration}")
 
-            self.algorithm.do_episode()
+                self.algorithm.do_episode()
 
-            max_t = self.algorithm.agent.t
-            total_return = self.algorithm.agent.episode.total_return
-            if self.verbose:
-                print(f"max_t = {max_t} \ttotal_return = {total_return:.2f}")
+                max_t = self.algorithm.agent.t
+                total_return = self.algorithm.agent.episode.total_return
+                if self.verbose:
+                    print(f"max_t = {max_t} \ttotal_return = {total_return:.2f}")
 
-            if self.is_record(self.iteration):
-                self.recorder[self.algorithm, self.iteration] = total_return
+                if self.is_record(iteration):
+                    self.recorder[self.algorithm, iteration] = total_return
 
-            self.iteration += 1
+            # print(self.recorder.tallies)
 
-    @property
-    def total_records(self) -> int:
-        start = math.ceil(constants.PERFORMANCE_SAMPLE_START / constants.PERFORMANCE_SAMPLE_FREQUENCY)
-        stop = math.floor(constants.TRAINING_ITERATIONS / constants.PERFORMANCE_SAMPLE_FREQUENCY)
-        return stop - start + 1
+        self.fill_arrays_from_recorder()
+
+    def fill_arrays_from_recorder(self):
+        iteration: int = 0
+        iteration_list: list[int] = []
+        return_list: list[float] = []
+
+        while iteration <= constants.TRAINING_ITERATIONS:
+            if self.is_record(iteration):
+                total_return = self.recorder[self.algorithm, iteration]
+                iteration_list.append(iteration)
+                return_list.append(total_return)
+            iteration += 1
+
+        self.iteration_array = np.array(iteration_list)
+        self.return_array = np.array(return_list)
+
+    # @property
+    # def total_records(self) -> int:
+    #     start = math.ceil(constants.PERFORMANCE_SAMPLE_START / constants.PERFORMANCE_SAMPLE_FREQUENCY)
+    #     stop = math.floor(constants.TRAINING_ITERATIONS / constants.PERFORMANCE_SAMPLE_FREQUENCY)
+    #     return stop - start + 1
 
     def is_record(self, iteration: int) -> bool:
         return iteration >= constants.PERFORMANCE_SAMPLE_START and \

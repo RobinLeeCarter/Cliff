@@ -22,7 +22,7 @@ class Recorder:
         if av_key in self.tallies:
             tally = self.tallies[av_key]
             tally.count += 1
-            tally.av_return = (1.0/tally.count)*(value - tally.av_return)
+            tally.av_return += (1.0/tally.count)*(value - tally.av_return)
         else:
             tally = _Tally(count=1, av_return=value)
             self.tallies[av_key] = tally

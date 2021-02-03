@@ -19,6 +19,9 @@ class EpisodicAlgorithm(abc.ABC):
         # assume all episodic algorithms have a Q function and initialise policy based on it
         # could add another layer of inheritance if not
         self._Q = state_action_function.StateActionFunction(self.environment)
+
+    def initialize(self):
+        self._Q.initialize_values()
         self._make_policy_greedy_wrt_q()
 
     def _make_policy_greedy_wrt_q(self):

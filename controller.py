@@ -2,7 +2,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib import figure
 
-import common
 import constants
 import environment
 import policy
@@ -46,32 +45,36 @@ class Controller:
         #     )
 
     def run(self):
+        iteration_array: np.ndarray = np.array([], dtype=int)
+        sarsa_array: np.ndarray = np.array([], dtype=float)
         for algorithm_ in self.algorithms:
             trainer: train.Trainer = train.Trainer(
                 self.av_recorder,
                 algorithm_,
-                verbose=True
+                verbose=False
             )
             trainer.train()
+            iteration_array = trainer.iteration_array
+            sarsa_array = trainer.return_array
             algorithm_.print_q_coverage_statistics()
 
         # self.output_q()
-        # self.graph_samples(self.algorithm_.sample_iteration, self.algorithm_.average_return)
+        self.graph_samples(iteration_array, sarsa_array)
 
         # self.behaviour_agent.set_policy(self.target_policy)
-        self.view.open_window()
+        # self.view.open_window()
         # self.view.display_and_wait()
         # self.environment.verbose = True
         # self.agent.verbose = True
 
         # self.agent.verbose = True
         # self.agent.set_policy(self.greedy_policy)
-        while True:
-            self.agent.generate_episode()
-            print(f"max_t: {self.agent.episode.max_t}")
-            user_event: common.UserEvent = self.view.display_episode(self.agent.episode, show_trail=False)
-            if user_event == common.UserEvent.QUIT:
-                break
+        # while True:
+        #     self.agent.generate_episode()
+        #     print(f"max_t: {self.agent.episode.max_t}")
+        #     user_event: common.UserEvent = self.view.display_episode(self.agent.episode, show_trail=False)
+        #     if user_event == common.UserEvent.QUIT:
+        #         break
 
     # def output_q(self):
     #     q = self.algorithm_.Q
@@ -86,7 +89,7 @@ class Controller:
         ax.set_title("Average Return vs Learning Episodes")
         ax.set_xlim(xmin=0, xmax=constants.TRAINING_ITERATIONS)
         ax.set_xlabel("Learning Episodes")
-        ax.set_ylim(ymin=constants.INITIAL_Q_VALUE*2, ymax=0)
+        ax.set_ylim(ymin=-100, ymax=0)
         ax.set_ylabel("Average Return")
         ax.plot(iteration, average_return)
         plt.show()
