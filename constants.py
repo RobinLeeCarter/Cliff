@@ -1,10 +1,8 @@
 GAMMA: float = 1.0
 
 ALPHA: float = 0.1
+INITIAL_V_VALUE: float = 0.0
 INITIAL_Q_VALUE: float = 0.0
-# for deletion
-EXTRA_REWARD_FOR_FAILURE: float = 0.0
-SKID_PROBABILITY: float = 0.0
 
 TRAINING_ITERATIONS: int = 500
 EPISODE_LENGTH_TIMEOUT: int = 100

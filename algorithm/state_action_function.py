@@ -40,12 +40,6 @@ class StateActionFunction:
         state, action = state_action
         self._values[state.index + action.index] = value
 
-    # def get_value(self, state: environment.State, action: environment.Action) -> float:
-    #     return self._q_values[state.index + action.index]
-    #
-    # def set_value(self, state: environment.State, action: environment.Action, value: float):
-    #     self._q_values[state.index + action.index] = value
-
     def argmax_over_actions(self, state: environment.State) -> environment.Action:
         """set target_policy to argmax over a of Q breaking ties consistently"""
         # state_index = self.get_index_from_state(state_)
