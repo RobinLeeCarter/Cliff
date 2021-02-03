@@ -11,10 +11,11 @@ class Sarsa(episodic_algorithm.EpisodicAlgorithm):
                  alpha: float = 0.5,
                  verbose: bool = False
                  ):
-        super().__init__(environment_, agent_, verbose)
+        title = "SARSA"
+        super().__init__(environment_, agent_, title, verbose)
         self._alpha = alpha
 
-    def _do_step(self):
+    def _do_training_step(self):
         self.agent.take_action()
         sarsa = self.agent.get_sarsa()
         delta = sarsa.reward + \

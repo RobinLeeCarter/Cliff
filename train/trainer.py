@@ -3,6 +3,7 @@ import numpy as np
 
 import constants
 import algorithm
+import agent
 from train import recorder
 
 
@@ -14,6 +15,7 @@ class Trainer:
                  ):
         self.recorder: recorder.Recorder = av_recorder_
         self.algorithm: algorithm.EpisodicAlgorithm = algorithm_
+        self.agent: agent.Agent = algorithm_.agent
         self.verbose = verbose
 
         # self.array_shape = (self.total_records, )
@@ -36,14 +38,20 @@ class Trainer:
                 #         print(f"iteration = {iteration}")
 
                 self.algorithm.do_episode()
-
                 max_t = self.algorithm.agent.t
                 total_return = self.algorithm.agent.episode.total_return
                 if self.verbose:
                     print(f"max_t = {max_t} \ttotal_return = {total_return:.2f}")
-
-                if self.is_record(iteration):
+                if self.is_record_iteration(iteration):
                     self.recorder[self.algorithm, iteration] = total_return
+
+                # if iteration > 20:
+                #     for test in range(constants.TESTS):
+                #         self.agent.generate_episode()
+                #         # max_t = self.algorithm.agent.t
+                #         total_return = self.agent.episode.total_return
+                #         if self.is_record_iteration(iteration):
+                #             self.recorder[self.algorithm, iteration] = total_return
 
             # print(self.recorder.tallies)
 
@@ -54,8 +62,8 @@ class Trainer:
         iteration_list: list[int] = []
         return_list: list[float] = []
 
-        while iteration <= constants.TRAINING_ITERATIONS:
-            if self.is_record(iteration):
+        while iteration < constants.TRAINING_ITERATIONS:
+            if self.is_record_iteration(iteration):
                 total_return = self.recorder[self.algorithm, iteration]
                 iteration_list.append(iteration)
                 return_list.append(total_return)
@@ -70,7 +78,7 @@ class Trainer:
     #     stop = math.floor(constants.TRAINING_ITERATIONS / constants.PERFORMANCE_SAMPLE_FREQUENCY)
     #     return stop - start + 1
 
-    def is_record(self, iteration: int) -> bool:
+    def is_record_iteration(self, iteration: int) -> bool:
         return iteration >= constants.PERFORMANCE_SAMPLE_START and \
                 iteration % constants.PERFORMANCE_SAMPLE_FREQUENCY == 0
 

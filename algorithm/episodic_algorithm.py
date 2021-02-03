@@ -10,10 +10,12 @@ class EpisodicAlgorithm(abc.ABC):
     def __init__(self,
                  environment_: environment.Environment,
                  agent_: agent.Agent,
+                 title: str,
                  verbose: bool = False
                  ):
         self.environment: environment.Environment = environment_
         self.agent: agent.Agent = agent_
+        self.title: title
         self.verbose = verbose
 
         # assume all episodic algorithms have a Q function and initialise policy based on it
@@ -31,10 +33,10 @@ class EpisodicAlgorithm(abc.ABC):
     def do_episode(self):
         self.agent.start_episode()
         while (not self.agent.state.is_terminal) and self.agent.t < constants.EPISODE_LENGTH_TIMEOUT:
-            self._do_step()
+            self._do_training_step()
 
     @abc.abstractmethod
-    def _do_step(self):
+    def _do_training_step(self):
         pass
 
     def print_q_coverage_statistics(self):
