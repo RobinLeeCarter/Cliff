@@ -1,6 +1,6 @@
 import environment
 import agent
-from algorithm import settings, episodic_algorithm, sarsa, q_learning, vq
+from algorithm import settings, episodic_algorithm, sarsa, q_learning, vq, expected_sarsa
 
 
 class Factory:
@@ -26,6 +26,12 @@ class Factory:
             else:
                 alpha: float = 0.5
             return q_learning.QLearning(self.environment, self.agent, alpha, verbose)
+        elif settings_.algorithm_type == expected_sarsa.ExpectedSarsa:
+            if "alpha" in settings_.parameters:
+                alpha: float = settings_.parameters["alpha"]
+            else:
+                alpha: float = 0.5
+            return expected_sarsa.ExpectedSarsa(self.environment, self.agent, alpha, verbose)
         elif settings_.algorithm_type == vq.VQ:
             if "alpha" in settings_.parameters:
                 alpha: float = settings_.parameters["alpha"]

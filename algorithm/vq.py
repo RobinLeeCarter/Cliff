@@ -27,6 +27,11 @@ class VQ(episodic_algorithm.EpisodicAlgorithm):
             else:
                 self._alpha = 0.1
 
+            # if iteration <= 20:
+            #     self._alpha = 0.5
+            # else:
+            #     self._alpha = 10/iteration
+
     def _do_training_step(self):
         self.agent.choose_action()
         self.agent.take_action()
