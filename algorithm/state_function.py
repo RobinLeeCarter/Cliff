@@ -13,9 +13,6 @@ class StateFunction:
         self._values: np.ndarray = np.empty(shape=self._shape, dtype=float)
 
     def initialize_values(self):
-        # incompatible actions must never be selected
-        self._values.fill(np.NINF)
-        # so that a successful trajectory is always better
         for state_ in self._environment.states():
             if state_.is_terminal:
                 self._values[state_.index] = 0.0
