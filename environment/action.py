@@ -22,8 +22,8 @@ class Actions:
 
     @staticmethod
     def init():
-        Actions.four_actions()
-        # Actions.kings_moves()
+        # Actions.four_actions()
+        Actions.kings_moves()
         # Actions.kings_moves(include_center=True)
         Actions.shape = (len(Actions.action_list),)
         Actions._action_to_index = {action_: i for i, action_ in enumerate(Actions.action_list)}

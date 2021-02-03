@@ -35,6 +35,7 @@ class Trainer:
             self.algorithm.initialize()
 
             for iteration in range(constants.TRAINING_ITERATIONS):
+                self.algorithm.parameter_changes(iteration)
                 # print(f"iteration = {iteration}")
                 if self.verbose:
                     print(f"iteration = {iteration}")

@@ -31,4 +31,8 @@ class Factory:
                 alpha: float = settings_.parameters["alpha"]
             else:
                 alpha: float = 0.5
-            return vq.VQ(self.environment, self.agent, alpha, verbose)
+            if "alpha_variable" in settings_.parameters:
+                alpha_variable: bool = True
+            else:
+                alpha_variable: bool = False
+            return vq.VQ(self.environment, self.agent, alpha, alpha_variable, verbose)

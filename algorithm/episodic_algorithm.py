@@ -28,6 +28,9 @@ class EpisodicAlgorithm(abc.ABC):
         self._Q.initialize_values()
         self._make_policy_greedy_wrt_q()
 
+    def parameter_changes(self, iteration: int):
+        pass
+
     def _make_policy_greedy_wrt_q(self):
         for state_ in self.environment.states():
             self.agent.policy[state_] = self._Q.argmax_over_actions(state_)
