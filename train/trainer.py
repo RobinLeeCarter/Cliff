@@ -10,14 +10,14 @@ from train import recorder
 
 class Trainer:
     def __init__(self,
+                 algorithm_factory: algorithm.Factory,
                  comparison: common.Comparison,
                  recorder_: recorder.Recorder,
-                 algorithm_: algorithm.EpisodicAlgorithm = None,
                  verbose: bool = False
                  ):
+        self.algorithm_factory: algorithm.Factory = algorithm_factory
         self.comparison: common.Comparison = comparison
         self.recorder: recorder.Recorder = recorder_
-        self.algorithm: Optional[algorithm.EpisodicAlgorithm] = algorithm_
         # self.agent: agent.Agent = algorithm_.agent
         self.verbose = verbose
 
@@ -28,17 +28,22 @@ class Trainer:
         self.iteration_array = np.array([], dtype=int)
         self.return_array = np.array([], dtype=float)
 
-    def set_algorithm(self, algorithm_: algorithm.EpisodicAlgorithm):
-        self.algorithm: algorithm.EpisodicAlgorithm = algorithm_
+    def train(self, settings: algorithm.Settings):
+        algorithm_ = self.algorithm_factory[settings]
         print(algorithm_)
 
-    def train(self):
+        algorithm_type = settings.algorithm_type
+        if self.comparison == common.Comparison.RETURN_BY_ALPHA:
+            alpha = settings.parameters["alpha"]
+        else:
+            alpha = None
+
         for run in range(constants.RUNS):
             print(f"run = {run}")
-            self.algorithm.initialize()
+            algorithm_.initialize()
 
             for iteration in range(constants.TRAINING_ITERATIONS):
-                self.algorithm.parameter_changes(iteration)
+                algorithm_.parameter_changes(iteration)
                 # print(f"iteration = {iteration}")
                 if self.verbose:
                     print(f"iteration = {iteration}")
@@ -46,18 +51,18 @@ class Trainer:
                 #     if iteration % 1000 == 0:
                 #         print(f"iteration = {iteration}")
 
-                self.algorithm.do_episode()
-                max_t = self.algorithm.agent.t
-                total_return = self.algorithm.agent.episode.total_return
+                algorithm_.do_episode()
+                max_t = algorithm_.agent.t
+                total_return = algorithm_.agent.episode.total_return
                 if self.verbose:
                     print(f"max_t = {max_t} \ttotal_return = {total_return:.2f}")
                 if self.is_record_iteration(iteration):
                     # if isinstance(self.recorder, algorithm_iteration_recorder.AlgorithmIterationRecorder):
                     # if self.recorder.key_type == tuple[algorithm.EpisodicAlgorithm, int]:
                     if self.comparison == common.Comparison.RETURN_BY_EPISODE:
-                        self.recorder[self.algorithm, iteration] = total_return
+                        self.recorder[algorithm_, iteration] = total_return
                     elif self.comparison == common.Comparison.RETURN_BY_ALPHA:
-                        self.recorder[self.algorithm, self.algorithm._alpha] = total_return
+                        self.recorder[algorithm_type, alpha] = total_return
 
                 # if iteration > 20:
                 #     for test in range(constants.TESTS):
@@ -68,17 +73,18 @@ class Trainer:
                 #             self.recorder[self.algorithm, iteration] = total_return
 
             # print(self.recorder.tallies)
+        algorithm_.print_q_coverage_statistics()
 
         self.fill_arrays_from_recorder()
 
     def fill_arrays_from_recorder(self):
+        """This should be outside of Trainer"""
         iteration: int = 0
         iteration_list: list[int] = []
         return_list: list[float] = []
 
         while iteration < constants.TRAINING_ITERATIONS:
             if self.is_record_iteration(iteration):
-                # if isinstance(self.recorder.key_type, algorithm_iteration_recorder.AlgorithmIterationRecorder):
                 if self.recorder.key_type == tuple[algorithm.EpisodicAlgorithm, int]:
                     total_return = self.recorder[self.algorithm, iteration]
                 else:

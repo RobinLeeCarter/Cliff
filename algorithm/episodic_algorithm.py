@@ -7,6 +7,8 @@ from algorithm import state_function, state_action_function
 
 
 class EpisodicAlgorithm(abc.ABC):
+    name: str = "Error EpisodicAlgorithm.name"
+
     def __init__(self,
                  environment_: environment.Environment,
                  agent_: agent.Agent,

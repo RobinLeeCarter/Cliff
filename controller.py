@@ -23,9 +23,13 @@ class Controller:
         self.e_greedy_policy: policy.EGreedyPolicy = policy.EGreedyPolicy(self.environment, self.rng,
                                                                           greedy_policy=self.greedy_policy)
         self.agent = agent.Agent(self.environment, self.e_greedy_policy)
-        self.factory: algorithm.Factory = algorithm.Factory(self.environment, self.agent)
-        self.algorithms: list[algorithm.EpisodicAlgorithm] = []
-        self.algorithm_iteration_recorder: Optional[train.Recorder] = None
+
+        self.algorithm_factory: algorithm.Factory = algorithm.Factory(self.environment, self.agent)
+
+        self.comparison: Optional[common.Comparison] = None
+        self.settings_list: list[algorithm.Settings] = []
+        # self.algorithms: list[algorithm.EpisodicAlgorithm] = []
+        self.recorder: Optional[train.Recorder] = None
         self.trainer: Optional[train.Trainer] = None
 
         self.graph = view.Graph()
@@ -46,25 +50,30 @@ class Controller:
         #         verbose=False
         #     )
 
-    def setup(self, comparison: common.Comparison):
-        settings_list: list[algorithm.Settings]
+    def setup_and_run(self, comparison: common.Comparison):
+        self.comparison = comparison
+        self.settings_list: list[algorithm.Settings] = []
         recorder_key_type: type
-        if comparison == common.Comparison.RETURN_BY_EPISODE:
-            settings_list = data.single_alpha_comparison
+        if self.comparison == common.Comparison.RETURN_BY_EPISODE:
+            self.settings_list = data.single_alpha_comparison
             recorder_key_type = tuple[algorithm.EpisodicAlgorithm, int]
-        elif comparison == common.Comparison.RETURN_BY_ALPHA:
-            settings_list = self.alpha_settings_list()
-            recorder_key_type = tuple[algorithm.EpisodicAlgorithm, float]
+        elif self.comparison == common.Comparison.RETURN_BY_ALPHA:
+            self.settings_list = self.alpha_settings_list()
+            recorder_key_type = tuple[type, float]
         else:
             raise NotImplementedError
 
-        self.algorithms = [self.factory[settings_] for settings_ in settings_list]
-        self.algorithm_iteration_recorder: train.Recorder = train.Recorder[recorder_key_type]()
+        # self.algorithms = [self.algorithm_factory[settings_] for settings_ in self.settings_list]
+        self.recorder: train.Recorder = train.Recorder[recorder_key_type]()
         self.trainer = train.Trainer(
+            self.algorithm_factory,
             comparison,
-            self.algorithm_iteration_recorder,
+            self.recorder,
             verbose=False
         )
+        # produce output in self.recorder
+        for settings in self.settings_list:
+            self.trainer.train(settings)
 
     def alpha_settings_list(self) -> list[algorithm.Settings]:
         settings_list: list[algorithm.Settings] = []
@@ -77,17 +86,26 @@ class Controller:
                 settings_list.append(settings)
         return settings_list
 
+    def graph_alpha(self):
+        # collate output from self.recorder
+        alpha_array = np.array(data.alpha_list, dtype=float)
+        graph_series: list[view.Series] = []
+        for algorithm_type in data.algorithm_type_list:
+            values = np.array([self.recorder[algorithm_type, alpha] for alpha in alpha_array])
+            series = view.Series(title=algorithm_type.name, values=values, algorithm_type=algorithm_type)
+            graph_series.append(series)
+        self.graph.make_plot(alpha_array, graph_series, is_moving_average=False)
+
     def run(self):
         algorithms_output: dict[algorithm.EpisodicAlgorithm, np.ndarray] = {}
 
         timer: utils.Timer = utils.Timer()
         timer.start()
-        for algorithm_ in self.algorithms:
-            self.trainer.set_algorithm(algorithm_)
-            self.trainer.train()
-            algorithms_output[algorithm_] = self.trainer.return_array
-            algorithm_.print_q_coverage_statistics()
-            timer.lap(name=algorithm_.title)
+        for settings in self.settings_list:
+            self.trainer.train(settings)
+            timer.lap(name=str(settings.algorithm_type))
+            # algorithms_output[algorithm_] = self.trainer.return_array
+
         timer.stop()
 
         iteration_array = self.trainer.iteration_array

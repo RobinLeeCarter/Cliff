@@ -5,13 +5,15 @@ from algorithm import episodic_algorithm
 
 
 class SarsaAlg(episodic_algorithm.EpisodicAlgorithm):
+    name: str = "Sarsa"
+
     def __init__(self,
                  environment_: environment.Environment,
                  agent_: agent.Agent,
                  alpha: float = 0.5,
                  verbose: bool = False
                  ):
-        title = f"Sarsa α={alpha}"
+        title = f"{SarsaAlg.name} α={alpha}"
         super().__init__(environment_, agent_, title, verbose)
         self._alpha = alpha
 

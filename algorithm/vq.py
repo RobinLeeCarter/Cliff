@@ -5,6 +5,8 @@ from algorithm import episodic_algorithm
 
 
 class VQ(episodic_algorithm.EpisodicAlgorithm):
+    name: str = "VQ"
+
     def __init__(self,
                  environment_: environment.Environment,
                  agent_: agent.Agent,
@@ -14,9 +16,9 @@ class VQ(episodic_algorithm.EpisodicAlgorithm):
                  ):
         self.alpha_variable = alpha_variable
         if self.alpha_variable:
-            title = f"VQ α=0.5 then α=0.1"
+            title = f"{VQ.name} α=0.5 then α=0.1"
         else:
-            title = f"VQ α={alpha}"
+            title = f"{VQ.name} α={alpha}"
         super().__init__(environment_, agent_, title, verbose)
         self._alpha = alpha
 

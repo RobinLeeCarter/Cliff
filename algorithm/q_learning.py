@@ -5,13 +5,15 @@ from algorithm import episodic_algorithm
 
 
 class QLearning(episodic_algorithm.EpisodicAlgorithm):
+    name: str = "Q-learning"
+
     def __init__(self,
                  environment_: environment.Environment,
                  agent_: agent.Agent,
                  alpha: float = 0.5,
                  verbose: bool = False
                  ):
-        title = f"Q-learning α={alpha}"
+        title = f"{QLearning.name} α={alpha}"
         super().__init__(environment_, agent_, title, verbose)
         self._alpha = alpha
 

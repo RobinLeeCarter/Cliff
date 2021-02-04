@@ -6,7 +6,7 @@ import controller
 def main():
     os_environ_settings.dummy = None
     controller_ = controller.Controller(verbose=False)
-    controller_.setup(comparison=common.Comparison.RETURN_BY_EPISODE)
+    controller_.setup_and_run(comparison=common.Comparison.RETURN_BY_EPISODE)
     controller_.run()
 
 

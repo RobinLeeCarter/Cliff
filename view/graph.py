@@ -6,6 +6,7 @@ from matplotlib import figure
 
 import constants
 import algorithm
+from view import series
 
 
 class Graph:
@@ -15,8 +16,8 @@ class Graph:
         self.ax: Optional[figure.Axes] = None
 
     def make_plot(self,
-                  iteration: np.ndarray,
-                  algorithms_output: dict[algorithm.EpisodicAlgorithm, np.ndarray],
+                  x_series: np.ndarray,
+                  graph_series: list[series.Series],
                   is_moving_average: bool = False):
         if is_moving_average:
             self.title = "Moving average of Average Return vs Learning Episodes"
@@ -25,9 +26,9 @@ class Graph:
 
         self.prep_graph()
         if is_moving_average:
-            self.moving_average_plot(iteration, algorithms_output)
+            self.moving_average_plot(x_series, graph_series)
         else:
-            self.plot_arrays(iteration, algorithms_output)
+            self.plot_arrays(x_series, graph_series)
         self.ax.legend()
         plt.show()
 
@@ -41,24 +42,24 @@ class Graph:
         self.ax.set_ylabel("Average Return")
         self.ax.grid(True)
 
-    def plot_arrays(self, iteration: np.ndarray, algorithms_output: dict[algorithm.EpisodicAlgorithm, np.ndarray]):
-        for algorithm_, return_array in algorithms_output.items():
-            self.ax.plot(iteration, return_array, label=algorithm_.title)
+    def plot_arrays(self, x_series: np.ndarray, graph_series: list[series.Series]):
+        for series_ in graph_series:
+            self.ax.plot(x_series, series_.values, label=series_.title)
 
     def moving_average_plot(self,
-                            iteration: np.ndarray,
-                            algorithms_output: dict[algorithm.EpisodicAlgorithm, np.ndarray]):
+                            x_series: np.ndarray,
+                            graph_series: list[series.Series]):
         # convert output into moving averages
-        algorithms_ma: dict[algorithm.EpisodicAlgorithm, np.ndarray] = {}
-        for algorithm_, return_array in algorithms_output.items():
-            algorithms_ma[algorithm_] = self.moving_average(return_array,
-                                                            window_size=constants.MOVING_AVERAGE_WINDOW_SIZE)
-        self.plot_arrays(iteration, algorithms_ma)
+        graph_series_ma: list[series.Series] = graph_series.copy()
+        for series_ma in graph_series_ma:
+            values_ma = self.moving_average(series_ma.values, window_size=constants.MOVING_AVERAGE_WINDOW_SIZE)
+            series_ma.values = values_ma
+        self.plot_arrays(x_series, graph_series_ma)
 
-    def moving_average(self, series: np.ndarray, window_size: int) -> np.ndarray:
-        cum_sum = np.cumsum(np.insert(series, 0, 0))
+    def moving_average(self, values: np.ndarray, window_size: int) -> np.ndarray:
+        cum_sum = np.cumsum(np.insert(values, 0, 0))
         mov_av = (cum_sum[window_size:] - cum_sum[:-window_size]) / window_size
-        full_ma = np.empty(shape=series.shape, dtype=float)
+        full_ma = np.empty(shape=values.shape, dtype=float)
         full_ma.fill(np.NAN)
         nan_indent: int = int((window_size - 1) / 2)
         full_ma[nan_indent:-nan_indent] = mov_av
