@@ -28,17 +28,17 @@ class Graph:
             self.moving_average_plot(iteration, algorithms_output)
         else:
             self.plot_arrays(iteration, algorithms_output)
+        self.ax.legend()
         plt.show()
 
     def prep_graph(self):
         self.fig: figure.Figure = plt.figure()
         self.ax: figure.Axes = self.fig.subplots()
-        self.ax.set_title("Average Return vs Learning Episodes")
+        self.ax.set_title(self.title)
         self.ax.set_xlim(xmin=0, xmax=constants.TRAINING_ITERATIONS)
         self.ax.set_xlabel("Learning Episodes")
         self.ax.set_ylim(ymin=-100, ymax=0)
         self.ax.set_ylabel("Average Return")
-        self.ax.legend()
         self.ax.grid(True)
 
     def plot_arrays(self, iteration: np.ndarray, algorithms_output: dict[algorithm.EpisodicAlgorithm, np.ndarray]):
