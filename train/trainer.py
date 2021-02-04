@@ -9,11 +9,11 @@ from train import recorder
 
 class Trainer:
     def __init__(self,
-                 av_recorder_: recorder.Recorder,
+                 recorder_: recorder.Recorder,
                  algorithm_: algorithm.EpisodicAlgorithm = None,
                  verbose: bool = False
                  ):
-        self.recorder: recorder.Recorder = av_recorder_
+        self.recorder: recorder.Recorder = recorder_
         self.algorithm: Optional[algorithm.EpisodicAlgorithm] = algorithm_
         # self.agent: agent.Agent = algorithm_.agent
         self.verbose = verbose
@@ -49,7 +49,9 @@ class Trainer:
                 if self.verbose:
                     print(f"max_t = {max_t} \ttotal_return = {total_return:.2f}")
                 if self.is_record_iteration(iteration):
-                    self.recorder[self.algorithm, iteration] = total_return
+                    # if isinstance(self.recorder, algorithm_iteration_recorder.AlgorithmIterationRecorder):
+                    if self.recorder.key_type == tuple[algorithm.EpisodicAlgorithm, int]:
+                        self.recorder[self.algorithm, iteration] = total_return
 
                 # if iteration > 20:
                 #     for test in range(constants.TESTS):
@@ -70,7 +72,11 @@ class Trainer:
 
         while iteration < constants.TRAINING_ITERATIONS:
             if self.is_record_iteration(iteration):
-                total_return = self.recorder[self.algorithm, iteration]
+                # if isinstance(self.recorder.key_type, algorithm_iteration_recorder.AlgorithmIterationRecorder):
+                if self.recorder.key_type == tuple[algorithm.EpisodicAlgorithm, int]:
+                    total_return = self.recorder[self.algorithm, iteration]
+                else:
+                    total_return = None
                 iteration_list.append(iteration)
                 return_list.append(total_return)
             iteration += 1

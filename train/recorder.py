@@ -1,40 +1,38 @@
-from typing import Dict
-
-import algorithm
+from typing import TypeVar, Generic
 from dataclasses import dataclass
 
+import utils
 
-class Recorder:
+T = TypeVar('T')
+
+
+class Recorder(Generic[T]):
     def __init__(self):
-        self.tallies: Dict[_AvKey, _Tally] = {}
+        self.tallies: dict[T, _Tally] = {}
 
-    def __getitem__(self, algorithm_iteration_tuple: tuple[algorithm.EpisodicAlgorithm, int]) -> float:
-        algorithm_, iteration = algorithm_iteration_tuple
-        av_key = _AvKey(algorithm_, iteration)
-        if av_key in self.tallies:
-            return self.tallies[av_key].av_return
+    def reset(self):
+        self.tallies = {}
+
+    def __getitem__(self, key: T) -> float:
+        if key in self.tallies:
+            return self.tallies[key].average
         else:
             return 0.0
 
-    def __setitem__(self, algorithm_iteration_tuple: tuple[algorithm.EpisodicAlgorithm, int], value: float):
-        algorithm_, iteration = algorithm_iteration_tuple
-        av_key = _AvKey(algorithm_, iteration)
-        if av_key in self.tallies:
-            tally = self.tallies[av_key]
+    def __setitem__(self, key: T, value: float):
+        if key in self.tallies:
+            tally = self.tallies[key]
             tally.count += 1
-            tally.av_return += (1.0/tally.count)*(value - tally.av_return)
+            tally.average += (1.0 / tally.count) * (value - tally.average)
         else:
-            tally = _Tally(count=1, av_return=value)
-            self.tallies[av_key] = tally
+            self.tallies[key] = _Tally(count=1, average=value)
 
-
-@dataclass(frozen=True)
-class _AvKey:
-    algorithm: algorithm.EpisodicAlgorithm
-    iteration: int
+    @property
+    def key_type(self) -> type:
+        return utils.get_generic_types(self)[0]
 
 
 @dataclass
 class _Tally:
     count: int
-    av_return: float
+    average: float

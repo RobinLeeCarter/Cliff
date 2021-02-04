@@ -24,9 +24,13 @@ class Controller:
         self.algorithms: list[algorithm.EpisodicAlgorithm] =\
             [self.factory[settings_] for settings_ in data.SETTINGS_LIST]
         # print(self.algorithms)
-        self.av_recorder = train.Recorder()
+
+        recorder_key_type: type = tuple[algorithm.EpisodicAlgorithm, int]
+        self.algorithm_iteration_recorder = train.Recorder[recorder_key_type]()
+        print(self.algorithm_iteration_recorder.key_type)
 
         self.graph = view.Graph()
+
         self.grid_view = view.GridView(self.environment.grid_world)
 
         # self.target_policy: policy.DeterministicPolicy = policy.DeterministicPolicy(self.environment)
@@ -47,7 +51,7 @@ class Controller:
         algorithms_output: dict[algorithm.EpisodicAlgorithm, np.ndarray] = {}
         # sarsa_array: np.ndarray = np.array([], dtype=float)
         trainer: train.Trainer = train.Trainer(
-            self.av_recorder,
+            self.algorithm_iteration_recorder,
             verbose=False
         )
         for algorithm_ in self.algorithms:
