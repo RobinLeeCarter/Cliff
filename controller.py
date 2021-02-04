@@ -1,5 +1,6 @@
 import numpy as np
 
+import utils
 import environment
 import policy
 import agent
@@ -54,11 +55,15 @@ class Controller:
             self.algorithm_iteration_recorder,
             verbose=False
         )
+        timer: utils.Timer = utils.Timer()
+        timer.start()
         for algorithm_ in self.algorithms:
             trainer.set_algorithm(algorithm_)
             trainer.train()
             algorithms_output[algorithm_] = trainer.return_array
             algorithm_.print_q_coverage_statistics()
+            timer.lap(name=algorithm_.title)
+        timer.stop()
 
         iteration_array = trainer.iteration_array
         self.graph.ma_plot(iteration_array, algorithms_output)
