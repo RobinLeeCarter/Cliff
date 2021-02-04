@@ -3,16 +3,19 @@ from typing import Optional
 import numpy as np
 
 import constants
+import common
 import algorithm
 from train import recorder
 
 
 class Trainer:
     def __init__(self,
+                 comparison: common.Comparison,
                  recorder_: recorder.Recorder,
                  algorithm_: algorithm.EpisodicAlgorithm = None,
                  verbose: bool = False
                  ):
+        self.comparison: common.Comparison = comparison
         self.recorder: recorder.Recorder = recorder_
         self.algorithm: Optional[algorithm.EpisodicAlgorithm] = algorithm_
         # self.agent: agent.Agent = algorithm_.agent
@@ -50,8 +53,11 @@ class Trainer:
                     print(f"max_t = {max_t} \ttotal_return = {total_return:.2f}")
                 if self.is_record_iteration(iteration):
                     # if isinstance(self.recorder, algorithm_iteration_recorder.AlgorithmIterationRecorder):
-                    if self.recorder.key_type == tuple[algorithm.EpisodicAlgorithm, int]:
+                    # if self.recorder.key_type == tuple[algorithm.EpisodicAlgorithm, int]:
+                    if self.comparison == common.Comparison.RETURN_BY_EPISODE:
                         self.recorder[self.algorithm, iteration] = total_return
+                    elif self.comparison == common.Comparison.RETURN_BY_ALPHA:
+                        self.recorder[self.algorithm, self.algorithm._alpha] = total_return
 
                 # if iteration > 20:
                 #     for test in range(constants.TESTS):

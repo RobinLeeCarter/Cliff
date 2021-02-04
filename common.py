@@ -21,6 +21,11 @@ class Square(enum.IntEnum):
 
 
 class UserEvent(enum.IntEnum):
-    NONE = 0
-    QUIT = 1
-    SPACE = 2
+    NONE = enum.auto()
+    QUIT = enum.auto()
+    SPACE = enum.auto()
+
+
+class Comparison(enum.IntEnum):
+    RETURN_BY_EPISODE = enum.auto()
+    RETURN_BY_ALPHA = enum.auto()

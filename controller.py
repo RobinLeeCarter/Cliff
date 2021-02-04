@@ -3,6 +3,7 @@ from typing import Optional
 import numpy as np
 
 import utils
+import common
 import environment
 import policy
 import agent
@@ -22,8 +23,7 @@ class Controller:
         self.e_greedy_policy: policy.EGreedyPolicy = policy.EGreedyPolicy(self.environment, self.rng,
                                                                           greedy_policy=self.greedy_policy)
         self.agent = agent.Agent(self.environment, self.e_greedy_policy)
-
-        self.factory: Optional[algorithm.Factory] = None
+        self.factory: algorithm.Factory = algorithm.Factory(self.environment, self.agent)
         self.algorithms: list[algorithm.EpisodicAlgorithm] = []
         self.algorithm_iteration_recorder: Optional[train.Recorder] = None
         self.trainer: Optional[train.Trainer] = None
@@ -46,19 +46,36 @@ class Controller:
         #         verbose=False
         #     )
 
-    def setup(self, comparison: str):
-        if comparison == "Return by episode":
+    def setup(self, comparison: common.Comparison):
+        settings_list: list[algorithm.Settings]
+        recorder_key_type: type
+        if comparison == common.Comparison.RETURN_BY_EPISODE:
             settings_list = data.single_alpha_comparison
-            self.algorithms = [self.factory[settings_] for settings_ in settings_list]
-            recorder_key_type: type = tuple[algorithm.EpisodicAlgorithm, int]
-            self.algorithm_iteration_recorder: train.Recorder = train.Recorder[recorder_key_type]()
-            self.trainer = train.Trainer(
-                self.algorithm_iteration_recorder,
-                verbose=False
-            )
-        elif comparison == "Return by alpha":
-            pass
+            recorder_key_type = tuple[algorithm.EpisodicAlgorithm, int]
+        elif comparison == common.Comparison.RETURN_BY_ALPHA:
+            settings_list = self.alpha_settings_list()
+            recorder_key_type = tuple[algorithm.EpisodicAlgorithm, float]
+        else:
+            raise NotImplementedError
 
+        self.algorithms = [self.factory[settings_] for settings_ in settings_list]
+        self.algorithm_iteration_recorder: train.Recorder = train.Recorder[recorder_key_type]()
+        self.trainer = train.Trainer(
+            comparison,
+            self.algorithm_iteration_recorder,
+            verbose=False
+        )
+
+    def alpha_settings_list(self) -> list[algorithm.Settings]:
+        settings_list: list[algorithm.Settings] = []
+        for alpha in data.alpha_list:
+            for algorithm_type in data.algorithm_type_list:
+                settings = algorithm.Settings(
+                    algorithm_type=algorithm_type,
+                    parameters={"alpha": alpha}
+                )
+                settings_list.append(settings)
+        return settings_list
 
     def run(self):
         algorithms_output: dict[algorithm.EpisodicAlgorithm, np.ndarray] = {}
@@ -68,7 +85,7 @@ class Controller:
         for algorithm_ in self.algorithms:
             self.trainer.set_algorithm(algorithm_)
             self.trainer.train()
-            self.algorithms_output[algorithm_] = self.trainer.return_array
+            algorithms_output[algorithm_] = self.trainer.return_array
             algorithm_.print_q_coverage_statistics()
             timer.lap(name=algorithm_.title)
         timer.stop()

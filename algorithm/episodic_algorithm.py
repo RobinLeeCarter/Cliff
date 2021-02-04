@@ -50,3 +50,6 @@ class EpisodicAlgorithm(abc.ABC):
 
     def print_q_coverage_statistics(self):
         self._Q.print_coverage_statistics()
+
+    def __repr__(self):
+        return f"{self.title}"

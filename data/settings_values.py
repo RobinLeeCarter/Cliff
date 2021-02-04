@@ -1,5 +1,3 @@
-import numpy as np
-
 import utils
 import algorithm
 
@@ -11,7 +9,7 @@ single_alpha_comparison = [
   algorithm.Settings(algorithm.SarsaAlg, {"alpha": 0.9})
 ]
 
-algorithms_list = [
+algorithm_type_list = [
   algorithm.ExpectedSarsa,
   algorithm.VQ,
   algorithm.QLearning,
