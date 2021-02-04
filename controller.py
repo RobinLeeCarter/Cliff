@@ -1,3 +1,5 @@
+from typing import Optional
+
 import numpy as np
 
 import utils
@@ -21,14 +23,10 @@ class Controller:
                                                                           greedy_policy=self.greedy_policy)
         self.agent = agent.Agent(self.environment, self.e_greedy_policy)
 
-        self.factory = algorithm.Factory(self.environment, self.agent)
-        self.algorithms: list[algorithm.EpisodicAlgorithm] =\
-            [self.factory[settings_] for settings_ in data.SETTINGS_LIST]
-        # print(self.algorithms)
-
-        recorder_key_type: type = tuple[algorithm.EpisodicAlgorithm, int]
-        self.algorithm_iteration_recorder = train.Recorder[recorder_key_type]()
-        print(self.algorithm_iteration_recorder.key_type)
+        self.factory: Optional[algorithm.Factory] = None
+        self.algorithms: list[algorithm.EpisodicAlgorithm] = []
+        self.algorithm_iteration_recorder: Optional[train.Recorder] = None
+        self.trainer: Optional[train.Trainer] = None
 
         self.graph = view.Graph()
 
@@ -48,24 +46,34 @@ class Controller:
         #         verbose=False
         #     )
 
+    def setup(self, comparison: str):
+        if comparison == "Return by episode":
+            settings_list = data.single_alpha_comparison
+            self.algorithms = [self.factory[settings_] for settings_ in settings_list]
+            recorder_key_type: type = tuple[algorithm.EpisodicAlgorithm, int]
+            self.algorithm_iteration_recorder: train.Recorder = train.Recorder[recorder_key_type]()
+            self.trainer = train.Trainer(
+                self.algorithm_iteration_recorder,
+                verbose=False
+            )
+        elif comparison == "Return by alpha":
+            pass
+
+
     def run(self):
         algorithms_output: dict[algorithm.EpisodicAlgorithm, np.ndarray] = {}
-        # sarsa_array: np.ndarray = np.array([], dtype=float)
-        trainer: train.Trainer = train.Trainer(
-            self.algorithm_iteration_recorder,
-            verbose=False
-        )
+
         timer: utils.Timer = utils.Timer()
         timer.start()
         for algorithm_ in self.algorithms:
-            trainer.set_algorithm(algorithm_)
-            trainer.train()
-            algorithms_output[algorithm_] = trainer.return_array
+            self.trainer.set_algorithm(algorithm_)
+            self.trainer.train()
+            self.algorithms_output[algorithm_] = self.trainer.return_array
             algorithm_.print_q_coverage_statistics()
             timer.lap(name=algorithm_.title)
         timer.stop()
 
-        iteration_array = trainer.iteration_array
+        iteration_array = self.trainer.iteration_array
         self.graph.make_plot(iteration_array, algorithms_output, is_moving_average=False)
 
         # self.behaviour_agent.set_policy(self.target_policy)
