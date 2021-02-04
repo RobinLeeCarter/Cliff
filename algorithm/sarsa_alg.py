@@ -4,7 +4,7 @@ import agent
 from algorithm import episodic_algorithm
 
 
-class Sarsa(episodic_algorithm.EpisodicAlgorithm):
+class SarsaAlg(episodic_algorithm.EpisodicAlgorithm):
     def __init__(self,
                  environment_: environment.Environment,
                  agent_: agent.Agent,
@@ -22,7 +22,7 @@ class Sarsa(episodic_algorithm.EpisodicAlgorithm):
         self.agent.take_action()
         self.agent.choose_action()
         sarsa = self.agent.get_sarsa()
-        delta = sarsa.reward + \
+        delta = sarsa.next_reward + \
             constants.GAMMA * self._Q[sarsa.next_state, sarsa.next_action] - \
             self._Q[sarsa.state, sarsa.action]
         self._Q[sarsa.state, sarsa.action] += self._alpha * delta

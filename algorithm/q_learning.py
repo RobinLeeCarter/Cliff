@@ -20,7 +20,7 @@ class QLearning(episodic_algorithm.EpisodicAlgorithm):
         self.agent.take_action()
         sarsa = self.agent.get_sarsa()
         q_max_over_a = self._Q.max_over_actions(sarsa.next_state)
-        delta = sarsa.reward + \
+        delta = sarsa.next_reward + \
             constants.GAMMA * q_max_over_a - \
             self._Q[sarsa.state, sarsa.action]
         self._Q[sarsa.state, sarsa.action] += self._alpha * delta

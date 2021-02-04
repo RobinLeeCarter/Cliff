@@ -5,13 +5,13 @@ import environment
 
 
 @dataclass
-class Sarsa:
+class SARSA:
     state: environment.State
     action: environment.Action
-    reward: float
+    next_reward: float
     next_state: environment.State
     next_action: Optional[environment.Action]
 
     @property
     def tuple(self) -> tuple:
-        return self.state, self.action, self.reward, self.next_state, self.next_action
+        return self.state, self.action, self.next_reward, self.next_state, self.next_action

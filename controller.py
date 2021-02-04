@@ -66,7 +66,7 @@ class Controller:
         timer.stop()
 
         iteration_array = trainer.iteration_array
-        self.graph.ma_plot(iteration_array, algorithms_output)
+        self.graph.make_plot(iteration_array, algorithms_output, is_moving_average=False)
 
         # self.behaviour_agent.set_policy(self.target_policy)
         # self.view.open_window()

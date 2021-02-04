@@ -1,6 +1,6 @@
 import environment
 import agent
-from algorithm import settings, episodic_algorithm, sarsa, q_learning, vq, expected_sarsa
+from algorithm import settings, episodic_algorithm, sarsa_alg, q_learning, vq, expected_sarsa
 
 
 class Factory:
@@ -14,12 +14,12 @@ class Factory:
         else:
             verbose: bool = False
 
-        if settings_.algorithm_type == sarsa.Sarsa:
+        if settings_.algorithm_type == sarsa_alg.SarsaAlg:
             if "alpha" in settings_.parameters:
                 alpha: float = settings_.parameters["alpha"]
             else:
                 alpha: float = 0.5
-            return sarsa.Sarsa(self.environment, self.agent, alpha, verbose)
+            return sarsa_alg.SarsaAlg(self.environment, self.agent, alpha, verbose)
         elif settings_.algorithm_type == q_learning.QLearning:
             if "alpha" in settings_.parameters:
                 alpha: float = settings_.parameters["alpha"]
