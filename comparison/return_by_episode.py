@@ -1,6 +1,5 @@
 import numpy as np
 
-import constants
 import agent
 import algorithm
 import train
@@ -27,21 +26,35 @@ class ReturnByEpisode(comparison.Comparison):
         self._recorder[algorithm_type, iteration] = total_return
 
     def compile(self):
-        raise NotImplementedError
+        assumed_settings = self.settings_list[0]
+        iteration_array = np.array([
+            iteration
+            for iteration in range(assumed_settings.training_iterations)
+            if self._is_record_iteration(assumed_settings, iteration)
+        ], dtype=float)
+
         self.x_series = series.Series(
-            title="Iterations",
-            values=np.array(self._alpha_list)
+            title="Episodes",
+            values=iteration_array
         )
+
         # collate output from self.recorder
-        for algorithm_type in self._algorithm_type_list:
-            values = np.array([self._recorder[algorithm_type, alpha] for alpha in self._alpha_list])
+        for settings_ in self.settings_list:
+            values = np.array([
+                self._recorder[settings_.algorithm_type, iteration]
+                for iteration in iteration_array
+            ])
             series_ = series.Series(
-                title=algorithm_type.name,
-                values=values,
-                identifiers={"algorithm_type": algorithm_type}
+                title=settings_.algorithm_title,
+                identifiers={"algorithm_type": settings_.algorithm_type},
+                values=values
             )
             self.series_list.append(series_)
 
     def draw_graph(self):
-        iteration_array = self.trainer.iteration_array
-        self.graph.make_plot(iteration_array, algorithms_output, is_moving_average=False)
+        assumed_settings = self.settings_list[0]
+        self.graph.make_plot(x_series=self.x_series,
+                             x_min=0,
+                             x_max=assumed_settings.training_iterations,
+                             graph_series=self.series_list,
+                             is_moving_average=False)

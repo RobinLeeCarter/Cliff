@@ -6,10 +6,12 @@ import algorithm
 import constants
 
 
-@dataclass(frozen=True)
+@dataclass
 class Settings:
     algorithm_type: Type[algorithm.EpisodicAlgorithm]
     parameters: Dict[str, any]
+
+    algorithm_title: str = ""   # algorithm title will be populated here by Trainer whether it's used or not
 
     training_iterations: int = constants.TRAINING_ITERATIONS
     episode_length_timeout: int = constants.EPISODE_LENGTH_TIMEOUT

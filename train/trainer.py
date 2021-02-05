@@ -1,5 +1,3 @@
-import numpy as np
-
 import comparison
 import algorithm
 
@@ -16,7 +14,8 @@ class Trainer:
 
     def train(self, settings: comparison.Settings):
         algorithm_ = self.algorithm_factory[settings]
-        print(algorithm_)
+        settings.algorithm_title = algorithm_.title
+        print(algorithm_.title)
 
         for run in range(settings.runs):
             if self.verbose or run % settings.run_print_frequency == 0:

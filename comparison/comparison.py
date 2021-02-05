@@ -20,9 +20,12 @@ class Comparison(ABC):
         pass
 
     def review(self, settings_: settings.Settings, iteration: int, episode: agent.Episode):
-        if iteration >= settings_.performance_sample_start and \
-                iteration % settings_.performance_sample_frequency == 0:
+        if self._is_record_iteration(settings_, iteration):
             self.record(settings_, iteration, episode)
+
+    def _is_record_iteration(self, settings_: settings.Settings, iteration: int) -> bool:
+        return iteration >= settings_.performance_sample_start and \
+               iteration % settings_.performance_sample_frequency == 0
 
     @abstractmethod
     def record(self, settings_: settings.Settings, iteration: int, episode: agent.Episode):

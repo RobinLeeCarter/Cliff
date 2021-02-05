@@ -15,43 +15,47 @@ class Graph:
         self.ax: Optional[figure.Axes] = None
 
     def make_plot(self,
-                  x_series: np.ndarray,
+                  x_series: series.Series,
+                  x_min: float,
+                  x_max: float,
                   graph_series: list[series.Series],
-                  is_moving_average: bool = False):
+                  moving_average_window_size: int = 0):
+        is_moving_average = (moving_average_window_size >= 3)
         if is_moving_average:
-            self.title = "Moving average of Average Return vs Learning Episodes"
+            self.title = f"Moving average of Average Return vs {x_series.title}"
         else:
-            self.title = "Average Return vs Learning Episodes"
+            self.title = f"Average Return vs {x_series.title}"
 
-        self.prep_graph()
+        self.prep_graph(x_min=x_min, x_max=x_max, x_label=x_series.title)
         if is_moving_average:
-            self.moving_average_plot(x_series, graph_series)
+            self.moving_average_plot(x_series, graph_series, moving_average_window_size)
         else:
             self.plot_arrays(x_series, graph_series)
         self.ax.legend()
         plt.show()
 
-    def prep_graph(self):
+    def prep_graph(self, x_min: float, x_max: float, x_label: str):
         self.fig: figure.Figure = plt.figure()
         self.ax: figure.Axes = self.fig.subplots()
         self.ax.set_title(self.title)
-        self.ax.set_xlim(xmin=0, xmax=constants.TRAINING_ITERATIONS)
-        self.ax.set_xlabel("Learning Episodes")
+        self.ax.set_xlim(xmin=x_min, xmax=x_max)
+        self.ax.set_xlabel(x_label)
         self.ax.set_ylim(ymin=-100, ymax=0)
         self.ax.set_ylabel("Average Return")
         self.ax.grid(True)
 
-    def plot_arrays(self, x_series: np.ndarray, graph_series: list[series.Series]):
+    def plot_arrays(self, x_series: series.Series, graph_series: list[series.Series]):
         for series_ in graph_series:
-            self.ax.plot(x_series, series_.values, label=series_.title)
+            self.ax.plot(x_series.values, series_.values, label=series_.title)
 
     def moving_average_plot(self,
-                            x_series: np.ndarray,
-                            graph_series: list[series.Series]):
+                            x_series: series.Series,
+                            graph_series: list[series.Series],
+                            moving_average_window_size: int):
         # convert output into moving averages
         graph_series_ma: list[series.Series] = graph_series.copy()
         for series_ma in graph_series_ma:
-            values_ma = self.moving_average(series_ma.values, window_size=constants.MOVING_AVERAGE_WINDOW_SIZE)
+            values_ma = self.moving_average(series_ma.values, window_size=moving_average_window_size)
             series_ma.values = values_ma
         self.plot_arrays(x_series, graph_series_ma)
 
