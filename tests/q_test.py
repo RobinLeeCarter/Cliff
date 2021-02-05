@@ -3,7 +3,7 @@ import numpy as np
 import common
 import environment
 import data
-from algorithm.state_action_function import StateActionFunction
+from algorithm.algorithms.support.state_action_function import StateActionFunction
 
 
 rng: np.random.Generator = np.random.default_rng()

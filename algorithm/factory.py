@@ -1,6 +1,7 @@
 import environment
 import agent
-from algorithm import settings, episodic_algorithm, sarsa_alg, q_learning, vq, expected_sarsa
+from algorithm import algorithms, settings
+# from algorithm. import vq, q_learning, episodic_algorithm, expected_sarsa, sarsa_alg
 
 
 class Factory:
@@ -8,31 +9,31 @@ class Factory:
         self.environment: environment.Environment = environment_
         self.agent: agent.Agent = agent_
 
-    def __getitem__(self, settings_: settings.Settings) -> episodic_algorithm.EpisodicAlgorithm:
+    def __getitem__(self, settings_: settings.Settings) -> algorithms.EpisodicAlgorithm:
         if "verbose" in settings_.parameters:
             verbose: bool = settings_.parameters["verbose"]
         else:
             verbose: bool = False
 
-        if settings_.algorithm_type == sarsa_alg.SarsaAlg:
+        if settings_.algorithm_type == algorithms.SarsaAlg:
             if "alpha" in settings_.parameters:
                 alpha: float = settings_.parameters["alpha"]
             else:
                 alpha: float = 0.5
-            return sarsa_alg.SarsaAlg(self.environment, self.agent, alpha, verbose)
-        elif settings_.algorithm_type == q_learning.QLearning:
+            return algorithms.SarsaAlg(self.environment, self.agent, alpha, verbose)
+        elif settings_.algorithm_type == algorithms.QLearning:
             if "alpha" in settings_.parameters:
                 alpha: float = settings_.parameters["alpha"]
             else:
                 alpha: float = 0.5
-            return q_learning.QLearning(self.environment, self.agent, alpha, verbose)
-        elif settings_.algorithm_type == expected_sarsa.ExpectedSarsa:
+            return algorithms.QLearning(self.environment, self.agent, alpha, verbose)
+        elif settings_.algorithm_type == algorithms.ExpectedSarsa:
             if "alpha" in settings_.parameters:
                 alpha: float = settings_.parameters["alpha"]
             else:
                 alpha: float = 0.5
-            return expected_sarsa.ExpectedSarsa(self.environment, self.agent, alpha, verbose)
-        elif settings_.algorithm_type == vq.VQ:
+            return algorithms.ExpectedSarsa(self.environment, self.agent, alpha, verbose)
+        elif settings_.algorithm_type == algorithms.VQ:
             if "alpha" in settings_.parameters:
                 alpha: float = settings_.parameters["alpha"]
             else:
@@ -41,4 +42,4 @@ class Factory:
                 alpha_variable: bool = True
             else:
                 alpha_variable: bool = False
-            return vq.VQ(self.environment, self.agent, alpha, alpha_variable, verbose)
+            return algorithms.VQ(self.environment, self.agent, alpha, alpha_variable, verbose)

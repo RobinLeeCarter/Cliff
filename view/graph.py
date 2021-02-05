@@ -5,8 +5,7 @@ import matplotlib.pyplot as plt
 from matplotlib import figure
 
 import constants
-import algorithm
-from view import series
+from data import series
 
 
 class Graph:

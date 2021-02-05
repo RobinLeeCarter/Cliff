@@ -1,7 +1,7 @@
 import constants
 import environment
 import agent
-from algorithm import episodic_algorithm
+from algorithm.algorithms import episodic_algorithm
 
 
 class QLearning(episodic_algorithm.EpisodicAlgorithm):

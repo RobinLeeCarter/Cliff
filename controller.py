@@ -55,7 +55,7 @@ class Controller:
         self.settings_list: list[algorithm.Settings] = []
         recorder_key_type: type
         if self.comparison == common.Comparison.RETURN_BY_EPISODE:
-            self.settings_list = data.single_alpha_comparison
+            self.settings_list = data.return_by_episode_settings
             recorder_key_type = tuple[algorithm.EpisodicAlgorithm, int]
         elif self.comparison == common.Comparison.RETURN_BY_ALPHA:
             self.settings_list = self.alpha_settings_list()
@@ -86,13 +86,13 @@ class Controller:
                 settings_list.append(settings)
         return settings_list
 
-    def graph_alpha(self):
+    def compile_return_by_alpha(self):
         # collate output from self.recorder
         alpha_array = np.array(data.alpha_list, dtype=float)
         graph_series: list[view.Series] = []
         for algorithm_type in data.algorithm_type_list:
             values = np.array([self.recorder[algorithm_type, alpha] for alpha in alpha_array])
-            series = view.Series(title=algorithm_type.name, values=values, algorithm_type=algorithm_type)
+            series = view.Series(title=algorithm_type.name, values=values)
             graph_series.append(series)
         self.graph.make_plot(alpha_array, graph_series, is_moving_average=False)
 
