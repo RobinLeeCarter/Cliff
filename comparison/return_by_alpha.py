@@ -3,8 +3,7 @@ import numpy as np
 import utils
 import algorithm
 import agent
-import train
-from comparison import settings, series, comparison
+from comparison import settings, series, comparison, recorder
 
 
 class ReturnByAlpha(comparison.Comparison):
@@ -22,7 +21,7 @@ class ReturnByAlpha(comparison.Comparison):
         self._alpha_step = 0.05
         self._alpha_list = utils.float_range(start=self._alpha_min, stop=self._alpha_max, step_size=self._alpha_step)
         recorder_key_type = tuple[type, float]
-        self.recorder = train.Recorder[recorder_key_type]()
+        self._recorder = recorder.Recorder[recorder_key_type]()
 
     def build(self):
         self.settings_list = []
@@ -56,9 +55,8 @@ class ReturnByAlpha(comparison.Comparison):
             self.series_list.append(series_)
 
     def draw_graph(self):
-        assumed_settings = self.settings_list[0]
+        # assumed_settings = self.settings_list[0]
         self.graph.make_plot(x_series=self.x_series,
                              x_min=self._alpha_min,
                              x_max=self._alpha_max,
-                             graph_series=self.series_list,
-                             moving_average_window_size=assumed_settings.moving_average_window_size)
+                             graph_series=self.series_list)

@@ -2,14 +2,13 @@ from abc import ABC, abstractmethod
 from typing import Optional
 
 import agent
-import train
 import view
-from comparison import settings, series
+from comparison import settings, series, recorder
 
 
 class Comparison(ABC):
     def __init__(self):
-        self._recorder: Optional[train.Recorder] = None
+        self._recorder: Optional[recorder.Recorder] = None
         self.settings_list: list[settings.Settings] = []
         self.x_series: Optional[series.Series] = None
         self.series_list: list[series.Series] = []

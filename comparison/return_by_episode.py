@@ -2,15 +2,14 @@ import numpy as np
 
 import agent
 import algorithm
-import train
-from comparison import settings, series, comparison
+from comparison import settings, series, comparison, recorder
 
 
 class ReturnByEpisode(comparison.Comparison):
     def __init__(self):
         super().__init__()
-        recorder_key_type = tuple[type, float]
-        self.recorder = train.Recorder[recorder_key_type]()
+        recorder_key_type = tuple[type, int]
+        self._recorder = recorder.Recorder[recorder_key_type]()
 
     def build(self):
         self.settings_list = [
@@ -29,7 +28,7 @@ class ReturnByEpisode(comparison.Comparison):
         assumed_settings = self.settings_list[0]
         iteration_array = np.array([
             iteration
-            for iteration in range(assumed_settings.training_iterations)
+            for iteration in range(1, assumed_settings.training_iterations+1)
             if self._is_record_iteration(assumed_settings, iteration)
         ], dtype=float)
 
@@ -57,4 +56,4 @@ class ReturnByEpisode(comparison.Comparison):
                              x_min=0,
                              x_max=assumed_settings.training_iterations,
                              graph_series=self.series_list,
-                             is_moving_average=False)
+                             moving_average_window_size=assumed_settings.moving_average_window_size)

@@ -1,5 +1,7 @@
-import comparison
+from __future__ import annotations
+
 import algorithm
+import comparison
 
 
 class Trainer:
@@ -15,14 +17,14 @@ class Trainer:
     def train(self, settings: comparison.Settings):
         algorithm_ = self.algorithm_factory[settings]
         settings.algorithm_title = algorithm_.title
-        print(algorithm_.title)
+        print(f"{algorithm_.title}: {settings.runs} runs")
 
-        for run in range(settings.runs):
+        for run in range(1, settings.runs+1):
             if self.verbose or run % settings.run_print_frequency == 0:
-                print(f"run = {run}")
+                print(f"run = {run}: {settings.training_iterations} iterations")
             algorithm_.initialize()
 
-            for iteration in range(settings.training_iterations):
+            for iteration in range(1, settings.training_iterations+1):
                 algorithm_.parameter_changes(iteration)
                 # print(f"iteration = {iteration}")
                 if self.verbose or iteration % settings.iteration_print_frequency == 0:
