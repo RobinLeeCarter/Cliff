@@ -40,7 +40,7 @@ class Graph:
         self.ax.set_title(self.title)
         self.ax.set_xlim(xmin=x_min, xmax=x_max)
         self.ax.set_xlabel(x_label)
-        self.ax.set_ylim(ymin=-100, ymax=0)
+        self.ax.set_ylim(ymin=-140, ymax=0)
         self.ax.set_ylabel("Average Return")
         self.ax.grid(True)
 
