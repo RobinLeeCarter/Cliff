@@ -34,8 +34,6 @@ class Controller:
         # self.recorder: Optional[train.Recorder] = None
         self.trainer: Optional[train.Trainer] = None
 
-        self.graph = view.Graph()
-
         self.grid_view = view.GridView(self.environment.grid_world)
 
         # self.target_policy: policy.DeterministicPolicy = policy.DeterministicPolicy(self.environment)
@@ -114,10 +112,7 @@ class Controller:
         timer.stop()
 
         self.comparison.compile()
-        self.comparison.graph()
-
-        iteration_array = self.trainer.iteration_array
-        self.graph.make_plot(iteration_array, algorithms_output, is_moving_average=False)
+        self.comparison.draw_graph()
 
         # self.behaviour_agent.set_policy(self.target_policy)
         # self.view.open_window()

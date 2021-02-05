@@ -3,7 +3,7 @@ from typing import Optional
 
 import agent
 import train
-# import common
+import view
 from comparison import settings, series
 
 
@@ -13,14 +13,16 @@ class Comparison(ABC):
         self.settings_list: list[settings.Settings] = []
         self.x_series: Optional[series.Series] = None
         self.series_list: list[series.Series] = []
-
-    # @abstractmethod
-    # def _build(self, comparison_type: common.ComparisonType):
-    #     pass
+        self.graph = view.Graph()
 
     @abstractmethod
     def build(self):
         pass
+
+    def review(self, settings_: settings.Settings, iteration: int, episode: agent.Episode):
+        if iteration >= settings_.performance_sample_start and \
+                iteration % settings_.performance_sample_frequency == 0:
+            self.record(settings_, iteration, episode)
 
     @abstractmethod
     def record(self, settings_: settings.Settings, iteration: int, episode: agent.Episode):
@@ -28,4 +30,8 @@ class Comparison(ABC):
 
     @abstractmethod
     def compile(self):
+        pass
+
+    @abstractmethod
+    def draw_graph(self):
         pass

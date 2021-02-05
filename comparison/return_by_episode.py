@@ -13,8 +13,6 @@ class ReturnByEpisode(comparison.Comparison):
         recorder_key_type = tuple[type, float]
         self.recorder = train.Recorder[recorder_key_type]()
 
-        self._training_episodes = constants.TRAINING_ITERATIONS
-
     def build(self):
         self.settings_list = [
           settings.Settings(algorithm.ExpectedSarsa, {"alpha": 0.9}),
@@ -43,3 +41,7 @@ class ReturnByEpisode(comparison.Comparison):
                 identifiers={"algorithm_type": algorithm_type}
             )
             self.series_list.append(series_)
+
+    def draw_graph(self):
+        iteration_array = self.trainer.iteration_array
+        self.graph.make_plot(iteration_array, algorithms_output, is_moving_average=False)

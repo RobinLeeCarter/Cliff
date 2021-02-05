@@ -1,63 +1,40 @@
-from typing import Optional
-
 import numpy as np
 
-import constants
 import comparison
 import algorithm
-from train import recorder
 
 
 class Trainer:
     def __init__(self,
                  algorithm_factory: algorithm.Factory,
                  comparison_: comparison.Comparison,
-                 # recorder_: recorder.Recorder,
                  verbose: bool = False
                  ):
         self.algorithm_factory: algorithm.Factory = algorithm_factory
         self.comparison: comparison.Comparison = comparison_
-        # self.recorder: recorder.Recorder = recorder_
-        # self.agent: agent.Agent = algorithm_.agent
         self.verbose = verbose
-
-        # self.array_shape = (self.total_records, )
-        # self.iteration_array = np.zeros(self.array_shape, dtype=int)
-        # self.return_array = np.zeros(self.array_shape, dtype=float)
-
-        self.iteration_array = np.array([], dtype=int)
-        self.return_array = np.array([], dtype=float)
 
     def train(self, settings: comparison.Settings):
         algorithm_ = self.algorithm_factory[settings]
         print(algorithm_)
 
-        # algorithm_type = settings.algorithm_type
-        # if self.comparison == common.Comparison.RETURN_BY_ALPHA:
-        #     alpha = settings.parameters["alpha"]
-        # else:
-        #     alpha = None
-
-        for run in range(constants.RUNS):
-            print(f"run = {run}")
+        for run in range(settings.runs):
+            if self.verbose or run % settings.run_print_frequency == 0:
+                print(f"run = {run}")
             algorithm_.initialize()
 
-            for iteration in range(constants.TRAINING_ITERATIONS):
+            for iteration in range(settings.training_iterations):
                 algorithm_.parameter_changes(iteration)
                 # print(f"iteration = {iteration}")
-                if self.verbose:
+                if self.verbose or iteration % settings.iteration_print_frequency == 0:
                     print(f"iteration = {iteration}")
-                # else:
-                #     if iteration % 1000 == 0:
-                #         print(f"iteration = {iteration}")
 
-                algorithm_.do_episode()
+                algorithm_.do_episode(settings.episode_length_timeout)
                 # max_t = algorithm_.agent.t
                 # total_return = algorithm_.agent.episode.total_return
                 # if self.verbose:
                 #     print(f"max_t = {max_t} \ttotal_return = {total_return:.2f}")
-                self.comparison.record(settings, iteration, algorithm_.agent.episode)
-
+                self.comparison.review(settings, iteration, algorithm_.agent.episode)
 
                 # if self.is_record_iteration(iteration):
                 #     # if isinstance(self.recorder, algorithm_iteration_recorder.AlgorithmIterationRecorder):
@@ -105,8 +82,8 @@ class Trainer:
     #     stop = math.floor(constants.TRAINING_ITERATIONS / constants.PERFORMANCE_SAMPLE_FREQUENCY)
     #     return stop - start + 1
 
-    # def is_record_iteration(self, iteration: int) -> bool:
-    #     return iteration >= constants.PERFORMANCE_SAMPLE_START and \
+    # def is_record_iteration(self, iteration: int, settings_: comparison.Settings) -> bool:
+    #     return iteration >= self.sett .PERFORMANCE_SAMPLE_START and \
     #             iteration % constants.PERFORMANCE_SAMPLE_FREQUENCY == 0
 
     # print(self.sample_iteration)
