@@ -106,7 +106,7 @@ class Controller:
         timer.start()
         for settings in self.comparison.settings_list:
             self.trainer.train(settings)
-            timer.lap(name=str(settings.algorithm_type))
+            timer.lap(name=str(settings.algorithm_title))
             # algorithms_output[algorithm_] = self.trainer.return_array
 
         timer.stop()

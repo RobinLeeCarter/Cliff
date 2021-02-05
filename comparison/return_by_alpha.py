@@ -16,7 +16,7 @@ class ReturnByAlpha(comparison.Comparison):
             algorithm.QLearning,
             algorithm.SarsaAlg
         ]
-        self._alpha_min = 0.1
+        self._alpha_min = 0.05
         self._alpha_max = 1.0
         self._alpha_step = 0.05
         self._alpha_list = utils.float_range(start=self._alpha_min, stop=self._alpha_max, step_size=self._alpha_step)
