@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 from matplotlib import figure
 
 import constants
-from data import series
+from comparison import series
 
 
 class Graph:

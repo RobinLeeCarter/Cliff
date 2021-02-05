@@ -2,11 +2,14 @@ import numpy as np
 
 import utils
 import algorithm
-from data import series
+import train
+from comparison import series, comparison
 
 
-class ReturnByAlpha:
-    def __init__(self):
+class ReturnByAlpha(comparison.Comparison):
+    def __init__(self, recorder: train.Recorder):
+        super().__init__(recorder)
+
         self._algorithm_type_list = [
             algorithm.ExpectedSarsa,
             algorithm.VQ,
@@ -15,31 +18,27 @@ class ReturnByAlpha:
         ]
         self._alpha_list = utils.float_range(start=0.1, stop=1.0, step_size=0.05)
 
-        # for training
-        self.settings = self.settings_list()
-
-        # for output
-        self.x_values = np.array(self._alpha_list)
-        self.series = self.series_list()
-
-    def settings_list(self) -> list[algorithm.Settings]:
-        settings_list: list[algorithm.Settings] = []
+    def build_settings(self):
+        self.settings_list = []
         for alpha in self._alpha_list:
             for algorithm_type in self._algorithm_type_list:
                 settings = algorithm.Settings(
                     algorithm_type=algorithm_type,
                     parameters={"alpha": alpha}
                 )
-                settings_list.append(settings)
-        return settings_list
+                self.settings_list.append(settings)
 
-    def series_list(self) -> list[series.Series]:
-        series_list: list[series.Series] = []
+    def compile_series(self):
+        self.x_series = series.Series(
+            title="α",
+            values=np.array(self._alpha_list)
+        )
+        # collate output from self.recorder
         for algorithm_type in self._algorithm_type_list:
+            values = np.array([self._recorder[algorithm_type, alpha] for alpha in self._alpha_list])
             series_ = series.Series(
                 title=algorithm_type.name,
-                values=np.array([], dtype=float),
+                values=values,
                 identifiers={"algorithm_type": algorithm_type}
             )
-            series_list.append(series_)
-        return series_list
+            self.series_list.append(series_)
