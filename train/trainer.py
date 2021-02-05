@@ -3,7 +3,7 @@ from typing import Optional
 import numpy as np
 
 import constants
-import common
+import comparison
 import algorithm
 from train import recorder
 
@@ -11,13 +11,13 @@ from train import recorder
 class Trainer:
     def __init__(self,
                  algorithm_factory: algorithm.Factory,
-                 comparison: common.Comparison,
-                 recorder_: recorder.Recorder,
+                 comparison_: comparison.Comparison,
+                 # recorder_: recorder.Recorder,
                  verbose: bool = False
                  ):
         self.algorithm_factory: algorithm.Factory = algorithm_factory
-        self.comparison: common.Comparison = comparison
-        self.recorder: recorder.Recorder = recorder_
+        self.comparison: comparison.Comparison = comparison_
+        # self.recorder: recorder.Recorder = recorder_
         # self.agent: agent.Agent = algorithm_.agent
         self.verbose = verbose
 
@@ -28,15 +28,15 @@ class Trainer:
         self.iteration_array = np.array([], dtype=int)
         self.return_array = np.array([], dtype=float)
 
-    def train(self, settings: algorithm.Settings):
+    def train(self, settings: comparison.Settings):
         algorithm_ = self.algorithm_factory[settings]
         print(algorithm_)
 
-        algorithm_type = settings.algorithm_type
-        if self.comparison == common.Comparison.RETURN_BY_ALPHA:
-            alpha = settings.parameters["alpha"]
-        else:
-            alpha = None
+        # algorithm_type = settings.algorithm_type
+        # if self.comparison == common.Comparison.RETURN_BY_ALPHA:
+        #     alpha = settings.parameters["alpha"]
+        # else:
+        #     alpha = None
 
         for run in range(constants.RUNS):
             print(f"run = {run}")
@@ -52,17 +52,20 @@ class Trainer:
                 #         print(f"iteration = {iteration}")
 
                 algorithm_.do_episode()
-                max_t = algorithm_.agent.t
-                total_return = algorithm_.agent.episode.total_return
-                if self.verbose:
-                    print(f"max_t = {max_t} \ttotal_return = {total_return:.2f}")
-                if self.is_record_iteration(iteration):
-                    # if isinstance(self.recorder, algorithm_iteration_recorder.AlgorithmIterationRecorder):
-                    # if self.recorder.key_type == tuple[algorithm.EpisodicAlgorithm, int]:
-                    if self.comparison == common.Comparison.RETURN_BY_EPISODE:
-                        self.recorder[algorithm_, iteration] = total_return
-                    elif self.comparison == common.Comparison.RETURN_BY_ALPHA:
-                        self.recorder[algorithm_type, alpha] = total_return
+                # max_t = algorithm_.agent.t
+                # total_return = algorithm_.agent.episode.total_return
+                # if self.verbose:
+                #     print(f"max_t = {max_t} \ttotal_return = {total_return:.2f}")
+                self.comparison.record(settings, iteration, algorithm_.agent.episode)
+
+
+                # if self.is_record_iteration(iteration):
+                #     # if isinstance(self.recorder, algorithm_iteration_recorder.AlgorithmIterationRecorder):
+                #     # if self.recorder.key_type == tuple[algorithm.EpisodicAlgorithm, int]:
+                #     if self.comparison == common.Comparison.RETURN_BY_EPISODE:
+                #         self.recorder[algorithm_, iteration] = total_return
+                #     elif self.comparison == common.Comparison.RETURN_BY_ALPHA:
+                #         self.recorder[algorithm_type, alpha] = total_return
 
                 # if iteration > 20:
                 #     for test in range(constants.TESTS):
@@ -75,26 +78,26 @@ class Trainer:
             # print(self.recorder.tallies)
         algorithm_.print_q_coverage_statistics()
 
-        self.fill_arrays_from_recorder()
+        # self.fill_arrays_from_recorder()
 
-    def fill_arrays_from_recorder(self):
-        """This should be outside of Trainer"""
-        iteration: int = 0
-        iteration_list: list[int] = []
-        return_list: list[float] = []
-
-        while iteration < constants.TRAINING_ITERATIONS:
-            if self.is_record_iteration(iteration):
-                if self.recorder.key_type == tuple[algorithm.EpisodicAlgorithm, int]:
-                    total_return = self.recorder[self.algorithm, iteration]
-                else:
-                    total_return = None
-                iteration_list.append(iteration)
-                return_list.append(total_return)
-            iteration += 1
-
-        self.iteration_array = np.array(iteration_list)
-        self.return_array = np.array(return_list)
+    # def fill_arrays_from_recorder(self):
+    #     """This should be outside of Trainer"""
+    #     iteration: int = 0
+    #     iteration_list: list[int] = []
+    #     return_list: list[float] = []
+    #
+    #     while iteration < constants.TRAINING_ITERATIONS:
+    #         if self.is_record_iteration(iteration):
+    #             if self.recorder.key_type == tuple[algorithm.EpisodicAlgorithm, int]:
+    #                 total_return = self.recorder[self.algorithm, iteration]
+    #             else:
+    #                 total_return = None
+    #             iteration_list.append(iteration)
+    #             return_list.append(total_return)
+    #         iteration += 1
+    #
+    #     self.iteration_array = np.array(iteration_list)
+    #     self.return_array = np.array(return_list)
 
     # @property
     # def total_records(self) -> int:
@@ -102,9 +105,9 @@ class Trainer:
     #     stop = math.floor(constants.TRAINING_ITERATIONS / constants.PERFORMANCE_SAMPLE_FREQUENCY)
     #     return stop - start + 1
 
-    def is_record_iteration(self, iteration: int) -> bool:
-        return iteration >= constants.PERFORMANCE_SAMPLE_START and \
-                iteration % constants.PERFORMANCE_SAMPLE_FREQUENCY == 0
+    # def is_record_iteration(self, iteration: int) -> bool:
+    #     return iteration >= constants.PERFORMANCE_SAMPLE_START and \
+    #             iteration % constants.PERFORMANCE_SAMPLE_FREQUENCY == 0
 
     # print(self.sample_iteration)
     # print(self.average_return)

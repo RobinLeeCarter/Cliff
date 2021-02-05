@@ -1,26 +1,35 @@
 import numpy as np
 
 import constants
+import agent
 import algorithm
 import train
-from comparison import series, comparison
+from comparison import settings, series, comparison
 
 
 class ReturnByEpisode(comparison.Comparison):
-    def __init__(self, recorder: train.Recorder):
-        super().__init__(recorder)
+    def __init__(self):
+        super().__init__()
+        recorder_key_type = tuple[type, float]
+        self.recorder = train.Recorder[recorder_key_type]()
 
         self._training_episodes = constants.TRAINING_ITERATIONS
 
-    def build_settings(self):
+    def build(self):
         self.settings_list = [
-          algorithm.Settings(algorithm.ExpectedSarsa, {"alpha": 0.9}),
-          algorithm.Settings(algorithm.VQ, {"alpha": 0.2}),
-          algorithm.Settings(algorithm.QLearning, {"alpha": 0.9}),
-          algorithm.Settings(algorithm.SarsaAlg, {"alpha": 0.9})
+          settings.Settings(algorithm.ExpectedSarsa, {"alpha": 0.9}),
+          settings.Settings(algorithm.VQ, {"alpha": 0.2}),
+          settings.Settings(algorithm.QLearning, {"alpha": 0.9}),
+          settings.Settings(algorithm.SarsaAlg, {"alpha": 0.9})
         ]
 
-    def compile_series(self):
+    def record(self, settings_: settings.Settings, iteration: int, episode: agent.Episode):
+        algorithm_type = settings_.algorithm_type
+        total_return = episode.total_return
+        self._recorder[algorithm_type, iteration] = total_return
+
+    def compile(self):
+        raise NotImplementedError
         self.x_series = series.Series(
             title="Iterations",
             values=np.array(self._alpha_list)

@@ -1,23 +1,31 @@
 from abc import ABC, abstractmethod
 from typing import Optional
 
-import algorithm
+import agent
 import train
-from comparison import series
+# import common
+from comparison import settings, series
 
 
 class Comparison(ABC):
-    def __init__(self, recorder: train.Recorder):
-        self._recorder: train.Recorder = recorder
-
-        self.settings_list: list[algorithm.Settings] = []
+    def __init__(self):
+        self._recorder: Optional[train.Recorder] = None
+        self.settings_list: list[settings.Settings] = []
         self.x_series: Optional[series.Series] = None
         self.series_list: list[series.Series] = []
 
+    # @abstractmethod
+    # def _build(self, comparison_type: common.ComparisonType):
+    #     pass
+
     @abstractmethod
-    def build_settings(self) -> list[algorithm.Settings]:
+    def build(self):
         pass
 
     @abstractmethod
-    def compile_series(self) -> list[series.Series]:
+    def record(self, settings_: settings.Settings, iteration: int, episode: agent.Episode):
+        pass
+
+    @abstractmethod
+    def compile(self):
         pass

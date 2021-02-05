@@ -26,6 +26,6 @@ class UserEvent(enum.IntEnum):
     SPACE = enum.auto()
 
 
-class Comparison(enum.IntEnum):
+class ComparisonType(enum.IntEnum):
     RETURN_BY_EPISODE = enum.auto()
     RETURN_BY_ALPHA = enum.auto()
