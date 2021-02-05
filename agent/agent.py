@@ -84,6 +84,7 @@ class Agent:
     def generate_episode(self):
         self.start_episode()
         while not self.state.is_terminal and self.t < constants.EPISODE_LENGTH_TIMEOUT:
+            self.choose_action()
             if self.verbose:
                 print(f"t={self.t} \t state = {self.state} \t action = {self.action}")
             self.take_action()

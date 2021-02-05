@@ -111,20 +111,27 @@ class Controller:
 
         timer.stop()
 
-        self.comparison.compile()
-        self.comparison.draw_graph()
+        # self.comparison.compile()
+        # self.comparison.draw_graph()
 
         # self.behaviour_agent.set_policy(self.target_policy)
-        # self.view.open_window()
+        self.grid_view.open_window()
         # self.view.display_and_wait()
         # self.environment.verbose = True
         # self.agent.verbose = True
 
         # self.agent.verbose = True
         # self.agent.set_policy(self.greedy_policy)
-        # while True:
-        #     self.agent.generate_episode()
-        #     print(f"max_t: {self.agent.episode.max_t}")
-        #     user_event: common.UserEvent = self.view.display_episode(self.agent.episode, show_trail=False)
-        #     if user_event == common.UserEvent.QUIT:
-        #         break
+
+        running_total = 0
+        count = 0
+        while True:
+            self.agent.generate_episode()
+            episode = self.agent.episode
+            print(f"max_t: {episode.max_t} \t total_return: {episode.total_return:.0f}")
+            count += 1
+            running_total += (1/count) * (episode.total_return - running_total)
+            print(f"count: {count} \t running_total: {running_total:.1f}")
+            user_event: common.UserEvent = self.grid_view.display_episode(episode, show_trail=False)
+            if user_event == common.UserEvent.QUIT:
+                break
