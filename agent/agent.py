@@ -3,7 +3,7 @@ from typing import Optional
 import constants
 import environment
 import policy
-from agent import episode, rsa, sarsa
+from agent import episode, sarsa
 
 
 class Agent:
@@ -13,7 +13,6 @@ class Agent:
         self.verbose: bool = verbose
         self.episode: Optional[episode.Episode] = None
 
-        self.previous_rsa: Optional[rsa.RSA] = None
         self.state: Optional[environment.State] = None
         self.action: Optional[environment.Action] = None
         self.reward: Optional[float] = None
@@ -29,45 +28,46 @@ class Agent:
             print("start episode...")
         self.episode = episode.Episode()
         self.t = 0
-        self.previous_rsa = None
         # start
         self.response = self.environment.start()
         self.reward = self.response.reward
         self.state = self.response.state
 
-    def take_action(self):
-        """With state and action are already set,
-        1) make a copy in previous_rsa before updating.
-        Perform action.
-        Get new reward and state in response.
-        Update current values including new action.
-        Record new reward, state and action in episode.
-        """
-        if self.state.is_terminal:
-            raise Exception("Trying to act in a terminal state.")
-        self.previous_rsa = self.episode.rsa
-        self.response = self.environment.from_state_perform_action(self.state, self.action)
-        self.t += 1
-        self.reward = self.response.reward
-        self.state = self.response.state
-
     def choose_action(self):
+        """
+        Have the policy choose an action
+        We then have a complete r, s, a to add to episode
+        The reward being is the response from the previous action (if there was one, or otherwise reward=None)
+        Note that the action is NOT applied yet.
+        """
         self.action = self.policy[self.state]
         self.episode.add_rsa(reward=self.reward, state=self.state, action=self.action)
         if self.verbose:
             print(f"state = {self.state} \t action = {self.action}")
 
     def get_sarsa(self) -> sarsa.SARSA:
-        if self.previous_rsa is None:
-            raise Exception("Trying to get_sarsa with no previous_rsa.")
+        if self.t == 0:
+            raise Exception("Trying to get a sarsa for the zeroth time step")
         sarsa_ = sarsa.SARSA(
-            prev_state=self.previous_rsa.state,
-            prev_action=self.previous_rsa.action,
+            prev_state=self.episode.prev_rsa.state,
+            prev_action=self.episode.prev_rsa.action,
             reward=self.reward,
             state=self.state,
             action=self.action
         )
         return sarsa_
+
+    def take_action(self):
+        """With state and action are already set,
+        Perform action.
+        Get new reward and state in response.
+        Start a new time step with the new reward and state
+        """
+        self.response = self.environment.from_state_perform_action(self.state, self.action)
+        # begin building up the next r, s, a
+        self.t += 1
+        self.reward = self.response.reward
+        self.state = self.response.state
 
     def generate_episode(self):
         self.start_episode()

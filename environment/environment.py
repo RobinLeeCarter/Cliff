@@ -72,6 +72,9 @@ class Environment:
         return state.State(position)
 
     def from_state_perform_action(self, state_: state.State, action_: action.Action) -> observation.Observation:
+        if state_.is_terminal:
+            raise Exception("Environment: Trying to act in a terminal state.")
+
         new_state: state.State
         # state + action move
         actioned_position: common.XY = common.XY(
@@ -80,7 +83,6 @@ class Environment:
         )
         # project back to grid
         projected_position: common.XY = self._project_back_to_grid(actioned_position)
-        # defaults
 
         # tests
         square: common.Square = self.grid_world.get_square(projected_position)
@@ -89,13 +91,13 @@ class Environment:
         else:
             is_terminal = False
 
+        # reponse
         if square == common.Square.CLIFF:
             reward: float = -100.0
             new_state = self.get_a_start_state()
         else:
             reward: float = -1.0
             new_state: state.State = state.State(projected_position, is_terminal)
-
         return observation.Observation(reward, new_state)
 
     def _project_back_to_grid(self, requested_position: common.XY) -> common.XY:
