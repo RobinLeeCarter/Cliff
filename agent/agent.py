@@ -3,7 +3,8 @@ from typing import Optional
 import constants
 import environment
 import policy
-from agent import episode, sarsa
+from agent import episode
+# from agent import sarsa
 
 
 class Agent:
@@ -66,15 +67,15 @@ class Agent:
         self.reward = self.response.reward
         self.state = self.response.state
 
-    def get_sarsa(self) -> sarsa.SARSA:
-        sarsa_ = sarsa.SARSA(
-            prev_state=self.prev_state,
-            prev_action=self.prev_action,
-            reward=self.reward,
-            state=self.state,
-            action=self.action
-        )
-        return sarsa_
+    # def get_sarsa(self) -> sarsa.SARSA:
+    #     sarsa_ = sarsa.SARSA(
+    #         prev_state=self.prev_state,
+    #         prev_action=self.prev_action,
+    #         reward=self.reward,
+    #         state=self.state,
+    #         action=self.action
+    #     )
+    #     return sarsa_
 
     def generate_episode(self):
         self.start_episode()

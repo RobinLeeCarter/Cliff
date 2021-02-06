@@ -20,10 +20,15 @@ class QLearning(episodic_algorithm.EpisodicAlgorithm):
     def _do_training_step(self):
         self.agent.choose_action()
         self.agent.take_action()
-        sarsa = self.agent.get_sarsa()
-        q_max_over_a = self._Q.max_over_actions(sarsa.state)
-        delta = sarsa.reward \
+
+        prev_state = self.agent.prev_state
+        prev_action = self.agent.action
+        reward = self.agent.reward
+        state = self.agent.state
+
+        q_max_over_a = self._Q.max_over_actions(state)
+        delta = reward \
             + constants.GAMMA * q_max_over_a \
-            - self._Q[sarsa.prev_state, sarsa.prev_action]
-        self._Q[sarsa.prev_state, sarsa.prev_action] += self._alpha * delta
-        self.agent.policy[sarsa.prev_state] = self._Q.argmax_over_actions(sarsa.prev_state)
+            - self._Q[prev_state, prev_action]
+        self._Q[prev_state, prev_action] += self._alpha * delta
+        self.agent.policy[prev_state] = self._Q.argmax_over_actions(prev_state)
