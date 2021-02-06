@@ -55,5 +55,7 @@ class ReturnByEpisode(comparison.Comparison):
         self.graph.make_plot(x_series=self.x_series,
                              x_min=0,
                              x_max=assumed_settings.training_iterations,
+                             y_min=-100,
+                             y_max=0,
                              graph_series=self.series_list,
                              moving_average_window_size=assumed_settings.moving_average_window_size)

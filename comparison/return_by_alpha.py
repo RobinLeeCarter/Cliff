@@ -59,4 +59,6 @@ class ReturnByAlpha(comparison.Comparison):
         self.graph.make_plot(x_series=self.x_series,
                              x_min=self._alpha_min,
                              x_max=self._alpha_max,
+                             y_min=-140,
+                             y_max=0,
                              graph_series=self.series_list)

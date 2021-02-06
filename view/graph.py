@@ -4,7 +4,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib import figure
 
-import constants
 from comparison import series
 
 
@@ -18,6 +17,8 @@ class Graph:
                   x_series: series.Series,
                   x_min: float,
                   x_max: float,
+                  y_min: float,
+                  y_max: float,
                   graph_series: list[series.Series],
                   moving_average_window_size: int = 0):
         is_moving_average = (moving_average_window_size >= 3)
@@ -26,7 +27,8 @@ class Graph:
         else:
             self.title = f"Average Return vs {x_series.title}"
 
-        self.prep_graph(x_min=x_min, x_max=x_max, x_label=x_series.title)
+        self.prep_graph(x_min=x_min, x_max=x_max, x_label=x_series.title,
+                        y_min=y_min, y_max=y_max)
         if is_moving_average:
             self.moving_average_plot(x_series, graph_series, moving_average_window_size)
         else:
@@ -34,13 +36,13 @@ class Graph:
         self.ax.legend()
         plt.show()
 
-    def prep_graph(self, x_min: float, x_max: float, x_label: str):
+    def prep_graph(self, x_min: float, x_max: float, x_label: str, y_min: float, y_max: float):
         self.fig: figure.Figure = plt.figure()
         self.ax: figure.Axes = self.fig.subplots()
         self.ax.set_title(self.title)
         self.ax.set_xlim(xmin=x_min, xmax=x_max)
         self.ax.set_xlabel(x_label)
-        self.ax.set_ylim(ymin=-140, ymax=0)
+        self.ax.set_ylim(ymin=y_min, ymax=y_max)
         self.ax.set_ylabel("Average Return")
         self.ax.grid(True)
 
