@@ -22,7 +22,8 @@ class Actions:
 
     @staticmethod
     def init():
-        Actions.four_actions()
+        # Actions.four_actions()
+        Actions.four_friendly_actions()
         # Actions.kings_moves()
         # Actions.kings_moves(include_center=True)
         Actions.shape = (len(Actions.action_list),)
@@ -37,6 +38,19 @@ class Actions:
             Action(move=common.XY(+1, 0)),
             # up
             Action(move=common.XY(0, +1)),
+            # down
+            Action(move=common.XY(0, -1))
+        ]
+
+    @staticmethod
+    def four_friendly_actions():
+        Actions.action_list = [
+            # right
+            Action(move=common.XY(+1, 0)),
+            # up
+            Action(move=common.XY(0, +1)),
+            # left
+            Action(move=common.XY(-1, 0)),
             # down
             Action(move=common.XY(0, -1))
         ]

@@ -23,7 +23,7 @@ class Agent:
         self.policy = policy_
 
     def start_episode(self):
-        """Gets initial state S0."""
+        """Gets initial state and sets initial reward to None"""
         if self.verbose:
             print("start episode...")
         self.episode = episode.Episode()
