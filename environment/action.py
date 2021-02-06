@@ -34,7 +34,7 @@ class Actions:
             # left
             Action(move=common.XY(-1, 0)),
             # right
-            Action(move=common.XY(1, 0)),
+            Action(move=common.XY(+1, 0)),
             # up
             Action(move=common.XY(0, +1)),
             # down

@@ -12,6 +12,7 @@ class Policy(abc.ABC):
         if state.is_terminal:
             return None
         else:
+            # this of course will go to the level in inheritance hierarchy set by self
             return self.get_action(state)
 
     def __setitem__(self, state: environment.State, action: environment.Action):
