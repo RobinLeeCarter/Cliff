@@ -39,12 +39,12 @@ class VQ(episodic_algorithm.EpisodicAlgorithm):
         self.agent.take_action()
         sarsa = self.agent.get_sarsa()
 
-        target = sarsa.next_reward + constants.GAMMA * self._V[sarsa.next_state]
+        target = sarsa.reward + constants.GAMMA * self._V[sarsa.state]
 
-        v_delta = target - self._V[sarsa.state]
-        self._V[sarsa.state] += self._alpha * v_delta
+        v_delta = target - self._V[sarsa.prev_state]
+        self._V[sarsa.prev_state] += self._alpha * v_delta
 
-        q_delta = target - self._Q[sarsa.state, sarsa.action]
-        self._Q[sarsa.state, sarsa.action] += self._alpha * q_delta
+        q_delta = target - self._Q[sarsa.prev_state, sarsa.prev_action]
+        self._Q[sarsa.prev_state, sarsa.prev_action] += self._alpha * q_delta
 
-        self.agent.policy[sarsa.state] = self._Q.argmax_over_actions(sarsa.state)
+        self.agent.policy[sarsa.prev_state] = self._Q.argmax_over_actions(sarsa.prev_state)

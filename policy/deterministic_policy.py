@@ -1,7 +1,7 @@
 import numpy as np
 
 import environment
-import policy
+from policy import policy
 
 
 class DeterministicPolicy(policy.Policy):

@@ -1,9 +1,9 @@
-from typing import Optional, List
+from typing import List
 
 import numpy as np
 
 import environment
-import policy
+from policy import policy
 
 
 class RandomPolicy(policy.Policy):

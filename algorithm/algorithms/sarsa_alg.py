@@ -24,8 +24,8 @@ class SarsaAlg(episodic_algorithm.EpisodicAlgorithm):
         self.agent.take_action()
         self.agent.choose_action()
         sarsa = self.agent.get_sarsa()
-        delta = sarsa.next_reward \
-            + constants.GAMMA * self._Q[sarsa.next_state, sarsa.next_action] \
-            - self._Q[sarsa.state, sarsa.action]
-        self._Q[sarsa.state, sarsa.action] += self._alpha * delta
-        self.agent.policy[sarsa.state] = self._Q.argmax_over_actions(sarsa.state)
+        delta = sarsa.reward \
+            + constants.GAMMA * self._Q[sarsa.state, sarsa.action] \
+            - self._Q[sarsa.prev_state, sarsa.prev_action]
+        self._Q[sarsa.prev_state, sarsa.prev_action] += self._alpha * delta
+        self.agent.policy[sarsa.prev_state] = self._Q.argmax_over_actions(sarsa.prev_state)

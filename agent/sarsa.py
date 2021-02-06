@@ -6,12 +6,12 @@ import environment
 
 @dataclass
 class SARSA:
+    prev_state: environment.State
+    prev_action: environment.Action
+    reward: float
     state: environment.State
-    action: environment.Action
-    next_reward: float
-    next_state: environment.State
-    next_action: Optional[environment.Action]
+    action: Optional[environment.Action]
 
     @property
     def tuple(self) -> tuple:
-        return self.state, self.action, self.next_reward, self.next_state, self.next_action
+        return self.prev_state, self.prev_action, self.reward, self.state, self.action

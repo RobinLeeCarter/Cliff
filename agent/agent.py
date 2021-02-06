@@ -61,11 +61,11 @@ class Agent:
         if self.previous_rsa is None:
             raise Exception("Trying to get_sarsa with no previous_rsa.")
         sarsa_ = sarsa.SARSA(
-            state=self.previous_rsa.state,
-            action=self.previous_rsa.action,
-            next_reward=self.reward,
-            next_state=self.state,
-            next_action=self.action
+            prev_state=self.previous_rsa.state,
+            prev_action=self.previous_rsa.action,
+            reward=self.reward,
+            state=self.state,
+            action=self.action
         )
         return sarsa_
 
