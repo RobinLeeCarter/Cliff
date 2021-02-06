@@ -24,24 +24,20 @@ class Agent:
         self.policy = policy_
 
     def start_episode(self):
-        """Gets initial state S0.
-        Choose initial action A0.
-        Records S0 and A0 but does not take action."""
+        """Gets initial state S0."""
         if self.verbose:
             print("start episode...")
         self.episode = episode.Episode()
         self.t = 0
-        # self.reward = None
         self.previous_rsa = None
         # start
         self.response = self.environment.start()
         self.reward = self.response.reward
         self.state = self.response.state
-        # special case at start
-        # self._add_episode_rsa()
 
     def take_action(self):
-        """State and action are already set, make a copy in previous_rsa before updating.
+        """With state and action are already set,
+        1) make a copy in previous_rsa before updating.
         Perform action.
         Get new reward and state in response.
         Update current values including new action.
