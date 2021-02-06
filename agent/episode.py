@@ -8,8 +8,8 @@ from agent import rsa
 class Episode:
     """Just makes a record laid out in the standard way with Reward, State, Action for each t"""
     def __init__(self):
-        self.trajectory: List[rsa.RSA] = []
         self.rsa: rsa.RSA = rsa.RSA(None, None, None)
+        self.trajectory: List[rsa.RSA] = []
 
     def add_rsa(self,
                 reward: Optional[float],

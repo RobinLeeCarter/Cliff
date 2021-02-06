@@ -35,7 +35,8 @@ class Agent:
         self.previous_rsa = None
         # start
         self.response = self.environment.start()
-        self._update_from_response()
+        self.reward = self.response.reward
+        self.state = self.response.state
         # special case at start
         # self._add_episode_rsa()
 
@@ -47,17 +48,16 @@ class Agent:
         Record new reward, state and action in episode.
         """
         if self.state.is_terminal:
-            raise Exception("Trying to act in terminal state.")
+            raise Exception("Trying to act in a terminal state.")
         self.previous_rsa = self.episode.rsa
         self.response = self.environment.from_state_perform_action(self.state, self.action)
-        self._update_from_response()
+        self.t += 1
+        self.reward = self.response.reward
+        self.state = self.response.state
 
     def choose_action(self):
-        if self.state.is_terminal:
-            self.action = None
-        else:
-            self.action = self.policy[self.state]
-        self._add_episode_rsa()
+        self.action = self.policy[self.state]
+        self.episode.add_rsa(reward=self.reward, state=self.state, action=self.action)
         if self.verbose:
             print(f"state = {self.state} \t action = {self.action}")
 
@@ -73,14 +73,6 @@ class Agent:
         )
         return sarsa_
 
-    def _update_from_response(self):
-        self.t += 1
-        self.reward = self.response.reward
-        self.state = self.response.state
-
-    def _add_episode_rsa(self):
-        self.episode.add_rsa(reward=self.reward, state=self.state, action=self.action)
-
     def generate_episode(self):
         self.start_episode()
         while not self.state.is_terminal and self.t < constants.EPISODE_LENGTH_TIMEOUT:
@@ -92,20 +84,3 @@ class Agent:
             print("Failed to terminate")
         if self.verbose:
             print(f"t={self.t} \t state = {self.state} (terminal)")
-
-    # def generate_episode(self) -> episode.Episode:
-    #     episode_: episode.Episode = episode.Episode()
-    #     # start
-    #     response = self.environment.start()
-    #     self.state = response.state
-    #
-    #     while not self.state.is_terminal:
-    #         self.action = self.policy[self.state]
-    #         if self.verbose:
-    #             print(f"state = {self.state} \t action = {self.action}")
-    #         self.response = self.environment.from_state_perform_action(self.state, self.action)
-    #         episode_.add_monte_carlo_style(self.state, self.action, self.response.reward)
-    #         self.state = self.response.state
-    #     episode_.add_terminal(self.state)
-    #
-    #     return episode_

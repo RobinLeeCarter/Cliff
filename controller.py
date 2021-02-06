@@ -13,6 +13,8 @@ import view
 import data
 import comparison
 
+from comparison import recorder
+
 
 class Controller:
     def __init__(self, verbose: bool = False):
@@ -111,11 +113,11 @@ class Controller:
 
         timer.stop()
 
-        # self.comparison.compile()
-        # self.comparison.draw_graph()
+        self.comparison.compile()
+        self.comparison.draw_graph()
 
         # self.behaviour_agent.set_policy(self.target_policy)
-        self.grid_view.open_window()
+        # self.grid_view.open_window()
         # self.view.display_and_wait()
         # self.environment.verbose = True
         # self.agent.verbose = True
@@ -123,15 +125,24 @@ class Controller:
         # self.agent.verbose = True
         # self.agent.set_policy(self.greedy_policy)
 
-        running_total = 0
-        count = 0
-        while True:
-            self.agent.generate_episode()
-            episode = self.agent.episode
-            print(f"max_t: {episode.max_t} \t total_return: {episode.total_return:.0f}")
-            count += 1
-            running_total += (1/count) * (episode.total_return - running_total)
-            print(f"count: {count} \t running_total: {running_total:.1f}")
-            user_event: common.UserEvent = self.grid_view.display_episode(episode, show_trail=False)
-            if user_event == common.UserEvent.QUIT:
-                break
+        # self.grid_view.open_window()
+        #
+        # recorder_ = recorder.Recorder[str]()
+        #
+        # test: str = "test"
+        #
+        # running_average = 0
+        # count = 0
+        # while count < 100:
+        #     self.agent.generate_episode()
+        #     episode = self.agent.episode
+        #     print(f"max_t: {episode.max_t} \t total_return: {episode.total_return:.0f}")
+        #     count += 1
+        #     running_average += (1/count) * (episode.total_return - running_average)
+        #     print(f"count: {count} \t running_average: {running_average:.1f}")
+        #     recorder_[test] = episode.total_return
+        #     value = recorder_[test]
+        #     print(f"recorder value: {value:.1f}")
+            # user_event: common.UserEvent = self.grid_view.display_episode(episode, show_trail=False)
+            # if user_event == common.UserEvent.QUIT:
+            #     break

@@ -16,7 +16,7 @@ class RandomPolicy(policy.Policy):
         self.state: Optional[environment.State] = None
         self.possible_actions: List[environment.Action] = []
 
-    def __getitem__(self, state: environment.State) -> environment.Action:
+    def get_action(self, state: environment.State) -> environment.Action:
         self.set_possible_actions(state)
         return self.rng.choice(self.possible_actions)
 
@@ -31,3 +31,7 @@ class RandomPolicy(policy.Policy):
             self.possible_actions = [action for action in self.environment.actions_for_state(state)]
             if not self.possible_actions:
                 raise Exception(f"EGreedyPolicy state: {state} no possible actions")
+
+    # pycharm is asking for this to be implemented even though it's not an abstract method, might be a pycharm bug
+    def __setitem__(self, state: environment.State, action: environment.Action):
+        super().__setitem__(state, action)

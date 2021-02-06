@@ -9,7 +9,7 @@ class DeterministicPolicy(policy.Policy):
         super().__init__(environment_)
         self._action_given_state: np.ndarray = np.empty(shape=self.environment.states_shape, dtype=environment.Action)
 
-    def __getitem__(self, state: environment.State) -> environment.Action:
+    def get_action(self, state: environment.State) -> environment.Action:
         return self._action_given_state[state.index]
 
     def __setitem__(self, state: environment.State, action: environment.Action):
