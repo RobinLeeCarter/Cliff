@@ -22,7 +22,7 @@ class ExpectedSarsa(episodic_algorithm.EpisodicAlgorithm):
         self.agent.take_action()
 
         prev_state = self.agent.prev_state
-        prev_action = self.agent.action
+        prev_action = self.agent.prev_action
         reward = self.agent.reward
         state = self.agent.state
 
@@ -31,6 +31,7 @@ class ExpectedSarsa(episodic_algorithm.EpisodicAlgorithm):
             + constants.GAMMA * q_expectation_over_a \
             - self._Q[prev_state, prev_action]
         self._Q[prev_state, prev_action] += self._alpha * delta
+        # update policy to be in-line with Q
         self.agent.policy[prev_state] = self._Q.argmax_over_actions(prev_state)
 
     def _get_expectation_over_a(self, state: environment.State) -> float:

@@ -34,4 +34,5 @@ class SarsaAlg(episodic_algorithm.EpisodicAlgorithm):
             + constants.GAMMA * self._Q[state, action] \
             - self._Q[prev_state, prev_action]
         self._Q[prev_state, prev_action] += self._alpha * delta
+        # update policy to be in-line with Q
         self.agent.policy[prev_state] = self._Q.argmax_over_actions(prev_state)

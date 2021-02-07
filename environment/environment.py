@@ -74,6 +74,8 @@ class Environment:
     def from_state_perform_action(self, state_: state.State, action_: action.Action) -> observation.Observation:
         if state_.is_terminal:
             raise Exception("Environment: Trying to act in a terminal state.")
+        if action_ is None:
+            raise Exception("Environment: Action passed is none.")
 
         new_state: state.State
         # state + action move
