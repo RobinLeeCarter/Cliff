@@ -1,14 +1,14 @@
 from typing import Generator
 
 import common
-from environment import action, observation, state, grid_world
+from environment import action, observation, state, grid, grid_world
 
 
 class Environment:
     """A GridWorld Environment - too hard to make general at this point"""
-    def __init__(self, grid_: grid_world.Grid, verbose: bool = False):
-        self.verbose: bool = verbose
+    def __init__(self, grid_: grid.Grid, verbose: bool = False):
         self.grid_world: grid_world.GridWorld = grid_world.GridWorld(grid_)
+        self.verbose: bool = verbose
 
         self.states_shape: tuple = (self.grid_world.max_x + 1, self.grid_world.max_y + 1)
         self.actions_shape: tuple = action.Actions.shape

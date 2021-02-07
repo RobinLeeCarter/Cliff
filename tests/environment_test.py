@@ -1,10 +1,9 @@
 import common
 import environment
-import data
 
 
 def environment_test() -> bool:
-    environment_ = environment.Environment(grid_=data.CLIFF_GRID)
+    environment_ = environment.Cliff
 
     for state_ in environment_.states():
         print(state_)

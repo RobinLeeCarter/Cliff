@@ -4,14 +4,13 @@ from typing import Optional, Dict
 import pygame
 
 import common
-from environment import grid_world
 import environment
 import agent
 
 
 class GridView:
-    def __init__(self, grid_world_: grid_world.GridWorld):
-        self._grid_world: grid_world.GridWorld = grid_world_
+    def __init__(self, grid_world_: environment.GridWorld):
+        self._grid_world: environment.GridWorld = grid_world_
 
         self._max_x: int = self._grid_world.max_x
         self._max_y: int = self._grid_world.max_y

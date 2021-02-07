@@ -3,23 +3,23 @@ from typing import Optional
 import numpy as np
 
 import common
-from environment.grid_world import grid
+from environment import grid
 
 
 class GridWorld:
     """GridWorld doesn't know about states and actions it just deals in the rules of the grid"""
     def __init__(self, grid_: grid.Grid):
         self.grid: grid.Grid = grid_
-        self.max_y: int = self.grid.track.shape[0] - 1
-        self.max_x: int = self.grid.track.shape[1] - 1
-        starts: np.ndarray = (self.grid.track[:, :] == common.Square.START)
+        self.max_y: int = self.grid.grid_array.shape[0] - 1
+        self.max_x: int = self.grid.grid_array.shape[1] - 1
+        starts: np.ndarray = (self.grid.grid_array[:, :] == common.Square.START)
         self._starts_flat: np.ndarray = np.flatnonzero(starts)
         self._single_start: Optional[common.XY] = None
         self._test_single_start()
 
     def _test_single_start(self):
         if len(self._starts_flat) == 1:
-            iy, ix = np.unravel_index(self._starts_flat[0], shape=self.grid.track.shape)
+            iy, ix = np.unravel_index(self._starts_flat[0], shape=self.grid.grid_array.shape)
             self._single_start = self._position_flip(common.XY(ix, iy))
 
     def get_a_start_position(self) -> common.XY:
@@ -27,7 +27,7 @@ class GridWorld:
             return self._single_start
         else:
             start_flat = common.rng.choice(self._starts_flat)
-            iy, ix = np.unravel_index(start_flat, shape=self.grid.track.shape)
+            iy, ix = np.unravel_index(start_flat, shape=self.grid.grid_array.shape)
             return self._position_flip(common.XY(ix, iy))
 
     def change_request(self, current: common.XY, request: common.XY) -> common.XY:
@@ -46,7 +46,7 @@ class GridWorld:
         return self.get_square(position) == common.Square.END
 
     def get_square(self, position: common.XY) -> common.Square:
-        value: int = self.grid.track[self.max_y - position.y, position.x]
+        value: int = self.grid.grid_array[self.max_y - position.y, position.x]
         # noinspection PyArgumentList
         return common.Square(value)  # pycharm inspection bug
 

@@ -6,4 +6,4 @@ import numpy as np
 # maintains consistency with Windy GridWorld enabling extensions to Grid such as wind
 @dataclass
 class Grid:
-    track: np.ndarray
+    grid_array: np.ndarray

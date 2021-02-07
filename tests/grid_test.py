@@ -1,12 +1,12 @@
 import numpy as np
 
 import common
-from environment import grid_world
+import environment
 import data
 
 
 def grid_test() -> bool:
-    grid_world_ = grid_world.GridWorld(data.CLIFF_GRID)
+    grid_world_ = environment.GridWorld(data.CLIFF_GRID)
     shape = grid_world_.max_y + 1, grid_world_.max_x + 1
     cartesian_grid = np.empty(shape=shape, dtype=common.Square)
     for y, x in np.ndindex(cartesian_grid.shape):

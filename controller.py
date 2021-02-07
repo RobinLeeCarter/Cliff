@@ -2,13 +2,12 @@ from typing import Optional
 
 import utils
 import common
-import environment
 import policy
 import agent
 import algorithm
 import train
 import view
-import data
+import environment
 import comparison
 
 
@@ -16,7 +15,8 @@ class Controller:
     def __init__(self, verbose: bool = False):
         self.verbose: bool = verbose
 
-        self.environment = environment.Environment(data.CLIFF_GRID, verbose=False)
+        self.environment = environment.Cliff
+        # self.environment.verbose = True
         self.greedy_policy: policy.DeterministicPolicy = policy.DeterministicPolicy(self.environment)
         self.e_greedy_policy: policy.EGreedyPolicy = policy.EGreedyPolicy(self.environment,
                                                                           greedy_policy=self.greedy_policy)
