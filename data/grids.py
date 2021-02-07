@@ -1,6 +1,5 @@
 import numpy as np
 
-import common
 from environment import grid
 
 _TRACK_1 = np.array([
@@ -10,7 +9,5 @@ _TRACK_1 = np.array([
 ], dtype=np.int32)
 
 GRID_1 = grid.Grid(
-  start=common.XY(0, 0),
-  goal=common.XY(11, 0),
   track=_TRACK_1
 )
