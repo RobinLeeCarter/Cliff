@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 import data
 import environment
 import view

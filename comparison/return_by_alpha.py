@@ -1,9 +1,10 @@
 import numpy as np
 
 import utils
+from comparison_dataclasses import settings, series
 import algorithm
 import agent
-from comparison import settings, series, comparison, recorder
+from comparison import comparison, recorder
 
 
 class ReturnByAlpha(comparison.Comparison):

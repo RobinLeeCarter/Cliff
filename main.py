@@ -1,12 +1,12 @@
 import os_environ_settings
-import constants
+import common
 import controller
 
 
 def main():
     os_environ_settings.dummy = None
     controller_ = controller.Controller(verbose=False)
-    controller_.setup_and_run(comparison_type=constants.COMPARISON)
+    controller_.setup_and_run(comparison_type=common.COMPARISON)
     controller_.run()
 
 

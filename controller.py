@@ -7,15 +7,16 @@ import agent
 import algorithm
 import train
 import view
-import environment
+# import environment
 import comparison
+import environments
 
 
 class Controller:
     def __init__(self, verbose: bool = False):
         self.verbose: bool = verbose
 
-        self.environment = environment.Cliff
+        self.environment = environments.Cliff
         # self.environment.verbose = True
         self.greedy_policy: policy.DeterministicPolicy = policy.DeterministicPolicy(self.environment)
         self.e_greedy_policy: policy.EGreedyPolicy = policy.EGreedyPolicy(self.environment,

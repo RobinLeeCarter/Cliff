@@ -1,13 +1,14 @@
 from __future__ import annotations
 from dataclasses import dataclass
-from typing import Type, Dict
+from typing import Dict, Type
 
-import algorithm
 import constants
+import algorithm
 
 
 @dataclass
 class Settings:
+    # algorithm_type: type
     algorithm_type: Type[algorithm.Episodic]
     parameters: Dict[str, any]
 

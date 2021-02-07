@@ -1,9 +1,10 @@
 from abc import ABC, abstractmethod
 from typing import Optional
 
+from comparison_dataclasses import series, settings
 import agent
 import view
-from comparison import settings, series, recorder
+from comparison import recorder
 
 
 class Comparison(ABC):

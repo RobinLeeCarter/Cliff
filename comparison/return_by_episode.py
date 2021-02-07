@@ -1,8 +1,9 @@
 import numpy as np
 
+from comparison_dataclasses import settings, series
 import agent
 import algorithm
-from comparison import settings, series, comparison, recorder
+from comparison import comparison, recorder
 
 
 class ReturnByEpisode(comparison.Comparison):

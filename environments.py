@@ -1,8 +1,8 @@
-from data import grids
-from environment import environment
+import data
+import environment
 
 
-Cliff = environment.Environment(grid_=grids.CLIFF_GRID)
+Cliff = environment.Environment(grid_=data.CLIFF_GRID)
 
 # class Cliff(environment.Environment):
 #     def __init__(self, verbose: bool = False):
