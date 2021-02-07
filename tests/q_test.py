@@ -10,7 +10,7 @@ rng: np.random.Generator = np.random.default_rng()
 
 
 def q_test() -> bool:
-    environment_ = environment.Environment(grid_=data.GRID_1, rng=rng)
+    environment_ = environment.Environment(grid_=data.CLIFF_GRID, rng=rng)
     q = StateActionFunction(environment_)
 
     state_ = environment.State(common.XY(x=4, y=2))

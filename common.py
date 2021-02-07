@@ -1,7 +1,10 @@
+import numpy as np
+
 import enum
 from collections import namedtuple
 # from dataclasses import dataclass
 
+rng: np.random.Generator = np.random.default_rng()
 
 XY = namedtuple('XY', ['x', 'y'])
 

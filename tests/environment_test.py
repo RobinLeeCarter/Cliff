@@ -9,7 +9,7 @@ rng: np.random.Generator = np.random.default_rng()
 
 
 def environment_test() -> bool:
-    environment_ = environment.Environment(grid_=data.GRID_1, rng=rng)
+    environment_ = environment.Environment(grid_=data.CLIFF_GRID, rng=rng)
 
     for state_ in environment_.states():
         print(state_)

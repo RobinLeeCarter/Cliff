@@ -2,30 +2,18 @@ from typing import Generator
 import numpy as np
 
 import common
-from environment import action, observation, state, grid
+from environment import action, observation, state, grid_world
 
 
 class Environment:
-    def __init__(self, grid_: grid.Grid, rng: np.random.Generator, verbose: bool = False):
+    """A GridWorld Environment - too hard to make general at this point"""
+    def __init__(self, grid_: grid_world.Grid, rng: np.random.Generator, verbose: bool = False):
         self.rng: np.random.Generator = rng
         self.verbose: bool = verbose
-        self.grid_world: grid.GridWorld = grid.GridWorld(grid_, rng)
+        self.grid_world: grid_world.GridWorld = grid_world.GridWorld(grid_, rng)
 
-        # position
-        self.min_x: int = 0
-        self.max_x: int = self.grid_world.max_x
-        self.min_y: int = 0
-        self.max_y: int = self.grid_world.max_y
-
-        self.states_shape: tuple = (self.max_x + 1, self.max_y + 1)
-        # self.action_list: List[action.Action] = [action_ for action_ in self.actions()]
-        # self.action_dict: Dict[action.Action, int] = {action_: i for i, action_ in enumerate(self.actions())}
-        # actions = [action_ for action_ in self.actions()]
+        self.states_shape: tuple = (self.grid_world.max_x + 1, self.grid_world.max_y + 1)
         self.actions_shape: tuple = action.Actions.shape
-        # self.trace_ = grid.Trace = grid.Trace(self.grid_world)
-
-        # pre-reset state (if not None it means the state has just been reset and this was the failure state)
-        # self.pre_reset_state: Optional[state.State] = None
 
     # region Sets
     def states(self) -> Generator[state.State, None, None]:
@@ -78,13 +66,10 @@ class Environment:
             raise Exception("Environment: Action passed is none.")
 
         new_state: state.State
-        # state + action move
-        actioned_position: common.XY = common.XY(
-            x=state_.position.x + action_.move.x,
-            y=state_.position.y + action_.move.y
-        )
-        # project back to grid
-        projected_position: common.XY = self._project_back_to_grid(actioned_position)
+
+        # apply grid world rules (eg. edges, wind)
+        projected_position: common.XY = self.grid_world.change_request(current=state_.position,
+                                                                       request=action_.move)
 
         # tests
         square: common.Square = self.grid_world.get_square(projected_position)
@@ -109,9 +94,9 @@ class Environment:
             x = 0
         if y < 0:
             y = 0
-        if x > self.max_x:
-            x = self.max_x
-        if y > self.max_y:
-            y = self.max_y
+        if x > self.grid_world.max_x:
+            x = self.grid_world.max_x
+        if y > self.grid_world.max_y:
+            y = self.grid_world.max_y
         return common.XY(x=x, y=y)
     # endregion

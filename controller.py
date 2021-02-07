@@ -21,7 +21,7 @@ class Controller:
         self.verbose: bool = verbose
 
         self.rng: np.random.Generator = np.random.default_rng()
-        self.environment = environment.Environment(data.GRID_1, self.rng, verbose=False)
+        self.environment = environment.Environment(data.CLIFF_GRID, self.rng, verbose=False)
         self.greedy_policy: policy.DeterministicPolicy = policy.DeterministicPolicy(self.environment)
         self.e_greedy_policy: policy.EGreedyPolicy = policy.EGreedyPolicy(self.environment, self.rng,
                                                                           greedy_policy=self.greedy_policy)

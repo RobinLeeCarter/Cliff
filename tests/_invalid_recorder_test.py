@@ -14,7 +14,7 @@ rng: np.random.Generator = np.random.default_rng()
 
 def recorder_test() -> bool:
     rng_: np.random.Generator = np.random.default_rng()
-    environment_ = environment.Environment(data.GRID_1, rng_, verbose=False)
+    environment_ = environment.Environment(data.CLIFF_GRID, rng_, verbose=False)
     greedy_policy: policy.DeterministicPolicy = policy.DeterministicPolicy(environment_)
     e_greedy_policy: policy.EGreedyPolicy = policy.EGreedyPolicy(environment_, rng_, greedy_policy=greedy_policy)
     agent_ = agent.Agent(environment_, e_greedy_policy)
