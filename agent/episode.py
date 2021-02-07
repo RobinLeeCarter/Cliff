@@ -19,6 +19,9 @@ class Episode:
         # S0, A0, R1, S1, A1, R2 ... S(T-1), A(T-1), R(T)
         self.trajectory.append(rsa_)
 
+    def __getitem__(self, t: int) -> rsa.RSA:
+        return self.trajectory[t]
+
     # @property
     # def prev_rsa(self) -> rsa.RSA:
     #     return self.trajectory[-2]
