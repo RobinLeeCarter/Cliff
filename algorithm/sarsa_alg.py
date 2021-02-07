@@ -1,10 +1,10 @@
 import constants
 import environment
 import agent
-from algorithm import episodic_algorithm
+from algorithm import episodic_online
 
 
-class SarsaAlg(episodic_algorithm.EpisodicAlgorithm):
+class SarsaAlg(episodic_online.EpisodicOnline):
     name: str = "Sarsa"
 
     def __init__(self,

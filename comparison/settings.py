@@ -8,7 +8,7 @@ import constants
 
 @dataclass
 class Settings:
-    algorithm_type: Type[algorithm.EpisodicAlgorithm]
+    algorithm_type: Type[algorithm.Episodic]
     parameters: Dict[str, any]
 
     algorithm_title: str = ""   # algorithm title will be populated here by Trainer whether it's used or not

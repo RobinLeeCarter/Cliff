@@ -5,7 +5,7 @@ import agent
 from algorithm import common
 
 
-class EpisodicAlgorithm(abc.ABC):
+class Episodic(abc.ABC):
     name: str = "Error EpisodicAlgorithm.name"
 
     def __init__(self,
@@ -35,17 +35,8 @@ class EpisodicAlgorithm(abc.ABC):
         for state_ in self.environment.states():
             self.agent.policy[state_] = self._Q.argmax_over_actions(state_)
 
-    def do_episode(self, episode_length_timeout: int):
-        self.agent.start_episode()
-        self._start_episode()
-        while (not self.agent.state.is_terminal) and self.agent.t < episode_length_timeout:
-            self._do_training_step()
-
-    def _start_episode(self):
-        pass
-
     @abc.abstractmethod
-    def _do_training_step(self):
+    def do_episode(self, episode_length_timeout: int):
         pass
 
     def print_q_coverage_statistics(self):

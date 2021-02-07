@@ -1,10 +1,10 @@
 import constants
 import environment
 import agent
-from algorithm import episodic_algorithm
+from algorithm import episodic_online
 
 
-class VQ(episodic_algorithm.EpisodicAlgorithm):
+class VQ(episodic_online.EpisodicOnline):
     name: str = "VQ"
 
     def __init__(self,

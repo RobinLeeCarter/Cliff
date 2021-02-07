@@ -1,7 +1,7 @@
 import environment
 import agent
 from comparison import settings
-from algorithm import episodic_algorithm, expected_sarsa, q_learning, sarsa_alg, vq
+from algorithm import episodic, expected_sarsa, q_learning, sarsa_alg, vq
 
 
 class Factory:
@@ -9,7 +9,7 @@ class Factory:
         self.environment: environment.Environment = environment_
         self.agent: agent.Agent = agent_
 
-    def __getitem__(self, settings_: settings.Settings) -> episodic_algorithm.EpisodicAlgorithm:
+    def __getitem__(self, settings_: settings.Settings) -> episodic.Episodic:
         if "verbose" in settings_.parameters:
             verbose: bool = settings_.parameters["verbose"]
         else:
