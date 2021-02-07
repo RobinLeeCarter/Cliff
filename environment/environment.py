@@ -1,5 +1,4 @@
 from typing import Generator
-import numpy as np
 
 import common
 from environment import action, observation, state, grid_world
@@ -7,10 +6,9 @@ from environment import action, observation, state, grid_world
 
 class Environment:
     """A GridWorld Environment - too hard to make general at this point"""
-    def __init__(self, grid_: grid_world.Grid, rng: np.random.Generator, verbose: bool = False):
-        self.rng: np.random.Generator = rng
+    def __init__(self, grid_: grid_world.Grid, verbose: bool = False):
         self.verbose: bool = verbose
-        self.grid_world: grid_world.GridWorld = grid_world.GridWorld(grid_, rng)
+        self.grid_world: grid_world.GridWorld = grid_world.GridWorld(grid_)
 
         self.states_shape: tuple = (self.grid_world.max_x + 1, self.grid_world.max_y + 1)
         self.actions_shape: tuple = action.Actions.shape

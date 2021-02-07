@@ -1,16 +1,11 @@
-import numpy as np
-
 import common
 import environment
 import data
 from algorithm.common.state_action_function import StateActionFunction
 
 
-rng: np.random.Generator = np.random.default_rng()
-
-
 def q_test() -> bool:
-    environment_ = environment.Environment(grid_=data.CLIFF_GRID, rng=rng)
+    environment_ = environment.Environment(grid_=data.CLIFF_GRID)
     q = StateActionFunction(environment_)
 
     state_ = environment.State(common.XY(x=4, y=2))

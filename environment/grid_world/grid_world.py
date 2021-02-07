@@ -1,3 +1,5 @@
+from typing import Optional
+
 import numpy as np
 
 import common
@@ -6,18 +8,27 @@ from environment.grid_world import grid
 
 class GridWorld:
     """GridWorld doesn't know about states and actions it just deals in the rules of the grid"""
-    def __init__(self, grid_: grid.Grid, rng: np.random.Generator):
+    def __init__(self, grid_: grid.Grid):
         self.grid: grid.Grid = grid_
-        self.rng: np.random.Generator = rng
         self.max_y: int = self.grid.track.shape[0] - 1
         self.max_x: int = self.grid.track.shape[1] - 1
         starts: np.ndarray = (self.grid.track[:, :] == common.Square.START)
         self._starts_flat: np.ndarray = np.flatnonzero(starts)
+        self._single_start: Optional[common.XY] = None
+        self._test_single_start()
+
+    def _test_single_start(self):
+        if len(self._starts_flat) == 1:
+            iy, ix = np.unravel_index(self._starts_flat[0], shape=self.grid.track.shape)
+            self._single_start = self._position_flip(common.XY(ix, iy))
 
     def get_a_start_position(self) -> common.XY:
-        start_flat = self.rng.choice(self._starts_flat)
-        iy, ix = np.unravel_index(start_flat, shape=self.grid.track.shape)
-        return self._position_flip(common.XY(ix, iy))
+        if self._single_start:
+            return self._single_start
+        else:
+            start_flat = common.rng.choice(self._starts_flat)
+            iy, ix = np.unravel_index(start_flat, shape=self.grid.track.shape)
+            return self._position_flip(common.XY(ix, iy))
 
     def change_request(self, current: common.XY, request: common.XY) -> common.XY:
         current_index = self._position_flip(current)  # position

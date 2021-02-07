@@ -1,7 +1,5 @@
 from typing import Optional
 
-import numpy as np
-
 import utils
 import common
 import environment
@@ -13,17 +11,14 @@ import view
 import data
 import comparison
 
-from comparison import recorder
-
 
 class Controller:
     def __init__(self, verbose: bool = False):
         self.verbose: bool = verbose
 
-        self.rng: np.random.Generator = np.random.default_rng()
-        self.environment = environment.Environment(data.CLIFF_GRID, self.rng, verbose=False)
+        self.environment = environment.Environment(data.CLIFF_GRID, verbose=False)
         self.greedy_policy: policy.DeterministicPolicy = policy.DeterministicPolicy(self.environment)
-        self.e_greedy_policy: policy.EGreedyPolicy = policy.EGreedyPolicy(self.environment, self.rng,
+        self.e_greedy_policy: policy.EGreedyPolicy = policy.EGreedyPolicy(self.environment,
                                                                           greedy_policy=self.greedy_policy)
         self.agent = agent.Agent(self.environment, self.e_greedy_policy)
 
@@ -39,9 +34,9 @@ class Controller:
         self.grid_view = view.GridView(self.environment.grid_world)
 
         # self.target_policy: policy.DeterministicPolicy = policy.DeterministicPolicy(self.environment)
-        # self.behaviour_policy: policy.EGreedyPolicy = policy.EGreedyPolicy(self.environment, self.rng,
+        # self.behaviour_policy: policy.EGreedyPolicy = policy.EGreedyPolicy(self.environment,
         #                                                                    greedy_policy=self.target_policy)
-        # self.behaviour_policy: policy.RandomPolicy = policy.RandomPolicy(self.environment, self.rng)
+        # self.behaviour_policy: policy.RandomPolicy = policy.RandomPolicy(self.environment)
         # self.target_agent = agent.Agent(self.environment, self.target_policy)
         # self.behaviour_agent = agent.Agent(self.environment, self.behaviour_policy)
 
@@ -143,6 +138,6 @@ class Controller:
         #     recorder_[test] = episode.total_return
         #     value = recorder_[test]
         #     print(f"recorder value: {value:.1f}")
-            # user_event: common.UserEvent = self.grid_view.display_episode(episode, show_trail=False)
-            # if user_event == common.UserEvent.QUIT:
-            #     break
+        # user_event: common.UserEvent = self.grid_view.display_episode(episode, show_trail=False)
+        # if user_event == common.UserEvent.QUIT:
+        #     break

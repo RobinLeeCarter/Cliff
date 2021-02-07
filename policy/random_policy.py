@@ -1,16 +1,14 @@
 from typing import List
 
-import numpy as np
-
+import common
 import environment
 from policy import policy
 
 
 class RandomPolicy(policy.Policy):
     # fully random
-    def __init__(self, environment_: environment.Environment, rng: np.random.Generator):
+    def __init__(self, environment_: environment.Environment):
         super().__init__(environment_)
-        self.rng: np.random.Generator = rng
 
         # cache state and possible actions for get_probability to avoid doing it twice
         # self.state: Optional[environment.State] = None
@@ -18,7 +16,7 @@ class RandomPolicy(policy.Policy):
 
     def get_action(self, state: environment.State) -> environment.Action:
         self.set_possible_actions(state)
-        return self.rng.choice(self.possible_actions)
+        return common.rng.choice(self.possible_actions)
 
     def get_probability(self, state_: environment.State, action_: environment.Action) -> float:
         self.set_possible_actions(state_)
