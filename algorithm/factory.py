@@ -1,7 +1,8 @@
 import environment
 import agent
 from comparison import settings
-from algorithm import episodic, expected_sarsa, q_learning, sarsa_alg, vq
+from algorithm import expected_sarsa, q_learning, sarsa, vq
+from algorithm.abstract import episodic
 
 
 class Factory:
@@ -15,9 +16,9 @@ class Factory:
         else:
             verbose: bool = False
 
-        if settings_.algorithm_type == sarsa_alg.SarsaAlg:
+        if settings_.algorithm_type == sarsa.Sarsa:
             alpha = self.alpha_lookup(settings_)
-            return sarsa_alg.SarsaAlg(self.environment, self.agent, alpha, verbose)
+            return sarsa.Sarsa(self.environment, self.agent, alpha, verbose)
         elif settings_.algorithm_type == q_learning.QLearning:
             alpha = self.alpha_lookup(settings_)
             return q_learning.QLearning(self.environment, self.agent, alpha, verbose)

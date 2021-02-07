@@ -14,7 +14,7 @@ class ReturnByAlpha(comparison.Comparison):
             algorithm.ExpectedSarsa,
             algorithm.VQ,
             algorithm.QLearning,
-            algorithm.SarsaAlg
+            algorithm.Sarsa
         ]
         self._alpha_min = 0.1
         self._alpha_max = 1.0

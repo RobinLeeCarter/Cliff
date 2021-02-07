@@ -1,10 +1,10 @@
 import constants
 import environment
 import agent
-from algorithm import episodic_online
+from algorithm import abstract
 
 
-class QLearning(episodic_online.EpisodicOnline):
+class QLearning(abstract.EpisodicOnline):
     name: str = "Q-learning"
 
     def __init__(self,

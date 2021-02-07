@@ -1,10 +1,10 @@
 import constants
 import environment
 import agent
-from algorithm import episodic_online
+from algorithm import abstract
 
 
-class ExpectedSarsa(episodic_online.EpisodicOnline):
+class ExpectedSarsa(abstract.EpisodicOnline):
     name: str = "Expected Sarsa"
 
     def __init__(self,

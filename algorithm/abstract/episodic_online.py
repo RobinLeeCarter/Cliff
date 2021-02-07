@@ -2,10 +2,10 @@ import abc
 
 import environment
 import agent
-from algorithm import episodic
+from algorithm.abstract import episodic
 
 
-class EpisodicOnline(episodic.Episodic):
+class EpisodicOnline(episodic.Episodic, abc.ABC):
     name: str = "Error EpisodicOnline.name"
 
     def __init__(self,

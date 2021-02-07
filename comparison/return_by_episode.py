@@ -16,7 +16,7 @@ class ReturnByEpisode(comparison.Comparison):
           # settings.Settings(algorithm.ExpectedSarsa, {"alpha": 0.9}),
           # settings.Settings(algorithm.VQ, {"alpha": 0.2}),
           settings.Settings(algorithm.QLearning, {"alpha": 0.5}),
-          settings.Settings(algorithm.SarsaAlg, {"alpha": 0.5})
+          settings.Settings(algorithm.Sarsa, {"alpha": 0.5})
         ]
 
     def record(self, settings_: settings.Settings, iteration: int, episode: agent.Episode):

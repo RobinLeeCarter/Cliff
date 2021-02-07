@@ -1,10 +1,10 @@
 import constants
 import environment
 import agent
-from algorithm import episodic_online
+from algorithm import abstract
 
 
-class SarsaAlg(episodic_online.EpisodicOnline):
+class Sarsa(abstract.EpisodicOnline):
     name: str = "Sarsa"
 
     def __init__(self,
@@ -14,7 +14,7 @@ class SarsaAlg(episodic_online.EpisodicOnline):
                  verbose: bool = False
                  ):
         super().__init__(environment_, agent_, verbose)
-        self.title = f"{SarsaAlg.name} α={alpha}"
+        self.title = f"{Sarsa.name} α={alpha}"
         self._alpha = alpha
 
     def _start_episode(self):
