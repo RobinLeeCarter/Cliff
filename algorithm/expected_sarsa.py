@@ -27,9 +27,8 @@ class ExpectedSarsa(abstract.EpisodicOnline):
         state = self.agent.state
 
         q_expectation_over_a = self._get_expectation_over_a(state)
-        delta = reward \
-            + constants.GAMMA * q_expectation_over_a \
-            - self._Q[prev_state, prev_action]
+        target = reward + constants.GAMMA * q_expectation_over_a
+        delta = target - self._Q[prev_state, prev_action]
         self._Q[prev_state, prev_action] += self._alpha * delta
         # update policy to be in-line with Q
         self.agent.policy[prev_state] = self._Q.argmax_over_actions(prev_state)

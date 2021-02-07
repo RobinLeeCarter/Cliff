@@ -4,7 +4,7 @@ import agent
 from algorithm import abstract
 
 
-class QLearning(abstract.EpisodicOnline):
+class TD0(abstract.EpisodicOnline):
     name: str = "Q-learning"
 
     def __init__(self,
@@ -14,7 +14,7 @@ class QLearning(abstract.EpisodicOnline):
                  verbose: bool = False
                  ):
         super().__init__(environment_, agent_, verbose)
-        self.title = f"{QLearning.name} α={alpha}"
+        self.title = f"{TD0.name} α={alpha}"
         self._alpha = alpha
 
     def _do_training_step(self):
@@ -22,13 +22,9 @@ class QLearning(abstract.EpisodicOnline):
         self.agent.take_action()
 
         prev_state = self.agent.prev_state
-        prev_action = self.agent.prev_action
         reward = self.agent.reward
         state = self.agent.state
 
-        q_max_over_a = self._Q.max_over_actions(state)
-        target = reward + constants.GAMMA * q_max_over_a
-        delta = target - self._Q[prev_state, prev_action]
-        self._Q[prev_state, prev_action] += self._alpha * delta
-        # update policy to be in-line with Q
-        self.agent.policy[prev_state] = self._Q.argmax_over_actions(prev_state)
+        target = reward + constants.GAMMA * self._V[state]
+        delta = target - self._V[prev_state]
+        self._V[prev_state] += self._alpha * delta
