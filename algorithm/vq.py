@@ -15,11 +15,11 @@ class VQ(episodic_algorithm.EpisodicAlgorithm):
                  verbose: bool = False
                  ):
         self.alpha_variable = alpha_variable
+        super().__init__(environment_, agent_, verbose)
         if self.alpha_variable:
-            title = f"{VQ.name} α=0.5 then α=0.1"
+            self.title = f"{VQ.name} α=0.5 then α=0.1"
         else:
-            title = f"{VQ.name} α={alpha}"
-        super().__init__(environment_, agent_, title, verbose)
+            self.title = f"{VQ.name} α={alpha}"
         self._alpha = alpha
 
     def parameter_changes(self, iteration: int):

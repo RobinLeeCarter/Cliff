@@ -13,8 +13,8 @@ class SarsaAlg(episodic_algorithm.EpisodicAlgorithm):
                  alpha: float = 0.5,
                  verbose: bool = False
                  ):
-        title = f"{SarsaAlg.name} α={alpha}"
-        super().__init__(environment_, agent_, title, verbose)
+        super().__init__(environment_, agent_, verbose)
+        self.title = f"{SarsaAlg.name} α={alpha}"
         self._alpha = alpha
 
     def _start_episode(self):

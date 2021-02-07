@@ -11,12 +11,11 @@ class EpisodicAlgorithm(abc.ABC):
     def __init__(self,
                  environment_: environment.Environment,
                  agent_: agent.Agent,
-                 title: str,
                  verbose: bool = False
                  ):
         self.environment: environment.Environment = environment_
         self.agent: agent.Agent = agent_
-        self.title: title = title
+        self.title: str = "Error: Untitled"
         self.verbose = verbose
 
         # assume all episodic algorithms have a Q function and initialise policy based on it
