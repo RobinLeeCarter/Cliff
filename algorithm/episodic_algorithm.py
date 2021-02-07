@@ -1,9 +1,8 @@
 import abc
 
-import constants
 import environment
 import agent
-from algorithm.algorithms import support
+from algorithm import common
 
 
 class EpisodicAlgorithm(abc.ABC):
@@ -22,8 +21,8 @@ class EpisodicAlgorithm(abc.ABC):
 
         # assume all episodic algorithms have a Q function and initialise policy based on it
         # could add another layer of inheritance if not
-        self._V = support.StateFunction(self.environment)
-        self._Q = support.StateActionFunction(self.environment)
+        self._V = common.StateFunction(self.environment)
+        self._Q = common.StateActionFunction(self.environment)
 
     def initialize(self):
         self._V.initialize_values()

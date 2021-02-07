@@ -1,7 +1,7 @@
 import constants
 import environment
 import agent
-from algorithm.algorithms import episodic_algorithm
+from algorithm import episodic_algorithm
 
 
 class ExpectedSarsa(episodic_algorithm.EpisodicAlgorithm):

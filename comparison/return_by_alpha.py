@@ -11,9 +11,9 @@ class ReturnByAlpha(comparison.Comparison):
         super().__init__()
 
         self._algorithm_type_list = [
-            # algorithm.ExpectedSarsa,
-            # algorithm.VQ,
-            # algorithm.QLearning,
+            algorithm.ExpectedSarsa,
+            algorithm.VQ,
+            algorithm.QLearning,
             algorithm.SarsaAlg
         ]
         self._alpha_min = 0.1

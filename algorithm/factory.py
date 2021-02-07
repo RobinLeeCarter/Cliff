@@ -1,8 +1,7 @@
 import environment
 import agent
 from comparison import settings
-from algorithm import algorithms
-# from algorithm import vq, q_learning, episodic_algorithm, expected_sarsa, sarsa_alg
+from algorithm import episodic_algorithm, expected_sarsa, q_learning, sarsa_alg, vq
 
 
 class Factory:
@@ -10,25 +9,25 @@ class Factory:
         self.environment: environment.Environment = environment_
         self.agent: agent.Agent = agent_
 
-    def __getitem__(self, settings_: settings.Settings) -> algorithms.EpisodicAlgorithm:
+    def __getitem__(self, settings_: settings.Settings) -> episodic_algorithm.EpisodicAlgorithm:
         if "verbose" in settings_.parameters:
             verbose: bool = settings_.parameters["verbose"]
         else:
             verbose: bool = False
 
-        if settings_.algorithm_type == algorithms.SarsaAlg:
+        if settings_.algorithm_type == sarsa_alg.SarsaAlg:
             alpha = self.alpha_lookup(settings_)
-            return algorithms.SarsaAlg(self.environment, self.agent, alpha, verbose)
-        elif settings_.algorithm_type == algorithms.QLearning:
+            return sarsa_alg.SarsaAlg(self.environment, self.agent, alpha, verbose)
+        elif settings_.algorithm_type == q_learning.QLearning:
             alpha = self.alpha_lookup(settings_)
-            return algorithms.QLearning(self.environment, self.agent, alpha, verbose)
-        elif settings_.algorithm_type == algorithms.ExpectedSarsa:
+            return q_learning.QLearning(self.environment, self.agent, alpha, verbose)
+        elif settings_.algorithm_type == expected_sarsa.ExpectedSarsa:
             alpha = self.alpha_lookup(settings_)
-            return algorithms.ExpectedSarsa(self.environment, self.agent, alpha, verbose)
-        elif settings_.algorithm_type == algorithms.VQ:
+            return expected_sarsa.ExpectedSarsa(self.environment, self.agent, alpha, verbose)
+        elif settings_.algorithm_type == vq.VQ:
             alpha = self.alpha_lookup(settings_)
             alpha_variable = self.alpha_variable_lookup(settings_)
-            return algorithms.VQ(self.environment, self.agent, alpha, alpha_variable, verbose)
+            return vq.VQ(self.environment, self.agent, alpha, alpha_variable, verbose)
 
     def alpha_lookup(self, settings_: settings.Settings, default: float = 0.5) -> float:
         if "alpha" in settings_.parameters:
