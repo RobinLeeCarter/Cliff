@@ -1,9 +1,12 @@
+from __future__ import annotations
+
 import common
 import environment
+import environments
 
 
 def environment_test() -> bool:
-    environment_ = environment.Cliff
+    environment_ = environments.Cliff
 
     for state_ in environment_.states():
         print(state_)

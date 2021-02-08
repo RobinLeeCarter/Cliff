@@ -1,9 +1,13 @@
+from __future__ import annotations
+from typing import TYPE_CHECKING
+
 import numpy as np
 
 from comparison_dataclasses import settings, series
-import agent
-import algorithm
 from comparison import comparison, recorder
+if TYPE_CHECKING:
+    import agent
+    import algorithm
 
 
 class ReturnByEpisode(comparison.Comparison):

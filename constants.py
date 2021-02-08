@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 GAMMA: float = 1.0
 
 INITIAL_V_VALUE: float = 0.0

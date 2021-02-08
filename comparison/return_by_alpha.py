@@ -1,10 +1,14 @@
+from __future__ import annotations
+from typing import TYPE_CHECKING
+
 import numpy as np
 
 import utils
 from comparison_dataclasses import settings, series
-import algorithm
-import agent
 from comparison import comparison, recorder
+import algorithm
+if TYPE_CHECKING:
+    import agent
 
 
 class ReturnByAlpha(comparison.Comparison):

@@ -1,17 +1,19 @@
-from typing import List, Optional
+from __future__ import annotations
+from typing import Optional, TYPE_CHECKING
 
 import numpy as np
 
 import constants
-import environment
 from agent import rsa
+if TYPE_CHECKING:
+    import environment
 
 
 class Episode:
     """Just makes a record laid out in the standard way with Reward, State, Action for each t"""
     def __init__(self):
         # S0, A0, R1, S1, A1, R2 ... S(T-1), A(T-1), R(T)
-        self.trajectory: List[rsa.RSA] = []
+        self.trajectory: list[rsa.RSA] = []
         self.terminates: bool = False
         self.T: Optional[int] = None
         self.G: np.ndarray = np.array([], dtype=float)

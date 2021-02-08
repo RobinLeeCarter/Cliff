@@ -1,7 +1,9 @@
+from __future__ import annotations
+from typing import Optional, TYPE_CHECKING
 from dataclasses import dataclass
-from typing import Optional
 
-import environment
+if TYPE_CHECKING:
+    import environment
 
 
 @dataclass

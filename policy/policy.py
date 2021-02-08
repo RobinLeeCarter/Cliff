@@ -1,7 +1,9 @@
+from __future__ import annotations
 import abc
-from typing import Optional
+from typing import Optional, TYPE_CHECKING
 
-import environment
+if TYPE_CHECKING:
+    import environment
 
 
 class Policy(abc.ABC):

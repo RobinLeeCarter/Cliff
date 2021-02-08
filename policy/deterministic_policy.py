@@ -1,13 +1,15 @@
+from __future__ import annotations
+
 import numpy as np
 
-import environment
 from policy import policy
+import environment
 
 
 class DeterministicPolicy(policy.Policy):
     def __init__(self, environment_: environment.Environment):
         super().__init__(environment_)
-        self._action_given_state: np.ndarray = np.empty(shape=self.environment.states_shape, dtype=environment.Action)
+        self._action_given_state: np.ndarray = np.empty(shape=environment_.states_shape, dtype=environment.Action)
 
     def get_action(self, state: environment.State) -> environment.Action:
         return self._action_given_state[state.index]

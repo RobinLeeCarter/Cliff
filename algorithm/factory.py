@@ -1,10 +1,10 @@
 from __future__ import annotations
-# from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING
 
-# if TYPE_CHECKING:
-import environment
-import agent
-from comparison_dataclasses import settings
+if TYPE_CHECKING:
+    import environment
+    import agent
+    from comparison_dataclasses import settings
 
 from algorithm import abstract, control  # , policy_evaluation
 

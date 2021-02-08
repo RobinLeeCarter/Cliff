@@ -1,3 +1,4 @@
+from __future__ import annotations
 from typing import Optional
 
 import utils
@@ -7,7 +8,6 @@ import agent
 import algorithm
 import train
 import view
-# import environment
 import comparison
 import environments
 

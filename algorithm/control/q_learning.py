@@ -1,7 +1,11 @@
+from __future__ import annotations
+from typing import TYPE_CHECKING
+
 import constants
-import environment
-import agent
 from algorithm import abstract
+if TYPE_CHECKING:
+    import environment
+    import agent
 
 
 class QLearning(abstract.EpisodicOnline):

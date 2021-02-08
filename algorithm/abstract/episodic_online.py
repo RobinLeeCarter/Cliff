@@ -1,8 +1,11 @@
+from __future__ import annotations
+from typing import TYPE_CHECKING
 import abc
 
-import environment
-import agent
 from algorithm.abstract import episodic
+if TYPE_CHECKING:
+    import environment
+    import agent
 
 
 class EpisodicOnline(episodic.Episodic, abc.ABC):

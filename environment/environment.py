@@ -1,7 +1,10 @@
-from typing import Generator
+from __future__ import annotations
+from typing import Generator, TYPE_CHECKING
 
 import common
-from environment import action, observation, state, grid, grid_world
+from environment import action, observation, state, grid_world
+if TYPE_CHECKING:
+    from environment import grid
 
 
 class Environment:

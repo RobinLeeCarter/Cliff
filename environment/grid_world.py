@@ -1,9 +1,11 @@
-from typing import Optional
+from __future__ import annotations
+from typing import Optional, TYPE_CHECKING
 
 import numpy as np
 
 import common
-from environment import grid
+if TYPE_CHECKING:
+    from environment import grid
 
 
 class GridWorld:

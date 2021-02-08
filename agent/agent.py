@@ -1,10 +1,12 @@
-from typing import Optional
+from __future__ import annotations
+from typing import Optional, TYPE_CHECKING
 
 import constants
-import environment
-import policy
 from agent import episode
-# from agent import sarsa
+
+if TYPE_CHECKING:
+    import environment
+    import policy
 
 
 class Agent:

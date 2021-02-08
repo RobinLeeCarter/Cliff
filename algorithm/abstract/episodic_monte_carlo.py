@@ -1,9 +1,11 @@
+from __future__ import annotations
+from typing import Optional, TYPE_CHECKING
 import abc
-from typing import Optional
 
-import environment
-import agent
 from algorithm.abstract import episodic
+if TYPE_CHECKING:
+    import environment
+    import agent
 
 
 class EpisodicMonteCarlo(episodic.Episodic, abc.ABC):

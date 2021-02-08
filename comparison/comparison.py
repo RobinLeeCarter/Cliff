@@ -1,10 +1,12 @@
+from __future__ import annotations
 from abc import ABC, abstractmethod
-from typing import Optional
+from typing import Optional, TYPE_CHECKING
 
-from comparison_dataclasses import series, settings
-import agent
-import view
 from comparison import recorder
+import view
+if TYPE_CHECKING:
+    from comparison_dataclasses import series, settings
+    import agent
 
 
 class Comparison(ABC):

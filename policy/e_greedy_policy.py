@@ -1,6 +1,12 @@
+from __future__ import annotations
+from typing import TYPE_CHECKING
+
 import common
-import environment
-from policy import random_policy, deterministic_policy
+
+from policy import random_policy
+if TYPE_CHECKING:
+    import environment
+    from policy import deterministic_policy
 
 
 class EGreedyPolicy(random_policy.RandomPolicy):
