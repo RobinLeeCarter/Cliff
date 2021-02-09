@@ -3,10 +3,10 @@ from typing import Optional, Dict, TYPE_CHECKING
 
 import pygame
 
-import common
 if TYPE_CHECKING:
     import environment
     import agent
+import common
 
 
 class GridView:

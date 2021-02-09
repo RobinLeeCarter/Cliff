@@ -1,10 +1,10 @@
 from __future__ import annotations
 from typing import TYPE_CHECKING
 
-from algorithm import abstract
 if TYPE_CHECKING:
     import environment
     import agent
+from algorithm import abstract
 
 
 class ConstantAlphaMC(abstract.EpisodicMonteCarlo):

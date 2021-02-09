@@ -1,17 +1,11 @@
 # abstract
-from algorithm.abstract import Episodic
-from algorithm.abstract import EpisodicOnline
-from algorithm.abstract import EpisodicMonteCarlo
+from algorithm.abstract import *
 
 # concrete control
-from algorithm.control import ExpectedSarsa
-from algorithm.control import QLearning
-from algorithm.control import Sarsa
-from algorithm.control import VQ
+from algorithm.control import *
 
 # concrete policy evaluation
-from algorithm.policy_evaluation import ConstantAlphaMC
-from algorithm.policy_evaluation import TD0
+from algorithm.policy_evaluation import *
 
 # factor to generate an algorithm from a Settings
 from algorithm.factory import Factory

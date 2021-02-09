@@ -2,9 +2,9 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
+    import common
     import algorithm
     import comparison
-    from comparison import comparison_dataclasses
 
 
 class Trainer:
@@ -17,7 +17,7 @@ class Trainer:
         self.comparison: comparison.Comparison = comparison_
         self.verbose = verbose
 
-    def train(self, settings: comparison_dataclasses.Settings):
+    def train(self, settings: common.Settings):
         algorithm_ = self.algorithm_factory[settings]
         settings.algorithm_title = algorithm_.title
         print(f"{algorithm_.title}: {settings.runs} runs")

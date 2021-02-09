@@ -3,9 +3,9 @@ from typing import TYPE_CHECKING
 
 import numpy as np
 
-import constants
 if TYPE_CHECKING:
     import environment
+import common
 
 
 class StateFunction:
@@ -21,7 +21,7 @@ class StateFunction:
             if state_.is_terminal:
                 self._values[state_.index] = 0.0
             else:
-                self._values[state_.index] = constants.INITIAL_V_VALUE
+                self._values[state_.index] = common.INITIAL_V_VALUE
 
     def __getitem__(self, state: environment.State) -> float:
         if state.is_terminal:

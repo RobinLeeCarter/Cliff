@@ -1,12 +1,11 @@
 from __future__ import annotations
 from typing import Optional, TYPE_CHECKING
 
-import constants
-from agent import episode
-
 if TYPE_CHECKING:
     import environment
     import policy
+import common
+from agent import episode
 
 
 class Agent:
@@ -72,12 +71,12 @@ class Agent:
 
     def generate_episode(self):
         self.start_episode()
-        while not self.state.is_terminal and self.t < constants.EPISODE_LENGTH_TIMEOUT:
+        while not self.state.is_terminal and self.t < common.EPISODE_LENGTH_TIMEOUT:
             self.choose_action()
             if self.verbose:
                 print(f"t={self.t} \t state = {self.state} \t action = {self.action}")
             self.take_action()
-        if self.t == constants.EPISODE_LENGTH_TIMEOUT:
+        if self.t == common.EPISODE_LENGTH_TIMEOUT:
             print("Failed to terminate")
         if self.verbose:
             print(f"t={self.t} \t state = {self.state} (terminal)")

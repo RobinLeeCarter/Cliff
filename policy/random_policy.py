@@ -1,11 +1,10 @@
 from __future__ import annotations
 from typing import List, TYPE_CHECKING
 
-import common
-from policy import policy
-
 if TYPE_CHECKING:
     import environment
+import common
+from policy import policy
 
 
 class RandomPolicy(policy.Policy):

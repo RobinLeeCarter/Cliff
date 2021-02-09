@@ -1,11 +1,11 @@
 from __future__ import annotations
 from typing import TYPE_CHECKING
 
-import constants
-from algorithm import abstract
 if TYPE_CHECKING:
     import environment
     import agent
+import common
+from algorithm import abstract
 
 
 class QLearning(abstract.EpisodicOnline):
@@ -31,7 +31,7 @@ class QLearning(abstract.EpisodicOnline):
         state = self.agent.state
 
         q_max_over_a = self._Q.max_over_actions(state)
-        target = reward + constants.GAMMA * q_max_over_a
+        target = reward + common.GAMMA * q_max_over_a
         delta = target - self._Q[prev_state, prev_action]
         self._Q[prev_state, prev_action] += self._alpha * delta
         # update policy to be in-line with Q

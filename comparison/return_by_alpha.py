@@ -3,13 +3,13 @@ from typing import TYPE_CHECKING
 
 import numpy as np
 
-import utils
-# from comparison.dataclasses import settings, series
-from comparison import comparison, recorder, comparison_dataclasses
-import algorithm
 if TYPE_CHECKING:
     import agent
     import view
+import utils
+import common
+import algorithm
+from comparison import comparison, recorder
 
 
 class ReturnByAlpha(comparison.Comparison):
@@ -33,27 +33,27 @@ class ReturnByAlpha(comparison.Comparison):
         self.settings_list = []
         for alpha in self._alpha_list:
             for algorithm_type in self._algorithm_type_list:
-                settings_ = comparison_dataclasses.Settings(
+                settings_ = common.Settings(
                     algorithm_type=algorithm_type,
                     parameters={"alpha": alpha}
                 )
                 self.settings_list.append(settings_)
 
-    def record(self, settings_: comparison_dataclasses.Settings, iteration: int, episode: agent.Episode):
+    def record(self, settings_: common.Settings, iteration: int, episode: agent.Episode):
         algorithm_type = settings_.algorithm_type
         alpha = settings_.parameters["alpha"]
         total_return = episode.total_return
         self._recorder[algorithm_type, alpha] = total_return
 
     def compile(self):
-        self.x_series = comparison_dataclasses.Series(
+        self.x_series = common.Series(
             title="α",
             values=np.array(self._alpha_list)
         )
         # collate output from self.recorder
         for algorithm_type in self._algorithm_type_list:
             values = np.array([self._recorder[algorithm_type, alpha] for alpha in self._alpha_list])
-            series_ = comparison_dataclasses.Series(
+            series_ = common.Series(
                 title=algorithm_type.name,
                 values=values,
                 identifiers={"algorithm_type": algorithm_type}

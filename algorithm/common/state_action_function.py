@@ -4,9 +4,9 @@ import itertools
 
 import numpy as np
 
-import constants
 if TYPE_CHECKING:
     import environment
+import common
 
 
 class StateActionFunction:
@@ -30,7 +30,7 @@ class StateActionFunction:
                 if state_.is_terminal:
                     self._values[q_index] = 0.0
                 else:
-                    self._values[q_index] = constants.INITIAL_Q_VALUE
+                    self._values[q_index] = common.INITIAL_Q_VALUE
 
     def __getitem__(self, state_action: tuple[environment.State, environment.Action]) -> float:
         state, action = state_action

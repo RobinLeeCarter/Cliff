@@ -1,11 +1,11 @@
 from __future__ import annotations
 from typing import TYPE_CHECKING
 
-import constants
-from algorithm import abstract
 if TYPE_CHECKING:
     import environment
     import agent
+import common
+from algorithm import abstract
 
 
 class ExpectedSarsa(abstract.EpisodicOnline):
@@ -31,7 +31,7 @@ class ExpectedSarsa(abstract.EpisodicOnline):
         state = self.agent.state
 
         q_expectation_over_a = self._get_expectation_over_a(state)
-        target = reward + constants.GAMMA * q_expectation_over_a
+        target = reward + common.GAMMA * q_expectation_over_a
         delta = target - self._Q[prev_state, prev_action]
         self._Q[prev_state, prev_action] += self._alpha * delta
         # update policy to be in-line with Q

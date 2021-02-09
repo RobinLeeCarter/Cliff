@@ -3,9 +3,9 @@ from typing import Optional, TYPE_CHECKING
 
 import numpy as np
 
-import common
 if TYPE_CHECKING:
     from environment import grid
+import common
 
 
 class GridWorld:

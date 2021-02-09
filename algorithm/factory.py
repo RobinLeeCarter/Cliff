@@ -2,9 +2,9 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
+    import common
     import environment
     import agent
-    from comparison.comparison_dataclasses import settings
 
 from algorithm import abstract, control  # , policy_evaluation
 
@@ -14,7 +14,7 @@ class Factory:
         self.environment: environment.Environment = environment_
         self.agent: agent.Agent = agent_
 
-    def __getitem__(self, settings_: settings.Settings) -> abstract.Episodic:
+    def __getitem__(self, settings_: common.Settings) -> abstract.Episodic:
         if "verbose" in settings_.parameters:
             verbose: bool = settings_.parameters["verbose"]
         else:
@@ -34,13 +34,13 @@ class Factory:
             alpha_variable = self.alpha_variable_lookup(settings_)
             return control.VQ(self.environment, self.agent, alpha, alpha_variable, verbose)
 
-    def alpha_lookup(self, settings_: settings.Settings, default: float = 0.5) -> float:
+    def alpha_lookup(self, settings_: common.Settings, default: float = 0.5) -> float:
         if "alpha" in settings_.parameters:
             return settings_.parameters["alpha"]
         else:
             return default
 
-    def alpha_variable_lookup(self, settings_: settings.Settings, default: bool = False) -> bool:
+    def alpha_variable_lookup(self, settings_: common.Settings, default: bool = False) -> bool:
         if "alpha_variable" in settings_.parameters:
             return settings_.parameters["alpha_variable"]
         else:

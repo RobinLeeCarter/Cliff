@@ -3,9 +3,9 @@ from typing import TYPE_CHECKING
 
 import numpy as np
 
-from policy import policy
 if TYPE_CHECKING:
     import environment
+from policy import policy
 
 
 class DeterministicPolicy(policy.Policy):

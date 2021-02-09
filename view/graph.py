@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 from matplotlib import figure
 
 if TYPE_CHECKING:
-    from comparison.comparison_dataclasses import series
+    import common
 
 
 class Graph:
@@ -16,12 +16,12 @@ class Graph:
         self.ax: Optional[figure.Axes] = None
 
     def make_plot(self,
-                  x_series: series.Series,
+                  x_series: common.Series,
                   x_min: float,
                   x_max: float,
                   y_min: float,
                   y_max: float,
-                  graph_series: list[series.Series],
+                  graph_series: list[common.Series],
                   moving_average_window_size: int = 0):
         is_moving_average = (moving_average_window_size >= 3)
         if is_moving_average:
@@ -48,16 +48,16 @@ class Graph:
         self.ax.set_ylabel("Average Return")
         self.ax.grid(True)
 
-    def plot_arrays(self, x_series: series.Series, graph_series: list[series.Series]):
+    def plot_arrays(self, x_series: common.Series, graph_series: list[common.Series]):
         for series_ in graph_series:
             self.ax.plot(x_series.values, series_.values, label=series_.title)
 
     def moving_average_plot(self,
-                            x_series: series.Series,
-                            graph_series: list[series.Series],
+                            x_series: common.Series,
+                            graph_series: list[common.Series],
                             moving_average_window_size: int):
         # convert output into moving averages
-        graph_series_ma: list[series.Series] = graph_series.copy()
+        graph_series_ma: list[common.Series] = graph_series.copy()
         for series_ma in graph_series_ma:
             values_ma = self.moving_average(series_ma.values, window_size=moving_average_window_size)
             series_ma.values = values_ma

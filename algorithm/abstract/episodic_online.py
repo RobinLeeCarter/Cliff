@@ -2,10 +2,10 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 import abc
 
-from algorithm.abstract import episodic
 if TYPE_CHECKING:
     import environment
     import agent
+from algorithm.abstract import episodic
 
 
 class EpisodicOnline(episodic.Episodic, abc.ABC):

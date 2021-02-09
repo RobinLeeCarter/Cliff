@@ -1,11 +1,11 @@
 from __future__ import annotations
 from typing import TYPE_CHECKING
 
-import constants
-from algorithm import abstract
 if TYPE_CHECKING:
     import environment
     import agent
+import common
+from algorithm import abstract
 
 
 class VQ(abstract.EpisodicOnline):
@@ -47,7 +47,7 @@ class VQ(abstract.EpisodicOnline):
         reward = self.agent.reward
         state = self.agent.state
 
-        target = reward + constants.GAMMA * self._V[state]
+        target = reward + common.GAMMA * self._V[state]
 
         v_delta = target - self._V[prev_state]
         self._V[prev_state] += self._alpha * v_delta

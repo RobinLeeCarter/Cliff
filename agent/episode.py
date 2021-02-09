@@ -3,10 +3,10 @@ from typing import Optional, TYPE_CHECKING
 
 import numpy as np
 
-import constants
-from agent import rsa
 if TYPE_CHECKING:
     import environment
+import common
+from agent import rsa
 
 
 class Episode:
@@ -34,7 +34,7 @@ class Episode:
             self.G = np.zeros(shape=self.T+1, dtype=float)
             self.G[self.T] = 0.0
             for t in range(self.T - 1, -1, -1):     # T-1, T-2, ... 1, 0
-                self.G[t] = self[t+1].reward + constants.GAMMA * self.G[t+1]
+                self.G[t] = self[t+1].reward + common.GAMMA * self.G[t + 1]
 
     def __getitem__(self, t: int) -> rsa.RSA:
         return self.trajectory[t]
@@ -51,5 +51,5 @@ class Episode:
         g: float = 0
         for t, rsa_ in enumerate(self.trajectory):
             if t > 0:
-                g = rsa_.reward + constants.GAMMA * g
+                g = rsa_.reward + common.GAMMA * g
         return g

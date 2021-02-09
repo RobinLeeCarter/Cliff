@@ -1,8 +1,9 @@
 from __future__ import annotations
 from dataclasses import dataclass
-from typing import Optional
+from typing import Optional, TYPE_CHECKING
 
-from environment import state
+if TYPE_CHECKING:
+    from environment import state
 
 
 @dataclass(frozen=True)
