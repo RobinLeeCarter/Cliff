@@ -5,7 +5,7 @@ import abc
 if TYPE_CHECKING:
     import environment
     import agent
-from algorithm import common
+from algorithm import value_function
 
 
 class Episodic(abc.ABC):
@@ -23,8 +23,8 @@ class Episodic(abc.ABC):
 
         # assume all episodic algorithms have a Q function and initialise policy based on it
         # could add another layer of inheritance if not
-        self._V = common.StateFunction(self.environment)
-        self._Q = common.StateActionFunction(self.environment)
+        self._V = value_function.StateFunction(self.environment)
+        self._Q = value_function.StateActionFunction(self.environment)
 
     def initialize(self):
         self._V.initialize_values()

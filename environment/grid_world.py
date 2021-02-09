@@ -1,17 +1,15 @@
 from __future__ import annotations
-from typing import Optional, TYPE_CHECKING
+from typing import Optional
 
 import numpy as np
 
-if TYPE_CHECKING:
-    from environment import grid
 import common
 
 
 class GridWorld:
     """GridWorld doesn't know about states and actions it just deals in the rules of the grid"""
-    def __init__(self, grid_: grid.Grid):
-        self.grid: grid.Grid = grid_
+    def __init__(self, grid_: common.Grid):
+        self.grid: common.Grid = grid_
         self.max_y: int = self.grid.grid_array.shape[0] - 1
         self.max_x: int = self.grid.grid_array.shape[1] - 1
         starts: np.ndarray = (self.grid.grid_array[:, :] == common.Square.START)

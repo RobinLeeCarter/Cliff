@@ -5,8 +5,9 @@ if TYPE_CHECKING:
     import common
     import environment
     import agent
+    from algorithm import abstract
 
-from algorithm import abstract, control  # , policy_evaluation
+from algorithm import control  # , policy_evaluation
 
 
 class Factory:

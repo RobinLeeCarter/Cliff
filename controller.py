@@ -9,7 +9,7 @@ import algorithm
 import train
 import view
 import comparison
-import environments
+from data import environments
 
 
 class Controller:
