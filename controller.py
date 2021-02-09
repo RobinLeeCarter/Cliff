@@ -6,7 +6,6 @@ import common
 import policy
 import agent
 import algorithm
-import train
 import view
 import comparison
 from data import environments
@@ -25,12 +24,7 @@ class Controller:
 
         self.algorithm_factory: algorithm.Factory = algorithm.Factory(self.environment, self.agent)
 
-        # self.comparison_type: Optional[common.ComparisonType] = None
         self.comparison: Optional[comparison.Comparison] = None
-        # self.settings_list: list[algorithm.Settings] = []
-        # self.algorithms: list[algorithm.EpisodicAlgorithm] = []
-        # self.recorder: Optional[train.Recorder] = None
-        self.trainer: Optional[train.Trainer] = None
 
         self.graph = view.Graph()
         self.grid_view = view.GridView(self.environment.grid_world)
@@ -42,70 +36,21 @@ class Controller:
         # self.target_agent = agent.Agent(self.environment, self.target_policy)
         # self.behaviour_agent = agent.Agent(self.environment, self.behaviour_policy)
 
-        # self.algorithm_: algorithm.EpisodicAlgorithm = algorithm.Sarsa(
-        #         self.environment,
-        #         self.agent,
-        #         alpha=constants.ALPHA,
-        #         verbose=False
-        #     )
-
     def setup_and_run(self, comparison_type: common.ComparisonType):
-        # self.comparison_type = comparison_type
-        # self.settings_list: list[algorithm.Settings] = []
-        # recorder_key_type: type
         if comparison_type == common.ComparisonType.RETURN_BY_EPISODE:
-            self.comparison = comparison.ReturnByEpisode(self.graph)
-            # self.settings_list = data.return_by_episode_settings
-            # recorder_key_type = tuple[algorithm.EpisodicAlgorithm, int]
+            self.comparison = comparison.ReturnByEpisode(self.algorithm_factory, self.graph, verbose=False)
         elif comparison_type == common.ComparisonType.RETURN_BY_ALPHA:
-            self.comparison = comparison.ReturnByAlpha(self.graph)
-            # self.settings_list = self.alpha_settings_list()
-            # recorder_key_type = tuple[type, float]
+            self.comparison = comparison.ReturnByAlpha(self.algorithm_factory, self.graph, verbose=False)
         else:
             raise NotImplementedError
         self.comparison.build()
 
-        # self.algorithms = [self.algorithm_factory[settings_] for settings_ in self.settings_list]
-        # self.recorder: train.Recorder = train.Recorder[recorder_key_type]()
-        self.trainer = train.Trainer(
-            self.algorithm_factory,
-            self.comparison,
-            verbose=False
-        )
-        # produce output in self.recorder
-        # for settings in self.settings_list:
-        #     self.trainer.train(settings)
-
-    # def alpha_settings_list(self) -> list[algorithm.Settings]:
-    #     settings_list: list[algorithm.Settings] = []
-    #     for alpha in data.alpha_list:
-    #         for algorithm_type in data.algorithm_type_list:
-    #             settings = algorithm.Settings(
-    #                 algorithm_type=algorithm_type,
-    #                 parameters={"alpha": alpha}
-    #             )
-    #             settings_list.append(settings)
-    #     return settings_list
-
-    # def compile_return_by_alpha(self):
-    #     # collate output from self.recorder
-    #     alpha_array = np.array(data.alpha_list, dtype=float)
-    #     graph_series: list[view.Series] = []
-    #     for algorithm_type in data.algorithm_type_list:
-    #         values = np.array([self.recorder[algorithm_type, alpha] for alpha in alpha_array])
-    #         series = view.Series(title=algorithm_type.name, values=values)
-    #         graph_series.append(series)
-    #     self.graph.make_plot(alpha_array, graph_series, is_moving_average=False)
-
     def run(self):
-        # algorithms_output: dict[algorithm.EpisodicAlgorithm, np.ndarray] = {}
-
         timer: utils.Timer = utils.Timer()
         timer.start()
         for settings in self.comparison.settings_list:
-            self.trainer.train(settings)
+            self.comparison.train(settings)
             timer.lap(name=str(settings.algorithm_title))
-            # algorithms_output[algorithm_] = self.trainer.return_array
 
         timer.stop()
 

@@ -6,14 +6,15 @@ import numpy as np
 if TYPE_CHECKING:
     import agent
     import view
+    import algorithm
 import utils
 import common
 from comparison import comparison_m, recorder
 
 
 class ReturnByAlpha(comparison_m.Comparison):
-    def __init__(self, graph: view.Graph):
-        super().__init__(graph)
+    def __init__(self, algorithm_factory: algorithm.Factory, graph: view.Graph, verbose: bool = False):
+        super().__init__(algorithm_factory, graph, verbose)
 
         self._algorithm_type_list = [
             common.AlgorithmType.ExpectedSarsa,
