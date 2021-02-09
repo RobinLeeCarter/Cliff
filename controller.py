@@ -70,7 +70,6 @@ class Controller:
         self.trainer = train.Trainer(
             self.algorithm_factory,
             self.comparison,
-            # self.recorder,
             verbose=False
         )
         # produce output in self.recorder

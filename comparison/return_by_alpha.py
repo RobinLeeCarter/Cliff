@@ -9,10 +9,10 @@ if TYPE_CHECKING:
 import utils
 import common
 import algorithm
-from comparison import comparison, recorder
+from comparison import comparison_m, recorder
 
 
-class ReturnByAlpha(comparison.Comparison):
+class ReturnByAlpha(comparison_m.Comparison):
     def __init__(self, graph: view.Graph):
         super().__init__(graph)
 

@@ -8,10 +8,10 @@ if TYPE_CHECKING:
     import algorithm
     import view
 import common
-from comparison import comparison, recorder
+from comparison import comparison_m, recorder
 
 
-class ReturnByEpisode(comparison.Comparison):
+class ReturnByEpisode(comparison_m.Comparison):
     def __init__(self, graph: view.Graph):
         super().__init__(graph)
         recorder_key_type = tuple[type, int]
