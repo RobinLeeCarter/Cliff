@@ -14,6 +14,7 @@ class Environment:
         self.verbose: bool = verbose
 
         self.states_shape: tuple = (self.grid_world.max_x + 1, self.grid_world.max_y + 1)
+        self.actions_class: action.Actions = action.Actions()
         self.actions_shape: tuple = action.Actions.shape
 
     # region Sets

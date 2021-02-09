@@ -1,10 +1,12 @@
 from __future__ import annotations
+from typing import TYPE_CHECKING
 import itertools
 
 import numpy as np
 
 import constants
-import environment
+if TYPE_CHECKING:
+    import environment
 
 
 class StateActionFunction:
