@@ -17,6 +17,9 @@ class Environment:
         self._actions: action.Actions = action.actions
         self.actions_shape: tuple = self._actions.shape
 
+        self.action_type: type = action.Action
+        self.state_type: type = state.State
+
     # region Sets
     def states(self) -> Generator[state.State, None, None]:
         """set S"""

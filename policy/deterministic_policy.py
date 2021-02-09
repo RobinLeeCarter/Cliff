@@ -1,15 +1,17 @@
 from __future__ import annotations
+from typing import TYPE_CHECKING
 
 import numpy as np
 
 from policy import policy
-import environment
+if TYPE_CHECKING:
+    import environment
 
 
 class DeterministicPolicy(policy.Policy):
     def __init__(self, environment_: environment.Environment):
         super().__init__(environment_)
-        self._action_given_state: np.ndarray = np.empty(shape=environment_.states_shape, dtype=environment.Action)
+        self._action_given_state: np.ndarray = np.empty(shape=environment_.states_shape, dtype=environment_.action_type)
 
     def get_action(self, state: environment.State) -> environment.Action:
         return self._action_given_state[state.index]
