@@ -11,26 +11,22 @@ class Action:
 
     @property
     def index(self) -> tuple[int]:
-        return Actions.get_index_from_action(self)
+        return actions.get_index_from_action(self)
 
 
 class Actions:
-    action_list: list[Action]
-    shape: tuple[int]
-    _action_to_index: dict[Action: int]
+    def __init__(self):
+        self.action_list: list[Action] = []
+        # self._four_actions()
+        self._four_friendly_actions()
+        # self._kings_moves()
+        # self._kings_moves(include_center=True)
 
-    @staticmethod
-    def init():
-        # Actions.four_actions()
-        Actions.four_friendly_actions()
-        # Actions.kings_moves()
-        # Actions.kings_moves(include_center=True)
-        Actions.shape = (len(Actions.action_list),)
-        Actions._action_to_index = {action_: i for i, action_ in enumerate(Actions.action_list)}
+        self.shape: tuple[int] = (len(self.action_list),)
+        self._action_to_index: dict[Action: int] = {action_: i for i, action_ in enumerate(self.action_list)}
 
-    @staticmethod
-    def four_actions():
-        Actions.action_list = [
+    def _four_actions(self):
+        self.action_list = [
             # left
             Action(move=common.XY(-1, 0)),
             # right
@@ -41,9 +37,8 @@ class Actions:
             Action(move=common.XY(0, -1))
         ]
 
-    @staticmethod
-    def four_friendly_actions():
-        Actions.action_list = [
+    def _four_friendly_actions(self):
+        self.action_list = [
             # right
             Action(move=common.XY(+1, 0)),
             # up
@@ -54,26 +49,21 @@ class Actions:
             Action(move=common.XY(0, -1))
         ]
 
-    @staticmethod
-    def kings_moves(include_center: bool = False):
-        Actions.action_list = []
+    def _kings_moves(self, include_center: bool = False):
         for x in (-1, 0, 1):
             for y in (-1, 0, 1):
                 include: bool = True
                 if x == 0 and y == 0:
                     include = include_center
                 if include:
-                    Actions.action_list.append(Action(move=common.XY(x, y)))
+                    self.action_list.append(Action(move=common.XY(x, y)))
 
-    @staticmethod
-    def get_action_from_index(index: tuple[int]) -> Action:
-        return Actions.action_list[index[0]]
+    def get_action_from_index(self, index: tuple[int]) -> Action:
+        return self.action_list[index[0]]
 
-    @staticmethod
-    def get_index_from_action(action_: Action) -> tuple[int]:
-        index = (Actions._action_to_index[action_], )
+    def get_index_from_action(self, action_: Action) -> tuple[int]:
+        index = (self._action_to_index[action_], )
         return index
 
 
-Actions.init()
-# print(Actions.action_list)
+actions = Actions()

@@ -75,7 +75,7 @@ class StateActionFunction:
 
         # best_index_np: tuple = best_index_tuple_array[0][0]
         # print(f"best_index_np {best_index_np}")
-        best_action = environment.Actions.get_action_from_index(best_index)
+        best_action = self._environment.get_action_from_index(best_index)
         # best_action = self.get_action_from_index(best_index_np)
         # print(f"best_action {best_action}")
         return best_action

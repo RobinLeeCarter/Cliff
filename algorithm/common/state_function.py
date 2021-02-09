@@ -4,8 +4,6 @@ from typing import TYPE_CHECKING
 import numpy as np
 
 import constants
-
-
 if TYPE_CHECKING:
     import environment
 

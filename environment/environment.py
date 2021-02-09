@@ -14,8 +14,8 @@ class Environment:
         self.verbose: bool = verbose
 
         self.states_shape: tuple = (self.grid_world.max_x + 1, self.grid_world.max_y + 1)
-        self.actions_class: action.Actions = action.Actions()
-        self.actions_shape: tuple = action.Actions.shape
+        self._actions: action.Actions = action.actions
+        self.actions_shape: tuple = self._actions.shape
 
     # region Sets
     def states(self) -> Generator[state.State, None, None]:
@@ -28,7 +28,7 @@ class Environment:
 
     def actions(self) -> Generator[action.Action, None, None]:
         """set A - same for all s in this scenario"""
-        for action_ in action.Actions.action_list:
+        for action_ in self._actions.action_list:
             yield action_
 
     # possible need to materialise this if it's slow since it will be at the bottom of the loop
@@ -38,6 +38,9 @@ class Environment:
         for action_ in self.actions():
             # if self.is_action_compatible_with_state(state_, action_):
             yield action_
+
+    def get_action_from_index(self, index: tuple[int]) -> action.Action:
+        return self._actions.get_action_from_index(index)
 
     # def is_action_compatible_with_state(self, state_: state.State, action_: action.Action):
     #     new_vx = state_.vx + action_.ax

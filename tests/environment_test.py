@@ -9,12 +9,12 @@ def environment_test() -> bool:
     environment_ = environments.Cliff
 
     for state_ in environment_.states():
-        print(state_)
+        print(f"{state_} \t index={state_.index}")
 
     print()
 
     for action_ in environment_.actions():
-        print(action_)
+        print(f"{action_} \t index={action_.index}")
 
     print()
 
