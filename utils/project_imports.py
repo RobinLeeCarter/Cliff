@@ -25,4 +25,4 @@ def project_dependencies(module_name: str):
 
 
 if __name__ == '__main__':
-    project_dependencies('algorithm')
+    project_dependencies('comparison')

@@ -3,19 +3,19 @@ from abc import ABC, abstractmethod
 from typing import Optional, TYPE_CHECKING
 
 from comparison import recorder
-import view
 if TYPE_CHECKING:
     from comparison_dataclasses import series, settings
     import agent
+    import view
 
 
 class Comparison(ABC):
-    def __init__(self):
+    def __init__(self, graph: view.Graph):
         self._recorder: Optional[recorder.Recorder] = None
         self.settings_list: list[settings.Settings] = []
         self.x_series: Optional[series.Series] = None
         self.series_list: list[series.Series] = []
-        self.graph = view.Graph()
+        self.graph = graph
 
     @abstractmethod
     def build(self):

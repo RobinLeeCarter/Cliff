@@ -9,11 +9,12 @@ from comparison import comparison, recorder
 import algorithm
 if TYPE_CHECKING:
     import agent
+    import view
 
 
 class ReturnByAlpha(comparison.Comparison):
-    def __init__(self):
-        super().__init__()
+    def __init__(self, graph: view.Graph):
+        super().__init__(graph)
 
         self._algorithm_type_list = [
             algorithm.ExpectedSarsa,

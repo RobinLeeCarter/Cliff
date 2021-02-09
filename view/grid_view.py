@@ -1,11 +1,12 @@
 from __future__ import annotations
-from typing import Optional, Dict
+from typing import Optional, Dict, TYPE_CHECKING
 
 import pygame
 
 import common
-import environment
-import agent
+if TYPE_CHECKING:
+    import environment
+    import agent
 
 
 class GridView:

@@ -8,11 +8,12 @@ from comparison import comparison, recorder
 if TYPE_CHECKING:
     import agent
     import algorithm
+    import view
 
 
 class ReturnByEpisode(comparison.Comparison):
-    def __init__(self):
-        super().__init__()
+    def __init__(self, graph: view.Graph):
+        super().__init__(graph)
         recorder_key_type = tuple[type, int]
         self._recorder = recorder.Recorder[recorder_key_type]()
 

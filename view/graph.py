@@ -1,10 +1,12 @@
-from typing import Optional
+from __future__ import annotations
+from typing import Optional, TYPE_CHECKING
 
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib import figure
 
-from comparison_dataclasses import series
+if TYPE_CHECKING:
+    from comparison_dataclasses import series
 
 
 class Graph:

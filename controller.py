@@ -32,6 +32,7 @@ class Controller:
         # self.recorder: Optional[train.Recorder] = None
         self.trainer: Optional[train.Trainer] = None
 
+        self.graph = view.Graph()
         self.grid_view = view.GridView(self.environment.grid_world)
 
         # self.target_policy: policy.DeterministicPolicy = policy.DeterministicPolicy(self.environment)
@@ -53,11 +54,11 @@ class Controller:
         # self.settings_list: list[algorithm.Settings] = []
         # recorder_key_type: type
         if comparison_type == common.ComparisonType.RETURN_BY_EPISODE:
-            self.comparison = comparison.ReturnByEpisode()
+            self.comparison = comparison.ReturnByEpisode(self.graph)
             # self.settings_list = data.return_by_episode_settings
             # recorder_key_type = tuple[algorithm.EpisodicAlgorithm, int]
         elif comparison_type == common.ComparisonType.RETURN_BY_ALPHA:
-            self.comparison = comparison.ReturnByAlpha()
+            self.comparison = comparison.ReturnByAlpha(self.graph)
             # self.settings_list = self.alpha_settings_list()
             # recorder_key_type = tuple[type, float]
         else:
