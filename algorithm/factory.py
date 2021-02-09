@@ -2,11 +2,10 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    import common
     import environment
     import agent
     from algorithm import abstract
-
+import common
 from algorithm import control  # , policy_evaluation
 
 
@@ -21,16 +20,16 @@ class Factory:
         else:
             verbose: bool = False
 
-        if settings_.algorithm_type == control.Sarsa:
+        if settings_.algorithm_type == common.AlgorithmType.Sarsa:
             alpha = self.alpha_lookup(settings_)
             return control.Sarsa(self.environment, self.agent, alpha, verbose)
-        elif settings_.algorithm_type == control.QLearning:
+        elif settings_.algorithm_type == common.AlgorithmType.QLearning:
             alpha = self.alpha_lookup(settings_)
             return control.QLearning(self.environment, self.agent, alpha, verbose)
-        elif settings_.algorithm_type == control.ExpectedSarsa:
+        elif settings_.algorithm_type == common.AlgorithmType.ExpectedSarsa:
             alpha = self.alpha_lookup(settings_)
             return control.ExpectedSarsa(self.environment, self.agent, alpha, verbose)
-        elif settings_.algorithm_type == control.VQ:
+        elif settings_.algorithm_type == common.AlgorithmType.VQ:
             alpha = self.alpha_lookup(settings_)
             alpha_variable = self.alpha_variable_lookup(settings_)
             return control.VQ(self.environment, self.agent, alpha, alpha_variable, verbose)

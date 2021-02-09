@@ -19,3 +19,10 @@ class UserEvent(enum.IntEnum):
 class ComparisonType(enum.IntEnum):
     RETURN_BY_EPISODE = enum.auto()
     RETURN_BY_ALPHA = enum.auto()
+
+
+class AlgorithmType(enum.IntEnum):
+    ExpectedSarsa = enum.auto()
+    VQ = enum.auto()
+    QLearning = enum.auto()
+    Sarsa = enum.auto()

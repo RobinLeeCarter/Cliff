@@ -1,17 +1,13 @@
 from __future__ import annotations
 import dataclasses
-from typing import Dict, Type, TYPE_CHECKING
 
-if TYPE_CHECKING:
-    import algorithm
-
-from common import constants
+from common import constants, enums
 
 
 @dataclasses.dataclass
 class Settings:
-    algorithm_type: Type[algorithm.Episodic]
-    parameters: Dict[str, any]
+    algorithm_type: enums.AlgorithmType
+    parameters: dict[str, any]
 
     algorithm_title: str = ""   # algorithm title will be populated here by Trainer whether it's used or not
 

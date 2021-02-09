@@ -8,7 +8,6 @@ if TYPE_CHECKING:
     import view
 import utils
 import common
-import algorithm
 from comparison import comparison_m, recorder
 
 
@@ -17,10 +16,10 @@ class ReturnByAlpha(comparison_m.Comparison):
         super().__init__(graph)
 
         self._algorithm_type_list = [
-            algorithm.ExpectedSarsa,
-            algorithm.VQ,
-            algorithm.QLearning,
-            algorithm.Sarsa
+            common.AlgorithmType.ExpectedSarsa,
+            common.AlgorithmType.VQ,
+            common.AlgorithmType.QLearning,
+            common.AlgorithmType.Sarsa
         ]
         self._alpha_min = 0.1
         self._alpha_max = 1.0
