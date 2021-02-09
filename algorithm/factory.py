@@ -4,7 +4,7 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     import environment
     import agent
-    from comparison_dataclasses import settings
+    from comparison.comparison_dataclasses import settings
 
 from algorithm import abstract, control  # , policy_evaluation
 

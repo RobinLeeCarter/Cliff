@@ -4,7 +4,7 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     import algorithm
     import comparison
-    import comparison_dataclasses
+    from comparison import comparison_dataclasses
 
 
 class Trainer:

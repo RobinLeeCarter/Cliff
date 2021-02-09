@@ -4,8 +4,8 @@ from typing import TYPE_CHECKING
 import numpy as np
 
 import utils
-from comparison_dataclasses import settings, series
-from comparison import comparison, recorder
+# from comparison.dataclasses import settings, series
+from comparison import comparison, recorder, comparison_dataclasses
 import algorithm
 if TYPE_CHECKING:
     import agent
@@ -33,27 +33,27 @@ class ReturnByAlpha(comparison.Comparison):
         self.settings_list = []
         for alpha in self._alpha_list:
             for algorithm_type in self._algorithm_type_list:
-                settings_ = settings.Settings(
+                settings_ = comparison_dataclasses.Settings(
                     algorithm_type=algorithm_type,
                     parameters={"alpha": alpha}
                 )
                 self.settings_list.append(settings_)
 
-    def record(self, settings_: settings.Settings, iteration: int, episode: agent.Episode):
+    def record(self, settings_: comparison_dataclasses.Settings, iteration: int, episode: agent.Episode):
         algorithm_type = settings_.algorithm_type
         alpha = settings_.parameters["alpha"]
         total_return = episode.total_return
         self._recorder[algorithm_type, alpha] = total_return
 
     def compile(self):
-        self.x_series = series.Series(
+        self.x_series = comparison_dataclasses.Series(
             title="α",
             values=np.array(self._alpha_list)
         )
         # collate output from self.recorder
         for algorithm_type in self._algorithm_type_list:
             values = np.array([self._recorder[algorithm_type, alpha] for alpha in self._alpha_list])
-            series_ = series.Series(
+            series_ = comparison_dataclasses.Series(
                 title=algorithm_type.name,
                 values=values,
                 identifiers={"algorithm_type": algorithm_type}

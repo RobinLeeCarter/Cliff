@@ -3,8 +3,8 @@ from typing import TYPE_CHECKING
 
 import numpy as np
 
-from comparison_dataclasses import settings, series
-from comparison import comparison, recorder
+# from comparison.dataclasses import settings, series
+from comparison import comparison, recorder, comparison_dataclasses
 if TYPE_CHECKING:
     import agent
     import algorithm
@@ -21,11 +21,11 @@ class ReturnByEpisode(comparison.Comparison):
         self.settings_list = [
           # settings.Settings(algorithm.ExpectedSarsa, {"alpha": 0.9}),
           # settings.Settings(algorithm.VQ, {"alpha": 0.2}),
-          settings.Settings(algorithm.QLearning, {"alpha": 0.5}),
-          settings.Settings(algorithm.Sarsa, {"alpha": 0.5})
+          comparison_dataclasses.Settings(algorithm.QLearning, {"alpha": 0.5}),
+          comparison_dataclasses.Settings(algorithm.Sarsa, {"alpha": 0.5})
         ]
 
-    def record(self, settings_: settings.Settings, iteration: int, episode: agent.Episode):
+    def record(self, settings_: comparison_dataclasses.Settings, iteration: int, episode: agent.Episode):
         algorithm_type = settings_.algorithm_type
         total_return = episode.total_return
         self._recorder[algorithm_type, iteration] = total_return
@@ -38,7 +38,7 @@ class ReturnByEpisode(comparison.Comparison):
             if self._is_record_iteration(assumed_settings, iteration)
         ], dtype=float)
 
-        self.x_series = series.Series(
+        self.x_series = comparison_dataclasses.Series(
             title="Episodes",
             values=iteration_array
         )
@@ -49,7 +49,7 @@ class ReturnByEpisode(comparison.Comparison):
                 self._recorder[settings_.algorithm_type, iteration]
                 for iteration in iteration_array
             ])
-            series_ = series.Series(
+            series_ = comparison_dataclasses.Series(
                 title=settings_.algorithm_title,
                 identifiers={"algorithm_type": settings_.algorithm_type},
                 values=values

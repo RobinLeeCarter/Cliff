@@ -10,18 +10,37 @@ def project_dependencies(module_name: str):
 
     app_dir = '/home/robin/Python/Projects/'
 
-    imported_module_names = []
+    excluded_names = ['common', 'constants', 'utils', module_name]
+    included_names = []
+    output_names = []
 
     for mod_name, mod in sys.modules.items():
         file = getattr(mod, '__file__', '')
-        if str(file).startswith(app_dir):
-            if mod_name not in ('__main__', 'constants', 'common') \
-                    and not mod_name.startswith("utils") \
-                    and mod_name != module_name \
-                    and not mod_name.startswith(module_name + "."):
-                imported_module_names.append(mod_name)
+        if str(file).startswith(app_dir) and mod_name != '__main__':
+            add_name = True
+            for excluded_name in excluded_names:
+                if mod_name == excluded_name or mod_name.startswith(excluded_name + "."):
+                    add_name = False
+            if add_name:
+                included_names.append(mod_name)
+            # if exclusions:
+            #     if mod_name not in safe_modules \
+            #             and not mod_name.startswith(safe_package) \
+            #             and mod_name != module_name \
+            #             and not mod_name.startswith(module_name + "."):
+            #         output_names.append(mod_name)
+            # else:
+            #     output_names.append(mod_name)
 
-    for mod_name in sorted(imported_module_names):
+    for mod_name in sorted(included_names):
+        add_name = True
+        for output_name in output_names:
+            if mod_name == output_name or mod_name.startswith(output_name + "."):
+                add_name = False
+        if add_name:
+            output_names.append(mod_name)
+
+    for mod_name in sorted(output_names):
         print(mod_name)
 
 

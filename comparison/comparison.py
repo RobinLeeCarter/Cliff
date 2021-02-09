@@ -2,9 +2,9 @@ from __future__ import annotations
 from abc import ABC, abstractmethod
 from typing import Optional, TYPE_CHECKING
 
-from comparison import recorder
+
 if TYPE_CHECKING:
-    from comparison_dataclasses import series, settings
+    from comparison import recorder, comparison_dataclasses
     import agent
     import view
 
@@ -12,25 +12,25 @@ if TYPE_CHECKING:
 class Comparison(ABC):
     def __init__(self, graph: view.Graph):
         self._recorder: Optional[recorder.Recorder] = None
-        self.settings_list: list[settings.Settings] = []
-        self.x_series: Optional[series.Series] = None
-        self.series_list: list[series.Series] = []
+        self.settings_list: list[comparison_dataclasses.Settings] = []
+        self.x_series: Optional[comparison_dataclasses.Series] = None
+        self.series_list: list[comparison_dataclasses.Series] = []
         self.graph = graph
 
     @abstractmethod
     def build(self):
         pass
 
-    def review(self, settings_: settings.Settings, iteration: int, episode: agent.Episode):
+    def review(self, settings_: comparison_dataclasses.Settings, iteration: int, episode: agent.Episode):
         if self._is_record_iteration(settings_, iteration):
             self.record(settings_, iteration, episode)
 
-    def _is_record_iteration(self, settings_: settings.Settings, iteration: int) -> bool:
+    def _is_record_iteration(self, settings_: comparison_dataclasses.Settings, iteration: int) -> bool:
         return iteration >= settings_.performance_sample_start and \
                iteration % settings_.performance_sample_frequency == 0
 
     @abstractmethod
-    def record(self, settings_: settings.Settings, iteration: int, episode: agent.Episode):
+    def record(self, settings_: comparison_dataclasses.Settings, iteration: int, episode: agent.Episode):
         pass
 
     @abstractmethod

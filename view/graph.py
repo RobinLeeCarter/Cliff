@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 from matplotlib import figure
 
 if TYPE_CHECKING:
-    from comparison_dataclasses import series
+    from comparison.comparison_dataclasses import series
 
 
 class Graph:
