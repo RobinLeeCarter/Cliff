@@ -15,4 +15,5 @@ class Cliff(environment.Environment):
         grid = environment.Grid(
             grid_array=grid_array
         )
-        super().__init__(grid_=grid, verbose=verbose)
+        grid_world = environment.GridWorld(grid)
+        super().__init__(grid_world_=grid_world, verbose=verbose)

@@ -2,15 +2,15 @@ from __future__ import annotations
 from typing import Generator, Optional, TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from environment import grid
+    from environment import grid_world
 import common
-from environment import action, response, state, grid_world
+from environment import action, response, state
 
 
 class Environment:
     """A GridWorld Environment - too hard to make general at this point"""
-    def __init__(self, grid_: grid.Grid, verbose: bool = False):
-        self.grid_world: grid_world.GridWorld = grid_world.GridWorld(grid_)
+    def __init__(self, grid_world_: grid_world.GridWorld, verbose: bool = False):
+        self.grid_world: grid_world.GridWorld = grid_world_
         self.verbose: bool = verbose
 
         self.states_shape: tuple = (self.grid_world.max_x + 1, self.grid_world.max_y + 1)

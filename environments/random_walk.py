@@ -5,7 +5,7 @@ import numpy as np
 import environment
 
 
-class Cliff(environment.Environment):
+class RandomWalk(environment.Environment):
     def __init__(self, verbose: bool = False):
         grid_array = np.array([
             [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -15,4 +15,5 @@ class Cliff(environment.Environment):
         grid = environment.Grid(
             grid_array=grid_array
         )
-        super().__init__(grid_=grid, verbose=verbose)
+        grid_world = environment.GridWorld(grid)
+        super().__init__(grid_world_=grid_world, verbose=verbose)
