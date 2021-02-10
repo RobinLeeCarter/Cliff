@@ -4,16 +4,17 @@ import numpy as np
 
 import common
 import environment
+from environments.random_walk import actions
 
 
 class RandomWalk(environment.Environment):
     def __init__(self, verbose: bool = False):
-        grid_array = np.array([
+        grid = np.array([
             [3, 0, 0, 2, 0, 0, 3]
         ], dtype=np.int)
-        grid_world = environment.GridWorld(grid_array)
-        actions = RandomWalkActions()
-        super().__init__(grid_world, actions, verbose)
+        grid_world_ = environment.GridWorld(grid)
+        actions_ = actions.Actions()
+        super().__init__(grid_world_, actions_, verbose)
 
     def _get_response(self) -> environment.Response:
         reward: float
@@ -27,8 +28,3 @@ class RandomWalk(environment.Environment):
             state=self._projected_state
         )
 
-
-class RandomWalkActions(environment.Actions):
-    def _build_action_list(self):
-        # no actions
-        pass
