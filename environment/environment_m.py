@@ -1,8 +1,8 @@
 from __future__ import annotations
-from typing import Generator
+from typing import Generator, Optional
 
 import common
-from environment import action, observation, state, grid_world
+from environment import action, response, state, grid_world
 
 
 class Environment:
@@ -18,7 +18,14 @@ class Environment:
         self.action_type: type = action.Action
         self.state_type: type = state.State
 
-    # region Sets
+        # for processing response
+        self._state: Optional[state.State] = None
+        self._action: Optional[action.Action] = None
+        self._projected_position: Optional[common.XY] = None
+        self._square: Optional[common.Square] = None
+        self._projected_state: Optional[state.State] = None
+
+        # region Sets
     def states(self) -> Generator[state.State, None, None]:
         """set S"""
         for x in range(self.states_shape[0]):
@@ -55,43 +62,37 @@ class Environment:
     # endregion
 
     # region Operation
-    def start(self) -> observation.Observation:
+    def start(self) -> response.Response:
         state_ = self.get_a_start_state()
         # if self.verbose:
         #     self.trace_.start(state_)
-        return observation.Observation(state=state_, reward=None)
+        return response.Response(state=state_, reward=None)
 
     def get_a_start_state(self) -> state.State:
         position: common.XY = self.grid_world.get_a_start_position()
         return state.State(position)
 
-    def from_state_perform_action(self, state_: state.State, action_: action.Action) -> observation.Observation:
+    def from_state_perform_action(self, state_: state.State, action_: action.Action) -> response.Response:
         if state_.is_terminal:
             raise Exception("Environment: Trying to act in a terminal state.")
         if action_ is None:
             raise Exception("Environment: Action passed is none.")
-
-        new_state: state.State
+        self._state = state_
+        self._action = action_
 
         # apply grid world rules (eg. edges, wind)
-        projected_position: common.XY = self.grid_world.change_request(current=state_.position,
-                                                                       request=action_.move)
+        self._projected_position = self.grid_world.change_request(
+            current=state_.position,
+            request=action_.move)
 
-        # tests
-        square: common.Square = self.grid_world.get_square(projected_position)
-        if square == common.Square.END:
+        self._square = self.grid_world.get_square(self._projected_position)
+        if self._square == common.Square.END:
             is_terminal = True
         else:
             is_terminal = False
+        self._projected_state = state.State(self._projected_position, is_terminal)
 
-        # reponse
-        if square == common.Square.CLIFF:
-            reward: float = -100.0
-            new_state = self.get_a_start_state()
-        else:
-            reward: float = -1.0
-            new_state: state.State = state.State(projected_position, is_terminal)
-        return observation.Observation(reward, new_state)
+        return self._get_response()
 
     def _project_back_to_grid(self, requested_position: common.XY) -> common.XY:
         x = requested_position.x
@@ -105,4 +106,18 @@ class Environment:
         if y > self.grid_world.max_y:
             y = self.grid_world.max_y
         return common.XY(x=x, y=y)
+
+    def _get_response(self) -> response.Response:
+        """Designed to be overridden if required"""
+        if self._square == common.Square.CLIFF:
+            return response.Response(
+                reward=-100.0,
+                state=self.get_a_start_state()
+            )
+        else:
+            return response.Response(
+                reward=-1.0,
+                state=self._projected_state
+            )
+
     # endregion

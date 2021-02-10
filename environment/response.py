@@ -7,6 +7,6 @@ if TYPE_CHECKING:
 
 
 @dataclass(frozen=True)
-class Observation:
+class Response:
     reward: Optional[float]
     state: state.State

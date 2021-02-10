@@ -27,7 +27,7 @@ class Agent:
         self.prev_state: Optional[environment.State] = None
         self.prev_action: Optional[environment.Action] = None
 
-        self.response: Optional[environment.Observation] = None
+        self.response: Optional[environment.Response] = None
 
     def set_policy(self, policy_: policy.Policy):
         self.policy = policy_
