@@ -45,4 +45,4 @@ def project_dependencies(module_name: str):
 
 
 if __name__ == '__main__':
-    project_dependencies('comparison')
+    project_dependencies('view')
