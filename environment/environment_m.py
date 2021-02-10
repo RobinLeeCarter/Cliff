@@ -1,13 +1,15 @@
 from __future__ import annotations
-from typing import Generator, Optional
+from typing import Generator, Optional, TYPE_CHECKING
 
+if TYPE_CHECKING:
+    from environment import grid
 import common
 from environment import action, response, state, grid_world
 
 
 class Environment:
     """A GridWorld Environment - too hard to make general at this point"""
-    def __init__(self, grid_: common.Grid, verbose: bool = False):
+    def __init__(self, grid_: grid.Grid, verbose: bool = False):
         self.grid_world: grid_world.GridWorld = grid_world.GridWorld(grid_)
         self.verbose: bool = verbose
 
