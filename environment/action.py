@@ -17,13 +17,13 @@ class Action:
 class Actions:
     def __init__(self):
         self.action_list: list[Action] = []
-        # self._four_actions()
-        self._four_friendly_actions()
-        # self._kings_moves()
-        # self._kings_moves(include_center=True)
+        self._build_action_list()
 
         self.shape: tuple[int] = (len(self.action_list),)
         self._action_to_index: dict[Action: int] = {action_: i for i, action_ in enumerate(self.action_list)}
+
+    def _build_action_list(self):
+        pass
 
     def _four_actions(self):
         self.action_list = [

@@ -27,3 +27,11 @@ class Cliff(environment.Environment):
                 reward=-1.0,
                 state=self._projected_state
             )
+
+
+class CliffActions(environment.Actions):
+    def _build_action_list(self):
+        self._four_actions()
+        # self._four_friendly_actions()
+        # self._kings_moves()
+        # self._kings_moves(include_center=True)
