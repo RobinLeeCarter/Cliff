@@ -3,23 +3,31 @@ from typing import Generator, Optional, TYPE_CHECKING
 import abc
 
 if TYPE_CHECKING:
-    from environment import grid_world
+    from environment import grid_world, actions
 import common
 from environment import action, response, state
 
 
 class Environment(abc.ABC):
+    actions_singleton: Optional[actions.Actions] = None
+
     """A GridWorld Environment - too hard to make general at this point"""
-    def __init__(self, grid_world_: grid_world.GridWorld, verbose: bool = False):
+    def __init__(self,
+                 grid_world_: grid_world.GridWorld,
+                 actions_: actions.Actions,
+                 verbose: bool = False):
         self.grid_world: grid_world.GridWorld = grid_world_
+        self._actions: actions.Actions = actions_
+        Environment.actions_singleton = self._actions   # make available to Action for .index
         self.verbose: bool = verbose
 
+        # state and states
         self.states_shape: tuple = (self.grid_world.max_x + 1, self.grid_world.max_y + 1)
-        self._actions: action.Actions = action.actions
-        self.actions_shape: tuple = self._actions.shape
-
-        self.action_type: type = action.Action
         self.state_type: type = state.State
+
+        # action and actions
+        self.actions_shape: tuple = self._actions.shape
+        self.action_type: type = action.Action
 
         # for processing response
         self._state: Optional[state.State] = None

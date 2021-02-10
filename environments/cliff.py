@@ -14,7 +14,8 @@ class Cliff(environment.Environment):
             [2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 3]
         ], dtype=np.int)
         grid_world = environment.GridWorld(grid_array)
-        super().__init__(grid_world_=grid_world, verbose=verbose)
+        actions = CliffActions()
+        super().__init__(grid_world, actions, verbose)
 
     def _get_response(self) -> environment.Response:
         if self._square == common.Square.CLIFF:

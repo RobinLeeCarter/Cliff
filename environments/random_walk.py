@@ -12,7 +12,8 @@ class RandomWalk(environment.Environment):
             [3, 0, 0, 2, 0, 0, 3]
         ], dtype=np.int)
         grid_world = environment.GridWorld(grid_array)
-        super().__init__(grid_world_=grid_world, verbose=verbose)
+        actions = RandomWalkActions()
+        super().__init__(grid_world, actions, verbose)
 
     def _get_response(self) -> environment.Response:
         reward: float
@@ -25,3 +26,9 @@ class RandomWalk(environment.Environment):
             reward=reward,
             state=self._projected_state
         )
+
+
+class RandomWalkActions(environment.Actions):
+    def _build_action_list(self):
+        # no actions
+        pass
