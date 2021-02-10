@@ -6,5 +6,4 @@ import environment
 
 class Actions(environment.Actions):
     def _build_action_list(self):
-        # no actions
-        pass
+        self._no_actions()

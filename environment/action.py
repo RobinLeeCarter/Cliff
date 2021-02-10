@@ -38,6 +38,12 @@ class Actions(abc.ABC):
         pass
 
     # common moves that could be reused
+    def _no_actions(self):
+        self.action_list = [
+            # stationary
+            Action(move=common.XY(0, 0)),
+        ]
+
     def _four_actions(self):
         self.action_list = [
             # left
