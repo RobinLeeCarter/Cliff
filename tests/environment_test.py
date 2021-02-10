@@ -6,7 +6,7 @@ import environments
 
 
 def environment_test() -> bool:
-    environment_ = environments.Cliff
+    environment_ = environments.Cliff()
 
     for state_ in environment_.states():
         print(f"{state_} \t index={state_.index}")

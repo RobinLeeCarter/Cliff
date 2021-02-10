@@ -2,12 +2,12 @@ from __future__ import annotations
 
 import common
 import environment
-from data import grids
+import environments
 from algorithm.value_function import state_action_function
 
 
 def q_test() -> bool:
-    environment_ = environment.Environment(grid_=grids.CLIFF_GRID)
+    environment_ = environments.Cliff()
     q = state_action_function.StateActionFunction(environment_)
 
     state_ = environment.State(common.XY(x=4, y=2))

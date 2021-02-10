@@ -1,13 +1,12 @@
 from __future__ import annotations
 
-from data import grids
-import environment
+import environments
 import view
 
 
 def view_test() -> bool:
-    grid_world_ = environment.GridWorld(grids.CLIFF_GRID)
-    my_view = view.GridView(grid_world_)
+    cliff = environments.Cliff()
+    my_view = view.GridView(cliff.grid_world)
     my_view.open_window()
     my_view.display_and_wait()
 

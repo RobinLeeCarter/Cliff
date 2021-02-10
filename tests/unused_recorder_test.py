@@ -1,20 +1,19 @@
-import environment
+import environments
 import policy
 import agent
 import algorithm
-import train
-from data import grids
+from comparison import recorder
 
 
 def recorder_test() -> bool:
-    environment_ = environment.Environment(grids.CLIFF_GRID, verbose=False)
+    environment_ = environments.Cliff()
     greedy_policy: policy.DeterministicPolicy = policy.DeterministicPolicy(environment_)
     e_greedy_policy: policy.EGreedyPolicy = policy.EGreedyPolicy(environment_, greedy_policy=greedy_policy)
     agent_ = agent.Agent(environment_, e_greedy_policy)
 
     factory_ = algorithm.Factory(environment_, agent_)
     algorithms: list[algorithm.Episodic] = [factory_[settings_] for settings_ in data.return_by_episode_settings]
-    av_recorder_ = train.Recorder()
+    av_recorder_ = recorder.Recorder()
 
     algorithm_ = algorithms[0]
     print(algorithm_)

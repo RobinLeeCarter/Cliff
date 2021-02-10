@@ -3,12 +3,12 @@ from __future__ import annotations
 import numpy as np
 
 import common
-import environment
-from data import grids
+import environments
 
 
 def grid_test() -> bool:
-    grid_world_ = environment.GridWorld(grids.CLIFF_GRID)
+    cliff = environments.Cliff()
+    grid_world_ = cliff.grid_world
     shape = grid_world_.max_y + 1, grid_world_.max_x + 1
     cartesian_grid = np.empty(shape=shape, dtype=common.Square)
     for y, x in np.ndindex(cartesian_grid.shape):
