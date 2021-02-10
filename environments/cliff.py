@@ -12,8 +12,5 @@ class Cliff(environment.Environment):
             [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
             [2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 3]
         ], dtype=np.int32)
-        grid = environment.Grid(
-            grid_array=grid_array
-        )
-        grid_world = environment.GridWorld(grid)
+        grid_world = environment.GridWorld(grid_array)
         super().__init__(grid_world_=grid_world, verbose=verbose)
