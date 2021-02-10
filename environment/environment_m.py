@@ -1,5 +1,6 @@
 from __future__ import annotations
 from typing import Generator, Optional, TYPE_CHECKING
+import abc
 
 if TYPE_CHECKING:
     from environment import grid_world
@@ -7,7 +8,7 @@ import common
 from environment import action, response, state
 
 
-class Environment:
+class Environment(abc.ABC):
     """A GridWorld Environment - too hard to make general at this point"""
     def __init__(self, grid_world_: grid_world.GridWorld, verbose: bool = False):
         self.grid_world: grid_world.GridWorld = grid_world_
@@ -27,7 +28,7 @@ class Environment:
         self._square: Optional[common.Square] = None
         self._projected_state: Optional[state.State] = None
 
-        # region Sets
+    # region Sets
     def states(self) -> Generator[state.State, None, None]:
         """set S"""
         for x in range(self.states_shape[0]):
@@ -84,8 +85,8 @@ class Environment:
 
         # apply grid world rules (eg. edges, wind)
         self._projected_position = self.grid_world.change_request(
-            current=state_.position,
-            request=action_.move)
+            current_position=state_.position,
+            move=action_.move)
 
         self._square = self.grid_world.get_square(self._projected_position)
         if self._square == common.Square.END:
@@ -109,17 +110,7 @@ class Environment:
             y = self.grid_world.max_y
         return common.XY(x=x, y=y)
 
+    @abc.abstractmethod
     def _get_response(self) -> response.Response:
-        """Designed to be overridden if required"""
-        if self._square == common.Square.CLIFF:
-            return response.Response(
-                reward=-100.0,
-                state=self.get_a_start_state()
-            )
-        else:
-            return response.Response(
-                reward=-1.0,
-                state=self._projected_state
-            )
-
+        pass
     # endregion

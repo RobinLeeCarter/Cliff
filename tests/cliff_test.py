@@ -5,7 +5,7 @@ import environment
 import environments
 
 
-def environment_test() -> bool:
+def cliff_test() -> bool:
     environment_ = environments.Cliff()
 
     for state_ in environment_.states():
@@ -34,5 +34,5 @@ def environment_test() -> bool:
 
 
 if __name__ == '__main__':
-    if environment_test():
+    if cliff_test():
         print("Passed")
