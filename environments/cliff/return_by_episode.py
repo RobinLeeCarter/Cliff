@@ -16,7 +16,7 @@ class ReturnByEpisode(comparison.ReturnByEpisode):
                              graph_series=self.series_list,
                              moving_average_window_size=assumed_settings.moving_average_window_size,
                              x_min=0,
-                             x_max=assumed_settings.training_iterations,
+                             x_max=assumed_settings.training_episodes,
                              y_min=-100,
                              y_max=0
                              )

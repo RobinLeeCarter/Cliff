@@ -47,6 +47,10 @@ class Episode:
             return 0
 
     @property
+    def timestep_count(self) -> int:
+        return self.max_t + 1   # starting from zero
+
+    @property
     def total_return(self) -> float:
         g: float = 0
         for t, rsa_ in enumerate(self.trajectory):

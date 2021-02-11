@@ -4,7 +4,6 @@ from typing import TYPE_CHECKING
 import numpy as np
 
 if TYPE_CHECKING:
-    import agent
     import view
     import algorithm
 import utils
@@ -39,10 +38,12 @@ class ReturnByAlpha(comparison_m.Comparison):
                 )
                 self.settings_list.append(settings_)
 
-    def record(self, settings_: common.Settings, iteration: int, episode: agent.Episode):
-        algorithm_type = settings_.algorithm_type
-        alpha = settings_.parameters["alpha"]
-        total_return = episode.total_return
+    def record(self):
+        trainer = self._trainer
+        settings = trainer.settings
+        algorithm_type = settings.algorithm_type
+        alpha = settings.parameters["alpha"]
+        total_return = trainer.episode.total_return
         self._recorder[algorithm_type, alpha] = total_return
 
     def compile(self):

@@ -5,7 +5,6 @@ from typing import Optional, TYPE_CHECKING
 
 if TYPE_CHECKING:
     import common
-    import agent
     import algorithm
     import view
     from comparison import recorder
@@ -35,16 +34,18 @@ class Comparison(ABC):
     def train(self, settings: common.Settings):
         self._trainer.train(settings)
 
-    def review(self, settings_: common.Settings, iteration: int, episode: agent.Episode):
-        if self._is_record_iteration(settings_, iteration):
-            self.record(settings_, iteration, episode)
+    def review(self):
+        episode_counter = self._trainer.episode_counter
+        start = self._trainer.settings.performance_sample_start
+        frequency = self._trainer.settings.performance_sample_frequency
+        if self._is_record_episode(episode_counter, start, frequency):
+            self.record()
 
-    def _is_record_iteration(self, settings_: common.Settings, iteration: int) -> bool:
-        return iteration >= settings_.performance_sample_start and \
-               iteration % settings_.performance_sample_frequency == 0
+    def _is_record_episode(self, episode_counter: int, start: int, frequency: int) -> bool:
+        return episode_counter >= start and episode_counter % frequency == 0
 
     @abstractmethod
-    def record(self, settings_: common.Settings, iteration: int, episode: agent.Episode):
+    def record(self):
         pass
 
     @abstractmethod
