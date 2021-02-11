@@ -68,6 +68,8 @@ class Agent:
         self.t += 1
         self.prev_reward, self.prev_state, self.prev_action = self.reward, self.state, self.action
         self.reward, self.state, self.action = self.response.reward, self.response.state, None
+        if self.state.is_terminal:
+            self.episode.add_rsa(reward=self.reward, state=self.state, action=self.action)
 
     def generate_episode(self):
         self.start_episode()

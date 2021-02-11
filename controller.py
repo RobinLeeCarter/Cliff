@@ -60,6 +60,22 @@ class Controller:
         self.comparison.compile()
         self.comparison.draw_graph()
 
+    def demonstrate(self):
+        self.grid_view.open_window()
+        running_average = 0
+        count = 0
+        while True:
+            self.agent.generate_episode()
+            episode = self.agent.episode
+            print(f"max_t: {episode.max_t} \t total_return: {episode.total_return:.0f}")
+            count += 1
+            running_average += (1/count) * (episode.total_return - running_average)
+            print(f"count: {count} \t running_average: {running_average:.1f}")
+            user_event: common.UserEvent = self.grid_view.display_episode(episode, show_trail=False)
+            if user_event == common.UserEvent.QUIT:
+                break
+        self.grid_view.close_window()
+
         # self.behaviour_agent.set_policy(self.target_policy)
         # self.grid_view.open_window()
         # self.view.display_and_wait()

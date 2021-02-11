@@ -56,7 +56,7 @@ class GridView:
             #     self.user_event = enums.enums.UserEvent.SPACE
             # else:
             self._wait_for_event_of_interest()
-            self._handle_event()
+            # self._handle_event()
 
     def display_episode(self, episode_: agent.Episode, show_trail: bool = True) -> common.UserEvent:
         # print(episode_.trajectory)
@@ -71,8 +71,10 @@ class GridView:
             # if keys[pygame.K_SPACE]:
             #     self.user_event = enums.enums.UserEvent.SPACE
             # else:
+            self._draw_agent(show_trail)
             self._wait_for_event_of_interest()
-            self._handle_event(show_trail)
+            # self._handle_event(show_trail)
+            self.t += 1
         return self._user_event
 
     # noinspection SpellCheckingInspection
@@ -136,18 +138,24 @@ class GridView:
             elif event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
                 self._user_event = common.UserEvent.SPACE
 
-    def _handle_event(self, show_trail: bool = True):
-        if self._user_event == common.UserEvent.QUIT:
-            self.close_window()
-            # sys.exit()
-        elif self._user_event == common.UserEvent.SPACE:
-            if not show_trail:
-                self._copy_grid_into_background()
-                self._put_background_on_screen()
-            state: environment.State = self.episode.trajectory[self.t].state
-            self._draw_agent_at_state(state)
-            self.t += 1
-            # self.draw_random_car()
+    # def _handle_event(self, show_trail: bool = True):
+    #     if self._user_event == common.UserEvent.QUIT:
+    #         self.close_window()
+    #         # sys.exit()
+    #     elif self._user_event == common.UserEvent.SPACE:
+    #         if not show_trail:
+    #             self._copy_grid_into_background()
+    #             self._put_background_on_screen()
+    #         state: environment.State = self.episode.trajectory[self.t].state
+    #         self._draw_agent_at_state(state)
+    #         # self.draw_random_car()
+
+    def _draw_agent(self, show_trail: bool = True):
+        if not show_trail:
+            self._copy_grid_into_background()
+            self._put_background_on_screen()
+        state: environment.State = self.episode.trajectory[self.t].state
+        self._draw_agent_at_state(state)
 
     def _draw_agent_at_state(self, state: environment.State):
         # row, col = self._grid_world.get_index(state.x, state.y)
