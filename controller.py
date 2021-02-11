@@ -37,7 +37,9 @@ class Controller:
         # self.behaviour_agent = agent.Agent(self.environment, self.behaviour_policy)
 
     def setup_and_run(self, comparison_type: common.ComparisonType):
-        if comparison_type == common.ComparisonType.RETURN_BY_EPISODE:
+        if comparison_type == common.ComparisonType.EPISODE_BY_TIMESTEP:
+            self.comparison = comparison.EpisodeByTimestep(self.algorithm_factory, self.graph, verbose=False)
+        elif comparison_type == common.ComparisonType.RETURN_BY_EPISODE:
             if isinstance(self.environment, environments.Windy):
                 self.comparison = environments.cliff.ReturnByEpisode(
                     self.algorithm_factory, self.graph, verbose=False)

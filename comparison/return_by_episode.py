@@ -48,10 +48,10 @@ class ReturnByEpisode(comparison_m.Comparison):
 
         # collate output from self.recorder
         for settings_ in self.settings_list:
-            values = np.array([
-                self._recorder[settings_.algorithm_type, iteration]
-                for iteration in episode_array
-            ])
+            values = np.array(
+                [self._recorder[settings_.algorithm_type, episode_counter] for episode_counter in episode_array],
+                dtype=float
+            )
             series_ = common.Series(
                 title=settings_.algorithm_title,
                 identifiers={"algorithm_type": settings_.algorithm_type},

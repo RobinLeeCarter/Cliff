@@ -11,7 +11,7 @@ class Settings:
 
     algorithm_title: str = ""   # algorithm title will be populated here by Trainer whether it's used or not
 
-    training_episodes: int = constants.TRAINING_ITERATIONS
+    training_episodes: int = constants.TRAINING_EPISODES
     episode_length_timeout: int = constants.EPISODE_LENGTH_TIMEOUT
     episodes_print_frequency: int = constants.EPISODES_PRINT_FREQUENCY
 

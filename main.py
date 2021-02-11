@@ -10,7 +10,7 @@ def main():
     controller_ = controller.Controller(verbose=False)
     controller_.setup_and_run(comparison_type=common.COMPARISON)
     controller_.run()
-    controller_.demonstrate()
+    # controller_.demonstrate()
 
 
 if __name__ == '__main__':

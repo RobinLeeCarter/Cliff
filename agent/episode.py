@@ -18,10 +18,10 @@ class Episode:
         self.T: Optional[int] = None
         self.G: np.ndarray = np.array([], dtype=float)
 
-        self.step_callback: Optional[Callable[[Episode], None]] = None
+        self._step_callback: Optional[Callable[[Episode], None]] = None
 
-    # def set_step_callback(self, review_step: Optional[Callable[[Episode], None]] = None):
-    #     self.review_step = review_step
+    def set_step_callback(self, step_callback: Optional[Callable[[Episode], None]] = None):
+        self._step_callback = step_callback
 
     def add_rsa(self,
                 reward: Optional[float],
@@ -32,8 +32,8 @@ class Episode:
         if state.is_terminal:
             self.terminates = True
             self.T = len(self.trajectory) - 1
-        if self.step_callback:
-            self.step_callback(self)
+        if self._step_callback:
+            self._step_callback(self)
 
     def generate_returns(self):
         if self.terminates:

@@ -17,6 +17,7 @@ class UserEvent(enum.IntEnum):
 
 
 class ComparisonType(enum.IntEnum):
+    EPISODE_BY_TIMESTEP = enum.auto()
     RETURN_BY_EPISODE = enum.auto()
     RETURN_BY_ALPHA = enum.auto()
 

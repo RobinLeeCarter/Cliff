@@ -53,7 +53,10 @@ class ReturnByAlpha(comparison_m.Comparison):
         )
         # collate output from self.recorder
         for algorithm_type in self._algorithm_type_list:
-            values = np.array([self._recorder[algorithm_type, alpha] for alpha in self._alpha_list])
+            values = np.array(
+                [self._recorder[algorithm_type, alpha] for alpha in self._alpha_list],
+                dtype=float
+            )
             series_ = common.Series(
                 title=algorithm_type.name,
                 values=values,

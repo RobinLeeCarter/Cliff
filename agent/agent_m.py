@@ -30,12 +30,13 @@ class Agent:
         self.response: Optional[environment.Response] = None
 
         # trainer callback
-        self.step_callback: Optional[Callable[[episode.Episode], None]] = None
+        self._step_callback: Optional[Callable[[episode.Episode], None]] = None
 
     # def set_policy(self, policy_: policy.Policy):
     #     self.policy = policy_
-    # def set_step_callback(self, review_step: Optional[Callable[[episode.Episode], None]] = None):
-    #     self.review_step = review_step
+
+    def set_step_callback(self, step_callback: Optional[Callable[[episode.Episode], None]] = None):
+        self._step_callback = step_callback
 
     def start_episode(self):
         """Gets initial state and sets initial reward to None"""
@@ -43,8 +44,8 @@ class Agent:
             print("start episode...")
         self.t = 0
         self.episode = episode.Episode()
-        if self.step_callback:
-            self.episode.step_callback = self.step_callback
+        if self._step_callback:
+            self.episode.set_step_callback(self._step_callback)
 
         # get starting state, reward will be None
         self.response = self.environment.start()

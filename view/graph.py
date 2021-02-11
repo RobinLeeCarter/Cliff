@@ -30,24 +30,28 @@ class Graph:
         else:
             self.title = f"Average Return vs {x_series.title}"
 
-        self.prep_graph(x_min=x_min, x_max=x_max, x_label=x_series.title,
-                        y_min=y_min, y_max=y_max)
+        self.pre_plot()
         if is_moving_average:
             self.moving_average_plot(x_series, graph_series, moving_average_window_size)
         else:
             self.plot_arrays(x_series, graph_series)
-        self.ax.legend()
+        self.post_plot(x_min=x_min, x_max=x_max, x_label=x_series.title,
+                       y_min=y_min, y_max=y_max)
         plt.show()
 
-    def prep_graph(self, x_min: float, x_max: float, x_label: str, y_min: float, y_max: float):
+    def pre_plot(self):
         self.fig: figure.Figure = plt.figure()
         self.ax: figure.Axes = self.fig.subplots()
+
+    def post_plot(self, x_min: Optional[float], x_max: Optional[float], x_label: str,
+                  y_min: Optional[float], y_max: Optional[float]):
         self.ax.set_title(self.title)
         self.ax.set_xlim(xmin=x_min, xmax=x_max)
         self.ax.set_xlabel(x_label)
         self.ax.set_ylim(ymin=y_min, ymax=y_max)
         self.ax.set_ylabel("Average Return")
         self.ax.grid(True)
+        self.ax.legend()
 
     def plot_arrays(self, x_series: common.Series, graph_series: list[common.Series]):
         for series_ in graph_series:

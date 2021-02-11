@@ -15,6 +15,7 @@ class EpisodeByTimestep(comparison_m.Comparison):
         super().__init__(algorithm_factory, graph, verbose)
         recorder_key_type = tuple[int, int]
         self._recorder = recorder.Recorder[recorder_key_type]()
+        self._max_timestep: int = 0
 
     def build(self):
         self.settings_list = [
@@ -28,31 +29,25 @@ class EpisodeByTimestep(comparison_m.Comparison):
     def record(self):
         trainer = self._trainer
         algorithm_type = trainer.settings.algorithm_type
+        timestep = trainer.timestep
         episode_counter = trainer.episode_counter
-        cumulative_timestep = trainer.cumulative_timestep
-        self._recorder[algorithm_type, cumulative_timestep] = episode_counter
+        self._recorder[algorithm_type, timestep] = episode_counter
 
     def compile(self):
-        assumed_settings = self.settings_list[0]
-        start = assumed_settings.performance_sample_start
-        frequency = assumed_settings.performance_sample_frequency
-        episode_array = np.array([
-            episode_counter
-            for episode_counter in range(1, assumed_settings.training_episodes + 1)
-            if self._is_record_episode(episode_counter, start, frequency)
-        ], dtype=float)
+        self._max_timestep = self._trainer.max_timestep
+        timestep_array = np.arange(self._max_timestep+1, dtype=int)
 
         self.x_series = common.Series(
-            title="Episode",
-            values=episode_array
+            title="Timestep",
+            values=timestep_array
         )
 
         # collate output from self.recorder
         for settings_ in self.settings_list:
-            values = np.array([
-                self._recorder[settings_.algorithm_type, iteration]
-                for iteration in episode_array
-            ])
+            values = np.array(
+                [self._recorder[settings_.algorithm_type, timestep] for timestep in timestep_array],
+                dtype=float
+            )
             series_ = common.Series(
                 title=settings_.algorithm_title,
                 identifiers={"algorithm_type": settings_.algorithm_type},
@@ -64,9 +59,8 @@ class EpisodeByTimestep(comparison_m.Comparison):
         assumed_settings = self.settings_list[0]
         self.graph.make_plot(x_series=self.x_series,
                              graph_series=self.series_list,
-                             moving_average_window_size=assumed_settings.moving_average_window_size,
                              x_min=0,
-                             x_max=assumed_settings.training_episodes,
-                             y_min=-100,
-                             y_max=0
+                             x_max=self._max_timestep,
+                             y_min=0,
+                             y_max=assumed_settings.training_episodes
                              )
