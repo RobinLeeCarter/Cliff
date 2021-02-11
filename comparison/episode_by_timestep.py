@@ -23,6 +23,7 @@ class EpisodeByTimestep(comparison_m.Comparison):
           # common.Settings(common.AlgorithmType.QLearning, {"alpha": 0.5}),
           common.Settings(common.AlgorithmType.Sarsa, {"alpha": 0.5})
         ]
+        self._trainer.review_every_step = True
 
     def record(self):
         trainer = self._trainer

@@ -26,10 +26,13 @@ class Trainer:
         self.episode: Optional[agent.Episode] = None
         self.max_t: int = 0
         self.total_return: float = 0.0
+        self.review_every_step: bool = False
 
     def train(self, settings: common.Settings):
         self.settings = settings
         self.algorithm_ = self.algorithm_factory[self.settings]
+        if self.review_every_step:
+            self.algorithm_.agent.step_callback = self.review_step
         settings.algorithm_title = self.algorithm_.title
         print(f"{self.algorithm_.title}: {settings.runs} runs")
 
@@ -48,10 +51,18 @@ class Trainer:
                 self.algorithm_.do_episode(settings.episode_length_timeout)
                 self.episode = self.algorithm_.agent.episode
                 self.max_t = self.episode.max_t
-                self.cumulative_timestep += self.episode.timestep_count # one extra
                 self.total_return = self.episode.total_return
                 # if self.verbose:
                 #     print(f"max_t = {max_t} \ttotal_return = {total_return:.2f}")
-                self.comparison.review()
+                if not self.review_every_step:
+                    self.cumulative_timestep += self.max_t + 1  # one extra
+                    self.comparison.review()
+            self.cumulative_timestep += 1
 
         self.algorithm_.print_q_coverage_statistics()
+
+    def review_step(self, episode: agent.Episode):
+        self.episode = episode
+        self.cumulative_timestep += 1
+        self.comparison.review()
+

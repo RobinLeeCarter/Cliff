@@ -1,5 +1,5 @@
 from __future__ import annotations
-from typing import Optional, TYPE_CHECKING
+from typing import Optional, TYPE_CHECKING, Callable
 
 import numpy as np
 
@@ -18,16 +18,22 @@ class Episode:
         self.T: Optional[int] = None
         self.G: np.ndarray = np.array([], dtype=float)
 
+        self.step_callback: Optional[Callable[[Episode], None]] = None
+
+    # def set_step_callback(self, review_step: Optional[Callable[[Episode], None]] = None):
+    #     self.review_step = review_step
+
     def add_rsa(self,
                 reward: Optional[float],
                 state: environment.State,
                 action: Optional[environment.Action]):
         rsa_ = rsa.RSA(reward, state, action)
         self.trajectory.append(rsa_)
-
         if state.is_terminal:
             self.terminates = True
             self.T = len(self.trajectory) - 1
+        if self.step_callback:
+            self.step_callback(self)
 
     def generate_returns(self):
         if self.terminates:
@@ -46,9 +52,9 @@ class Episode:
         else:
             return 0
 
-    @property
-    def timestep_count(self) -> int:
-        return self.max_t + 1   # starting from zero
+    # @property
+    # def timestep_count(self) -> int:
+    #     return self.max_t + 1   # starting from zero
 
     @property
     def total_return(self) -> float:
