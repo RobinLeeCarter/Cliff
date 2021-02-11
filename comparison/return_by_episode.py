@@ -39,7 +39,7 @@ class ReturnByEpisode(comparison_m.Comparison):
         ], dtype=float)
 
         self.x_series = common.Series(
-            title="Episodes",
+            title="Episode",
             values=iteration_array
         )
 
@@ -59,9 +59,10 @@ class ReturnByEpisode(comparison_m.Comparison):
     def draw_graph(self):
         assumed_settings = self.settings_list[0]
         self.graph.make_plot(x_series=self.x_series,
+                             graph_series=self.series_list,
+                             moving_average_window_size=assumed_settings.moving_average_window_size,
                              x_min=0,
                              x_max=assumed_settings.training_iterations,
                              y_min=-100,
-                             y_max=0,
-                             graph_series=self.series_list,
-                             moving_average_window_size=assumed_settings.moving_average_window_size)
+                             y_max=0
+                             )

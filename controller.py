@@ -15,7 +15,7 @@ class Controller:
     def __init__(self, verbose: bool = False):
         self.verbose: bool = verbose
 
-        self.environment = environments.Cliff()
+        self.environment = environments.Windy()
         # self.environment.verbose = True
         self.greedy_policy: policy.DeterministicPolicy = policy.DeterministicPolicy(self.environment)
         self.e_greedy_policy: policy.EGreedyPolicy = policy.EGreedyPolicy(self.environment,
@@ -38,7 +38,11 @@ class Controller:
 
     def setup_and_run(self, comparison_type: common.ComparisonType):
         if comparison_type == common.ComparisonType.RETURN_BY_EPISODE:
-            self.comparison = comparison.ReturnByEpisode(self.algorithm_factory, self.graph, verbose=False)
+            if isinstance(self.environment, environments.Windy):
+                self.comparison = environments.cliff.ReturnByEpisode(
+                    self.algorithm_factory, self.graph, verbose=False)
+            else:
+                self.comparison = comparison.ReturnByEpisode(self.algorithm_factory, self.graph, verbose=False)
         elif comparison_type == common.ComparisonType.RETURN_BY_ALPHA:
             self.comparison = comparison.ReturnByAlpha(self.algorithm_factory, self.graph, verbose=False)
         else:
@@ -51,7 +55,6 @@ class Controller:
         for settings in self.comparison.settings_list:
             self.comparison.train(settings)
             timer.lap(name=str(settings.algorithm_title))
-
         timer.stop()
 
         self.comparison.compile()

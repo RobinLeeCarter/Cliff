@@ -17,12 +17,13 @@ class Graph:
 
     def make_plot(self,
                   x_series: common.Series,
-                  x_min: float,
-                  x_max: float,
-                  y_min: float,
-                  y_max: float,
                   graph_series: list[common.Series],
-                  moving_average_window_size: int = 0):
+                  moving_average_window_size: int = 0,
+                  x_min: Optional[float] = None,
+                  x_max: Optional[float] = None,
+                  y_min: Optional[float] = None,
+                  y_max: Optional[float] = None
+                  ):
         is_moving_average = (moving_average_window_size >= 3)
         if is_moving_average:
             self.title = f"Moving average of Average Return vs {x_series.title}"

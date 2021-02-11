@@ -1,4 +1,6 @@
 # imports environment
-from environments.cliff import *
-from environments.random_walk import *
-from environments.windy import *
+from environments.cliff import Cliff
+import environments.cliff
+from environments.random_walk import RandomWalk
+from environments.windy import Windy
+

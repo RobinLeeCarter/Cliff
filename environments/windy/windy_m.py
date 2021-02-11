@@ -17,9 +17,7 @@ class Windy(environment.Environment):
             [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
             [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         ], dtype=np.int)
-        upward_wind = np.array([
-            [0, 0, 0, 1, 1, 1, 2, 2, 1, 0]
-        ], dtype=np.int)
+        upward_wind = np.array([0, 0, 0, 1, 1, 1, 2, 2, 1, 0], dtype=np.int)
 
         grid_world_ = grid_world.GridWorld(grid, upward_wind, random_wind)
         actions_ = actions.Actions()
