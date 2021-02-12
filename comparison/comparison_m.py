@@ -26,6 +26,7 @@ class Comparison(ABC):
         self.settings_list: list[common.Settings] = []
         self.x_series: Optional[common.Series] = None
         self.series_list: list[common.Series] = []
+        self._y_label: str = ""
 
     @abstractmethod
     def build(self):

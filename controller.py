@@ -16,9 +16,11 @@ class Controller:
     def __init__(self, verbose: bool = False):
         self.verbose: bool = verbose
 
-        # self.environment = environments.Windy()
-        self.environment_type = common.EnvironmentType.Windy
-        self.environment = self._select_environment(self.environment_type)
+        scenarios: common.Scenarios = common.Scenarios()
+        self.scenario: common.Scenario = scenarios.windy_timestep
+
+        self.environment = self._create_environment(self.scenario)
+
         # self.environment.verbose = True
         self.greedy_policy: policy.DeterministicPolicy = policy.DeterministicPolicy(self.environment)
         self.e_greedy_policy: policy.EGreedyPolicy = policy.EGreedyPolicy(self.environment,
@@ -39,14 +41,18 @@ class Controller:
         # self.target_agent = agent.Agent(self.environment, self.target_policy)
         # self.behaviour_agent = agent.Agent(self.environment, self.behaviour_policy)
 
-    def _select_environment(self, environment_type) -> environment.Environment:
+    def _create_environment(self, scenario: common.Scenario) -> environment.Environment:
+        environment_type = scenario.environment_type
+        gamma = scenario.gamma
+        # TODO: environment_kwargs
+        # environment_kwargs = scenario.environment_kwargs
         e = common.EnvironmentType
         if environment_type == e.Cliff:
-            environment_ = environments.Cliff(verbose=self.verbose)
+            environment_ = environments.Cliff(gamma=gamma, verbose=self.verbose)
         elif environment_type == e.Windy:
-            environment_ = environments.Windy(verbose=self.verbose)
+            environment_ = environments.Windy(gamma=gamma, verbose=self.verbose)
         elif environment_type == e.RandomWalk:
-            environment_ = environments.RandomWalk(verbose=self.verbose)
+            environment_ = environments.RandomWalk(gamma=gamma, verbose=self.verbose)
         else:
             raise NotImplementedError
         return environment_

@@ -6,14 +6,16 @@ import numpy as np
 
 if TYPE_CHECKING:
     import environment
-import common
 
 
 class StateActionFunction:
     def __init__(self,
-                 environment_: environment.Environment
+                 environment_: environment.Environment,
+                 initial_q_value: float
                  ):
         self._environment: environment.Environment = environment_
+        self.initial_q_value: float = initial_q_value
+
         self._shape = self._environment.states_shape + self._environment.actions_shape
         self._values: np.ndarray = np.empty(shape=self._shape, dtype=float)
         # self._actions_slice is used by argmax_over_actions so cached here
@@ -30,7 +32,7 @@ class StateActionFunction:
                 if state_.is_terminal:
                     self._values[q_index] = 0.0
                 else:
-                    self._values[q_index] = common.INITIAL_Q_VALUE
+                    self._values[q_index] = self.initial_q_value
 
     def __getitem__(self, state_action: tuple[environment.State, environment.Action]) -> float:
         state, action = state_action

@@ -13,12 +13,11 @@ class ConstantAlphaMC(abstract.EpisodicMonteCarlo):
     def __init__(self,
                  environment_: environment.Environment,
                  agent_: agent.Agent,
-                 alpha: float = 0.5,
-                 verbose: bool = False
+                 algorithm_parameters: dict[str, any]
                  ):
-        super().__init__(environment_, agent_, verbose)
-        self.title = f"{ConstantAlphaMC.name} α={alpha}"
-        self._alpha = alpha
+        super().__init__(environment_, agent_, algorithm_parameters)
+        self._alpha = algorithm_parameters['alpha']
+        self.title = f"{ConstantAlphaMC.name} α={self._alpha}"
 
     def _process_time_step(self, t: int):
         state = self.episode[t].state

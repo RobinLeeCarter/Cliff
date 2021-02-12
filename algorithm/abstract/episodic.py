@@ -14,17 +14,29 @@ class Episodic(abc.ABC):
     def __init__(self,
                  environment_: environment.Environment,
                  agent_: agent.Agent,
-                 verbose: bool = False
+                 algorithm_parameters: dict[str, any]
                  ):
         self.environment: environment.Environment = environment_
         self.agent: agent.Agent = agent_
+        self.algorithm_parameters: dict[str, any] = algorithm_parameters
         self.title: str = "Error: Untitled"
-        self.verbose = verbose
+        if "verbose" in algorithm_parameters:
+            self.verbose: bool = algorithm_parameters["verbose"]
+        else:
+            self.verbose: bool = False
 
         # assume all episodic algorithms have a Q function and initialise policy based on it
         # could add another layer of inheritance if not
-        self._V = value_function.StateFunction(self.environment)
-        self._Q = value_function.StateActionFunction(self.environment)
+        initial_v_value = algorithm_parameters['initial_v_value']
+        initial_q_value = algorithm_parameters['initial_q_value']
+        self._V = value_function.StateFunction(self.environment, initial_v_value)
+        self._Q = value_function.StateActionFunction(self.environment, initial_q_value)
+
+    def _parameter_lookup(self, parameter_name: str, default) -> bool:
+        if parameter_name in self.algorithm_parameters:
+            return self.algorithm_parameters[parameter_name]
+        else:
+            return default
 
     def initialize(self):
         self._V.initialize_values()

@@ -69,4 +69,3 @@ class Trainer:
         self.episode = episode
         self.timestep += 1
         self.comparison.review()
-

@@ -14,17 +14,15 @@ class VQ(abstract.EpisodicOnline):
     def __init__(self,
                  environment_: environment.Environment,
                  agent_: agent.Agent,
-                 alpha: float = 0.5,
-                 alpha_variable: bool = False,
-                 verbose: bool = False
+                 algorithm_parameters: dict[str, any],
                  ):
-        self.alpha_variable = alpha_variable
-        super().__init__(environment_, agent_, verbose)
+        super().__init__(environment_, agent_, algorithm_parameters)
+        self.alpha_variable: bool = self._parameter_lookup('alpha_variable', False)
+        self._alpha: float = algorithm_parameters['alpha']
         if self.alpha_variable:
             self.title = f"{VQ.name} α=0.5 then α=0.1"
         else:
-            self.title = f"{VQ.name} α={alpha}"
-        self._alpha = alpha
+            self.title = f"{VQ.name} α={self._alpha}"
 
     def parameter_changes(self, iteration: int):
         if self.alpha_variable:

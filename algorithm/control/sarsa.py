@@ -14,12 +14,11 @@ class Sarsa(abstract.EpisodicOnline):
     def __init__(self,
                  environment_: environment.Environment,
                  agent_: agent.Agent,
-                 alpha: float = 0.5,
-                 verbose: bool = False
+                 algorithm_parameters: dict[str, any]
                  ):
-        super().__init__(environment_, agent_, verbose)
-        self.title = f"{Sarsa.name} α={alpha}"
-        self._alpha = alpha
+        super().__init__(environment_, agent_, algorithm_parameters)
+        self._alpha = algorithm_parameters['alpha']
+        self.title = f"{Sarsa.name} α={self._alpha}"
 
     def _start_episode(self):
         self.agent.choose_action()

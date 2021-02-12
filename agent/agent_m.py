@@ -9,7 +9,10 @@ from agent import episode
 
 
 class Agent:
-    def __init__(self, environment_: environment.Environment, policy_: policy.Policy, verbose: bool = False):
+    def __init__(self,
+                 environment_: environment.Environment,
+                 policy_: policy.Policy,
+                 verbose: bool = False):
         self.environment: environment.Environment = environment_
         self.policy: policy.Policy = policy_
         self.verbose: bool = verbose
@@ -43,7 +46,7 @@ class Agent:
         if self.verbose:
             print("start episode...")
         self.t = 0
-        self.episode = episode.Episode()
+        self.episode = episode.Episode(self.environment.gamma)
         if self._step_callback:
             self.episode.set_step_callback(self._step_callback)
 

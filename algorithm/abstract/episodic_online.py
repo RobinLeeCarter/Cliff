@@ -14,9 +14,9 @@ class EpisodicOnline(episodic.Episodic, abc.ABC):
     def __init__(self,
                  environment_: environment.Environment,
                  agent_: agent.Agent,
-                 verbose: bool = False
+                 algorithm_parameters: dict[str, any],
                  ):
-        super().__init__(environment_, agent_, verbose)
+        super().__init__(environment_, agent_, algorithm_parameters)
 
     def do_episode(self, episode_length_timeout: int):
         self.agent.start_episode()

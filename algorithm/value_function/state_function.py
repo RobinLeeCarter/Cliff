@@ -5,14 +5,16 @@ import numpy as np
 
 if TYPE_CHECKING:
     import environment
-import common
 
 
 class StateFunction:
     def __init__(self,
-                 environment_: environment.Environment
+                 environment_: environment.Environment,
+                 initial_v_value: float
                  ):
         self._environment: environment.Environment = environment_
+        self.initial_v_value: float = initial_v_value
+
         self._shape = self._environment.states_shape
         self._values: np.ndarray = np.empty(shape=self._shape, dtype=float)
 
@@ -21,7 +23,7 @@ class StateFunction:
             if state_.is_terminal:
                 self._values[state_.index] = 0.0
             else:
-                self._values[state_.index] = common.INITIAL_V_VALUE
+                self._values[state_.index] = self.initial_v_value
 
     def __getitem__(self, state: environment.State) -> float:
         if state.is_terminal:

@@ -35,7 +35,7 @@ class ReturnByAlpha(comparison_m.Comparison):
             for algorithm_type in self._algorithm_type_list:
                 settings_ = common.Settings(
                     algorithm_type=algorithm_type,
-                    parameters={"alpha": alpha}
+                    algorithm_parameters={"alpha": alpha}
                 )
                 self.settings_list.append(settings_)
 
