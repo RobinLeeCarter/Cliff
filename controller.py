@@ -40,7 +40,7 @@ class Controller:
         if comparison_type == common.ComparisonType.EPISODE_BY_TIMESTEP:
             self.comparison = comparison.EpisodeByTimestep(self.algorithm_factory, self.graph, verbose=False)
         elif comparison_type == common.ComparisonType.RETURN_BY_EPISODE:
-            if isinstance(self.environment, environments.Windy):
+            if isinstance(self.environment, environments.Cliff):
                 self.comparison = environments.cliff.ReturnByEpisode(
                     self.algorithm_factory, self.graph, verbose=False)
             else:

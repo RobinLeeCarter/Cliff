@@ -18,6 +18,7 @@ class Graph:
     def make_plot(self,
                   x_series: common.Series,
                   graph_series: list[common.Series],
+                  y_label: str,
                   moving_average_window_size: int = 0,
                   x_min: Optional[float] = None,
                   x_max: Optional[float] = None,
@@ -26,9 +27,9 @@ class Graph:
                   ):
         is_moving_average = (moving_average_window_size >= 3)
         if is_moving_average:
-            self.title = f"Moving average of Average Return vs {x_series.title}"
+            self.title = f"Moving average of {y_label} vs {x_series.title}"
         else:
-            self.title = f"Average Return vs {x_series.title}"
+            self.title = f"{y_label} vs {x_series.title}"
 
         self.pre_plot()
         if is_moving_average:
@@ -36,7 +37,7 @@ class Graph:
         else:
             self.plot_arrays(x_series, graph_series)
         self.post_plot(x_min=x_min, x_max=x_max, x_label=x_series.title,
-                       y_min=y_min, y_max=y_max)
+                       y_min=y_min, y_max=y_max, y_label=y_label)
         plt.show()
 
     def pre_plot(self):
@@ -44,12 +45,12 @@ class Graph:
         self.ax: figure.Axes = self.fig.subplots()
 
     def post_plot(self, x_min: Optional[float], x_max: Optional[float], x_label: str,
-                  y_min: Optional[float], y_max: Optional[float]):
+                  y_min: Optional[float], y_max: Optional[float], y_label: str):
         self.ax.set_title(self.title)
         self.ax.set_xlim(xmin=x_min, xmax=x_max)
         self.ax.set_xlabel(x_label)
         self.ax.set_ylim(ymin=y_min, ymax=y_max)
-        self.ax.set_ylabel("Average Return")
+        self.ax.set_ylabel(y_label)
         self.ax.grid(True)
         self.ax.legend()
 

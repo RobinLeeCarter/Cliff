@@ -27,6 +27,7 @@ class ReturnByAlpha(comparison_m.Comparison):
         self._alpha_list = utils.float_range(start=self._alpha_min, stop=self._alpha_max, step_size=self._alpha_step)
         recorder_key_type = tuple[type, float]
         self._recorder = recorder.Recorder[recorder_key_type]()
+        self._y_label = "Average Return"
 
     def build(self):
         self.settings_list = []
@@ -68,6 +69,7 @@ class ReturnByAlpha(comparison_m.Comparison):
         # assumed_settings = self.settings_list[0]
         self.graph.make_plot(x_series=self.x_series,
                              graph_series=self.series_list,
+                             y_label=self._y_label,
                              x_min=self._alpha_min,
                              x_max=self._alpha_max,
                              y_min=-140,

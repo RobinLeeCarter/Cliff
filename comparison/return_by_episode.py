@@ -15,6 +15,7 @@ class ReturnByEpisode(comparison_m.Comparison):
         super().__init__(algorithm_factory, graph, verbose)
         recorder_key_type = tuple[type, int]
         self._recorder = recorder.Recorder[recorder_key_type]()
+        self._y_label = "Average Return"
 
     def build(self):
         self.settings_list = [
@@ -63,6 +64,7 @@ class ReturnByEpisode(comparison_m.Comparison):
         assumed_settings = self.settings_list[0]
         self.graph.make_plot(x_series=self.x_series,
                              graph_series=self.series_list,
+                             y_label=self._y_label,
                              moving_average_window_size=assumed_settings.moving_average_window_size,
                              x_min=0,
                              x_max=assumed_settings.training_episodes,

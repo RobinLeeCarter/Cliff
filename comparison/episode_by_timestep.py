@@ -16,6 +16,7 @@ class EpisodeByTimestep(comparison_m.Comparison):
         recorder_key_type = tuple[int, int]
         self._recorder = recorder.Recorder[recorder_key_type]()
         self._max_timestep: int = 0
+        self._y_label: str = "Episode"
 
     def build(self):
         self.settings_list = [
@@ -59,6 +60,7 @@ class EpisodeByTimestep(comparison_m.Comparison):
         assumed_settings = self.settings_list[0]
         self.graph.make_plot(x_series=self.x_series,
                              graph_series=self.series_list,
+                             y_label=self._y_label,
                              x_min=0,
                              x_max=self._max_timestep,
                              y_min=0,
