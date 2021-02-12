@@ -15,8 +15,8 @@ class Factory:
         self.agent: agent.Agent = agent_
 
     def __getitem__(self, settings_: common.Settings) -> abstract.Episodic:
-        if "verbose" in settings_.parameters:
-            verbose: bool = settings_.parameters["verbose"]
+        if "verbose" in settings_.algorithm_parameters:
+            verbose: bool = settings_.algorithm_parameters["verbose"]
         else:
             verbose: bool = False
 
@@ -35,13 +35,13 @@ class Factory:
             return control.VQ(self.environment, self.agent, alpha, alpha_variable, verbose)
 
     def alpha_lookup(self, settings_: common.Settings, default: float = 0.5) -> float:
-        if "alpha" in settings_.parameters:
-            return settings_.parameters["alpha"]
+        if "alpha" in settings_.algorithm_parameters:
+            return settings_.algorithm_parameters["alpha"]
         else:
             return default
 
     def alpha_variable_lookup(self, settings_: common.Settings, default: bool = False) -> bool:
-        if "alpha_variable" in settings_.parameters:
-            return settings_.parameters["alpha_variable"]
+        if "alpha_variable" in settings_.algorithm_parameters:
+            return settings_.algorithm_parameters["alpha_variable"]
         else:
             return default

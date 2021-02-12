@@ -1,7 +1,7 @@
 from __future__ import annotations
 # from typing import TYPE_CHECKING
 
-from common import enums
+from common import enums, constants
 from common.dataclass import scenario, settings
 
 # _e = enums.EnvironmentType
@@ -11,22 +11,50 @@ from common.dataclass import scenario, settings
 
 class Scenarios:
     def __init__(self):
-        self.cliff_timestep = self.cliff_timestep_scenario()
+        self.windy_timestep = self.build_windy_timestep()
 
-    def cliff_timestep_scenario(self) -> scenario.Scenario:
-        cliff_timestep = scenario.Scenario(
-            environment_type=enums.EnvironmentType.Cliff,
+    def build_windy_timestep(self) -> scenario.Scenario:
+        scenario_ = scenario.Scenario(
+            environment_type=enums.EnvironmentType.Windy,
+            environment_kwargs={"random_wind": False},
             comparison_type=enums.ComparisonType.EPISODE_BY_TIMESTEP,
+            scenario_settings=settings.Settings(
+                runs=50,
+                training_episodes=170
+            ),
             settings_list=[
-                settings.Settings(enums.AlgorithmType.Sarsa, {"alpha": 0.5})
-            ],
-            environment_parameters={"random_wind": False},
-            training_episodes=170,
-            runs=50
+                settings.Settings(
+                    algorithm_type=enums.AlgorithmType.Sarsa,
+                    algorithm_parameters={"alpha": 0.5}
+                )
+            ]
         )
-        cliff_timestep.graph_parameters = {
-            "y_min": 0,
-            "y_max": cliff_timestep.training_episodes
-        }
-        return cliff_timestep
 
+        for settings_ in scenario_.settings_list:
+            self._fully_populate_settings(scenario_, settings_)
+
+        scenario_.graph_parameters = {
+            "y_min": 0,
+            "y_max": scenario_.scenario_settings.training_episodes
+        }
+        return scenario_
+
+    def _fully_populate_settings(self, scenario_: scenario.Scenario, settings_: settings.Settings):
+        attributes: list[str] = [
+            'runs',
+            'run_print_frequency',
+            'training_episodes',
+            'episode_length_timeout',
+            'episode_print_frequency',
+            'episode_to_start_recording',
+            'episode_recording_frequency'
+        ]
+        for attribute in attributes:
+            settings_value = getattr(settings_, attribute)
+            scenario_value = getattr(scenario_.scenario_settings, attribute)
+            default_value = getattr(constants.default_settings, attribute)
+            if settings_value is None:
+                if scenario_value is None:
+                    setattr(settings_, attribute, default_value)
+                else:
+                    setattr(settings_, attribute, scenario_value)

@@ -36,8 +36,8 @@ class Comparison(ABC):
 
     def review(self):
         episode_counter = self._trainer.episode_counter
-        start = self._trainer.settings.performance_sample_start
-        frequency = self._trainer.settings.performance_sample_frequency
+        start = self._trainer.settings.episode_to_start_recording
+        frequency = self._trainer.settings.episode_recording_frequency
         if self._is_record_episode(episode_counter, start, frequency):
             self.record()
 

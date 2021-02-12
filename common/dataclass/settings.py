@@ -1,24 +1,22 @@
 from __future__ import annotations
 import dataclasses
+from typing import Optional
 
-from common import constants, enums
+from common import enums
 
 
 @dataclasses.dataclass
 class Settings:
-    algorithm_type: enums.AlgorithmType
-    parameters: dict[str, any]
-
+    algorithm_type: Optional[enums.AlgorithmType] = None
+    algorithm_parameters: dict[str, any] = dataclasses.field(default_factory=dict)
     algorithm_title: str = ""   # algorithm title will be populated here by Trainer whether it's used or not
 
-    training_episodes: int = constants.TRAINING_EPISODES
-    episode_length_timeout: int = constants.EPISODE_LENGTH_TIMEOUT
-    episodes_print_frequency: int = constants.EPISODES_PRINT_FREQUENCY
+    runs: Optional[int] = None
+    run_print_frequency: Optional[int] = None
 
-    performance_sample_start: int = constants.PERFORMANCE_SAMPLE_START
-    performance_sample_frequency: int = constants.PERFORMANCE_SAMPLE_FREQUENCY
+    training_episodes: Optional[int] = None
+    episode_length_timeout: Optional[int] = None
+    episode_print_frequency: Optional[int] = None
 
-    runs: int = constants.RUNS
-    run_print_frequency: int = constants.RUN_PRINT_FREQUENCY
-
-    moving_average_window_size: int = constants.MOVING_AVERAGE_WINDOW_SIZE
+    episode_to_start_recording: Optional[int] = None
+    episode_recording_frequency: Optional[int] = None

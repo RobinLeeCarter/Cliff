@@ -1,5 +1,6 @@
 from __future__ import annotations
 import dataclasses
+from typing import Optional
 
 from common import constants, enums
 from common.dataclass import settings
@@ -9,22 +10,12 @@ from common.dataclass import settings
 class Scenario:
     environment_type: enums.EnvironmentType
     comparison_type: enums.ComparisonType
-    settings_list: list[settings.Settings]
-
-    environment_parameters: dict[str, any] = dataclasses.field(default_factory=dict)
 
     gamma: float = constants.GAMMA
+    environment_kwargs: dict[str, any] = dataclasses.field(default_factory=dict)
 
-    training_episodes: int = constants.TRAINING_EPISODES
-    episode_length_timeout: int = constants.EPISODE_LENGTH_TIMEOUT
-    episodes_print_frequency: int = constants.EPISODES_PRINT_FREQUENCY
-
-    performance_sample_start: int = constants.PERFORMANCE_SAMPLE_START
-    performance_sample_frequency: int = constants.PERFORMANCE_SAMPLE_FREQUENCY
-
-    runs: int = constants.RUNS
-    run_print_frequency: int = constants.RUN_PRINT_FREQUENCY
+    scenario_settings: Optional[settings.Settings] = None
+    settings_list: list[settings.Settings] = dataclasses.field(default_factory=list)
 
     moving_average_window_size: int = constants.MOVING_AVERAGE_WINDOW_SIZE
-
     graph_parameters: dict[str, any] = dataclasses.field(default_factory=dict)

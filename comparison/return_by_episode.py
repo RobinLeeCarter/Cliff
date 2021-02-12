@@ -34,8 +34,8 @@ class ReturnByEpisode(comparison_m.Comparison):
 
     def compile(self):
         assumed_settings = self.settings_list[0]
-        start = assumed_settings.performance_sample_start
-        frequency = assumed_settings.performance_sample_frequency
+        start = assumed_settings.episode_to_start_recording
+        frequency = assumed_settings.episode_recording_frequency
         episode_array = np.array([
             episode_counter
             for episode_counter in range(1, assumed_settings.training_episodes + 1)

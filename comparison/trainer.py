@@ -47,7 +47,7 @@ class Trainer:
             for self.episode_counter in range(1, settings.training_episodes + 1):
                 self.algorithm_.parameter_changes(self.episode_counter)
                 # print(f"episode_counter = {self.episode_counter}")
-                if self.verbose or self.episode_counter % settings.episodes_print_frequency == 0:
+                if self.verbose or self.episode_counter % settings.episode_print_frequency == 0:
                     print(f"episode_counter = {self.episode_counter}")
 
                 if not self.review_every_step and self.timestep != 0:

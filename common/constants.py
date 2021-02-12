@@ -2,25 +2,21 @@ from __future__ import annotations
 
 import numpy as np
 
-from common import enums
+from common import dataclass
 
-
+rng: np.random.Generator = np.random.default_rng()
 GAMMA: float = 1.0
+MOVING_AVERAGE_WINDOW_SIZE = 19
 
 INITIAL_V_VALUE: float = 0.0
 INITIAL_Q_VALUE: float = 0.0
 
-TRAINING_EPISODES: int = 170
-EPISODE_LENGTH_TIMEOUT: int = 1000
-EPISODES_PRINT_FREQUENCY: int = 1000
-
-PERFORMANCE_SAMPLE_START: int = 0
-PERFORMANCE_SAMPLE_FREQUENCY: int = 1
-
-RUNS: int = 50
-RUN_PRINT_FREQUENCY: int = 10
-MOVING_AVERAGE_WINDOW_SIZE = 19
-
-
-rng: np.random.Generator = np.random.default_rng()
-COMPARISON: enums.ComparisonType = enums.ComparisonType.EPISODE_BY_TIMESTEP
+default_settings = dataclass.Settings(
+    runs=50,
+    run_print_frequency=10,
+    training_episodes=100,
+    episode_length_timeout=1000,
+    episode_print_frequency=1000,
+    episode_to_start_recording=0,
+    episode_recording_frequency=1
+)
