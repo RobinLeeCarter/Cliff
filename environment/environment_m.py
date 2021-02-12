@@ -11,11 +11,9 @@ from environment import action, response, state
 class Environment(abc.ABC):
     """A GridWorld Environment - too hard to make general at this point"""
     def __init__(self,
-                 gamma: float,
                  grid_world_: grid_world.GridWorld,
                  actions_: action.Actions,
                  verbose: bool = False):
-        self.gamma = gamma
         self.grid_world: grid_world.GridWorld = grid_world_
         self._actions: action.Actions = actions_
         self.verbose: bool = verbose

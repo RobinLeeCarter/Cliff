@@ -4,7 +4,6 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     import environment
     import agent
-import common
 from algorithm import abstract
 
 
@@ -28,6 +27,6 @@ class TD0(abstract.EpisodicOnline):
         reward = self.agent.reward
         state = self.agent.state
 
-        target = reward + common.GAMMA * self._V[state]
+        target = reward + self.gamma * self._V[state]
         delta = target - self._V[prev_state]
         self._V[prev_state] += self._alpha * delta

@@ -7,7 +7,7 @@ from environments.windy import actions, grid_world
 
 
 class Windy(environment.Environment):
-    def __init__(self, gamma: float, random_wind: bool = False, verbose: bool = False):
+    def __init__(self, random_wind: bool = False, verbose: bool = False):
         grid = np.array([
             [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
             [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -21,7 +21,7 @@ class Windy(environment.Environment):
 
         grid_world_ = grid_world.GridWorld(grid, upward_wind, random_wind)
         actions_ = actions.Actions()
-        super().__init__(gamma, grid_world_, actions_, verbose)
+        super().__init__(grid_world_, actions_, verbose)
 
     def _get_response(self) -> environment.Response:
         return environment.Response(

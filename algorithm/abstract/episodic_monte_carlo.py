@@ -20,7 +20,7 @@ class EpisodicMonteCarlo(episodic.Episodic, abc.ABC):
         self.episode: Optional[agent.Episode] = None
 
     def do_episode(self, episode_length_timeout: int):
-        self.agent.generate_episode()
+        self.agent.generate_episode(episode_length_timeout)
         self.episode = self.agent.episode
         self._pre_process_episode()
         if self.episode.terminates and self.episode.T > 0:

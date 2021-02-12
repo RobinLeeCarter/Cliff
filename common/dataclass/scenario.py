@@ -14,7 +14,6 @@ class Scenario:
     settings_list: list[settings.Settings]
 
     # environment
-    gamma: float = constants.GAMMA
     environment_kwargs: dict[str, any] = dataclasses.field(default_factory=dict)
 
     # output

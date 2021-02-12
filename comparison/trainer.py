@@ -32,6 +32,7 @@ class Trainer:
     def train(self, settings: common.Settings):
         self.settings = settings
         self.algorithm_ = self.algorithm_factory[self.settings]
+        self.algorithm_.agent.set_gamma(settings.gamma)
         if self.review_every_step:
             self.algorithm_.agent.set_step_callback(self.review_step)
         settings.algorithm_title = self.algorithm_.title

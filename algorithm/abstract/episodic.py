@@ -31,6 +31,7 @@ class Episodic(abc.ABC):
         initial_q_value = algorithm_parameters['initial_q_value']
         self._V = value_function.StateFunction(self.environment, initial_v_value)
         self._Q = value_function.StateActionFunction(self.environment, initial_q_value)
+        self.gamma: float = self.algorithm_parameters['gamma']
 
     def _parameter_lookup(self, parameter_name: str, default) -> bool:
         if parameter_name in self.algorithm_parameters:

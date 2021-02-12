@@ -43,6 +43,7 @@ class Scenarios:
     def _fully_populate_settings(self, scenario_: scenario.Scenario, settings_: settings.Settings):
         # order of precedence: settings_ > scenario_ > default
         attributes: list[str] = [
+            'gamma',
             'runs',
             'run_print_frequency',
             'training_episodes',

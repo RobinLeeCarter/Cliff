@@ -8,13 +8,13 @@ from environments.random_walk import actions
 
 
 class RandomWalk(environment.Environment):
-    def __init__(self, gamma: float, verbose: bool = False):
+    def __init__(self, verbose: bool = False):
         grid = np.array([
             [3, 0, 0, 2, 0, 0, 3]
         ], dtype=np.int)
         grid_world_ = environment.GridWorld(grid)
         actions_ = actions.Actions()
-        super().__init__(gamma, grid_world_, actions_, verbose)
+        super().__init__(grid_world_, actions_, verbose)
 
     def _get_response(self) -> environment.Response:
         reward: float

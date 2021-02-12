@@ -22,6 +22,7 @@ class Controller:
         self.environment = self._create_environment(self.scenario)
 
         # self.environment.verbose = True
+        # TODO: have e-greedy_policy make it's own DetermintisticPolicy
         self.greedy_policy: policy.DeterministicPolicy = policy.DeterministicPolicy(self.environment)
         self.e_greedy_policy: policy.EGreedyPolicy = policy.EGreedyPolicy(self.environment,
                                                                           greedy_policy=self.greedy_policy)
@@ -43,16 +44,15 @@ class Controller:
 
     def _create_environment(self, scenario: common.Scenario) -> environment.Environment:
         environment_type = scenario.environment_type
-        gamma = scenario.gamma
         # TODO: environment_kwargs
         # environment_kwargs = scenario.environment_kwargs
         e = common.EnvironmentType
         if environment_type == e.Cliff:
-            environment_ = environments.Cliff(gamma=gamma, verbose=self.verbose)
+            environment_ = environments.Cliff(verbose=self.verbose)
         elif environment_type == e.Windy:
-            environment_ = environments.Windy(gamma=gamma, verbose=self.verbose)
+            environment_ = environments.Windy(verbose=self.verbose)
         elif environment_type == e.RandomWalk:
-            environment_ = environments.RandomWalk(gamma=gamma, verbose=self.verbose)
+            environment_ = environments.RandomWalk(verbose=self.verbose)
         else:
             raise NotImplementedError
         return environment_
@@ -92,7 +92,7 @@ class Controller:
     def run(self):
         timer: utils.Timer = utils.Timer()
         timer.start()
-        for settings in self.comparison.settings_list:
+        for settings in self.scenario.settings_list:
             self.comparison.train(settings)
             timer.lap(name=str(settings.algorithm_title))
         timer.stop()
