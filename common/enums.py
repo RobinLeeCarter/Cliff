@@ -27,3 +27,9 @@ class AlgorithmType(enum.IntEnum):
     VQ = enum.auto()
     QLearning = enum.auto()
     Sarsa = enum.auto()
+
+
+class EnvironmentType(enum.IntEnum):
+    Cliff = enum.auto()
+    RandomWalk = enum.auto()
+    Windy = enum.auto()

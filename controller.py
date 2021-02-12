@@ -1,5 +1,5 @@
 from __future__ import annotations
-from typing import Optional
+from typing import Optional, Type
 
 import utils
 import common
@@ -8,6 +8,7 @@ import agent
 import algorithm
 import view
 import comparison
+import environment
 import environments
 
 
@@ -15,7 +16,9 @@ class Controller:
     def __init__(self, verbose: bool = False):
         self.verbose: bool = verbose
 
-        self.environment = environments.Windy()
+        # self.environment = environments.Windy()
+        self.environment_type = common.EnvironmentType.Windy
+        self.environment = self._select_environment(self.environment_type)
         # self.environment.verbose = True
         self.greedy_policy: policy.DeterministicPolicy = policy.DeterministicPolicy(self.environment)
         self.e_greedy_policy: policy.EGreedyPolicy = policy.EGreedyPolicy(self.environment,
@@ -36,19 +39,48 @@ class Controller:
         # self.target_agent = agent.Agent(self.environment, self.target_policy)
         # self.behaviour_agent = agent.Agent(self.environment, self.behaviour_policy)
 
-    def setup_and_run(self, comparison_type: common.ComparisonType):
-        if comparison_type == common.ComparisonType.EPISODE_BY_TIMESTEP:
-            self.comparison = comparison.EpisodeByTimestep(self.algorithm_factory, self.graph, verbose=False)
-        elif comparison_type == common.ComparisonType.RETURN_BY_EPISODE:
-            if isinstance(self.environment, environments.Cliff):
-                self.comparison = environments.cliff.ReturnByEpisode(
-                    self.algorithm_factory, self.graph, verbose=False)
-            else:
-                self.comparison = comparison.ReturnByEpisode(self.algorithm_factory, self.graph, verbose=False)
-        elif comparison_type == common.ComparisonType.RETURN_BY_ALPHA:
-            self.comparison = comparison.ReturnByAlpha(self.algorithm_factory, self.graph, verbose=False)
+    def _select_environment(self, environment_type) -> environment.Environment:
+        e = common.EnvironmentType
+        if environment_type == e.Cliff:
+            environment_ = environments.Cliff(verbose=self.verbose)
+        elif environment_type == e.Windy:
+            environment_ = environments.Windy(verbose=self.verbose)
+        elif environment_type == e.RandomWalk:
+            environment_ = environments.RandomWalk(verbose=self.verbose)
         else:
             raise NotImplementedError
+        return environment_
+
+    def setup_and_run(self, comparison_type: common.ComparisonType):
+        e = common.EnvironmentType
+        c = common.ComparisonType
+        comparison_lookup: dict[tuple[e, c], Type[comparison.Comparison]] = {
+            (e.Windy,       c.EPISODE_BY_TIMESTEP):  comparison.EpisodeByTimestep,
+            (e.Windy,       c.RETURN_BY_EPISODE):    comparison.ReturnByEpisode,
+            (e.Windy,       c.RETURN_BY_ALPHA):      comparison.ReturnByAlpha,
+            (e.Cliff,       c.EPISODE_BY_TIMESTEP):  comparison.EpisodeByTimestep,
+            (e.Cliff,       c.RETURN_BY_EPISODE):    environments.cliff.ReturnByEpisode,
+            (e.Cliff,       c.RETURN_BY_ALPHA):      comparison.ReturnByAlpha,
+            (e.RandomWalk,  c.EPISODE_BY_TIMESTEP):  comparison.EpisodeByTimestep,
+            (e.RandomWalk,  c.RETURN_BY_EPISODE):    comparison.ReturnByEpisode,
+            (e.RandomWalk,  c.RETURN_BY_ALPHA):      comparison.ReturnByAlpha,
+        }
+
+        type_for_comparison = comparison_lookup[self.environment_type, comparison_type]
+        self.comparison = type_for_comparison(self.algorithm_factory, self.graph, verbose=False)
+
+        # if comparison_type == common.ComparisonType.EPISODE_BY_TIMESTEP:
+        #     self.comparison = comparison.EpisodeByTimestep(self.algorithm_factory, self.graph, verbose=False)
+        # elif comparison_type == common.ComparisonType.RETURN_BY_EPISODE:
+        #     if isinstance(self.environment, environments.Cliff):
+        #         self.comparison = environments.cliff.ReturnByEpisode(
+        #             self.algorithm_factory, self.graph, verbose=False)
+        #     else:
+        #         self.comparison = comparison.ReturnByEpisode(self.algorithm_factory, self.graph, verbose=False)
+        # elif comparison_type == common.ComparisonType.RETURN_BY_ALPHA:
+        #     self.comparison = comparison.ReturnByAlpha(self.algorithm_factory, self.graph, verbose=False)
+        # else:
+        #     raise NotImplementedError
         self.comparison.build()
 
     def run(self):
