@@ -56,11 +56,11 @@ class Controller:
         # TODO: environment_kwargs
         # environment_kwargs = scenario.environment_kwargs
         e = common.EnvironmentType
-        if environment_type == e.Cliff:
+        if environment_type == e.CLIFF:
             environment_ = environments.Cliff(verbose=self.verbose)
-        elif environment_type == e.Windy:
+        elif environment_type == e.WINDY:
             environment_ = environments.Windy(verbose=self.verbose)
-        elif environment_type == e.RandomWalk:
+        elif environment_type == e.RANDOM_WALK:
             environment_ = environments.RandomWalk(verbose=self.verbose)
         else:
             raise NotImplementedError

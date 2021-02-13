@@ -1,74 +1,46 @@
 from __future__ import annotations
-# from typing import TYPE_CHECKING
+import copy
 
-from common import enums, constants
+from common import enums
 from common.dataclass import scenario, settings
 
-# _e = enums.EnvironmentType
-# _c = enums.ComparisonType
-# _a = enums.AlgorithmType
 
-
-class Scenarios:
-    def __init__(self):
-        self.windy_timestep = self._build_windy_timestep()
-
-    def _build_windy_timestep(self) -> scenario.Scenario:
-        scenario_ = scenario.Scenario(
-            environment_type=enums.EnvironmentType.Windy,
-            environment_kwargs={"random_wind": False},
-            comparison_type=enums.ComparisonType.EPISODE_BY_TIMESTEP,
-            scenario_settings=settings.Settings(
-                runs=50,
-                training_episodes=170,
-                review_every_step=True
-            ),
-            settings_list=[
-                settings.Settings(
-                    algorithm_type=enums.AlgorithmType.Sarsa,
-                    algorithm_parameters={"alpha": 0.5,
-                                          "initial_q_value": 0.0}
-                )
-            ]
+# do we want random_wind to be a parameter?
+windy_timestep = scenario.Scenario(
+    environment_type=enums.EnvironmentType.WINDY,
+    environment_parameters={"random_wind": False},
+    comparison_type=enums.ComparisonType.EPISODE_BY_TIMESTEP,
+    scenario_settings=settings.Settings(
+        runs=50,
+        training_episodes=170,
+        review_every_step=True
+    ),
+    settings_list=[
+        settings.Settings(
+            algorithm_type=enums.AlgorithmType.SARSA,
+            algorithm_parameters={"alpha": 0.5,
+                                  "initial_q_value": -20.0}
         )
+    ]
+)
 
-        for settings_ in scenario_.settings_list:
-            self._fully_populate_settings(scenario_, settings_)
+random_windy_timestep = copy.deepcopy(windy_timestep)
+random_windy_timestep.environment_parameters["random_wind"] = True
 
-        # scenario_.graph_parameters = {
-        #     "y_min": 0,
-        #     "y_max": scenario_.scenario_settings.training_episodes
-        # }
-        return scenario_
-
-    def _fully_populate_settings(self, scenario_: scenario.Scenario, settings_: settings.Settings):
-        # order of precedence: settings_ > scenario_ > default
-        attributes: list[str] = [
-            'gamma',
-            'runs',
-            'run_print_frequency',
-            'training_episodes',
-            'episode_length_timeout',
-            'episode_print_frequency',
-            'episode_to_start_recording',
-            'episode_recording_frequency',
-            'review_every_step'
-        ]
-        for attribute in attributes:
-            settings_value = getattr(settings_, attribute)
-            scenario_value = getattr(scenario_.scenario_settings, attribute)
-            default_value = getattr(constants.default_settings, attribute)
-            # order of precedence: settings_ > scenario_ > default
-            if settings_value is None:
-                if scenario_value is None:
-                    setattr(settings_, attribute, default_value)
-                else:
-                    setattr(settings_, attribute, scenario_value)
-
-        settings_p = settings_.algorithm_parameters
-        scenario_p = scenario_.scenario_settings.algorithm_parameters
-        default_p = constants.default_settings.algorithm_parameters
-
-        # https://stackoverflow.com/questions/38987/how-do-i-merge-two-dictionaries-in-a-single-expression-in-python-taking-union-o
-        # order of precedence: settings_ > scenario_ > default
-        settings_.algorithm_parameters = {**default_p, **scenario_p, **settings_p}
+cliff_alpha = scenario.AlgorithmByAlpha(
+    environment_type=enums.EnvironmentType.CLIFF,
+    comparison_type=enums.ComparisonType.RETURN_BY_ALPHA,
+    scenario_settings=settings.Settings(
+        runs=100,
+        training_episodes=500
+    ),
+    alpha_min=0.1,
+    alpha_max=1.0,
+    alpha_step=0.1,
+    algorithm_type_list=[
+        enums.AlgorithmType.EXPECTED_SARSA,
+        enums.AlgorithmType.VQ,
+        enums.AlgorithmType.Q_LEARNED,
+        enums.AlgorithmType.SARSA
+    ]
+)

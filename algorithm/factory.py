@@ -17,9 +17,9 @@ class Factory:
     def __getitem__(self, settings_: common.Settings) -> abstract.Episodic:
         a = common.AlgorithmType
         algorithm_lookup: dict[a, Type[abstract.Episodic]] = {
-            a.ExpectedSarsa: control.ExpectedSarsa,
-            a.QLearning: control.QLearning,
-            a.Sarsa: control.Sarsa,
+            a.EXPECTED_SARSA: control.ExpectedSarsa,
+            a.Q_LEARNED: control.QLearning,
+            a.SARSA: control.Sarsa,
             a.VQ: control.VQ
         }
         type_for_algorithm = algorithm_lookup[settings_.algorithm_type]

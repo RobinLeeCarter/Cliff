@@ -15,28 +15,29 @@ class ReturnByAlpha(comparison_m.Comparison):
         super().__init__(graph, verbose)
 
         self._algorithm_type_list = [
-            common.AlgorithmType.ExpectedSarsa,
+            common.AlgorithmType.EXPECTED_SARSA,
             common.AlgorithmType.VQ,
-            common.AlgorithmType.QLearning,
-            common.AlgorithmType.Sarsa
+            common.AlgorithmType.Q_LEARNED,
+            common.AlgorithmType.SARSA
         ]
         self._alpha_min = 0.1
         self._alpha_max = 1.0
         self._alpha_step = 0.1
         self._alpha_list = utils.float_range(start=self._alpha_min, stop=self._alpha_max, step_size=self._alpha_step)
+
         recorder_key_type = tuple[type, float]
         self._recorder = recorder.Recorder[recorder_key_type]()
         self._y_label = "Average Return"
 
-    # def build(self):
-    #     self.settings_list = []
-    #     for alpha in self._alpha_list:
-    #         for algorithm_type in self._algorithm_type_list:
-    #             settings_ = common.Settings(
-    #                 algorithm_type=algorithm_type,
-    #                 algorithm_parameters={"alpha": alpha}
-    #             )
-    #             self.settings_list.append(settings_)
+    def build(self):
+        self.settings_list = []
+        for alpha in self._alpha_list:
+            for algorithm_type in self._algorithm_type_list:
+                settings_ = common.Settings(
+                    algorithm_type=algorithm_type,
+                    algorithm_parameters={"alpha": alpha}
+                )
+                self.settings_list.append(settings_)
 
     def record(self):
         trainer = self._trainer

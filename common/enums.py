@@ -23,13 +23,13 @@ class ComparisonType(enum.IntEnum):
 
 
 class AlgorithmType(enum.IntEnum):
-    ExpectedSarsa = enum.auto()
+    EXPECTED_SARSA = enum.auto()
     VQ = enum.auto()
-    QLearning = enum.auto()
-    Sarsa = enum.auto()
+    Q_LEARNED = enum.auto()
+    SARSA = enum.auto()
 
 
 class EnvironmentType(enum.IntEnum):
-    Cliff = enum.auto()
-    RandomWalk = enum.auto()
-    Windy = enum.auto()
+    CLIFF = enum.auto()
+    RANDOM_WALK = enum.auto()
+    WINDY = enum.auto()
