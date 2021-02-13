@@ -31,7 +31,7 @@ class Episodic(abc.ABC):
         initial_q_value = algorithm_parameters['initial_q_value']
         self._V = value_function.StateFunction(self.environment, initial_v_value)
         self._Q = value_function.StateActionFunction(self.environment, initial_q_value)
-        self.gamma: float = self.algorithm_parameters['gamma']
+        self.gamma: float = self.agent.gamma
 
     def initialize(self):
         self._V.initialize_values()

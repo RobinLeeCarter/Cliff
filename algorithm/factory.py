@@ -18,7 +18,7 @@ class Factory:
         a = common.AlgorithmType
         algorithm_lookup: dict[a, Type[abstract.Episodic]] = {
             a.EXPECTED_SARSA: control.ExpectedSarsa,
-            a.Q_LEARNED: control.QLearning,
+            a.Q_LEARNING: control.QLearning,
             a.SARSA: control.Sarsa,
             a.VQ: control.VQ
         }

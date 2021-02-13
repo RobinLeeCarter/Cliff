@@ -1,5 +1,5 @@
 from __future__ import annotations
-from typing import Optional, Type
+from typing import Optional
 
 import utils
 import common
@@ -31,8 +31,10 @@ class Controller:
                                                                           greedy_policy=self.greedy_policy)
         self.agent = agent.Agent(self.environment, self.e_greedy_policy)
 
-        self.algorithm_factory: algorithm.Factory = algorithm.Factory(self.environment, self.agent)
+        self.graph = view.Graph()
+        self.grid_view = view.GridView(self.environment.grid_world)
 
+        self.algorithm_factory: algorithm.Factory = algorithm.Factory(self.environment, self.agent)
         self.comparison: comparison.Comparison = self._create_comparison()
         self.trainer: trainer.Trainer = trainer.Trainer(
             algorithm_factory=self.algorithm_factory,
@@ -40,9 +42,6 @@ class Controller:
             verbose=False
         )
         self.comparison.set_trainer(self.trainer)
-
-        self.graph = view.Graph()
-        self.grid_view = view.GridView(self.environment.grid_world)
 
         # self.target_policy: policy.DeterministicPolicy = policy.DeterministicPolicy(self.environment)
         # self.behaviour_policy: policy.EGreedyPolicy = policy.EGreedyPolicy(self.environment,

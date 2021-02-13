@@ -25,7 +25,7 @@ class ComparisonType(enum.IntEnum):
 class AlgorithmType(enum.IntEnum):
     EXPECTED_SARSA = enum.auto()
     VQ = enum.auto()
-    Q_LEARNED = enum.auto()
+    Q_LEARNING = enum.auto()
     SARSA = enum.auto()
 
 
