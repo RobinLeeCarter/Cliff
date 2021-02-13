@@ -11,8 +11,8 @@ from comparison import comparison_m, recorder
 
 
 class EpisodeByTimestep(comparison_m.Comparison):
-    def __init__(self, graph: view.Graph, verbose: bool = False):
-        super().__init__(graph, verbose)
+    def __init__(self, scenario: common.Scenario, graph: view.Graph, verbose: bool = False):
+        super().__init__(scenario, graph, verbose)
         recorder_key_type = tuple[int, int]
         self._recorder = recorder.Recorder[recorder_key_type]()
         self._max_timestep: int = 0

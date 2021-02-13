@@ -17,8 +17,8 @@ class Controller:
     def __init__(self, verbose: bool = False):
         self.verbose: bool = verbose
 
-        scenarios: common.Scenarios = common.Scenarios()
-        self.scenario: common.Scenario = scenarios.windy_timestep
+        self.scenario: common.Scenario = common.windy_timestep
+
         self.settings: Optional[common.Settings] = None  # current settings
 
         # create environment

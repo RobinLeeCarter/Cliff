@@ -32,7 +32,7 @@ cliff_alpha = scenario.AlgorithmByAlpha(
     comparison_type=enums.ComparisonType.RETURN_BY_ALPHA,
     scenario_settings=settings.Settings(
         runs=100,
-        training_episodes=500
+        training_episodes=100
     ),
     alpha_min=0.1,
     alpha_max=1.0,
@@ -42,5 +42,26 @@ cliff_alpha = scenario.AlgorithmByAlpha(
         enums.AlgorithmType.VQ,
         enums.AlgorithmType.Q_LEARNED,
         enums.AlgorithmType.SARSA
+    ],
+    graph_parameters={"min_y": -140, "max_y:": 0}   # should be a dataclass
+)
+
+cliff_episode = scenario.Scenario(
+    environment_type=enums.EnvironmentType.CLIFF,
+    comparison_type=enums.ComparisonType.RETURN_BY_EPISODE,
+    scenario_settings=settings.Settings(
+        runs=100,
+        training_episodes=500
+    ),
+    settings_list=[
+        settings.Settings(algorithm_type=enums.AlgorithmType.EXPECTED_SARSA,
+                          algorithm_parameters={"alpha": 0.9}),
+        settings.Settings(algorithm_type=enums.AlgorithmType.VQ,
+                          algorithm_parameters={"alpha": 0.2}),
+        settings.Settings(algorithm_type=enums.AlgorithmType.QLearning,
+                          algorithm_parameters={"alpha": 0.5}),
+        settings.Settings(algorithm_type=enums.AlgorithmType.Sarsa,
+                          algorithm_parameters={"alpha": 0.5})
     ]
 )
+

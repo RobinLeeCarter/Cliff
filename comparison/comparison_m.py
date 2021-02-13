@@ -11,9 +11,10 @@ if TYPE_CHECKING:
 
 
 class Comparison(ABC):
-    def __init__(self, graph: view.Graph, verbose: bool = False):
-        self.graph = graph
-        self.verbose = verbose
+    def __init__(self, scenario: common.Scenario, graph: view.Graph, verbose: bool = False):
+        self.scenario: common.Scenario = scenario
+        self.graph: view.Graph = graph
+        self.verbose: bool = verbose
 
         self._trainer: Optional[trainer.Trainer] = None
         self._recorder: Optional[recorder.Recorder] = None
