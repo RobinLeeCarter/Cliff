@@ -4,7 +4,6 @@ from typing import TYPE_CHECKING
 import numpy as np
 
 if TYPE_CHECKING:
-    import algorithm
     import view
 import common
 from comparison import comparison_m, recorder
@@ -17,14 +16,6 @@ class EpisodeByTimestep(comparison_m.Comparison):
         self._recorder = recorder.Recorder[recorder_key_type]()
         self._max_timestep: int = 0
         self._y_label: str = "Episode"
-
-    # def build(self):
-    #     self.settings_list = [
-    #       # settings.Settings(algorithm.ExpectedSarsa, {"alpha": 0.9}),
-    #       # settings.Settings(algorithm.VQ, {"alpha": 0.2}),
-    #       # common.Settings(common.AlgorithmType.QLearning, {"alpha": 0.5}),
-    #       common.Settings(common.AlgorithmType.Sarsa, {"alpha": 0.5})
-    #     ]
 
     def record(self):
         trainer = self._trainer
@@ -43,7 +34,7 @@ class EpisodeByTimestep(comparison_m.Comparison):
         )
 
         # collate output from self.recorder
-        for settings_ in self.settings_list:
+        for settings_ in self.scenario.settings_list:
             values = np.array(
                 [self._recorder[settings_.algorithm_type, timestep] for timestep in timestep_array],
                 dtype=float
@@ -56,12 +47,13 @@ class EpisodeByTimestep(comparison_m.Comparison):
             self.series_list.append(series_)
 
     def draw_graph(self):
-        assumed_settings = self.settings_list[0]
+        scenario_settings = self.scenario.scenario_settings
+
         self.graph.make_plot(x_series=self.x_series,
                              graph_series=self.series_list,
                              y_label=self._y_label,
                              x_min=0,
                              x_max=self._max_timestep,
                              y_min=0,
-                             y_max=assumed_settings.training_episodes
+                             y_max=scenario_settings.training_episodes
                              )

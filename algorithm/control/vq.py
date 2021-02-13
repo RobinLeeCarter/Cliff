@@ -16,7 +16,7 @@ class VQ(abstract.EpisodicOnline):
                  algorithm_parameters: dict[str, any],
                  ):
         super().__init__(environment_, agent_, algorithm_parameters)
-        self.alpha_variable: bool = self._parameter_lookup('alpha_variable', False)
+        self.alpha_variable: bool = self.algorithm_parameters.get('alpha_variable', False)
         self._alpha: float = algorithm_parameters['alpha']
         if self.alpha_variable:
             self.title = f"{VQ.name} α=0.5 then α=0.1"
