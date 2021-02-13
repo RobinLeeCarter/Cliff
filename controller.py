@@ -53,13 +53,14 @@ class Controller:
 
     def _create_environment(self) -> environment.Environment:
         environment_type = self.scenario.environment_type
-        # TODO: environment_kwargs
-        # environment_kwargs = scenario.environment_kwargs
+
+        ep = self.scenario.environment_parameters
         e = common.EnvironmentType
         if environment_type == e.CLIFF:
             environment_ = environments.Cliff(verbose=self.verbose)
         elif environment_type == e.WINDY:
-            environment_ = environments.Windy(verbose=self.verbose)
+            random_wind = ep.get("random_wind", False)
+            environment_ = environments.Windy(random_wind=random_wind, verbose=self.verbose)
         elif environment_type == e.RANDOM_WALK:
             environment_ = environments.RandomWalk(verbose=self.verbose)
         else:
@@ -70,11 +71,12 @@ class Controller:
         c = common.ComparisonType
         comparison_type = self.scenario.comparison_type
         if comparison_type == c.EPISODE_BY_TIMESTEP:
-            comparison_ = comparison.EpisodeByTimestep(self.graph, verbose=False)
+            comparison_ = comparison.EpisodeByTimestep(self.scenario, self.graph)
         elif comparison_type == c.RETURN_BY_EPISODE:
-            comparison_ = comparison.ReturnByEpisode(self.graph, verbose=False)
+            comparison_ = comparison.ReturnByEpisode(self.scenario, self.graph)
         elif comparison_type == c.RETURN_BY_ALPHA:
-            comparison_ = comparison.ReturnByAlpha(self.graph, verbose=False)
+            self.scenario: common.AlgorithmByAlpha
+            comparison_ = comparison.ReturnByAlpha(self.scenario, self.graph)
         else:
             raise NotImplementedError
 
