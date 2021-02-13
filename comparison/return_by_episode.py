@@ -56,7 +56,7 @@ class ReturnByEpisode(comparison_m.Comparison):
         gp = self.scenario.graph_parameters
         moving_average_window_size: Optional[int] = gp.get("moving_average_window_size", None)
         y_min: Optional[float] = gp.get("y_min", None)
-        y_max: Optional[float] = gp.get("y_min", None)
+        y_max: Optional[float] = gp.get("y_max", None)
 
         self.graph.make_plot(x_series=self.x_series,
                              graph_series=self.series_list,

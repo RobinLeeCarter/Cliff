@@ -1,16 +1,15 @@
 from __future__ import annotations
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Optional
 import abc
 
 if TYPE_CHECKING:
     import environment
     import agent
+    import common
 from algorithm import value_function
 
 
 class Episodic(abc.ABC):
-    name: str = "Error EpisodicAlgorithm.name"
-
     def __init__(self,
                  environment_: environment.Environment,
                  agent_: agent.Agent,
@@ -19,6 +18,8 @@ class Episodic(abc.ABC):
         self.environment: environment.Environment = environment_
         self.agent: agent.Agent = agent_
         self.algorithm_parameters: dict[str, any] = algorithm_parameters
+        self.algorithm_type: Optional[common.AlgorithmType] = None
+        self.name: str = "Error: Untitled"
         self.title: str = "Error: Untitled"
         if "verbose" in algorithm_parameters:
             self.verbose: bool = algorithm_parameters["verbose"]

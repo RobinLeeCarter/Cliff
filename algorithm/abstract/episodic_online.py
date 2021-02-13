@@ -9,8 +9,6 @@ from algorithm.abstract import episodic
 
 
 class EpisodicOnline(episodic.Episodic, abc.ABC):
-    name: str = "Error EpisodicOnline.name"
-
     def __init__(self,
                  environment_: environment.Environment,
                  agent_: agent.Agent,

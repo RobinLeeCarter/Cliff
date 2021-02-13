@@ -27,6 +27,8 @@ class AlgorithmType(enum.IntEnum):
     VQ = enum.auto()
     Q_LEARNING = enum.auto()
     SARSA = enum.auto()
+    CONSTANT_ALPHA_MC = enum.auto()
+    TD_0 = enum.auto()
 
 
 class EnvironmentType(enum.IntEnum):

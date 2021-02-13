@@ -4,12 +4,11 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     import environment
     import agent
+import common
 from algorithm import abstract
 
 
 class Sarsa(abstract.EpisodicOnline):
-    name: str = "Sarsa"
-
     def __init__(self,
                  environment_: environment.Environment,
                  agent_: agent.Agent,
@@ -17,7 +16,9 @@ class Sarsa(abstract.EpisodicOnline):
                  ):
         super().__init__(environment_, agent_, algorithm_parameters)
         self._alpha = algorithm_parameters['alpha']
-        self.title = f"{Sarsa.name} α={self._alpha}"
+        self.algorithm_type = common.AlgorithmType.SARSA
+        self.name = common.algorithm_name[self.algorithm_type]
+        self.title = f"{self.name} α={self._alpha}"
 
     def _start_episode(self):
         self.agent.choose_action()

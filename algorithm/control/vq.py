@@ -4,12 +4,11 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     import environment
     import agent
+import common
 from algorithm import abstract
 
 
 class VQ(abstract.EpisodicOnline):
-    name: str = "VQ"
-
     def __init__(self,
                  environment_: environment.Environment,
                  agent_: agent.Agent,
@@ -18,10 +17,13 @@ class VQ(abstract.EpisodicOnline):
         super().__init__(environment_, agent_, algorithm_parameters)
         self.alpha_variable: bool = self.algorithm_parameters.get('alpha_variable', False)
         self._alpha: float = algorithm_parameters['alpha']
+        self.algorithm_type = common.AlgorithmType.SARSA
+        self.name = common.algorithm_name[self.algorithm_type]
+
         if self.alpha_variable:
-            self.title = f"{VQ.name} α=0.5 then α=0.1"
+            self.title = f"{self.name} α=0.5 then α=0.1"
         else:
-            self.title = f"{VQ.name} α={self._alpha}"
+            self.title = f"{self.name} α={self._alpha}"
 
     def parameter_changes(self, iteration: int):
         if self.alpha_variable:

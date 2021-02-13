@@ -31,7 +31,7 @@ cliff_alpha = scenario.AlgorithmByAlpha(
     environment_type=enums.EnvironmentType.CLIFF,
     comparison_type=enums.ComparisonType.RETURN_BY_ALPHA,
     scenario_settings=settings.Settings(
-        runs=100,
+        runs=10,
         training_episodes=100
     ),
     alpha_min=0.1,
@@ -43,7 +43,7 @@ cliff_alpha = scenario.AlgorithmByAlpha(
         enums.AlgorithmType.Q_LEARNING,
         enums.AlgorithmType.SARSA
     ],
-    graph_parameters={"min_y": -140, "max_y:": 0}   # should be a dataclass
+    graph_parameters={"y_min": -140, "y_max:": 0}   # should be a dataclass
 )
 
 cliff_episode = scenario.Scenario(
@@ -62,5 +62,6 @@ cliff_episode = scenario.Scenario(
                           algorithm_parameters={"alpha": 0.5}),
         settings.Settings(algorithm_type=enums.AlgorithmType.SARSA,
                           algorithm_parameters={"alpha": 0.5})
-    ]
+    ],
+    graph_parameters={"y_min": -100, "y_max:": 0}   # should be a dataclass
 )

@@ -38,8 +38,9 @@ class ReturnByAlpha(comparison_m.Comparison):
                 [self._recorder[algorithm_type, alpha] for alpha in self.scenario.alpha_list],
                 dtype=float
             )
+            title = common.algorithm_name[algorithm_type]
             series_ = common.Series(
-                title=algorithm_type.name,
+                title=title,
                 values=values,
                 identifiers={"algorithm_type": algorithm_type}
             )
@@ -48,7 +49,7 @@ class ReturnByAlpha(comparison_m.Comparison):
     def draw_graph(self):
         gp = self.scenario.graph_parameters
         y_min: Optional[float] = gp.get("y_min", None)
-        y_max: Optional[float] = gp.get("y_min", None)
+        y_max: Optional[float] = gp.get("y_max", None)
 
         self.graph.make_plot(x_series=self.x_series,
                              graph_series=self.series_list,
