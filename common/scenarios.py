@@ -20,7 +20,8 @@ class Scenarios:
             comparison_type=enums.ComparisonType.EPISODE_BY_TIMESTEP,
             scenario_settings=settings.Settings(
                 runs=50,
-                training_episodes=170
+                training_episodes=170,
+                review_every_step=True
             ),
             settings_list=[
                 settings.Settings(
@@ -50,7 +51,8 @@ class Scenarios:
             'episode_length_timeout',
             'episode_print_frequency',
             'episode_to_start_recording',
-            'episode_recording_frequency'
+            'episode_recording_frequency',
+            'review_every_step'
         ]
         for attribute in attributes:
             settings_value = getattr(settings_, attribute)

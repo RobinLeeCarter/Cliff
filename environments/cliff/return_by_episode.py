@@ -5,10 +5,10 @@ import comparison
 
 
 class ReturnByEpisode(comparison.ReturnByEpisode):
-    def build(self):
-        self.settings_list = [
-          common.Settings(common.AlgorithmType.Sarsa, {"alpha": 0.5})
-        ]
+    # def build(self):
+    #     self.settings_list = [
+    #       common.Settings(common.AlgorithmType.Sarsa, {"alpha": 0.5})
+    #     ]
 
     def draw_graph(self):
         assumed_settings = self.settings_list[0]

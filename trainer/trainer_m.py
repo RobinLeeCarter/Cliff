@@ -27,13 +27,13 @@ class Trainer:
         self.episode: Optional[agent.Episode] = None
         self.max_t: int = 0
         self.total_return: float = 0.0
-        self.review_every_step: bool = False
 
     def train(self, settings: common.Settings):
+        # process settings
         self.settings = settings
         self.algorithm_ = self.algorithm_factory[self.settings]
         self.algorithm_.agent.set_gamma(settings.gamma)
-        if self.review_every_step:
+        if settings.review_every_step:
             self.algorithm_.agent.set_step_callback(self.review_step)
         settings.algorithm_title = self.algorithm_.title
         print(f"{self.algorithm_.title}: {settings.runs} runs")
@@ -51,7 +51,7 @@ class Trainer:
                 if self.verbose or self.episode_counter % settings.episode_print_frequency == 0:
                     print(f"episode_counter = {self.episode_counter}")
 
-                if not self.review_every_step and self.timestep != 0:
+                if not settings.review_every_step and self.timestep != 0:
                     self.timestep += 1  # start next episode from the next timestep
                 self.algorithm_.do_episode(settings.episode_length_timeout)
                 self.episode = self.algorithm_.agent.episode
@@ -59,7 +59,7 @@ class Trainer:
                 self.total_return = self.episode.total_return
                 # if self.verbose:
                 #     print(f"max_t = {max_t} \ttotal_return = {total_return:.2f}")
-                if not self.review_every_step:
+                if not settings.review_every_step:
                     self.timestep += self.max_t
                     self.comparison.review()
             self.max_timestep = max(self.max_timestep, self.timestep)

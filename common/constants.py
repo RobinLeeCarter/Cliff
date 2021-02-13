@@ -20,5 +20,6 @@ default_settings = dataclass.Settings(
     episode_length_timeout=1000,
     episode_print_frequency=1000,
     episode_to_start_recording=0,
-    episode_recording_frequency=1
+    episode_recording_frequency=1,
+    review_every_step=False
 )

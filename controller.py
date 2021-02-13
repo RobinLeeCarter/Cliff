@@ -10,6 +10,7 @@ import view
 import comparison
 import environment
 import environments
+import trainer
 
 
 class Controller:
@@ -18,10 +19,12 @@ class Controller:
 
         scenarios: common.Scenarios = common.Scenarios()
         self.scenario: common.Scenario = scenarios.windy_timestep
+        self.settings: Optional[common.Settings] = None  # current settings
 
-        self.environment = self._create_environment(self.scenario)
+        # create environment
+        self.environment = self._create_environment()
 
-        # self.environment.verbose = True
+        # create policy and agent
         # TODO: have e-greedy_policy make it's own DetermintisticPolicy
         self.greedy_policy: policy.DeterministicPolicy = policy.DeterministicPolicy(self.environment)
         self.e_greedy_policy: policy.EGreedyPolicy = policy.EGreedyPolicy(self.environment,
@@ -30,7 +33,13 @@ class Controller:
 
         self.algorithm_factory: algorithm.Factory = algorithm.Factory(self.environment, self.agent)
 
-        self.comparison: Optional[comparison.Comparison] = None
+        self.comparison: comparison.Comparison = self._create_comparison()
+        self.trainer: trainer.Trainer = trainer.Trainer(
+            algorithm_factory=self.algorithm_factory,
+            comparison_=self.comparison,
+            verbose=False
+        )
+        self.comparison.set_trainer(self.trainer)
 
         self.graph = view.Graph()
         self.grid_view = view.GridView(self.environment.grid_world)
@@ -42,8 +51,8 @@ class Controller:
         # self.target_agent = agent.Agent(self.environment, self.target_policy)
         # self.behaviour_agent = agent.Agent(self.environment, self.behaviour_policy)
 
-    def _create_environment(self, scenario: common.Scenario) -> environment.Environment:
-        environment_type = scenario.environment_type
+    def _create_environment(self) -> environment.Environment:
+        environment_type = self.scenario.environment_type
         # TODO: environment_kwargs
         # environment_kwargs = scenario.environment_kwargs
         e = common.EnvironmentType
@@ -57,44 +66,26 @@ class Controller:
             raise NotImplementedError
         return environment_
 
-    def setup_and_run(self, comparison_type: common.ComparisonType):
-        e = common.EnvironmentType
+    def _create_comparison(self) -> comparison.Comparison:
         c = common.ComparisonType
-        comparison_lookup: dict[tuple[e, c], Type[comparison.Comparison]] = {
-            (e.Windy,       c.EPISODE_BY_TIMESTEP):  comparison.EpisodeByTimestep,
-            (e.Windy,       c.RETURN_BY_EPISODE):    comparison.ReturnByEpisode,
-            (e.Windy,       c.RETURN_BY_ALPHA):      comparison.ReturnByAlpha,
-            (e.Cliff,       c.EPISODE_BY_TIMESTEP):  comparison.EpisodeByTimestep,
-            (e.Cliff,       c.RETURN_BY_EPISODE):    environments.cliff.ReturnByEpisode,
-            (e.Cliff,       c.RETURN_BY_ALPHA):      comparison.ReturnByAlpha,
-            (e.RandomWalk,  c.EPISODE_BY_TIMESTEP):  comparison.EpisodeByTimestep,
-            (e.RandomWalk,  c.RETURN_BY_EPISODE):    comparison.ReturnByEpisode,
-            (e.RandomWalk,  c.RETURN_BY_ALPHA):      comparison.ReturnByAlpha,
-        }
+        comparison_type = self.scenario.comparison_type
+        if comparison_type == c.EPISODE_BY_TIMESTEP:
+            comparison_ = comparison.EpisodeByTimestep(self.graph, verbose=False)
+        elif comparison_type == c.RETURN_BY_EPISODE:
+            comparison_ = comparison.ReturnByEpisode(self.graph, verbose=False)
+        elif comparison_type == c.RETURN_BY_ALPHA:
+            comparison_ = comparison.ReturnByAlpha(self.graph, verbose=False)
+        else:
+            raise NotImplementedError
 
-        type_for_comparison = comparison_lookup[self.environment_type, comparison_type]
-        self.comparison = type_for_comparison(self.algorithm_factory, self.graph, verbose=False)
-
-        # if comparison_type == common.ComparisonType.EPISODE_BY_TIMESTEP:
-        #     self.comparison = comparison.EpisodeByTimestep(self.algorithm_factory, self.graph, verbose=False)
-        # elif comparison_type == common.ComparisonType.RETURN_BY_EPISODE:
-        #     if isinstance(self.environment, environments.Cliff):
-        #         self.comparison = environments.cliff.ReturnByEpisode(
-        #             self.algorithm_factory, self.graph, verbose=False)
-        #     else:
-        #         self.comparison = comparison.ReturnByEpisode(self.algorithm_factory, self.graph, verbose=False)
-        # elif comparison_type == common.ComparisonType.RETURN_BY_ALPHA:
-        #     self.comparison = comparison.ReturnByAlpha(self.algorithm_factory, self.graph, verbose=False)
-        # else:
-        #     raise NotImplementedError
-        self.comparison.build()
+        return comparison_
 
     def run(self):
         timer: utils.Timer = utils.Timer()
         timer.start()
-        for settings in self.scenario.settings_list:
-            self.comparison.train(settings)
-            timer.lap(name=str(settings.algorithm_title))
+        for self.settings in self.scenario.settings_list:
+            self.trainer.train(self.settings)
+            timer.lap(name=str(self.settings.algorithm_title))
         timer.stop()
 
         self.comparison.compile()
@@ -105,7 +96,7 @@ class Controller:
         running_average = 0
         count = 0
         while True:
-            self.agent.generate_episode()
+            self.agent.generate_episode(self.settings.episode_length_timeout)
             episode = self.agent.episode
             print(f"max_t: {episode.max_t} \t total_return: {episode.total_return:.0f}")
             count += 1
@@ -146,3 +137,51 @@ class Controller:
         # user_event: common.UserEvent = self.grid_view.display_episode(episode, show_trail=False)
         # if user_event == common.UserEvent.QUIT:
         #     break
+
+        # e = common.EnvironmentType
+        # c = common.ComparisonType
+        # comparison_lookup: dict[tuple[e, c], Type[comparison.Comparison]] = {
+        #     (e.Windy,       c.EPISODE_BY_TIMESTEP):  comparison.EpisodeByTimestep,
+        #     (e.Windy,       c.RETURN_BY_EPISODE):    comparison.ReturnByEpisode,
+        #     (e.Windy,       c.RETURN_BY_ALPHA):      comparison.ReturnByAlpha,
+        #     (e.Cliff,       c.EPISODE_BY_TIMESTEP):  comparison.EpisodeByTimestep,
+        #     (e.Cliff,       c.RETURN_BY_EPISODE):    environments.cliff.ReturnByEpisode,
+        #     (e.Cliff,       c.RETURN_BY_ALPHA):      comparison.ReturnByAlpha,
+        #     (e.RandomWalk,  c.EPISODE_BY_TIMESTEP):  comparison.EpisodeByTimestep,
+        #     (e.RandomWalk,  c.RETURN_BY_EPISODE):    comparison.ReturnByEpisode,
+        #     (e.RandomWalk,  c.RETURN_BY_ALPHA):      comparison.ReturnByAlpha,
+        # }
+
+        # c = common.ComparisonType
+        # comparison_lookup: dict[c, Type[comparison.Comparison]] = {
+        #     c.EPISODE_BY_TIMESTEP:  comparison.EpisodeByTimestep,
+        #     c.RETURN_BY_EPISODE:    comparison.ReturnByEpisode,
+        #     c.RETURN_BY_ALPHA:      comparison.ReturnByAlpha,
+        # }
+        # type_for_comparison = comparison_lookup[self.scenario.comparison_type]
+        # comparison_ = type_for_comparison(self.graph, verbose=False)
+
+    # def setup_and_run(self, comparison_type: common.ComparisonType):
+    #     e = common.EnvironmentType
+    #     c = common.ComparisonType
+    #     comparison_lookup: dict[tuple[e, c], Type[comparison.Comparison]] = {
+    #         (e.Windy,       c.EPISODE_BY_TIMESTEP):  comparison.EpisodeByTimestep,
+    #         (e.Windy,       c.RETURN_BY_EPISODE):    comparison.ReturnByEpisode,
+    #         (e.Windy,       c.RETURN_BY_ALPHA):      comparison.ReturnByAlpha,
+    #         (e.Cliff,       c.EPISODE_BY_TIMESTEP):  comparison.EpisodeByTimestep,
+    #         (e.Cliff,       c.RETURN_BY_EPISODE):    environments.cliff.ReturnByEpisode,
+    #         (e.Cliff,       c.RETURN_BY_ALPHA):      comparison.ReturnByAlpha,
+    #         (e.RandomWalk,  c.EPISODE_BY_TIMESTEP):  comparison.EpisodeByTimestep,
+    #         (e.RandomWalk,  c.RETURN_BY_EPISODE):    comparison.ReturnByEpisode,
+    #         (e.RandomWalk,  c.RETURN_BY_ALPHA):      comparison.ReturnByAlpha,
+    #     }
+    #
+    #     type_for_comparison = comparison_lookup[self.environment_type, comparison_type]
+    #     self.comparison = type_for_comparison(self.graph, verbose=False)
+    #
+    #     self.trainer = trainer.Trainer(
+    #         algorithm_factory=self.algorithm_factory,
+    #         comparison_=self.comparison,
+    #         verbose=False
+    #     )
+    #     self.comparison.set_trainer(self.trainer)

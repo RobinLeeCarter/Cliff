@@ -21,5 +21,6 @@ class Settings:
 
     episode_to_start_recording: Optional[int] = None
     episode_recording_frequency: Optional[int] = None
+    review_every_step: Optional[bool] = None
 
     algorithm_title: str = ""   # algorithm title will be populated by Trainer later whether it's used or not

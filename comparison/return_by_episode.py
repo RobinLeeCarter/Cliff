@@ -11,19 +11,19 @@ from comparison import comparison_m, recorder
 
 
 class ReturnByEpisode(comparison_m.Comparison):
-    def __init__(self, algorithm_factory: algorithm.Factory, graph: view.Graph, verbose: bool = False):
-        super().__init__(algorithm_factory, graph, verbose)
+    def __init__(self, graph: view.Graph, verbose: bool = False):
+        super().__init__(graph, verbose)
         recorder_key_type = tuple[type, int]
         self._recorder = recorder.Recorder[recorder_key_type]()
         self._y_label = "Average Return"
 
-    def build(self):
-        self.settings_list = [
-          # settings.Settings(algorithm.ExpectedSarsa, {"alpha": 0.9}),
-          # settings.Settings(algorithm.VQ, {"alpha": 0.2}),
-          common.Settings(common.AlgorithmType.QLearning, {"alpha": 0.5}),
-          common.Settings(common.AlgorithmType.Sarsa, {"alpha": 0.5})
-        ]
+    # def build(self):
+    #     self.settings_list = [
+    #       # settings.Settings(algorithm.ExpectedSarsa, {"alpha": 0.9}),
+    #       # settings.Settings(algorithm.VQ, {"alpha": 0.2}),
+    #       common.Settings(common.AlgorithmType.QLearning, {"alpha": 0.5}),
+    #       common.Settings(common.AlgorithmType.Sarsa, {"alpha": 0.5})
+    #     ]
 
     def record(self):
         trainer = self._trainer

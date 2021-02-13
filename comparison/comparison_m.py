@@ -5,35 +5,25 @@ from typing import Optional, TYPE_CHECKING
 
 if TYPE_CHECKING:
     import common
-    import algorithm
     import view
     from comparison import recorder
-from comparison import trainer
+    import trainer
 
 
 class Comparison(ABC):
-    def __init__(self, algorithm_factory: algorithm.Factory, graph: view.Graph, verbose: bool = False):
-        self.algorithm_factory: algorithm.Factory = algorithm_factory
+    def __init__(self, graph: view.Graph, verbose: bool = False):
         self.graph = graph
         self.verbose = verbose
 
-        self._trainer = trainer.Trainer(
-            algorithm_factory=self.algorithm_factory,
-            comparison_=self,
-            verbose=False
-        )
+        self._trainer: Optional[trainer.Trainer] = None
         self._recorder: Optional[recorder.Recorder] = None
-        self.settings_list: list[common.Settings] = []
+        # self.settings_list: list[common.Settings] = []
         self.x_series: Optional[common.Series] = None
         self.series_list: list[common.Series] = []
         self._y_label: str = ""
 
-    @abstractmethod
-    def build(self):
-        pass
-
-    def train(self, settings: common.Settings):
-        self._trainer.train(settings)
+    def set_trainer(self, trainer_: trainer.Trainer):
+        self._trainer = trainer_
 
     def review(self):
         episode_counter = self._trainer.episode_counter

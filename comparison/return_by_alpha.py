@@ -5,15 +5,14 @@ import numpy as np
 
 if TYPE_CHECKING:
     import view
-    import algorithm
 import utils
 import common
 from comparison import comparison_m, recorder
 
 
 class ReturnByAlpha(comparison_m.Comparison):
-    def __init__(self, algorithm_factory: algorithm.Factory, graph: view.Graph, verbose: bool = False):
-        super().__init__(algorithm_factory, graph, verbose)
+    def __init__(self, graph: view.Graph, verbose: bool = False):
+        super().__init__(graph, verbose)
 
         self._algorithm_type_list = [
             common.AlgorithmType.ExpectedSarsa,
@@ -29,15 +28,15 @@ class ReturnByAlpha(comparison_m.Comparison):
         self._recorder = recorder.Recorder[recorder_key_type]()
         self._y_label = "Average Return"
 
-    def build(self):
-        self.settings_list = []
-        for alpha in self._alpha_list:
-            for algorithm_type in self._algorithm_type_list:
-                settings_ = common.Settings(
-                    algorithm_type=algorithm_type,
-                    algorithm_parameters={"alpha": alpha}
-                )
-                self.settings_list.append(settings_)
+    # def build(self):
+    #     self.settings_list = []
+    #     for alpha in self._alpha_list:
+    #         for algorithm_type in self._algorithm_type_list:
+    #             settings_ = common.Settings(
+    #                 algorithm_type=algorithm_type,
+    #                 algorithm_parameters={"alpha": alpha}
+    #             )
+    #             self.settings_list.append(settings_)
 
     def record(self):
         trainer = self._trainer
