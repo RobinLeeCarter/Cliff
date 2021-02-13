@@ -17,7 +17,7 @@ class VQ(abstract.EpisodicOnline):
         super().__init__(environment_, agent_, algorithm_parameters)
         self.alpha_variable: bool = self.algorithm_parameters.get('alpha_variable', False)
         self._alpha: float = algorithm_parameters['alpha']
-        self.algorithm_type = common.AlgorithmType.SARSA
+        self.algorithm_type = common.AlgorithmType.VQ
         self.name = common.algorithm_name[self.algorithm_type]
 
         if self.alpha_variable:

@@ -19,23 +19,22 @@ class Graph:
                   x_series: common.Series,
                   graph_series: list[common.Series],
                   y_label: str,
-                  moving_average_window_size: int = 0,
+                  moving_average_window_size: Optional[int] = None,
                   x_min: Optional[float] = None,
                   x_max: Optional[float] = None,
                   y_min: Optional[float] = None,
                   y_max: Optional[float] = None
                   ):
-        is_moving_average = (moving_average_window_size >= 3)
-        if is_moving_average:
-            self.title = f"Moving average of {y_label} vs {x_series.title}"
-        else:
+        if moving_average_window_size is None:
             self.title = f"{y_label} vs {x_series.title}"
+        else:
+            self.title = f"Moving average of {y_label} vs {x_series.title}"
 
         self.pre_plot()
-        if is_moving_average:
-            self.moving_average_plot(x_series, graph_series, moving_average_window_size)
-        else:
+        if moving_average_window_size is None:
             self.plot_arrays(x_series, graph_series)
+        else:
+            self.moving_average_plot(x_series, graph_series, moving_average_window_size)
         self.post_plot(x_min=x_min, x_max=x_max, x_label=x_series.title,
                        y_min=y_min, y_max=y_max, y_label=y_label)
         plt.show()

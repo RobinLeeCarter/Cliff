@@ -17,7 +17,7 @@ class Scenario:
     environment_parameters: dict[str, any] = dataclasses.field(default_factory=dict)
 
     # output
-    graph_parameters: dict[str, any] = dataclasses.field(default_factory=dict)
+    graph_parameters: dict[str, any] = dataclasses.field(default_factory=dict)  # should be a dataclass
 
     def __post_init__(self):
         assert self.settings_list
@@ -45,6 +45,7 @@ class Scenario:
             # order of precedence: settings_ > scenario_ > default
             if settings_value is None:
                 if scenario_value is None:
+                    setattr(self.scenario_settings, attribute, default_value)
                     setattr(settings_, attribute, default_value)
                 else:
                     setattr(settings_, attribute, scenario_value)

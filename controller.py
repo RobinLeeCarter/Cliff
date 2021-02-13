@@ -18,8 +18,8 @@ class Controller:
         self.verbose: bool = verbose
 
         # self.scenario: common.Scenario = common.scenarios.windy_timestep
-        # self.scenario: common.Scenario = common.scenarios.random_windy_timestep
-        self.scenario: common.Scenario = common.scenarios.cliff_alpha
+        self.scenario: common.Scenario = common.scenarios.random_windy_timestep
+        # self.scenario: common.Scenario = common.scenarios.cliff_alpha
         # self.scenario: common.Scenario = common.scenarios.cliff_episode
 
         self.settings: Optional[common.Settings] = None  # current settings
