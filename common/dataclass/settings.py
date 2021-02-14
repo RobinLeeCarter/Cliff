@@ -10,7 +10,6 @@ from common.dataclass import algorithm_parameters_, policy_parameters_
 class Settings:
     gamma: Optional[float] = None
 
-    algorithm_type: Optional[enums.AlgorithmType] = None
     algorithm_parameters: algorithm_parameters_.AlgorithmParameters = \
         dataclasses.field(default_factory=algorithm_parameters_.default_factory)
 
@@ -29,9 +28,6 @@ class Settings:
     review_every_step: Optional[bool] = None
 
     algorithm_title: str = ""   # algorithm title will be populated by Trainer later whether it's used or not
-
-    def test(self):
-        print(default_settings)
 
 
 precedence_attribute_names: list[str] = [

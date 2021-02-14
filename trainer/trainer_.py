@@ -31,7 +31,7 @@ class Trainer:
     def train(self, settings: common.Settings):
         # process settings
         self.settings = settings
-        self.algorithm_ = self.algorithm_factory[self.settings]
+        self.algorithm_ = self.algorithm_factory[self.settings.algorithm_parameters]
         self.algorithm_.agent.new_policy(settings.policy_parameters)
         self.algorithm_.agent.set_gamma(settings.gamma)
         if settings.review_every_step:

@@ -19,8 +19,8 @@ windy_timestep = common.Scenario(
     ),
     settings_list=[
         common.Settings(
-            algorithm_type=common.AlgorithmType.SARSA,
             algorithm_parameters=common.AlgorithmParameters(
+                algorithm_type=common.AlgorithmType.SARSA,
                 alpha=0.5,
                 initial_q_value=-20.0
             )
@@ -62,14 +62,22 @@ cliff_episode = common.Scenario(
         # policy_parameters=common.PolicyParameters(epsilon=0.2)
     ),
     settings_list=[
-        common.Settings(algorithm_type=common.AlgorithmType.EXPECTED_SARSA,
-                        algorithm_parameters=common.AlgorithmParameters(alpha=0.9)),
-        common.Settings(algorithm_type=common.AlgorithmType.VQ,
-                        algorithm_parameters=common.AlgorithmParameters(alpha=0.2)),
-        common.Settings(algorithm_type=common.AlgorithmType.Q_LEARNING,
-                        algorithm_parameters=common.AlgorithmParameters(alpha=0.5)),
-        common.Settings(algorithm_type=common.AlgorithmType.SARSA,
-                        algorithm_parameters=common.AlgorithmParameters(alpha=0.5)),
+        common.Settings(algorithm_parameters=common.AlgorithmParameters(
+            algorithm_type=common.AlgorithmType.EXPECTED_SARSA,
+            alpha=0.9
+        )),
+        common.Settings(algorithm_parameters=common.AlgorithmParameters(
+            algorithm_type=common.AlgorithmType.VQ,
+            alpha=0.2
+        )),
+        common.Settings(algorithm_parameters=common.AlgorithmParameters(
+            algorithm_type=common.AlgorithmType.Q_LEARNING,
+            alpha=0.5
+        )),
+        common.Settings(algorithm_parameters=common.AlgorithmParameters(
+            algorithm_type=common.AlgorithmType.SARSA,
+            alpha=0.5
+        )),
     ],
     graph_parameters=common.GraphParameters(
         moving_average_window_size=19,

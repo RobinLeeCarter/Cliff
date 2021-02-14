@@ -19,7 +19,7 @@ class EpisodeByTimestep(comparison_.Comparison):
 
     def record(self):
         trainer = self._trainer
-        algorithm_type = trainer.settings.algorithm_type
+        algorithm_type = trainer.settings.algorithm_parameters.algorithm_type
         timestep = trainer.timestep
         episode_counter = trainer.episode_counter
         self._recorder[algorithm_type, timestep] = episode_counter
@@ -36,12 +36,13 @@ class EpisodeByTimestep(comparison_.Comparison):
         # collate output from self.recorder
         for settings_ in self.scenario.settings_list:
             values = np.array(
-                [self._recorder[settings_.algorithm_type, timestep] for timestep in timestep_array],
+                [self._recorder[settings_.algorithm_parameters.algorithm_type, timestep]
+                 for timestep in timestep_array],
                 dtype=float
             )
             series_ = common.Series(
                 title=settings_.algorithm_title,
-                identifiers={"algorithm_type": settings_.algorithm_type},
+                identifiers={"algorithm_type": settings_.algorithm_parameters.algorithm_type},
                 values=values
             )
             self.series_list.append(series_)

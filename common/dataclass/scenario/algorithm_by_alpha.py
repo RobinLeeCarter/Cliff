@@ -33,8 +33,10 @@ class AlgorithmByAlpha(scenario_m.Scenario):
         for alpha in self.alpha_list:
             for algorithm_type in self.algorithm_type_list:
                 settings_ = settings.Settings(
-                    algorithm_type=algorithm_type,
-                    algorithm_parameters=algorithm_parameters_.AlgorithmParameters(alpha=alpha)
+                    algorithm_parameters=algorithm_parameters_.AlgorithmParameters(
+                        algorithm_type=algorithm_type,
+                        alpha=alpha
+                    )
                 )
                 self.settings_list.append(settings_)
 

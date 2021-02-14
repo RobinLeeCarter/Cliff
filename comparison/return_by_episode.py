@@ -18,7 +18,7 @@ class ReturnByEpisode(comparison_.Comparison):
 
     def record(self):
         trainer = self._trainer
-        algorithm_type = trainer.settings.algorithm_type
+        algorithm_type = trainer.settings.algorithm_parameters.algorithm_type
         episode_counter = trainer.episode_counter
         total_return = trainer.episode.total_return
         self._recorder[algorithm_type, episode_counter] = total_return
@@ -41,12 +41,13 @@ class ReturnByEpisode(comparison_.Comparison):
         # collate output from self.recorder
         for settings_ in self.scenario.settings_list:
             values = np.array(
-                [self._recorder[settings_.algorithm_type, episode_counter] for episode_counter in episode_array],
+                [self._recorder[settings_.algorithm_parameters.algorithm_type, episode_counter]
+                 for episode_counter in episode_array],
                 dtype=float
             )
             series_ = common.Series(
                 title=settings_.algorithm_title,
-                identifiers={"algorithm_type": settings_.algorithm_type},
+                identifiers={"algorithm_type": settings_.algorithm_parameters.algorithm_type},
                 values=values
             )
             self.series_list.append(series_)

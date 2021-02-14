@@ -14,7 +14,7 @@ class Factory:
         self.environment: environment.Environment = environment_
         self.agent: agent.Agent = agent_
 
-    def __getitem__(self, settings_: common.Settings) -> abstract.Episodic:
+    def __getitem__(self, algorithm_parameters: common.Settings.algorithm_parameters) -> abstract.Episodic:
         a = common.AlgorithmType
         algorithm_lookup: dict[a, Type[abstract.Episodic]] = {
             a.EXPECTED_SARSA: control.ExpectedSarsa,
@@ -22,6 +22,6 @@ class Factory:
             a.SARSA: control.Sarsa,
             a.VQ: control.VQ
         }
-        type_for_algorithm = algorithm_lookup[settings_.algorithm_type]
-        algorithm_ = type_for_algorithm(self.environment, self.agent, settings_.algorithm_parameters)
+        type_for_algorithm = algorithm_lookup[algorithm_parameters.algorithm_type]
+        algorithm_ = type_for_algorithm(self.environment, self.agent, algorithm_parameters)
         return algorithm_
