@@ -29,7 +29,10 @@ class Controller:
         self.environment = self._create_environment()
 
         # create policy and agent
-        self.e_greedy_policy: policy.EGreedyPolicy = policy.EGreedyPolicy(self.environment)
+        self.e_greedy_policy: policy.EGreedyPolicy = policy.EGreedyPolicy(
+            environment_=self.environment,
+            epsilon=self.scenario.scenario_settings.policy_parameters.epsilon
+        )
         self.agent = agent.Agent(self.environment, self.e_greedy_policy)
 
         self.graph = view.Graph()

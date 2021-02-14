@@ -8,7 +8,7 @@ from policy import random_policy, deterministic_policy
 
 
 class EGreedyPolicy(random_policy.RandomPolicy):
-    def __init__(self, environment_: environment.Environment, epsilon: float = 0.1):
+    def __init__(self, environment_: environment.Environment, epsilon: float):
         super().__init__(environment_)
         self.greedy_policy: deterministic_policy.DeterministicPolicy =\
             deterministic_policy.DeterministicPolicy(self.environment)

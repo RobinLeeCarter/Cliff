@@ -2,7 +2,8 @@ from __future__ import annotations
 import dataclasses
 
 from common import enums
-from common.dataclass import settings, graph_parameters_, algorithm_parameters_, environment_parameters_
+from common.dataclass import settings, algorithm_parameters_, policy_parameters_,\
+    environment_parameters_, graph_parameters_
 
 
 @dataclasses.dataclass
@@ -28,6 +29,7 @@ class Scenario:
         for settings_ in self.settings_list:
             self._coalesce_settings(settings_)
             self._coalesce_algorithm_parameters(settings_.algorithm_parameters)
+            self._coalesce_policy_parameters(settings_.policy_parameters)
 
     def _coalesce_settings(self, settings_s: settings.Settings):
         """combine settings values
@@ -65,7 +67,26 @@ class Scenario:
                 else:
                     setattr(settings_ap, attribute_name, scenario_value)
 
-        # https://stackoverflow.com/questions/38987/how-do-i-merge-two-dictionaries-in-a-single-expression-in-python-taking-union-o
-        # order of precedence: settings_ > scenario_ > default
-        # algorithm_parameters_kwargs = {**default_ap.__dict__, **scenario_ap.__dict__, **settings_ap.__dict__}
-        # settings_.algorithm_parameters = algorithm_parameters_.AlgorithmParameters(**algorithm_parameters_kwargs)
+    def _coalesce_policy_parameters(self, settings_pp: policy_parameters_.PolicyParameters):
+        """combine algorithm_parameters
+        order of precedence: settings > scenario > default"""
+        scenario_pp: policy_parameters_.PolicyParameters = self.scenario_settings.policy_parameters
+        default_pp: policy_parameters_.PolicyParameters = settings.default_settings.policy_parameters
+
+        for attribute_name in policy_parameters_.precedence_attribute_names:
+            settings_value = getattr(settings_pp, attribute_name)
+            scenario_value = getattr(scenario_pp, attribute_name)
+            default_value = getattr(default_pp, attribute_name)
+            # order of precedence: settings_ > scenario_ > default
+            if settings_value is None:
+                if scenario_value is None:
+                    setattr(scenario_pp, attribute_name, default_value)
+                    setattr(settings_pp, attribute_name, default_value)
+                else:
+                    setattr(settings_pp, attribute_name, scenario_value)
+
+
+# https://stackoverflow.com/questions/38987/how-do-i-merge-two-dictionaries-in-a-single-expression-in-python-taking-union-o
+# order of precedence: settings_ > scenario_ > default
+# algorithm_parameters_kwargs = {**default_ap.__dict__, **scenario_ap.__dict__, **settings_ap.__dict__}
+# settings_.algorithm_parameters = algorithm_parameters_.AlgorithmParameters(**algorithm_parameters_kwargs)

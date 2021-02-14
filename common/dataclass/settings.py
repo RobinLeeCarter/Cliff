@@ -3,7 +3,7 @@ import dataclasses
 from typing import Optional
 
 from common import enums
-from common.dataclass import algorithm_parameters_
+from common.dataclass import algorithm_parameters_, policy_parameters_
 
 
 @dataclasses.dataclass
@@ -13,6 +13,9 @@ class Settings:
     algorithm_type: Optional[enums.AlgorithmType] = None
     algorithm_parameters: algorithm_parameters_.AlgorithmParameters = \
         dataclasses.field(default_factory=algorithm_parameters_.default_factory)
+
+    policy_parameters: policy_parameters_.PolicyParameters = \
+        dataclasses.field(default_factory=policy_parameters_.default_factory)
 
     runs: Optional[int] = None
     run_print_frequency: Optional[int] = None
@@ -49,6 +52,9 @@ default_settings = Settings(
         initial_v_value=0.0,
         initial_q_value=0.0,
         verbose=True
+    ),
+    policy_parameters=policy_parameters_.PolicyParameters(
+        epsilon=0.1
     ),
     runs=10,
     run_print_frequency=10,
