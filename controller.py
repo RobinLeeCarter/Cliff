@@ -17,9 +17,9 @@ class Controller:
     def __init__(self, verbose: bool = False):
         self.verbose: bool = verbose
 
-        self.scenario: common.Scenario = common.scenarios.windy_timestep
+        # self.scenario: common.Scenario = common.scenarios.windy_timestep
         # self.scenario: common.Scenario = common.scenarios.random_windy_timestep
-        # self.scenario: common.Scenario = common.scenarios.cliff_alpha
+        self.scenario: common.Scenario = common.scenarios.cliff_alpha
         # self.scenario: common.Scenario = common.scenarios.cliff_episode
 
         self.settings: Optional[common.Settings] = None  # current settings
@@ -56,15 +56,14 @@ class Controller:
     def _create_environment(self) -> environment.Environment:
         environment_type = self.scenario.environment_type
 
-        ep = self.scenario.environment_parameters
+        ep: common.EnvironmentParameters = self.scenario.environment_parameters
         e = common.EnvironmentType
         if environment_type == e.CLIFF:
-            environment_ = environments.Cliff(verbose=self.verbose)
+            environment_ = environments.Cliff(verbose=ep.verbose)
         elif environment_type == e.WINDY:
-            random_wind = ep.get("random_wind", False)
-            environment_ = environments.Windy(random_wind=random_wind, verbose=self.verbose)
+            environment_ = environments.Windy(random_wind=ep.random_wind, verbose=ep.verbose)
         elif environment_type == e.RANDOM_WALK:
-            environment_ = environments.RandomWalk(verbose=self.verbose)
+            environment_ = environments.RandomWalk(verbose=ep.verbose)
         else:
             raise NotImplementedError
         return environment_

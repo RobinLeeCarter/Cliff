@@ -7,16 +7,15 @@ from common import enums, dataclass
 # do we want random_wind to be a parameter?
 windy_timestep = dataclass.Scenario(
     environment_type=enums.EnvironmentType.WINDY,
-    environment_parameters={"random_wind": False},
     comparison_type=enums.ComparisonType.EPISODE_BY_TIMESTEP,
     scenario_settings=dataclass.Settings(
         runs=50,
         training_episodes=170,
-        review_every_step=True,
-        algorithm_parameters=dataclass.AlgorithmParameters(
-            initial_q_value=5.0,
-            initial_v_value=6.0
-        )
+        review_every_step=True
+        # algorithm_parameters=dataclass.AlgorithmParameters(
+        #     initial_q_value=5.0,
+        #     initial_v_value=6.0
+        # )
     ),
     settings_list=[
         dataclass.Settings(
@@ -30,18 +29,14 @@ windy_timestep = dataclass.Scenario(
 )
 
 random_windy_timestep = copy.deepcopy(windy_timestep)
-random_windy_timestep.environment_parameters["random_wind"] = True
+random_windy_timestep.environment_parameters.random_wind = True
 
 cliff_alpha = dataclass.AlgorithmByAlpha(
     environment_type=enums.EnvironmentType.CLIFF,
     comparison_type=enums.ComparisonType.RETURN_BY_ALPHA,
     scenario_settings=dataclass.Settings(
         runs=10,
-        training_episodes=100,
-        algorithm_parameters=dataclass.AlgorithmParameters(
-            initial_v_value=0.0,
-            initial_q_value=0.0
-        )
+        training_episodes=100
     ),
     alpha_min=0.1,
     alpha_max=1.0,

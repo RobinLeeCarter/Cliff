@@ -23,7 +23,7 @@ class ReturnByAlpha(comparison_.Comparison):
         trainer = self._trainer
         settings = trainer.settings
         algorithm_type = settings.algorithm_type
-        alpha = settings.algorithm_parameters["alpha"]
+        alpha = settings.algorithm_parameters.alpha
         total_return = trainer.episode.total_return
         self._recorder[algorithm_type, alpha] = total_return
 

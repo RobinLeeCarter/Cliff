@@ -2,7 +2,7 @@ from __future__ import annotations
 import dataclasses
 
 from common import enums
-from common.dataclass import settings, graph_parameters_, algorithm_parameters_
+from common.dataclass import settings, graph_parameters_, algorithm_parameters_, environment_parameters_
 
 
 @dataclasses.dataclass
@@ -14,7 +14,8 @@ class Scenario:
     settings_list: list[settings.Settings] = dataclasses.field(default_factory=list)
 
     # environment
-    environment_parameters: dict[str, any] = dataclasses.field(default_factory=dict)
+    environment_parameters: environment_parameters_.EnvironmentParameters = \
+        dataclasses.field(default_factory=environment_parameters_.default_factory)
 
     # output
     graph_parameters: graph_parameters_.GraphParameters = \
