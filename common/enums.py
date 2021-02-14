@@ -35,3 +35,10 @@ class EnvironmentType(enum.IntEnum):
     CLIFF = enum.auto()
     RANDOM_WALK = enum.auto()
     WINDY = enum.auto()
+
+
+class PolicyType(enum.IntEnum):
+    DETERMINISTIC = enum.auto()
+    E_GREEDY = enum.auto()
+    NONE = enum.auto()
+    RANDOM = enum.auto()

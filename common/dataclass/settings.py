@@ -51,9 +51,10 @@ default_settings = Settings(
     algorithm_parameters=algorithm_parameters_.AlgorithmParameters(
         initial_v_value=0.0,
         initial_q_value=0.0,
-        verbose=True
+        verbose=False
     ),
     policy_parameters=policy_parameters_.PolicyParameters(
+        policy_type=enums.PolicyType.E_GREEDY,
         epsilon=0.1
     ),
     runs=10,

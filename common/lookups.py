@@ -10,3 +10,10 @@ algorithm_name: dict[enums.AlgorithmType, str] = {
     enums.AlgorithmType.CONSTANT_ALPHA_MC: 'Constant-α MC',
     enums.AlgorithmType.TD_0: 'TD(0)'
 }
+
+policy_name: dict[enums.PolicyType, str] = {
+    enums.PolicyType.DETERMINISTIC: 'Deterministic',
+    enums.PolicyType.E_GREEDY: 'ε-greedy',
+    enums.PolicyType.NONE: 'No policy',
+    enums.PolicyType.RANDOM: 'Random'
+}

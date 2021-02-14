@@ -29,11 +29,11 @@ class Controller:
         self.environment = self._create_environment()
 
         # create policy and agent
-        self.e_greedy_policy: policy.EGreedyPolicy = policy.EGreedyPolicy(
+        self.policy: policy.EGreedyPolicy = policy.EGreedyPolicy(
             environment_=self.environment,
             epsilon=self.scenario.scenario_settings.policy_parameters.epsilon
         )
-        self.agent = agent.Agent(self.environment, self.e_greedy_policy)
+        self.agent = agent.Agent(self.environment, self.policy)
 
         self.graph = view.Graph()
         self.grid_view = view.GridView(self.environment.grid_world)
@@ -56,6 +56,21 @@ class Controller:
 
     def _create_environment(self) -> environment.Environment:
         environment_type = self.scenario.environment_type
+
+        ep: common.EnvironmentParameters = self.scenario.environment_parameters
+        e = common.EnvironmentType
+        if environment_type == e.CLIFF:
+            environment_ = environments.Cliff(verbose=ep.verbose)
+        elif environment_type == e.WINDY:
+            environment_ = environments.Windy(random_wind=ep.random_wind, verbose=ep.verbose)
+        elif environment_type == e.RANDOM_WALK:
+            environment_ = environments.RandomWalk(verbose=ep.verbose)
+        else:
+            raise NotImplementedError
+        return environment_
+
+    def _create_policy(self) -> policy.Policy:
+        policy_type: common.PolicyType = self.scenario.scenario_settings.policy_parameters.policy_type
 
         ep: common.EnvironmentParameters = self.scenario.environment_parameters
         e = common.EnvironmentType
