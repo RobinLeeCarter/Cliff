@@ -56,9 +56,9 @@ class Controller:
         # self.behaviour_agent = agent.Agent(self.environment, self.behaviour_policy)
 
     def _create_environment(self, environment_parameters: common.EnvironmentParameters) -> environment.Environment:
-        environment_type = self.scenario.environment_type
-
+        environment_type = environment_parameters.environment_type
         et = common.EnvironmentType
+
         if environment_type == et.CLIFF:
             environment_ = environments.Cliff(environment_parameters)
         elif environment_type == et.WINDY:

@@ -9,7 +9,6 @@ from common.dataclass import settings, algorithm_parameters_, policy_parameters_
 @dataclasses.dataclass
 class Scenario:
     # mandatory
-    environment_type: enums.EnvironmentType
     comparison_type: enums.ComparisonType
     scenario_settings: settings.Settings
     settings_list: list[settings.Settings] = dataclasses.field(default_factory=list)
