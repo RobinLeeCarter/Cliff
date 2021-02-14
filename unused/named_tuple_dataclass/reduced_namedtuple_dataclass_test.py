@@ -13,7 +13,7 @@ class Action:
 my_action = Action(move=XY(3, 4), test="hello")
 print(my_action.test)
 print(my_action.move.x)
-my_action = Action(move=(3, 4), test=56)
+my_action = Action(move=(3, 4), test="56")
 print(my_action.test)
 print(my_action.move.y)     # fails here
 

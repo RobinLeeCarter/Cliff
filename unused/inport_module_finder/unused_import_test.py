@@ -59,11 +59,10 @@ if __name__ == '__main__':
 
 # mod_dict = {name: mod for name, mod in sys.modules.items()}
 
-app_dir = '/home/robin/Python/Projects/'
+# app_dir = '/home/robin/Python/Projects/'
 
-
-    # if hasattr(mod, '__file__'):
-    #     print(name, mod.__file__)
+# if hasattr(mod, '__file__'):
+#     print(name, mod.__file__)
 
 # agent_mod = mod_dict['agent']
 
@@ -86,8 +85,8 @@ app_dir = '/home/robin/Python/Projects/'
 # for k, v in sys.modules.items():
 #     if v.__file__ is not None:
 #         print(f"key: {k}\tvalue: {v.__file__}")
-    # print(type(k))
-    # print(type(v))
+# print(type(k))
+# print(type(v))
 
 #
 # print("dir:")

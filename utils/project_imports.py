@@ -23,15 +23,6 @@ def project_dependencies(module_name: str):
                     add_name = False
             if add_name:
                 included_names.append(mod_name)
-            # if exclusions:
-            #     if mod_name not in safe_modules \
-            #             and not mod_name.startswith(safe_package) \
-            #             and mod_name != module_name \
-            #             and not mod_name.startswith(module_name + "."):
-            #         output_names.append(mod_name)
-            # else:
-            #     output_names.append(mod_name)
-
     for mod_name in sorted(included_names):
         add_name = True
         for output_name in output_names:
@@ -45,4 +36,4 @@ def project_dependencies(module_name: str):
 
 
 if __name__ == '__main__':
-    project_dependencies('view')
+    project_dependencies('environments')

@@ -36,8 +36,8 @@ class Agent:
         # trainer callback
         self._step_callback: Optional[Callable[[episode.Episode], None]] = None
 
-    # def set_policy(self, policy_: policy.Policy):
-    #     self.policy = policy_
+    def set_policy(self, policy_: policy.Policy):
+        self.policy = policy_
 
     def set_gamma(self, gamma: float):
         self.gamma = gamma

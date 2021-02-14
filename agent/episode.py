@@ -5,7 +5,6 @@ import numpy as np
 
 if TYPE_CHECKING:
     import environment
-import common
 from agent import rsa
 
 

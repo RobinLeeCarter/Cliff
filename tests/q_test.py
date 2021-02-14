@@ -8,7 +8,7 @@ from algorithm.value_function import state_action_function
 
 def q_test() -> bool:
     environment_ = environments.Cliff()
-    q = state_action_function.StateActionFunction(environment_)
+    q = state_action_function.StateActionFunction(environment_, initial_q_value=-7.0)
 
     state_ = environment.State(common.XY(x=4, y=2))
     action_ = environment.Action(common.XY(x=1, y=0))

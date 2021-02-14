@@ -138,18 +138,6 @@ class GridView:
             elif event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
                 self._user_event = common.UserEvent.SPACE
 
-    # def _handle_event(self, show_trail: bool = True):
-    #     if self._user_event == common.UserEvent.QUIT:
-    #         self.close_window()
-    #         # sys.exit()
-    #     elif self._user_event == common.UserEvent.SPACE:
-    #         if not show_trail:
-    #             self._copy_grid_into_background()
-    #             self._put_background_on_screen()
-    #         state: environment.State = self.episode.trajectory[self.t].state
-    #         self._draw_agent_at_state(state)
-    #         # self.draw_random_car()
-
     def _draw_agent(self, show_trail: bool = True):
         if not show_trail:
             self._copy_grid_into_background()
