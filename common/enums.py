@@ -31,14 +31,22 @@ class AlgorithmType(enum.IntEnum):
     TD_0 = enum.auto()
 
 
+class PolicyType(enum.IntEnum):
+    DETERMINISTIC = enum.auto()
+    E_GREEDY = enum.auto()
+    NONE = enum.auto()
+    RANDOM = enum.auto()
+
+
 class EnvironmentType(enum.IntEnum):
     CLIFF = enum.auto()
     RANDOM_WALK = enum.auto()
     WINDY = enum.auto()
 
 
-class PolicyType(enum.IntEnum):
-    DETERMINISTIC = enum.auto()
-    E_GREEDY = enum.auto()
-    NONE = enum.auto()
-    RANDOM = enum.auto()
+class ActionsList(enum.IntEnum):
+    STATIONARY_MOVE_ONLY = enum.auto()
+    FOUR_MOVES = enum.auto()
+    FOUR_CLIFF_FRIENDLY_MOVES = enum.auto()
+    KINGS_MOVES = enum.auto()
+    KINGS_MOVES_PLUS_NO_MOVE = enum.auto()

@@ -11,12 +11,11 @@ from environment import action, response, state
 class Environment(abc.ABC):
     """A GridWorld Environment - too hard to make general at this point"""
     def __init__(self,
-                 grid_world_: grid_world.GridWorld,
-                 actions_: action.Actions,
-                 verbose: bool = False):
+                 environment_parameters: common.EnvironmentParameters,
+                 grid_world_: grid_world.GridWorld):
         self.grid_world: grid_world.GridWorld = grid_world_
-        self._actions: action.Actions = actions_
-        self.verbose: bool = verbose
+        self._actions: action.Actions = action.Actions(environment_parameters.actions_list)
+        self.verbose: bool = environment_parameters.verbose
 
         # state and states
         self.states_shape: tuple = (self.grid_world.max_x + 1, self.grid_world.max_y + 1)

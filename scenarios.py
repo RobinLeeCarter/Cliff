@@ -8,10 +8,13 @@ import common
 windy_timestep = common.Scenario(
     environment_type=common.EnvironmentType.WINDY,
     comparison_type=common.ComparisonType.EPISODE_BY_TIMESTEP,
+    environment_parameters=common.EnvironmentParameters(
+        actions_list=common.ActionsList.FOUR_MOVES
+    ),
     scenario_settings=common.Settings(
         runs=50,
         training_episodes=170,
-        review_every_step=True
+        review_every_step=True,
         # algorithm_parameters=common.AlgorithmParameters(
         #     initial_q_value=5.0,
         #     initial_v_value=6.0
@@ -34,6 +37,9 @@ random_windy_timestep.environment_parameters.random_wind = True
 cliff_alpha = common.AlgorithmByAlpha(
     environment_type=common.EnvironmentType.CLIFF,
     comparison_type=common.ComparisonType.RETURN_BY_ALPHA,
+    environment_parameters=common.EnvironmentParameters(
+        actions_list=common.ActionsList.FOUR_MOVES
+    ),
     scenario_settings=common.Settings(
         runs=10,
         training_episodes=100
@@ -56,6 +62,9 @@ cliff_alpha = common.AlgorithmByAlpha(
 cliff_episode = common.Scenario(
     environment_type=common.EnvironmentType.CLIFF,
     comparison_type=common.ComparisonType.RETURN_BY_EPISODE,
+    environment_parameters=common.EnvironmentParameters(
+        actions_list=common.ActionsList.FOUR_MOVES
+    ),
     scenario_settings=common.Settings(
         runs=10,
         training_episodes=500

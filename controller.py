@@ -25,7 +25,7 @@ class Controller:
         self.settings: Optional[common.Settings] = None  # current settings
 
         # create environment
-        self.environment = self._create_environment()
+        self.environment = self._create_environment(self.scenario.environment_parameters)
 
         # create policy and agent
         # self.policy: policy.EGreedy = policy.EGreedy(
@@ -55,17 +55,16 @@ class Controller:
         # self.target_agent = agent.Agent(self.environment, self.target_policy)
         # self.behaviour_agent = agent.Agent(self.environment, self.behaviour_policy)
 
-    def _create_environment(self) -> environment.Environment:
+    def _create_environment(self, environment_parameters: common.EnvironmentParameters) -> environment.Environment:
         environment_type = self.scenario.environment_type
 
-        ep: common.EnvironmentParameters = self.scenario.environment_parameters
-        e = common.EnvironmentType
-        if environment_type == e.CLIFF:
-            environment_ = environments.Cliff(verbose=ep.verbose)
-        elif environment_type == e.WINDY:
-            environment_ = environments.Windy(random_wind=ep.random_wind, verbose=ep.verbose)
-        elif environment_type == e.RANDOM_WALK:
-            environment_ = environments.RandomWalk(verbose=ep.verbose)
+        et = common.EnvironmentType
+        if environment_type == et.CLIFF:
+            environment_ = environments.Cliff(environment_parameters)
+        elif environment_type == et.WINDY:
+            environment_ = environments.Windy(environment_parameters)
+        elif environment_type == et.RANDOM_WALK:
+            environment_ = environments.RandomWalk(environment_parameters)
         else:
             raise NotImplementedError
         return environment_
