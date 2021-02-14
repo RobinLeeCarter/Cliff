@@ -54,16 +54,12 @@ class ReturnByEpisode(comparison_m.Comparison):
     def draw_graph(self):
         scenario_settings = self.scenario.scenario_settings
         gp = self.scenario.graph_parameters
-        moving_average_window_size: Optional[int] = gp.get("moving_average_window_size", None)
-        y_min: Optional[float] = gp.get("y_min", None)
-        y_max: Optional[float] = gp.get("y_max", None)
-
         self.graph.make_plot(x_series=self.x_series,
                              graph_series=self.series_list,
                              y_label=self._y_label,
-                             moving_average_window_size=moving_average_window_size,
+                             moving_average_window_size=gp.moving_average_window_size,
                              x_min=0,
                              x_max=scenario_settings.training_episodes,
-                             y_min=y_min,
-                             y_max=y_max
+                             y_min=gp.y_min,
+                             y_max=gp.y_max
                              )

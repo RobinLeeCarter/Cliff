@@ -48,14 +48,11 @@ class ReturnByAlpha(comparison_m.Comparison):
 
     def draw_graph(self):
         gp = self.scenario.graph_parameters
-        y_min: Optional[float] = gp.get("y_min", None)
-        y_max: Optional[float] = gp.get("y_max", None)
-
         self.graph.make_plot(x_series=self.x_series,
                              graph_series=self.series_list,
                              y_label=self._y_label,
                              x_min=self.scenario.alpha_min,
                              x_max=self.scenario.alpha_max,
-                             y_min=y_min,
-                             y_max=y_max
+                             y_min=gp.y_min,
+                             y_max=gp.y_max
                              )

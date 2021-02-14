@@ -3,6 +3,7 @@ import dataclasses
 
 from common import enums
 from common.dataclass import settings
+from common.dataclass.scenario import graph_parameters_m
 
 
 @dataclasses.dataclass
@@ -17,7 +18,9 @@ class Scenario:
     environment_parameters: dict[str, any] = dataclasses.field(default_factory=dict)
 
     # output
-    graph_parameters: dict[str, any] = dataclasses.field(default_factory=dict)  # should be a dataclass
+    graph_parameters: graph_parameters_m.GraphParameters = \
+        dataclasses.field(default_factory=graph_parameters_m.default_factory)
+    # graph_parameters: dict[str, any] = dataclasses.field(default_factory=dict)  # should be a dataclass
 
     def __post_init__(self):
         assert self.settings_list

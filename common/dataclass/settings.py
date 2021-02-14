@@ -26,6 +26,9 @@ class Settings:
 
     algorithm_title: str = ""   # algorithm title will be populated by Trainer later whether it's used or not
 
+    def test(self):
+        print(default_settings)
+
 
 default_settings = Settings(
     gamma=1.0,
