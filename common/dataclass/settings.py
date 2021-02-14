@@ -1,5 +1,6 @@
 from __future__ import annotations
 import dataclasses
+import copy
 from typing import Optional
 
 from common import enums
@@ -62,3 +63,7 @@ default_settings = Settings(
     episode_recording_frequency=1,
     review_every_step=False
 )
+
+
+def default_factory() -> Settings:
+    return copy.deepcopy(default_settings)

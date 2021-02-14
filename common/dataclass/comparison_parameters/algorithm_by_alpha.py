@@ -6,11 +6,11 @@ from typing import Optional
 import utils
 from common import enums
 from common.dataclass import settings, algorithm_parameters_
-from common.dataclass.scenario import scenario_m
+from common.dataclass.comparison_parameters import comparison_parameters_
 
 
 @dataclasses.dataclass
-class AlgorithmByAlpha(scenario_m.Scenario):
+class ComparisonAlgorithmByAlpha(comparison_parameters_.ComparisonParameters):
     # derived dataclasses effectively must have default values:
     # https://stackoverflow.com/questions/51575931/class-inheritance-in-python-3-7-dataclasses
     # can supply min, max and step or just supply a list
@@ -20,6 +20,8 @@ class AlgorithmByAlpha(scenario_m.Scenario):
     alpha_list: list[float] = dataclasses.field(default_factory=list)
 
     algorithm_type_list: list[enums.AlgorithmType] = dataclasses.field(default_factory=list)
+
+    settings_list: list[settings.Settings] = dataclasses.field(default_factory=list, init=False)
 
     def __post_init__(self):
         # assert self.alpha_min is not None
@@ -39,5 +41,4 @@ class AlgorithmByAlpha(scenario_m.Scenario):
                     )
                 )
                 self.settings_list.append(settings_)
-
-        super().__post_init__()
+        assert self.settings_list

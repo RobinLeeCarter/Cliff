@@ -10,10 +10,10 @@ from comparison import comparison_, recorder
 
 
 class ReturnByAlpha(comparison_.Comparison):
-    def __init__(self, scenario: common.AlgorithmByAlpha, graph: view.Graph, verbose: bool = False):
-        super().__init__(scenario, graph, verbose)
-        assert isinstance(self.scenario, common.AlgorithmByAlpha)
-        self.scenario: common.AlgorithmByAlpha = self.scenario
+    def __init__(self, scenario: common.Scenario, graph: view.Graph):
+        super().__init__(scenario, graph)
+        assert isinstance(self.scenario.comparison_parameters, common.ComparisonAlgorithmByAlpha)
+        self.comparison_parameters: common.ComparisonAlgorithmByAlpha = self.scenario.comparison_parameters
 
         recorder_key_type = tuple[common.AlgorithmType, float]
         self._recorder = recorder.Recorder[recorder_key_type]()
@@ -30,12 +30,12 @@ class ReturnByAlpha(comparison_.Comparison):
     def compile(self):
         self.x_series = common.Series(
             title="α",
-            values=np.array(self.scenario.alpha_list)
+            values=np.array(self.comparison_parameters.alpha_list)
         )
         # collate output from self.recorder
-        for algorithm_type in self.scenario.algorithm_type_list:
+        for algorithm_type in self.comparison_parameters.algorithm_type_list:
             values = np.array(
-                [self._recorder[algorithm_type, alpha] for alpha in self.scenario.alpha_list],
+                [self._recorder[algorithm_type, alpha] for alpha in self.comparison_parameters.alpha_list],
                 dtype=float
             )
             title = common.algorithm_name[algorithm_type]
@@ -51,8 +51,8 @@ class ReturnByAlpha(comparison_.Comparison):
         self.graph.make_plot(x_series=self.x_series,
                              graph_series=self.series_list,
                              y_label=self._y_label,
-                             x_min=self.scenario.alpha_min,
-                             x_max=self.scenario.alpha_max,
+                             x_min=self.comparison_parameters.alpha_min,
+                             x_max=self.comparison_parameters.alpha_max,
                              y_min=gp.y_min,
                              y_max=gp.y_max
                              )

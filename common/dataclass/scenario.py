@@ -4,18 +4,22 @@ import dataclasses
 from common import enums
 from common.dataclass import settings, algorithm_parameters_, policy_parameters_,\
     environment_parameters_, graph_parameters_
+from common.dataclass.comparison_parameters import comparison_parameters_, algorithm_by_alpha
 
 
 @dataclasses.dataclass
 class Scenario:
-    # mandatory
-    comparison_type: enums.ComparisonType
-    scenario_settings: settings.Settings
-    settings_list: list[settings.Settings] = dataclasses.field(default_factory=list)
-
     # environment
     environment_parameters: environment_parameters_.EnvironmentParameters = \
         dataclasses.field(default_factory=environment_parameters_.default_factory)
+
+    # scenario
+    scenario_settings: settings.Settings = dataclasses.field(default_factory=settings.default_factory)
+    settings_list: list[settings.Settings] = dataclasses.field(default_factory=list)
+
+    # comparison
+    comparison_parameters: comparison_parameters_.ComparisonParameters = \
+        dataclasses.field(default_factory=comparison_parameters_.default_factory)
 
     # output
     graph_parameters: graph_parameters_.GraphParameters = \
@@ -23,6 +27,9 @@ class Scenario:
     # graph_parameters: dict[str, any] = dataclasses.field(default_factory=dict)  # should be a dataclass
 
     def __post_init__(self):
+        if isinstance(self.comparison_parameters, algorithm_by_alpha.ComparisonAlgorithmByAlpha):
+            self.settings_list = self.comparison_parameters.settings_list
+
         assert self.settings_list
         # Push scenario values or default values into most settings attributes if currently =None
         for settings_ in self.settings_list:

@@ -24,8 +24,7 @@ class Controller:
 
         self.settings: Optional[common.Settings] = None  # current settings
 
-        # create environment
-        self.environment = self._create_environment(self.scenario.environment_parameters)
+        self.environment = self._create_environment()
 
         # create policy and agent
         # self.policy: policy.EGreedy = policy.EGreedy(
@@ -36,11 +35,13 @@ class Controller:
         # create agent (and it will create the policy)
         self.agent = agent.Agent(self.environment, self.scenario.scenario_settings.policy_parameters)
 
+        self.algorithm_factory: algorithm.Factory = algorithm.Factory(self.environment, self.agent)
+
         self.graph = view.Graph()
         self.grid_view = view.GridView(self.environment.grid_world)
 
-        self.algorithm_factory: algorithm.Factory = algorithm.Factory(self.environment, self.agent)
         self.comparison: comparison.Comparison = self._create_comparison()
+
         self.trainer: trainer.Trainer = trainer.Trainer(
             algorithm_factory=self.algorithm_factory,
             comparison_=self.comparison,
@@ -55,7 +56,8 @@ class Controller:
         # self.target_agent = agent.Agent(self.environment, self.target_policy)
         # self.behaviour_agent = agent.Agent(self.environment, self.behaviour_policy)
 
-    def _create_environment(self, environment_parameters: common.EnvironmentParameters) -> environment.Environment:
+    def _create_environment(self) -> environment.Environment:
+        environment_parameters = self.scenario.environment_parameters
         environment_type = environment_parameters.environment_type
         et = common.EnvironmentType
 
@@ -71,13 +73,12 @@ class Controller:
 
     def _create_comparison(self) -> comparison.Comparison:
         c = common.ComparisonType
-        comparison_type = self.scenario.comparison_type
+        comparison_type = self.scenario.comparison_parameters.comparison_type
         if comparison_type == c.EPISODE_BY_TIMESTEP:
             comparison_ = comparison.EpisodeByTimestep(self.scenario, self.graph)
         elif comparison_type == c.RETURN_BY_EPISODE:
             comparison_ = comparison.ReturnByEpisode(self.scenario, self.graph)
         elif comparison_type == c.RETURN_BY_ALPHA:
-            self.scenario: common.AlgorithmByAlpha
             comparison_ = comparison.ReturnByAlpha(self.scenario, self.graph)
         else:
             raise NotImplementedError

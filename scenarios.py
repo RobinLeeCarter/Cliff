@@ -6,7 +6,6 @@ import common
 
 # do we want random_wind to be a parameter?
 windy_timestep = common.Scenario(
-    comparison_type=common.ComparisonType.EPISODE_BY_TIMESTEP,
     environment_parameters=common.EnvironmentParameters(
         environment_type=common.EnvironmentType.WINDY,
         actions_list=common.ActionsList.FOUR_MOVES
@@ -19,6 +18,9 @@ windy_timestep = common.Scenario(
         #     initial_q_value=5.0,
         #     initial_v_value=6.0
         # )
+    ),
+    comparison_parameters=common.ComparisonParameters(
+        comparison_type=common.ComparisonType.EPISODE_BY_TIMESTEP
     ),
     settings_list=[
         common.Settings(
@@ -34,8 +36,7 @@ windy_timestep = common.Scenario(
 random_windy_timestep = copy.deepcopy(windy_timestep)
 random_windy_timestep.environment_parameters.random_wind = True
 
-cliff_alpha = common.AlgorithmByAlpha(
-    comparison_type=common.ComparisonType.RETURN_BY_ALPHA,
+cliff_alpha = common.Scenario(
     environment_parameters=common.EnvironmentParameters(
         environment_type=common.EnvironmentType.CLIFF,
         actions_list=common.ActionsList.FOUR_MOVES
@@ -44,15 +45,18 @@ cliff_alpha = common.AlgorithmByAlpha(
         runs=10,
         training_episodes=100
     ),
-    alpha_min=0.1,
-    alpha_max=1.0,
-    alpha_step=0.1,
-    algorithm_type_list=[
-        common.AlgorithmType.EXPECTED_SARSA,
-        common.AlgorithmType.VQ,
-        common.AlgorithmType.Q_LEARNING,
-        common.AlgorithmType.SARSA
-    ],
+    comparison_parameters=common.ComparisonAlgorithmByAlpha(
+        comparison_type=common.ComparisonType.RETURN_BY_ALPHA,
+        alpha_min=0.1,
+        alpha_max=1.0,
+        alpha_step=0.1,
+        algorithm_type_list=[
+            common.AlgorithmType.EXPECTED_SARSA,
+            common.AlgorithmType.VQ,
+            common.AlgorithmType.Q_LEARNING,
+            common.AlgorithmType.SARSA
+        ]
+    ),
     graph_parameters=common.GraphParameters(
         y_min=-140,
         y_max=0
@@ -60,7 +64,6 @@ cliff_alpha = common.AlgorithmByAlpha(
 )
 
 cliff_episode = common.Scenario(
-    comparison_type=common.ComparisonType.RETURN_BY_EPISODE,
     environment_parameters=common.EnvironmentParameters(
         environment_type=common.EnvironmentType.CLIFF,
         actions_list=common.ActionsList.FOUR_MOVES
@@ -69,6 +72,9 @@ cliff_episode = common.Scenario(
         runs=10,
         training_episodes=500
         # policy_parameters=common.PolicyParameters(epsilon=0.2)
+    ),
+    comparison_parameters=common.ComparisonParameters(
+        comparison_type=common.ComparisonType.RETURN_BY_EPISODE
     ),
     settings_list=[
         common.Settings(algorithm_parameters=common.AlgorithmParameters(

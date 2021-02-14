@@ -10,8 +10,8 @@ from comparison import comparison_, recorder
 
 
 class ReturnByEpisode(comparison_.Comparison):
-    def __init__(self, scenario: common.Scenario, graph: view.Graph, verbose: bool = False):
-        super().__init__(scenario, graph, verbose)
+    def __init__(self, scenario: common.Scenario, graph: view.Graph):
+        super().__init__(scenario, graph)
         recorder_key_type = tuple[common.AlgorithmType, int]
         self._recorder = recorder.Recorder[recorder_key_type]()
         self._y_label = "Average Return"
