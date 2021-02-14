@@ -5,10 +5,10 @@ import numpy as np
 
 if TYPE_CHECKING:
     import environment
-from policy import policy_m
+from policy import policy_
 
 
-class DeterministicPolicy(policy_m.Policy):
+class DeterministicPolicy(policy_.Policy):
     def __init__(self, environment_: environment.Environment):
         super().__init__(environment_)
         self._action_given_state: np.ndarray = np.empty(shape=environment_.states_shape, dtype=environment_.action_type)

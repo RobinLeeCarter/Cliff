@@ -4,10 +4,10 @@ from typing import List, TYPE_CHECKING
 if TYPE_CHECKING:
     import environment
 import common
-from policy import policy_m
+from policy import policy_
 
 
-class RandomPolicy(policy_m.Policy):
+class RandomPolicy(policy_.Policy):
     # fully random
     def __init__(self, environment_: environment.Environment):
         super().__init__(environment_)

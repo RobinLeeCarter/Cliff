@@ -6,10 +6,10 @@ import numpy as np
 if TYPE_CHECKING:
     import view
 import common
-from comparison import comparison_m, recorder
+from comparison import comparison_, recorder
 
 
-class ReturnByAlpha(comparison_m.Comparison):
+class ReturnByAlpha(comparison_.Comparison):
     def __init__(self, scenario: common.AlgorithmByAlpha, graph: view.Graph, verbose: bool = False):
         super().__init__(scenario, graph, verbose)
         assert isinstance(self.scenario, common.AlgorithmByAlpha)

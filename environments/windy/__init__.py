@@ -1,1 +1,1 @@
-from environments.windy.windy_m import Windy
+from environments.windy.windy_ import Windy

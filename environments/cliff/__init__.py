@@ -1,1 +1,1 @@
-from environments.cliff.cliff_m import Cliff
+from environments.cliff.cliff_ import Cliff

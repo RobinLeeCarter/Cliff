@@ -2,8 +2,7 @@ from __future__ import annotations
 import dataclasses
 
 from common import enums
-from common.dataclass import settings
-from common.dataclass.scenario import graph_parameters_m
+from common.dataclass import settings, graph_parameters_
 
 
 @dataclasses.dataclass
@@ -18,8 +17,8 @@ class Scenario:
     environment_parameters: dict[str, any] = dataclasses.field(default_factory=dict)
 
     # output
-    graph_parameters: graph_parameters_m.GraphParameters = \
-        dataclasses.field(default_factory=graph_parameters_m.default_factory)
+    graph_parameters: graph_parameters_.GraphParameters = \
+        dataclasses.field(default_factory=graph_parameters_.default_factory)
     # graph_parameters: dict[str, any] = dataclasses.field(default_factory=dict)  # should be a dataclass
 
     def __post_init__(self):

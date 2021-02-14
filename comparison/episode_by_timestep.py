@@ -6,10 +6,10 @@ import numpy as np
 if TYPE_CHECKING:
     import view
 import common
-from comparison import comparison_m, recorder
+from comparison import comparison_, recorder
 
 
-class EpisodeByTimestep(comparison_m.Comparison):
+class EpisodeByTimestep(comparison_.Comparison):
     def __init__(self, scenario: common.Scenario, graph: view.Graph, verbose: bool = False):
         super().__init__(scenario, graph, verbose)
         recorder_key_type = tuple[int, int]

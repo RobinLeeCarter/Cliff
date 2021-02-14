@@ -3,10 +3,10 @@ from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     import environment
-from policy import policy_m
+from policy import policy_
 
 
-class NonePolicy(policy_m.Policy):
+class NonePolicy(policy_.Policy):
     def __init__(self, environment_: environment.Environment):
         super().__init__(environment_)
         actions: list[environment.Action] = [action for action in environment_.actions()]
