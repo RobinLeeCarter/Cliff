@@ -11,4 +11,4 @@ class GraphParameters:
 
 
 def default_factory() -> GraphParameters:
-    return GraphParameters(y_min=0)
+    return GraphParameters()

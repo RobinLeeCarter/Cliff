@@ -3,6 +3,7 @@ import dataclasses
 from typing import Optional
 
 from common import enums
+from common.dataclass import algorithm_parameters_
 
 
 @dataclasses.dataclass
@@ -11,7 +12,8 @@ class Settings:
 
     # TODO: potentially a dataclass hierarchy
     algorithm_type: Optional[enums.AlgorithmType] = None
-    algorithm_parameters: dict[str, any] = dataclasses.field(default_factory=dict)
+    algorithm_parameters: algorithm_parameters_.AlgorithmParameters = \
+        dataclasses.field(default_factory=algorithm_parameters_.default_factory)
 
     runs: Optional[int] = None
     run_print_frequency: Optional[int] = None
@@ -30,10 +32,25 @@ class Settings:
         print(default_settings)
 
 
+precedence_attribute_names: list[str] = [
+    'gamma',
+    'runs',
+    'run_print_frequency',
+    'training_episodes',
+    'episode_length_timeout',
+    'episode_print_frequency',
+    'episode_to_start_recording',
+    'episode_recording_frequency',
+    'review_every_step'
+]
+
 default_settings = Settings(
     gamma=1.0,
-    algorithm_parameters={"initial_v_value": 0.0,
-                          "initial_q_value": 0.0},
+    algorithm_parameters=algorithm_parameters_.AlgorithmParameters(
+        initial_v_value=0.0,
+        initial_q_value=0.0,
+        verbose=True
+    ),
     runs=10,
     run_print_frequency=10,
     training_episodes=100,

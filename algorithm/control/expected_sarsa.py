@@ -12,10 +12,10 @@ class ExpectedSarsa(abstract.EpisodicOnline):
     def __init__(self,
                  environment_: environment.Environment,
                  agent_: agent.Agent,
-                 algorithm_parameters: dict[str, any]
+                 algorithm_parameters: common.AlgorithmParameters
                  ):
         super().__init__(environment_, agent_, algorithm_parameters)
-        self._alpha = algorithm_parameters['alpha']
+        self._alpha = self.algorithm_parameters.alpha
         self.algorithm_type = common.AlgorithmType.EXPECTED_SARSA
         self.name = common.algorithm_name[self.algorithm_type]
         self.title = f"{self.name} α={self._alpha}"

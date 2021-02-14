@@ -5,6 +5,7 @@ import abc
 if TYPE_CHECKING:
     import environment
     import agent
+    import common
 from algorithm.abstract import episodic
 
 
@@ -12,7 +13,7 @@ class EpisodicMonteCarlo(episodic.Episodic, abc.ABC):
     def __init__(self,
                  environment_: environment.Environment,
                  agent_: agent.Agent,
-                 algorithm_parameters: dict[str, any]
+                 algorithm_parameters: common.AlgorithmParameters
                  ):
         super().__init__(environment_, agent_, algorithm_parameters)
         self.episode: Optional[agent.Episode] = None

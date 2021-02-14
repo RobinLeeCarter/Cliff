@@ -12,11 +12,11 @@ class VQ(abstract.EpisodicOnline):
     def __init__(self,
                  environment_: environment.Environment,
                  agent_: agent.Agent,
-                 algorithm_parameters: dict[str, any],
+                 algorithm_parameters: common.AlgorithmParameters,
                  ):
         super().__init__(environment_, agent_, algorithm_parameters)
-        self.alpha_variable: bool = self.algorithm_parameters.get('alpha_variable', False)
-        self._alpha: float = algorithm_parameters['alpha']
+        self.alpha_variable: bool = self.algorithm_parameters.alpha_variable
+        self._alpha: float = self.algorithm_parameters.alpha
         self.algorithm_type = common.AlgorithmType.VQ
         self.name = common.algorithm_name[self.algorithm_type]
 

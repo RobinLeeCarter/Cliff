@@ -1,8 +1,7 @@
 from __future__ import annotations
 import copy
 
-from common import enums
-from common import dataclass
+from common import enums, dataclass
 
 
 # do we want random_wind to be a parameter?
@@ -13,13 +12,19 @@ windy_timestep = dataclass.Scenario(
     scenario_settings=dataclass.Settings(
         runs=50,
         training_episodes=170,
-        review_every_step=True
+        review_every_step=True,
+        algorithm_parameters=dataclass.AlgorithmParameters(
+            initial_q_value=5.0,
+            initial_v_value=6.0
+        )
     ),
     settings_list=[
         dataclass.Settings(
             algorithm_type=enums.AlgorithmType.SARSA,
-            algorithm_parameters={"alpha": 0.5,
-                                  "initial_q_value": -20.0}
+            algorithm_parameters=dataclass.AlgorithmParameters(
+                alpha=0.5,
+                initial_q_value=-20.0
+            )
         )
     ]
 )
@@ -32,7 +37,11 @@ cliff_alpha = dataclass.AlgorithmByAlpha(
     comparison_type=enums.ComparisonType.RETURN_BY_ALPHA,
     scenario_settings=dataclass.Settings(
         runs=10,
-        training_episodes=100
+        training_episodes=100,
+        algorithm_parameters=dataclass.AlgorithmParameters(
+            initial_v_value=0.0,
+            initial_q_value=0.0
+        )
     ),
     alpha_min=0.1,
     alpha_max=1.0,
@@ -58,13 +67,13 @@ cliff_episode = dataclass.Scenario(
     ),
     settings_list=[
         dataclass.Settings(algorithm_type=enums.AlgorithmType.EXPECTED_SARSA,
-                           algorithm_parameters={"alpha": 0.9}),
+                           algorithm_parameters=dataclass.AlgorithmParameters(alpha=0.9)),
         dataclass.Settings(algorithm_type=enums.AlgorithmType.VQ,
-                           algorithm_parameters={"alpha": 0.2}),
+                           algorithm_parameters=dataclass.AlgorithmParameters(alpha=0.2)),
         dataclass.Settings(algorithm_type=enums.AlgorithmType.Q_LEARNING,
-                           algorithm_parameters={"alpha": 0.5}),
+                           algorithm_parameters=dataclass.AlgorithmParameters(alpha=0.5)),
         dataclass.Settings(algorithm_type=enums.AlgorithmType.SARSA,
-                           algorithm_parameters={"alpha": 0.5})
+                           algorithm_parameters=dataclass.AlgorithmParameters(alpha=0.5)),
     ],
     graph_parameters=dataclass.GraphParameters(
         moving_average_window_size=19,

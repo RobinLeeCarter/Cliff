@@ -13,25 +13,20 @@ class Episodic(abc.ABC):
     def __init__(self,
                  environment_: environment.Environment,
                  agent_: agent.Agent,
-                 algorithm_parameters: dict[str, any]
+                 algorithm_parameters: common.AlgorithmParameters
                  ):
         self.environment: environment.Environment = environment_
         self.agent: agent.Agent = agent_
-        self.algorithm_parameters: dict[str, any] = algorithm_parameters
+        self.algorithm_parameters: common.AlgorithmParameters = algorithm_parameters
         self.algorithm_type: Optional[common.AlgorithmType] = None
         self.name: str = "Error: Untitled"
         self.title: str = "Error: Untitled"
-        if "verbose" in algorithm_parameters:
-            self.verbose: bool = algorithm_parameters["verbose"]
-        else:
-            self.verbose: bool = False
+        self.verbose = self.algorithm_parameters.verbose
 
         # assume all episodic algorithms have a Q function and initialise policy based on it
         # could add another layer of inheritance if not
-        initial_v_value = algorithm_parameters['initial_v_value']
-        initial_q_value = algorithm_parameters['initial_q_value']
-        self._V = value_function.StateFunction(self.environment, initial_v_value)
-        self._Q = value_function.StateActionFunction(self.environment, initial_q_value)
+        self._V = value_function.StateFunction(self.environment, self.algorithm_parameters.initial_v_value)
+        self._Q = value_function.StateActionFunction(self.environment, self.algorithm_parameters.initial_q_value)
         self.gamma: float = self.agent.gamma
 
     def initialize(self):

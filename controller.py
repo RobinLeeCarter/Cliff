@@ -17,8 +17,8 @@ class Controller:
     def __init__(self, verbose: bool = False):
         self.verbose: bool = verbose
 
-        # self.scenario: common.Scenario = common.scenarios.windy_timestep
-        self.scenario: common.Scenario = common.scenarios.random_windy_timestep
+        self.scenario: common.Scenario = common.scenarios.windy_timestep
+        # self.scenario: common.Scenario = common.scenarios.random_windy_timestep
         # self.scenario: common.Scenario = common.scenarios.cliff_alpha
         # self.scenario: common.Scenario = common.scenarios.cliff_episode
 
