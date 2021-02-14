@@ -29,10 +29,7 @@ class Controller:
         self.environment = self._create_environment()
 
         # create policy and agent
-        # TODO: have e-greedy_policy make it's own DetermintisticPolicy
-        self.greedy_policy: policy.DeterministicPolicy = policy.DeterministicPolicy(self.environment)
-        self.e_greedy_policy: policy.EGreedyPolicy = policy.EGreedyPolicy(self.environment,
-                                                                          greedy_policy=self.greedy_policy)
+        self.e_greedy_policy: policy.EGreedyPolicy = policy.EGreedyPolicy(self.environment)
         self.agent = agent.Agent(self.environment, self.e_greedy_policy)
 
         self.graph = view.Graph()

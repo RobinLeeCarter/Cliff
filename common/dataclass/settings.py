@@ -10,7 +10,6 @@ from common.dataclass import algorithm_parameters_
 class Settings:
     gamma: Optional[float] = None
 
-    # TODO: potentially a dataclass hierarchy
     algorithm_type: Optional[enums.AlgorithmType] = None
     algorithm_parameters: algorithm_parameters_.AlgorithmParameters = \
         dataclasses.field(default_factory=algorithm_parameters_.default_factory)
