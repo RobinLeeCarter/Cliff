@@ -7,8 +7,8 @@ from comparison import recorder
 
 def recorder_test() -> bool:
     environment_ = environments.Cliff()
-    greedy_policy: policy.DeterministicPolicy = policy.DeterministicPolicy(environment_)
-    e_greedy_policy: policy.EGreedyPolicy = policy.EGreedyPolicy(environment_, greedy_policy=greedy_policy)
+    greedy_policy: policy.Deterministic = policy.Deterministic(environment_)
+    e_greedy_policy: policy.EGreedy = policy.EGreedy(environment_, greedy_policy=greedy_policy)
     agent_ = agent.Agent(environment_, e_greedy_policy)
 
     factory_ = algorithm.Factory(environment_, agent_)

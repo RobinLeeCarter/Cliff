@@ -59,6 +59,7 @@ cliff_episode = common.Scenario(
     scenario_settings=common.Settings(
         runs=10,
         training_episodes=500
+        # policy_parameters=common.PolicyParameters(epsilon=0.2)
     ),
     settings_list=[
         common.Settings(algorithm_type=common.AlgorithmType.EXPECTED_SARSA,

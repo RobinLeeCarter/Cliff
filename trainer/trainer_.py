@@ -32,6 +32,7 @@ class Trainer:
         # process settings
         self.settings = settings
         self.algorithm_ = self.algorithm_factory[self.settings]
+        self.algorithm_.agent.new_policy(settings.policy_parameters)
         self.algorithm_.agent.set_gamma(settings.gamma)
         if settings.review_every_step:
             self.algorithm_.agent.set_step_callback(self.review_step)

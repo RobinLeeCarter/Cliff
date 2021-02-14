@@ -4,21 +4,21 @@ from typing import TYPE_CHECKING
 import common
 if TYPE_CHECKING:
     import environment
-from policy import random_policy, deterministic_policy
+from policy import random, deterministic
 
 
-class EGreedyPolicy(random_policy.RandomPolicy):
+class EGreedy(random.Random):
     def __init__(self, environment_: environment.Environment, epsilon: float):
         super().__init__(environment_)
-        self.greedy_policy: deterministic_policy.DeterministicPolicy =\
-            deterministic_policy.DeterministicPolicy(self.environment)
+        self.greedy_policy: deterministic.Deterministic =\
+            deterministic.Deterministic(self.environment)
         self.epsilon = epsilon
 
     def get_action(self, state: environment.State) -> environment.Action:
         if common.rng.uniform() > self.epsilon:
             return self.greedy_policy[state]
         else:
-            return random_policy.RandomPolicy.get_action(self, state)
+            return random.Random.get_action(self, state)
 
     def __setitem__(self, state: environment.State, action: environment.Action):
         self.greedy_policy[state] = action

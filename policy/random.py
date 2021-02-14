@@ -7,7 +7,7 @@ import common
 from policy import policy_
 
 
-class RandomPolicy(policy_.Policy):
+class Random(policy_.Policy):
     # fully random
     def __init__(self, environment_: environment.Environment):
         super().__init__(environment_)

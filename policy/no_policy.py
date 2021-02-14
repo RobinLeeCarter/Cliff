@@ -6,7 +6,7 @@ if TYPE_CHECKING:
 from policy import policy_
 
 
-class NonePolicy(policy_.Policy):
+class NoPolicy(policy_.Policy):
     def __init__(self, environment_: environment.Environment):
         super().__init__(environment_)
         actions: list[environment.Action] = [action for action in environment_.actions()]

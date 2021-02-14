@@ -29,11 +29,13 @@ class Controller:
         self.environment = self._create_environment()
 
         # create policy and agent
-        self.policy: policy.EGreedyPolicy = policy.EGreedyPolicy(
-            environment_=self.environment,
-            epsilon=self.scenario.scenario_settings.policy_parameters.epsilon
-        )
-        self.agent = agent.Agent(self.environment, self.policy)
+        # self.policy: policy.EGreedy = policy.EGreedy(
+        #     environment_=self.environment,
+        #     epsilon=self.scenario.scenario_settings.policy_parameters.epsilon
+        # )
+
+        # create agent (and it will create the policy)
+        self.agent = agent.Agent(self.environment, self.scenario.scenario_settings.policy_parameters)
 
         self.graph = view.Graph()
         self.grid_view = view.GridView(self.environment.grid_world)
