@@ -4,7 +4,6 @@ from typing import Optional
 import utils
 import common
 import agent
-import algorithm
 import view
 import comparison
 import environments
@@ -31,10 +30,8 @@ class Controller:
         #     epsilon=self.scenario.scenario_settings.policy_parameters.epsilon
         # )
 
-        # create agent (and it will create the policy)
-        self.agent = agent.Agent(self.environment, self.scenario.scenario_settings.policy_parameters)
-
-        self.algorithm_factory: algorithm.Factory = algorithm.Factory(self.environment, self.agent)
+        # create agent (and it will create the algorithms and the policy)
+        self.agent = agent.Agent(self.environment)
 
         self.graph = view.Graph()
         self.grid_view = view.GridView(self.environment.grid_world)
@@ -43,7 +40,7 @@ class Controller:
         self.comparison: comparison.Comparison = comparison.factory(self.scenario, self.graph)
 
         self.trainer: trainer.Trainer = trainer.Trainer(
-            algorithm_factory=self.algorithm_factory,
+            agent_=self.agent,
             comparison_=self.comparison,
             verbose=False
         )

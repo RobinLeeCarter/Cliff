@@ -9,6 +9,7 @@ import common
 from algorithm import control  # , policy_evaluation
 
 
+# TODO: Make this consistent
 class Factory:
     def __init__(self, environment_: environment.Environment, agent_: agent.Agent):
         self.environment: environment.Environment = environment_

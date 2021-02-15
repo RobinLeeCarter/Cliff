@@ -5,21 +5,24 @@ if TYPE_CHECKING:
     import environment
 import common
 import policy
+import algorithm
 from agent import episode
 
 
 class Agent:
     def __init__(self,
                  environment_: environment.Environment,
-                 policy_parameters: common.PolicyParameters,
                  verbose: bool = False):
         self.environment: environment.Environment = environment_
-        self.policy: policy.Policy = self._create_policy(policy_parameters)
+        self.algorithm_factory: algorithm.Factory = algorithm.Factory(self.environment, self)
         self.verbose: bool = verbose
 
-        self.gamma: float = 1.0
+        self.policy: Optional[policy.Policy] = None
+        self.algorithm: Optional[algorithm.Episodic] = None
         self.episode: Optional[episode.Episode] = None
 
+        # not None to avoid unboxing cost of Optional
+        self.gamma: float = 1.0
         self.t: int = 0
 
         # always refers to values for time-step t
@@ -37,11 +40,10 @@ class Agent:
         # trainer callback
         self._step_callback: Optional[Callable[[episode.Episode], None]] = None
 
-    def new_policy(self, policy_parameters: common.PolicyParameters):
-        self.policy = self._create_policy(policy_parameters)
-
-    def set_gamma(self, gamma: float):
-        self.gamma = gamma
+    def set_settings(self, settings: common.Settings):
+        self.policy = policy.factory(self.environment, settings.policy_parameters)
+        self.algorithm = self.algorithm_factory[settings.algorithm_parameters]
+        self.gamma = settings.gamma
 
     def set_step_callback(self, step_callback: Optional[Callable[[episode.Episode], None]] = None):
         self._step_callback = step_callback
@@ -100,19 +102,3 @@ class Agent:
             print("Failed to terminate")
         if self.verbose:
             print(f"t={self.t} \t state = {self.state} (terminal)")
-
-    def _create_policy(self, policy_parameters: common.PolicyParameters) -> policy.Policy:
-        pt = common.PolicyType
-        policy_type = policy_parameters.policy_type
-        if policy_type == pt.DETERMINISTIC:
-            policy_ = policy.Deterministic(self.environment)
-        elif policy_type == pt.NONE:
-            policy_ = policy.NoPolicy(self.environment)
-        elif policy_type == pt.RANDOM:
-            policy_ = policy.Random(self.environment)
-        elif policy_type == pt.E_GREEDY:
-            policy_ = policy.EGreedy(self.environment,
-                                     policy_parameters.epsilon)
-        else:
-            raise NotImplementedError
-        return policy_

@@ -10,11 +10,11 @@ if TYPE_CHECKING:
 
 class Trainer:
     def __init__(self,
-                 algorithm_factory: algorithm.Factory,
+                 agent_: agent.Agent,
                  comparison_: comparison.Comparison,
                  verbose: bool = False
                  ):
-        self.algorithm_factory: algorithm.Factory = algorithm_factory
+        self.agent: agent.Agent = agent_
         self.comparison: comparison.Comparison = comparison_
         self.verbose = verbose
 
@@ -31,19 +31,23 @@ class Trainer:
     def train(self, settings: common.Settings):
         # process settings
         self.settings = settings
-        self.algorithm_ = self.algorithm_factory[self.settings.algorithm_parameters]
-        self.algorithm_.agent.new_policy(settings.policy_parameters)
-        self.algorithm_.agent.set_gamma(settings.gamma)
+        self.agent.set_settings(self.settings)
+        self.algorithm_ = self.agent.algorithm
+
+        # self.algorithm_ = self.algorithm_factory[self.settings.algorithm_parameters]
+        # self.algorithm_.agent.new_policy(settings.policy_parameters)
+        # self.algorithm_.agent.set_gamma(settings.gamma)
+
         if settings.review_every_step:
-            self.algorithm_.agent.set_step_callback(self.review_step)
+            self.agent.set_step_callback(self.review_step)
         settings.algorithm_title = self.algorithm_.title
-        print(f"{self.algorithm_.title}: {settings.runs} runs")
+        print(f"{settings.algorithm_title}: {settings.runs} runs")
 
         self.max_timestep = 0
         for self.run_counter in range(1, settings.runs + 1):
             if self.verbose or self.run_counter % settings.run_print_frequency == 0:
                 print(f"run_counter = {self.run_counter}: {settings.training_episodes} episodes")
-            self.algorithm_.initialize()
+            self.agent.algorithm.initialize()
 
             self.timestep = 0
             for self.episode_counter in range(1, settings.training_episodes + 1):
@@ -54,8 +58,8 @@ class Trainer:
 
                 if not settings.review_every_step and self.timestep != 0:
                     self.timestep += 1  # start next episode from the next timestep
-                self.algorithm_.do_episode(settings.episode_length_timeout)
-                self.episode = self.algorithm_.agent.episode
+                self.agent.algorithm.do_episode(settings.episode_length_timeout)
+                self.episode = self.agent.episode
                 self.max_t = self.episode.max_t
                 self.total_return = self.episode.total_return
                 # if self.verbose:
@@ -65,7 +69,8 @@ class Trainer:
                     self.comparison.review()
             self.max_timestep = max(self.max_timestep, self.timestep)
 
-        self.algorithm_.print_q_coverage_statistics()
+        if self.verbose:
+            self.agent.algorithm.print_q_coverage_statistics()
 
     def review_step(self, episode: agent.Episode):
         self.episode = episode

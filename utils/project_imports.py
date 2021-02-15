@@ -36,4 +36,4 @@ def project_dependencies(module_name: str):
 
 
 if __name__ == '__main__':
-    project_dependencies('environments')
+    project_dependencies('comparison')
