@@ -10,7 +10,9 @@ from agent import rsa
 
 class Episode:
     """Just makes a record laid out in the standard way with Reward, State, Action for each t"""
-    def __init__(self, gamma: float):
+    def __init__(self,
+                 gamma: float,
+                 step_callback: Optional[Callable[[], None]] = None):
         self.gamma: float = gamma
         # S0, A0, R1, S1, A1, R2 ... S(T-1), A(T-1), R(T)
         self.trajectory: list[rsa.RSA] = []
@@ -18,10 +20,7 @@ class Episode:
         self.T: Optional[int] = None
         self.G: np.ndarray = np.array([], dtype=float)
 
-        self._step_callback: Optional[Callable[[Episode], None]] = None
-
-    def set_step_callback(self, step_callback: Optional[Callable[[Episode], None]] = None):
-        self._step_callback = step_callback
+        self._step_callback: Optional[Callable[[], None]] = step_callback
 
     def add_rsa(self,
                 reward: Optional[float],
@@ -33,7 +32,7 @@ class Episode:
             self.terminates = True
             self.T = len(self.trajectory) - 1
         if self._step_callback:
-            self._step_callback(self)
+            self._step_callback()
 
     def generate_returns(self):
         if self.terminates:
