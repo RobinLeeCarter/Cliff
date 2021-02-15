@@ -14,7 +14,6 @@ class Agent:
                  environment_: environment.Environment,
                  verbose: bool = False):
         self.environment: environment.Environment = environment_
-        self.algorithm_factory: algorithm.Factory = algorithm.Factory(self.environment, self)
         self.verbose: bool = verbose
 
         self.policy: Optional[policy.Policy] = None
@@ -42,7 +41,7 @@ class Agent:
 
     def set_settings(self, settings: common.Settings):
         self.policy = policy.factory(self.environment, settings.policy_parameters)
-        self.algorithm = self.algorithm_factory[settings.algorithm_parameters]
+        self.algorithm = algorithm.factory(self.environment, self, settings.algorithm_parameters)
         self.gamma = settings.gamma
 
     def set_step_callback(self, step_callback: Optional[Callable[[episode.Episode], None]] = None):
