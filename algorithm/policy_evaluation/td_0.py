@@ -15,19 +15,19 @@ class TD0(abstract.EpisodicOnline):
                  algorithm_parameters: common.AlgorithmParameters
                  ):
         super().__init__(environment_, agent_, algorithm_parameters)
-        self._alpha = self.algorithm_parameters.alpha
-        self.algorithm_type = common.AlgorithmType.CONSTANT_ALPHA_MC
-        self.name = common.algorithm_name[self.algorithm_type]
+        self._alpha = self._algorithm_parameters.alpha
+        self._algorithm_type = common.AlgorithmType.CONSTANT_ALPHA_MC
+        self.name = common.algorithm_name[self._algorithm_type]
         self.title = f"{self.name} α={self._alpha}"
 
     def _do_training_step(self):
-        self.agent.choose_action()
-        self.agent.take_action()
+        self._agent.choose_action()
+        self._agent.take_action()
 
-        prev_state = self.agent.prev_state
-        reward = self.agent.reward
-        state = self.agent.state
+        prev_state = self._agent.prev_state
+        reward = self._agent.reward
+        state = self._agent.state
 
-        target = reward + self.gamma * self._V[state]
+        target = reward + self._gamma * self._V[state]
         delta = target - self._V[prev_state]
         self._V[prev_state] += self._alpha * delta

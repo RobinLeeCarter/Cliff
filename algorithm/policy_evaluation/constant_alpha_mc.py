@@ -15,13 +15,13 @@ class ConstantAlphaMC(abstract.EpisodicMonteCarlo):
                  algorithm_parameters: common.AlgorithmParameters
                  ):
         super().__init__(environment_, agent_, algorithm_parameters)
-        self._alpha = self.algorithm_parameters.alpha
-        self.algorithm_type = common.AlgorithmType.CONSTANT_ALPHA_MC
-        self.name = common.algorithm_name[self.algorithm_type]
+        self._alpha = self._algorithm_parameters.alpha
+        self._algorithm_type = common.AlgorithmType.CONSTANT_ALPHA_MC
+        self.name = common.algorithm_name[self._algorithm_type]
         self.title = f"{self.name} α={self._alpha}"
 
     def _process_time_step(self, t: int):
-        state = self.episode[t].state
-        target = self.episode.G[t]
+        state = self._episode[t].state
+        target = self._episode.G[t]
         delta = target - self._V[state]
         self._V[state] += self._alpha * delta

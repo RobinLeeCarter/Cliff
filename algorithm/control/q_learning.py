@@ -15,23 +15,23 @@ class QLearning(abstract.EpisodicOnline):
                  algorithm_parameters: common.AlgorithmParameters
                  ):
         super().__init__(environment_, agent_, algorithm_parameters)
-        self._alpha = self.algorithm_parameters.alpha
-        self.algorithm_type = common.AlgorithmType.Q_LEARNING
-        self.name = common.algorithm_name[self.algorithm_type]
+        self._alpha = self._algorithm_parameters.alpha
+        self._algorithm_type = common.AlgorithmType.Q_LEARNING
+        self.name = common.algorithm_name[self._algorithm_type]
         self.title = f"{self.name} α={self._alpha}"
 
     def _do_training_step(self):
-        self.agent.choose_action()
-        self.agent.take_action()
+        self._agent.choose_action()
+        self._agent.take_action()
 
-        prev_state = self.agent.prev_state
-        prev_action = self.agent.prev_action
-        reward = self.agent.reward
-        state = self.agent.state
+        prev_state = self._agent.prev_state
+        prev_action = self._agent.prev_action
+        reward = self._agent.reward
+        state = self._agent.state
 
         q_max_over_a = self._Q.max_over_actions(state)
-        target = reward + self.gamma * q_max_over_a
+        target = reward + self._gamma * q_max_over_a
         delta = target - self._Q[prev_state, prev_action]
         self._Q[prev_state, prev_action] += self._alpha * delta
         # update policy to be in-line with Q
-        self.agent.policy[prev_state] = self._Q.argmax_over_actions(prev_state)
+        self._agent.policy[prev_state] = self._Q.argmax_over_actions(prev_state)

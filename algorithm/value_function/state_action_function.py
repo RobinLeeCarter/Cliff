@@ -14,7 +14,7 @@ class StateActionFunction:
                  initial_q_value: float
                  ):
         self._environment: environment.Environment = environment_
-        self.initial_q_value: float = initial_q_value
+        self._initial_q_value: float = initial_q_value
 
         self._shape = self._environment.states_shape + self._environment.actions_shape
         self._values: np.ndarray = np.empty(shape=self._shape, dtype=float)
@@ -34,7 +34,7 @@ class StateActionFunction:
                 if state_.is_terminal:
                     self._values[q_index] = 0.0
                 else:
-                    self._values[q_index] = self.initial_q_value
+                    self._values[q_index] = self._initial_q_value
 
     def __getitem__(self, state_action: tuple[environment.State, environment.Action]) -> float:
         state, action = state_action
