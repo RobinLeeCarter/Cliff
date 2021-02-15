@@ -24,21 +24,13 @@ class Controller:
 
         self.environment = environments.factory(self.scenario.environment_parameters)
 
-        # create policy and agent
-        # self.policy: policy.EGreedy = policy.EGreedy(
-        #     environment_=self.environment,
-        #     epsilon=self.scenario.scenario_settings.policy_parameters.epsilon
-        # )
-
-        # create agent (and it will create the algorithms and the policy)
+        # create agent (and it will create the algorithm and the policy when it is given Settings)
         self.agent = agent.Agent(self.environment)
 
         self.graph = view.Graph()
         self.grid_view = view.GridView(self.environment.grid_world)
 
-        # self.comparison: comparison.Comparison = self._create_comparison()
         self.comparison: comparison.Comparison = comparison.factory(self.scenario, self.graph)
-
         self.trainer: trainer.Trainer = trainer.Trainer(
             agent_=self.agent,
             comparison_=self.comparison,

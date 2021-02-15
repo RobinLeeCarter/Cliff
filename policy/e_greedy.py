@@ -8,11 +8,11 @@ from policy import random, deterministic
 
 
 class EGreedy(random.Random):
-    def __init__(self, environment_: environment.Environment, epsilon: float):
-        super().__init__(environment_)
+    def __init__(self, environment_: environment.Environment, policy_parameters: common.PolicyParameters):
+        super().__init__(environment_, policy_parameters)
         self.greedy_policy: deterministic.Deterministic =\
-            deterministic.Deterministic(self.environment)
-        self.epsilon = epsilon
+            deterministic.Deterministic(self._environment, self._policy_parameters)
+        self.epsilon = self._policy_parameters.epsilon
 
     def get_action(self, state: environment.State) -> environment.Action:
         if common.rng.uniform() > self.epsilon:

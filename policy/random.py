@@ -9,8 +9,8 @@ from policy import policy_
 
 class Random(policy_.Policy):
     # fully random
-    def __init__(self, environment_: environment.Environment):
-        super().__init__(environment_)
+    def __init__(self, environment_: environment.Environment, policy_parameters: common.PolicyParameters):
+        super().__init__(environment_, policy_parameters)
 
         # cache state and possible actions for get_probability to avoid doing it twice
         # self.state: Optional[environment.State] = None
@@ -28,7 +28,7 @@ class Random(policy_.Policy):
         # if self.state is None or state != self.state:
         #       can't use cached version
         # self.state = state
-        self.possible_actions = [action for action in self.environment.actions_for_state(state)]
+        self.possible_actions = [action for action in self._environment.actions_for_state(state)]
         if not self.possible_actions:
             raise Exception(f"EGreedyPolicy state: {state} no possible actions")
 

@@ -2,13 +2,14 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
+    import common
     import environment
 from policy import policy_
 
 
 class NoPolicy(policy_.Policy):
-    def __init__(self, environment_: environment.Environment):
-        super().__init__(environment_)
+    def __init__(self, environment_: environment.Environment, policy_parameters: common.PolicyParameters):
+        super().__init__(environment_, policy_parameters)
         actions: list[environment.Action] = [action for action in environment_.actions()]
         self.action = actions[0]    # always pick first action (presumably stationary)
 

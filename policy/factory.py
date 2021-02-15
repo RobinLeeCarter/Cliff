@@ -12,13 +12,13 @@ def factory(environment_: environment.Environment, policy_parameters: common.Pol
     pt = common.PolicyType
     policy_type = policy_parameters.policy_type
     if policy_type == pt.DETERMINISTIC:
-        policy = deterministic.Deterministic(environment_)
+        policy = deterministic.Deterministic(environment_, policy_parameters)
     elif policy_type == pt.NONE:
-        policy = no_policy.NoPolicy(environment_)
+        policy = no_policy.NoPolicy(environment_, policy_parameters)
     elif policy_type == pt.RANDOM:
-        policy = random.Random(environment_)
+        policy = random.Random(environment_, policy_parameters)
     elif policy_type == pt.E_GREEDY:
-        policy = e_greedy.EGreedy(environment_, policy_parameters.epsilon)
+        policy = e_greedy.EGreedy(environment_, policy_parameters)
     else:
         raise NotImplementedError
     return policy

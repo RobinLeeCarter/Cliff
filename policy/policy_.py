@@ -3,12 +3,14 @@ import abc
 from typing import Optional, TYPE_CHECKING
 
 if TYPE_CHECKING:
+    import common
     import environment
 
 
 class Policy(abc.ABC):
-    def __init__(self, environment_: environment.Environment):
-        self.environment = environment_
+    def __init__(self, environment_: environment.Environment, policy_parameters: common.PolicyParameters):
+        self._environment = environment_
+        self._policy_parameters: common.PolicyParameters = policy_parameters
 
     def __getitem__(self, state: environment.State) -> Optional[environment.Action]:
         if state.is_terminal:

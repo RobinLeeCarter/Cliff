@@ -4,13 +4,14 @@ from typing import TYPE_CHECKING
 import numpy as np
 
 if TYPE_CHECKING:
+    import common
     import environment
 from policy import policy_
 
 
 class Deterministic(policy_.Policy):
-    def __init__(self, environment_: environment.Environment):
-        super().__init__(environment_)
+    def __init__(self, environment_: environment.Environment, policy_parameters: common.PolicyParameters):
+        super().__init__(environment_, policy_parameters)
         self._action_given_state: np.ndarray = np.empty(shape=environment_.states_shape, dtype=environment_.action_type)
 
     def get_action(self, state: environment.State) -> environment.Action:
