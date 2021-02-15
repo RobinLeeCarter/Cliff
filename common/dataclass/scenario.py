@@ -2,16 +2,16 @@ from __future__ import annotations
 import dataclasses
 
 from common import enums
-from common.dataclass import settings, algorithm_parameters_, policy_parameters_,\
-    environment_parameters_, graph_parameters_
+from common.dataclass import settings, algorithm_parameters, policy_parameters,\
+    environment_parameters, graph_parameters
 from common.dataclass.comparison_parameters import comparison_parameters_, algorithm_by_alpha
 
 
 @dataclasses.dataclass
 class Scenario:
     # environment
-    environment_parameters: environment_parameters_.EnvironmentParameters = \
-        dataclasses.field(default_factory=environment_parameters_.default_factory)
+    environment_parameters: environment_parameters.EnvironmentParameters = \
+        dataclasses.field(default_factory=environment_parameters.default_factory)
 
     # scenario
     scenario_settings: settings.Settings = dataclasses.field(default_factory=settings.default_factory)
@@ -22,8 +22,8 @@ class Scenario:
         dataclasses.field(default_factory=comparison_parameters_.default_factory)
 
     # output
-    graph_parameters: graph_parameters_.GraphParameters = \
-        dataclasses.field(default_factory=graph_parameters_.default_factory)
+    graph_parameters: graph_parameters.GraphParameters = \
+        dataclasses.field(default_factory=graph_parameters.default_factory)
     # graph_parameters: dict[str, any] = dataclasses.field(default_factory=dict)  # should be a dataclass
 
     def __post_init__(self):
@@ -55,13 +55,13 @@ class Scenario:
                 else:
                     setattr(settings_s, attribute_name, scenario_value)
 
-    def _coalesce_algorithm_parameters(self, settings_ap: algorithm_parameters_.AlgorithmParameters):
+    def _coalesce_algorithm_parameters(self, settings_ap: algorithm_parameters.AlgorithmParameters):
         """combine algorithm_parameters
         order of precedence: settings > scenario > default"""
-        scenario_ap: algorithm_parameters_.AlgorithmParameters = self.scenario_settings.algorithm_parameters
-        default_ap: algorithm_parameters_.AlgorithmParameters = settings.default_settings.algorithm_parameters
+        scenario_ap: algorithm_parameters.AlgorithmParameters = self.scenario_settings.algorithm_parameters
+        default_ap: algorithm_parameters.AlgorithmParameters = settings.default_settings.algorithm_parameters
 
-        for attribute_name in algorithm_parameters_.precedence_attribute_names:
+        for attribute_name in algorithm_parameters.precedence_attribute_names:
             settings_value = getattr(settings_ap, attribute_name)
             scenario_value = getattr(scenario_ap, attribute_name)
             default_value = getattr(default_ap, attribute_name)
@@ -73,13 +73,13 @@ class Scenario:
                 else:
                     setattr(settings_ap, attribute_name, scenario_value)
 
-    def _coalesce_policy_parameters(self, settings_pp: policy_parameters_.PolicyParameters):
+    def _coalesce_policy_parameters(self, settings_pp: policy_parameters.PolicyParameters):
         """combine algorithm_parameters
         order of precedence: settings > scenario > default"""
-        scenario_pp: policy_parameters_.PolicyParameters = self.scenario_settings.policy_parameters
-        default_pp: policy_parameters_.PolicyParameters = settings.default_settings.policy_parameters
+        scenario_pp: policy_parameters.PolicyParameters = self.scenario_settings.policy_parameters
+        default_pp: policy_parameters.PolicyParameters = settings.default_settings.policy_parameters
 
-        for attribute_name in policy_parameters_.precedence_attribute_names:
+        for attribute_name in policy_parameters.precedence_attribute_names:
             settings_value = getattr(settings_pp, attribute_name)
             scenario_value = getattr(scenario_pp, attribute_name)
             default_value = getattr(default_pp, attribute_name)

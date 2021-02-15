@@ -4,18 +4,18 @@ import copy
 from typing import Optional
 
 from common import enums
-from common.dataclass import algorithm_parameters_, policy_parameters_
+from common.dataclass import algorithm_parameters, policy_parameters
 
 
 @dataclasses.dataclass
 class Settings:
     gamma: Optional[float] = None
 
-    algorithm_parameters: algorithm_parameters_.AlgorithmParameters = \
-        dataclasses.field(default_factory=algorithm_parameters_.default_factory)
+    algorithm_parameters: algorithm_parameters.AlgorithmParameters = \
+        dataclasses.field(default_factory=algorithm_parameters.default_factory)
 
-    policy_parameters: policy_parameters_.PolicyParameters = \
-        dataclasses.field(default_factory=policy_parameters_.default_factory)
+    policy_parameters: policy_parameters.PolicyParameters = \
+        dataclasses.field(default_factory=policy_parameters.default_factory)
 
     runs: Optional[int] = None
     run_print_frequency: Optional[int] = None
@@ -45,12 +45,12 @@ precedence_attribute_names: list[str] = [
 
 default_settings = Settings(
     gamma=1.0,
-    algorithm_parameters=algorithm_parameters_.AlgorithmParameters(
+    algorithm_parameters=algorithm_parameters.AlgorithmParameters(
         initial_v_value=0.0,
         initial_q_value=0.0,
         verbose=False
     ),
-    policy_parameters=policy_parameters_.PolicyParameters(
+    policy_parameters=policy_parameters.PolicyParameters(
         policy_type=enums.PolicyType.E_GREEDY,
         epsilon=0.1
     ),

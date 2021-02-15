@@ -5,7 +5,7 @@ from typing import Optional
 
 import utils
 from common import enums
-from common.dataclass import settings, algorithm_parameters_
+from common.dataclass import settings, algorithm_parameters
 from common.dataclass.comparison_parameters import comparison_parameters_
 
 
@@ -35,7 +35,7 @@ class ComparisonAlgorithmByAlpha(comparison_parameters_.ComparisonParameters):
         for alpha in self.alpha_list:
             for algorithm_type in self.algorithm_type_list:
                 settings_ = settings.Settings(
-                    algorithm_parameters=algorithm_parameters_.AlgorithmParameters(
+                    algorithm_parameters=algorithm_parameters.AlgorithmParameters(
                         algorithm_type=algorithm_type,
                         alpha=alpha
                     )
