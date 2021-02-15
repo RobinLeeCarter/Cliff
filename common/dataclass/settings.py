@@ -3,7 +3,6 @@ import dataclasses
 import copy
 from typing import Optional
 
-from common import enums
 from common.dataclass import algorithm_parameters, policy_parameters
 
 
@@ -28,32 +27,35 @@ class Settings:
     episode_recording_frequency: Optional[int] = None
     review_every_step: Optional[bool] = None
 
-    algorithm_title: str = ""   # algorithm title will be populated by Trainer later whether it's used or not
+    # algorithm title will be populated by Trainer later whether it's used or not
+    algorithm_title: str = dataclasses.field(default="", init=False)
+
+    def apply_default_to_nones(self, default_: Settings):
+        attribute_names: list[str] = [
+            'gamma',
+            'runs',
+            'run_print_frequency',
+            'training_episodes',
+            'episode_length_timeout',
+            'episode_print_frequency',
+            'episode_to_start_recording',
+            'episode_recording_frequency',
+            'review_every_step'
+        ]
+        for attribute_name in attribute_names:
+            attribute = self.__getattribute__(attribute_name)
+            if attribute is None:
+                default_value = default_.__getattribute__(attribute_name)
+                self.__setattr__(attribute_name, default_value)
+
+        self.algorithm_parameters.apply_default_to_nones(default_.algorithm_parameters)
+        self.policy_parameters.apply_default_to_nones(default_.policy_parameters)
 
 
-precedence_attribute_names: list[str] = [
-    'gamma',
-    'runs',
-    'run_print_frequency',
-    'training_episodes',
-    'episode_length_timeout',
-    'episode_print_frequency',
-    'episode_to_start_recording',
-    'episode_recording_frequency',
-    'review_every_step'
-]
-
-default_settings = Settings(
+default = Settings(
     gamma=1.0,
-    algorithm_parameters=algorithm_parameters.AlgorithmParameters(
-        initial_v_value=0.0,
-        initial_q_value=0.0,
-        verbose=False
-    ),
-    policy_parameters=policy_parameters.PolicyParameters(
-        policy_type=enums.PolicyType.E_GREEDY,
-        epsilon=0.1
-    ),
+    algorithm_parameters=algorithm_parameters.default,
+    policy_parameters=policy_parameters.default,
     runs=10,
     run_print_frequency=10,
     training_episodes=100,
@@ -66,4 +68,4 @@ default_settings = Settings(
 
 
 def default_factory() -> Settings:
-    return copy.deepcopy(default_settings)
+    return copy.deepcopy(default)

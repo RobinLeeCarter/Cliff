@@ -1,6 +1,7 @@
 from __future__ import annotations
-import dataclasses
 from typing import Optional
+import dataclasses
+import copy
 
 from common import enums
 
@@ -14,16 +15,28 @@ class AlgorithmParameters:
     initial_q_value: Optional[float] = None
     verbose: Optional[bool] = None
 
+    def apply_default_to_nones(self, default_: AlgorithmParameters):
+        attribute_names: list[str] = [
+            'algorithm_type',
+            'alpha',
+            'alpha_variable',
+            'initial_v_value',
+            'initial_q_value',
+            'verbose'
+        ]
+        for attribute_name in attribute_names:
+            attribute = self.__getattribute__(attribute_name)
+            if attribute is None:
+                default_value = default_.__getattribute__(attribute_name)
+                self.__setattr__(attribute_name, default_value)
 
-precedence_attribute_names: list[str] = [
-    'algorithm_type',
-    'alpha',
-    'alpha_variable',
-    'initial_v_value',
-    'initial_q_value',
-    'verbose'
-]
+
+default: AlgorithmParameters = AlgorithmParameters(
+    initial_v_value=0.0,
+    initial_q_value=0.0,
+    verbose=False
+)
 
 
 def default_factory() -> AlgorithmParameters:
-    return AlgorithmParameters()
+    return copy.deepcopy(default)

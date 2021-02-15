@@ -17,8 +17,8 @@ class Controller:
 
         # self.scenario: common.Scenario = scenarios.windy_timestep
         # self.scenario: common.Scenario = scenarios.random_windy_timestep
-        # self.scenario: common.Scenario = scenarios.cliff_alpha
-        self.scenario: common.Scenario = scenarios.cliff_episode
+        self.scenario: common.Scenario = scenarios.cliff_alpha
+        # self.scenario: common.Scenario = scenarios.cliff_episode
 
         self.settings: Optional[common.Settings] = None  # current settings
 
