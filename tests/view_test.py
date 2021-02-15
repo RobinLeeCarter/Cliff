@@ -1,11 +1,16 @@
 from __future__ import annotations
 
+import common
 import environments
 import view
 
 
 def view_test() -> bool:
-    cliff = environments.Cliff()
+    environment_parameters = common.EnvironmentParameters(
+        environment_type=common.EnvironmentType.CLIFF,
+        actions_list=common.ActionsList.FOUR_MOVES
+    )
+    cliff = environments.factory(environment_parameters)
     my_view = view.GridView(cliff.grid_world)
     my_view.open_window()
     my_view.display_and_wait()

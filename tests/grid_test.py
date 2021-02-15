@@ -7,7 +7,11 @@ import environments
 
 
 def grid_test() -> bool:
-    cliff = environments.Cliff()
+    environment_parameters = common.EnvironmentParameters(
+        environment_type=common.EnvironmentType.CLIFF,
+        actions_list=common.ActionsList.FOUR_MOVES
+    )
+    cliff = environments.factory(environment_parameters)
     grid_world_ = cliff.grid_world
     shape = grid_world_.max_y + 1, grid_world_.max_x + 1
     cartesian_grid = np.empty(shape=shape, dtype=common.Square)

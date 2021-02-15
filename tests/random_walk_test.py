@@ -6,7 +6,11 @@ import environments
 
 
 def random_walk_test() -> bool:
-    environment_ = environments.RandomWalk()
+    environment_parameters = common.EnvironmentParameters(
+        environment_type=common.EnvironmentType.RANDOM_WALK,
+        actions_list=common.ActionsList.STATIONARY_MOVE_ONLY
+    )
+    environment_ = environments.factory(environment_parameters)
 
     for state_ in environment_.states():
         print(f"{state_} \t index={state_.index}")

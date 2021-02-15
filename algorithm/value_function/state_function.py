@@ -18,6 +18,8 @@ class StateFunction:
         self._shape = self._environment.states_shape
         self._values: np.ndarray = np.empty(shape=self._shape, dtype=float)
 
+        self.initialize_values()
+
     def initialize_values(self):
         for state_ in self._environment.states():
             if state_.is_terminal:

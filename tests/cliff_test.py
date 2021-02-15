@@ -6,7 +6,11 @@ import environments
 
 
 def cliff_test() -> bool:
-    environment_ = environments.Cliff()
+    environment_parameters = common.EnvironmentParameters(
+        environment_type=common.EnvironmentType.CLIFF,
+        actions_list=common.ActionsList.FOUR_MOVES
+    )
+    environment_ = environments.factory(environment_parameters)
 
     for state_ in environment_.states():
         print(f"{state_} \t index={state_.index}")

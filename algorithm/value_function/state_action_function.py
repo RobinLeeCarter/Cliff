@@ -22,6 +22,8 @@ class StateActionFunction:
         all_slice: slice = np.s_[:]
         self._actions_slice: tuple[slice] = tuple(itertools.repeat(all_slice, len(self._environment.actions_shape)))
 
+        self.initialize_values()
+
     def initialize_values(self):
         # incompatible actions must never be selected
         self._values.fill(np.NINF)

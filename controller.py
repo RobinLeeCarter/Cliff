@@ -7,7 +7,6 @@ import agent
 import algorithm
 import view
 import comparison
-import environment
 import environments
 import trainer
 import scenarios
@@ -24,7 +23,7 @@ class Controller:
 
         self.settings: Optional[common.Settings] = None  # current settings
 
-        self.environment = self._create_environment()
+        self.environment = environments.factory(self.scenario.environment_parameters)
 
         # create policy and agent
         # self.policy: policy.EGreedy = policy.EGreedy(
@@ -40,7 +39,8 @@ class Controller:
         self.graph = view.Graph()
         self.grid_view = view.GridView(self.environment.grid_world)
 
-        self.comparison: comparison.Comparison = self._create_comparison()
+        # self.comparison: comparison.Comparison = self._create_comparison()
+        self.comparison: comparison.Comparison = comparison.factory(self.scenario, self.graph)
 
         self.trainer: trainer.Trainer = trainer.Trainer(
             algorithm_factory=self.algorithm_factory,
@@ -55,35 +55,6 @@ class Controller:
         # self.behaviour_policy: policy.RandomPolicy = policy.RandomPolicy(self.environment)
         # self.target_agent = agent.Agent(self.environment, self.target_policy)
         # self.behaviour_agent = agent.Agent(self.environment, self.behaviour_policy)
-
-    def _create_environment(self) -> environment.Environment:
-        environment_parameters = self.scenario.environment_parameters
-        environment_type = environment_parameters.environment_type
-        et = common.EnvironmentType
-
-        if environment_type == et.CLIFF:
-            environment_ = environments.Cliff(environment_parameters)
-        elif environment_type == et.WINDY:
-            environment_ = environments.Windy(environment_parameters)
-        elif environment_type == et.RANDOM_WALK:
-            environment_ = environments.RandomWalk(environment_parameters)
-        else:
-            raise NotImplementedError
-        return environment_
-
-    def _create_comparison(self) -> comparison.Comparison:
-        c = common.ComparisonType
-        comparison_type = self.scenario.comparison_parameters.comparison_type
-        if comparison_type == c.EPISODE_BY_TIMESTEP:
-            comparison_ = comparison.EpisodeByTimestep(self.scenario, self.graph)
-        elif comparison_type == c.RETURN_BY_EPISODE:
-            comparison_ = comparison.ReturnByEpisode(self.scenario, self.graph)
-        elif comparison_type == c.RETURN_BY_ALPHA:
-            comparison_ = comparison.ReturnByAlpha(self.scenario, self.graph)
-        else:
-            raise NotImplementedError
-
-        return comparison_
 
     def run(self):
         timer: utils.Timer = utils.Timer()
