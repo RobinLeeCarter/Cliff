@@ -4,7 +4,7 @@ from typing import Optional, Dict, TYPE_CHECKING
 import pygame
 
 if TYPE_CHECKING:
-    from model import environment, agent
+    from mdp.model import environment, agent
 import common
 
 

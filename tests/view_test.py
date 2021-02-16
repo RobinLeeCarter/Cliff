@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import common
-from model import scenarios
+from mdp.model import scenarios
 import view
 
 

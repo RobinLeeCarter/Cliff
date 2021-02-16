@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import common
-from model import scenarios
+from mdp.model import scenarios
 
 environment_parameters = common.EnvironmentParameters(
     environment_type=common.EnvironmentType.CLIFF,

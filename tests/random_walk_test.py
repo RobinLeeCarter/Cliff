@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import common
-from model import environment, scenarios
+from mdp.model import environment, scenarios
 
 
 def random_walk_test() -> bool:

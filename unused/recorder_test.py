@@ -1,5 +1,6 @@
-from model import agent, algorithm, policy, scenarios
-from model.breakdown import recorder
+from mdp.model import algorithm
+from mdp.model import scenarios, policy, agent
+from mdp.model.breakdown import recorder
 
 
 def recorder_test() -> bool:

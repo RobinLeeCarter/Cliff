@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import os_environ_settings
-import model
+from mdp import model
 
 
 def main():
