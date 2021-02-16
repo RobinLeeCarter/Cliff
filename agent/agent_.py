@@ -52,7 +52,7 @@ class Agent:
     def episode(self) -> episode.Episode:
         return self._episode
 
-    def set_settings(self, settings: common.Settings):
+    def apply_settings(self, settings: common.Settings):
         self._policy = policy.factory(self._environment, settings.policy_parameters)
         self._algorithm = algorithm.factory(self._environment, self, settings.algorithm_parameters)
         self._episode_length_timeout = settings.episode_length_timeout

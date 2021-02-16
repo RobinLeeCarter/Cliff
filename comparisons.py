@@ -8,29 +8,25 @@ import common
 windy_timestep = common.Comparison(
     environment_parameters=common.EnvironmentParameters(
         environment_type=common.EnvironmentType.WINDY,
-        actions_list=common.ActionsList.FOUR_MOVES
+        actions_list=common.ActionsList.FOUR_MOVES,
     ),
     comparison_settings=common.Settings(
         runs=50,
         training_episodes=170,
         review_every_step=True,
-        # algorithm_parameters=common.AlgorithmParameters(
-        #     initial_q_value=5.0,
-        #     initial_v_value=6.0
-        # )
     ),
     breakdown_parameters=common.BreakdownParameters(
-        breakdown_type=common.BreakdownType.EPISODE_BY_TIMESTEP
+        breakdown_type=common.BreakdownType.EPISODE_BY_TIMESTEP,
     ),
     settings_list=[
         common.Settings(
             algorithm_parameters=common.AlgorithmParameters(
                 algorithm_type=common.AlgorithmType.SARSA,
                 alpha=0.5,
-                initial_q_value=-20.0
+                initial_q_value=-20.0,
             )
         )
-    ]
+    ],
 )
 
 random_windy_timestep = copy.deepcopy(windy_timestep)
@@ -39,11 +35,11 @@ random_windy_timestep.environment_parameters.random_wind = True
 cliff_alpha = common.Comparison(
     environment_parameters=common.EnvironmentParameters(
         environment_type=common.EnvironmentType.CLIFF,
-        actions_list=common.ActionsList.FOUR_MOVES
+        actions_list=common.ActionsList.FOUR_MOVES,
     ),
     comparison_settings=common.Settings(
         runs=10,
-        training_episodes=100
+        training_episodes=100,
     ),
     breakdown_parameters=common.BreakdownAlgorithmByAlpha(
         breakdown_type=common.BreakdownType.RETURN_BY_ALPHA,
@@ -55,23 +51,22 @@ cliff_alpha = common.Comparison(
             common.AlgorithmType.VQ,
             common.AlgorithmType.Q_LEARNING,
             common.AlgorithmType.SARSA
-        ]
+        ],
     ),
     graph_parameters=common.GraphParameters(
         y_min=-140,
-        y_max=0
-    )
+        y_max=0,
+    ),
 )
 
 cliff_episode = common.Comparison(
     environment_parameters=common.EnvironmentParameters(
         environment_type=common.EnvironmentType.CLIFF,
-        actions_list=common.ActionsList.FOUR_MOVES
+        actions_list=common.ActionsList.FOUR_MOVES,
     ),
     comparison_settings=common.Settings(
         runs=10,
-        training_episodes=500
-        # policy_parameters=common.PolicyParameters(epsilon=0.2)
+        training_episodes=500,
     ),
     breakdown_parameters=common.BreakdownParameters(
         breakdown_type=common.BreakdownType.RETURN_BY_EPISODE
@@ -98,5 +93,5 @@ cliff_episode = common.Comparison(
         moving_average_window_size=19,
         y_min=-100,
         y_max=0
-    )
+    ),
 )

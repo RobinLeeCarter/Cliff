@@ -34,7 +34,7 @@ class AlgorithmParameters:
 default: AlgorithmParameters = AlgorithmParameters(
     initial_v_value=0.0,
     initial_q_value=0.0,
-    verbose=False
+    verbose=False,
 )
 
 

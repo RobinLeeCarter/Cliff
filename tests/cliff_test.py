@@ -11,6 +11,7 @@ def cliff_test() -> bool:
         actions_list=common.ActionsList.FOUR_MOVES
     )
     environment_ = environments.factory(environment_parameters)
+    print(type(environment_))
 
     for state_ in environment_.states():
         print(f"{state_} \t index={state_.index}")

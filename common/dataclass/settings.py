@@ -63,7 +63,7 @@ default = Settings(
     episode_print_frequency=1000,
     episode_to_start_recording=0,
     episode_recording_frequency=1,
-    review_every_step=False
+    review_every_step=False,
 )
 
 

@@ -31,7 +31,7 @@ class Trainer:
     def train(self, settings: common.Settings):
         # process settings
         self.settings = settings
-        self._agent.set_settings(self.settings)
+        self._agent.apply_settings(self.settings)
         # self.algorithm_ = self.agent.algorithm
 
         # self.algorithm_ = self.algorithm_factory[self.settings.algorithm_parameters]

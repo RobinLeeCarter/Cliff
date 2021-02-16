@@ -31,7 +31,7 @@ class EnvironmentParameters:
 default: EnvironmentParameters = EnvironmentParameters(
     actions_list=enums.ActionsList.FOUR_MOVES,
     random_wind=False,
-    verbose=False
+    verbose=False,
 )
 
 
