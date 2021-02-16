@@ -10,8 +10,8 @@ from breakdown import breakdown_, recorder
 
 
 class EpisodeByTimestep(breakdown_.Breakdown):
-    def __init__(self, scenario: common.Scenario, graph: view.Graph):
-        super().__init__(scenario, graph)
+    def __init__(self, comparison: common.Comparison, graph: view.Graph):
+        super().__init__(comparison, graph)
         recorder_key_type = tuple[int, int]
         self._recorder = recorder.Recorder[recorder_key_type]()
         self._max_timestep: int = 0
@@ -34,7 +34,7 @@ class EpisodeByTimestep(breakdown_.Breakdown):
         )
 
         # collate output from self.recorder
-        for settings_ in self.scenario.settings_list:
+        for settings_ in self.comparison.settings_list:
             values = np.array(
                 [self._recorder[settings_.algorithm_parameters.algorithm_type, timestep]
                  for timestep in timestep_array],
@@ -48,7 +48,7 @@ class EpisodeByTimestep(breakdown_.Breakdown):
             self.series_list.append(series_)
 
     def draw_graph(self):
-        scenario_settings = self.scenario.scenario_settings
+        comparison_settings = self.comparison.comparison_settings
 
         self.graph.make_plot(x_series=self.x_series,
                              graph_series=self.series_list,
@@ -56,5 +56,5 @@ class EpisodeByTimestep(breakdown_.Breakdown):
                              x_min=0,
                              x_max=self._max_timestep,
                              y_min=0,
-                             y_max=scenario_settings.training_episodes
+                             y_max=comparison_settings.training_episodes
                              )

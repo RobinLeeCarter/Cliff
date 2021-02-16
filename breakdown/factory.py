@@ -8,15 +8,15 @@ import common
 from breakdown import episode_by_timestep, return_by_alpha, return_by_episode
 
 
-def factory(scenario: common.Scenario, graph_: graph.Graph) -> breakdown_.Breakdown:
+def factory(comparison: common.Comparison, graph_: graph.Graph) -> breakdown_.Breakdown:
     c = common.BreakdownType
-    breakdown_type = scenario.breakdown_parameters.breakdown_type
+    breakdown_type = comparison.breakdown_parameters.breakdown_type
     if breakdown_type == c.EPISODE_BY_TIMESTEP:
-        breakdown = episode_by_timestep.EpisodeByTimestep(scenario, graph_)
+        breakdown = episode_by_timestep.EpisodeByTimestep(comparison, graph_)
     elif breakdown_type == c.RETURN_BY_EPISODE:
-        breakdown = return_by_episode.ReturnByEpisode(scenario, graph_)
+        breakdown = return_by_episode.ReturnByEpisode(comparison, graph_)
     elif breakdown_type == c.RETURN_BY_ALPHA:
-        breakdown = return_by_alpha.ReturnByAlpha(scenario, graph_)
+        breakdown = return_by_alpha.ReturnByAlpha(comparison, graph_)
     else:
         raise NotImplementedError
 

@@ -8,21 +8,21 @@ import view
 import breakdown
 import environments
 import trainer
-import scenarios
+import comparisons
 
 
 class Controller:
     def __init__(self, verbose: bool = False):
         self.verbose: bool = verbose
 
-        # self.scenario: common.Scenario = scenarios.windy_timestep
-        # self.scenario: common.Scenario = scenarios.random_windy_timestep
-        # self.scenario: common.Scenario = scenarios.cliff_alpha
-        self.scenario: common.Scenario = scenarios.cliff_episode
+        # self.comparison: common.Comparison = comparison.windy_timestep
+        # self.comparison: common.Comparison = comparison.random_windy_timestep
+        # self.comparison: common.Comparison = comparison.cliff_alpha
+        self.comparison: common.Comparison = comparisons.cliff_episode
 
         self.settings: Optional[common.Settings] = None  # current settings
 
-        self.environment = environments.factory(self.scenario.environment_parameters)
+        self.environment = environments.factory(self.comparison.environment_parameters)
 
         # create agent (and it will create the algorithm and the policy when it is given Settings)
         self.agent = agent.Agent(self.environment)
@@ -30,7 +30,7 @@ class Controller:
         self.graph = view.Graph()
         self.grid_view = view.GridView(self.environment.grid_world)
 
-        self.breakdown: breakdown.Breakdown = breakdown.factory(self.scenario, self.graph)
+        self.breakdown: breakdown.Breakdown = breakdown.factory(self.comparison, self.graph)
         self.trainer: trainer.Trainer = trainer.Trainer(
             agent_=self.agent,
             breakdown_=self.breakdown,
@@ -48,7 +48,7 @@ class Controller:
     def run(self):
         timer: utils.Timer = utils.Timer()
         timer.start()
-        for self.settings in self.scenario.settings_list:
+        for self.settings in self.comparison.settings_list:
             self.trainer.train(self.settings)
             timer.lap(name=str(self.settings.algorithm_title))
         timer.stop()

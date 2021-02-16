@@ -42,7 +42,7 @@ class Environment(abc.ABC):
                 yield state.State(position, is_terminal)
 
     def actions(self) -> Generator[action.Action, None, None]:
-        """set A - same for all s in this scenario"""
+        """set A - same for all s in this comparison"""
         for action_ in self._actions.action_list:
             yield action_
 

@@ -11,10 +11,10 @@ if TYPE_CHECKING:
 
 
 class Breakdown(ABC):
-    def __init__(self, scenario: common.Scenario, graph: view.Graph):
-        self.scenario: common.Scenario = scenario
+    def __init__(self, comparison: common.Comparison, graph: view.Graph):
+        self.comparison: common.Comparison = comparison
         self.graph: view.Graph = graph
-        self.verbose: bool = self.scenario.breakdown_parameters.verbose
+        self.verbose: bool = self.comparison.breakdown_parameters.verbose
 
         self._trainer: Optional[trainer.Trainer] = None
         self._recorder: Optional[recorder.Recorder] = None

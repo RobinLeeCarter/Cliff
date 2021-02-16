@@ -10,10 +10,10 @@ from breakdown import breakdown_, recorder
 
 
 class ReturnByAlpha(breakdown_.Breakdown):
-    def __init__(self, scenario: common.Scenario, graph: view.Graph):
-        super().__init__(scenario, graph)
-        assert isinstance(self.scenario.breakdown_parameters, common.BreakdownAlgorithmByAlpha)
-        self.breakdown_parameters: common.BreakdownAlgorithmByAlpha = self.scenario.breakdown_parameters
+    def __init__(self, comparison: common.Comparison, graph: view.Graph):
+        super().__init__(comparison, graph)
+        assert isinstance(self.comparison.breakdown_parameters, common.BreakdownAlgorithmByAlpha)
+        self.breakdown_parameters: common.BreakdownAlgorithmByAlpha = self.comparison.breakdown_parameters
 
         recorder_key_type = tuple[common.AlgorithmType, float]
         self._recorder = recorder.Recorder[recorder_key_type]()
@@ -47,7 +47,7 @@ class ReturnByAlpha(breakdown_.Breakdown):
             self.series_list.append(series_)
 
     def draw_graph(self):
-        gp = self.scenario.graph_parameters
+        gp = self.comparison.graph_parameters
         self.graph.make_plot(x_series=self.x_series,
                              graph_series=self.series_list,
                              y_label=self._y_label,

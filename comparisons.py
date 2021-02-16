@@ -5,12 +5,12 @@ import common
 
 
 # do we want random_wind to be a parameter?
-windy_timestep = common.Scenario(
+windy_timestep = common.Comparison(
     environment_parameters=common.EnvironmentParameters(
         environment_type=common.EnvironmentType.WINDY,
         actions_list=common.ActionsList.FOUR_MOVES
     ),
-    scenario_settings=common.Settings(
+    comparison_settings=common.Settings(
         runs=50,
         training_episodes=170,
         review_every_step=True,
@@ -36,12 +36,12 @@ windy_timestep = common.Scenario(
 random_windy_timestep = copy.deepcopy(windy_timestep)
 random_windy_timestep.environment_parameters.random_wind = True
 
-cliff_alpha = common.Scenario(
+cliff_alpha = common.Comparison(
     environment_parameters=common.EnvironmentParameters(
         environment_type=common.EnvironmentType.CLIFF,
         actions_list=common.ActionsList.FOUR_MOVES
     ),
-    scenario_settings=common.Settings(
+    comparison_settings=common.Settings(
         runs=10,
         training_episodes=100
     ),
@@ -63,12 +63,12 @@ cliff_alpha = common.Scenario(
     )
 )
 
-cliff_episode = common.Scenario(
+cliff_episode = common.Comparison(
     environment_parameters=common.EnvironmentParameters(
         environment_type=common.EnvironmentType.CLIFF,
         actions_list=common.ActionsList.FOUR_MOVES
     ),
-    scenario_settings=common.Settings(
+    comparison_settings=common.Settings(
         runs=10,
         training_episodes=500
         # policy_parameters=common.PolicyParameters(epsilon=0.2)
