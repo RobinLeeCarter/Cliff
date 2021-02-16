@@ -5,7 +5,7 @@ from typing import Optional, TYPE_CHECKING
 
 if TYPE_CHECKING:
     import common
-    import view
+    from mdp import view
     from mdp.model.breakdown import recorder
     from mdp.model import trainer
 

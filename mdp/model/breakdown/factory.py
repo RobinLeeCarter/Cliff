@@ -2,7 +2,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from view import graph
+    from mdp.view import graph
 import common
 from mdp.model.breakdown import return_by_alpha, breakdown_, return_by_episode, episode_by_timestep
 

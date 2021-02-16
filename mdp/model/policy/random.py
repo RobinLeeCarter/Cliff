@@ -26,7 +26,7 @@ class Random(policy_.Policy):
 
     def set_possible_actions(self, state: environment.State):
         # if self.state is None or state != self.state:
-        #       can't use cached version
+        #       can'_t use cached version
         # self.state = state
         self.possible_actions = [action for action in self._environment.actions_for_state(state)]
         if not self.possible_actions:

@@ -1,7 +1,7 @@
 import sys
 
 
-def get_size(obj, seen=None):  # abandoned as doesn't work for numpy arrays
+def get_size(obj, seen=None):  # abandoned as doesn'_t work for numpy arrays
     """Recursively finds size of objects"""
     size = sys.getsizeof(obj)
     if seen is None:

@@ -4,27 +4,22 @@ from typing import Optional
 import utils
 import common
 from mdp.model import breakdown, trainer, scenarios, agent
-import view
+from mdp import controller
 
 
 class Model:
     def __init__(self, verbose: bool = False):
         self.verbose: bool = verbose
+        self._controller: Optional[controller.Controller] = None
+        self.comparison: Optional[common.Comparison] = None
 
-        self.comparison: common.Comparison = scenarios.windy.comparisons.timestep()
-        # self.comparison: common.Comparison = scenarios.windy.comparisons.timestep(random_wind=True)
-        # self.comparison: common.Comparison = scenarios.cliff.comparisons.alpha()
-        # self.comparison: common.Comparison = scenarios.cliff.comparisons.episode()
-
-        self.settings: Optional[common.Settings] = None  # current settings
+    def build(self, comparison: common.Comparison):
+        self.comparison = comparison
 
         self.environment = scenarios.environment_factory(self.comparison.environment_parameters)
 
         # create agent (and it will create the algorithm and the policy when it is given Settings)
         self.agent = agent.Agent(self.environment)
-
-        self.graph = view.Graph()
-        self.grid_view = view.GridView(self.environment.grid_world)
 
         self.breakdown: breakdown.Breakdown = breakdown.factory(self.comparison, self.graph)
         self.trainer: trainer.Trainer = trainer.Trainer(
@@ -41,29 +36,16 @@ class Model:
         # self.target_agent = agent.Agent(self.environment, self.target_policy)
         # self.behaviour_agent = agent.Agent(self.environment, self.behaviour_policy)
 
+    def set_controller(self, controller_: controller.Controller):
+        self._controller = controller_
+
     def run(self):
         timer: utils.Timer = utils.Timer()
         timer.start()
-        for self.settings in self.comparison.settings_list:
-            self.trainer.train(self.settings)
-            timer.lap(name=str(self.settings.algorithm_title))
+        for settings in self.comparison.settings_list:
+            self.trainer.train(settings)
+            timer.lap(name=str(settings.algorithm_title))
         timer.stop()
 
         self.breakdown.compile()
         self.breakdown.draw_graph()
-
-    def demonstrate(self):
-        self.grid_view.open_window()
-        running_average = 0
-        count = 0
-        while True:
-            self.agent.generate_episode(self.settings.episode_length_timeout)
-            episode = self.agent.episode
-            print(f"max_t: {episode.max_t} \t total_return: {episode.total_return:.0f}")
-            count += 1
-            running_average += (1/count) * (episode.total_return - running_average)
-            print(f"count: {count} \t running_average: {running_average:.1f}")
-            user_event: common.UserEvent = self.grid_view.display_episode(episode, show_trail=False)
-            if user_event == common.UserEvent.QUIT:
-                break
-        self.grid_view.close_window()

@@ -1,14 +1,22 @@
 from __future__ import annotations
+from typing import TYPE_CHECKING
 
+if TYPE_CHECKING:
+    import common
 import os_environ_settings
-from mdp import model
+from mdp import application
+from mdp.model import scenarios
 
 
 def main():
     os_environ_settings.dummy = None    # for pycharm code inspection only
-    model_ = model.Model(verbose=False)
-    model_.run()
-    # model_.demonstrate()
+
+    comparison: common.Comparison = scenarios.windy.comparisons.timestep()
+    # comparison: common.Comparison = scenarios.windy.comparisons.timestep(random_wind=True)
+    # comparison: common.Comparison = scenarios.cliff.comparisons.alpha()
+    # comparison: common.Comparison = scenarios.cliff.comparisons.episode()
+
+    application.Application(comparison)
 
 
 if __name__ == '__main__':

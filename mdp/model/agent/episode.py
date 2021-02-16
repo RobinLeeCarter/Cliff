@@ -9,7 +9,7 @@ from mdp.model.agent import rsa
 
 
 class Episode:
-    """Just makes a record laid out in the standard way with Reward, State, Action for each t"""
+    """Just makes a record laid out in the standard way with Reward, State, Action for each _t"""
     def __init__(self,
                  gamma: float,
                  step_callback: Optional[Callable[[], None]] = None):

@@ -70,11 +70,11 @@ class StateActionFunction:
         # In case of multiple occurrences of the maximum values,
         # the indices corresponding to the first occurrence are returned
 
-        # best_flat_index_np is just an int but can't be typed as such
+        # best_flat_index_np is just an int but can'_t be typed as such
         best_flat_index_np: np.ndarray = np.argmax(q_state)
-        # best_index_np is actually tuple[np.int64] but can't be typed as such
+        # best_index_np is actually tuple[np.int64] but can'_t be typed as such
         best_index_np: tuple[np.ndarray] = np.unravel_index(best_flat_index_np, shape=q_state.shape)
-        # assert np.isscalar(best_index_np[0]) - could assert but don't need to
+        # assert np.isscalar(best_index_np[0]) - could assert but don'_t need to
         best_index: tuple = tuple(int(i) for i in best_index_np)
 
         # best_index_np: tuple = best_index_tuple_array[0][0]

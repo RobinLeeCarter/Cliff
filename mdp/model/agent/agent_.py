@@ -4,8 +4,10 @@ from typing import Optional, TYPE_CHECKING, Callable
 if TYPE_CHECKING:
     from mdp.model import environment
 import common
-from mdp.model import algorithm, policy
-from mdp.model.agent import episode
+from mdp.model import algorithm
+# renamed to avoid name conflicts
+from mdp.model import policy as policy_
+from mdp.model.agent import episode as episode_
 
 
 class Agent:
@@ -15,21 +17,21 @@ class Agent:
         self._environment: environment.Environment = environment_
         self._verbose: bool = verbose
 
-        self._policy: Optional[policy.Policy] = None
+        self._policy: Optional[policy_.Policy] = None
         self._algorithm: Optional[algorithm.Episodic] = None
-        self._episode: Optional[episode.Episode] = None
+        self._episode: Optional[episode_.Episode] = None
         self._episode_length_timeout: Optional[int] = None
 
         # not None to avoid unboxing cost of Optional
         self.gamma: float = 1.0
         self.t: int = 0
 
-        # always refers to values for time-step t
+        # always refers to values for time-step _t
         self.reward: Optional[float] = None
         self.state: Optional[environment.State] = None
         self.action: Optional[environment.Action] = None
 
-        # always refers to values for time-step t-1
+        # always refers to values for time-step _t-1
         self.prev_reward: Optional[float] = None
         self.prev_state: Optional[environment.State] = None
         self.prev_action: Optional[environment.Action] = None
@@ -37,10 +39,10 @@ class Agent:
         self._response: Optional[environment.Response] = None
 
         # trainer callback
-        self._step_callback: Optional[Callable[[episode.Episode], None]] = None
+        self._step_callback: Optional[Callable[[], None]] = None
 
     @property
-    def policy(self) -> policy.Policy:
+    def policy(self) -> policy_.Policy:
         return self._policy
 
     @property
@@ -48,11 +50,11 @@ class Agent:
         return self._algorithm.title
 
     @property
-    def episode(self) -> episode.Episode:
+    def episode(self) -> episode_.Episode:
         return self._episode
 
     def apply_settings(self, settings: common.Settings):
-        self._policy = policy.factory(self._environment, settings.policy_parameters)
+        self._policy = policy_.factory(self._environment, settings.policy_parameters)
         self._algorithm = algorithm.factory(self._environment, self, settings.algorithm_parameters)
         self._episode_length_timeout = settings.episode_length_timeout
         self.gamma = settings.gamma
@@ -75,7 +77,7 @@ class Agent:
         if self._verbose:
             print("start episode...")
         self.t = 0
-        self._episode = episode.Episode(self.gamma, self._step_callback)
+        self._episode = episode_.Episode(self.gamma, self._step_callback)
 
         # get starting state, reward will be None
         self._response = self._environment.start()
@@ -90,7 +92,7 @@ class Agent:
         Note that the action is NOT applied yet.
         """
         self.action = self.policy[self.state]
-        self.episode.add_rsa(reward=self.reward, state=self.state, action=self.action)
+        self._episode.add_rsa(reward=self.reward, state=self.state, action=self.action)
         if self._verbose:
             print(f"state = {self.state} \t action = {self.action}")
 
@@ -109,9 +111,12 @@ class Agent:
 
         if self.state.is_terminal:
             # add terminating step here as should not select another action
-            self.episode.add_rsa(reward=self.reward, state=self.state, action=self.action)
+            self._episode.add_rsa(reward=self.reward, state=self.state, action=self.action)
 
-    def generate_episode(self, episode_length_timeout: int):
+    def generate_episode(self, episode_length_timeout: Optional[int] = None) -> episode_.Episode:
+        if not episode_length_timeout:
+            episode_length_timeout = self._episode_length_timeout
+
         self.start_episode()
         while not self.state.is_terminal and self.t < episode_length_timeout:
             self.choose_action()
@@ -122,6 +127,7 @@ class Agent:
             print("Failed to terminate")
         if self._verbose:
             print(f"t={self.t} \t state = {self.state} (terminal)")
+        return self._episode
 
     def print_statistics(self):
         self._algorithm.print_q_coverage_statistics()

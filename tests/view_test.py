@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import common
 from mdp.model import scenarios
-import view
+from mdp import view
 
 
 def view_test() -> bool:

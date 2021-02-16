@@ -7,7 +7,7 @@ from mdp.model import environment
 
 
 class GridWorld(environment.GridWorld):
-    """GridWorld doesn't know about states and actions it just deals in the rules of the grid"""
+    """GridWorld doesn'_t know about states and actions it just deals in the rules of the grid"""
     def __init__(self, grid_array: np.ndarray, upward_wind: np.ndarray, random_wind: bool = False):
         super().__init__(grid_array)
         self.upward_wind: np.ndarray = upward_wind

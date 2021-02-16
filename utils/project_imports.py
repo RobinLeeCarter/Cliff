@@ -1,4 +1,4 @@
-# runs standalone, don't import this file
+# runs standalone, don'_t import this file
 from __future__ import annotations
 
 import sys

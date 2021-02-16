@@ -1,46 +1,51 @@
 from __future__ import annotations
-from typing import Optional, Dict, TYPE_CHECKING
+from typing import Optional, TYPE_CHECKING
 
 import pygame
 
 if TYPE_CHECKING:
-    from mdp.model import environment, agent
+    from mdp.model import agent, environment
 import common
 
 
 class GridView:
-    def __init__(self, grid_world_: environment.GridWorld):
-        self._grid_world: environment.GridWorld = grid_world_
+    def __init__(self):
+        self._grid_world: Optional[environment.GridWorld] = None
 
-        self._max_x: int = self._grid_world.max_x
-        self._max_y: int = self._grid_world.max_y
+        self._max_x: Optional[int] = None
+        self._max_y: Optional[int] = None
 
-        self.screen_width: int = 1500
-        self.screen_height: int = 1000
-        self.title: str = "Cliff Gridworld for SARSA and variants"
+        self._screen_width: int = 1500
+        self._screen_height: int = 1000
+        self._title: str = "Not implemented"
         self._cell_pixels: int = 10
         self._screen: Optional[pygame.Surface] = None
         self._background: Optional[pygame.Surface] = None
         self._grid_surface: Optional[pygame.Surface] = None
 
-        self._background_color: pygame.Color = pygame.Color('grey10')
-        self._color_lookup: Dict[common.Square, pygame.Color] = {}
+        self._background_color: Optional[pygame.Color] = None
+        self._color_lookup: dict[common.Square, pygame.Color] = {}
 
         self._user_event: common.UserEvent = common.UserEvent.NONE
 
-        self.t: int = 0
-        self.episode: Optional[agent.Episode] = None
+        self._t: int = 0
+        self._episode: Optional[agent.Episode] = None
 
         self._build_color_lookup()
+
+    def set_grid_world(self, grid_world_: environment.GridWorld):
+        self._grid_world = grid_world_
+        self._max_x = self._grid_world.max_x
+        self._max_y = self._grid_world.max_y
         self._load_gridworld()
 
     @property
     def screen_size(self) -> tuple:
-        return self.screen_width, self.screen_height
+        return self._screen_width, self._screen_height
 
     def open_window(self):
         self._screen = pygame.display.set_mode(size=self.screen_size)
-        pygame.display.set_caption(self.title)
+        pygame.display.set_caption(self._title)
         # self.background = pygame.Surface(size=self.screen_size).convert()
         self._background = self._background.convert()
         self._grid_surface = self._grid_surface.convert()
@@ -59,12 +64,12 @@ class GridView:
 
     def display_episode(self, episode_: agent.Episode, show_trail: bool = True) -> common.UserEvent:
         # print(episode_.trajectory)
-        # print(f"len(self.episode.trajectory) = {len(episode_.trajectory)}")
+        # print(f"len(self._episode.trajectory) = {len(episode_.trajectory)}")
         self._copy_grid_into_background()
         self._put_background_on_screen()
-        self.episode = episode_
-        self.t = 0
-        while self._user_event != common.UserEvent.QUIT and self.t <= self.episode.max_t:
+        self._episode = episode_
+        self._t = 0
+        while self._user_event != common.UserEvent.QUIT and self._t <= self._episode.max_t:
             # need to pass through for terminal state to display penultimate state
             # keys = pygame.key.get_pressed()
             # if keys[pygame.K_SPACE]:
@@ -73,11 +78,12 @@ class GridView:
             self._draw_agent(show_trail)
             self._wait_for_event_of_interest()
             # self._handle_event(show_trail)
-            self.t += 1
+            self._t += 1
         return self._user_event
 
     # noinspection SpellCheckingInspection
     def _build_color_lookup(self):
+        self._background_color: pygame.Color = pygame.Color('grey10')
         self._color_lookup = {
             common.Square.NORMAL: pygame.Color('darkgrey'),
             common.Square.CLIFF: pygame.Color('red2'),
@@ -101,9 +107,9 @@ class GridView:
     def _set_sizes(self):
         # size window for track and set cell_pixels
         rows, cols = self._grid_world.max_y + 1, self._grid_world.max_x + 1
-        self._cell_pixels = int(min(self.screen_height / rows, self.screen_width / cols))
-        self.screen_width = cols * self._cell_pixels
-        self.screen_height = rows * self._cell_pixels
+        self._cell_pixels = int(min(self._screen_height / rows, self._screen_width / cols))
+        self._screen_width = cols * self._cell_pixels
+        self._screen_height = rows * self._cell_pixels
 
         self._background = pygame.Surface(size=self.screen_size)
         self._grid_surface = pygame.Surface(size=self.screen_size)
@@ -118,7 +124,7 @@ class GridView:
         width: int = self._cell_pixels - 1
         height: int = self._cell_pixels - 1
 
-        # doesn't like named parameters
+        # doesn'_t like named parameters
         rect: pygame.Rect = pygame.Rect(left, top, width, height)
         pygame.draw.rect(surface, color, rect)
         return rect
@@ -141,12 +147,12 @@ class GridView:
         if not show_trail:
             self._copy_grid_into_background()
             self._put_background_on_screen()
-        state: environment.State = self.episode.trajectory[self.t].state
+        state: environment.State = self._episode.trajectory[self._t].state
         self._draw_agent_at_state(state)
 
     def _draw_agent_at_state(self, state: environment.State):
         # row, col = self._grid_world.get_index(state.x, state.y)
-        # print(f"t={self.t} x={state.x} y={state.y} row={row} col={col}")
+        # print(f"_t={self._t} x={state.x} y={state.y} row={row} col={col}")
         rect: pygame.Rect = self._draw_square(x=state.position.x, y=state.position.y,
                                               square=common.Square.AGENT, surface=self._background)
         self._screen.blit(source=self._background, dest=rect, area=rect)
