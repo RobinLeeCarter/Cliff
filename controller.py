@@ -5,7 +5,7 @@ import utils
 import common
 import agent
 import view
-import comparison
+import breakdown
 import environments
 import trainer
 import scenarios
@@ -17,8 +17,8 @@ class Controller:
 
         # self.scenario: common.Scenario = scenarios.windy_timestep
         # self.scenario: common.Scenario = scenarios.random_windy_timestep
-        self.scenario: common.Scenario = scenarios.cliff_alpha
-        # self.scenario: common.Scenario = scenarios.cliff_episode
+        # self.scenario: common.Scenario = scenarios.cliff_alpha
+        self.scenario: common.Scenario = scenarios.cliff_episode
 
         self.settings: Optional[common.Settings] = None  # current settings
 
@@ -30,13 +30,13 @@ class Controller:
         self.graph = view.Graph()
         self.grid_view = view.GridView(self.environment.grid_world)
 
-        self.comparison: comparison.Comparison = comparison.factory(self.scenario, self.graph)
+        self.breakdown: breakdown.Breakdown = breakdown.factory(self.scenario, self.graph)
         self.trainer: trainer.Trainer = trainer.Trainer(
             agent_=self.agent,
-            comparison_=self.comparison,
+            breakdown_=self.breakdown,
             verbose=False
         )
-        self.comparison.set_trainer(self.trainer)
+        self.breakdown.set_trainer(self.trainer)
 
         # self.target_policy: policy.DeterministicPolicy = policy.DeterministicPolicy(self.environment)
         # self.behaviour_policy: policy.EGreedyPolicy = policy.EGreedyPolicy(self.environment,
@@ -53,8 +53,8 @@ class Controller:
             timer.lap(name=str(self.settings.algorithm_title))
         timer.stop()
 
-        self.comparison.compile()
-        self.comparison.draw_graph()
+        self.breakdown.compile()
+        self.breakdown.draw_graph()
 
     def demonstrate(self):
         self.grid_view.open_window()

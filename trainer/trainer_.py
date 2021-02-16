@@ -4,17 +4,17 @@ from typing import TYPE_CHECKING, Optional
 if TYPE_CHECKING:
     import common
     import agent
-    import comparison
+    import breakdown
 
 
 class Trainer:
     def __init__(self,
                  agent_: agent.Agent,
-                 comparison_: comparison.Comparison,
+                 breakdown_: breakdown.Breakdown,
                  verbose: bool = False
                  ):
         self._agent: agent.Agent = agent_
-        self._comparison: comparison.Comparison = comparison_
+        self._breakdown: breakdown.Breakdown = breakdown_
         self._verbose = verbose
 
         self.settings: Optional[common.Settings] = None
@@ -68,7 +68,7 @@ class Trainer:
                         print(f"max_t = {max_t} \ttotal_return = {total_return:.2f}")
                 if not settings.review_every_step:
                     self.timestep += self._agent.episode.max_t
-                    self._comparison.review()
+                    self._breakdown.review()
             self.max_timestep = max(self.max_timestep, self.timestep)
 
         if self._verbose:
@@ -76,4 +76,4 @@ class Trainer:
 
     def review_step(self):
         self.timestep += 1
-        self._comparison.review()
+        self._breakdown.review()

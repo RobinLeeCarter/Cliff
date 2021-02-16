@@ -7,11 +7,11 @@ import copy
 import utils
 from common import enums
 from common.dataclass import settings, algorithm_parameters
-from common.dataclass.comparison_parameters import comparison_parameters_
+from common.dataclass.breakdown_parameters import breakdown_parameters_
 
 
 @dataclasses.dataclass
-class ComparisonAlgorithmByAlpha(comparison_parameters_.ComparisonParameters):
+class BreakdownAlgorithmByAlpha(breakdown_parameters_.BreakdownParameters):
     # derived dataclasses effectively must have default values:
     # https://stackoverflow.com/questions/51575931/class-inheritance-in-python-3-7-dataclasses
     # can supply min, max and step or just supply a list
@@ -38,7 +38,7 @@ class ComparisonAlgorithmByAlpha(comparison_parameters_.ComparisonParameters):
                 )
                 self.settings_list.append(settings_)
 
-    def apply_default_to_nones(self, default_: ComparisonAlgorithmByAlpha):
+    def apply_default_to_nones(self, default_: BreakdownAlgorithmByAlpha):
         super().apply_default_to_nones(default_)
         attribute_names: list[str] = [
             'alpha_min',
@@ -53,13 +53,13 @@ class ComparisonAlgorithmByAlpha(comparison_parameters_.ComparisonParameters):
                 self.__setattr__(attribute_name, default_value)
 
 
-default: ComparisonAlgorithmByAlpha = ComparisonAlgorithmByAlpha(
-    verbose=comparison_parameters_.default.verbose,
+default: BreakdownAlgorithmByAlpha = BreakdownAlgorithmByAlpha(
+    verbose=breakdown_parameters_.default.verbose,
     alpha_min=0.1,
     alpha_max=1.0,
     alpha_step=0.1
 )
 
 
-def default_factory() -> ComparisonAlgorithmByAlpha:
+def default_factory() -> BreakdownAlgorithmByAlpha:
     return copy.deepcopy(default)

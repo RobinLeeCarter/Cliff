@@ -2,7 +2,7 @@ import environments
 import policy
 import agent
 import algorithm
-from comparison import recorder
+from breakdown import recorder
 
 
 def recorder_test() -> bool:

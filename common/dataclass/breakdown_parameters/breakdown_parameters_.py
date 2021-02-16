@@ -7,13 +7,13 @@ from common import enums
 
 
 @dataclasses.dataclass
-class ComparisonParameters:
-    comparison_type: Optional[enums.ComparisonType] = None
+class BreakdownParameters:
+    breakdown_type: Optional[enums.BreakdownType] = None
     verbose: Optional[bool] = None
 
-    def apply_default_to_nones(self, default_: ComparisonParameters):
+    def apply_default_to_nones(self, default_: BreakdownParameters):
         attribute_names: list[str] = [
-            'comparison_type',
+            'breakdown_type',
             'verbose'
         ]
         for attribute_name in attribute_names:
@@ -23,10 +23,10 @@ class ComparisonParameters:
                 self.__setattr__(attribute_name, default_value)
 
 
-default: ComparisonParameters = ComparisonParameters(
+default: BreakdownParameters = BreakdownParameters(
     verbose=False
 )
 
 
-def default_factory() -> ComparisonParameters:
+def default_factory() -> BreakdownParameters:
     return copy.deepcopy(default)

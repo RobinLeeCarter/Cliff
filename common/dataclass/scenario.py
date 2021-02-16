@@ -2,7 +2,7 @@ from __future__ import annotations
 import dataclasses
 
 from common.dataclass import settings, environment_parameters, graph_parameters
-from common.dataclass.comparison_parameters import comparison_parameters_, algorithm_by_alpha
+from common.dataclass.breakdown_parameters import breakdown_parameters_, breakdown_algorithm_by_alpha
 
 
 @dataclasses.dataclass
@@ -15,9 +15,9 @@ class Scenario:
     scenario_settings: settings.Settings = dataclasses.field(default_factory=settings.default_factory)
     settings_list: list[settings.Settings] = dataclasses.field(default_factory=list)
 
-    # comparison
-    comparison_parameters: comparison_parameters_.ComparisonParameters = \
-        dataclasses.field(default_factory=comparison_parameters_.default_factory)
+    # breakdown
+    breakdown_parameters: breakdown_parameters_.BreakdownParameters = \
+        dataclasses.field(default_factory=breakdown_parameters_.default_factory)
 
     # graph output
     graph_parameters: graph_parameters.GraphParameters = \
@@ -27,11 +27,11 @@ class Scenario:
         # Push scenario values or default values into most settings attributes if currently =None
         self.environment_parameters.apply_default_to_nones(default_=environment_parameters.default)
 
-        if isinstance(self.comparison_parameters, algorithm_by_alpha.ComparisonAlgorithmByAlpha):
-            self.comparison_parameters.apply_default_to_nones(default_=algorithm_by_alpha.default)
-            self.settings_list = self.comparison_parameters.settings_list
+        if isinstance(self.breakdown_parameters, breakdown_algorithm_by_alpha.BreakdownAlgorithmByAlpha):
+            self.breakdown_parameters.apply_default_to_nones(default_=breakdown_algorithm_by_alpha.default)
+            self.settings_list = self.breakdown_parameters.settings_list
         else:
-            self.comparison_parameters.apply_default_to_nones(default_=comparison_parameters_.default)
+            self.breakdown_parameters.apply_default_to_nones(default_=breakdown_parameters_.default)
 
         assert self.settings_list
         self.scenario_settings.apply_default_to_nones(default_=settings.default)

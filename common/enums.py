@@ -16,7 +16,7 @@ class UserEvent(enum.IntEnum):
     SPACE = enum.auto()
 
 
-class ComparisonType(enum.IntEnum):
+class BreakdownType(enum.IntEnum):
     EPISODE_BY_TIMESTEP = enum.auto()
     RETURN_BY_EPISODE = enum.auto()
     RETURN_BY_ALPHA = enum.auto()

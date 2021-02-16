@@ -6,15 +6,15 @@ from typing import Optional, TYPE_CHECKING
 if TYPE_CHECKING:
     import common
     import view
-    from comparison import recorder
+    from breakdown import recorder
     import trainer
 
 
-class Comparison(ABC):
+class Breakdown(ABC):
     def __init__(self, scenario: common.Scenario, graph: view.Graph):
         self.scenario: common.Scenario = scenario
         self.graph: view.Graph = graph
-        self.verbose: bool = self.scenario.comparison_parameters.verbose
+        self.verbose: bool = self.scenario.breakdown_parameters.verbose
 
         self._trainer: Optional[trainer.Trainer] = None
         self._recorder: Optional[recorder.Recorder] = None

@@ -6,14 +6,14 @@ import numpy as np
 if TYPE_CHECKING:
     import view
 import common
-from comparison import comparison_, recorder
+from breakdown import breakdown_, recorder
 
 
-class ReturnByAlpha(comparison_.Comparison):
+class ReturnByAlpha(breakdown_.Breakdown):
     def __init__(self, scenario: common.Scenario, graph: view.Graph):
         super().__init__(scenario, graph)
-        assert isinstance(self.scenario.comparison_parameters, common.ComparisonAlgorithmByAlpha)
-        self.comparison_parameters: common.ComparisonAlgorithmByAlpha = self.scenario.comparison_parameters
+        assert isinstance(self.scenario.breakdown_parameters, common.BreakdownAlgorithmByAlpha)
+        self.breakdown_parameters: common.BreakdownAlgorithmByAlpha = self.scenario.breakdown_parameters
 
         recorder_key_type = tuple[common.AlgorithmType, float]
         self._recorder = recorder.Recorder[recorder_key_type]()
@@ -30,12 +30,12 @@ class ReturnByAlpha(comparison_.Comparison):
     def compile(self):
         self.x_series = common.Series(
             title="α",
-            values=np.array(self.comparison_parameters.alpha_list)
+            values=np.array(self.breakdown_parameters.alpha_list)
         )
         # collate output from self.recorder
-        for algorithm_type in self.comparison_parameters.algorithm_type_list:
+        for algorithm_type in self.breakdown_parameters.algorithm_type_list:
             values = np.array(
-                [self._recorder[algorithm_type, alpha] for alpha in self.comparison_parameters.alpha_list],
+                [self._recorder[algorithm_type, alpha] for alpha in self.breakdown_parameters.alpha_list],
                 dtype=float
             )
             title = common.algorithm_name[algorithm_type]
@@ -51,8 +51,8 @@ class ReturnByAlpha(comparison_.Comparison):
         self.graph.make_plot(x_series=self.x_series,
                              graph_series=self.series_list,
                              y_label=self._y_label,
-                             x_min=self.comparison_parameters.alpha_min,
-                             x_max=self.comparison_parameters.alpha_max,
+                             x_min=self.breakdown_parameters.alpha_min,
+                             x_max=self.breakdown_parameters.alpha_max,
                              y_min=gp.y_min,
                              y_max=gp.y_max
                              )

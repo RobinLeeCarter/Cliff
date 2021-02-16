@@ -19,8 +19,8 @@ windy_timestep = common.Scenario(
         #     initial_v_value=6.0
         # )
     ),
-    comparison_parameters=common.ComparisonParameters(
-        comparison_type=common.ComparisonType.EPISODE_BY_TIMESTEP
+    breakdown_parameters=common.BreakdownParameters(
+        breakdown_type=common.BreakdownType.EPISODE_BY_TIMESTEP
     ),
     settings_list=[
         common.Settings(
@@ -45,8 +45,8 @@ cliff_alpha = common.Scenario(
         runs=10,
         training_episodes=100
     ),
-    comparison_parameters=common.ComparisonAlgorithmByAlpha(
-        comparison_type=common.ComparisonType.RETURN_BY_ALPHA,
+    breakdown_parameters=common.BreakdownAlgorithmByAlpha(
+        breakdown_type=common.BreakdownType.RETURN_BY_ALPHA,
         alpha_min=0.1,
         alpha_max=1.0,
         alpha_step=0.1,
@@ -73,8 +73,8 @@ cliff_episode = common.Scenario(
         training_episodes=500
         # policy_parameters=common.PolicyParameters(epsilon=0.2)
     ),
-    comparison_parameters=common.ComparisonParameters(
-        comparison_type=common.ComparisonType.RETURN_BY_EPISODE
+    breakdown_parameters=common.BreakdownParameters(
+        breakdown_type=common.BreakdownType.RETURN_BY_EPISODE
     ),
     settings_list=[
         common.Settings(algorithm_parameters=common.AlgorithmParameters(

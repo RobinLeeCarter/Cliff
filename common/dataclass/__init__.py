@@ -4,5 +4,5 @@ from common.dataclass.policy_parameters import PolicyParameters
 from common.dataclass.settings import Settings
 from common.dataclass.graph_parameters import GraphParameters
 from common.dataclass.environment_parameters import EnvironmentParameters
-from common.dataclass.comparison_parameters import *
+from common.dataclass.breakdown_parameters import *
 from common.dataclass.scenario import Scenario
