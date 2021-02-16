@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import common
 import environment
-import environments
+import scenarios
 
 
 def cliff_test() -> bool:
@@ -10,7 +10,7 @@ def cliff_test() -> bool:
         environment_type=common.EnvironmentType.CLIFF,
         actions_list=common.ActionsList.FOUR_MOVES
     )
-    environment_ = environments.factory(environment_parameters)
+    environment_ = scenarios.environment_factory(environment_parameters)
     print(type(environment_))
 
     for state_ in environment_.states():

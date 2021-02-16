@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import common
 import environment
-import environments
+import scenarios
 
 
 def random_walk_test() -> bool:
@@ -10,7 +10,7 @@ def random_walk_test() -> bool:
         environment_type=common.EnvironmentType.RANDOM_WALK,
         actions_list=common.ActionsList.STATIONARY_MOVE_ONLY
     )
-    environment_ = environments.factory(environment_parameters)
+    environment_ = scenarios.environment_factory(environment_parameters)
 
     for state_ in environment_.states():
         print(f"{state_} \t index={state_.index}")

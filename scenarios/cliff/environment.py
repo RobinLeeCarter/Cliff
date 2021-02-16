@@ -6,7 +6,7 @@ import common
 import environment
 
 
-class Cliff(environment.Environment):
+class Environment(environment.Environment):
     def __init__(self, environment_parameters: common.EnvironmentParameters):
         grid = np.array([
             [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],

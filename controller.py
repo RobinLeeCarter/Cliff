@@ -6,23 +6,23 @@ import common
 import agent
 import view
 import breakdown
-import environments
+import scenarios
 import trainer
-import comparisons
+# import comparisons
 
 
 class Controller:
     def __init__(self, verbose: bool = False):
         self.verbose: bool = verbose
 
-        # self.comparison: common.Comparison = comparison.windy_timestep
-        # self.comparison: common.Comparison = comparison.random_windy_timestep
-        # self.comparison: common.Comparison = comparison.cliff_alpha
-        self.comparison: common.Comparison = comparisons.cliff_episode
+        # self.comparison: common.Comparison = scenarios.windy.comparisons.timestep()
+        # self.comparison: common.Comparison = scenarios.windy.comparisons.timestep(random_wind=True)
+        # self.comparison: common.Comparison = scenarios.cliff.comparisons.alpha()
+        self.comparison: common.Comparison = scenarios.cliff.comparisons.episode()
 
         self.settings: Optional[common.Settings] = None  # current settings
 
-        self.environment = environments.factory(self.comparison.environment_parameters)
+        self.environment = scenarios.environment_factory(self.comparison.environment_parameters)
 
         # create agent (and it will create the algorithm and the policy when it is given Settings)
         self.agent = agent.Agent(self.environment)

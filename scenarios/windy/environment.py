@@ -6,10 +6,10 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     import common
 import environment
-from environments.windy import grid_world
+from scenarios.windy import grid_world
 
 
-class Windy(environment.Environment):
+class Environment(environment.Environment):
     def __init__(self, environment_parameters: common.EnvironmentParameters):
         grid = np.array([
             [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],

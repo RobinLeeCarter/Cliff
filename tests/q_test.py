@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import common
 import environment
-import environments
+import scenarios
 from algorithm.value_function import state_action_function
 
 
@@ -11,7 +11,7 @@ def q_test() -> bool:
         environment_type=common.EnvironmentType.CLIFF,
         actions_list=common.ActionsList.FOUR_MOVES
     )
-    environment_ = environments.factory(environment_parameters)
+    environment_ = scenarios.environment_factory(environment_parameters)
     q = state_action_function.StateActionFunction(environment_, initial_q_value=-7.0)
     print(environment_.actions_shape)
     print(environment_.states_shape)

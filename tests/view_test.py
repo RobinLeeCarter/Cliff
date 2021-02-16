@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import common
-import environments
+import scenarios
 import view
 
 
@@ -10,7 +10,7 @@ def view_test() -> bool:
         environment_type=common.EnvironmentType.CLIFF,
         actions_list=common.ActionsList.FOUR_MOVES
     )
-    cliff = environments.factory(environment_parameters)
+    cliff = scenarios.environment_factory(environment_parameters)
     my_view = view.GridView(cliff.grid_world)
     my_view.open_window()
     my_view.display_and_wait()

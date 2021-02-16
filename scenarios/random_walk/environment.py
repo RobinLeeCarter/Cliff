@@ -6,7 +6,7 @@ import common
 import environment
 
 
-class RandomWalk(environment.Environment):
+class Environment(environment.Environment):
     def __init__(self, environment_parameters: common.EnvironmentParameters):
         grid = np.array([
             [3, 0, 0, 2, 0, 0, 3]

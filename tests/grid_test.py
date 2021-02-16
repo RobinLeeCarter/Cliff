@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 import common
-import environments
+import scenarios
 
 
 def grid_test() -> bool:
@@ -11,7 +11,7 @@ def grid_test() -> bool:
         environment_type=common.EnvironmentType.CLIFF,
         actions_list=common.ActionsList.FOUR_MOVES
     )
-    cliff = environments.factory(environment_parameters)
+    cliff = scenarios.environment_factory(environment_parameters)
     grid_world_ = cliff.grid_world
     shape = grid_world_.max_y + 1, grid_world_.max_x + 1
     cartesian_grid = np.empty(shape=shape, dtype=common.Square)
