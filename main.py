@@ -1,14 +1,14 @@
 from __future__ import annotations
 
 import os_environ_settings
-import controller
+import model
 
 
 def main():
     os_environ_settings.dummy = None    # for pycharm code inspection only
-    controller_ = controller.Controller(verbose=False)
-    controller_.run()
-    # controller_.demonstrate()
+    model_ = model.Model(verbose=False)
+    model_.run()
+    # model_.demonstrate()
 
 
 if __name__ == '__main__':

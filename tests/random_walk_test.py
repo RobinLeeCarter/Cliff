@@ -1,8 +1,7 @@
 from __future__ import annotations
 
 import common
-import environment
-import scenarios
+from model import environment, scenarios
 
 
 def random_walk_test() -> bool:

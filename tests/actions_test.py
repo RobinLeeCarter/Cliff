@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import common
-import scenarios
+from model import scenarios
 
 environment_parameters = common.EnvironmentParameters(
     environment_type=common.EnvironmentType.CLIFF,

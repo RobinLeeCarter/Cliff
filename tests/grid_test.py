@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 import common
-import scenarios
+from model import scenarios
 
 
 def grid_test() -> bool:

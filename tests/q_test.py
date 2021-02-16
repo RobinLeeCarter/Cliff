@@ -1,9 +1,8 @@
 from __future__ import annotations
 
 import common
-import environment
-import scenarios
-from algorithm.value_function import state_action_function
+from model import environment, scenarios
+from model.algorithm.value_function import state_action_function
 
 
 def q_test() -> bool:

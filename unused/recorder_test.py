@@ -1,8 +1,5 @@
-import scenarios
-import policy
-import agent
-import algorithm
-from breakdown import recorder
+from model import agent, algorithm, policy, scenarios
+from model.breakdown import recorder
 
 
 def recorder_test() -> bool:
