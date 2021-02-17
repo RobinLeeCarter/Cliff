@@ -9,7 +9,8 @@ from mdp import common
 
 
 class GridView:
-    def __init__(self):
+    def __init__(self, display_v: bool = False):
+        self._display_v: bool = display_v
         self._grid_world: Optional[environment.GridWorld] = None
 
         self._max_x: Optional[int] = None
@@ -63,6 +64,8 @@ class GridView:
             # self._handle_event()
 
     def demonstrate(self, new_episode_request: Callable[[], agent.Episode]):
+        if self._display_v:
+            self._load_gridworld()
         self.open_window()
         running_average = 0
         count = 0
@@ -113,7 +116,11 @@ class GridView:
         for x in range(self._max_x + 1):
             for y in range(self._max_y + 1):
                 square: common.Square = self._grid_world.get_square(position=common.XY(x, y))
-                self._draw_square(x, y, square, self._grid_surface)
+                if self._display_v:
+                    v = self._grid_world.v[y, x]
+                    self._draw_square(x, y, square, self._grid_surface, v=v)
+                else:
+                    self._draw_square(x, y, square, self._grid_surface)
         self._copy_grid_into_background()
 
     def _copy_grid_into_background(self):
@@ -129,7 +136,11 @@ class GridView:
         self._background = pygame.Surface(size=self.screen_size)
         self._grid_surface = pygame.Surface(size=self.screen_size)
 
-    def _draw_square(self, x: int, y: int, square: common.Square, surface: pygame.Surface) -> pygame.Rect:
+    def _draw_square(self, x: int, y: int,
+                     square: common.Square,
+                     surface: pygame.Surface,
+                     v: Optional[float] = None
+                     ) -> pygame.Rect:
         row = self._max_y - y
         col = x
 
@@ -142,6 +153,9 @@ class GridView:
         # doesn'_t like named parameters
         rect: pygame.Rect = pygame.Rect(left, top, width, height)
         pygame.draw.rect(surface, color, rect)
+        if v is not None:
+            # write v in rect
+            pass
         return rect
 
     def _put_background_on_screen(self):

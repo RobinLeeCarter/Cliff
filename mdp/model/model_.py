@@ -70,3 +70,4 @@ class Model:
             #         move=action.move,
             #         value=self.agent.algorithm.Q[state, action]
             #     )
+        print(self.environment.grid_world.v)
