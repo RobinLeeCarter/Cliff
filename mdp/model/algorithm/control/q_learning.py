@@ -28,9 +28,9 @@ class QLearning(abstract.EpisodicOnline):
         reward = self._agent.reward
         state = self._agent.state
 
-        q_max_over_a = self._Q.max_over_actions(state)
+        q_max_over_a = self.Q.max_over_actions(state)
         target = reward + self._gamma * q_max_over_a
-        delta = target - self._Q[prev_state, prev_action]
-        self._Q[prev_state, prev_action] += self._alpha * delta
+        delta = target - self.Q[prev_state, prev_action]
+        self.Q[prev_state, prev_action] += self._alpha * delta
         # update policy to be in-line with Q
-        self._agent.policy[prev_state] = self._Q.argmax_over_actions(prev_state)
+        self._agent.policy[prev_state] = self.Q.argmax_over_actions(prev_state)

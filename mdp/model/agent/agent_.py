@@ -4,8 +4,8 @@ from typing import Optional, TYPE_CHECKING, Callable
 if TYPE_CHECKING:
     from mdp.model import environment
 from mdp import common
-from mdp.model import algorithm
 # renamed to avoid name conflicts
+from mdp.model import algorithm as algorithm_
 from mdp.model import policy as policy_
 from mdp.model.agent import episode as episode_
 
@@ -18,7 +18,7 @@ class Agent:
         self._verbose: bool = verbose
 
         self._policy: Optional[policy_.Policy] = None
-        self._algorithm: Optional[algorithm.Episodic] = None
+        self._algorithm: Optional[algorithm_.Episodic] = None
         self._episode: Optional[episode_.Episode] = None
         self._episode_length_timeout: Optional[int] = None
 
@@ -46,6 +46,10 @@ class Agent:
         return self._policy
 
     @property
+    def algorithm(self) -> algorithm_.Episodic:
+        return self._algorithm
+
+    @property
     def algorithm_title(self) -> str:
         return self._algorithm.title
 
@@ -55,7 +59,7 @@ class Agent:
 
     def apply_settings(self, settings: common.Settings):
         self._policy = policy_.factory(self._environment, settings.policy_parameters)
-        self._algorithm = algorithm.factory(self._environment, self, settings.algorithm_parameters)
+        self._algorithm = algorithm_.factory(self._environment, self, settings.algorithm_parameters)
         self._episode_length_timeout = settings.episode_length_timeout
         self.gamma = settings.gamma
 

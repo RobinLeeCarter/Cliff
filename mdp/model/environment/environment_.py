@@ -34,6 +34,7 @@ class Environment(abc.ABC):
         self._projected_state: Optional[state.State] = None
 
     # region Sets
+    # TODO: materialize states
     def states(self) -> Generator[state.State, None, None]:
         """set S"""
         for x in range(self.states_shape[0]):

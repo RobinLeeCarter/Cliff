@@ -22,5 +22,5 @@ class ConstantAlphaMC(abstract.EpisodicMonteCarlo):
     def _process_time_step(self, t: int):
         state = self._episode[t].state
         target = self._episode.G[t]
-        delta = target - self._V[state]
-        self._V[state] += self._alpha * delta
+        delta = target - self.V[state]
+        self.V[state] += self._alpha * delta

@@ -30,14 +30,14 @@ class ExpectedSarsa(abstract.EpisodicOnline):
 
         q_expectation_over_a = self._get_expectation_over_a(state)
         target = reward + self._gamma * q_expectation_over_a
-        delta = target - self._Q[prev_state, prev_action]
-        self._Q[prev_state, prev_action] += self._alpha * delta
+        delta = target - self.Q[prev_state, prev_action]
+        self.Q[prev_state, prev_action] += self._alpha * delta
         # update policy to be in-line with Q
-        self._agent.policy[prev_state] = self._Q.argmax_over_actions(prev_state)
+        self._agent.policy[prev_state] = self.Q.argmax_over_actions(prev_state)
 
     def _get_expectation_over_a(self, state: environment.State) -> float:
         expectation: float = 0.0
         for action in self._environment.actions():
             probability = self._agent.policy.get_probability(state, action)
-            expectation += probability * self._Q[state, action]
+            expectation += probability * self.Q[state, action]
         return expectation

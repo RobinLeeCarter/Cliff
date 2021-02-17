@@ -32,8 +32,8 @@ class Sarsa(abstract.EpisodicOnline):
         state = self._agent.state
         action = self._agent.action
 
-        target = reward + self._gamma * self._Q[state, action]
-        delta = target - self._Q[prev_state, prev_action]
-        self._Q[prev_state, prev_action] += self._alpha * delta
+        target = reward + self._gamma * self.Q[state, action]
+        delta = target - self.Q[prev_state, prev_action]
+        self.Q[prev_state, prev_action] += self._alpha * delta
         # update policy to be in-line with Q
-        self._agent.policy[prev_state] = self._Q.argmax_over_actions(prev_state)
+        self._agent.policy[prev_state] = self.Q.argmax_over_actions(prev_state)

@@ -3,6 +3,7 @@ from typing import Optional, TYPE_CHECKING
 
 if TYPE_CHECKING:
     from mdp.model import environment
+    from mdp.model.algorithm import value_function
 
 import utils
 from mdp import controller
@@ -56,3 +57,16 @@ class Model:
 
         self.breakdown.compile()
         # graph_values: common.GraphValues = self.breakdown.get_graph_values()
+
+    def update_grid_value_functions(self):
+        for state in self.environment.states():
+            self.environment.grid_world.set_state_function(
+                position=state.position,
+                value=self.agent.algorithm.V[state]
+            )
+            # for action in self.environment.actions_for_state(state):
+            #     self.environment.grid_world.set_state_action_function(
+            #         position=state.position,
+            #         move=action.move,
+            #         value=self.agent.algorithm.Q[state, action]
+            #     )

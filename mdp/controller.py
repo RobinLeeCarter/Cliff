@@ -19,6 +19,7 @@ class Controller:
 
     def run(self):
         self._model.run()
+        self._model.update_grid_value_functions()
         graph_values: common.GraphValues = self._model.breakdown.get_graph_values()
         self._view.graph.make_plot(graph_values)
         self._view.grid_view.demonstrate(self.new_episode_request)

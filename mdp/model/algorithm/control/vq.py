@@ -45,13 +45,13 @@ class VQ(abstract.EpisodicOnline):
         reward = self._agent.reward
         state = self._agent.state
 
-        target = reward + self._gamma * self._V[state]
+        target = reward + self._gamma * self.V[state]
 
-        v_delta = target - self._V[prev_state]
-        self._V[prev_state] += self._alpha * v_delta
+        v_delta = target - self.V[prev_state]
+        self.V[prev_state] += self._alpha * v_delta
 
-        q_delta = target - self._Q[prev_state, prev_action]
-        self._Q[prev_state, prev_action] += self._alpha * q_delta
+        q_delta = target - self.Q[prev_state, prev_action]
+        self.Q[prev_state, prev_action] += self._alpha * q_delta
 
         # update policy to be in-line with Q
-        self._agent.policy[prev_state] = self._Q.argmax_over_actions(prev_state)
+        self._agent.policy[prev_state] = self.Q.argmax_over_actions(prev_state)

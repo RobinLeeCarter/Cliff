@@ -27,6 +27,6 @@ class TD0(abstract.EpisodicOnline):
         reward = self._agent.reward
         state = self._agent.state
 
-        target = reward + self._gamma * self._V[state]
-        delta = target - self._V[prev_state]
-        self._V[prev_state] += self._alpha * delta
+        target = reward + self._gamma * self.V[state]
+        delta = target - self.V[prev_state]
+        self.V[prev_state] += self._alpha * delta

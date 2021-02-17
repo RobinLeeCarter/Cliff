@@ -17,6 +17,8 @@ class GridWorld:
         self._single_start: Optional[common.XY] = None
         self._test_single_start()
 
+        self.v: np.ndarray = np.zeros(shape=self.grid_array.shape, dtype=float)
+
     def _test_single_start(self):
         if len(self._starts_flat) == 1:
             iy, ix = np.unravel_index(self._starts_flat[0], shape=self.grid_array.shape)
@@ -66,3 +68,7 @@ class GridWorld:
 
     def _move_flip(self, xy_in: common.XY) -> common.XY:
         return common.XY(x=xy_in.x, y=-xy_in.y)
+
+    def set_state_function(self, position: common.XY, value: float):
+        np_index: common.XY = self._position_flip(position)
+        self.v[np_index.y, np_index.x] = value
