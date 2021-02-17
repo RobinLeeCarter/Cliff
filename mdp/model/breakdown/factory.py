@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-import common
+from mdp import common
 from mdp.model.breakdown import return_by_alpha, breakdown_, return_by_episode, episode_by_timestep
 
 

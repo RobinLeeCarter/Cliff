@@ -3,7 +3,7 @@ from typing import Optional
 import dataclasses
 import copy
 
-from common.dataclass import series
+from mdp.common.dataclass import series
 
 
 @dataclasses.dataclass

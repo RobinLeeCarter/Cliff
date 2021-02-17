@@ -4,7 +4,7 @@ import abc
 
 if TYPE_CHECKING:
     from mdp.model import environment, agent
-    import common
+    from mdp import common
 from mdp.model.algorithm.abstract import episodic
 
 

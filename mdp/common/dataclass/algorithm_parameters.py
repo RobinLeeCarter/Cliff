@@ -3,7 +3,7 @@ from typing import Optional
 import dataclasses
 import copy
 
-from common import enums
+from mdp.common import enums
 
 
 @dataclasses.dataclass

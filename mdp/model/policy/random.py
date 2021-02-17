@@ -3,7 +3,7 @@ from typing import List, TYPE_CHECKING
 
 if TYPE_CHECKING:
     from mdp.model import environment
-import common
+from mdp import common
 from mdp.model.policy import policy_
 
 

@@ -4,7 +4,7 @@ import numpy as np
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    import common
+    from mdp import common
 from mdp.model import environment
 from mdp.model.scenarios.windy import grid_world
 

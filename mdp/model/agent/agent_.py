@@ -3,7 +3,7 @@ from typing import Optional, TYPE_CHECKING, Callable
 
 if TYPE_CHECKING:
     from mdp.model import environment
-import common
+from mdp import common
 from mdp.model import algorithm
 # renamed to avoid name conflicts
 from mdp.model import policy as policy_

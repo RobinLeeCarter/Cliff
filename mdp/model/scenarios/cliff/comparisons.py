@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-import common
+from mdp import common
 
 
 def alpha() -> common.Comparison:

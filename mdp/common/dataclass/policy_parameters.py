@@ -3,18 +3,18 @@ from typing import Optional
 import dataclasses
 import copy
 
-from common import enums
+from mdp.common import enums
 
 
 @dataclasses.dataclass
-class BreakdownParameters:
-    breakdown_type: Optional[enums.BreakdownType] = None
-    verbose: Optional[bool] = None
+class PolicyParameters:
+    policy_type: Optional[enums.PolicyType] = None
+    epsilon: Optional[float] = None
 
-    def apply_default_to_nones(self, default_: BreakdownParameters):
+    def apply_default_to_nones(self, default_: PolicyParameters):
         attribute_names: list[str] = [
-            'breakdown_type',
-            'verbose'
+            'policy_type',
+            'epsilon'
         ]
         for attribute_name in attribute_names:
             attribute = self.__getattribute__(attribute_name)
@@ -23,10 +23,11 @@ class BreakdownParameters:
                 self.__setattr__(attribute_name, default_value)
 
 
-default: BreakdownParameters = BreakdownParameters(
-    verbose=False
+default: PolicyParameters = PolicyParameters(
+    policy_type=enums.PolicyType.E_GREEDY,
+    epsilon=0.1,
 )
 
 
-def default_factory() -> BreakdownParameters:
+def default_factory() -> PolicyParameters:
     return copy.deepcopy(default)

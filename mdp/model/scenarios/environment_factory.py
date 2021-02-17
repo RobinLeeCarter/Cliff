@@ -3,7 +3,7 @@ from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from mdp.model import environment
-import common
+from mdp import common
 from mdp.model.scenarios import cliff, windy, random_walk
 
 

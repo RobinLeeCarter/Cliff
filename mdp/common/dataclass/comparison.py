@@ -1,8 +1,8 @@
 from __future__ import annotations
 import dataclasses
 
-from common.dataclass import settings, environment_parameters, graph_values
-from common.dataclass.breakdown_parameters import breakdown_parameters_, breakdown_algorithm_by_alpha
+from mdp.common.dataclass import settings, environment_parameters, graph_values
+from mdp.common.dataclass.breakdown_parameters import breakdown_parameters_, breakdown_algorithm_by_alpha
 
 
 @dataclasses.dataclass

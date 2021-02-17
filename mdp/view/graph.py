@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 from matplotlib import figure
 
 if TYPE_CHECKING:
-    import common
+    from mdp import common
 
 
 class Graph:

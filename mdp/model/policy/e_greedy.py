@@ -1,7 +1,7 @@
 from __future__ import annotations
 from typing import TYPE_CHECKING
 
-import common
+from mdp import common
 if TYPE_CHECKING:
     from mdp.model import environment
 from mdp.model.policy import random, deterministic

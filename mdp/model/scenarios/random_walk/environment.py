@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import numpy as np
 
-import common
+from mdp import common
 from mdp.model import environment
 from mdp.model.scenarios.random_walk import grid_world
 

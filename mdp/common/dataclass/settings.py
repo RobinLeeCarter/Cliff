@@ -3,7 +3,7 @@ import dataclasses
 import copy
 from typing import Optional
 
-from common.dataclass import algorithm_parameters, policy_parameters
+from mdp.common.dataclass import algorithm_parameters, policy_parameters
 
 
 @dataclasses.dataclass

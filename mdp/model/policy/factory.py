@@ -5,7 +5,7 @@ if TYPE_CHECKING:
     from mdp.model import environment
     from mdp.model.policy import deterministic
     from mdp.model.policy import policy_, no_policy
-import common
+from mdp import common
 from mdp.model.policy import e_greedy, random
 
 

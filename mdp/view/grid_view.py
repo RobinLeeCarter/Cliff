@@ -5,7 +5,7 @@ import pygame
 
 if TYPE_CHECKING:
     from mdp.model import agent, environment
-import common
+from mdp import common
 
 
 class GridView:

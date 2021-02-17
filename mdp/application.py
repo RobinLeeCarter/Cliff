@@ -1,7 +1,6 @@
 from __future__ import annotations
 
-from mdp import model, view, controller
-import common
+from mdp import common, model, view, controller
 
 
 class Application:

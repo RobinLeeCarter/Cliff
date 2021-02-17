@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from common import enums
+from mdp.common import enums
 
 algorithm_name: dict[enums.AlgorithmType, str] = {
     enums.AlgorithmType.EXPECTED_SARSA: 'Expected Sarsa',

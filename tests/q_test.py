@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-import common
+from mdp import common
 from mdp.model import environment, scenarios
 from mdp.model.algorithm.value_function import state_action_function
 

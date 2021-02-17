@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-import common
+from mdp import common
 from mdp.model import scenarios
 
 environment_parameters = common.EnvironmentParameters(

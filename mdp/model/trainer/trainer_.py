@@ -2,7 +2,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING, Optional
 
 if TYPE_CHECKING:
-    import common
+    from mdp import common
     from mdp.model import breakdown, agent
 
 

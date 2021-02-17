@@ -3,7 +3,7 @@ from typing import Optional
 
 import numpy as np
 
-import common
+from mdp import common
 
 
 class GridWorld:

@@ -3,7 +3,7 @@ from typing import TYPE_CHECKING, Type
 
 if TYPE_CHECKING:
     from mdp.model import environment, agent
-import common
+from mdp import common
 from mdp.model.algorithm import abstract, control
 
 

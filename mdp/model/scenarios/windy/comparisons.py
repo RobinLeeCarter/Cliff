@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-import common
+from mdp import common
 
 
 def timestep(random_wind: bool = False) -> common.Comparison:

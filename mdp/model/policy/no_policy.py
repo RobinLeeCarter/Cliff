@@ -2,7 +2,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    import common
+    from mdp import common
     from mdp.model import environment
 from mdp.model.policy import policy_
 

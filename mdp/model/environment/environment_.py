@@ -4,7 +4,7 @@ import abc
 
 if TYPE_CHECKING:
     from mdp.model.environment import grid_world
-import common
+from mdp import common
 from mdp.model.environment import state, response
 from mdp.model.environment import action
 

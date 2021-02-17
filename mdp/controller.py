@@ -4,8 +4,7 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from mdp.model import agent
 
-from mdp import model, view
-import common
+from mdp import common, model, view
 
 
 class Controller:

@@ -5,9 +5,9 @@ import dataclasses
 import copy
 
 import utils
-from common import enums
-from common.dataclass import settings, algorithm_parameters
-from common.dataclass.breakdown_parameters import breakdown_parameters_
+from mdp.common import enums
+from mdp.common.dataclass import settings, algorithm_parameters
+from mdp.common.dataclass.breakdown_parameters import breakdown_parameters_
 
 
 @dataclasses.dataclass

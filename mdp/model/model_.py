@@ -6,7 +6,7 @@ if TYPE_CHECKING:
 
 import utils
 from mdp import controller
-import common
+from mdp import common
 from mdp.model import breakdown, trainer, scenarios, agent
 
 

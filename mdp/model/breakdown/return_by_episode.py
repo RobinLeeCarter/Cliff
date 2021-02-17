@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import numpy as np
 
-import common
+from mdp import common
 from mdp.model.breakdown import recorder, breakdown_
 
 

@@ -3,7 +3,7 @@ import abc
 from typing import Optional, TYPE_CHECKING
 
 if TYPE_CHECKING:
-    import common
+    from mdp import common
     from mdp.model import environment
 
 

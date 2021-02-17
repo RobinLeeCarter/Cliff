@@ -3,7 +3,7 @@ from dataclasses import dataclass
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    import common
+    from mdp import common
 
 
 @dataclass(frozen=True)

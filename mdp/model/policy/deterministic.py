@@ -4,7 +4,7 @@ from typing import TYPE_CHECKING
 import numpy as np
 
 if TYPE_CHECKING:
-    import common
+    from mdp import common
     from mdp.model import environment
 from mdp.model.policy import policy_
 
