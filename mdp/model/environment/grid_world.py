@@ -7,7 +7,7 @@ import common
 
 
 class GridWorld:
-    """GridWorld doesn'_t know about states and actions it just deals in the rules of the grid"""
+    """GridWorld doesn't know about states and actions it just deals in the rules of the grid"""
     def __init__(self, grid_array: np.ndarray):
         self.grid_array: np.ndarray = grid_array
         self.max_y: int = self.grid_array.shape[0] - 1

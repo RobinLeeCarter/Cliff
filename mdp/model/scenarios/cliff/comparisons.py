@@ -25,7 +25,7 @@ def alpha() -> common.Comparison:
                 common.AlgorithmType.SARSA
             ],
         ),
-        graph_parameters=common.GraphParameters(
+        graph_values=common.GraphValues(
             y_min=-140,
             y_max=0,
         ),
@@ -64,7 +64,7 @@ def episode() -> common.Comparison:
                 alpha=0.5
             )),
         ],
-        graph_parameters=common.GraphParameters(
+        graph_values=common.GraphValues(
             moving_average_window_size=19,
             y_min=-100,
             y_max=0

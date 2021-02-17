@@ -1,17 +1,14 @@
 from __future__ import annotations
-from typing import TYPE_CHECKING
 
 import numpy as np
 
-if TYPE_CHECKING:
-    from mdp import view
 import common
 from mdp.model.breakdown import recorder, breakdown_
 
 
 class ReturnByEpisode(breakdown_.Breakdown):
-    def __init__(self, comparison: common.Comparison, graph: view.Graph):
-        super().__init__(comparison, graph)
+    def __init__(self, comparison: common.Comparison):
+        super().__init__(comparison)
         recorder_key_type = tuple[common.AlgorithmType, int]
         self._recorder = recorder.Recorder[recorder_key_type]()
         self._y_label = "Average Return"
@@ -52,15 +49,13 @@ class ReturnByEpisode(breakdown_.Breakdown):
             )
             self.series_list.append(series_)
 
-    def draw_graph(self):
-        comparison_settings = self.comparison.comparison_settings
-        gp = self.comparison.graph_parameters
-        self.graph.make_plot(x_series=self.x_series,
-                             graph_series=self.series_list,
-                             y_label=self._y_label,
-                             moving_average_window_size=gp.moving_average_window_size,
-                             x_min=0,
-                             x_max=comparison_settings.training_episodes,
-                             y_min=gp.y_min,
-                             y_max=gp.y_max
-                             )
+    def get_graph_values(self) -> common.GraphValues:
+        graph_values: common.GraphValues = common.GraphValues(
+            x_series=self.x_series,
+            graph_series=self.series_list,
+            y_label=self._y_label,
+            x_min=0,
+            x_max=self.comparison.comparison_settings.training_episodes,
+        )
+        graph_values.apply_default_to_nones(self.comparison.graph_values)
+        return graph_values

@@ -11,9 +11,10 @@ def view_test() -> bool:
         actions_list=common.ActionsList.FOUR_MOVES
     )
     cliff = scenarios.environment_factory(environment_parameters)
-    my_view = view.GridView(cliff.grid_world)
-    my_view.open_window()
-    my_view.display_and_wait()
+    my_view = view.View()
+    my_view.build(cliff.grid_world)
+    my_view.grid_view.open_window()
+    my_view.grid_view.display_and_wait()
 
     return True
 

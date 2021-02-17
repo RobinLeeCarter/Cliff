@@ -25,7 +25,7 @@ class Trainer:
 
     @property
     def episode(self) -> agent.Episode:
-        return self._agent.episode_
+        return self._agent.episode
 
     def train(self, settings: common.Settings):
         # process settings

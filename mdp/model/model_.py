@@ -1,10 +1,13 @@
 from __future__ import annotations
-from typing import Optional
+from typing import Optional, TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from mdp.model import environment
 
 import utils
+from mdp import controller
 import common
 from mdp.model import breakdown, trainer, scenarios, agent
-from mdp import controller
 
 
 class Model:
@@ -12,6 +15,13 @@ class Model:
         self.verbose: bool = verbose
         self._controller: Optional[controller.Controller] = None
         self.comparison: Optional[common.Comparison] = None
+        self.environment: Optional[environment.Environment] = None
+        self.agent: Optional[agent.Agent] = None
+        self.breakdown: Optional[breakdown.Breakdown] = None
+        self.trainer: Optional[trainer.Trainer] = None
+
+    def set_controller(self, controller_: controller.Controller):
+        self._controller = controller_
 
     def build(self, comparison: common.Comparison):
         self.comparison = comparison
@@ -21,7 +31,7 @@ class Model:
         # create agent (and it will create the algorithm and the policy when it is given Settings)
         self.agent = agent.Agent(self.environment)
 
-        self.breakdown: breakdown.Breakdown = breakdown.factory(self.comparison, self.graph)
+        self.breakdown: breakdown.Breakdown = breakdown.factory(self.comparison)
         self.trainer: trainer.Trainer = trainer.Trainer(
             agent_=self.agent,
             breakdown_=self.breakdown,
@@ -36,9 +46,6 @@ class Model:
         # self.target_agent = agent.Agent(self.environment, self.target_policy)
         # self.behaviour_agent = agent.Agent(self.environment, self.behaviour_policy)
 
-    def set_controller(self, controller_: controller.Controller):
-        self._controller = controller_
-
     def run(self):
         timer: utils.Timer = utils.Timer()
         timer.start()
@@ -48,4 +55,4 @@ class Model:
         timer.stop()
 
         self.breakdown.compile()
-        self.breakdown.draw_graph()
+        # graph_values: common.GraphValues = self.breakdown.get_graph_values()

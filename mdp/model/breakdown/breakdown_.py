@@ -5,15 +5,13 @@ from typing import Optional, TYPE_CHECKING
 
 if TYPE_CHECKING:
     import common
-    from mdp import view
     from mdp.model.breakdown import recorder
     from mdp.model import trainer
 
 
 class Breakdown(ABC):
-    def __init__(self, comparison: common.Comparison, graph: view.Graph):
+    def __init__(self, comparison: common.Comparison):
         self.comparison: common.Comparison = comparison
-        self.graph: view.Graph = graph
         self.verbose: bool = self.comparison.breakdown_parameters.verbose
 
         self._trainer: Optional[trainer.Trainer] = None
@@ -45,5 +43,5 @@ class Breakdown(ABC):
         pass
 
     @abstractmethod
-    def draw_graph(self):
+    def get_graph_values(self) -> common.GraphValues:
         pass

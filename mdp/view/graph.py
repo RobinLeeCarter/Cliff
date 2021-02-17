@@ -14,44 +14,45 @@ class Graph:
         self.title = ""
         self.fig: Optional[figure.Figure] = None
         self.ax: Optional[figure.Axes] = None
+        self.graph_values: Optional[common.GraphValues] = None
 
-    def make_plot(self,
-                  x_series: common.Series,
-                  graph_series: list[common.Series],
-                  y_label: str,
-                  moving_average_window_size: Optional[int] = None,
-                  x_min: Optional[float] = None,
-                  x_max: Optional[float] = None,
-                  y_min: Optional[float] = None,
-                  y_max: Optional[float] = None
-                  ):
-        if moving_average_window_size is None:
-            self.title = f"{y_label} vs {x_series.title}"
-        else:
-            self.title = f"Moving average of {y_label} vs {x_series.title}"
+    def make_plot(self, graph_values: common.GraphValues):
+        self.graph_values = graph_values
+
+        # fill-in values where missing
+        gv = self.graph_values
+        if gv.x_label is None:
+            gv.x_label = gv.x_series.title
+        if gv.title is None:
+            vs = f"{gv.y_label} vs {gv.x_label}"
+            if gv.moving_average_window_size is None:
+                gv.title = vs
+            else:
+                self.title = f"Moving average of {vs}"
 
         self.pre_plot()
-        if moving_average_window_size is None:
-            self.plot_arrays(x_series, graph_series)
+        if gv.moving_average_window_size is None:
+            self.plot_arrays(gv.x_series, gv.graph_series)
         else:
-            self.moving_average_plot(x_series, graph_series, moving_average_window_size)
-        self.post_plot(x_min=x_min, x_max=x_max, x_label=x_series.title,
-                       y_min=y_min, y_max=y_max, y_label=y_label)
+            self.moving_average_plot(gv.x_series, gv.graph_series, gv.moving_average_window_size)
+        self.post_plot()
         plt.show()
 
     def pre_plot(self):
         self.fig: figure.Figure = plt.figure()
         self.ax: figure.Axes = self.fig.subplots()
 
-    def post_plot(self, x_min: Optional[float], x_max: Optional[float], x_label: str,
-                  y_min: Optional[float], y_max: Optional[float], y_label: str):
-        self.ax.set_title(self.title)
-        self.ax.set_xlim(xmin=x_min, xmax=x_max)
-        self.ax.set_xlabel(x_label)
-        self.ax.set_ylim(ymin=y_min, ymax=y_max)
-        self.ax.set_ylabel(y_label)
-        self.ax.grid(True)
-        self.ax.legend()
+    def post_plot(self):
+        gv = self.graph_values
+        self.ax.set_title(gv.title)
+        self.ax.set_xlim(xmin=gv.x_min, xmax=gv.x_max)
+        self.ax.set_xlabel(gv.x_label)
+        self.ax.set_ylim(ymin=gv.y_min, ymax=gv.y_max)
+        self.ax.set_ylabel(gv.y_label)
+        if gv.has_grid:
+            self.ax.grid(True)
+        if gv.has_legend:
+            self.ax.legend()
 
     def plot_arrays(self, x_series: common.Series, graph_series: list[common.Series]):
         for series_ in graph_series:

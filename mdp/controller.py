@@ -18,6 +18,13 @@ class Controller:
         self._model.build(comparison)
         self._view.build(grid_world_=self._model.environment.grid_world)
 
-    # view requests
-    def get_fresh_episode(self) -> agent.Episode:
-        return self._model.agent.get_fresh_episode()
+    def run(self):
+        self._model.run()
+        graph_values: common.GraphValues = self._model.breakdown.get_graph_values()
+        self._view.graph.make_plot(graph_values)
+        self._view.grid_view.demonstrate(self.new_episode_request)
+
+    # region View requests
+    def new_episode_request(self) -> agent.Episode:
+        return self._model.agent.generate_episode()
+    # endregion

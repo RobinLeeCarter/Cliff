@@ -1,17 +1,14 @@
 from __future__ import annotations
-from typing import TYPE_CHECKING
 
 import numpy as np
 
-if TYPE_CHECKING:
-    from mdp import view
 import common
 from mdp.model.breakdown import recorder, breakdown_
 
 
 class ReturnByAlpha(breakdown_.Breakdown):
-    def __init__(self, comparison: common.Comparison, graph: view.Graph):
-        super().__init__(comparison, graph)
+    def __init__(self, comparison: common.Comparison):
+        super().__init__(comparison)
         assert isinstance(self.comparison.breakdown_parameters, common.BreakdownAlgorithmByAlpha)
         self.breakdown_parameters: common.BreakdownAlgorithmByAlpha = self.comparison.breakdown_parameters
 
@@ -46,13 +43,13 @@ class ReturnByAlpha(breakdown_.Breakdown):
             )
             self.series_list.append(series_)
 
-    def draw_graph(self):
-        gp = self.comparison.graph_parameters
-        self.graph.make_plot(x_series=self.x_series,
-                             graph_series=self.series_list,
-                             y_label=self._y_label,
-                             x_min=self.breakdown_parameters.alpha_min,
-                             x_max=self.breakdown_parameters.alpha_max,
-                             y_min=gp.y_min,
-                             y_max=gp.y_max
-                             )
+    def get_graph_values(self) -> common.GraphValues:
+        graph_values: common.GraphValues = common.GraphValues(
+            x_series=self.x_series,
+            graph_series=self.series_list,
+            y_label=self._y_label,
+            x_min=self.breakdown_parameters.alpha_min,
+            x_max=self.breakdown_parameters.alpha_max,
+        )
+        graph_values.apply_default_to_nones(self.comparison.graph_values)
+        return graph_values

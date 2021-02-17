@@ -13,6 +13,7 @@ class Application:
         self._controller: controller.Controller = controller.Controller(self._model, self._view)
 
         self.build()
+        self.run()
 
     def build(self):
         # enable model and view to send messages to controller
@@ -20,3 +21,6 @@ class Application:
         self._view.set_controller(self._controller)
 
         self._controller.build(self._comparison)
+
+    def run(self):
+        self._controller.run()

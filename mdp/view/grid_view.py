@@ -1,5 +1,5 @@
 from __future__ import annotations
-from typing import Optional, TYPE_CHECKING
+from typing import Optional, TYPE_CHECKING, Callable
 
 import pygame
 
@@ -61,6 +61,21 @@ class GridView:
             # else:
             self._wait_for_event_of_interest()
             # self._handle_event()
+
+    def demonstrate(self, new_episode_request: Callable[[], agent.Episode]):
+        self.open_window()
+        running_average = 0
+        count = 0
+        while True:
+            count += 1
+            episode: agent.Episode = new_episode_request()
+            print(f"max_t: {episode.max_t} \t total_return: {episode.total_return:.0f}")
+            running_average += (1/count) * (episode.total_return - running_average)
+            print(f"count: {count} \t running_average: {running_average:.1f}")
+            user_event: common.UserEvent = self.display_episode(episode, show_trail=False)
+            if user_event == common.UserEvent.QUIT:
+                break
+        self.close_window()
 
     def display_episode(self, episode_: agent.Episode, show_trail: bool = True) -> common.UserEvent:
         # print(episode_.trajectory)

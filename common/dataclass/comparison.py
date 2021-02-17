@@ -1,7 +1,7 @@
 from __future__ import annotations
 import dataclasses
 
-from common.dataclass import settings, environment_parameters, graph_parameters
+from common.dataclass import settings, environment_parameters, graph_values
 from common.dataclass.breakdown_parameters import breakdown_parameters_, breakdown_algorithm_by_alpha
 
 
@@ -20,8 +20,8 @@ class Comparison:
         dataclasses.field(default_factory=breakdown_parameters_.default_factory)
 
     # graph output
-    graph_parameters: graph_parameters.GraphParameters = \
-        dataclasses.field(default_factory=graph_parameters.default_factory)
+    graph_values: graph_values.GraphValues = \
+        dataclasses.field(default_factory=graph_values.default_factory)
 
     def __post_init__(self):
         # Push comparison values or default values into most settings attributes if currently =None
@@ -38,4 +38,4 @@ class Comparison:
         for settings_ in self.settings_list:
             settings_.apply_default_to_nones(default_=self.comparison_settings)
 
-        self.graph_parameters.apply_default_to_nones(default_=graph_parameters.default)
+        self.graph_values.apply_default_to_nones(default_=graph_values.default)

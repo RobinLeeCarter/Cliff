@@ -7,7 +7,7 @@ from mdp.model import environment
 
 
 class GridWorld(environment.GridWorld):
-    """GridWorld doesn'_t know about states and actions it just deals in the rules of the grid"""
+    """GridWorld doesn't know about states and actions it just deals in the rules of the grid"""
     def __init__(self, grid_array: np.ndarray):
         super().__init__(grid_array)
         self._random_move_choices = np.array([-1, 1], dtype=int)

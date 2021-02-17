@@ -3,8 +3,7 @@ from typing import Optional, TYPE_CHECKING
 
 if TYPE_CHECKING:
     from mdp import controller
-    from mdp.model import agent, environment
-import common
+    from mdp.model import environment
 from mdp.view import graph, grid_view
 
 
@@ -21,19 +20,7 @@ class View:
         self.grid_view.set_grid_world(grid_world_)
 
     def demonstrate(self):
-        self.grid_view.open_window()
-        running_average = 0
-        count = 0
-        while True:
-            count += 1
-            episode: agent.Episode = self._controller.get_fresh_episode()
-            print(f"max_t: {episode.max_t} \t total_return: {episode.total_return:.0f}")
-            running_average += (1/count) * (episode.total_return - running_average)
-            print(f"count: {count} \t running_average: {running_average:.1f}")
-            user_event: common.UserEvent = self.grid_view.display_episode(episode, show_trail=False)
-            if user_event == common.UserEvent.QUIT:
-                break
-        self.grid_view.close_window()
+        self.grid_view.demonstrate(self._controller.new_episode_request)
 
     # def set_grid_world(self, grid_world_: environment.GridWorld):
     #     self.grid_view.set_grid_world(grid_world_)
