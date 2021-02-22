@@ -40,7 +40,7 @@ class GridView:
         self._build_color_lookup()
 
         t0 = time.time()
-        self.font: pygame.freetype.Font = pygame.freetype.Font(None, 42)
+        self.font: pygame.freetype.Font = pygame.freetype.Font(None, 12)
         print('time needed for Font creation :', time.time() - t0)
 
     def set_grid_world(self, grid_world_: environment.GridWorld):
@@ -163,12 +163,26 @@ class GridView:
         square_rect: pygame.Rect = pygame.Rect(left, top, width, height)
         pygame.draw.rect(surface, color, square_rect)
 
-        text: str = "H"
+        text: str = "12.3"
+
+        move: common.XY = common.XY(x=-1, y=1)
+        sub_rect = self._get_sub_rect(square_rect, move)
+        self._center_text(surface, sub_rect, text)
+
+        # sub_width: float = square_rect.width / 3.0
+        # sub_height: float = square_rect.height / 3.0
+        # sub_left: float = square_rect.left + (move.x + 1)*sub_width
+        # sub_top: float = square_rect.top + (1 - move.y)*sub_height
+        # sub_rect: pygame.Rect = pygame.Rect(sub_left, sub_top, sub_width, sub_height)
+        # print(f"rect = {square_rect}")
+        # print(f"sub  = {sub_rect}")
 
         # print("next...")
-        bounds = self.font.get_rect(text)
-        bounds.center = (0, 0)
-        bounds.move_ip(square_rect.center)
+
+        # bounds = self._font.get_rect(text)
+        # bounds.center = (0, 0)
+        # bounds.move_ip(square_rect.center)
+        # self._font.render_to(surface, bounds.topleft, text)
 
         # print(bounds.x, bounds.y, bounds.w, bounds.h)
         # print(bounds.center)
@@ -186,12 +200,25 @@ class GridView:
         # print(square_rect.center)
 
         # destination: tuple = (left, top)
-        self.font.render_to(surface, bounds.topleft, text)
 
         if v is not None:
             # write v in square_rect
             pass
         return square_rect
+
+    def _get_sub_rect(self, rect: pygame.Rect, move: common.XY) -> pygame.Rect:
+        sub_width: float = rect.width / 3.0
+        sub_height: float = rect.height / 3.0
+        sub_left: float = rect.left + (move.x + 1)*sub_width
+        sub_top: float = rect.top + (1 - move.y)*sub_height
+        sub_rect: pygame.Rect = pygame.Rect(sub_left, sub_top, sub_width, sub_height)
+        return sub_rect
+
+    def _center_text(self, surface: pygame.Surface, rect: pygame.Rect, text: str):
+        bounds = self.font.get_rect(text)
+        bounds.center = (0, 0)
+        bounds.move_ip(rect.center)
+        self.font.render_to(surface, bounds.topleft, text)
 
     def _put_background_on_screen(self):
         self._screen.blit(source=self._background, dest=(0, 0))

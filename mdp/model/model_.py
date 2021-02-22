@@ -3,7 +3,7 @@ from typing import Optional, TYPE_CHECKING
 
 if TYPE_CHECKING:
     from mdp.model import environment
-    from mdp.model.algorithm import value_function
+    # from mdp.model.algorithm import value_function
 
 import utils
 from mdp import controller
@@ -70,4 +70,4 @@ class Model:
             #         move=action.move,
             #         value=self.agent.algorithm.Q[state, action]
             #     )
-        print(self.environment.grid_world.v)
+        # print(self.environment.grid_world.v)

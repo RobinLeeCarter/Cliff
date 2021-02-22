@@ -2,6 +2,7 @@ from __future__ import annotations
 from typing import Optional, TYPE_CHECKING, Callable
 
 import pygame
+import pygame.freetype
 
 if TYPE_CHECKING:
     from mdp.model import agent, environment
@@ -34,6 +35,9 @@ class GridView:
 
         self._build_color_lookup()
 
+        # self._font: pygame.freetype.Font = pygame.freetype.Font(None, 12)
+        self._font: pygame.freetype.Font = pygame.freetype.SysFont("Calibri", 12)
+
     def set_grid_world(self, grid_world_: environment.GridWorld):
         self._grid_world = grid_world_
         self._max_x = self._grid_world.max_x
@@ -52,6 +56,10 @@ class GridView:
         self._grid_surface = self._grid_surface.convert()
         pygame.key.set_repeat(500, 50)
         # self.background.fill(self.background_color)
+
+    def close_window(self):
+        # pygame.display.quit()
+        pygame.quit()
 
     def display_and_wait(self):
         while self._user_event != common.UserEvent.QUIT:
@@ -115,12 +123,8 @@ class GridView:
         self._grid_surface.fill(self._background_color)
         for x in range(self._max_x + 1):
             for y in range(self._max_y + 1):
-                square: common.Square = self._grid_world.get_square(position=common.XY(x, y))
-                if self._display_v:
-                    v = self._grid_world.v[y, x]
-                    self._draw_square(x, y, square, self._grid_surface, v=v)
-                else:
-                    self._draw_square(x, y, square, self._grid_surface)
+                position: common.XY = common.XY(x, y)
+                self._draw_square(self._grid_surface, position)
         self._copy_grid_into_background()
 
     def _copy_grid_into_background(self):
@@ -136,26 +140,34 @@ class GridView:
         self._background = pygame.Surface(size=self.screen_size)
         self._grid_surface = pygame.Surface(size=self.screen_size)
 
-    def _draw_square(self, x: int, y: int,
-                     square: common.Square,
+    def _draw_square(self,
                      surface: pygame.Surface,
-                     v: Optional[float] = None
+                     position: common.XY,
+                     square: Optional[common.Square] = None
                      ) -> pygame.Rect:
-        row = self._max_y - y
-        col = x
+        row = self._max_y - position.y
+        col = position.x
 
+        if not square:
+            square: common.Square = self._grid_world.get_square(position)
         color: pygame.Color = self._color_lookup[square]
         left: int = col * self._cell_pixels
         top: int = row * self._cell_pixels
         width: int = self._cell_pixels - 1
         height: int = self._cell_pixels - 1
 
-        # doesn'_t like named parameters
+        # doesn't like named parameters
         rect: pygame.Rect = pygame.Rect(left, top, width, height)
         pygame.draw.rect(surface, color, rect)
-        if v is not None:
-            # write v in rect
-            pass
+
+        if self._display_v:
+            v = self._grid_world.v[row, col]
+            if v is not None:
+                # write v in rect
+                text: str = f"{v:.1f}"
+                move: common.XY = common.XY(x=0, y=0)
+                sub_rect = self._get_sub_rect(rect, move)
+                self._center_text(surface, sub_rect, text)
         return rect
 
     def _put_background_on_screen(self):
@@ -182,13 +194,24 @@ class GridView:
     def _draw_agent_at_state(self, state: environment.State):
         # row, col = self._grid_world.get_index(state.x, state.y)
         # print(f"_t={self._t} x={state.x} y={state.y} row={row} col={col}")
-        rect: pygame.Rect = self._draw_square(x=state.position.x, y=state.position.y,
-                                              square=common.Square.AGENT, surface=self._background)
+        rect: pygame.Rect = self._draw_square(surface=self._background,
+                                              position=state.position,
+                                              square=common.Square.AGENT)
         self._screen.blit(source=self._background, dest=rect, area=rect)
         pygame.display.update(rect)
         # self.screen.blit(source=self.background, dest=(0, 0))
         # pygame.display.flip()
 
-    def close_window(self):
-        # pygame.display.quit()
-        pygame.quit()
+    def _get_sub_rect(self, rect: pygame.Rect, move: common.XY) -> pygame.Rect:
+        sub_width: float = rect.width / 3.0
+        sub_height: float = rect.height / 3.0
+        sub_left: float = rect.left + (move.x + 1)*sub_width
+        sub_top: float = rect.top + (1 - move.y)*sub_height
+        sub_rect: pygame.Rect = pygame.Rect(sub_left, sub_top, sub_width, sub_height)
+        return sub_rect
+
+    def _center_text(self, surface: pygame.Surface, rect: pygame.Rect, text: str):
+        bounds = self._font.get_rect(text)
+        bounds.center = (0, 0)
+        bounds.move_ip(rect.center)
+        self._font.render_to(surface, bounds.topleft, text)
