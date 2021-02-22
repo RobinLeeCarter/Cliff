@@ -17,13 +17,13 @@ class Policy(abc.ABC):
             return None
         else:
             # this of course will go to the level in inheritance hierarchy set by self
-            return self.get_action(state)
+            return self._get_action(state)
 
     def __setitem__(self, state: environment.State, action: environment.Action):
         raise NotImplementedError(f"__setitem__ not implemented for Policy: {type(self)}")
 
     @abc.abstractmethod
-    def get_action(self, state: environment.State) -> environment.Action:
+    def _get_action(self, state: environment.State) -> environment.Action:
         pass
 
     @abc.abstractmethod

@@ -26,6 +26,7 @@ class GridView:
         self._grid_surface: Optional[pygame.Surface] = None
 
         self._background_color: Optional[pygame.Color] = None
+        self._policy_color: Optional[pygame.Color] = None
         self._color_lookup: dict[common.Square, pygame.Color] = {}
 
         self._user_event: common.UserEvent = common.UserEvent.NONE
@@ -110,6 +111,7 @@ class GridView:
     # noinspection SpellCheckingInspection
     def _build_color_lookup(self):
         self._background_color: pygame.Color = pygame.Color('grey10')
+        self._policy_color: pygame.Color = pygame.Color('pink')
         self._color_lookup = {
             common.Square.NORMAL: pygame.Color('darkgrey'),
             common.Square.CLIFF: pygame.Color('red2'),
@@ -161,13 +163,20 @@ class GridView:
         pygame.draw.rect(surface, color, rect)
 
         if self._display_v:
-            v = self._grid_world.v[row, col]
-            if v is not None:
+            output_square: common.OutputSquare = self._grid_world.output_squares[row, col]
+            if output_square.v_value is not None:
                 # write v in rect
-                text: str = f"{v:.1f}"
-                move: common.XY = common.XY(x=0, y=0)
-                sub_rect = self._get_sub_rect(rect, move)
+                text: str = f"{output_square.v_value:.1f}"
+                sub_rect = self._get_sub_rect(rect, move=common.XY(x=0, y=0))
                 self._center_text(surface, sub_rect, text)
+
+            for move_value in output_square.move_values.values():
+                text: str = f"{move_value.q_value:.1f}"
+                sub_rect = self._get_sub_rect(rect, move_value.move)
+                if move_value.is_policy:
+                    pygame.draw.rect(surface, self._policy_color, sub_rect)
+                self._center_text(surface, sub_rect, text)
+
         return rect
 
     def _put_background_on_screen(self):

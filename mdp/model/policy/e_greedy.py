@@ -14,11 +14,11 @@ class EGreedy(random.Random):
             deterministic.Deterministic(self._environment, self._policy_parameters)
         self.epsilon = self._policy_parameters.epsilon
 
-    def get_action(self, state: environment.State) -> environment.Action:
+    def _get_action(self, state: environment.State) -> environment.Action:
         if common.rng.uniform() > self.epsilon:
             return self.greedy_policy[state]
         else:
-            return random.Random.get_action(self, state)
+            return random.Random._get_action(self, state)
 
     def __setitem__(self, state: environment.State, action: environment.Action):
         self.greedy_policy[state] = action

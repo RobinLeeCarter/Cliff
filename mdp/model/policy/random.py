@@ -16,7 +16,7 @@ class Random(policy_.Policy):
         # self.state: Optional[environment.State] = None
         self.possible_actions: List[environment.Action] = []
 
-    def get_action(self, state: environment.State) -> environment.Action:
+    def _get_action(self, state: environment.State) -> environment.Action:
         self.set_possible_actions(state)
         return common.rng.choice(self.possible_actions)
 

@@ -6,9 +6,8 @@ if TYPE_CHECKING:
     # from mdp.model.algorithm import value_function
 
 import utils
-from mdp import controller
-from mdp import common
-from mdp.model import breakdown, trainer, scenarios, agent
+from mdp import controller, common
+from mdp.model import breakdown, trainer, scenarios, agent, policy
 
 
 class Model:
@@ -59,15 +58,26 @@ class Model:
         # graph_values: common.GraphValues = self.breakdown.get_graph_values()
 
     def update_grid_value_functions(self):
+        policy_ = self.agent.policy
+        assert isinstance(policy_, policy.EGreedy)
+        greedy_policy = policy_.greedy_policy
+
         for state in self.environment.states():
+            policy_action: Optional[environment.Action] = greedy_policy[state]
+            policy_move: Optional[common.XY] = None
+            if policy_action:
+                policy_move = policy_action.move
+
             self.environment.grid_world.set_state_function(
                 position=state.position,
-                value=self.agent.algorithm.V[state]
+                v_value=self.agent.algorithm.V[state]
             )
-            # for action in self.environment.actions_for_state(state):
-            #     self.environment.grid_world.set_state_action_function(
-            #         position=state.position,
-            #         move=action.move,
-            #         value=self.agent.algorithm.Q[state, action]
-            #     )
-        # print(self.environment.grid_world.v)
+            for action in self.environment.actions_for_state(state):
+                is_policy: bool = (policy_move and policy_move == action.move)
+                self.environment.grid_world.set_state_action_function(
+                    position=state.position,
+                    move=action.move,
+                    q_value=self.agent.algorithm.Q[state, action],
+                    is_policy=is_policy
+                )
+        # print(self.environment.grid_world.output_squares)

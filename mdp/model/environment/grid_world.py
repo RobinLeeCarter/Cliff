@@ -17,7 +17,10 @@ class GridWorld:
         self._single_start: Optional[common.XY] = None
         self._test_single_start()
 
-        self.v: np.ndarray = np.zeros(shape=self.grid_array.shape, dtype=float)
+        self.output_squares: np.ndarray = np.empty(shape=self.grid_array.shape, dtype=common.OutputSquare)
+        # initialize output_squares so don't have to test for existance.
+        for index in np.ndindex(self.output_squares.shape):
+            self.output_squares[index] = common.OutputSquare()
 
     def _test_single_start(self):
         if len(self._starts_flat) == 1:
@@ -69,6 +72,19 @@ class GridWorld:
     def _move_flip(self, xy_in: common.XY) -> common.XY:
         return common.XY(x=xy_in.x, y=-xy_in.y)
 
-    def set_state_function(self, position: common.XY, value: float):
+    def set_output_square(self, position: common.XY):
+        pass
+
+    def set_state_function(self, position: common.XY, v_value: float):
+        output_square: common.OutputSquare = self._get_output_square(position)
+        output_square.v_value = v_value
+
+    def set_state_action_function(self, position: common.XY, move: common.XY, q_value: float, is_policy: bool = False):
+        output_square: common.OutputSquare = self._get_output_square(position)
+        move_value: common.MoveValue = common.MoveValue(move, q_value, is_policy)
+        output_square.move_values[move] = move_value
+
+    def _get_output_square(self, position: common.XY) -> common.OutputSquare:
         np_index: common.XY = self._position_flip(position)
-        self.v[np_index.y, np_index.x] = value
+        output_square: common.OutputSquare = self.output_squares[np_index.y, np_index.x]
+        return output_square

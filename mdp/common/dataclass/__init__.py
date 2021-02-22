@@ -6,3 +6,4 @@ from mdp.common.dataclass.graph_values import GraphValues
 from mdp.common.dataclass.environment_parameters import EnvironmentParameters
 from mdp.common.dataclass.breakdown_parameters import *
 from mdp.common.dataclass.comparison import Comparison
+from mdp.common.dataclass.output_square import *

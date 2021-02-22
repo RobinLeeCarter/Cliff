@@ -13,7 +13,7 @@ class NoPolicy(policy_.Policy):
         actions: list[environment.Action] = [action for action in environment_.actions()]
         self.action = actions[0]    # always pick first action (presumably stationary)
 
-    def get_action(self, state: environment.State) -> environment.Action:
+    def _get_action(self, state: environment.State) -> environment.Action:
         return self.action
 
     def __setitem__(self, state: environment.State, action: environment.Action):
