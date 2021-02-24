@@ -3,6 +3,7 @@ from typing import Generator, Optional, TYPE_CHECKING
 import abc
 
 if TYPE_CHECKING:
+    from mdp.model import algorithm, policy
     from mdp.model.environment import grid_world
 from mdp import common
 from mdp.model.environment import state, response
@@ -119,4 +120,24 @@ class Environment(abc.ABC):
     @abc.abstractmethod
     def _get_response(self) -> response.Response:
         pass
+
+    def update_grid_value_functions(self, algorithm_: algorithm.Episodic, policy_: policy.Deterministic):
+        for state_ in self.states():
+            policy_action: Optional[action.Action] = policy_[state_]
+            policy_move: Optional[common.XY] = None
+            if policy_action:
+                policy_move = policy_action.move
+
+            self.grid_world.set_state_function(
+                position=state_.position,
+                v_value=algorithm_.V[state_]
+            )
+            for action_ in self.actions_for_state(state_):
+                is_policy: bool = (policy_move and policy_move == action_.move)
+                self.grid_world.set_state_action_function(
+                    position=state_.position,
+                    move=action_.move,
+                    q_value=algorithm_.Q[state_, action_],
+                    is_policy=is_policy
+                )
     # endregion
