@@ -1,5 +1,5 @@
 from __future__ import annotations
-from typing import TYPE_CHECKING, Optional
+from typing import TYPE_CHECKING, Optional, Callable
 
 if TYPE_CHECKING:
     from mdp import common
@@ -10,10 +10,12 @@ class Trainer:
     def __init__(self,
                  agent_: agent.Agent,
                  breakdown_: breakdown.Breakdown,
+                 model_step_callback: Optional[Callable[[agent.Episode], bool]] = None,
                  verbose: bool = False
                  ):
         self._agent: agent.Agent = agent_
         self._breakdown: breakdown.Breakdown = breakdown_
+        self._model_step_callback: Optional[Callable[[agent.Episode], bool]] = model_step_callback
         self._verbose = verbose
 
         self.settings: Optional[common.Settings] = None
@@ -37,8 +39,8 @@ class Trainer:
         # self.algorithm_.agent.new_policy(settings.policy_parameters)
         # self.algorithm_.agent.set_gamma(settings.gamma)
 
-        if settings.review_every_step:
-            self._agent.set_step_callback(self.review_step)
+        if settings.review_every_step or settings.display_every_step:
+            self._agent.set_step_callback(self.step)
         settings.algorithm_title = self._agent.algorithm_title
         print(f"{settings.algorithm_title}: {settings.runs} runs")
 
@@ -72,6 +74,14 @@ class Trainer:
 
         if self._verbose:
             self._agent.print_statistics()
+
+    def step(self) -> bool:
+        cont: bool = True
+        if self.settings.review_every_step:
+            self.review_step()
+        if self.settings.display_every_step and self._model_step_callback:
+            cont = self._model_step_callback(self._agent.episode)
+        return cont
 
     def review_step(self):
         self.timestep += 1

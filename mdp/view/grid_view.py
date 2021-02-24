@@ -10,8 +10,9 @@ from mdp import common
 
 
 class GridView:
-    def __init__(self, display_v: bool = False):
+    def __init__(self, display_v: bool = False, display_q: bool = False):
         self._display_v: bool = display_v
+        self._display_q: bool = display_q
         self._grid_world: Optional[environment.GridWorld] = None
 
         self._max_x: Optional[int] = None
@@ -21,6 +22,9 @@ class GridView:
         self._screen_height: int = 1000
         self._title: str = "Not implemented"
         self._cell_pixels: int = 10
+
+        self._is_window_open: bool = False
+
         self._screen: Optional[pygame.Surface] = None
         self._background: Optional[pygame.Surface] = None
         self._grid_surface: Optional[pygame.Surface] = None
@@ -39,30 +43,44 @@ class GridView:
         # self._font: pygame.freetype.Font = pygame.freetype.Font(None, 12)
         self._font: pygame.freetype.Font = pygame.freetype.SysFont("Calibri", 12)
 
+    @property
+    def screen_size(self) -> tuple:
+        return self._screen_width, self._screen_height
+
     def set_grid_world(self, grid_world_: environment.GridWorld):
         self._grid_world = grid_world_
         self._max_x = self._grid_world.max_x
         self._max_y = self._grid_world.max_y
         self._load_gridworld()
 
-    @property
-    def screen_size(self) -> tuple:
-        return self._screen_width, self._screen_height
+    def _load_gridworld(self):
+        self._set_sizes()
+        self._grid_surface.fill(self._background_color)
+        for x in range(self._max_x + 1):
+            for y in range(self._max_y + 1):
+                position: common.XY = common.XY(x, y)
+                self._draw_square(self._grid_surface, position, draw_background=True)
+        self._copy_grid_into_background()
 
     def open_window(self):
-        self._screen = pygame.display.set_mode(size=self.screen_size)
-        pygame.display.set_caption(self._title)
-        # self.background = pygame.Surface(size=self.screen_size).convert()
-        self._background = self._background.convert()
-        self._grid_surface = self._grid_surface.convert()
-        pygame.key.set_repeat(500, 50)
-        # self.background.fill(self.background_color)
+        """open window if not already open
+        safe to call repeatedly"""
+        if not self._is_window_open:
+            self._screen = pygame.display.set_mode(size=self.screen_size)
+            pygame.display.set_caption(self._title)
+            # self.background = pygame.Surface(size=self.screen_size).convert()
+            self._background = self._background.convert()
+            self._grid_surface = self._grid_surface.convert()
+            pygame.key.set_repeat(500, 50)
+            self._is_window_open = True
+            # self.background.fill(self.background_color)
 
     def close_window(self):
-        # pygame.display.quit()
         pygame.quit()
+        self._is_window_open = False
 
     def display_and_wait(self):
+        self.open_window()
         while self._user_event != common.UserEvent.QUIT:
             self._put_background_on_screen()
             # keys = pygame.key.get_pressed()
@@ -72,9 +90,37 @@ class GridView:
             self._wait_for_event_of_interest()
             # self._handle_event()
 
+    def display_step(self, episode_: agent.Episode) -> bool:  # , show_trail: bool = True
+        cont: bool = True
+        agent_position: common.XY = episode_.last_state.position
+
+        self.open_window()  # if not already
+        self._copy_grid_into_background()
+        for x in range(self._max_x + 1):
+            for y in range(self._max_y + 1):
+                position: common.XY = common.XY(x, y)
+                if position == agent_position:
+                    self._draw_square(self._background,
+                                      position,
+                                      square=common.Square.AGENT,
+                                      draw_background=True,
+                                      draw_v=self._display_v,
+                                      draw_q=self._display_q)
+                else:
+                    self._draw_square(self._background,
+                                      position,
+                                      draw_v=self._display_v,
+                                      draw_q=self._display_q)
+        self._put_background_on_screen()
+        self._wait_for_event_of_interest()
+        if self._user_event == common.UserEvent.QUIT:
+            cont = False
+            self.close_window()
+        return cont
+
     def demonstrate(self, new_episode_request: Callable[[], agent.Episode]):
-        if self._display_v:
-            self._load_gridworld()
+        # if self._display_v:
+        # self._load_gridworld()
         self.open_window()
         running_average = 0
         count = 0
@@ -120,15 +166,6 @@ class GridView:
             common.Square.AGENT: pygame.Color('deepskyblue2')
         }
 
-    def _load_gridworld(self):
-        self._set_sizes()
-        self._grid_surface.fill(self._background_color)
-        for x in range(self._max_x + 1):
-            for y in range(self._max_y + 1):
-                position: common.XY = common.XY(x, y)
-                self._draw_square(self._grid_surface, position)
-        self._copy_grid_into_background()
-
     def _copy_grid_into_background(self):
         self._background.blit(source=self._grid_surface, dest=(0, 0))
 
@@ -145,14 +182,15 @@ class GridView:
     def _draw_square(self,
                      surface: pygame.Surface,
                      position: common.XY,
-                     square: Optional[common.Square] = None
+                     square: Optional[common.Square] = None,
+                     draw_background: bool = False,
+                     draw_v: bool = False,
+                     draw_q: bool = False
                      ) -> pygame.Rect:
+        # make rect
         row = self._max_y - position.y
         col = position.x
 
-        if not square:
-            square: common.Square = self._grid_world.get_square(position)
-        color: pygame.Color = self._color_lookup[square]
         left: int = col * self._cell_pixels
         top: int = row * self._cell_pixels
         width: int = self._cell_pixels - 1
@@ -160,24 +198,35 @@ class GridView:
 
         # doesn't like named parameters
         rect: pygame.Rect = pygame.Rect(left, top, width, height)
-        pygame.draw.rect(surface, color, rect)
 
-        if self._display_v:
-            output_square: common.OutputSquare = self._grid_world.output_squares[row, col]
-            if output_square.v_value is not None:
-                # write v in rect
-                text: str = f"{output_square.v_value:.1f}"
-                sub_rect = self._get_sub_rect(rect, move=common.XY(x=0, y=0))
-                self._center_text(surface, sub_rect, text)
+        if draw_background:
+            if not square:
+                square: common.Square = self._grid_world.get_square(position)
+            color: pygame.Color = self._color_lookup[square]
+            pygame.draw.rect(surface, color, rect)
 
-            for move_value in output_square.move_values.values():
+        output_square: common.OutputSquare = self._grid_world.output_squares[row, col]
+        if draw_v:
+            self._draw_v(surface, rect, output_square)
+        if draw_q:
+            self._draw_q(surface, rect, output_square)
+
+        return rect
+
+    def _draw_v(self, surface: pygame.Surface, rect: pygame.Rect, output_square: common.OutputSquare):
+        if output_square.v_value is not None:
+            text: str = f"{output_square.v_value:.1f}"
+            sub_rect = self._get_sub_rect(rect, move=common.XY(x=0, y=0))
+            self._center_text(surface, sub_rect, text)
+
+    def _draw_q(self, surface: pygame.Surface, rect: pygame.Rect, output_square: common.OutputSquare):
+        for move_value in output_square.move_values.values():
+            if move_value.q_value is not None:
                 text: str = f"{move_value.q_value:.1f}"
                 sub_rect = self._get_sub_rect(rect, move_value.move)
                 if move_value.is_policy:
                     pygame.draw.rect(surface, self._policy_color, sub_rect)
                 self._center_text(surface, sub_rect, text)
-
-        return rect
 
     def _put_background_on_screen(self):
         self._screen.blit(source=self._background, dest=(0, 0))
@@ -205,7 +254,8 @@ class GridView:
         # print(f"_t={self._t} x={state.x} y={state.y} row={row} col={col}")
         rect: pygame.Rect = self._draw_square(surface=self._background,
                                               position=state.position,
-                                              square=common.Square.AGENT)
+                                              square=common.Square.AGENT,
+                                              draw_background=True)
         self._screen.blit(source=self._background, dest=rect, area=rect)
         pygame.display.update(rect)
         # self.screen.blit(source=self.background, dest=(0, 0))

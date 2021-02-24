@@ -40,8 +40,9 @@ def episode() -> common.Comparison:
             actions_list=common.ActionsList.FOUR_MOVES,
         ),
         comparison_settings=common.Settings(
-            runs=10,
-            training_episodes=500,
+            runs=1,
+            training_episodes=100,
+            display_every_step=True,
         ),
         breakdown_parameters=common.BreakdownParameters(
             breakdown_type=common.BreakdownType.RETURN_BY_EPISODE

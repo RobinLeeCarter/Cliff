@@ -24,6 +24,11 @@ class Controller:
         self._view.graph.make_plot(graph_values)
         self._view.grid_view.demonstrate(self.new_episode_request)
 
+    # region Model requests
+    def display_step(self, episode_: agent.Episode) -> bool:
+        return self._view.grid_view.display_step(episode_)
+    # endregion
+
     # region View requests
     def new_episode_request(self) -> agent.Episode:
         return self._model.agent.generate_episode()

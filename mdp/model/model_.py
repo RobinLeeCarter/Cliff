@@ -35,6 +35,7 @@ class Model:
         self.trainer: trainer.Trainer = trainer.Trainer(
             agent_=self.agent,
             breakdown_=self.breakdown,
+            model_step_callback=self._display_step,
             verbose=False
         )
         self.breakdown.set_trainer(self.trainer)
@@ -62,3 +63,7 @@ class Model:
         assert isinstance(policy_, policy.EGreedy)
         greedy_policy = policy_.greedy_policy
         self.environment.update_grid_value_functions(algorithm_=self.agent.algorithm, policy_=greedy_policy)
+
+    def _display_step(self, episode_: agent.Episode) -> bool:
+        self.update_grid_value_functions()
+        return self._controller.display_step(episode_)

@@ -26,6 +26,7 @@ class Settings:
     episode_to_start_recording: Optional[int] = None
     episode_recording_frequency: Optional[int] = None
     review_every_step: Optional[bool] = None
+    display_every_step: Optional[bool] = None
 
     # algorithm title will be populated by Trainer later whether it's used or not
     algorithm_title: str = dataclasses.field(default="", init=False)
@@ -40,7 +41,8 @@ class Settings:
             'episode_print_frequency',
             'episode_to_start_recording',
             'episode_recording_frequency',
-            'review_every_step'
+            'review_every_step',
+            'display_every_step'
         ]
         for attribute_name in attribute_names:
             attribute = self.__getattribute__(attribute_name)
@@ -64,6 +66,7 @@ default = Settings(
     episode_to_start_recording=0,
     episode_recording_frequency=1,
     review_every_step=False,
+    display_every_step=False
 )
 
 

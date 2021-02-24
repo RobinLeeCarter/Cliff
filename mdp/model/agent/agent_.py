@@ -39,7 +39,7 @@ class Agent:
         self._response: Optional[environment.Response] = None
 
         # trainer callback
-        self._step_callback: Optional[Callable[[], None]] = None
+        self._step_callback: Optional[Callable[[], bool]] = None
 
     @property
     def policy(self) -> policy_.Policy:
@@ -73,7 +73,7 @@ class Agent:
     def do_episode(self):
         self._algorithm.do_episode(self._episode_length_timeout)
 
-    def set_step_callback(self, step_callback: Optional[Callable[[], None]] = None):
+    def set_step_callback(self, step_callback: Optional[Callable[[], bool]] = None):
         self._step_callback = step_callback
 
     def start_episode(self):
