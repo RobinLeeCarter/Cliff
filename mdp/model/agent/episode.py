@@ -30,6 +30,13 @@ class Episode:
         else:
             return None
 
+    @property
+    def last_action(self) -> Optional[environment.Action]:
+        if self.trajectory:
+            return self.trajectory[-1].action
+        else:
+            return None
+
     def add_rsa(self,
                 reward: Optional[float],
                 state: environment.State,

@@ -1,6 +1,8 @@
 from __future__ import annotations
 from typing import Optional, TYPE_CHECKING
 
+import sys
+
 if TYPE_CHECKING:
     from mdp.model import environment
     # from mdp.model.algorithm import value_function
@@ -19,6 +21,8 @@ class Model:
         self.agent: Optional[agent.Agent] = None
         self.breakdown: Optional[breakdown.Breakdown] = None
         self.trainer: Optional[trainer.Trainer] = None
+
+        self._cont: bool = True
 
     def set_controller(self, controller_: controller.Controller):
         self._controller = controller_
@@ -52,6 +56,8 @@ class Model:
         timer.start()
         for settings in self.comparison.settings_list:
             self.trainer.train(settings)
+            if not self._cont:
+                break
             timer.lap(name=str(settings.algorithm_title))
         timer.stop()
 
@@ -64,6 +70,6 @@ class Model:
         greedy_policy = policy_.greedy_policy
         self.environment.update_grid_value_functions(algorithm_=self.agent.algorithm, policy_=greedy_policy)
 
-    def _display_step(self, episode_: agent.Episode) -> bool:
+    def _display_step(self, episode_: agent.Episode):
         self.update_grid_value_functions()
-        return self._controller.display_step(episode_)
+        self._controller.display_step(episode_)

@@ -10,13 +10,14 @@ class Trainer:
     def __init__(self,
                  agent_: agent.Agent,
                  breakdown_: breakdown.Breakdown,
-                 model_step_callback: Optional[Callable[[agent.Episode], bool]] = None,
+                 model_step_callback: Optional[Callable[[agent.Episode], None]] = None,
                  verbose: bool = False
                  ):
         self._agent: agent.Agent = agent_
         self._breakdown: breakdown.Breakdown = breakdown_
-        self._model_step_callback: Optional[Callable[[agent.Episode], bool]] = model_step_callback
+        self._model_step_callback: Optional[Callable[[agent.Episode], None]] = model_step_callback
         self._verbose = verbose
+        self._cont: bool = True
 
         self.settings: Optional[common.Settings] = None
         self.run_counter: int = 0
@@ -76,12 +77,11 @@ class Trainer:
             self._agent.print_statistics()
 
     def step(self) -> bool:
-        cont: bool = True
         if self.settings.review_every_step:
             self.review_step()
         if self.settings.display_every_step and self._model_step_callback:
-            cont = self._model_step_callback(self._agent.episode)
-        return cont
+            self._model_step_callback(self._agent.episode)
+        return True
 
     def review_step(self):
         self.timestep += 1

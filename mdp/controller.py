@@ -25,8 +25,8 @@ class Controller:
         self._view.grid_view.demonstrate(self.new_episode_request)
 
     # region Model requests
-    def display_step(self, episode_: agent.Episode) -> bool:
-        return self._view.grid_view.display_step(episode_)
+    def display_step(self, episode_: agent.Episode):
+        self._view.grid_view.display_step(episode_)
     # endregion
 
     # region View requests

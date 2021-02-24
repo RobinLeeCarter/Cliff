@@ -1,6 +1,8 @@
 from __future__ import annotations
 from typing import Optional, TYPE_CHECKING, Callable
 
+import sys
+
 import pygame
 import pygame.freetype
 
@@ -90,8 +92,7 @@ class GridView:
             self._wait_for_event_of_interest()
             # self._handle_event()
 
-    def display_step(self, episode_: agent.Episode) -> bool:  # , show_trail: bool = True
-        cont: bool = True
+    def display_step(self, episode_: agent.Episode):  # , show_trail: bool = True
         agent_position: common.XY = episode_.last_state.position
 
         self.open_window()  # if not already
@@ -114,9 +115,8 @@ class GridView:
         self._put_background_on_screen()
         self._wait_for_event_of_interest()
         if self._user_event == common.UserEvent.QUIT:
-            cont = False
             self.close_window()
-        return cont
+            sys.exit()
 
     def demonstrate(self, new_episode_request: Callable[[], agent.Episode]):
         # if self._display_v:
