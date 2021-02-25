@@ -18,6 +18,7 @@ class ConstantAlphaMC(abstract.EpisodicMonteCarlo):
         self._algorithm_type = common.AlgorithmType.CONSTANT_ALPHA_MC
         self.name = common.algorithm_name[self._algorithm_type]
         self.title = f"{self.name} α={self._alpha}"
+        self._create_v()
 
     def _process_time_step(self, t: int):
         state = self._episode[t].state

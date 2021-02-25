@@ -128,16 +128,18 @@ class Environment(abc.ABC):
             if policy_action:
                 policy_move = policy_action.move
 
-            self.grid_world.set_state_function(
-                position=state_.position,
-                v_value=algorithm_.V[state_]
-            )
-            for action_ in self.actions_for_state(state_):
-                is_policy: bool = (policy_move and policy_move == action_.move)
-                self.grid_world.set_state_action_function(
+            if algorithm_.V:
+                self.grid_world.set_state_function(
                     position=state_.position,
-                    move=action_.move,
-                    q_value=algorithm_.Q[state_, action_],
-                    is_policy=is_policy
+                    v_value=algorithm_.V[state_]
                 )
+            if algorithm_.Q:
+                for action_ in self.actions_for_state(state_):
+                    is_policy: bool = (policy_move and policy_move == action_.move)
+                    self.grid_world.set_state_action_function(
+                        position=state_.position,
+                        move=action_.move,
+                        q_value=algorithm_.Q[state_, action_],
+                        is_policy=is_policy
+                    )
     # endregion

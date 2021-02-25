@@ -18,6 +18,7 @@ class ExpectedSarsa(abstract.EpisodicOnline):
         self._algorithm_type = common.AlgorithmType.EXPECTED_SARSA
         self.name = common.algorithm_name[self._algorithm_type]
         self.title = f"{self.name} α={self._alpha}"
+        self._create_q()
 
     def _do_training_step(self):
         self._agent.choose_action()

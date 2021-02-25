@@ -18,11 +18,12 @@ class VQ(abstract.EpisodicOnline):
         self._alpha: float = self._algorithm_parameters.alpha
         self._algorithm_type = common.AlgorithmType.VQ
         self.name = common.algorithm_name[self._algorithm_type]
-
         if self._alpha_variable:
             self.title = f"{self.name} α=0.5 then α=0.1"
         else:
             self.title = f"{self.name} α={self._alpha}"
+        self._create_v()
+        self._create_q()
 
     def parameter_changes(self, iteration: int):
         if self._alpha_variable:

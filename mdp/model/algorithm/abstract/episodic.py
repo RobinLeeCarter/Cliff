@@ -23,16 +23,22 @@ class Episodic(abc.ABC):
         self.name: str = "Error: Untitled"
         self.title: str = "Error: Untitled"
 
-        # assume all episodic algorithms have a Q function and initialise policy based on it
-        # could add another layer of inheritance if not
-        self.V = value_function.StateFunction(self._environment, self._algorithm_parameters.initial_v_value)
-        self.Q = value_function.StateActionFunction(self._environment, self._algorithm_parameters.initial_q_value)
         self._gamma: float = self._agent.gamma
+        self.V: Optional[value_function.StateFunction] = None
+        self.Q: Optional[value_function.StateActionFunction] = None
+
+    def _create_v(self):
+        self.V = value_function.StateFunction(self._environment, self._algorithm_parameters.initial_v_value)
+
+    def _create_q(self):
+        self.Q = value_function.StateActionFunction(self._environment, self._algorithm_parameters.initial_q_value)
 
     def initialize(self):
-        self.V.initialize_values()
-        self.Q.initialize_values()
-        self._make_policy_greedy_wrt_q()
+        if self.V:
+            self.V.initialize_values()
+        if self.Q:
+            self.Q.initialize_values()
+            self._make_policy_greedy_wrt_q()
 
     def parameter_changes(self, iteration: int):
         pass

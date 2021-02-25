@@ -18,6 +18,7 @@ class Sarsa(abstract.EpisodicOnline):
         self._algorithm_type = common.AlgorithmType.SARSA
         self.name = common.algorithm_name[self._algorithm_type]
         self.title = f"{self.name} α={self._alpha}"
+        self._create_q()
 
     def _start_episode(self):
         self._agent.choose_action()

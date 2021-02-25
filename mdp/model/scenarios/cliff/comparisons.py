@@ -52,18 +52,18 @@ def episode() -> common.Comparison:
             #     algorithm_type=common.AlgorithmType.EXPECTED_SARSA,
             #     alpha=0.9
             # )),
-            common.Settings(algorithm_parameters=common.AlgorithmParameters(
-                algorithm_type=common.AlgorithmType.VQ,
-                alpha=0.2
-            )),
+            # common.Settings(algorithm_parameters=common.AlgorithmParameters(
+            #     algorithm_type=common.AlgorithmType.VQ,
+            #     alpha=0.2
+            # )),
             # common.Settings(algorithm_parameters=common.AlgorithmParameters(
             #     algorithm_type=common.AlgorithmType.Q_LEARNING,
             #     alpha=0.5
             # )),
-            # common.Settings(algorithm_parameters=common.AlgorithmParameters(
-            #     algorithm_type=common.AlgorithmType.SARSA,
-            #     alpha=0.5
-            # )),
+            common.Settings(algorithm_parameters=common.AlgorithmParameters(
+                algorithm_type=common.AlgorithmType.SARSA,
+                alpha=0.5
+            )),
         ],
         graph_values=common.GraphValues(
             moving_average_window_size=19,
