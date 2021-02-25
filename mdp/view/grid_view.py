@@ -98,7 +98,11 @@ class GridView:
 
     def display_step(self, episode_: agent.Episode):  # , show_trail: bool = True
         agent_position: common.XY = episode_.last_state.position
-        agent_move: common.XY = episode_.last_action.move
+
+        last_action: Optional[environment.Action] = episode_.last_action
+        agent_move: Optional[common.XY] = None
+        if last_action:
+            agent_move = episode_.last_action.move
 
         prev_state: Optional[environment.State] = episode_.prev_state
         prev_position: Optional[common.XY] = None
@@ -191,7 +195,7 @@ class GridView:
         }
         self._agent_color: Optional[pygame.Color] = pygame.Color('deepskyblue2')
         self._agent_move_color: Optional[pygame.Color] = pygame.Color('forestgreen')
-        self._prev_color: Optional[pygame.Color] = pygame.Color('grey76')
+        self._prev_color: Optional[pygame.Color] = pygame.Color('grey76                      ')
         self._prev_move_color: Optional[pygame.Color] = pygame.Color('forestgreen')
 
     def _copy_grid_into_background(self):
