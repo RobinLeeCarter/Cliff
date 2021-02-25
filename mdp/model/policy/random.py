@@ -1,5 +1,5 @@
 from __future__ import annotations
-from typing import List, TYPE_CHECKING
+from typing import List, TYPE_CHECKING, Optional
 
 if TYPE_CHECKING:
     from mdp.model import environment
@@ -30,7 +30,7 @@ class Random(policy_.Policy):
         # self.state = state
         self.possible_actions = [action for action in self._environment.actions_for_state(state)]
         if not self.possible_actions:
-            raise Exception(f"EGreedyPolicy state: {state} no possible actions")
+            raise Exception(f"Random state: {state} no possible actions")
 
     # pycharm is asking for this to be implemented even though it's not an abstract method, might be a pycharm bug
     def __setitem__(self, state: environment.State, action: environment.Action):

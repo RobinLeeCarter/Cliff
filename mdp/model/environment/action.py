@@ -32,8 +32,8 @@ class Actions:
 
     def _build_action_list(self, actions_list: common.ActionsList) -> list[Action]:
         al = common.ActionsList
-        if actions_list == al.STATIONARY_MOVE_ONLY:
-            return self._stationary_move_only()
+        if actions_list == al.NO_ACTIONS:
+            return self._no_actions()
         elif actions_list == al.FOUR_MOVES:
             return self._four_moves()
         elif actions_list == al.FOUR_CLIFF_FRIENDLY_MOVES:
@@ -46,11 +46,8 @@ class Actions:
             raise NotImplementedError
 
     # common moves that could be reused
-    def _stationary_move_only(self) -> list[Action]:
-        return [
-            # stationary
-            Action(move=common.XY(0, 0)),
-        ]
+    def _no_actions(self) -> list[Action]:
+        return []
 
     def _four_moves(self) -> list[Action]:
         return [

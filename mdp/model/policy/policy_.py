@@ -23,7 +23,7 @@ class Policy(abc.ABC):
         raise NotImplementedError(f"__setitem__ not implemented for Policy: {type(self)}")
 
     @abc.abstractmethod
-    def _get_action(self, state: environment.State) -> environment.Action:
+    def _get_action(self, state: environment.State) -> Optional[environment.Action]:
         pass
 
     @abc.abstractmethod

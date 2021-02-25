@@ -91,9 +91,12 @@ class Environment(abc.ABC):
         self._action = action_
 
         # apply grid world rules (eg. edges, wind)
+        move: Optional[common.XY] = None
+        if self._action:
+            move = action_.move
         self._projected_position = self.grid_world.change_request(
             current_position=state_.position,
-            move=action_.move)
+            move=move)
 
         self._square = self.grid_world.get_square(self._projected_position)
         if self._square == common.Square.END:

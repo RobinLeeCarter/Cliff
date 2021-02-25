@@ -44,7 +44,7 @@ class EnvironmentType(enum.IntEnum):
 
 
 class ActionsList(enum.IntEnum):
-    STATIONARY_MOVE_ONLY = enum.auto()
+    NO_ACTIONS = enum.auto()
     FOUR_MOVES = enum.auto()
     FOUR_CLIFF_FRIENDLY_MOVES = enum.auto()
     KINGS_MOVES = enum.auto()

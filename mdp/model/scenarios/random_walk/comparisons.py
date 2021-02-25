@@ -7,6 +7,7 @@ def alpha() -> common.Comparison:
     comparison = common.Comparison(
         environment_parameters=common.EnvironmentParameters(
             environment_type=common.EnvironmentType.RANDOM_WALK,
+            actions_list=common.ActionsList.NO_ACTIONS
         ),
         comparison_settings=common.Settings(
             runs=10,
