@@ -37,6 +37,20 @@ class Episode:
         else:
             return None
 
+    @property
+    def prev_state(self) -> Optional[environment.State]:
+        if self.trajectory and len(self.trajectory) > 1:
+            return self.trajectory[-2].state
+        else:
+            return None
+
+    @property
+    def prev_action(self) -> Optional[environment.Action]:
+        if self.trajectory and len(self.trajectory) > 1:
+            return self.trajectory[-2].action
+        else:
+            return None
+
     def add_rsa(self,
                 reward: Optional[float],
                 state: environment.State,

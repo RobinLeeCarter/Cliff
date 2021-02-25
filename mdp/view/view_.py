@@ -19,7 +19,7 @@ class View:
             raise Exception(f"{pygame_fail} pygame modules failed to load")
 
         self.graph = graph.Graph()
-        self.grid_view = grid_view.GridView(display_v=True, display_q=True)
+        self.grid_view = grid_view.GridView()
 
     def set_controller(self, controller_: controller.Controller):
         self._controller = controller_

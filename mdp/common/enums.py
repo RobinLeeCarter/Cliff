@@ -7,7 +7,6 @@ class Square(enum.IntEnum):
     CLIFF = 1
     START = 2
     END = 3
-    AGENT = 4
 
 
 class UserEvent(enum.IntEnum):
