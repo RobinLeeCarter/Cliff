@@ -34,6 +34,7 @@ class GridView:
         self._background_color: Optional[pygame.Color] = None
         self._policy_color: Optional[pygame.Color] = None
         self._color_lookup: dict[common.Square, pygame.Color] = {}
+        self._move_color: Optional[pygame.Color] = None
 
         self._user_event: common.UserEvent = common.UserEvent.NONE
 
@@ -94,6 +95,7 @@ class GridView:
 
     def display_step(self, episode_: agent.Episode):  # , show_trail: bool = True
         agent_position: common.XY = episode_.last_state.position
+        agent_move: common.XY = episode_.last_action.move
 
         self.open_window()  # if not already
         self._copy_grid_into_background()
@@ -101,15 +103,16 @@ class GridView:
             for y in range(self._max_y + 1):
                 position: common.XY = common.XY(x, y)
                 if position == agent_position:
-                    self._draw_square(self._background,
-                                      position,
+                    self._draw_square(surface=self._background,
+                                      position=agent_position,
+                                      move=agent_move,
                                       square=common.Square.AGENT,
                                       draw_background=True,
                                       draw_v=self._display_v,
                                       draw_q=self._display_q)
                 else:
-                    self._draw_square(self._background,
-                                      position,
+                    self._draw_square(surface=self._background,
+                                      position=position,
                                       draw_v=self._display_v,
                                       draw_q=self._display_q)
         self._put_background_on_screen()
@@ -165,6 +168,7 @@ class GridView:
             common.Square.END: pygame.Color('goldenrod2'),
             common.Square.AGENT: pygame.Color('deepskyblue2')
         }
+        self._move_color = pygame.Color('forestgreen')
 
     def _copy_grid_into_background(self):
         self._background.blit(source=self._grid_surface, dest=(0, 0))
@@ -182,6 +186,7 @@ class GridView:
     def _draw_square(self,
                      surface: pygame.Surface,
                      position: common.XY,
+                     move: Optional[common.XY] = None,
                      square: Optional[common.Square] = None,
                      draw_background: bool = False,
                      draw_v: bool = False,
@@ -211,7 +216,15 @@ class GridView:
         if draw_q:
             self._draw_q(surface, rect, output_square)
 
+        if move:
+            self._draw_move(surface, rect, move)
+
         return rect
+
+    def _draw_move(self, surface: pygame.Surface, rect: pygame.Rect, move: common.XY):
+        sub_rect = self._get_sub_rect(rect, move=move)
+        width: int = 2
+        pygame.draw.rect(surface, self._move_color, sub_rect, width)
 
     def _draw_v(self, surface: pygame.Surface, rect: pygame.Rect, output_square: common.OutputSquare):
         if output_square.v_value is not None:
