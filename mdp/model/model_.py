@@ -1,11 +1,8 @@
 from __future__ import annotations
 from typing import Optional, TYPE_CHECKING
 
-import sys
-
 if TYPE_CHECKING:
     from mdp.model import environment
-    # from mdp.model.algorithm import value_function
 
 import utils
 from mdp import controller, common
