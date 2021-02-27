@@ -10,9 +10,9 @@ from mdp.common.dataclass import algorithm_parameters, policy_parameters
 class Settings:
     gamma: Optional[float] = None
 
+    # defaults are set in apply_default_to_nones
     algorithm_parameters: algorithm_parameters.AlgorithmParameters = \
         dataclasses.field(default_factory=algorithm_parameters.none_factory)
-
     policy_parameters: policy_parameters.PolicyParameters = \
         dataclasses.field(default_factory=policy_parameters.none_factory)
 
