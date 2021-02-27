@@ -1,7 +1,7 @@
 from __future__ import annotations
 from typing import Optional
 import dataclasses
-import copy
+# import copy
 
 from mdp.common import enums
 
@@ -38,5 +38,5 @@ default: AlgorithmParameters = AlgorithmParameters(
 )
 
 
-def default_factory() -> AlgorithmParameters:
-    return copy.deepcopy(default)
+def none_factory() -> AlgorithmParameters:
+    return AlgorithmParameters()

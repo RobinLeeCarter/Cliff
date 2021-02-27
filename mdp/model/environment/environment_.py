@@ -85,8 +85,6 @@ class Environment(abc.ABC):
     def from_state_perform_action(self, state_: state.State, action_: action.Action) -> response.Response:
         if state_.is_terminal:
             raise Exception("Environment: Trying to act in a terminal state.")
-        if action_ is None:
-            raise Exception("Environment: Action passed is none.")
         self._state = state_
         self._action = action_
 
@@ -124,7 +122,7 @@ class Environment(abc.ABC):
     def _get_response(self) -> response.Response:
         pass
 
-    def update_grid_value_functions(self, algorithm_: algorithm.Episodic, policy_: policy.Deterministic):
+    def update_grid_value_functions(self, algorithm_: algorithm.Episodic, policy_: policy.Policy):
         for state_ in self.states():
             policy_action: Optional[action.Action] = policy_[state_]
             policy_move: Optional[common.XY] = None

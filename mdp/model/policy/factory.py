@@ -3,10 +3,9 @@ from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from mdp.model import environment
-    from mdp.model.policy import deterministic
-    from mdp.model.policy import policy_, no_policy
+    from mdp.model.policy import policy_
 from mdp import common
-from mdp.model.policy import e_greedy, random
+from mdp.model.policy import e_greedy, random, deterministic, no_policy
 
 
 def factory(environment_: environment.Environment, policy_parameters: common.PolicyParameters) -> policy_.Policy:

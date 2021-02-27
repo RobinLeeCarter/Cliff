@@ -1,7 +1,7 @@
 from __future__ import annotations
 from typing import Optional
 import dataclasses
-import copy
+# import copy
 
 from mdp.common import enums
 
@@ -29,5 +29,5 @@ default: PolicyParameters = PolicyParameters(
 )
 
 
-def default_factory() -> PolicyParameters:
-    return copy.deepcopy(default)
+def none_factory() -> PolicyParameters:
+    return PolicyParameters()

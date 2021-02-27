@@ -6,7 +6,7 @@ if TYPE_CHECKING:
 
 import utils
 from mdp import controller, common
-from mdp.model import breakdown, trainer, scenarios, agent, policy
+from mdp.model import breakdown, trainer, scenarios, agent
 
 
 class Model:
@@ -62,10 +62,8 @@ class Model:
         # graph_values: common.GraphValues = self.breakdown.get_graph_values()
 
     def update_grid_value_functions(self):
-        policy_ = self.agent.policy
-        assert isinstance(policy_, policy.EGreedy)
-        greedy_policy = policy_.greedy_policy
-        self.environment.update_grid_value_functions(algorithm_=self.agent.algorithm, policy_=greedy_policy)
+        policy_for_display = self.agent.policy.policy_for_display
+        self.environment.update_grid_value_functions(algorithm_=self.agent.algorithm, policy_=policy_for_display)
 
     def _display_step(self, episode_: agent.Episode):
         self.update_grid_value_functions()

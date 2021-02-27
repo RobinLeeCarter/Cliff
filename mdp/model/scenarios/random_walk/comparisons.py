@@ -3,15 +3,15 @@ from __future__ import annotations
 from mdp import common
 
 
-def alpha() -> common.Comparison:
+def episode() -> common.Comparison:
     comparison = common.Comparison(
         environment_parameters=common.EnvironmentParameters(
             environment_type=common.EnvironmentType.RANDOM_WALK,
             actions_list=common.ActionsList.NO_ACTIONS
         ),
         comparison_settings=common.Settings(
-            runs=10,
-            training_episodes=100,
+            runs=1,
+            training_episodes=1000,
             policy_parameters=common.PolicyParameters(
                 policy_type=common.PolicyType.NONE
             )
@@ -23,9 +23,12 @@ def alpha() -> common.Comparison:
             common.Settings(
                 algorithm_parameters=common.AlgorithmParameters(
                     algorithm_type=common.AlgorithmType.TD_0,
-                    alpha=0.5
+                    alpha=0.1
                 )
             ),
         ],
+        graph_values=common.GraphValues(
+            show_graph=False
+        )
     )
     return comparison

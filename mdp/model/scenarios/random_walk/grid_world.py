@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from typing import Optional
+
 import numpy as np
 
 from mdp import common
@@ -12,11 +14,11 @@ class GridWorld(environment.GridWorld):
         super().__init__(grid_array)
         self._random_move_choices = np.array([-1, 1], dtype=int)
 
-    def change_request(self, current_position: common.XY, move: common.XY) -> common.XY:
+    def change_request(self, current_position: common.XY, move: Optional[common.XY]) -> common.XY:
         random = self._get_random_movement()
         requested_position: common.XY = common.XY(
-            x=current_position.x + move.x + random.x,
-            y=current_position.y + move.y + random.y
+            x=current_position.x + random.x,
+            y=current_position.y + random.y
         )
         # project back to grid if outside
         new_position: common.XY = self._project_back_to_grid(requested_position)

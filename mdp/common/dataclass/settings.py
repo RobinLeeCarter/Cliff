@@ -11,10 +11,10 @@ class Settings:
     gamma: Optional[float] = None
 
     algorithm_parameters: algorithm_parameters.AlgorithmParameters = \
-        dataclasses.field(default_factory=algorithm_parameters.default_factory)
+        dataclasses.field(default_factory=algorithm_parameters.none_factory)
 
     policy_parameters: policy_parameters.PolicyParameters = \
-        dataclasses.field(default_factory=policy_parameters.default_factory)
+        dataclasses.field(default_factory=policy_parameters.none_factory)
 
     runs: Optional[int] = None
     run_print_frequency: Optional[int] = None
