@@ -8,12 +8,13 @@ def timestep(random_wind: bool = False) -> common.Comparison:
         environment_parameters=common.EnvironmentParameters(
             environment_type=common.EnvironmentType.WINDY,
             actions_list=common.ActionsList.FOUR_MOVES,
-            random_wind=random_wind
+            random_wind=random_wind,
         ),
         comparison_settings=common.Settings(
-            runs=50,
+            runs=1,
             training_episodes=170,
             review_every_step=True,
+            # display_every_step=True,
         ),
         breakdown_parameters=common.BreakdownParameters(
             breakdown_type=common.BreakdownType.EPISODE_BY_TIMESTEP,
