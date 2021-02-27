@@ -53,6 +53,21 @@ class GridView:
     def screen_size(self) -> tuple:
         return self._screen_width, self._screen_height
 
+    # noinspection SpellCheckingInspection
+    def _build_color_lookup(self):
+        self._background_color: pygame.Color = pygame.Color('grey10')
+        self._policy_color: pygame.Color = pygame.Color('pink')
+        self._color_lookup = {
+            common.Square.NORMAL: pygame.Color('grey66'),
+            common.Square.CLIFF: pygame.Color('red2'),
+            common.Square.START: pygame.Color('yellow2'),
+            common.Square.END: pygame.Color('goldenrod2'),
+        }
+        self._agent_color: Optional[pygame.Color] = pygame.Color('deepskyblue2')
+        self._agent_move_color: Optional[pygame.Color] = pygame.Color('forestgreen')
+        self._prev_color: Optional[pygame.Color] = pygame.Color('grey76')
+        self._prev_move_color: Optional[pygame.Color] = pygame.Color('forestgreen')
+
     def set_grid_world(self, grid_world_: environment.GridWorld):
         self._grid_world = grid_world_
         self._max_x = self._grid_world.max_x
@@ -117,32 +132,6 @@ class GridView:
         self.open_window()  # if not already
         self._copy_grid_into_background()
         self._draw_frame_on_background(agent_position, agent_move, prev_position, prev_move)
-
-        # for x in range(self._max_x + 1):
-        #     for y in range(self._max_y + 1):
-        #         position: common.XY = common.XY(x, y)
-        #         if position == agent_position:
-        #             self._draw_square(surface=self._background,
-        #                               position=agent_position,
-        #                               position_color=self._agent_color,
-        #                               draw_background=True,
-        #                               move=agent_move,
-        #                               move_color=self._agent_move_color,
-        #                               draw_move=True
-        #                               )
-        #         elif position == prev_position:
-        #             self._draw_square(surface=self._background,
-        #                               position=prev_position,
-        #                               position_color=self._prev_color,
-        #                               draw_background=True,
-        #                               move=prev_move,
-        #                               move_color=self._prev_move_color,
-        #                               draw_move=True
-        #                               )
-        #         else:
-        #             self._draw_square(surface=self._background,
-        #                               position=position
-        #                               )
         self._put_background_on_screen()
         self._wait_for_event_of_interest()
         if self._user_event == common.UserEvent.QUIT:
@@ -151,9 +140,8 @@ class GridView:
 
     def demonstrate(self,
                     new_episode_request: Callable[[], agent.Episode],
+                    show_trail: bool = False,
                     show_values: bool = True):
-        # if self._display_v:
-        # self._load_gridworld()
         self.open_window()
         running_average = 0
         count = 0
@@ -163,7 +151,7 @@ class GridView:
             print(f"max_t: {episode.max_t} \t total_return: {episode.total_return:.0f}")
             running_average += (1/count) * (episode.total_return - running_average)
             print(f"count: {count} \t running_average: {running_average:.1f}")
-            user_event: common.UserEvent = self.display_episode(episode, show_trail=True, show_values=show_values)
+            user_event: common.UserEvent = self.display_episode(episode, show_trail, show_values)
             if user_event == common.UserEvent.QUIT:
                 break
         self.close_window()
@@ -219,21 +207,6 @@ class GridView:
             self._draw_frame_on_background(agent_position, agent_move, prev_position, prev_move)
         self._put_background_on_screen()
 
-    # noinspection SpellCheckingInspection
-    def _build_color_lookup(self):
-        self._background_color: pygame.Color = pygame.Color('grey10')
-        self._policy_color: pygame.Color = pygame.Color('pink')
-        self._color_lookup = {
-            common.Square.NORMAL: pygame.Color('grey66'),
-            common.Square.CLIFF: pygame.Color('red2'),
-            common.Square.START: pygame.Color('yellow2'),
-            common.Square.END: pygame.Color('goldenrod2'),
-        }
-        self._agent_color: Optional[pygame.Color] = pygame.Color('deepskyblue2')
-        self._agent_move_color: Optional[pygame.Color] = pygame.Color('forestgreen')
-        self._prev_color: Optional[pygame.Color] = pygame.Color('grey76                      ')
-        self._prev_move_color: Optional[pygame.Color] = pygame.Color('forestgreen')
-
     def _copy_grid_into_background(self):
         self._background.blit(source=self._grid_surface, dest=(0, 0))
 
@@ -281,18 +254,6 @@ class GridView:
             elif event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
                 self._user_event = common.UserEvent.SPACE
 
-    # def _draw_agent_at_state(self, state: environment.State):
-    #     # row, col = self._grid_world.get_index(state.x, state.y)
-    #     # print(f"_t={self._t} x={state.x} y={state.y} row={row} col={col}")
-    #     self._draw_square(surface=self._background,
-    #                       position=state.position,
-    #                       position_color=self._agent_color,
-    #                       draw_background=True)
-    #     # self._screen.blit(source=self._background, dest=rect, area=rect)
-    #     # pygame.display.update(rect)
-    #     # self.screen.blit(source=self.background, dest=(0, 0))
-    #     # pygame.display.flip()
-
     def _draw_frame_on_background(self,
                                   agent_position: Optional[common.XY] = None,
                                   agent_move: Optional[common.XY] = None,
@@ -303,23 +264,9 @@ class GridView:
             for y in range(self._max_y + 1):
                 position: common.XY = common.XY(x, y)
                 if position == agent_position:
-                    self._draw_square(surface=self._background,
-                                      position=agent_position,
-                                      position_color=self._agent_color,
-                                      draw_background=True,
-                                      move=agent_move,
-                                      move_color=self._agent_move_color,
-                                      draw_move=True
-                                      )
+                    self._draw_agent_on_background(agent_position, agent_move)
                 elif position == prev_position:
-                    self._draw_square(surface=self._background,
-                                      position=prev_position,
-                                      position_color=self._prev_color,
-                                      draw_background=True,
-                                      move=prev_move,
-                                      move_color=self._prev_move_color,
-                                      draw_move=True
-                                      )
+                    self._draw_prev_on_background(prev_position, prev_move)
                 else:
                     self._draw_square(surface=self._background,
                                       position=position
@@ -335,6 +282,19 @@ class GridView:
                           draw_background=True,
                           move=agent_move,
                           move_color=self._agent_move_color,
+                          draw_move=True
+                          )
+
+    def _draw_prev_on_background(self,
+                                 prev_position: Optional[common.XY],
+                                 prev_move: Optional[common.XY],
+                                 ):
+        self._draw_square(surface=self._background,
+                          position=prev_position,
+                          position_color=self._prev_color,
+                          draw_background=True,
+                          move=prev_move,
+                          move_color=self._prev_move_color,
                           draw_move=True
                           )
 

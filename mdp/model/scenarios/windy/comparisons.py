@@ -14,7 +14,7 @@ def timestep(random_wind: bool = False) -> common.Comparison:
             runs=1,
             training_episodes=170,
             review_every_step=True,
-            # display_every_step=True,
+            display_every_step=True,
         ),
         breakdown_parameters=common.BreakdownParameters(
             breakdown_type=common.BreakdownType.EPISODE_BY_TIMESTEP,
