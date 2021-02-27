@@ -9,12 +9,16 @@ class GridViewParameters:
     window_title: Optional[str] = None
     show_trail: Optional[bool] = None
     show_values: Optional[bool] = None
+    screen_width: Optional[int] = None
+    screen_height: Optional[int] = None
 
     def apply_default_to_nones(self, default_: GridViewParameters):
         attribute_names: list[str] = [
             'window_title',
             'show_trail',
             'show_values',
+            'screen_width',
+            'screen_height',
         ]
         for attribute_name in attribute_names:
             attribute = self.__getattribute__(attribute_name)
@@ -26,7 +30,9 @@ class GridViewParameters:
 default: GridViewParameters = GridViewParameters(
     window_title="Grid World",
     show_trail=False,
-    show_values=True
+    show_values=True,
+    screen_width=1500,
+    screen_height=1000,
 )
 
 

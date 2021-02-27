@@ -19,9 +19,9 @@ class GridView:
         self._max_x: Optional[int] = None
         self._max_y: Optional[int] = None
 
-        self._screen_width: int = 1500
-        self._screen_height: int = 1000
-        self._cell_pixels: int = 10
+        self._screen_width: Optional[int] = None
+        self._screen_height: Optional[int] = None
+        self._cell_pixels: Optional[int] = None
 
         self._is_window_open: bool = False
 
@@ -80,6 +80,18 @@ class GridView:
                 position: common.XY = common.XY(x, y)
                 self._draw_square(self._grid_surface, position, draw_background=True)
         self._copy_grid_into_background()
+
+    def _set_sizes(self):
+        # size window for track and set cell_pixels
+        rows, cols = self._grid_world.max_y + 1, self._grid_world.max_x + 1
+        desired_screen_height = self.grid_view_parameters.screen_height
+        desired_screen_width = self.grid_view_parameters.screen_width
+        self._cell_pixels = int(min(desired_screen_height / rows, desired_screen_width / cols))
+        self._screen_width = cols * self._cell_pixels
+        self._screen_height = rows * self._cell_pixels
+
+        self._background = pygame.Surface(size=self.screen_size)
+        self._grid_surface = pygame.Surface(size=self.screen_size)
 
     def open_window(self):
         """open window if not already open
@@ -197,16 +209,6 @@ class GridView:
 
     def _copy_grid_into_background(self):
         self._background.blit(source=self._grid_surface, dest=(0, 0))
-
-    def _set_sizes(self):
-        # size window for track and set cell_pixels
-        rows, cols = self._grid_world.max_y + 1, self._grid_world.max_x + 1
-        self._cell_pixels = int(min(self._screen_height / rows, self._screen_width / cols))
-        self._screen_width = cols * self._cell_pixels
-        self._screen_height = rows * self._cell_pixels
-
-        self._background = pygame.Surface(size=self.screen_size)
-        self._grid_surface = pygame.Surface(size=self.screen_size)
 
     def _draw_v(self, surface: pygame.Surface, rect: pygame.Rect, output_square: common.OutputSquare):
         if output_square.v_value is not None:
