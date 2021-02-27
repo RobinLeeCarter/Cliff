@@ -18,7 +18,7 @@ class GridWorld:
         self._test_single_start()
 
         self.output_squares: np.ndarray = np.empty(shape=self.grid_array.shape, dtype=common.OutputSquare)
-        # initialize output_squares so don't have to test for existance.
+        # set_gridworld output_squares so don't have to test for existance.
         for index in np.ndindex(self.output_squares.shape):
             self.output_squares[index] = common.OutputSquare()
 

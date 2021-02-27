@@ -5,7 +5,7 @@ import pygame
 import pygame.freetype
 
 if TYPE_CHECKING:
-    from mdp import controller
+    from mdp import controller, common
     from mdp.model import environment
 from mdp.view import graph, grid_view
 
@@ -24,14 +24,9 @@ class View:
     def set_controller(self, controller_: controller.Controller):
         self._controller = controller_
 
-    def build(self, grid_world_: environment.GridWorld):
-        self.grid_view.set_grid_world(grid_world_)
+    def build(self, grid_world_: environment.GridWorld, comparison: common.Comparison):
+        self.grid_view.grid_view_parameters = comparison.grid_view_parameters
+        self.grid_view.set_gridworld(grid_world_)
 
     def demonstrate(self):
         self.grid_view.demonstrate(self._controller.new_episode_request)
-
-    # def set_grid_world(self, grid_world_: environment.GridWorld):
-    #     self.grid_view.set_grid_world(grid_world_)
-    #
-    # def grid_view_open_window(self):
-    #     self.grid_view.open_window()

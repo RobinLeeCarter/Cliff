@@ -15,7 +15,7 @@ class Controller:
     def build(self, comparison: common.Comparison):
         # self._view.open() to determine user environment only
         self._model.build(comparison)
-        self._view.build(grid_world_=self._model.environment.grid_world)
+        self._view.build(grid_world_=self._model.environment.grid_world, comparison=comparison)
 
     def run(self):
         self._model.run()

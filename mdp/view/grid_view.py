@@ -12,9 +12,8 @@ from mdp import common
 
 
 class GridView:
-    def __init__(self, display_v: bool = True, display_q: bool = True):
-        self._display_v: bool = display_v
-        self._display_q: bool = display_q
+    def __init__(self):
+        self.grid_view_parameters: Optional[common.GridViewParameters] = None
         self._grid_world: Optional[environment.GridWorld] = None
 
         self._max_x: Optional[int] = None
@@ -22,7 +21,6 @@ class GridView:
 
         self._screen_width: int = 1500
         self._screen_height: int = 1000
-        self._title: str = "Not implemented"
         self._cell_pixels: int = 10
 
         self._is_window_open: bool = False
@@ -68,7 +66,7 @@ class GridView:
         self._prev_color: Optional[pygame.Color] = pygame.Color('grey76')
         self._prev_move_color: Optional[pygame.Color] = pygame.Color('forestgreen')
 
-    def set_grid_world(self, grid_world_: environment.GridWorld):
+    def set_gridworld(self, grid_world_: environment.GridWorld):
         self._grid_world = grid_world_
         self._max_x = self._grid_world.max_x
         self._max_y = self._grid_world.max_y
@@ -88,7 +86,7 @@ class GridView:
         safe to call repeatedly"""
         if not self._is_window_open:
             self._screen = pygame.display.set_mode(size=self.screen_size)
-            pygame.display.set_caption(self._title)
+            pygame.display.set_caption(self.grid_view_parameters.window_title)
             # self.background = pygame.Surface(size=self.screen_size).convert()
             self._background = self._background.convert()
             self._grid_surface = self._grid_surface.convert()
@@ -138,10 +136,7 @@ class GridView:
             self.close_window()
             sys.exit()
 
-    def demonstrate(self,
-                    new_episode_request: Callable[[], agent.Episode],
-                    show_trail: bool = False,
-                    show_values: bool = True):
+    def demonstrate(self, new_episode_request: Callable[[], agent.Episode]):
         self.open_window()
         running_average = 0
         count = 0
@@ -151,19 +146,12 @@ class GridView:
             print(f"max_t: {episode.max_t} \t total_return: {episode.total_return:.0f}")
             running_average += (1/count) * (episode.total_return - running_average)
             print(f"count: {count} \t running_average: {running_average:.1f}")
-            user_event: common.UserEvent = self.display_episode(episode, show_trail, show_values)
+            user_event: common.UserEvent = self.display_episode(episode)
             if user_event == common.UserEvent.QUIT:
                 break
         self.close_window()
 
-    def display_episode(self,
-                        episode_: agent.Episode,
-                        show_trail: bool = False,
-                        show_values: bool = False
-                        ) -> common.UserEvent:
-        self._display_v = show_values
-        self._display_q = show_values
-
+    def display_episode(self, episode_: agent.Episode) -> common.UserEvent:
         # print(episode_.trajectory)
         # print(f"len(self._episode.trajectory) = {len(episode_.trajectory)}")
         self._copy_grid_into_background()
@@ -178,13 +166,13 @@ class GridView:
             # if keys[pygame.K_SPACE]:
             #     self.user_event = enums.enums.UserEvent.SPACE
             # else:
-            self._draw_agent_for_episode(episode_, show_trail)
+            self._draw_agent_for_episode(episode_)
             self._wait_for_event_of_interest()
             # self._handle_event(show_trail)
             self._t += 1
         return self._user_event
 
-    def _draw_agent_for_episode(self, episode_: agent.Episode, show_trail: bool = False):
+    def _draw_agent_for_episode(self, episode_: agent.Episode):
         agent_position: common.XY = episode_[self._t].state.position
         agent_move: Optional[common.XY] = None
         prev_position: Optional[common.XY] = None
@@ -194,13 +182,13 @@ class GridView:
         if last_action:
             agent_move = last_action.move
 
-        if self._t >= 1 and not show_trail:
+        if self._t >= 1 and not self.grid_view_parameters.show_trail:
             prev_position = episode_[self._t-1].state.position
             prev_action: Optional[environment.Action] = episode_[self._t-1].action
             if prev_action:
                 prev_move: common.XY = prev_action.move
 
-        if show_trail:
+        if self.grid_view_parameters.show_trail:
             self._draw_agent_on_background(agent_position, agent_move)
         else:
             self._copy_grid_into_background()
@@ -310,9 +298,9 @@ class GridView:
                      draw_q: Optional[bool] = None
                      ) -> pygame.Rect:
         if draw_v is None:
-            draw_v = self._display_v
+            draw_v = self.grid_view_parameters.show_values
         if draw_q is None:
-            draw_q = self._display_q
+            draw_q = self.grid_view_parameters.show_values
 
         # make rect
         row = self._max_y - position.y

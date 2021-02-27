@@ -1,7 +1,7 @@
 from __future__ import annotations
 import dataclasses
 
-from mdp.common.dataclass import settings, environment_parameters, graph_values
+from mdp.common.dataclass import settings, environment_parameters, graph_values, grid_view_parameters
 from mdp.common.dataclass.breakdown_parameters import breakdown_parameters_, breakdown_algorithm_by_alpha
 
 
@@ -23,6 +23,10 @@ class Comparison:
     graph_values: graph_values.GraphValues = \
         dataclasses.field(default_factory=graph_values.default_factory)
 
+    # grid view output
+    grid_view_parameters: grid_view_parameters.GridViewParameters = \
+        dataclasses.field(default_factory=grid_view_parameters.default_factory)
+
     def __post_init__(self):
         # Push comparison values or default values into most settings attributes if currently =None
         self.environment_parameters.apply_default_to_nones(default_=environment_parameters.default)
@@ -39,3 +43,4 @@ class Comparison:
             settings_.apply_default_to_nones(default_=self.comparison_settings)
 
         self.graph_values.apply_default_to_nones(default_=graph_values.default)
+        self.grid_view_parameters.apply_default_to_nones(default_=grid_view_parameters.default)
