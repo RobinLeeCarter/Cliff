@@ -43,4 +43,4 @@ class Comparison:
             settings_.apply_default_to_nones(default_=self.comparison_settings)
 
         self.graph_values.apply_default_to_nones(default_=graph_values.default)
-        # self.grid_view_parameters.apply_default_to_nones(default_=grid_view_parameters.default)
+        self.grid_view_parameters.apply_default_to_nones(default_=grid_view_parameters.default)

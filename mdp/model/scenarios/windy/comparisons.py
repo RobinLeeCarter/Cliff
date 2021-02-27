@@ -28,5 +28,11 @@ def timestep(random_wind: bool = False) -> common.Comparison:
                 )
             )
         ],
+        # graph_values=common.GraphValues(
+        #     show_graph=False
+        # ),
+        # grid_view_parameters=common.GridViewParameters(
+        #     show_demo=False
+        # )
     )
     return comparison

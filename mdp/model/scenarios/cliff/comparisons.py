@@ -42,7 +42,7 @@ def episode() -> common.Comparison:
         comparison_settings=common.Settings(
             runs=1,
             training_episodes=100,
-            display_every_step=True,
+            # display_every_step=True,
         ),
         breakdown_parameters=common.BreakdownParameters(
             breakdown_type=common.BreakdownType.RETURN_BY_EPISODE
@@ -62,7 +62,7 @@ def episode() -> common.Comparison:
             # )),
             common.Settings(algorithm_parameters=common.AlgorithmParameters(
                 algorithm_type=common.AlgorithmType.SARSA,
-                alpha=0.5
+                alpha=1.0
             )),
         ],
         graph_values=common.GraphValues(

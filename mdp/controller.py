@@ -1,5 +1,5 @@
 from __future__ import annotations
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Optional
 
 if TYPE_CHECKING:
     from mdp.model import agent
@@ -11,18 +11,24 @@ class Controller:
     def __init__(self, model_: model.Model, view_: view.View):
         self._model: model.Model = model_
         self._view: view.View = view_
+        self._comparison: Optional[common.Comparison] = None
 
     def build(self, comparison: common.Comparison):
         # self._view.open() to determine user environment only
-        self._model.build(comparison)
-        self._view.build(grid_world_=self._model.environment.grid_world, comparison=comparison)
+        self._comparison = comparison
+        self._model.build(self._comparison)
+        self._view.build(grid_world_=self._model.environment.grid_world, comparison=self._comparison)
 
     def run(self):
         self._model.run()
-        self._model.update_grid_value_functions()
-        graph_values: common.GraphValues = self._model.breakdown.get_graph_values()
-        self._view.graph.make_plot(graph_values)
-        self._view.grid_view.demonstrate(self.new_episode_request)
+
+        if self._comparison.graph_values.show_graph:
+            graph_values: common.GraphValues = self._model.breakdown.get_graph_values()
+            self._view.graph.make_plot(graph_values)
+
+        if self._comparison.grid_view_parameters.show_demo:
+            self._model.update_grid_value_functions()
+            self._view.grid_view.demonstrate(self.new_episode_request)
 
     # region Model requests
     def display_step(self, episode_: agent.Episode):

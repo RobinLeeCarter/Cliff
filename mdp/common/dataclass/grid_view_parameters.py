@@ -6,6 +6,7 @@ import copy
 
 @dataclasses.dataclass
 class GridViewParameters:
+    show_demo: Optional[bool] = None
     window_title: Optional[str] = None
     show_trail: Optional[bool] = None
     show_values: Optional[bool] = None
@@ -14,6 +15,7 @@ class GridViewParameters:
 
     def apply_default_to_nones(self, default_: GridViewParameters):
         attribute_names: list[str] = [
+            'show_demo',
             'window_title',
             'show_trail',
             'show_values',
@@ -28,6 +30,7 @@ class GridViewParameters:
 
 
 default: GridViewParameters = GridViewParameters(
+    show_demo=True,
     window_title="Grid World",
     show_trail=False,
     show_values=True,

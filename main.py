@@ -11,10 +11,10 @@ from mdp.model import scenarios
 def main():
     os_environ_settings.dummy = None    # for pycharm code inspection only
 
-    comparison: common.Comparison = scenarios.windy.comparisons.timestep()
+    # comparison: common.Comparison = scenarios.windy.comparisons.timestep()
     # comparison: common.Comparison = scenarios.windy.comparisons.timestep(random_wind=True)
     # comparison: common.Comparison = scenarios.cliff.comparisons.alpha()
-    # comparison: common.Comparison = scenarios.cliff.comparisons.episode()
+    comparison: common.Comparison = scenarios.cliff.comparisons.episode()
 
     application.Application(comparison)
 

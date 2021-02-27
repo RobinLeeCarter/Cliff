@@ -11,6 +11,7 @@ class GraphValues:
     x_series: Optional[series.Series] = None
     graph_series: list[series.Series] = dataclasses.field(default_factory=list)
 
+    show_graph: Optional[bool] = None
     title: Optional[str] = None
     x_label: Optional[str] = None
     y_label: Optional[str] = None
@@ -27,6 +28,7 @@ class GraphValues:
 
     def apply_default_to_nones(self, default_: GraphValues):
         attribute_names: list[str] = [
+            'show_graph',
             'title',
             'x_label',
             'y_label',
@@ -46,6 +48,7 @@ class GraphValues:
 
 
 default: GraphValues = GraphValues(
+    show_graph=True,
     has_grid=True,
     has_legend=True
 )
