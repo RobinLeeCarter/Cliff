@@ -11,12 +11,12 @@ def random_walk_test() -> bool:
     )
     environment_ = scenarios.environment_factory(environment_parameters)
 
-    for state_ in environment_.states():
+    for state_ in environment_.states:
         print(f"{state_} \t index={state_.index}")
 
     print()
 
-    for action_ in environment_.actions():
+    for action_ in environment_.actions:
         print(f"{action_} \t index={action_.index}")
 
     print()

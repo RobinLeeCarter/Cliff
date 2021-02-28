@@ -13,9 +13,9 @@ def main():
 
     # comparison: common.Comparison = scenarios.windy.comparisons.timestep()
     # comparison: common.Comparison = scenarios.windy.comparisons.timestep(random_wind=True)
-    # comparison: common.Comparison = scenarios.cliff.comparisons.alpha()
+    comparison: common.Comparison = scenarios.cliff.comparisons.alpha()
     # comparison: common.Comparison = scenarios.cliff.comparisons.episode()
-    comparison: common.Comparison = scenarios.random_walk.comparisons.episode()
+    # comparison: common.Comparison = scenarios.random_walk.comparisons.episode()
 
     application.Application(comparison)
 

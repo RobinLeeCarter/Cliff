@@ -38,7 +38,7 @@ class ExpectedSarsa(abstract.EpisodicOnline):
 
     def _get_expectation_over_a(self, state: environment.State) -> float:
         expectation: float = 0.0
-        for action in self._environment.actions():
+        for action in self._environment.actions:
             probability = self._agent.policy.get_probability(state, action)
             expectation += probability * self.Q[state, action]
         return expectation

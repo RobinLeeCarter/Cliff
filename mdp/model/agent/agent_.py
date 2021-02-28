@@ -145,7 +145,7 @@ class Agent:
 
         squared_error: float = 0.0
         count: int = 0
-        for state in self._environment.states():
+        for state in self._environment.states:
             if self._environment.is_valued_state(state):
                 value: float = self._algorithm.V[state]
                 # noinspection PyUnresolvedReferences

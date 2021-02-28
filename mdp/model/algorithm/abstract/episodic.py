@@ -44,7 +44,7 @@ class Episodic(abc.ABC):
         pass
 
     def _make_policy_greedy_wrt_q(self):
-        for state_ in self._environment.states():
+        for state_ in self._environment.states:
             self._agent.policy[state_] = self.Q.argmax_over_actions(state_)
 
     @abc.abstractmethod

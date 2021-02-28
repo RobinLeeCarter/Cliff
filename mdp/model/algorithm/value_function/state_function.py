@@ -1,11 +1,10 @@
 from __future__ import annotations
-from typing import TYPE_CHECKING, Optional
+from typing import TYPE_CHECKING
 
 import numpy as np
 
 if TYPE_CHECKING:
     from mdp.model import environment
-    from mdp.model.scenarios import random_walk
 
 
 class StateFunction:
@@ -25,7 +24,7 @@ class StateFunction:
         self.initialize_values()
 
     def initialize_values(self):
-        for state_ in self._environment.states():
+        for state_ in self._environment.states:
             if state_.is_terminal:
                 self._values[state_.index] = 0.0
             else:

@@ -28,7 +28,7 @@ class StateActionFunction:
         # incompatible actions must never be selected
         self._values.fill(np.NINF)
         # so that a successful trajectory is always better
-        for state_ in self._environment.states():
+        for state_ in self._environment.states:
             for action_ in self._environment.actions_for_state(state_):
                 q_index = state_.index + action_.index
                 if state_.is_terminal:

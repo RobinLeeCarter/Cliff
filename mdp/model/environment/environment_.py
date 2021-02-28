@@ -16,15 +16,17 @@ class Environment(abc.ABC):
                  environment_parameters: common.EnvironmentParameters,
                  grid_world_: grid_world.GridWorld):
         self.grid_world: grid_world.GridWorld = grid_world_
-        self._actions: action.Actions = action.Actions(environment_parameters.actions_list)
         self.verbose: bool = environment_parameters.verbose
 
         # state and states
+        self.states: list[state.State] = []
         self.states_shape: tuple = (self.grid_world.max_x + 1, self.grid_world.max_y + 1)
         self.state_type: type = state.State
 
         # action and actions
-        self.actions_shape: tuple = self._actions.shape
+        self._actions_object: action.Actions = action.Actions(environment_parameters.actions_list)
+        self.actions: list[action.Action] = self._actions_object.action_list
+        self.actions_shape: tuple = self._actions_object.shape
         self.action_type: type = action.Action
 
         # for processing response
@@ -34,31 +36,32 @@ class Environment(abc.ABC):
         self._square: Optional[common.Square] = None
         self._projected_state: Optional[state.State] = None
 
+        self._build_states()
+
     # region Sets
-    # TODO: materialize states
-    def states(self) -> Generator[state.State, None, None]:
+    def _build_states(self):
         """set S"""
         for x in range(self.states_shape[0]):
             for y in range(self.states_shape[1]):
                 position = common.XY(x=x, y=y)
                 is_terminal: bool = self.grid_world.is_at_goal(position)
-                yield state.State(position, is_terminal)
+                self.states.append(state.State(position, is_terminal))
 
-    def actions(self) -> Generator[action.Action, None, None]:
-        """set A - same for all s in this comparison"""
-        for action_ in self._actions.action_list:
-            yield action_
+    # def actions(self) -> Generator[action.Action, None, None]:
+    #     """set A - same for all s in this comparison"""
+    #     for action_ in self._actions_object.action_list:
+    #         yield action_
 
     # possible need to materialise this if it's slow since it will be at the bottom of the loop
     # noinspection PyUnusedLocal
     def actions_for_state(self, state_: state.State) -> Generator[action.Action, None, None]:
         """set A(s)"""
-        for action_ in self.actions():
+        for action_ in self.actions:
             # if self.is_action_compatible_with_state(state_, action_):
             yield action_
 
     def get_action_from_index(self, index: tuple[int]) -> action.Action:
-        return self._actions.get_action_from_index(index)
+        return self._actions_object.get_action_from_index(index)
 
     # def is_action_compatible_with_state(self, state_: state.State, action_: action.Action):
     #     new_vx = state_.vx + action_.ax
@@ -123,7 +126,7 @@ class Environment(abc.ABC):
         pass
 
     def update_grid_value_functions(self, algorithm_: algorithm.Episodic, policy_: policy.Policy):
-        for state_ in self.states():
+        for state_ in self.states:
             policy_action: Optional[action.Action] = policy_[state_]
             policy_move: Optional[common.XY] = None
             if policy_action:
