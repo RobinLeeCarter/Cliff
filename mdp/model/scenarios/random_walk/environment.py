@@ -12,10 +12,10 @@ class Environment(environment.Environment):
         grid = np.array([
             [3, 0, 0, 2, 0, 0, 3]
         ], dtype=np.int)
-        optimum_v_value = np.array([
+        v_optimal = np.array([
             [0, 1/6, 2/6, 3/6, 4/6, 5/6, 0]
         ], dtype=np.float)
-        grid_world_ = grid_world.GridWorld(grid)
+        grid_world_ = grid_world.GridWorld(grid, v_optimal)
         super().__init__(environment_parameters, grid_world_)
 
     def _get_response(self) -> environment.Response:
@@ -29,3 +29,7 @@ class Environment(environment.Environment):
             reward=reward,
             state=self._projected_state
         )
+
+    def get_optimum(self, state: environment.State) -> float:
+        self.grid_world: grid_world.GridWorld
+        return self.grid_world.get_optimum(state.position)

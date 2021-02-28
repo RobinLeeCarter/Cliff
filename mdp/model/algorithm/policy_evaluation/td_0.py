@@ -15,7 +15,7 @@ class TD0(abstract.EpisodicOnline):
                  ):
         super().__init__(environment_, agent_, algorithm_parameters)
         self._alpha = self._algorithm_parameters.alpha
-        self._algorithm_type = common.AlgorithmType.CONSTANT_ALPHA_MC
+        self._algorithm_type = common.AlgorithmType.TD_0
         self.name = common.algorithm_name[self._algorithm_type]
         self.title = f"{self.name} α={self._alpha}"
         self._create_v()

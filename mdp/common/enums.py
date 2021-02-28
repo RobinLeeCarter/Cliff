@@ -18,6 +18,7 @@ class UserEvent(enum.IntEnum):
 class BreakdownType(enum.IntEnum):
     EPISODE_BY_TIMESTEP = enum.auto()
     RETURN_BY_EPISODE = enum.auto()
+    RMS_BY_EPISODE = enum.auto()
     RETURN_BY_ALPHA = enum.auto()
 
 

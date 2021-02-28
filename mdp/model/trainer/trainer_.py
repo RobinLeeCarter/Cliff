@@ -30,6 +30,10 @@ class Trainer:
     def episode(self) -> agent.Episode:
         return self._agent.episode
 
+    @property
+    def agent(self) -> agent.Agent:
+        return self._agent
+
     def train(self, settings: common.Settings):
         # process settings
         self.settings = settings

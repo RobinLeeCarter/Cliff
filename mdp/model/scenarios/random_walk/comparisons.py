@@ -10,7 +10,7 @@ def episode() -> common.Comparison:
             actions_list=common.ActionsList.NO_ACTIONS,
         ),
         comparison_settings=common.Settings(
-            runs=10,
+            runs=100,
             training_episodes=100,
             policy_parameters=common.PolicyParameters(
                 policy_type=common.PolicyType.NONE
@@ -20,18 +20,32 @@ def episode() -> common.Comparison:
             )
         ),
         breakdown_parameters=common.BreakdownParameters(
-            breakdown_type=common.BreakdownType.RETURN_BY_EPISODE,
+            breakdown_type=common.BreakdownType.RMS_BY_EPISODE,
         ),
         settings_list=[
             common.Settings(
                 algorithm_parameters=common.AlgorithmParameters(
                     algorithm_type=common.AlgorithmType.TD_0,
-                    alpha=0.1
+                    alpha=0.15
                 )
             ),
+            # common.Settings(
+            #     algorithm_parameters=common.AlgorithmParameters(
+            #         algorithm_type=common.AlgorithmType.TD_0,
+            #         alpha=0.1
+            #     )
+            # ),
+            # common.Settings(
+            #     algorithm_parameters=common.AlgorithmParameters(
+            #         algorithm_type=common.AlgorithmType.TD_0,
+            #         alpha=0.05
+            #     )
+            # ),
         ],
         graph_values=common.GraphValues(
-            show_graph=True
+            show_graph=True,
+            y_min=0.0,
+            y_max=0.25
         ),
         grid_view_parameters=common.GridViewParameters(
             show_demo=False

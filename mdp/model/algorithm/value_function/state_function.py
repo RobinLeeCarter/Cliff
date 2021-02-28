@@ -18,8 +18,8 @@ class StateFunction:
 
         self._shape = self._environment.states_shape
         self._values: np.ndarray = np.empty(shape=self._shape, dtype=float)
-        self._optimal_values: Optional[np.ndarray] = None
-        # if isinstance(environment_, random_walk.environment.Environment):
+        # self._optimal_values: Optional[np.ndarray] = None
+        # if isinstance(environment_, 'random_walk.environment.Environment'):
         #     print("hello")
 
         self.initialize_values()

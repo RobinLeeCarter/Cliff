@@ -10,9 +10,10 @@ from mdp.model import environment
 
 class GridWorld(environment.GridWorld):
     """GridWorld doesn't know about states and actions it just deals in the rules of the grid"""
-    def __init__(self, grid_array: np.ndarray):
+    def __init__(self, grid_array: np.ndarray, v_optimal: np.ndarray):
         super().__init__(grid_array)
-        self._random_move_choices = np.array([-1, 1], dtype=int)
+        self._v_optimal: np.ndarray = v_optimal
+        self._random_move_choices: np.ndarray = np.array([-1, 1], dtype=int)
 
     def change_request(self, current_position: common.XY, move: Optional[common.XY]) -> common.XY:
         random = self._get_random_movement()
@@ -30,3 +31,7 @@ class GridWorld(environment.GridWorld):
             x=x_random,
             y=0
         )
+
+    def get_optimum(self, position: common.XY) -> float:
+        index = self._position_to_index(position)
+        return self._v_optimal[index]

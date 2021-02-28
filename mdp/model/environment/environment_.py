@@ -143,4 +143,12 @@ class Environment(abc.ABC):
                         q_value=algorithm_.Q[state_, action_],
                         is_policy=is_policy
                     )
+
+    def is_valued_state(self, state_: state.State) -> bool:
+        _square: common.Square = self.grid_world.get_square(state_.position)
+        square_enum = common.enums.Square
+        if _square in (square_enum.END, square_enum.CLIFF):
+            return False
+        else:
+            return True
     # endregion

@@ -72,6 +72,9 @@ class GridWorld:
     def _position_flip(self, xy_in: common.XY) -> common.XY:
         return common.XY(x=xy_in.x, y=self.max_y - xy_in.y)
 
+    def _position_to_index(self, xy_in: common.XY) -> tuple:
+        return self.max_y - xy_in.y, xy_in.x
+
     def _move_flip(self, xy_in: common.XY) -> common.XY:
         return common.XY(x=xy_in.x, y=-xy_in.y)
 

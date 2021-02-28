@@ -1,6 +1,8 @@
 from __future__ import annotations
 from typing import Optional, TYPE_CHECKING, Callable
 
+import math
+
 if TYPE_CHECKING:
     from mdp.model import environment
 from mdp import common
@@ -135,3 +137,17 @@ class Agent:
 
     def print_statistics(self):
         self._algorithm.print_q_coverage_statistics()
+
+    def rms_error(self) -> float:
+        # better that it just fail if you use something with no V or an environment without get_optimum
+        # if not self._algorithm.V or not hasattr(self._environment, 'get_optimum'):
+        #     return None
+
+        rms_error: float = 0.0
+        for state in self._environment.states():
+            if self._environment.is_valued_state(state):
+                value: float = self._algorithm.V[state]
+                # noinspection PyUnresolvedReferences
+                optimum: float = self._environment.get_optimum(state)
+                rms_error += (value - optimum)**2
+        return rms_error
