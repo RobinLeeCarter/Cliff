@@ -9,7 +9,9 @@ from mdp.model.breakdown import recorder, breakdown_
 class EpisodeByTimestep(breakdown_.Breakdown):
     def __init__(self, comparison: common.Comparison):
         super().__init__(comparison)
-        recorder_key_type = tuple[int, int]
+
+        # algorithm_type, timestep
+        recorder_key_type = tuple[common.AlgorithmType, int]
         self._recorder = recorder.Recorder[recorder_key_type]()
         self._max_timestep: int = 0
         self._y_label: str = "Episode"

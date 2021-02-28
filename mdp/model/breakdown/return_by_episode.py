@@ -9,6 +9,8 @@ from mdp.model.breakdown import recorder, breakdown_
 class ReturnByEpisode(breakdown_.Breakdown):
     def __init__(self, comparison: common.Comparison):
         super().__init__(comparison)
+
+        # common.AlgorithmParameters, episode
         recorder_key_type = tuple[common.AlgorithmParameters, int]
         self._recorder = recorder.Recorder[recorder_key_type]()
         self._y_label = "Average Return"

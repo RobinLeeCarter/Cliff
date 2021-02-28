@@ -12,6 +12,7 @@ class ReturnByAlpha(breakdown_.Breakdown):
         assert isinstance(self.comparison.breakdown_parameters, common.BreakdownAlgorithmByAlpha)
         self.breakdown_parameters: common.BreakdownAlgorithmByAlpha = self.comparison.breakdown_parameters
 
+        # AlgorithmType, alpha
         recorder_key_type = tuple[common.AlgorithmType, float]
         self._recorder = recorder.Recorder[recorder_key_type]()
         self._y_label = "Average Return"
