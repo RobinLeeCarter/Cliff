@@ -11,6 +11,6 @@ class RmsByEpisode(return_by_episode.ReturnByEpisode):
 
     def record(self):
         trainer = self._trainer
-        algorithm_type = trainer.settings.algorithm_parameters.algorithm_type
+        algorithm_parameters = trainer.settings.algorithm_parameters
         episode_counter = trainer.episode_counter
-        self._recorder[algorithm_type, episode_counter] = trainer.agent.rms_error()
+        self._recorder[algorithm_parameters, episode_counter] = trainer.agent.rms_error()

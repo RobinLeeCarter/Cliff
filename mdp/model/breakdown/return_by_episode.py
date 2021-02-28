@@ -9,16 +9,16 @@ from mdp.model.breakdown import recorder, breakdown_
 class ReturnByEpisode(breakdown_.Breakdown):
     def __init__(self, comparison: common.Comparison):
         super().__init__(comparison)
-        recorder_key_type = tuple[common.AlgorithmType, int]
+        recorder_key_type = tuple[common.AlgorithmParameters, int]
         self._recorder = recorder.Recorder[recorder_key_type]()
         self._y_label = "Average Return"
 
     def record(self):
         trainer = self._trainer
-        algorithm_type = trainer.settings.algorithm_parameters.algorithm_type
+        algorithm_parameters = trainer.settings.algorithm_parameters
         episode_counter = trainer.episode_counter
         total_return = trainer.episode.total_return
-        self._recorder[algorithm_type, episode_counter] = total_return
+        self._recorder[algorithm_parameters, episode_counter] = total_return
 
     def compile(self):
         comparison_settings = self.comparison.comparison_settings
@@ -38,7 +38,7 @@ class ReturnByEpisode(breakdown_.Breakdown):
         # collate output from self.recorder
         for settings_ in self.comparison.settings_list:
             values = np.array(
-                [self._recorder[settings_.algorithm_parameters.algorithm_type, episode_counter]
+                [self._recorder[settings_.algorithm_parameters, episode_counter]
                  for episode_counter in episode_array],
                 dtype=float
             )

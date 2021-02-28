@@ -6,7 +6,7 @@ import dataclasses
 from mdp.common import enums
 
 
-@dataclasses.dataclass
+@dataclasses.dataclass(eq=False)    # sacrifice so it can be hashed (using id is bad if eq is defined)
 class AlgorithmParameters:
     algorithm_type: Optional[enums.AlgorithmType] = None
     alpha: Optional[float] = None
