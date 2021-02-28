@@ -1,10 +1,11 @@
 from __future__ import annotations
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Optional
 
 import numpy as np
 
 if TYPE_CHECKING:
     from mdp.model import environment
+    from mdp.model.scenarios import random_walk
 
 
 class StateFunction:
@@ -17,6 +18,9 @@ class StateFunction:
 
         self._shape = self._environment.states_shape
         self._values: np.ndarray = np.empty(shape=self._shape, dtype=float)
+        self._optimal_values: Optional[np.ndarray] = None
+        # if isinstance(environment_, random_walk.environment.Environment):
+        #     print("hello")
 
         self.initialize_values()
 

@@ -1,14 +1,16 @@
 from __future__ import annotations
 
-from mdp import common, model, view, controller
+from mdp import common, controller
+from mdp.model import model_
+from mdp.view import view_
 
 
 class Application:
     def __init__(self, comparison: common.Comparison):
         self._comparison: common.Comparison = comparison
 
-        self._model: model.Model = model.Model()
-        self._view: view.View = view.View()
+        self._model: model_.Model = model_.Model()
+        self._view: view_.View = view_.View()
         self._controller: controller.Controller = controller.Controller(self._model, self._view)
 
         self.build()

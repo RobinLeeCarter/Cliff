@@ -4,13 +4,15 @@ from typing import TYPE_CHECKING, Optional
 if TYPE_CHECKING:
     from mdp.model import agent
 
-from mdp import common, model, view
+from mdp import common
+from mdp.model import model_
+from mdp.view import view_
 
 
 class Controller:
-    def __init__(self, model_: model.Model, view_: view.View):
-        self._model: model.Model = model_
-        self._view: view.View = view_
+    def __init__(self, model: model_.Model, view: view_.View):
+        self._model: model_.Model = model
+        self._view: view_.View = view
         self._comparison: Optional[common.Comparison] = None
 
     def build(self, comparison: common.Comparison):

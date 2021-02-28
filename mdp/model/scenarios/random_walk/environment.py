@@ -12,6 +12,9 @@ class Environment(environment.Environment):
         grid = np.array([
             [3, 0, 0, 2, 0, 0, 3]
         ], dtype=np.int)
+        optimum_v_value = np.array([
+            [0, 1/6, 2/6, 3/6, 4/6, 5/6, 0]
+        ], dtype=np.float)
         grid_world_ = grid_world.GridWorld(grid)
         super().__init__(environment_parameters, grid_world_)
 

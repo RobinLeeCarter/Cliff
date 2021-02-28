@@ -1,4 +1,1 @@
-from __future__ import annotations
-# from typing import TYPE_CHECKING
-
-from mdp.model.model_ import Model
+# this must be empty because otherwise an import from one part will import everything via model_
