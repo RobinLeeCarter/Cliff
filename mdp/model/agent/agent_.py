@@ -78,6 +78,22 @@ class Agent:
     def set_step_callback(self, step_callback: Optional[Callable[[], bool]] = None):
         self._step_callback = step_callback
 
+    def generate_episode(self, episode_length_timeout: Optional[int] = None) -> episode_.Episode:
+        if not episode_length_timeout:
+            episode_length_timeout = self._episode_length_timeout
+
+        self.start_episode()
+        while not self.state.is_terminal and self.t < episode_length_timeout:
+            self.choose_action()
+            if self._verbose:
+                print(f"t={self.t} \t state = {self.state} \t action = {self.action}")
+            self.take_action()
+        if self.t == episode_length_timeout:
+            print("Failed to terminate")
+        if self._verbose:
+            print(f"t={self.t} \t state = {self.state} (terminal)")
+        return self._episode
+
     def start_episode(self):
         """Gets initial state and sets initial reward to None"""
         if self._verbose:
@@ -119,22 +135,6 @@ class Agent:
             # add terminating step here as should not select another action
             self._episode.add_rsa(reward=self.reward, state=self.state, action=self.action)
 
-    def generate_episode(self, episode_length_timeout: Optional[int] = None) -> episode_.Episode:
-        if not episode_length_timeout:
-            episode_length_timeout = self._episode_length_timeout
-
-        self.start_episode()
-        while not self.state.is_terminal and self.t < episode_length_timeout:
-            self.choose_action()
-            if self._verbose:
-                print(f"t={self.t} \t state = {self.state} \t action = {self.action}")
-            self.take_action()
-        if self.t == episode_length_timeout:
-            print("Failed to terminate")
-        if self._verbose:
-            print(f"t={self.t} \t state = {self.state} (terminal)")
-        return self._episode
-
     def print_statistics(self):
         self._algorithm.print_q_coverage_statistics()
 
@@ -143,11 +143,14 @@ class Agent:
         # if not self._algorithm.V or not hasattr(self._environment, 'get_optimum'):
         #     return None
 
-        rms_error: float = 0.0
+        squared_error: float = 0.0
+        count: int = 0
         for state in self._environment.states():
             if self._environment.is_valued_state(state):
                 value: float = self._algorithm.V[state]
                 # noinspection PyUnresolvedReferences
                 optimum: float = self._environment.get_optimum(state)
-                rms_error += (value - optimum)**2
+                squared_error += (value - optimum)**2
+                count += 1
+        rms_error = math.sqrt(squared_error / count)
         return rms_error

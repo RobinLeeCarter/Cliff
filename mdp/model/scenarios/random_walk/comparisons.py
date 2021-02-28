@@ -26,19 +26,43 @@ def episode() -> common.Comparison:
             common.Settings(
                 algorithm_parameters=common.AlgorithmParameters(
                     algorithm_type=common.AlgorithmType.TD_0,
-                    alpha=0.15
+                    alpha=0.05,
                 )
             ),
             common.Settings(
                 algorithm_parameters=common.AlgorithmParameters(
                     algorithm_type=common.AlgorithmType.TD_0,
-                    alpha=0.1
+                    alpha=0.1,
                 )
             ),
             common.Settings(
                 algorithm_parameters=common.AlgorithmParameters(
                     algorithm_type=common.AlgorithmType.TD_0,
-                    alpha=0.05
+                    alpha=0.15,
+                )
+            ),
+            common.Settings(
+                algorithm_parameters=common.AlgorithmParameters(
+                    algorithm_type=common.AlgorithmType.CONSTANT_ALPHA_MC,
+                    alpha=0.01,
+                )
+            ),
+            common.Settings(
+                algorithm_parameters=common.AlgorithmParameters(
+                    algorithm_type=common.AlgorithmType.CONSTANT_ALPHA_MC,
+                    alpha=0.02,
+                )
+            ),
+            common.Settings(
+                algorithm_parameters=common.AlgorithmParameters(
+                    algorithm_type=common.AlgorithmType.CONSTANT_ALPHA_MC,
+                    alpha=0.03,
+                )
+            ),
+            common.Settings(
+                algorithm_parameters=common.AlgorithmParameters(
+                    algorithm_type=common.AlgorithmType.CONSTANT_ALPHA_MC,
+                    alpha=0.04,
                 )
             ),
         ],
