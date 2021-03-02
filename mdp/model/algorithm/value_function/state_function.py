@@ -15,8 +15,9 @@ class StateFunction:
         self._environment: environment.Environment = environment_
         self._initial_v_value: float = initial_v_value
 
-        self._shape = self._environment.states_shape
-        self._values: np.ndarray = np.empty(shape=self._shape, dtype=float)
+        self._values: np.ndarray = np.empty(
+            shape=len(self._environment.states),
+            dtype=float)
         # self._optimal_values: Optional[np.ndarray] = None
         # if isinstance(environment_, 'random_walk.environment.Environment'):
         #     print("hello")
@@ -25,19 +26,22 @@ class StateFunction:
 
     def initialize_values(self):
         for state_ in self._environment.states:
+            state_index = self._environment.state_index[state_]
             if state_.is_terminal:
-                self._values[state_.index] = 0.0
+                self._values[state_index] = 0.0
             else:
-                self._values[state_.index] = self._initial_v_value
+                self._values[state_index] = self._initial_v_value
 
     def __getitem__(self, state: environment.State) -> float:
         if state.is_terminal:
             return 0.0
         else:
-            return self._values[state.index]
+            state_index = self._environment.state_index[state]
+            return self._values[state_index]
 
     def __setitem__(self, state: environment.State, value: float):
-        self._values[state.index] = value
+        state_index = self._environment.state_index[state]
+        self._values[state_index] = value
 
     def print_coverage_statistics(self):
         v_size = self._values.size

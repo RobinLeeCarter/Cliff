@@ -1,8 +1,9 @@
 from __future__ import annotations
 
 from mdp import common
-from mdp.model import environment, scenarios
+from mdp.model import scenarios
 from mdp.model.algorithm.value_function import state_action_function
+from mdp.model.scenarios.common import action_move, state_position
 
 
 def q_test() -> bool:
@@ -12,13 +13,14 @@ def q_test() -> bool:
     )
     environment_ = scenarios.environment_factory(environment_parameters)
     q = state_action_function.StateActionFunction(environment_, initial_q_value=-7.0)
-    print(environment_.actions_shape)
-    print(environment_.states_shape)
 
-    state_ = environment.State(common.XY(x=4, y=2))
-    print(f"state_.index {state_.index}")
-    action_ = environment.Action(common.XY(x=1, y=0))
-    print(f"action_.index {action_.index}")
+    state_ = state_position.State(is_terminal=False, position=common.XY(x=4, y=2))
+    state_index = environment_.state_index(state_)
+    print(f"state_.index {state_index}")
+
+    action_ = action_move.Action(common.XY(x=1, y=0))
+    action_index = environment_.action_index(action_)
+    print(f"action_.index {action_index}")
 
     print(q[state_, action_])
     q[state_, action_] = 2.0

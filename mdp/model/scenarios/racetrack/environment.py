@@ -6,11 +6,10 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from mdp import common
 from mdp.model import environment
-from mdp.model.scenarios.common import environment_state_position
 from mdp.model.scenarios.windy import grid_world
 
 
-class Environment(environment_state_position.Environment):
+class Environment(environment.Environment):
     def __init__(self, environment_parameters: common.EnvironmentParameters):
         grid = np.array([
             [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],

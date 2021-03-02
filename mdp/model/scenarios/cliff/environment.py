@@ -4,9 +4,10 @@ import numpy as np
 
 from mdp import common
 from mdp.model import environment
+from mdp.model.scenarios.common import environment_state_position
 
 
-class Environment(environment.Environment):
+class Environment(environment_state_position.Environment):
     def __init__(self, environment_parameters: common.EnvironmentParameters):
         grid = np.array([
             [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -20,7 +21,7 @@ class Environment(environment.Environment):
         if self._square == common.Square.CLIFF:
             return environment.Response(
                 reward=-100.0,
-                state=self.get_a_start_state()
+                state=self._get_a_start_state()
             )
         else:
             return environment.Response(

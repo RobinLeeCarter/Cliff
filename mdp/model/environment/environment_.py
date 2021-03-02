@@ -15,19 +15,19 @@ class Environment(abc.ABC):
     def __init__(self,
                  environment_parameters: common.EnvironmentParameters,
                  grid_world_: grid_world.GridWorld):
+        self._environment_parameters = environment_parameters
         self.grid_world: grid_world.GridWorld = grid_world_
         self.verbose: bool = environment_parameters.verbose
 
         # state and states
         self.states: list[state.State] = []
-        self.states_shape: tuple = (self.grid_world.max_x + 1, self.grid_world.max_y + 1)
-        self.state_type: type = state.State
+        self.state_index: dict[state.State: int] = {}
+        self.state_type: type = state.State     # required?
 
         # action and actions
-        self._actions_object: action.Actions = action.Actions(environment_parameters.actions_list)
-        self.actions: list[action.Action] = self._actions_object.action_list
-        self.actions_shape: tuple = self._actions_object.shape
-        self.action_type: type = action.Action
+        self.actions: list[action.Action] = []
+        self.action_index: dict[action.Action: int] = {}
+        self.action_type: type = action.Action  # required?
 
         # for processing response
         self._state: Optional[state.State] = None
@@ -36,21 +36,25 @@ class Environment(abc.ABC):
         self._square: Optional[common.Square] = None
         self._projected_state: Optional[state.State] = None
 
+    def build(self):
         self._build_states()
+        self.state_index = {state_: i for i, state_ in enumerate(self.states)}
+        self._build_actions()
+        self.action_index = {action_: i for i, action_ in enumerate(self.actions)}
+
+    def state_action_index(self, state_: state.State, action_: action.Action) -> tuple[int, int]:
+        state_index = self.state_index[state_]
+        action_index = self.action_index[action_]
+        return state_index, action_index
 
     # region Sets
+    @abc.abstractmethod
     def _build_states(self):
-        """set S"""
-        for x in range(self.states_shape[0]):
-            for y in range(self.states_shape[1]):
-                position = common.XY(x=x, y=y)
-                is_terminal: bool = self.grid_world.is_at_goal(position)
-                self.states.append(state.State(position, is_terminal))
+        pass
 
-    # def actions(self) -> Generator[action.Action, None, None]:
-    #     """set A - same for all s in this comparison"""
-    #     for action_ in self._actions_object.action_list:
-    #         yield action_
+    @abc.abstractmethod
+    def _build_actions(self):
+        pass
 
     # possible need to materialise this if it's slow since it will be at the bottom of the loop
     # noinspection PyUnusedLocal
@@ -60,8 +64,8 @@ class Environment(abc.ABC):
             # if self.is_action_compatible_with_state(state_, action_):
             yield action_
 
-    def get_action_from_index(self, index: tuple[int]) -> action.Action:
-        return self._actions_object.get_action_from_index(index)
+    # def get_action_from_index(self, index: tuple[int]) -> action.Action:
+    #     return self._actions_object.get_action_from_index(index)
 
     # def is_action_compatible_with_state(self, state_: state.State, action_: action.Action):
     #     new_vx = state_.vx + action_.ax
@@ -76,37 +80,26 @@ class Environment(abc.ABC):
 
     # region Operation
     def start(self) -> response.Response:
-        state_ = self.get_a_start_state()
+        state_ = self._get_a_start_state()
         # if self.verbose:
         #     self.trace_.start(state_)
         return response.Response(state=state_, reward=None)
 
-    def get_a_start_state(self) -> state.State:
-        position: common.XY = self.grid_world.get_a_start_position()
-        return state.State(position)
+    @abc.abstractmethod
+    def _get_a_start_state(self) -> state.State:
+        pass
 
     def from_state_perform_action(self, state_: state.State, action_: action.Action) -> response.Response:
         if state_.is_terminal:
             raise Exception("Environment: Trying to act in a terminal state.")
         self._state = state_
         self._action = action_
-
-        # apply grid world rules (eg. edges, wind)
-        move: Optional[common.XY] = None
-        if self._action:
-            move = action_.move
-        self._projected_position = self.grid_world.change_request(
-            current_position=state_.position,
-            move=move)
-
-        self._square = self.grid_world.get_square(self._projected_position)
-        if self._square == common.Square.END:
-            is_terminal = True
-        else:
-            is_terminal = False
-        self._projected_state = state.State(self._projected_position, is_terminal)
-
+        self._apply_action()
         return self._get_response()
+
+    @abc.abstractmethod
+    def _apply_action(self):
+        pass
 
     def _project_back_to_grid(self, requested_position: common.XY) -> common.XY:
         x = requested_position.x

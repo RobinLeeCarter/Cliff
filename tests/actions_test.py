@@ -8,13 +8,13 @@ environment_parameters = common.EnvironmentParameters(
     actions_list=common.ActionsList.FOUR_MOVES
 )
 cliff = scenarios.environment_factory(environment_parameters)
-print(cliff.actions_shape)
+print(len(cliff.actions))
 
 environment_parameters = common.EnvironmentParameters(
     environment_type=common.EnvironmentType.RANDOM_WALK,
     actions_list=common.ActionsList.NO_ACTIONS
 )
 random_walk = scenarios.environment_factory(environment_parameters)
-print(random_walk.actions_shape)
+print(len(random_walk.actions))
 
-print(cliff.actions_shape)
+print(len(cliff.actions))
