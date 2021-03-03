@@ -1,6 +1,6 @@
 from __future__ import annotations
 from typing import Optional, TYPE_CHECKING, Callable
-
+import abc
 import sys
 
 import pygame
@@ -11,7 +11,7 @@ if TYPE_CHECKING:
 from mdp import common
 
 
-class GridView:
+class GridView(abc.ABC):
     def __init__(self):
         self.grid_view_parameters: Optional[common.GridViewParameters] = None
         self._grid_world: Optional[environment.GridWorld] = None
@@ -121,27 +121,10 @@ class GridView:
             self._wait_for_event_of_interest()
             # self._handle_event()
 
-    def display_step(self, episode_: agent.Episode):  # , show_trail: bool = True
-        agent_position: common.XY = episode_.last_state.position
-        agent_move: Optional[common.XY] = None
-        prev_position: Optional[common.XY] = None
-        prev_move: Optional[common.XY] = None
-
-        last_action: Optional[environment.Action] = episode_.last_action
-        if last_action:
-            agent_move = last_action.move
-
-        prev_state: Optional[environment.State] = episode_.prev_state
-        if prev_state:
-            prev_position = prev_state.position
-
-        prev_action: Optional[environment.Action] = episode_.prev_action
-        if prev_action:
-            prev_move = prev_action.move
-
+    def display_latest_step(self, episode_: agent.Episode):
         self.open_window()  # if not already
         self._copy_grid_into_background()
-        self._draw_frame_on_background(agent_position, agent_move, prev_position, prev_move)
+        self._frame_on_background_latest(episode_)
         self._put_background_on_screen()
         self._wait_for_event_of_interest()
         if self._user_event == common.UserEvent.QUIT:
@@ -178,34 +161,22 @@ class GridView:
             # if keys[pygame.K_SPACE]:
             #     self.user_event = enums.enums.UserEvent.SPACE
             # else:
-            self._draw_agent_for_episode(episode_)
+            self._frame_on_background_for_t(episode_, self._t)
+            self._put_background_on_screen()
             self._wait_for_event_of_interest()
             # self._handle_event(show_trail)
             self._t += 1
         return self._user_event
 
-    def _draw_agent_for_episode(self, episode_: agent.Episode):
-        agent_position: common.XY = episode_[self._t].state.position
-        agent_move: Optional[common.XY] = None
-        prev_position: Optional[common.XY] = None
-        prev_move: Optional[common.XY] = None
+    @abc.abstractmethod
+    def _frame_on_background_latest(self, episode_: agent.Episode):
+        """draw frame onto background for the latest state, action (& previous) from in-progress episode"""
+        pass
 
-        last_action: Optional[environment.Action] = episode_[self._t].action
-        if last_action:
-            agent_move = last_action.move
-
-        if self._t >= 1 and not self.grid_view_parameters.show_trail:
-            prev_position = episode_[self._t-1].state.position
-            prev_action: Optional[environment.Action] = episode_[self._t-1].action
-            if prev_action:
-                prev_move: common.XY = prev_action.move
-
-        if self.grid_view_parameters.show_trail:
-            self._draw_agent_on_background(agent_position, agent_move)
-        else:
-            self._copy_grid_into_background()
-            self._draw_frame_on_background(agent_position, agent_move, prev_position, prev_move)
-        self._put_background_on_screen()
+    @abc.abstractmethod
+    def _frame_on_background_for_t(self, episode_: agent.Episode, t: int):
+        """draw frame onto background for S(t), A(t) (& previous) from episode"""
+        pass
 
     def _copy_grid_into_background(self):
         self._background.blit(source=self._grid_surface, dest=(0, 0))

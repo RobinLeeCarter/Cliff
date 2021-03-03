@@ -36,7 +36,9 @@ class Environment(abc.ABC):
         self._square: Optional[common.Square] = None
         self._projected_state: Optional[state.State] = None
 
-    def build(self):
+        self._build()
+
+    def _build(self):
         self._build_states()
         self.state_index = {state_: i for i, state_ in enumerate(self.states)}
         self._build_actions()
@@ -119,32 +121,8 @@ class Environment(abc.ABC):
         pass
 
     def update_grid_value_functions(self, algorithm_: algorithm.Episodic, policy_: policy.Policy):
-        for state_ in self.states:
-            policy_action: Optional[action.Action] = policy_[state_]
-            policy_move: Optional[common.XY] = None
-            if policy_action:
-                policy_move = policy_action.move
-
-            if algorithm_.V:
-                self.grid_world.set_state_function(
-                    position=state_.position,
-                    v_value=algorithm_.V[state_]
-                )
-            if algorithm_.Q:
-                for action_ in self.actions_for_state(state_):
-                    is_policy: bool = (policy_move and policy_move == action_.move)
-                    self.grid_world.set_state_action_function(
-                        position=state_.position,
-                        move=action_.move,
-                        q_value=algorithm_.Q[state_, action_],
-                        is_policy=is_policy
-                    )
+        pass
 
     def is_valued_state(self, state_: state.State) -> bool:
-        _square: common.Square = self.grid_world.get_square(state_.position)
-        square_enum = common.enums.Square
-        if _square in (square_enum.END, square_enum.CLIFF):
-            return False
-        else:
-            return True
+        return False
     # endregion

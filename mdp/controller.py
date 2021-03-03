@@ -34,7 +34,7 @@ class Controller:
 
     # region Model requests
     def display_step(self, episode_: agent.Episode):
-        self._view.grid_view.display_step(episode_)
+        self._view.grid_view.display_latest_step(episode_)
     # endregion
 
     # region View requests
