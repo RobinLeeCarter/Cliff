@@ -32,9 +32,8 @@ class Environment(abc.ABC):
         # for processing response
         self._state: Optional[state.State] = None
         self._action: Optional[action.Action] = None
-        self._projected_position: Optional[common.XY] = None
         self._square: Optional[common.Square] = None
-        self._projected_state: Optional[state.State] = None
+        self._new_state: Optional[state.State] = None
 
         self._build()
 

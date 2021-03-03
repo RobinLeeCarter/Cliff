@@ -25,6 +25,7 @@ class EnvironmentStatePosition(environment.Environment, ABC):
         self._action: action.ActionMove = self._action
         self.grid_world: grid_world.GridWorldPositionMove = self.grid_world
 
+    # region Sets
     def _build_states(self):
         """set S"""
         for x in range(self.grid_world.max_x+1):
@@ -46,7 +47,9 @@ class EnvironmentStatePosition(environment.Environment, ABC):
         for action_ in self.actions:
             # if self.is_action_compatible_with_state(state_, action_):
             yield action_
+    # endregion
 
+    # region Operation
     def _get_a_start_state(self) -> state.StatePosition:
         position: common.XY = self.grid_world.get_a_start_position()
         return state.StatePosition(is_terminal=False, position=position)
@@ -56,16 +59,16 @@ class EnvironmentStatePosition(environment.Environment, ABC):
         move: Optional[common.XY] = None
         if self._action:
             move = self._action.move
-        self._projected_position = self.grid_world.change_request(
+        new_position = self.grid_world.change_request(
             current_position=self._state.position,
             move=move)
 
-        self._square = self.grid_world.get_square(self._projected_position)
+        self._square = self.grid_world.get_square(new_position)
         if self._square == common.Square.END:
             is_terminal = True
         else:
             is_terminal = False
-        self._projected_state = state.StatePosition(is_terminal, self._projected_position)
+        self._new_state = state.StatePosition(is_terminal, new_position)
 
     def update_grid_value_functions(self, algorithm_: algorithm.Episodic, policy_: policy.Policy):
         for state_ in self.states:
@@ -96,3 +99,4 @@ class EnvironmentStatePosition(environment.Environment, ABC):
             return False
         else:
             return True
+    # endregion

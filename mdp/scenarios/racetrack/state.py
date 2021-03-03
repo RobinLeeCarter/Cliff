@@ -8,7 +8,7 @@ from mdp.model import environment
 
 
 @dataclass(frozen=True)
-class StatePositionVelocity(environment.State):
+class State(environment.State):
     # origin at bottom left
     position: common.XY
     velocity: common.XY

@@ -5,7 +5,7 @@ if TYPE_CHECKING:
     from mdp.model.environment import action
 
 from mdp import common
-from mdp.scenarios.common.model import action_move  # , action_acceleration
+from mdp.scenarios.common.model.position_move import action as action_move
 
 
 def factory(actions_list: common.ActionsList) -> list[action.Action]:

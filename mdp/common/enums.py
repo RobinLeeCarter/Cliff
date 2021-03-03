@@ -16,6 +16,7 @@ class UserEvent(enum.IntEnum):
 
 
 class BreakdownType(enum.IntEnum):
+    # NONE = enum.auto()
     EPISODE_BY_TIMESTEP = enum.auto()
     RETURN_BY_EPISODE = enum.auto()
     RMS_BY_EPISODE = enum.auto()

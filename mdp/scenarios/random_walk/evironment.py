@@ -21,15 +21,15 @@ class RandomWalkEnvironment(environment.EnvironmentStatePosition):
 
     def _get_response(self) -> environment.Response:
         reward: float
-        self._projected_state: state.StatePosition
-        if self._projected_state.position == common.XY(x=self.grid_world.max_x, y=0):
+        self._new_state: state.StatePosition
+        if self._new_state.position == common.XY(x=self.grid_world.max_x, y=0):
             reward = 1.0
         else:
             reward = 0.0
 
         return environment.Response(
             reward=reward,
-            state=self._projected_state
+            state=self._new_state
         )
 
     def get_optimum(self, state_: environment.State) -> float:

@@ -1,7 +1,8 @@
 from __future__ import annotations
 
 from mdp import common
-from mdp.scenarios.common.model import action_move, state_position, environment_factory
+from mdp.scenarios.common.model import environment_factory
+from mdp.scenarios.common.model.position_move import action, state
 
 
 def random_walk_test() -> bool:
@@ -23,20 +24,20 @@ def random_walk_test() -> bool:
 
     print()
 
-    state_ = state_position.StatePosition(is_terminal=False, position=common.XY(x=4, y=0))
-    action_ = action_move.ActionMove(common.XY(x=1, y=0))
+    state_ = state.StatePosition(is_terminal=False, position=common.XY(x=4, y=0))
+    action_ = action.ActionMove(common.XY(x=1, y=0))
     observation_ = environment_.from_state_perform_action(state_, action_)
     print(state_, action_)
     print(observation_)
 
-    state_ = state_position.StatePosition(is_terminal=False, position=common.XY(x=5, y=0))
-    action_ = action_move.ActionMove(common.XY(x=1, y=0))
+    state_ = state.StatePosition(is_terminal=False, position=common.XY(x=5, y=0))
+    action_ = action.ActionMove(common.XY(x=1, y=0))
     observation_ = environment_.from_state_perform_action(state_, action_)
     print(state_, action_)
     print(observation_)
 
-    state_ = state_position.StatePosition(is_terminal=False, position=common.XY(x=0, y=0))
-    action_ = action_move.ActionMove(common.XY(x=-1, y=0))
+    state_ = state.StatePosition(is_terminal=False, position=common.XY(x=0, y=0))
+    action_ = action.ActionMove(common.XY(x=-1, y=0))
     observation_ = environment_.from_state_perform_action(state_, action_)
     print(state_, action_)
     print(observation_)

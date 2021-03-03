@@ -8,6 +8,6 @@ from mdp.model import environment
 
 
 @dataclass(frozen=True)
-class ActionAcceleration(environment.Action):
+class Action(environment.Action):
     # origin at bottom left
     acceleration: common.XY

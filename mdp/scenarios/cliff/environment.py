@@ -26,6 +26,6 @@ class CliffEnvironment(environment.EnvironmentStatePosition):
         else:
             return environment.Response(
                 reward=-1.0,
-                state=self._projected_state
+                state=self._new_state
             )
 
