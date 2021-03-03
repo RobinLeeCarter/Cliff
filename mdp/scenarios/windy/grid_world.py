@@ -3,10 +3,10 @@ from __future__ import annotations
 import numpy as np
 
 from mdp import common
-from mdp.model import environment
+from mdp.scenarios.common.model.position_move import grid_world
 
 
-class GridWorld(environment.GridWorld):
+class GridWorld(grid_world.GridWorldPositionMove):
     """GridWorld doesn't know about states and actions it just deals in the rules of the grid"""
     def __init__(self, grid_array: np.ndarray, upward_wind: np.ndarray, random_wind: bool = False):
         super().__init__(grid_array)

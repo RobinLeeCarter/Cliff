@@ -5,7 +5,7 @@ if TYPE_CHECKING:
     from mdp.model import environment
 from mdp import common
 from mdp.scenarios.cliff.environment import CliffEnvironment
-from mdp.scenarios.random_walk.environment import RandomWalkEnvironment
+from mdp.scenarios.random_walk.evironment import RandomWalkEnvironment
 from mdp.scenarios.windy.environment import WindyEnvironment
 
 

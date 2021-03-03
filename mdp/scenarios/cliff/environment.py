@@ -4,10 +4,10 @@ import numpy as np
 
 from mdp import common
 from mdp.model import environment
-from mdp.scenarios.common.model import environment_state_position
+from mdp.scenarios.common.model.position_move import environment
 
 
-class CliffEnvironment(environment_state_position.EnvironmentStatePosition):
+class CliffEnvironment(environment.EnvironmentStatePosition):
     def __init__(self, environment_parameters: common.EnvironmentParameters):
         grid = np.array([
             [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],

@@ -4,11 +4,11 @@ import numpy as np
 
 from mdp import common
 from mdp.model import environment
-from mdp.scenarios.common.model import environment_state_position, state_position
+from mdp.scenarios.common.model.position_move import environment, state
 from mdp.scenarios.random_walk import grid_world
 
 
-class RandomWalkEnvironment(environment_state_position.EnvironmentStatePosition):
+class RandomWalkEnvironment(environment.EnvironmentStatePosition):
     def __init__(self, environment_parameters: common.EnvironmentParameters):
         grid = np.array([
             [3, 0, 0, 2, 0, 0, 3]
@@ -16,12 +16,12 @@ class RandomWalkEnvironment(environment_state_position.EnvironmentStatePosition)
         v_optimal = np.array([
             [0, 1/6, 2/6, 3/6, 4/6, 5/6, 0]
         ], dtype=np.float)
-        grid_world_ = grid_world.GridWorld(grid, v_optimal)
+        grid_world_ = grid_world.RandomWalkGridWorld(grid, v_optimal)
         super().__init__(environment_parameters, grid_world_)
 
     def _get_response(self) -> environment.Response:
         reward: float
-        self._projected_state: state_position.StatePosition
+        self._projected_state: state.StatePosition
         if self._projected_state.position == common.XY(x=self.grid_world.max_x, y=0):
             reward = 1.0
         else:
@@ -32,7 +32,7 @@ class RandomWalkEnvironment(environment_state_position.EnvironmentStatePosition)
             state=self._projected_state
         )
 
-    def get_optimum(self, state: environment.State) -> float:
-        self.grid_world: grid_world.GridWorld
-        state: state_position.StatePosition
-        return self.grid_world.get_optimum(state.position)
+    def get_optimum(self, state_: environment.State) -> float:
+        self.grid_world: grid_world.RandomWalkGridWorld
+        state_: state.StatePosition
+        return self.grid_world.get_optimum(state_.position)

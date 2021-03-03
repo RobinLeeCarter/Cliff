@@ -35,18 +35,6 @@ class GridWorld:
             iy, ix = np.unravel_index(start_flat, shape=self.grid_array.shape)
             return self._position_flip(common.XY(ix, iy))
 
-    def change_request(self, current_position: common.XY, move: Optional[common.XY]) -> common.XY:
-        if move is None:
-            requested_position: common.XY = current_position
-        else:
-            requested_position: common.XY = common.XY(
-                x=current_position.x + move.x,
-                y=current_position.y + move.y
-            )
-        # project back to grid if outside
-        new_position: common.XY = self._project_back_to_grid(requested_position)
-        return new_position
-
     def is_at_goal(self, position: common.XY) -> bool:
         return self.get_square(position) == common.Square.END
 
