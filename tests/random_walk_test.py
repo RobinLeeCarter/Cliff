@@ -9,7 +9,7 @@ def random_walk_test() -> bool:
         environment_type=common.EnvironmentType.RANDOM_WALK,
         actions_list=common.ActionsList.NO_ACTIONS
     )
-    environment_ = environment_factory.environment_factory(environment_parameters)
+    environment_ = environment_factory.factory(environment_parameters)
 
     for state_ in environment_.states:
         state_index = environment_.state_index[state_]

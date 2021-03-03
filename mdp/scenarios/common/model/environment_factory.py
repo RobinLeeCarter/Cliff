@@ -9,7 +9,7 @@ from mdp.scenarios.random_walk.environment import RandomWalkEnvironment
 from mdp.scenarios.windy.environment import WindyEnvironment
 
 
-def environment_factory(environment_parameters: common.EnvironmentParameters) -> environment.Environment:
+def factory(environment_parameters: common.EnvironmentParameters) -> environment.Environment:
     environment_type = environment_parameters.environment_type
     et = common.EnvironmentType
 

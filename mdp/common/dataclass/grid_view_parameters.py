@@ -18,6 +18,7 @@ class GridViewParameters:
 
     def apply_default_to_nones(self, default_: GridViewParameters):
         attribute_names: list[str] = [
+            'grid_view_type',
             'show_demo',
             'window_title',
             'show_trail',

@@ -9,7 +9,7 @@ def cliff_test() -> bool:
         environment_type=common.EnvironmentType.CLIFF,
         actions_list=common.ActionsList.FOUR_MOVES
     )
-    environment_ = environment_factory.environment_factory(environment_parameters)
+    environment_ = environment_factory.factory(environment_parameters)
     print(type(environment_))
 
     for state_ in environment_.states:

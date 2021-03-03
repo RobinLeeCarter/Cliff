@@ -42,4 +42,5 @@ def project_dependencies(module_name: str):
 if __name__ == '__main__':
     # project_dependencies('mdp.model.policy')
     # import mdp.model.scenarios.random_walk.environment
-    project_dependencies('mdp.scenarios')
+    project_dependencies('mdp.model.agent')
+    # project_dependencies('mdp.scenarios')

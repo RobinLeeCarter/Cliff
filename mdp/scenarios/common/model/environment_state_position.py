@@ -36,7 +36,7 @@ class EnvironmentStatePosition(environment.Environment, ABC):
                 self.states.append(new_state)
 
     def _build_actions(self):
-        self.actions = actions_factory.ActionsFactory(actions_list=self._environment_parameters.actions_list)
+        self.actions = actions_factory.factory(actions_list=self._environment_parameters.actions_list)
 
     # noinspection PyUnusedLocal
     def actions_for_state(self, state_: state_position.StatePosition) -> Generator[action_move.ActionMove, None, None]:
