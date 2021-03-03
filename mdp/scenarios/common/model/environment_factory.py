@@ -4,7 +4,9 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from mdp.model import environment
 from mdp import common
-from mdp.model.scenarios import cliff, windy, random_walk
+from mdp.scenarios.cliff.environment import CliffEnvironment
+from mdp.scenarios.random_walk.environment import RandomWalkEnvironment
+from mdp.scenarios.windy.environment import WindyEnvironment
 
 
 def environment_factory(environment_parameters: common.EnvironmentParameters) -> environment.Environment:
@@ -12,11 +14,11 @@ def environment_factory(environment_parameters: common.EnvironmentParameters) ->
     et = common.EnvironmentType
 
     if environment_type == et.CLIFF:
-        environment_ = cliff.environment.Environment(environment_parameters)
-    elif environment_type == et.WINDY:
-        environment_ = windy.environment.Environment(environment_parameters)
+        environment_ = CliffEnvironment(environment_parameters)
     elif environment_type == et.RANDOM_WALK:
-        environment_ = random_walk.environment.Environment(environment_parameters)
+        environment_ = RandomWalkEnvironment(environment_parameters)
+    elif environment_type == et.WINDY:
+        environment_ = WindyEnvironment(environment_parameters)
     else:
         raise NotImplementedError
     return environment_

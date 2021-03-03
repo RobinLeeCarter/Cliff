@@ -3,7 +3,7 @@ from __future__ import annotations
 from mdp import common
 
 
-def alpha() -> common.Comparison:
+def cliff_alpha() -> common.Comparison:
     comparison = common.Comparison(
         environment_parameters=common.EnvironmentParameters(
             environment_type=common.EnvironmentType.CLIFF,
@@ -33,7 +33,7 @@ def alpha() -> common.Comparison:
     return comparison
 
 
-def episode() -> common.Comparison:
+def cliff_episode() -> common.Comparison:
     comparison = common.Comparison(
         environment_parameters=common.EnvironmentParameters(
             environment_type=common.EnvironmentType.CLIFF,

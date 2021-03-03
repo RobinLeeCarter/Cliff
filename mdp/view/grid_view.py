@@ -12,8 +12,8 @@ from mdp import common
 
 
 class GridView(abc.ABC):
-    def __init__(self):
-        self.grid_view_parameters: Optional[common.GridViewParameters] = None
+    def __init__(self, grid_view_parameters: common.GridViewParameters):
+        self.grid_view_parameters: common.GridViewParameters = grid_view_parameters
         self._grid_world: Optional[environment.GridWorld] = None
 
         self._max_x: Optional[int] = None

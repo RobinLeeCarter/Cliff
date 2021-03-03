@@ -3,9 +3,12 @@ from typing import Optional
 import dataclasses
 import copy
 
+from mdp.common import enums
+
 
 @dataclasses.dataclass
 class GridViewParameters:
+    grid_view_type: Optional[enums.GridViewType] = None
     show_demo: Optional[bool] = None
     window_title: Optional[str] = None
     show_trail: Optional[bool] = None
@@ -30,6 +33,7 @@ class GridViewParameters:
 
 
 default: GridViewParameters = GridViewParameters(
+    grid_view_type=enums.GridViewType.POSITION_MOVE,
     show_demo=True,
     window_title="Grid World",
     show_trail=False,

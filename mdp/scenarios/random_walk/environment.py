@@ -4,11 +4,11 @@ import numpy as np
 
 from mdp import common
 from mdp.model import environment
-from mdp.model.scenarios.common import environment_state_position, state_position
-from mdp.model.scenarios.random_walk import grid_world
+from mdp.scenarios.common.model import environment_state_position, state_position
+from mdp.scenarios.random_walk import grid_world
 
 
-class Environment(environment_state_position.Environment):
+class RandomWalkEnvironment(environment_state_position.EnvironmentStatePosition):
     def __init__(self, environment_parameters: common.EnvironmentParameters):
         grid = np.array([
             [3, 0, 0, 2, 0, 0, 3]
@@ -21,7 +21,7 @@ class Environment(environment_state_position.Environment):
 
     def _get_response(self) -> environment.Response:
         reward: float
-        self._projected_state: state_position.State
+        self._projected_state: state_position.StatePosition
         if self._projected_state.position == common.XY(x=self.grid_world.max_x, y=0):
             reward = 1.0
         else:
@@ -34,5 +34,5 @@ class Environment(environment_state_position.Environment):
 
     def get_optimum(self, state: environment.State) -> float:
         self.grid_world: grid_world.GridWorld
-        state: state_position.State
+        state: state_position.StatePosition
         return self.grid_world.get_optimum(state.position)

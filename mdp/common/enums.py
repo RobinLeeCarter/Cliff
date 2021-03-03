@@ -50,3 +50,7 @@ class ActionsList(enum.IntEnum):
     FOUR_CLIFF_FRIENDLY_MOVES = enum.auto()
     KINGS_MOVES = enum.auto()
     KINGS_MOVES_PLUS_NO_MOVE = enum.auto()
+
+
+class GridViewType(enum.IntEnum):
+    POSITION_MOVE = enum.auto()

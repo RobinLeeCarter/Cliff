@@ -3,7 +3,7 @@ from __future__ import annotations
 from mdp import common
 
 
-def episode() -> common.Comparison:
+def random_walk_episode() -> common.Comparison:
     comparison = common.Comparison(
         environment_parameters=common.EnvironmentParameters(
             environment_type=common.EnvironmentType.RANDOM_WALK,

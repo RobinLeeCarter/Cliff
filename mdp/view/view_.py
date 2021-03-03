@@ -7,6 +7,7 @@ import pygame.freetype
 if TYPE_CHECKING:
     from mdp import controller, common
     from mdp.model import environment
+from mdp.scenarios.common.view import grid_view_factory
 from mdp.view import graph, grid_view
 
 
@@ -19,13 +20,13 @@ class View:
             raise Exception(f"{pygame_fail} pygame modules failed to load")
 
         self.graph = graph.Graph()
-        self.grid_view = grid_view.GridView()
+        self.grid_view: Optional[grid_view.GridView] = None
 
     def set_controller(self, controller_: controller.Controller):
         self._controller = controller_
 
     def build(self, grid_world_: environment.GridWorld, comparison: common.Comparison):
-        self.grid_view.grid_view_parameters = comparison.grid_view_parameters
+        self.grid_view = grid_view_factory.grid_view_factory(comparison.grid_view_parameters)
         self.grid_view.set_gridworld(grid_world_)
 
     def demonstrate(self):

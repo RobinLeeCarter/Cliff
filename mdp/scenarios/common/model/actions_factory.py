@@ -1,9 +1,11 @@
 from __future__ import annotations
-# from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from mdp.model.environment import action
 
 from mdp import common
-from mdp.model.environment import action
-from mdp.model.scenarios.common import action_move  # , action_acceleration
+from mdp.scenarios.common.model import action_move  # , action_acceleration
 
 
 class ActionsFactory:
@@ -29,37 +31,37 @@ class ActionsFactory:
     def _no_actions(self) -> list[action.Action]:
         return []
 
-    def _four_moves(self) -> list[action_move.Action]:
+    def _four_moves(self) -> list[action_move.ActionMove]:
         return [
             # left
-            action_move.Action(move=common.XY(-1, 0)),
+            action_move.ActionMove(move=common.XY(-1, 0)),
             # right
-            action_move.Action(move=common.XY(+1, 0)),
+            action_move.ActionMove(move=common.XY(+1, 0)),
             # up
-            action_move.Action(move=common.XY(0, +1)),
+            action_move.ActionMove(move=common.XY(0, +1)),
             # down
-            action_move.Action(move=common.XY(0, -1))
+            action_move.ActionMove(move=common.XY(0, -1))
         ]
 
-    def _four_cliff_friendly_moves(self) -> list[action_move.Action]:
+    def _four_cliff_friendly_moves(self) -> list[action_move.ActionMove]:
         return [
             # right
-            action_move.Action(move=common.XY(+1, 0)),
+            action_move.ActionMove(move=common.XY(+1, 0)),
             # up
-            action_move.Action(move=common.XY(0, +1)),
+            action_move.ActionMove(move=common.XY(0, +1)),
             # left
-            action_move.Action(move=common.XY(-1, 0)),
+            action_move.ActionMove(move=common.XY(-1, 0)),
             # down
-            action_move.Action(move=common.XY(0, -1))
+            action_move.ActionMove(move=common.XY(0, -1))
         ]
 
-    def _kings_moves(self, include_center: bool = False) -> list[action_move.Action]:
-        action_list: list[action_move.Action] = []
+    def _kings_moves(self, include_center: bool = False) -> list[action_move.ActionMove]:
+        action_list: list[action_move.ActionMove] = []
         for x in (-1, 0, 1):
             for y in (-1, 0, 1):
                 include: bool = True
                 if x == 0 and y == 0:
                     include = include_center
                 if include:
-                    action_list.append(action_move.Action(move=common.XY(x, y)))
+                    action_list.append(action_move.ActionMove(move=common.XY(x, y)))
         return action_list

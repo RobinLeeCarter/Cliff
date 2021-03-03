@@ -3,7 +3,7 @@ from __future__ import annotations
 from mdp import common
 
 
-def timestep(random_wind: bool = False) -> common.Comparison:
+def windy_timestep(random_wind: bool = False) -> common.Comparison:
     comparison = common.Comparison(
         environment_parameters=common.EnvironmentParameters(
             environment_type=common.EnvironmentType.WINDY,

@@ -4,10 +4,10 @@ from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from mdp import common
-from mdp.model.scenarios.common import state_position
+from mdp.model import environment
 
 
 @dataclass(frozen=True)
-class State(state_position.State):
+class ActionAcceleration(environment.Action):
     # origin at bottom left
-    velocity: common.XY
+    acceleration: common.XY
