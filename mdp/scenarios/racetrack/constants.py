@@ -1,5 +1,5 @@
 import numpy as np
-from mdp.scenarios.racetrack import tracks
+from mdp.scenarios.racetrack.model import tracks
 
 MIN_VELOCITY: int = 0
 MAX_VELOCITY: int = 4

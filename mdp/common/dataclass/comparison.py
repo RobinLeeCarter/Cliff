@@ -1,7 +1,7 @@
 from __future__ import annotations
 import dataclasses
 
-from mdp.common.dataclass import settings, environment_parameters, graph_values, grid_view_parameters
+from mdp.common.dataclass import settings, graph_values, grid_view_parameters, environment_parameters
 from mdp.common.dataclass.breakdown_parameters import breakdown_parameters_, breakdown_algorithm_by_alpha
 
 

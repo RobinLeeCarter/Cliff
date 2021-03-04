@@ -30,6 +30,7 @@ class AlgorithmType(enum.IntEnum):
     SARSA = enum.auto()
     CONSTANT_ALPHA_MC = enum.auto()
     TD_0 = enum.auto()
+    OFF_POLICY_MC_CONTROL = enum.auto()
 
 
 class PolicyType(enum.IntEnum):
@@ -43,6 +44,7 @@ class EnvironmentType(enum.IntEnum):
     CLIFF = enum.auto()
     RANDOM_WALK = enum.auto()
     WINDY = enum.auto()
+    RACETRACK = enum.auto()
 
 
 class ActionsList(enum.IntEnum):

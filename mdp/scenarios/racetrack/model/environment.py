@@ -4,7 +4,8 @@ from typing import TYPE_CHECKING, Generator, Optional
 if TYPE_CHECKING:
     from mdp import common
 from mdp.model import environment
-from mdp.scenarios.racetrack import grid_world, constants, state, action
+from mdp.scenarios.racetrack import constants
+from mdp.scenarios.racetrack.model import action, state, grid_world
 
 
 class Environment(environment.Environment):
