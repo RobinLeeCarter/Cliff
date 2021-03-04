@@ -45,7 +45,3 @@ default: BreakdownAlgorithmByAlpha = BreakdownAlgorithmByAlpha(
     alpha_max=1.0,
     alpha_step=0.1
 )
-
-
-def default_factory() -> BreakdownAlgorithmByAlpha:
-    return copy.deepcopy(default)
