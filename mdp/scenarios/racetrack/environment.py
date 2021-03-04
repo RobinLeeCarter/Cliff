@@ -7,7 +7,7 @@ from mdp.model import environment
 from mdp.scenarios.racetrack import grid_world, constants, state, action
 
 
-class RacetrackEnvironment(environment.Environment):
+class Environment(environment.Environment):
     def __init__(self, environment_parameters: common.EnvironmentParameters):
         grid_array = constants.TRACK
         grid_world_ = grid_world.GridWorld(grid_array)

@@ -7,7 +7,7 @@ from mdp import common
 from mdp.model import environment
 
 
-class GridWorldPositionMove(environment.GridWorld):
+class GridWorld(environment.GridWorld):
     def change_request(self, current_position: common.XY, move: Optional[common.XY]) -> common.XY:
         if move is None:
             requested_position: common.XY = current_position

@@ -266,7 +266,7 @@ def view_test() -> bool:
         environment_type=common.EnvironmentType.CLIFF,
         actions_list=common.ActionsList.FOUR_MOVES
     )
-    cliff = scenarios.factory(environment_parameters)
+    cliff = scenarios.environment_factory(environment_parameters)
     my_grid_view = GridView()
     my_grid_view.set_grid_world(cliff.grid_world)
     my_grid_view.open_window()

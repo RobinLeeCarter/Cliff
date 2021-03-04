@@ -4,7 +4,7 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from mdp.view import grid_view
 from mdp import common
-from mdp.scenarios.common.view.grid_view_position_move import GridViewPositionMove
+from mdp.scenarios.common.view.grid_view_position_move import GridView as GridViewPositionMove
 
 
 def grid_view_factory(grid_view_parameters: common.GridViewParameters) -> grid_view.GridView:

@@ -8,7 +8,7 @@ from mdp import common
 from mdp.scenarios.common.model.position_move import action as action_move
 
 
-def factory(actions_list: common.ActionsList) -> list[action.Action]:
+def actions_factory(actions_list: common.ActionsList) -> list[action.Action]:
     al = common.ActionsList
     if actions_list == al.NO_ACTIONS:
         return _no_actions()
@@ -29,39 +29,39 @@ def _no_actions() -> list[action.Action]:
     return []
 
 
-def _four_moves() -> list[action_move.ActionMove]:
+def _four_moves() -> list[action_move.Action]:
     return [
         # left
-        action_move.ActionMove(move=common.XY(-1, 0)),
+        action_move.Action(move=common.XY(-1, 0)),
         # right
-        action_move.ActionMove(move=common.XY(+1, 0)),
+        action_move.Action(move=common.XY(+1, 0)),
         # up
-        action_move.ActionMove(move=common.XY(0, +1)),
+        action_move.Action(move=common.XY(0, +1)),
         # down
-        action_move.ActionMove(move=common.XY(0, -1))
+        action_move.Action(move=common.XY(0, -1))
     ]
 
 
-def _four_cliff_friendly_moves() -> list[action_move.ActionMove]:
+def _four_cliff_friendly_moves() -> list[action_move.Action]:
     return [
         # right
-        action_move.ActionMove(move=common.XY(+1, 0)),
+        action_move.Action(move=common.XY(+1, 0)),
         # up
-        action_move.ActionMove(move=common.XY(0, +1)),
+        action_move.Action(move=common.XY(0, +1)),
         # left
-        action_move.ActionMove(move=common.XY(-1, 0)),
+        action_move.Action(move=common.XY(-1, 0)),
         # down
-        action_move.ActionMove(move=common.XY(0, -1))
+        action_move.Action(move=common.XY(0, -1))
     ]
 
 
-def _kings_moves(include_center: bool = False) -> list[action_move.ActionMove]:
-    action_list: list[action_move.ActionMove] = []
+def _kings_moves(include_center: bool = False) -> list[action_move.Action]:
+    action_list: list[action_move.Action] = []
     for x in (-1, 0, 1):
         for y in (-1, 0, 1):
             include: bool = True
             if x == 0 and y == 0:
                 include = include_center
             if include:
-                action_list.append(action_move.ActionMove(move=common.XY(x, y)))
+                action_list.append(action_move.Action(move=common.XY(x, y)))
     return action_list

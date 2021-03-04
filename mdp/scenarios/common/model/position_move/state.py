@@ -8,6 +8,6 @@ from mdp.model import environment
 
 
 @dataclass(frozen=True)
-class StatePosition(environment.State):
+class State(environment.State):
     # origin at bottom left
     position: common.XY

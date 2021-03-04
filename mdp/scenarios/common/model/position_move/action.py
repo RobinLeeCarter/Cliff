@@ -8,6 +8,6 @@ from mdp.model import environment
 
 
 @dataclass(frozen=True)
-class ActionMove(environment.Action):
+class Action(environment.Action):
     # origin at bottom left
     move: common.XY

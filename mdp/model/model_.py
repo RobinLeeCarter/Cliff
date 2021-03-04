@@ -6,7 +6,7 @@ if TYPE_CHECKING:
 
 import utils
 from mdp import controller, common
-from mdp.scenarios.common.model import environment_factory
+from mdp.scenarios.common.model import environment_factory_
 from mdp.model import breakdown, trainer, agent
 
 
@@ -28,7 +28,7 @@ class Model:
     def build(self, comparison: common.Comparison):
         self.comparison = comparison
 
-        self.environment = environment_factory.factory(self.comparison.environment_parameters)
+        self.environment = environment_factory_.environment_factory(self.comparison.environment_parameters)
 
         # create agent (and it will create the algorithm and the policy when it is given Settings)
         self.agent = agent.Agent(self.environment)

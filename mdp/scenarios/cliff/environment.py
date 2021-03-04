@@ -4,17 +4,17 @@ import numpy as np
 
 from mdp import common
 from mdp.model import environment
-from mdp.scenarios.common.model.position_move import environment
+from mdp.scenarios.common.model import position_move
 
 
-class CliffEnvironment(environment.EnvironmentStatePosition):
+class Environment(position_move.Environment):
     def __init__(self, environment_parameters: common.EnvironmentParameters):
         grid = np.array([
             [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
             [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
             [2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 3]
         ], dtype=np.int)
-        grid_world_ = environment.GridWorld(grid)
+        grid_world_ = position_move.GridWorld(grid)
         super().__init__(environment_parameters, grid_world_)
 
     def _get_response(self) -> environment.Response:

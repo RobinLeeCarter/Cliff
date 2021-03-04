@@ -5,10 +5,10 @@ from typing import Optional
 import numpy as np
 
 from mdp import common
-from mdp.scenarios.common.model.position_move import grid_world
+from mdp.scenarios.common.model import position_move
 
 
-class RandomWalkGridWorld(grid_world.GridWorldPositionMove):
+class GridWorld(position_move.GridWorld):
     """GridWorld doesn't know about states and actions it just deals in the rules of the grid"""
     def __init__(self, grid_array: np.ndarray, v_optimal: np.ndarray):
         super().__init__(grid_array)
