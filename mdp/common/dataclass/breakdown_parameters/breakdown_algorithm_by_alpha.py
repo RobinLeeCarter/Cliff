@@ -38,20 +38,6 @@ class BreakdownAlgorithmByAlpha(breakdown_parameters_.BreakdownParameters):
                 )
                 self.settings_list.append(settings_)
 
-    def apply_default_to_nones(self, default_: BreakdownAlgorithmByAlpha):
-        super().apply_default_to_nones(default_)
-        attribute_names: list[str] = [
-            'alpha_min',
-            'alpha_max',
-            'alpha_step',
-            'alpha_list'
-        ]
-        for attribute_name in attribute_names:
-            attribute = self.__getattribute__(attribute_name)
-            if attribute is None:
-                default_value = default_.__getattribute__(attribute_name)
-                self.__setattr__(attribute_name, default_value)
-
 
 default: BreakdownAlgorithmByAlpha = BreakdownAlgorithmByAlpha(
     verbose=breakdown_parameters_.default.verbose,

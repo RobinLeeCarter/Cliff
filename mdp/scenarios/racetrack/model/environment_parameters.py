@@ -18,20 +18,6 @@ class EnvironmentParameters(common.EnvironmentParameters):
     extra_reward_for_failure: Optional[float] = None
     skid_probability: Optional[float] = None
 
-    def apply_default_to_nones(self, default_: EnvironmentParameters):
-        super().apply_default_to_nones(default_)
-        attribute_names: list[str] = [
-            'track',
-            'min_velocity',
-            'max_velocity',
-            'verbose'
-        ]
-        for attribute_name in attribute_names:
-            attribute = self.__getattribute__(attribute_name)
-            if attribute is None:
-                default_value = default_.__getattribute__(attribute_name)
-                self.__setattr__(attribute_name, default_value)
-
 
 default: EnvironmentParameters = EnvironmentParameters(
     actions_list=common.ActionsList.FOUR_MOVES,

@@ -26,26 +26,6 @@ class GraphValues:
 
     moving_average_window_size: Optional[int] = None
 
-    def apply_default_to_nones(self, default_: GraphValues):
-        attribute_names: list[str] = [
-            'show_graph',
-            'title',
-            'x_label',
-            'y_label',
-            'x_min',
-            'x_max',
-            'y_min',
-            'y_max',
-            'has_grid',
-            'has_legend',
-            'moving_average_window_size',
-        ]
-        for attribute_name in attribute_names:
-            attribute = self.__getattribute__(attribute_name)
-            if attribute is None:
-                default_value = default_.__getattribute__(attribute_name)
-                self.__setattr__(attribute_name, default_value)
-
 
 default: GraphValues = GraphValues(
     show_graph=True,

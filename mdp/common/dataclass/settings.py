@@ -3,6 +3,7 @@ import dataclasses
 import copy
 from typing import Optional
 
+from mdp.common import utils
 from mdp.common.dataclass import algorithm_parameters, policy_parameters
 
 
@@ -10,7 +11,7 @@ from mdp.common.dataclass import algorithm_parameters, policy_parameters
 class Settings:
     gamma: Optional[float] = None
 
-    # defaults are set in apply_default_to_nones
+    # defaults are set in set_none_to_default
     algorithm_parameters: algorithm_parameters.AlgorithmParameters = \
         dataclasses.field(default_factory=algorithm_parameters.none_factory)
     policy_parameters: policy_parameters.PolicyParameters = \
@@ -31,27 +32,10 @@ class Settings:
     # algorithm title will be populated by Trainer later whether it's used or not
     algorithm_title: str = dataclasses.field(default="", init=False)
 
-    def apply_default_to_nones(self, default_: Settings):
-        attribute_names: list[str] = [
-            'gamma',
-            'runs',
-            'run_print_frequency',
-            'training_episodes',
-            'episode_length_timeout',
-            'episode_print_frequency',
-            'episode_to_start_recording',
-            'episode_recording_frequency',
-            'review_every_step',
-            'display_every_step'
-        ]
-        for attribute_name in attribute_names:
-            attribute = self.__getattribute__(attribute_name)
-            if attribute is None:
-                default_value = default_.__getattribute__(attribute_name)
-                self.__setattr__(attribute_name, default_value)
-
-        self.algorithm_parameters.apply_default_to_nones(default_.algorithm_parameters)
-        self.policy_parameters.apply_default_to_nones(default_.policy_parameters)
+    def set_none_to_default(self, default_: Settings):
+        utils.set_none_to_default(self, default_)
+        utils.set_none_to_default(self.algorithm_parameters, default_.algorithm_parameters)
+        utils.set_none_to_default(self.policy_parameters, default_.policy_parameters)
 
 
 default = Settings(

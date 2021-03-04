@@ -16,22 +16,6 @@ class GridViewParameters:
     screen_width: Optional[int] = None
     screen_height: Optional[int] = None
 
-    def apply_default_to_nones(self, default_: GridViewParameters):
-        attribute_names: list[str] = [
-            'grid_view_type',
-            'show_demo',
-            'window_title',
-            'show_trail',
-            'show_values',
-            'screen_width',
-            'screen_height',
-        ]
-        for attribute_name in attribute_names:
-            attribute = self.__getattribute__(attribute_name)
-            if attribute is None:
-                default_value = default_.__getattribute__(attribute_name)
-                self.__setattr__(attribute_name, default_value)
-
 
 default: GridViewParameters = GridViewParameters(
     grid_view_type=enums.GridViewType.POSITION_MOVE,

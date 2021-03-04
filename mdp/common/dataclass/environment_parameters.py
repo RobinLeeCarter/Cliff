@@ -14,19 +14,6 @@ class EnvironmentParameters:
     random_wind: Optional[bool] = None
     verbose: Optional[bool] = None
 
-    def apply_default_to_nones(self, default_: EnvironmentParameters):
-        # attribute_names: list[str] = [
-        #     'environment_type',
-        #     'actions_list',
-        #     'random_wind',
-        #     'verbose'
-        # ]
-        for attribute_name in vars(self).keys():
-            attribute = self.__getattribute__(attribute_name)
-            if attribute is None:
-                default_value = default_.__getattribute__(attribute_name)
-                self.__setattr__(attribute_name, default_value)
-
 
 default: EnvironmentParameters = EnvironmentParameters(
     actions_list=enums.ActionsList.FOUR_MOVES,

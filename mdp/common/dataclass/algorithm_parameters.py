@@ -1,7 +1,6 @@
 from __future__ import annotations
 from typing import Optional
 import dataclasses
-# import copy
 
 from mdp.common import enums
 
@@ -14,21 +13,6 @@ class AlgorithmParameters:
     initial_v_value: Optional[float] = None
     initial_q_value: Optional[float] = None
     verbose: Optional[bool] = None
-
-    def apply_default_to_nones(self, default_: AlgorithmParameters):
-        attribute_names: list[str] = [
-            'algorithm_type',
-            'alpha',
-            'alpha_variable',
-            'initial_v_value',
-            'initial_q_value',
-            'verbose'
-        ]
-        for attribute_name in attribute_names:
-            attribute = self.__getattribute__(attribute_name)
-            if attribute is None:
-                default_value = default_.__getattribute__(attribute_name)
-                self.__setattr__(attribute_name, default_value)
 
 
 default: AlgorithmParameters = AlgorithmParameters(

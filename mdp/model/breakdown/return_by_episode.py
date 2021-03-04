@@ -59,5 +59,5 @@ class ReturnByEpisode(breakdown_.Breakdown):
             x_min=0,
             x_max=self.comparison.comparison_settings.training_episodes,
         )
-        graph_values.apply_default_to_nones(self.comparison.graph_values)
+        common.set_none_to_default(graph_values, self.comparison.graph_values)
         return graph_values
