@@ -2,14 +2,14 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from mdp.model import environment
+    from mdp.model import environment as base_environment
 from mdp import common
 from mdp.scenarios.cliff.environment import Environment as CliffEnvironment
-from mdp.scenarios.random_walk.evironment import Environment as RandomWalkEnvironment
+from mdp.scenarios.random_walk.environment import Environment as RandomWalkEnvironment
 from mdp.scenarios.windy.environment import Environment as WindyEnvironment
 
 
-def environment_factory(environment_parameters: common.EnvironmentParameters) -> environment.Environment:
+def environment_factory(environment_parameters: common.EnvironmentParameters) -> base_environment.Environment:
     environment_type = environment_parameters.environment_type
     et = common.EnvironmentType
 

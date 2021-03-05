@@ -7,7 +7,8 @@ if TYPE_CHECKING:
 
 from mdp import common
 from mdp.model import environment
-from mdp.scenarios.common.model.position_move import actions_factory_, action, grid_world, state
+from mdp.scenarios.position_move import state, action, grid_world
+from mdp.scenarios.factory import actions_list_factory
 
 
 class Environment(environment.Environment, ABC):
@@ -37,7 +38,7 @@ class Environment(environment.Environment, ABC):
                 self.states.append(new_state)
 
     def _build_actions(self):
-        self.actions = actions_factory_.actions_factory(actions_list=self._environment_parameters.actions_list)
+        self.actions = actions_list_factory.actions_list_factory(actions_list=self._environment_parameters.actions_list)
 
     # noinspection PyUnusedLocal
     def actions_for_state(self, state_: state.State) -> Generator[action.Action, None, None]:

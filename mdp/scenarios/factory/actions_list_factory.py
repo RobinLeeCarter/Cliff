@@ -2,13 +2,13 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from mdp.model.environment import action
+    from mdp.model import environment as base_environment
 
 from mdp import common
-from mdp.scenarios.common.model.position_move import action as action_move
+from mdp.scenarios.position_move import action as pm
 
 
-def actions_factory(actions_list: common.ActionsList) -> list[action.Action]:
+def actions_list_factory(actions_list: common.ActionsList) -> list[base_environment.Action]:
     al = common.ActionsList
     if actions_list == al.NO_ACTIONS:
         return _no_actions()
@@ -25,43 +25,43 @@ def actions_factory(actions_list: common.ActionsList) -> list[action.Action]:
 
 
 # common moves that could be reused
-def _no_actions() -> list[action.Action]:
+def _no_actions() -> list[base_environment.Action]:
     return []
 
 
-def _four_moves() -> list[action_move.Action]:
+def _four_moves() -> list[pm.Action]:
     return [
         # left
-        action_move.Action(move=common.XY(-1, 0)),
+        pm.Action(move=common.XY(-1, 0)),
         # right
-        action_move.Action(move=common.XY(+1, 0)),
+        pm.Action(move=common.XY(+1, 0)),
         # up
-        action_move.Action(move=common.XY(0, +1)),
+        pm.Action(move=common.XY(0, +1)),
         # down
-        action_move.Action(move=common.XY(0, -1))
+        pm.Action(move=common.XY(0, -1))
     ]
 
 
-def _four_cliff_friendly_moves() -> list[action_move.Action]:
+def _four_cliff_friendly_moves() -> list[pm.Action]:
     return [
         # right
-        action_move.Action(move=common.XY(+1, 0)),
+        pm.Action(move=common.XY(+1, 0)),
         # up
-        action_move.Action(move=common.XY(0, +1)),
+        pm.Action(move=common.XY(0, +1)),
         # left
-        action_move.Action(move=common.XY(-1, 0)),
+        pm.Action(move=common.XY(-1, 0)),
         # down
-        action_move.Action(move=common.XY(0, -1))
+        pm.Action(move=common.XY(0, -1))
     ]
 
 
-def _kings_moves(include_center: bool = False) -> list[action_move.Action]:
-    action_list: list[action_move.Action] = []
+def _kings_moves(include_center: bool = False) -> list[pm.Action]:
+    action_list: list[pm.Action] = []
     for x in (-1, 0, 1):
         for y in (-1, 0, 1):
             include: bool = True
             if x == 0 and y == 0:
                 include = include_center
             if include:
-                action_list.append(action_move.Action(move=common.XY(x, y)))
+                action_list.append(pm.Action(move=common.XY(x, y)))
     return action_list

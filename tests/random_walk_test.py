@@ -1,8 +1,8 @@
 from __future__ import annotations
 
 from mdp import common
-from mdp.scenarios.common.model import environment_factory_
-from mdp.scenarios.common.model.position_move import action, state
+from mdp.scenarios.factory import environment_factory
+from mdp.scenarios.position_move import state, action
 
 
 def random_walk_test() -> bool:
@@ -10,7 +10,7 @@ def random_walk_test() -> bool:
         environment_type=common.EnvironmentType.RANDOM_WALK,
         actions_list=common.ActionsList.NO_ACTIONS
     )
-    environment_ = environment_factory_.environment_factory(environment_parameters)
+    environment_ = environment_factory.environment_factory(environment_parameters)
 
     for state_ in environment_.states:
         state_index = environment_.state_index[state_]

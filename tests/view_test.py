@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from mdp import common, scenarios
-from mdp.scenarios.common.model import environment_factory_
+from mdp.scenarios.factory import environment_factory
 from mdp.view import view_
 
 
@@ -11,7 +11,7 @@ def view_test() -> bool:
     #     environment_type=common.EnvironmentType.CLIFF,
     #     actions_list=common.ActionsList.FOUR_MOVES
     # )
-    cliff = environment_factory_.environment_factory(comparison.environment_parameters)
+    cliff = environment_factory.environment_factory(comparison.environment_parameters)
     my_view = view_.View()
     my_view.build(cliff.grid_world, comparison)
     my_view.grid_view.display_and_wait()

@@ -7,7 +7,7 @@ import pygame.freetype
 if TYPE_CHECKING:
     from mdp import controller, common
     from mdp.model import environment
-from mdp.scenarios.common.view import grid_view_factory_
+from mdp.scenarios.factory import grid_view_factory
 from mdp.view import graph, grid_view
 
 
@@ -26,7 +26,7 @@ class View:
         self._controller = controller_
 
     def build(self, grid_world_: environment.GridWorld, comparison: common.Comparison):
-        self.grid_view = grid_view_factory_.grid_view_factory(comparison.grid_view_parameters)
+        self.grid_view = grid_view_factory.grid_view_factory(comparison.grid_view_parameters)
         self.grid_view.set_gridworld(grid_world_)
 
     def demonstrate(self):

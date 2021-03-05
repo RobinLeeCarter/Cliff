@@ -5,11 +5,11 @@ from typing import Optional
 import numpy as np
 
 from mdp import common
-from mdp.scenarios.common.model import position_move
+from mdp.scenarios.position_move import grid_world
 from mdp.scenarios.random_walk import environment_parameters
 
 
-class GridWorld(position_move.GridWorld):
+class GridWorld(grid_world.GridWorld):
     """GridWorld doesn't know about states and actions it just deals in the rules of the grid"""
     def __init__(self, environment_parameters_: environment_parameters.EnvironmentParameters):
         super().__init__(environment_parameters_)
