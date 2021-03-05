@@ -25,7 +25,6 @@ class OffPolicyMcControl(abstract.EpisodicMonteCarlo):
     def _pre_process_episode(self):
         self._episode.generate_returns()
         self._W = 1.0
-        self._C.initialize_values()
 
     def _process_time_step(self, t: int):
         state = self._episode[t].state
