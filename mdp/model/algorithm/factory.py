@@ -18,6 +18,7 @@ def factory(environment_: environment.Environment,
         a.VQ: control.VQ,
         a.CONSTANT_ALPHA_MC: policy_evaluation.ConstantAlphaMC,
         a.TD_0: policy_evaluation.TD0,
+        a.OFF_POLICY_MC_CONTROL: control.OffPolicyMcControl,
     }
     type_for_algorithm = algorithm_lookup[algorithm_parameters.algorithm_type]
     algorithm_ = type_for_algorithm(environment_, agent_, algorithm_parameters)

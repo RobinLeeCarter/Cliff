@@ -16,6 +16,7 @@ class EpisodicMonteCarlo(episodic.Episodic, abc.ABC):
                  ):
         super().__init__(environment_, agent_, algorithm_parameters)
         self._episode: Optional[agent.Episode] = None
+        self._exit_episode: bool = False
 
     @property
     def episode(self) -> Optional[agent.Episode]:
@@ -24,9 +25,12 @@ class EpisodicMonteCarlo(episodic.Episodic, abc.ABC):
     def do_episode(self, episode_length_timeout: int):
         self._episode = self._agent.generate_episode(episode_length_timeout)
         self._pre_process_episode()
+        self._exit_episode = False
         if self._episode.terminates and self._episode.T > 0:
             for t in range(self._episode.T - 1, -1, -1):     # T-1, T-2, ... 1, 0
                 self._process_time_step(t)
+                if self._exit_episode:
+                    break
 
     def _pre_process_episode(self):
         self._episode.generate_returns()

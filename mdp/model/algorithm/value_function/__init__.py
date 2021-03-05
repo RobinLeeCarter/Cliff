@@ -1,2 +1,4 @@
 from mdp.model.algorithm.value_function.state_function import StateFunction
+from mdp.model.algorithm.value_function.state_variable import StateVariable
 from mdp.model.algorithm.value_function.state_action_function import StateActionFunction
+from mdp.model.algorithm.value_function.state_action_variable import StateActionVariable
