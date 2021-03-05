@@ -269,7 +269,7 @@ class GridView(abc.ABC):
                      draw_move: bool = False,
                      draw_v: Optional[bool] = None,
                      draw_q: Optional[bool] = None
-                     ) -> pygame.Rect:
+                     ):
         if draw_v is None:
             draw_v = self.grid_view_parameters.show_values
         if draw_q is None:
@@ -301,8 +301,6 @@ class GridView(abc.ABC):
 
         if draw_move and move:
             self._draw_move(surface, rect, move, move_color)
-
-        return rect
 
     def _get_sub_rect(self, rect: pygame.Rect, move: common.XY) -> pygame.Rect:
         sub_width: float = rect.width / 3.0

@@ -30,8 +30,9 @@ class GridView(grid_view.GridView):
             prev_state: Optional[state.State] = episode_[t - 1].state
             prev_position = prev_state.position
 
-        if self.grid_view_parameters.show_trail:
-            self._draw_agent_on_background(agent_position=agent_position)
-        else:
-            self._copy_grid_into_background()
-            self._draw_frame_on_background(agent_position=agent_position, prev_position=prev_position)
+        if self._grid_world.is_inside(agent_position):
+            if self.grid_view_parameters.show_trail:
+                self._draw_agent_on_background(agent_position=agent_position)
+            elif self._grid_world.is_inside(prev_position):
+                self._copy_grid_into_background()
+                self._draw_frame_on_background(agent_position=agent_position, prev_position=prev_position)

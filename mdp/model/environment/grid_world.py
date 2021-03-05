@@ -38,6 +38,10 @@ class GridWorld:
     def is_at_goal(self, position: common.XY) -> bool:
         return self.get_square(position) == common.Square.END
 
+    def is_inside(self, position: common.XY) -> bool:
+        return 0 <= position.x <= self.max_x and \
+               0 <= position.y <= self.max_y
+
     def get_square(self, position: common.XY) -> common.Square:
         value: int = self._grid_array[self.max_y - position.y, position.x]
         # noinspection PyArgumentList
