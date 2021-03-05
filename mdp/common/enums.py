@@ -40,6 +40,12 @@ class PolicyType(enum.IntEnum):
     RANDOM = enum.auto()
 
 
+class DualPolicyRelationship(enum.IntEnum):
+    SINGLE_POLICY = enum.auto()
+    LINKED_POLICIES = enum.auto()
+    INDEPENDENT_POLICIES = enum.auto()
+
+
 class EnvironmentType(enum.IntEnum):
     CLIFF = enum.auto()
     RANDOM_WALK = enum.auto()

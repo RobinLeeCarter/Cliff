@@ -63,7 +63,7 @@ class Model:
         # graph_values: common.GraphValues = self.breakdown.get_graph_values()
 
     def update_grid_value_functions(self):
-        policy_for_display = self.agent.policy.policy_for_display
+        policy_for_display = self.agent.policy.linked_policy
         self.environment.update_grid_value_functions(algorithm_=self.agent.algorithm, policy_=policy_for_display)
 
     def _display_step(self, episode_: agent.Episode):

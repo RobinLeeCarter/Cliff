@@ -23,7 +23,7 @@ class Policy(abc.ABC):
         raise NotImplementedError(f"__setitem__ not implemented for Policy: {type(self)}")
 
     @property
-    def policy_for_display(self) -> Policy:
+    def linked_policy(self) -> Policy:  # determinstic part if exists else self
         return self
 
     @abc.abstractmethod

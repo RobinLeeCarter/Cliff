@@ -13,6 +13,7 @@ def racetrack_episode() -> comparison.Comparison:
             runs=1,
             training_episodes=10_000,
             # display_every_step=True,
+            dual_policy_relationship=common.DualPolicyRelationship.LINKED_POLICIES
         ),
         breakdown_parameters=common.BreakdownParameters(
             breakdown_type=common.BreakdownType.RETURN_BY_EPISODE

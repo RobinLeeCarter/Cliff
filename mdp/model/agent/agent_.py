@@ -44,9 +44,19 @@ class Agent:
         # trainer callback
         self._step_callback: Optional[Callable[[], bool]] = None
 
+    # use for on-policy algorithms
     @property
     def policy(self) -> policy_.Policy:
         return self._policy
+
+    # use these two for off-policy algorithms
+    @property
+    def target_policy(self) -> policy_.Policy:
+        return self._policy
+
+    @property
+    def behaviour_policy(self) -> policy_.Policy:
+        return self._behaviour_policy
 
     @property
     def algorithm(self) -> algorithm_.Episodic:
@@ -61,7 +71,21 @@ class Agent:
         return self._episode
 
     def apply_settings(self, settings: common.Settings):
-        self._policy = policy_.factory(self._environment, settings.policy_parameters)
+        # sort out policies
+        primary_policy = policy_.factory(self._environment, settings.policy_parameters)
+        r: common.DualPolicyRelationship = settings.dual_policy_relationship
+        if r == common.DualPolicyRelationship.SINGLE_POLICY:
+            self._policy = primary_policy
+            self._behaviour_policy = primary_policy
+        elif r == common.DualPolicyRelationship.INDEPENDENT_POLICIES:
+            self._policy = primary_policy
+            self._behaviour_policy = policy_.factory(self._environment, settings.behaviour_policy_parameters)
+        elif r == common.DualPolicyRelationship.LINKED_POLICIES:
+            self._policy = primary_policy.linked_policy     # typically the deterministic part we want to output
+            self._behaviour_policy = primary_policy
+        else:
+            raise NotImplementedError
+
         self._algorithm = algorithm_.factory(self._environment, self, settings.algorithm_parameters)
         self._episode_length_timeout = settings.episode_length_timeout
         self.gamma = settings.gamma
@@ -114,7 +138,7 @@ class Agent:
         The reward being is response from the previous action (if there was one, or otherwise reward=None)
         Note that the action is NOT applied yet.
         """
-        self.action = self.policy[self.state]
+        self.action = self._behaviour_policy[self.state]
         self._episode.add_rsa(reward=self.reward, state=self.state, action=self.action)
         if self._verbose:
             print(f"state = {self.state} \t action = {self.action}")

@@ -25,7 +25,7 @@ class EGreedy(random.Random):
         self.greedy_policy[state] = action
 
     @property
-    def policy_for_display(self) -> policy_.Policy:
+    def linked_policy(self) -> policy_.Policy:
         return self.greedy_policy
 
     def get_probability(self, state_: environment.State, action_: environment.Action) -> float:

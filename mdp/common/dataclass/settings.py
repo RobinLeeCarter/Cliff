@@ -3,7 +3,7 @@ import dataclasses
 import copy
 from typing import Optional
 
-from mdp.common import utils
+from mdp.common import utils, enums
 from mdp.common.dataclass import algorithm_parameters_, policy_parameters_
 
 
@@ -14,10 +14,12 @@ class Settings:
     # defaults are set in set_none_to_default
     algorithm_parameters: algorithm_parameters_.AlgorithmParameters = \
         dataclasses.field(default_factory=algorithm_parameters_.none_factory)
+
     policy_parameters: policy_parameters_.PolicyParameters = \
         dataclasses.field(default_factory=policy_parameters_.none_factory)
     behaviour_policy_parameters: policy_parameters_.PolicyParameters = \
         dataclasses.field(default_factory=policy_parameters_.none_factory)
+    dual_policy_relationship: Optional[enums.DualPolicyRelationship] = None
 
     runs: Optional[int] = None
     run_print_frequency: Optional[int] = None
@@ -44,6 +46,7 @@ default = Settings(
     gamma=1.0,
     algorithm_parameters=algorithm_parameters_.default,
     policy_parameters=policy_parameters_.default,
+    dual_policy_relationship=enums.DualPolicyRelationship.SINGLE_POLICY,
     runs=10,
     run_print_frequency=10,
     training_episodes=100,
