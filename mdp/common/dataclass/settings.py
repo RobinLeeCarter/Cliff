@@ -4,7 +4,7 @@ import copy
 from typing import Optional
 
 from mdp.common import utils
-from mdp.common.dataclass import algorithm_parameters, policy_parameters
+from mdp.common.dataclass import algorithm_parameters_, policy_parameters_
 
 
 @dataclasses.dataclass
@@ -12,10 +12,12 @@ class Settings:
     gamma: Optional[float] = None
 
     # defaults are set in set_none_to_default
-    algorithm_parameters: algorithm_parameters.AlgorithmParameters = \
-        dataclasses.field(default_factory=algorithm_parameters.none_factory)
-    policy_parameters: policy_parameters.PolicyParameters = \
-        dataclasses.field(default_factory=policy_parameters.none_factory)
+    algorithm_parameters: algorithm_parameters_.AlgorithmParameters = \
+        dataclasses.field(default_factory=algorithm_parameters_.none_factory)
+    policy_parameters: policy_parameters_.PolicyParameters = \
+        dataclasses.field(default_factory=policy_parameters_.none_factory)
+    behaviour_policy_parameters: policy_parameters_.PolicyParameters = \
+        dataclasses.field(default_factory=policy_parameters_.none_factory)
 
     runs: Optional[int] = None
     run_print_frequency: Optional[int] = None
@@ -40,8 +42,8 @@ class Settings:
 
 default = Settings(
     gamma=1.0,
-    algorithm_parameters=algorithm_parameters.default,
-    policy_parameters=policy_parameters.default,
+    algorithm_parameters=algorithm_parameters_.default,
+    policy_parameters=policy_parameters_.default,
     runs=10,
     run_print_frequency=10,
     training_episodes=100,

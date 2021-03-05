@@ -234,8 +234,8 @@ class GridView(abc.ABC):
                                       )
 
     def _draw_agent_on_background(self,
-                                  agent_position: Optional[common.XY],
-                                  agent_move: Optional[common.XY],
+                                  agent_position: Optional[common.XY] = None,
+                                  agent_move: Optional[common.XY] = None,
                                   ):
         self._draw_square(surface=self._background,
                           position=agent_position,

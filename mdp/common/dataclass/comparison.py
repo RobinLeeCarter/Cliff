@@ -3,14 +3,14 @@ import dataclasses
 import abc
 
 from mdp.common import utils
-from mdp.common.dataclass import settings, graph_values, grid_view_parameters, environment_parameters
+from mdp.common.dataclass import settings, graph_values_, grid_view_parameters_, environment_parameters_
 from mdp.common.dataclass.breakdown_parameters import breakdown_parameters_, breakdown_algorithm_by_alpha
 
 
 @dataclasses.dataclass
 class Comparison(abc.ABC):
     # environment (abstract - must be derived, none_factory never called)
-    environment_parameters: environment_parameters.EnvironmentParameters
+    environment_parameters: environment_parameters_.EnvironmentParameters
     # = dataclasses.field(default_factory=environment_parameters.none_factory())
 
     # training session settings
@@ -22,12 +22,12 @@ class Comparison(abc.ABC):
         dataclasses.field(default_factory=breakdown_parameters_.default_factory)
 
     # graph output
-    graph_values: graph_values.GraphValues = \
-        dataclasses.field(default_factory=graph_values.default_factory)
+    graph_values: graph_values_.GraphValues = \
+        dataclasses.field(default_factory=graph_values_.default_factory)
 
     # grid view output
-    grid_view_parameters: grid_view_parameters.GridViewParameters = \
-        dataclasses.field(default_factory=grid_view_parameters.default_factory)
+    grid_view_parameters: grid_view_parameters_.GridViewParameters = \
+        dataclasses.field(default_factory=grid_view_parameters_.default_factory)
 
     def __post_init__(self):
         # Push comparison values or default values into most settings attributes if currently =None
@@ -46,5 +46,5 @@ class Comparison(abc.ABC):
             settings_.set_none_to_default(default_=self.comparison_settings)
 
         # view
-        utils.set_none_to_default(self.graph_values, graph_values.default)
-        utils.set_none_to_default(self.grid_view_parameters, grid_view_parameters.default)
+        utils.set_none_to_default(self.graph_values, graph_values_.default)
+        utils.set_none_to_default(self.grid_view_parameters, grid_view_parameters_.default)

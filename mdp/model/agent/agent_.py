@@ -20,6 +20,7 @@ class Agent:
         self._verbose: bool = verbose
 
         self._policy: Optional[policy_.Policy] = None
+        self._behaviour_policy: Optional[policy_.Policy] = None     # if on-policy = self._policy
         self._algorithm: Optional[algorithm_.Episodic] = None
         self._episode: Optional[episode_.Episode] = None
         self._episode_length_timeout: Optional[int] = None

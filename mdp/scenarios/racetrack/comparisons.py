@@ -39,5 +39,10 @@ def racetrack_episode() -> comparison.Comparison:
             y_min=-100,
             y_max=0
         ),
+        grid_view_parameters=common.GridViewParameters(
+            grid_view_type=common.GridViewType.POSITION,
+            show_values=False,
+            show_trail=True
+        )
     )
     return comparison_

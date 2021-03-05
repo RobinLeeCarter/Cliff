@@ -5,7 +5,7 @@ import dataclasses
 
 import utils
 from mdp.common import enums
-from mdp.common.dataclass import settings, algorithm_parameters
+from mdp.common.dataclass import settings, algorithm_parameters_
 from mdp.common.dataclass.breakdown_parameters import breakdown_parameters_
 
 
@@ -30,7 +30,7 @@ class BreakdownAlgorithmByAlpha(breakdown_parameters_.BreakdownParameters):
         for alpha in self.alpha_list:
             for algorithm_type in self.algorithm_type_list:
                 settings_ = settings.Settings(
-                    algorithm_parameters=algorithm_parameters.AlgorithmParameters(
+                    algorithm_parameters=algorithm_parameters_.AlgorithmParameters(
                         algorithm_type=algorithm_type,
                         alpha=alpha
                     )
