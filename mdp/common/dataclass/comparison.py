@@ -32,6 +32,7 @@ class Comparison(abc.ABC):
     def __post_init__(self):
         # Push comparison values or default values into most settings attributes if currently =None
         # model
+        # this is now done in the derived classes using their defaults
         # utils.set_none_to_default(self.environment_parameters, environment_parameters.default)
 
         if isinstance(self.breakdown_parameters, breakdown_algorithm_by_alpha.BreakdownAlgorithmByAlpha):

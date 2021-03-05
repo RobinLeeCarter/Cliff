@@ -4,7 +4,7 @@ import enum
 
 class Square(enum.IntEnum):
     NORMAL = 0
-    CLIFF = 1
+    CLIFF = 1   # or grass
     START = 2
     END = 3
 

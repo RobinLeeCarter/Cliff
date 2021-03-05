@@ -19,7 +19,13 @@ class OffPolicyMcControl(abstract.EpisodicMonteCarlo):
         self.title = f"{self.name}"
         self._W: float = 1.0
         self._create_q()
+        self._make_policy_greedy_wrt_q()
         self._C = value_function.StateActionVariable(self._environment, initial_value=0.0)
+
+    def _pre_process_episode(self):
+        self._episode.generate_returns()
+        self._W = 1.0
+        self._C.initialize_values()
 
     def _process_time_step(self, t: int):
         state = self._episode[t].state

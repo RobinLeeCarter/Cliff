@@ -35,9 +35,7 @@ class Environment(abc.ABC):
         self._square: Optional[common.Square] = None
         self._new_state: Optional[state.State] = None
 
-        self._build()
-
-    def _build(self):
+    def build(self):
         self._build_states()
         self.state_index = {state_: i for i, state_ in enumerate(self.states)}
         self._build_actions()

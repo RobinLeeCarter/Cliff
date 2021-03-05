@@ -14,6 +14,22 @@ class GridWorld(environment.GridWorld):
         self._end_y: np.ndarray = (self._grid_array[:, self.max_x] == common.enums.Square.END)
         self._skid_probability: float = environment_parameters_.skid_probability
 
+    def get_square(self, position: common.XY) -> common.Square:
+        x_inside = (0 <= position.x <= self.max_x)
+        y_inside = (0 <= position.y <= self.max_y)
+
+        if y_inside and self._end_y[self.max_y - position.y] and position.x > self.max_x:
+            # 'over' finish line (to the right of it)
+            return common.Square.END
+        elif not x_inside or not y_inside:
+            # crash outside of track and not over finish line
+            return common.Square.CLIFF
+        else:
+            # just whatever the track value is
+            value: int = self._grid_array[self.max_y - position.y, position.x]
+            # noinspection PyArgumentList
+            return common.Square(value=value)   # docs say this is fine
+
     def change_request(self, position: common.XY, velocity: common.XY, acceleration: common.XY)\
             -> tuple[common.XY, common.XY]:
         if common.rng.uniform() > self._skid_probability:   # not skidding
@@ -23,11 +39,12 @@ class GridWorld(environment.GridWorld):
             )
         else:  # skid
             new_velocity = velocity
-        expected_position: common.XY = common.XY(
+
+        new_position: common.XY = common.XY(
             x=position.x + new_velocity.x,
             y=position.y + new_velocity.y
         )
         # project back to grid if outside
-        new_position: common.XY = self._project_back_to_grid(expected_position)
+        # new_position: common.XY = self._project_back_to_grid(expected_position)
         return new_position, new_velocity
 

@@ -8,7 +8,8 @@ algorithm_name: dict[enums.AlgorithmType, str] = {
     enums.AlgorithmType.Q_LEARNING: 'Q-learning',
     enums.AlgorithmType.SARSA: 'Sarsa',
     enums.AlgorithmType.CONSTANT_ALPHA_MC: 'Constant-α MC',
-    enums.AlgorithmType.TD_0: 'TD(0)'
+    enums.AlgorithmType.TD_0: 'TD(0)',
+    enums.AlgorithmType.OFF_POLICY_MC_CONTROL: 'Off-policy MC Control'
 }
 
 policy_name: dict[enums.PolicyType, str] = {

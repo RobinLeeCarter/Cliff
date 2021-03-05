@@ -7,6 +7,7 @@ from mdp import common
 from mdp.scenarios.cliff.environment import Environment as CliffEnvironment
 from mdp.scenarios.random_walk.environment import Environment as RandomWalkEnvironment
 from mdp.scenarios.windy.environment import Environment as WindyEnvironment
+from mdp.scenarios.racetrack.environment import Environment as RacetrackEnvironment
 
 
 def environment_factory(environment_parameters: common.EnvironmentParameters) -> base_environment.Environment:
@@ -19,6 +20,9 @@ def environment_factory(environment_parameters: common.EnvironmentParameters) ->
         environment_ = RandomWalkEnvironment(environment_parameters)
     elif environment_type == et.WINDY:
         environment_ = WindyEnvironment(environment_parameters)
+    elif environment_type == et.RACETRACK:
+        environment_ = RacetrackEnvironment(environment_parameters)
     else:
         raise NotImplementedError
+    environment_.build()
     return environment_
