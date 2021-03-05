@@ -90,6 +90,9 @@ class Agent:
         self._episode_length_timeout = settings.episode_length_timeout
         self.gamma = settings.gamma
 
+    def set_behaviour_policy(self, policy: policy_.Policy):
+        self._behaviour_policy = policy
+
     def initialize(self):
         self._algorithm.initialize()
 

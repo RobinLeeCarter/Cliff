@@ -12,7 +12,7 @@ class GridWorld(environment.GridWorld):
     def __init__(self, environment_parameters_: environment_parameters.EnvironmentParameters):
         super().__init__(environment_parameters_)
         self._end_y: np.ndarray = (self._grid_array[:, self.max_x] == common.enums.Square.END)
-        self._skid_probability: float = environment_parameters_.skid_probability
+        self.skid_probability: float = environment_parameters_.skid_probability
 
     def get_square(self, position: common.XY) -> common.Square:
         x_inside = (0 <= position.x <= self.max_x)
@@ -32,7 +32,7 @@ class GridWorld(environment.GridWorld):
 
     def change_request(self, position: common.XY, velocity: common.XY, acceleration: common.XY)\
             -> tuple[common.XY, common.XY]:
-        if common.rng.uniform() > self._skid_probability:   # not skidding
+        if common.rng.uniform() > self.skid_probability:   # not skidding
             new_velocity = common.XY(
                 x=velocity.x + acceleration.x,
                 y=velocity.y + acceleration.y

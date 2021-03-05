@@ -128,4 +128,7 @@ class Environment(environment.Environment):
             reward=self._reward,
             state=self._next_state
         )
+
+    def output_mode(self):
+        self.grid_world.skid_probability = 0.0
     # endregion

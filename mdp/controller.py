@@ -29,7 +29,7 @@ class Controller:
             self._view.graph.make_plot(graph_values)
 
         if self._comparison.grid_view_parameters.show_demo:
-            self._model.update_grid_value_functions()
+            self._model.prep_for_output()
             self._view.grid_view.demonstrate(self.new_episode_request)
 
     # region Model requests

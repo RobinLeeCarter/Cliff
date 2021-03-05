@@ -122,4 +122,7 @@ class Environment(abc.ABC):
 
     def is_valued_state(self, state_: state.State) -> bool:
         return False
+
+    def output_mode(self):
+        pass
     # endregion
