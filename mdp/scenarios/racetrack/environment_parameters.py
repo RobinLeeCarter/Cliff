@@ -1,17 +1,14 @@
 from __future__ import annotations
 from typing import Optional
 import dataclasses
-
-import numpy as np
+import copy
 
 from mdp import common
-from mdp.common.dataclass import environment_parameters
-from mdp.scenarios.racetrack.model import tracks
+from mdp.scenarios.racetrack import grids
 
 
 @dataclasses.dataclass
 class EnvironmentParameters(common.EnvironmentParameters):
-    track: Optional[np.ndarray] = None
     min_velocity: Optional[int] = None
     max_velocity: Optional[int] = None
     min_acceleration: Optional[int] = None
@@ -20,11 +17,10 @@ class EnvironmentParameters(common.EnvironmentParameters):
     skid_probability: Optional[float] = None
 
 
-# TODO: how to instantiate with this as default in scenarios rather than common
-
 default: EnvironmentParameters = EnvironmentParameters(
-    verbose=environment_parameters.default.verbose,
-    track=tracks.TRACK_1,
+    environment_type=common.EnvironmentType.RACETRACK,
+    verbose=False,
+    grid=grids.TRACK_1,
     min_velocity=0,
     max_velocity=4,
     min_acceleration=-1,
@@ -32,3 +28,7 @@ default: EnvironmentParameters = EnvironmentParameters(
     extra_reward_for_failure=-40.0,
     skid_probability=0.1,
 )
+
+
+def default_factory() -> EnvironmentParameters:
+    return copy.deepcopy(default)

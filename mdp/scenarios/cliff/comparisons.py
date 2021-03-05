@@ -1,14 +1,15 @@
 from __future__ import annotations
 
 from mdp import common
+from mdp.scenarios.cliff import comparison
 
 
-def cliff_alpha() -> common.Comparison:
-    comparison = common.Comparison(
-        environment_parameters=common.EnvironmentParameters(
-            environment_type=common.EnvironmentType.CLIFF,
-            actions_list=common.ActionsList.FOUR_MOVES,
-        ),
+def cliff_alpha() -> comparison.Comparison:
+    comparison_ = comparison.Comparison(
+        # environment_parameters=environment_parameters.EnvironmentParameters(
+        #     grid=grids.CLIFF_1,
+        #     actions_list=common.ActionsList.FOUR_MOVES,
+        # ),
         comparison_settings=common.Settings(
             runs=10,
             training_episodes=100,
@@ -30,15 +31,15 @@ def cliff_alpha() -> common.Comparison:
             y_max=0,
         ),
     )
-    return comparison
+    return comparison_
 
 
-def cliff_episode() -> common.Comparison:
-    comparison = common.Comparison(
-        environment_parameters=common.EnvironmentParameters(
-            environment_type=common.EnvironmentType.CLIFF,
-            actions_list=common.ActionsList.FOUR_MOVES,
-        ),
+def cliff_episode() -> comparison.Comparison:
+    comparison_ = comparison.Comparison(
+        # environment_parameters=environment_parameters.EnvironmentParameters(
+        #     grid=grids.CLIFF_1,
+        #     actions_list=common.ActionsList.FOUR_MOVES,
+        # ),
         comparison_settings=common.Settings(
             runs=1,
             training_episodes=100,
@@ -71,4 +72,4 @@ def cliff_episode() -> common.Comparison:
             y_max=0
         ),
     )
-    return comparison
+    return comparison_

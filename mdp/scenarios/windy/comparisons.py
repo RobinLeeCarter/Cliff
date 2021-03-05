@@ -1,13 +1,13 @@
 from __future__ import annotations
 
 from mdp import common
+from mdp.scenarios.windy import comparison, environment_parameters
 
 
-def windy_timestep(random_wind: bool = False) -> common.Comparison:
-    comparison = common.Comparison(
-        environment_parameters=common.EnvironmentParameters(
-            environment_type=common.EnvironmentType.WINDY,
-            actions_list=common.ActionsList.FOUR_MOVES,
+def windy_timestep(random_wind: bool = False) -> comparison.Comparison:
+    comparison_ = comparison.Comparison(
+        environment_parameters=environment_parameters.EnvironmentParameters(
+            # actions_list=common.ActionsList.FOUR_MOVES,
             random_wind=random_wind,
         ),
         comparison_settings=common.Settings(
@@ -35,4 +35,4 @@ def windy_timestep(random_wind: bool = False) -> common.Comparison:
         #     show_demo=False
         # )
     )
-    return comparison
+    return comparison_

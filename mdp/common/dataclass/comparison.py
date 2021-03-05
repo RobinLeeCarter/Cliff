@@ -1,5 +1,6 @@
 from __future__ import annotations
 import dataclasses
+import abc
 
 from mdp.common import utils
 from mdp.common.dataclass import settings, graph_values, grid_view_parameters, environment_parameters
@@ -7,10 +8,10 @@ from mdp.common.dataclass.breakdown_parameters import breakdown_parameters_, bre
 
 
 @dataclasses.dataclass
-class Comparison:
-    # environment
-    environment_parameters: environment_parameters.EnvironmentParameters = \
-        dataclasses.field(default_factory=environment_parameters.default_factory)
+class Comparison(abc.ABC):
+    # environment (abstract - must be derived, none_factory never called)
+    environment_parameters: environment_parameters.EnvironmentParameters
+    # = dataclasses.field(default_factory=environment_parameters.none_factory())
 
     # training session settings
     comparison_settings: settings.Settings = dataclasses.field(default_factory=settings.default_factory)
@@ -31,7 +32,7 @@ class Comparison:
     def __post_init__(self):
         # Push comparison values or default values into most settings attributes if currently =None
         # model
-        utils.set_none_to_default(self.environment_parameters, environment_parameters.default)
+        # utils.set_none_to_default(self.environment_parameters, environment_parameters.default)
 
         if isinstance(self.breakdown_parameters, breakdown_algorithm_by_alpha.BreakdownAlgorithmByAlpha):
             utils.set_none_to_default(self.breakdown_parameters, breakdown_algorithm_by_alpha.default)

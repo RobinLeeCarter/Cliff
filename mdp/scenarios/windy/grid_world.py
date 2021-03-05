@@ -4,16 +4,16 @@ import numpy as np
 
 from mdp import common
 from mdp.scenarios.common.model import position_move
+from mdp.scenarios.windy import environment_parameters
 
 
 class GridWorld(position_move.GridWorld):
     """GridWorld doesn't know about states and actions it just deals in the rules of the grid"""
-    def __init__(self, grid_array: np.ndarray, upward_wind: np.ndarray, random_wind: bool = False):
-        super().__init__(grid_array)
-        self.upward_wind: np.ndarray = upward_wind
-        self.random_wind: bool = random_wind
-
-        self._random_wind_choices = np.array([-1, 0, 1], dtype=int)
+    def __init__(self, environment_parameters_: environment_parameters.EnvironmentParameters):
+        super().__init__(environment_parameters_)
+        self.upward_wind: np.ndarray = environment_parameters_.upward_wind
+        self.random_wind: bool = environment_parameters_.random_wind
+        self._random_wind_choices: np.ndarray = environment_parameters_.random_wind_choices
 
     def change_request(self, current_position: common.XY, move: common.XY) -> common.XY:
         wind = self._get_wind(current_position)

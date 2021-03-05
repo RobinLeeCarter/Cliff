@@ -1,26 +1,21 @@
 from __future__ import annotations
 from typing import Optional
 import dataclasses
-import copy
+import abc
 
+import numpy as np
 
 from mdp.common import enums
 
 
 @dataclasses.dataclass
-class EnvironmentParameters:
+class EnvironmentParameters(abc.ABC):
     environment_type: Optional[enums.EnvironmentType] = None
+    grid: Optional[np.ndarray] = None
     actions_list: Optional[enums.ActionsList] = None
-    random_wind: Optional[bool] = None
     verbose: Optional[bool] = None
 
 
-default: EnvironmentParameters = EnvironmentParameters(
-    actions_list=enums.ActionsList.FOUR_MOVES,
-    random_wind=False,
-    verbose=False,
-)
+# def none_factory() -> EnvironmentParameters:
+#     return EnvironmentParameters()
 
-
-def default_factory() -> EnvironmentParameters:
-    return copy.deepcopy(default)

@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-import numpy as np
-
 from mdp import common
 from mdp.model import environment
 from mdp.scenarios.common.model import position_move
@@ -10,13 +8,7 @@ from mdp.scenarios.random_walk import grid_world
 
 class Environment(position_move.Environment):
     def __init__(self, environment_parameters: common.EnvironmentParameters):
-        grid = np.array([
-            [3, 0, 0, 2, 0, 0, 3]
-        ], dtype=np.int)
-        v_optimal = np.array([
-            [0, 1/6, 2/6, 3/6, 4/6, 5/6, 0]
-        ], dtype=np.float)
-        grid_world_ = grid_world.GridWorld(grid, v_optimal)
+        grid_world_ = grid_world.GridWorld(environment_parameters)
         super().__init__(environment_parameters, grid_world_)
 
     def _get_response(self) -> environment.Response:

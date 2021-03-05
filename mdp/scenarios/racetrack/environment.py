@@ -4,15 +4,13 @@ from typing import TYPE_CHECKING, Generator, Optional
 if TYPE_CHECKING:
     from mdp import common
 from mdp.model import environment
-from mdp.scenarios.racetrack import constants
-from mdp.scenarios.racetrack.model import action, state, grid_world
+from mdp.scenarios.racetrack import action, grid_world, environment_parameters, state
 
 
 class Environment(environment.Environment):
-    def __init__(self, environment_parameters: common.EnvironmentParameters):
-        grid_array = constants.TRACK
-        grid_world_ = grid_world.GridWorld(grid_array)
-        super().__init__(environment_parameters, grid_world_)
+    def __init__(self, environment_parameters_: environment_parameters.EnvironmentParameters):
+        grid_world_ = grid_world.GridWorld(environment_parameters_)
+        super().__init__(environment_parameters_, grid_world_)
 
         # downcast states and actions so properties can be used freely
         self.states: list[state.State] = self.states
@@ -22,18 +20,19 @@ class Environment(environment.Environment):
         self.grid_world_: grid_world.GridWorld = self.grid_world_
 
         self._reward: float = 0.0
+        self._extra_reward_for_failure: float = environment_parameters_.extra_reward_for_failure
 
         # velocity
-        self.min_vx: int = 0
-        self.max_vx: int = constants.MAX_VELOCITY
-        self.min_vy: int = 0
-        self.max_vy: int = constants.MAX_VELOCITY
+        self.min_vx: int = environment_parameters_.min_velocity
+        self.max_vx: int = environment_parameters_.max_velocity
+        self.min_vy: int = environment_parameters_.min_velocity
+        self.max_vy: int = environment_parameters_.max_velocity
 
         # acceleration
-        self.min_ax: int = constants.MIN_ACCELERATION
-        self.max_ax: int = constants.MAX_ACCELERATION
-        self.min_ay: int = constants.MIN_ACCELERATION
-        self.max_ay: int = constants.MAX_ACCELERATION
+        self.min_ax: int = environment_parameters_.min_acceleration
+        self.max_ax: int = environment_parameters_.max_acceleration
+        self.min_ay: int = environment_parameters_.min_acceleration
+        self.max_ay: int = environment_parameters_.max_acceleration
 
     # region Sets
     def _build_states(self):
@@ -111,7 +110,7 @@ class Environment(environment.Environment):
         elif self._square == common.Square.GRASS:
             # failure, move back to start line
             # self.pre_reset_state = state.State(x, y, vx, vy, is_reset=True)
-            self._reward = -1.0 + constants.EXTRA_REWARD_FOR_FAILURE
+            self._reward = -1.0 + self._extra_reward_for_failure
             self._projected_state = self._get_a_start_state()
             if self.verbose:
                 print(f"Grass at {new_position}")

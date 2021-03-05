@@ -52,5 +52,5 @@ class ReturnByAlpha(breakdown_.Breakdown):
             x_min=self.breakdown_parameters.alpha_min,
             x_max=self.breakdown_parameters.alpha_max,
         )
-        graph_values.apply_default_to_nones(self.comparison.graph_values)
+        common.set_none_to_default(graph_values, self.comparison.graph_values)
         return graph_values

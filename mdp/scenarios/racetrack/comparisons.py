@@ -1,12 +1,13 @@
 from __future__ import annotations
 
 from mdp import common
+from mdp.scenarios.racetrack import comparison, environment_parameters, grids
 
 
-def cliff_episode() -> common.Comparison:
-    comparison = common.Comparison(
-        environment_parameters=common.EnvironmentParameters(
-            environment_type=common.EnvironmentType.RACETRACK,
+def racetrack_episode() -> comparison.Comparison:
+    comparison_ = comparison.Comparison(
+        environment_parameters=environment_parameters.EnvironmentParameters(
+            grid=grids.TRACK_1
         ),
         comparison_settings=common.Settings(
             runs=1,
@@ -39,4 +40,4 @@ def cliff_episode() -> common.Comparison:
             y_max=0
         ),
     )
-    return comparison
+    return comparison_
