@@ -25,7 +25,7 @@ default: EnvironmentParameters = EnvironmentParameters(
     max_velocity=4,
     min_acceleration=-1,
     max_acceleration=+1,
-    extra_reward_for_failure=-40.0,
+    extra_reward_for_failure=0.0,
     skid_probability=0.1,
 )
 
