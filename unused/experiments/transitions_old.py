@@ -21,37 +21,27 @@ class Action:
 @dataclass(frozen=True)
 class Response:
     """(s',r) = (new_state, reward)"""
-    state: state.State
+    state: State
     reward: Optional[float]
 
-
-# class _RewardProbDict(dict[float, float]):
-#      def __missing__(self, key):
-#          return 0.0
 
 class RewardDistribution:
     """un-normalised probability distribution p(r) of possible rewards from Environment for one (s,a,s')"""
     def __init__(self):
-        # dictionary for build
-        # key on float is not ideal but also not a problem if 2 keys created for the same value
-        # self._distribution: _RewardProbDict = _RewardProbDict()
-        # self._distribution: dict[float, float] = {}
+        # using a list rather than a dictionary as 20-30% faster for draw() which is called with high frequency
+        """
+        self._rewards: r
+        self._probabilities: p(s',r|s,a)
+        self.expected_reward: E[r|s,a,s']
+        self.state_probability: p(s'|s,a)
+        """
+        self._rewards: list[float] = []         # r
+        self._probabilities: list[float] = []   # p(s',r|s,a)
 
-        # using a list rather than a dictionary as 20-30% faster for draw() which is frequently called
-        self._rewards: list[float] = []
-        self._probabilities: list[float] = []    # un-normalised probabilities
-
-        self.expected_reward: float = 0.0
-        self.total_probability: float = 0.0
-        # self._normalised_probabilities: np.ndarray = np.array([], dtype=float)
+        self.expected_reward: float = 0.0       # E[r|s,a,s']
+        self.state_probability: float = 0.0     # p(s'|s,a)
 
     def add(self, reward: float, probability: float):
-        # self._distribution[reward] += probability
-
-        # probability = self.get((state, action), ResponseDistribution())
-        # if not response_distribution:
-        #     self[(state, action)] = response_distribution
-
         if reward in self._rewards:
             index = self._rewards.index(reward)
             self._probabilities[index] += probability
@@ -59,69 +49,98 @@ class RewardDistribution:
             self._rewards.append(reward)
             self._probabilities.append(probability)
 
-        # if reward in self._distribution:
-        #     self._distribution[reward] += probability
-        #     index = self._rewards.index(reward)
-        # else:
-        #     self._distribution[reward] = probability
-
-
         self.expected_reward += reward * probability
-        self.total_probability += probability
-        # self._normalised_probabilities = np.array(self.probabilities, dtype=float) / self._total_probability
+        self.state_probability += probability
+
+    def __iter__(self) -> Generator[(float, float), None, None]:
+        for reward, probability in zip(self._rewards, self._probabilities):
+            yield reward, probability
 
     def draw(self) -> float:
-        # if not self._rewards:
-        #     self._rewards = list(self._distribution.keys())
-        #     self._probabilities = list(self._distribution.values())
-        # common.rng.choice(self.rewards, p=self._normalised_probabilities)
+        """draw a reward from reward distribution"""
         return random.choices(self._rewards, weights=self._probabilities)[0]
 
 
-# class _StateRewardDistributionDict(dict[State, RewardDistribution]):
-#      def __missing__(self, key):
-#          return RewardDistribution()
+dist = RewardDistribution()
+dist.add(reward=10.0, probability=0.1)
+dist.add(reward=20.0, probability=0.2)
+dist.add(reward=30.0, probability=0.3)
+dist.add(reward=40.0, probability=0.4)
+
+for reward_, probability_ in dist:
+    print(reward_, probability_)
+
+print(dist.draw())
+print(dist.draw())
+print(dist.draw())
+print(dist.draw())
+
 
 class StateDistribution:
     """normalised probability distribution p(s') of possible next states from Environment for one (s,a)"""
     def __init__(self):
-        # or dict[Response, float] but reward is float so unwise
-        self._distribution: dict[State, RewardDistribution] = {}
-        # self._distribution: dict[State, float] = {}
+        self._states: list[State] = []          # s'
+        self._probabilities: list[float] = []   # p(s'|s,a)
+        self._reward_distributions: list[RewardDistribution] = []
 
-    def add_response_probability(self, response_: Response, probability: float):
-        new_state = response_.state
-        reward = response_.reward
+        # duplication of lookup for performance
+        self._state_lookup: dict[State, RewardDistribution] = {}
 
-        reward_distribution: RewardDistribution
-        if new_state in self._distribution:
-            reward_distribution = self._distribution[new_state]
+        self._expected_reward: float = 0.0      # E[r|s,a]
+        self._total_probability: float = 0.0    # should be 1.0
+
+    @property
+    def expected_reward(self) -> float:
+        return self._expected_reward
+
+    def add(self, state: State, reward: float, probability: float):
+        """add s', r, p(s',r|s,a)"""
+        if state in self._states:
+            index = self._states.index(state)
+            self._probabilities[index] += probability
+            self._reward_distributions[index].add(reward, probability)
         else:
+            self._states.append(state)
+            self._probabilities.append(probability)
             reward_distribution = RewardDistribution()
-            self._distribution[new_state] = reward_distribution
-        reward_distribution.add(reward, probability)
+            reward_distribution.add(reward, probability)
+            self._reward_distributions.append(reward_distribution)
+            self._state_lookup[state] = reward_distribution
 
-        # reward_distribution: RewardDistribution = self._distribution[response_.state]
-        # reward_distribution.add(response_.reward, probability)
+        self._expected_reward += reward * probability
+        self._total_probability += probability
 
-        # go faster code - not really needed
-        # reward_distribution: RewardsDistribution = self.get((state, action), ResponseDistribution())
-        # if not response_distribution:
-        #     self[(state, action)] = response_distribution
-        # reward_distribution: RewardDistribution
+    def get_state_probability(self, state: State) -> float:
+        """p(s'|s,a)"""
+        reward_distribution = self._state_lookup.get(state)
+        if reward_distribution:
+            return reward_distribution.state_probability
+        else:
+            return 0
 
+    def __iter__(self) -> Generator[(State, float, float), None, None]:
+        """iterator for tuple (s', E[r|s,a,s'], p(s'|s,a)) """
+        for state, reward_distribution in zip(self._states, self._reward_distributions):
+            yield state, reward_distribution.expected_reward, reward_distribution.state_probability
 
-
-    def get_state_probability(self, new_state: State) -> float:
-        return self._distribution[new_state].total_probability
-
-    def get_state_expected_rewards(self, new_state: State) -> float:
-        return self._distribution[new_state].expected_reward
+    def responses(self) -> Generator[(Response, float), None, None]:
+        """iterator for tuple (s', r, p(s',r|s,a) ) """
+        for state, reward_distribution in zip(self._states, self._reward_distributions):
+            for reward, probability in reward_distribution:
+                yield Response(state, reward), probability
 
     def draw(self) -> Response:
+        """draw a response:(state, reward) from state and reward distributions a.k.a p(s',r|s,a) """
+        state = random.choices(self._states, weights=self._probabilities)[0]
+        reward_distribution = self._state_lookup[state]
+        reward = reward_distribution.draw()
+        return Response(state, reward)
 
+    # def get_state_expected_rewards(self, new_state: State) -> float:
+    #     return self._distribution[new_state].expected_reward
 
-
+    # def draw(self) -> Response:
+    #     pass
 
 
 hello_state = State(name="hello")
