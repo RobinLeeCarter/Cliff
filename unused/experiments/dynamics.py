@@ -4,8 +4,7 @@ from typing import Optional, Generator
 
 import random
 # import numpy as np
-
-from mdp import common
+# from mdp import common
 
 
 @dataclass(frozen=True)
@@ -35,11 +34,15 @@ class RewardDistribution:
         self.expected_reward: E[r|s,a,s']
         self.state_probability: p(s'|s,a)
         """
-        self._rewards: list[float] = []         # r
-        self._probabilities: list[float] = []   # p(s',r|s,a)
+        self._rewards: list[float] = []             # r
+        self._probabilities: list[float] = []       # p(s',r|s,a)
 
-        self.expected_reward: float = 0.0       # E[r|s,a,s']
-        self.state_probability: float = 0.0     # p(s'|s,a)
+        self.reward_times_p: float = 0.0  # Sum over r of r.p(s',r|s,a)
+        self.state_probability: float = 0.0         # p(s'|s,a)
+
+    @property
+    def expected_reward(self) -> float:             # E[r|s,a,s'] = Sum over r of r.p(s',r|s,a) / p(s'|s,a)
+        return self.reward_times_p / self.state_probability
 
     def add(self, reward: float, probability: float):
         if reward in self._rewards:
@@ -49,7 +52,7 @@ class RewardDistribution:
             self._rewards.append(reward)
             self._probabilities.append(probability)
 
-        self.expected_reward += reward * probability
+        self.reward_times_p += reward * probability
         self.state_probability += probability
 
     def get_reward_probability(self, reward: float) -> float:
@@ -62,7 +65,7 @@ class RewardDistribution:
         else:
             return 0.0
 
-    def __iter__(self) -> Generator[(float, float), None, None]:
+    def rewards(self) -> Generator[(float, float), None, None]:
         """r, p(s',r|s,a)"""
         for reward, probability in zip(self._rewards, self._probabilities):
             yield reward, probability
@@ -82,7 +85,7 @@ class StateDistribution:
         # duplication of lookup for performance
         self._state_lookup: dict[State, RewardDistribution] = {}
 
-        self._expected_reward: float = 0.0      # E[r|s,a]
+        self._expected_reward: float = 0.0      # E[r|s,a] = Sum over r,s' of r.p(s',r|s,a)
         self._total_probability: float = 0.0    # should be 1.0
 
     @property
@@ -122,15 +125,15 @@ class StateDistribution:
         else:
             return 0.0
 
-    def __iter__(self) -> Generator[(State, float, float), None, None]:
+    def states(self) -> Generator[(State, float, float), None, None]:
         """iterator for tuple(s', E[r|s,a,s'], p(s'|s,a))"""
         for state, reward_distribution in zip(self._states, self._reward_distributions):
             yield state, reward_distribution.expected_reward, reward_distribution.state_probability
 
-    def state_reward(self) -> Generator[(State, float, float), None, None]:
+    def states_and_rewards(self) -> Generator[(State, float, float), None, None]:
         """iterator for tuple(s', r, p(s',r|s,a))"""
         for state, reward_distribution in zip(self._states, self._reward_distributions):
-            for reward, probability in reward_distribution:
+            for reward, probability in reward_distribution.rewards():
                 yield state, reward, probability
 
     def draw(self) -> (State, float):
@@ -145,6 +148,16 @@ class Dynamics:
     """p(s',r|s,a)"""
     def __init__(self):
         self._state_distributions: dict[tuple[State, Action], StateDistribution] = {}
+        self._state: Optional[State] = None
+        self._action: Optional[Action] = None
+        self._state_distribution: Optional[StateDistribution] = None
+
+    @property
+    def expected_reward(self) -> Optional[float]:
+        if self._state_distribution:
+            return self._state_distribution.expected_reward
+        else:
+            return None
 
     def add(self, state: State, action: Action, new_state: State, reward: float, probability: float):
         """add s, a, s', r, p(s',r|s,a)"""
@@ -157,45 +170,130 @@ class Dynamics:
             state_distribution.add(new_state, reward, probability)
             self._state_distributions[state_action] = state_distribution
 
-    def draw(self, state: State, action: Action) -> (State, float):
-        """pass (s,a) get (s',r)"""
+    def set_state_action(self, state: State, action: Action):
+        """set state and action before using the functions below"""
+        self._state: State = state
+        self._action: Action = action
         state_action: tuple[State, Action] = (state, action)
-        state_distribution = self._state_distributions[state_action]
-        return state_distribution.draw()
+        self._state_distribution = self._state_distributions.get(state_action)
 
-    def states(self, state: State, action: Action) -> Generator[(State, float, float), None, None]:
-        """pass (s,a) iterator for tuple(s', E[r|s,a,s'], p(s'|s,a))"""
-        state_action: tuple[State, Action] = (state, action)
-        state_distribution = self._state_distributions.get(state_action)
-        yield from state_distribution
+    def draw(self) -> (State, float):
+        """get (s',r)"""
+        return self._state_distribution.draw()
 
-    def state_rewards(self, state: State, action: Action) -> Generator[(State, float, float), None, None]:
-        """pass (s,a) iterator for tuple(s', r, p(s',r|s,a))"""
-        state_action: tuple[State, Action] = (state, action)
-        state_distribution = self._state_distributions.get(state_action)
-        yield from state_distribution.state_reward()
+    def states(self) -> Generator[(State, float, float), None, None]:
+        """iterator for tuple(s', E[r|s,a,s'], p(s'|s,a))"""
+        yield from self._state_distribution.states()
+
+    def states_and_rewards(self) -> Generator[(State, float, float), None, None]:
+        """iterator for tuple(s', r, p(s',r|s,a))"""
+        yield from self._state_distribution.states_and_rewards()
+
+    # def draw(self, state: State, action: Action) -> (State, float):
+    #     """pass (s,a) get (s',r)"""
+    #     state_action: tuple[State, Action] = (state, action)
+    #     state_distribution = self._state_distributions[state_action]
+    #     return state_distribution.draw()
+
+    # def get_expected_reward(self, state: State, action: Action):
+    #     state_action: tuple[State, Action] = (state, action)
+    #     state_distribution = self._state_distributions.get(state_action)
+    #     return state_distribution.expected_reward
+
+    # def states(self, state: State, action: Action) -> Generator[(State, float, float), None, None]:
+    #     """pass (s,a) iterator for tuple(s', E[r|s,a,s'], p(s'|s,a))"""
+    #     state_action: tuple[State, Action] = (state, action)
+    #     state_distribution = self._state_distributions.get(state_action)
+    #     yield from state_distribution.states()
+
+    # def states_and_rewards(self, state: State, action: Action) -> Generator[(State, float, float), None, None]:
+    #     """pass (s,a) iterator for tuple(s', r, p(s',r|s,a))"""
+    #     state_action: tuple[State, Action] = (state, action)
+    #     state_distribution = self._state_distributions.get(state_action)
+    #     yield from state_distribution.states_and_rewards()
 
 
-# test code
+# RewardDistribution test
+print("RewardDistribution")
 
-dist = RewardDistribution()
-dist.add(reward=10.0, probability=0.1)
-dist.add(reward=20.0, probability=0.2)
-dist.add(reward=30.0, probability=0.3)
-dist.add(reward=40.0, probability=0.4)
+r_dist = RewardDistribution()
+r_dist.add(reward=10.0, probability=0.1)
+r_dist.add(reward=20.0, probability=0.2)
+r_dist.add(reward=30.0, probability=0.3)
+r_dist.add(reward=40.0, probability=0.4)
 
-for reward_, probability_ in dist:
+print("reward values...")
+for reward_, probability_ in r_dist.rewards():
     print(reward_, probability_)
 
-print(dist.draw())
-print(dist.draw())
-print(dist.draw())
-print(dist.draw())
+print("drawing...")
+print(r_dist.draw())
+print(r_dist.draw())
+print(r_dist.draw())
+print(r_dist.draw())
 
+
+# StateDistribution
+print("StateDistribution")
 hello_state = State(name="hello")
+goodbye_state = State(name="goodbye")
 left_action = Action(name="left")
 right_action = Action(name="right")
-goodbye_state = State(name="goodbye")
-response_1 = Response(hello_state, 100.0)
-response_2 = Response(goodbye_state, 1.0)
 
+s_dist = StateDistribution()
+s_dist.add(hello_state, 10.0, 0.1)
+s_dist.add(hello_state, 20.0, 0.2)
+s_dist.add(goodbye_state, -30.0, 0.3)
+s_dist.add(goodbye_state, -40.0, 0.4)
+
+print("(new_state, reward) values...")
+for new_state_, reward_, probability_ in s_dist.states_and_rewards():
+    print(new_state_, reward_, probability_)
+
+print("new_state values...")
+for new_state_, expected_reward_, probability_ in s_dist.states():
+    print(new_state_, expected_reward_, probability_)
+
+print("state distribution values...")
+print(f"expected_reward={s_dist.expected_reward}")
+# noinspection PyProtectedMember
+print(f"total_probability={s_dist._total_probability}")
+
+print("drawing...")
+print(s_dist.draw())
+print(s_dist.draw())
+print(s_dist.draw())
+print(s_dist.draw())
+print(s_dist.draw())
+
+# Dynamics
+print("Dynamics")
+dynamics = Dynamics()
+dynamics.add(state=hello_state, action=left_action, new_state=hello_state, reward=10.0, probability=0.25)
+dynamics.add(state=hello_state, action=left_action, new_state=hello_state, reward=12.0, probability=0.25)
+dynamics.add(state=hello_state, action=left_action, new_state=goodbye_state, reward=-11.0, probability=0.5)
+dynamics.add(state=hello_state, action=right_action, new_state=goodbye_state, reward=20.0, probability=1.0)
+dynamics.add(state=goodbye_state, action=left_action, new_state=hello_state, reward=30.0, probability=1.0)
+dynamics.add(state=goodbye_state, action=right_action, new_state=goodbye_state, reward=40.0, probability=1.0)
+
+
+def output_state_action(state: State, action: Action):
+    print()
+    print(f"({state.name}, {action.name}) values...")
+    dynamics.set_state_action(state, action)
+
+    print(f"expected_reward={dynamics.expected_reward}")
+
+    print("new_state values...")
+    for new_state, expected_reward, probability in dynamics.states():
+        print(new_state, expected_reward, probability)
+
+    print("new_state, reward values...")
+    for new_state, reward, probability in dynamics.states_and_rewards():
+        print(new_state, reward, probability)
+
+
+output_state_action(hello_state, left_action)
+output_state_action(hello_state, right_action)
+output_state_action(goodbye_state, left_action)
+output_state_action(goodbye_state, right_action)
