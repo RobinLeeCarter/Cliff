@@ -3,14 +3,12 @@ from __future__ import annotations
 from mdp import common
 from mdp.scenarios.factory import environment_factory
 from mdp.scenarios.position_move import state, action
+from mdp.scenarios.cliff import environment_parameters
 
 
 def cliff_test() -> bool:
-    environment_parameters = common.EnvironmentParameters(
-        environment_type=common.EnvironmentType.CLIFF,
-        actions_list=common.ActionsList.FOUR_MOVES
-    )
-    environment_ = environment_factory.environment_factory(environment_parameters)
+    environment_parameters_ = environment_parameters.default
+    environment_ = environment_factory.environment_factory(environment_parameters_)
     print(type(environment_))
 
     for state_ in environment_.states:
