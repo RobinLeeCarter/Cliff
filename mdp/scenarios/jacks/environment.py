@@ -1,8 +1,9 @@
 from __future__ import annotations
 
-from mdp import common
+import random
+
 from mdp.model import environment
-from mdp.scenarios.jacks import state, action, environment_parameters   # grid_world
+from mdp.scenarios.jacks import state, action, environment_parameters, location, location_outcome   # grid_world
 
 
 class Environment(environment.Environment):
@@ -20,6 +21,19 @@ class Environment(environment.Environment):
 
         self._max_cars: int = environment_parameters_.max_cars
         self._max_transfers: int = environment_parameters_.max_transfers
+        self._rental_revenue: float = environment_parameters_.rental_revenue
+        self._transfer_cost: float = environment_parameters_.transfer_cost
+
+        self._location_1: location.Location = location.Location(
+            max_cars=self._max_cars,
+            rental_rate=environment_parameters_.rental_rate_1,
+            return_rate=environment_parameters_.return_rate_1,
+        )
+        self._location_2: location.Location = location.Location(
+            max_cars=self._max_cars,
+            rental_rate=environment_parameters_.rental_rate_2,
+            return_rate=environment_parameters_.return_rate_2,
+        )
 
     # region Sets
     def _build_states(self):
@@ -41,10 +55,10 @@ class Environment(environment.Environment):
             self.actions.append(new_action)
 
     def is_action_compatible_with_state(self, state_: state.State, action_: action.Action):
-        new_cars_1 = state_.cars_cob_1 - action_.transfer_1_to_2
-        new_cars_2 = state_.cars_cob_2 + action_.transfer_1_to_2
-        if 0 <= new_cars_1 <= self._max_cars and \
-                0 <= new_cars_2 <= self._max_cars:
+        cars_sob_1 = state_.cars_cob_1 - action_.transfer_1_to_2
+        cars_sob_2 = state_.cars_cob_2 + action_.transfer_1_to_2
+        if 0 <= cars_sob_1 <= self._max_cars and \
+                0 <= cars_sob_2 <= self._max_cars:
             return True
         else:
             return False
@@ -57,28 +71,40 @@ class Environment(environment.Environment):
                 self._add_dynamics(state_, action_)
 
     def _add_dynamics(self, state_: state.State, action_: action.Action):
-        new_cars_1 = state_.cars_cob_1 - action_.transfer_1_to_2
-        new_cars_2 = state_.cars_cob_2 + action_.transfer_1_to_2
+        total_costs: float = 0.0
+        total_costs += self._calc_cost_of_transfers(action_.transfer_1_to_2)
+        cars_sob_1 = state_.cars_cob_1 - action_.transfer_1_to_2
+        cars_sob_2 = state_.cars_cob_2 + action_.transfer_1_to_2
 
+        location_outcome_1: location_outcome.LocationOutcome
+        location_outcome_2: location_outcome.LocationOutcome
+        for location_outcome_1 in self._location_1.day_distribution(cars_sob_1):
+            for location_outcome_2 in self._location_2.day_distribution(cars_sob_2):
+                total_cars_rented = location_outcome_1.cars_rented + location_outcome_2.cars_rented
+                total_revenue = total_cars_rented * self._rental_revenue
+                joint_probability = location_outcome_1.probability * location_outcome_2.probability
+                reward = total_revenue - total_costs
+                new_state = state.State(cars_cob_1=location_outcome_1.ending_cars,
+                                        cars_cob_2=location_outcome_2.ending_cars,
+                                        is_terminal=False)
+                self.dynamics.add(state_, action_, new_state, reward, joint_probability)
 
+    def _calc_cost_of_transfers(self, transfer_1_to_2: int) -> float:
+        """This will change for second part of problem"""
+        transfer_cost = self._transfer_cost * abs(transfer_1_to_2)
+        return transfer_cost
     # endregion
 
+    # region Operation
+    def _get_a_start_state(self) -> state.State:
+        return random.choice(self.states)
 
+    def _apply_action(self):
+        self._new_state, self._reward = self.dynamics.draw()
 
     def _get_response(self) -> environment.Response:
-        reward: float
-        self._new_state: state.State
-        if self._new_state.position == common.XY(x=self.grid_world.max_x, y=0):
-            reward = 1.0
-        else:
-            reward = 0.0
-
         return environment.Response(
-            reward=reward,
+            reward=self._reward,
             state=self._new_state
         )
-
-    def get_optimum(self, state_: environment.State) -> float:
-        self.grid_world: grid_world.GridWorld
-        state_: state.State
-        return self.grid_world.get_optimum(state_.position)
+    # endregion

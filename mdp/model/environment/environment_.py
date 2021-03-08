@@ -33,6 +33,7 @@ class Environment(abc.ABC):
         self._action: Optional[action.Action] = None
         self._square: Optional[common.Square] = None
         self._new_state: Optional[state.State] = None
+        self._reward: Optional[float] = None
 
         # None to ensure not used when not used/initialised
         self.dynamics: Optional[dynamics] = None
@@ -71,6 +72,8 @@ class Environment(abc.ABC):
 
     def _build_dynamics(self):
         raise NotImplementedError
+    # endregion
+
     # region Operation
     def start(self) -> response.Response:
         state_ = self._get_a_start_state()
