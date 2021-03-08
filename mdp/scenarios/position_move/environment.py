@@ -1,6 +1,6 @@
 from __future__ import annotations
-from abc import ABC
-from typing import Optional, TYPE_CHECKING
+import abc
+from typing import Optional, TYPE_CHECKING, Generator
 
 if TYPE_CHECKING:
     from mdp.model import algorithm, policy
@@ -11,7 +11,7 @@ from mdp.scenarios.position_move import grid_world, action, state
 from mdp.scenarios.factory import actions_list_factory
 
 
-class Environment(environment.Environment, ABC):
+class Environment(environment.Environment, abc.ABC):
     def __init__(self,
                  environment_parameters: common.EnvironmentParameters,
                  grid_world_: environment.GridWorld):
@@ -39,6 +39,12 @@ class Environment(environment.Environment, ABC):
 
     def _build_actions(self):
         self.actions = actions_list_factory.actions_list_factory(actions_list=self._environment_parameters.actions_list)
+
+    def actions_for_state(self, state_: state.State) -> Generator[action.Action, None, None]:
+        """set A(s)"""
+        for action_ in self.actions:
+            if self.is_action_compatible_with_state(state_, action_):
+                yield action_
     # endregion
 
     # region Operation
@@ -62,7 +68,7 @@ class Environment(environment.Environment, ABC):
             is_terminal = False
         self._new_state = state.State(is_terminal, new_position)
 
-    def update_grid_value_functions(self, algorithm_: algorithm.Episodic, policy_: policy.Policy):
+    def update_grid_value_functions(self, algorithm_: algorithm.Algorithm, policy_: policy.Policy):
         for state_ in self.states:
             if algorithm_.V:
                 self.grid_world.set_state_function(

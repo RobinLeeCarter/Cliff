@@ -12,6 +12,9 @@ class AlgorithmParameters:
     alpha_variable: Optional[bool] = None
     initial_v_value: Optional[float] = None
     initial_q_value: Optional[float] = None
+
+    theta: Optional[float] = None
+
     verbose: Optional[bool] = None
 
 

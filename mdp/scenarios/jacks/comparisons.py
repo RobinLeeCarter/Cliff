@@ -10,56 +10,16 @@ def jacks_policy_iteration() -> comparison.Comparison:
             runs=100,
             training_episodes=100,
             policy_parameters=common.PolicyParameters(
-                policy_type=common.PolicyType.NONE
+                policy_type=common.PolicyType.DETERMINISTIC
             ),
             algorithm_parameters=common.AlgorithmParameters(
-                initial_v_value=0.5
+                theta=0.1   # accuracy of policy_evaluation
             )
-        ),
-        breakdown_parameters=common.BreakdownParameters(
-            breakdown_type=common.BreakdownType.RMS_BY_EPISODE,
         ),
         settings_list=[
             common.Settings(
                 algorithm_parameters=common.AlgorithmParameters(
                     algorithm_type=common.AlgorithmType.TD_0,
-                    alpha=0.05,
-                )
-            ),
-            common.Settings(
-                algorithm_parameters=common.AlgorithmParameters(
-                    algorithm_type=common.AlgorithmType.TD_0,
-                    alpha=0.1,
-                )
-            ),
-            common.Settings(
-                algorithm_parameters=common.AlgorithmParameters(
-                    algorithm_type=common.AlgorithmType.TD_0,
-                    alpha=0.15,
-                )
-            ),
-            common.Settings(
-                algorithm_parameters=common.AlgorithmParameters(
-                    algorithm_type=common.AlgorithmType.CONSTANT_ALPHA_MC,
-                    alpha=0.01,
-                )
-            ),
-            common.Settings(
-                algorithm_parameters=common.AlgorithmParameters(
-                    algorithm_type=common.AlgorithmType.CONSTANT_ALPHA_MC,
-                    alpha=0.02,
-                )
-            ),
-            common.Settings(
-                algorithm_parameters=common.AlgorithmParameters(
-                    algorithm_type=common.AlgorithmType.CONSTANT_ALPHA_MC,
-                    alpha=0.03,
-                )
-            ),
-            common.Settings(
-                algorithm_parameters=common.AlgorithmParameters(
-                    algorithm_type=common.AlgorithmType.CONSTANT_ALPHA_MC,
-                    alpha=0.04,
                 )
             ),
         ],

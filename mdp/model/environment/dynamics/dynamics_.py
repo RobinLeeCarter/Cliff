@@ -15,7 +15,8 @@ class Dynamics:
         self._action: Optional[action.Action] = None
         self._state_distribution: Optional[state_distribution.StateDistribution] = None
 
-    def add(self, state_: state.State, action_: action.Action, new_state: state.State, reward: float, probability: float):
+    def add(self, state_: state.State, action_: action.Action,
+            new_state: state.State, reward: float, probability: float):
         """add s, a, s', r, p(s',r|s,a)"""
         state_action: tuple[state.State, action.Action] = (state_, action_)
         state_distribution_ = self._state_distributions.get(state_action)

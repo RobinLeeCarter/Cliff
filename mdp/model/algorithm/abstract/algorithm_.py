@@ -8,7 +8,7 @@ if TYPE_CHECKING:
 from mdp.model.algorithm import value_function
 
 
-class Episodic(abc.ABC):
+class Algorithm(abc.ABC):
     def __init__(self,
                  environment_: environment.Environment,
                  agent_: agent.Agent,
@@ -38,7 +38,6 @@ class Episodic(abc.ABC):
             self.V.initialize_values()
         if self.Q:
             self.Q.initialize_values()
-            self._make_policy_greedy_wrt_q()
 
     def parameter_changes(self, iteration: int):
         pass
@@ -47,10 +46,6 @@ class Episodic(abc.ABC):
         for state_ in self._environment.states:
             # works for single policy or dual policies
             self._agent.target_policy[state_] = self.Q.argmax_over_actions(state_)
-
-    @abc.abstractmethod
-    def do_episode(self, episode_length_timeout: int):
-        pass
 
     def print_q_coverage_statistics(self):
         self.Q.print_coverage_statistics()

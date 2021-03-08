@@ -25,6 +25,10 @@ class VQ(abstract.EpisodicOnline):
         self._create_v()
         self._create_q()
 
+    def initialize(self):
+        super().initialize()
+        self._make_policy_greedy_wrt_q()
+
     def parameter_changes(self, iteration: int):
         if self._alpha_variable:
             if iteration <= 50:

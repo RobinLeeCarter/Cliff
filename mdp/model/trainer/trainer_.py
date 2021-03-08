@@ -3,7 +3,7 @@ from typing import TYPE_CHECKING, Optional, Callable
 
 if TYPE_CHECKING:
     from mdp import common
-    from mdp.model import breakdown, agent
+    from mdp.model import breakdown, agent, algorithm
 
 
 class Trainer:
@@ -38,15 +38,18 @@ class Trainer:
         # process settings
         self.settings = settings
         self._agent.apply_settings(self.settings)
-        # self.algorithm_ = self.agent.algorithm
+        algorithm_: algorithm.Algorithm = self._agent.algorithm
+        algorithm_: algorithm.Episodic
+        episode_length_timeout = self.settings.episode_length_timeout
 
+        # self.algorithm_ = self.agent.algorithm
         # self.algorithm_ = self.algorithm_factory[self.settings.algorithm_parameters]
         # self.algorithm_.agent.new_policy(settings.policy_parameters)
         # self.algorithm_.agent.set_gamma(settings.gamma)
 
         if settings.review_every_step or settings.display_every_step:
             self._agent.set_step_callback(self.step)
-        settings.algorithm_title = self._agent.algorithm_title
+        settings.algorithm_title = algorithm_.title
         print(f"{settings.algorithm_title}: {settings.runs} runs")
 
         self.max_timestep = 0
@@ -64,7 +67,7 @@ class Trainer:
 
                 if not settings.review_every_step and self.timestep != 0:
                     self.timestep += 1  # start next episode from the next timestep
-                self._agent.do_episode()
+                algorithm_.do_episode(episode_length_timeout)
 
                 if self._verbose:
                     episode = self._agent.episode

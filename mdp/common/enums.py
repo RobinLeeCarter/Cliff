@@ -16,7 +16,6 @@ class UserEvent(enum.IntEnum):
 
 
 class BreakdownType(enum.IntEnum):
-    # NONE = enum.auto()
     EPISODE_BY_TIMESTEP = enum.auto()
     RETURN_BY_EPISODE = enum.auto()
     RMS_BY_EPISODE = enum.auto()
@@ -24,13 +23,18 @@ class BreakdownType(enum.IntEnum):
 
 
 class AlgorithmType(enum.IntEnum):
-    EXPECTED_SARSA = enum.auto()
-    VQ = enum.auto()
-    Q_LEARNING = enum.auto()
-    SARSA = enum.auto()
-    CONSTANT_ALPHA_MC = enum.auto()
+    DP_POLICY_EVALUATION = enum.auto()
+    DP_POLICY_IMPROVEMENT = enum.auto()
+    DP_POLICY_ITERATION = enum.auto()
+
     TD_0 = enum.auto()
     OFF_POLICY_MC_CONTROL = enum.auto()
+
+    CONSTANT_ALPHA_MC = enum.auto()
+    SARSA = enum.auto()
+    Q_LEARNING = enum.auto()
+    EXPECTED_SARSA = enum.auto()
+    VQ = enum.auto()
 
 
 class PolicyType(enum.IntEnum):

@@ -5,10 +5,10 @@ import abc
 if TYPE_CHECKING:
     from mdp.model import environment, agent
     from mdp import common
-from mdp.model.algorithm.abstract import episodic
+from mdp.model.algorithm.abstract import episodic_
 
 
-class EpisodicOnline(episodic.Episodic, abc.ABC):
+class EpisodicOnline(episodic_.Episodic, abc.ABC):
     def __init__(self,
                  environment_: environment.Environment,
                  agent_: agent.Agent,

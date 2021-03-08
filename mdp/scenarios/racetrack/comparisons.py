@@ -12,7 +12,7 @@ def racetrack_episode() -> comparison.Comparison:
         ),
         comparison_settings=common.Settings(
             runs=1,
-            training_episodes=100_000,
+            training_episodes=10_000,
             episode_print_frequency=1000,
             # display_every_step=True,
             dual_policy_relationship=common.DualPolicyRelationship.LINKED_POLICIES

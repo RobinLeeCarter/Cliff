@@ -67,9 +67,9 @@ class StateDistribution:
 
     def states_and_rewards(self) -> Generator[(state.State, float, float), None, None]:
         """iterator for tuple(s', r, p(s',r|s,a))"""
-        for state, reward_distribution in zip(self._states, self._reward_distributions):
-            for reward, probability in reward_distribution.rewards():
-                yield state, reward, probability
+        for state_, reward_distribution_ in zip(self._states, self._reward_distributions):
+            for reward, probability in reward_distribution_.rewards():
+                yield state_, reward, probability
 
     def draw(self) -> (state.State, float):
         """draw (s', r) from state and reward distributions p(s',r|s,a) """

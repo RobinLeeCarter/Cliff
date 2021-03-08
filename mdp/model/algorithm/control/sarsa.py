@@ -20,6 +20,10 @@ class Sarsa(abstract.EpisodicOnline):
         self.title = f"{self.name} α={self._alpha}"
         self._create_q()
 
+    def initialize(self):
+        super().initialize()
+        self._make_policy_greedy_wrt_q()
+
     def _start_episode(self):
         self._agent.choose_action()
 

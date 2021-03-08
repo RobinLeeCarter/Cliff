@@ -23,16 +23,19 @@ class Environment(environment.Environment):
         self._max_transfers: int = environment_parameters_.max_transfers
         self._rental_revenue: float = environment_parameters_.rental_revenue
         self._transfer_cost: float = environment_parameters_.transfer_cost
+        self._extra_rules: bool = environment_parameters_.extra_rules
 
         self._location_1: location.Location = location.Location(
             max_cars=self._max_cars,
             rental_rate=environment_parameters_.rental_rate_1,
             return_rate=environment_parameters_.return_rate_1,
+            excess_parking_cost=environment_parameters_.excess_parking_cost,
         )
         self._location_2: location.Location = location.Location(
             max_cars=self._max_cars,
             rental_rate=environment_parameters_.rental_rate_2,
             return_rate=environment_parameters_.return_rate_2,
+            excess_parking_cost=environment_parameters_.excess_parking_cost,
         )
 
     # region Sets
@@ -71,8 +74,10 @@ class Environment(environment.Environment):
                 self._add_dynamics(state_, action_)
 
     def _add_dynamics(self, state_: state.State, action_: action.Action):
-        total_costs: float = 0.0
-        total_costs += self._calc_cost_of_transfers(action_.transfer_1_to_2)
+        total_costs: float = self._calc_cost_of_transfers(action_.transfer_1_to_2)
+        if self._extra_rules:
+            total_costs += self._location_1.parking_costs(state_.cars_cob_1)
+            total_costs += self._location_2.parking_costs(state_.cars_cob_2)
         cars_sob_1 = state_.cars_cob_1 - action_.transfer_1_to_2
         cars_sob_2 = state_.cars_cob_2 + action_.transfer_1_to_2
 
@@ -91,7 +96,11 @@ class Environment(environment.Environment):
 
     def _calc_cost_of_transfers(self, transfer_1_to_2: int) -> float:
         """This will change for second part of problem"""
-        transfer_cost = self._transfer_cost * abs(transfer_1_to_2)
+        if self._extra_rules and transfer_1_to_2 >= 1:
+            transfers_incurring_cost = transfer_1_to_2 - 1  # one free ride
+        else:
+            transfers_incurring_cost = abs(transfer_1_to_2)
+        transfer_cost = self._transfer_cost * transfers_incurring_cost
         return transfer_cost
     # endregion
 

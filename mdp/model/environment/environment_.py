@@ -71,7 +71,7 @@ class Environment(abc.ABC):
         return True
 
     def _build_dynamics(self):
-        raise NotImplementedError
+        pass
     # endregion
 
     # region Operation
@@ -114,7 +114,7 @@ class Environment(abc.ABC):
     def _get_response(self) -> response.Response:
         pass
 
-    def update_grid_value_functions(self, algorithm_: algorithm.Episodic, policy_: policy.Policy):
+    def update_grid_value_functions(self, algorithm_: algorithm.Algorithm, policy_: policy.Policy):
         pass
 
     def is_valued_state(self, state_: state.State) -> bool:

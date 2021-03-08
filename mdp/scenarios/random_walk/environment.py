@@ -2,8 +2,7 @@ from __future__ import annotations
 
 from mdp import common
 from mdp.model import environment as base_environment
-from mdp.scenarios.position_move import environment
-from mdp.scenarios.jacks import state
+from mdp.scenarios.position_move import environment, state
 from mdp.scenarios.random_walk import grid_world
 
 
@@ -25,7 +24,7 @@ class Environment(environment.Environment):
             state=self._new_state
         )
 
-    def get_optimum(self, state_: base_environment.State) -> float:
+    def get_optimum(self, state_: state.State) -> float:
         self.grid_world: grid_world.GridWorld
         state_: state.State
         return self.grid_world.get_optimum(state_.position)

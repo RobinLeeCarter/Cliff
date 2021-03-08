@@ -17,6 +17,9 @@ class EnvironmentParameters(common.EnvironmentParameters):
     rental_revenue: Optional[float] = None
     transfer_cost: Optional[float] = None
 
+    extra_rules: Optional[bool] = None
+    excess_parking_cost: Optional[float] = None
+
 
 default: EnvironmentParameters = EnvironmentParameters(
     environment_type=common.EnvironmentType.JACKS,
@@ -28,6 +31,10 @@ default: EnvironmentParameters = EnvironmentParameters(
     return_rate_2=2.0,
     rental_revenue=10.0,
     transfer_cost=2.0,
+
+    extra_rules=False,
+    excess_parking_cost=4.0,
+
     verbose=False,
 )
 

@@ -10,7 +10,7 @@ def recorder_test() -> bool:
     agent_ = agent.Agent(environment_, e_greedy_policy)
 
     factory_ = algorithm.Factory(environment_, agent_)
-    algorithms: list[algorithm.Episodic] = [factory_[settings_] for settings_ in data.return_by_episode_settings]
+    algorithms: list[algorithm.Algorithm] = [factory_[settings_] for settings_ in data.return_by_episode_settings]
     av_recorder_ = recorder.Recorder()
 
     algorithm_ = algorithms[0]
