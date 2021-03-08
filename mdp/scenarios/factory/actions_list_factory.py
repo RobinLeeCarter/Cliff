@@ -5,7 +5,7 @@ if TYPE_CHECKING:
     from mdp.model import environment as base_environment
 
 from mdp import common
-from mdp.scenarios.jacks import action as pm
+from mdp.scenarios.position_move import action as pm
 
 
 def actions_list_factory(actions_list: common.ActionsList) -> list[base_environment.Action]:

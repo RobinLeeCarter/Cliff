@@ -3,25 +3,20 @@ from typing import Optional
 import dataclasses
 import copy
 
-import numpy as np
-
 from mdp import common
-from mdp.scenarios.random_walk import grids
 
 
 @dataclasses.dataclass
 class EnvironmentParameters(common.EnvironmentParameters):
-    v_optimal: Optional[np.ndarray] = None
-    random_move_choices: Optional[np.ndarray] = None
+    max_cars: Optional[int] = None
+    max_transfers: Optional[int] = None
 
 
 default: EnvironmentParameters = EnvironmentParameters(
-    environment_type=common.EnvironmentType.RANDOM_WALK,
-    actions_list=common.ActionsList.NO_ACTIONS,
-    grid=grids.GRID,
+    environment_type=common.EnvironmentType.JACKS,
+    max_cars=20,
+    max_transfers=5,
     verbose=False,
-    v_optimal=grids.V_OPTIMAL,
-    random_move_choices=grids.RANDOM_MOVE_CHOICES
 )
 
 

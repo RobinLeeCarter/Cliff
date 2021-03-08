@@ -58,14 +58,6 @@ class Environment(environment.Environment):
                 )
                 self.actions.append(new_action)
 
-    # possible need to materialise this if it's slow since it will be at the bottom of the loop
-    def actions_for_state(self, state_: state.State) -> \
-            Generator[action.Action, None, None]:
-        """set A(s)"""
-        for action_ in self.actions:
-            if self.is_action_compatible_with_state(state_, action_):
-                yield action_
-
     def is_action_compatible_with_state(self, state_: state.State, action_: action.Action):
         new_vx = state_.velocity.x + action_.acceleration.x
         new_vy = state_.velocity.y + action_.acceleration.y

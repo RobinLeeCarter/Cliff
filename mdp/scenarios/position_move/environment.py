@@ -1,14 +1,13 @@
 from __future__ import annotations
 from abc import ABC
-from typing import Optional, TYPE_CHECKING, Generator
+from typing import Optional, TYPE_CHECKING
 
 if TYPE_CHECKING:
     from mdp.model import algorithm, policy
 
 from mdp import common
 from mdp.model import environment
-from mdp.scenarios.position_move import grid_world
-from mdp.scenarios.jacks import action, state
+from mdp.scenarios.position_move import grid_world, action, state
 from mdp.scenarios.factory import actions_list_factory
 
 
@@ -40,13 +39,6 @@ class Environment(environment.Environment, ABC):
 
     def _build_actions(self):
         self.actions = actions_list_factory.actions_list_factory(actions_list=self._environment_parameters.actions_list)
-
-    # noinspection PyUnusedLocal
-    def actions_for_state(self, state_: state.State) -> Generator[action.Action, None, None]:
-        """set A(s)"""
-        for action_ in self.actions:
-            # if self.is_action_compatible_with_state(state_, action_):
-            yield action_
     # endregion
 
     # region Operation

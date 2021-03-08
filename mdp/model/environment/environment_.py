@@ -13,9 +13,9 @@ class Environment(abc.ABC):
     """A GridWorld Environment - too hard to make general at this point"""
     def __init__(self,
                  environment_parameters: common.EnvironmentParameters,
-                 grid_world_: grid_world.GridWorld):
+                 grid_world_: Optional[grid_world.GridWorld] = None):
         self._environment_parameters = environment_parameters
-        self.grid_world: grid_world.GridWorld = grid_world_
+        self.grid_world: Optional[grid_world.GridWorld] = grid_world_
         self.verbose: bool = environment_parameters.verbose
 
         # state and states
@@ -42,6 +42,8 @@ class Environment(abc.ABC):
         self.state_index = {state_: i for i, state_ in enumerate(self.states)}
         self._build_actions()
         self.action_index = {action_: i for i, action_ in enumerate(self.actions)}
+        if self.dynamics:
+            self._build_dynamics()
 
     def state_action_index(self, state_: state.State, action_: action.Action) -> tuple[int, int]:
         state_index = self.state_index[state_]
@@ -58,27 +60,17 @@ class Environment(abc.ABC):
         pass
 
     # possible need to materialise this if it's slow since it will be at the bottom of the loop
-    # noinspection PyUnusedLocal
     def actions_for_state(self, state_: state.State) -> Generator[action.Action, None, None]:
         """set A(s)"""
         for action_ in self.actions:
-            # if self.is_action_compatible_with_state(state_, action_):
-            yield action_
+            if self.is_action_compatible_with_state(state_, action_):
+                yield action_
 
-    # def get_action_from_index(self, index: tuple[int]) -> action.Action:
-    #     return self._actions_object.get_action_from_index(index)
+    def is_action_compatible_with_state(self, state_: state.State, action_: action.Action):
+        return True
 
-    # def is_action_compatible_with_state(self, state_: state.State, action_: action.Action):
-    #     new_vx = state_.vx + action_.ax
-    #     new_vy = state_.vy + action_.ay
-    #     if self.min_vx <= new_vx <= self.max_vx and \
-    #         self.min_vy <= new_vy <= self.max_vy and \
-    #             not (new_vx == 0 and new_vy == 0):
-    #         return True
-    #     else:
-    #         return False
-    # endregion
-
+    def _build_dynamics(self):
+        raise NotImplementedError
     # region Operation
     def start(self) -> response.Response:
         state_ = self._get_a_start_state()
