@@ -2,7 +2,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 
 
-@dataclass(frozen=True)
+@dataclass()
 class LocationOutcome:
     cars_rented: int
     ending_cars: int

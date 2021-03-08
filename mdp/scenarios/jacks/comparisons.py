@@ -1,11 +1,14 @@
 from __future__ import annotations
 
 from mdp import common
-from mdp.scenarios.random_walk import comparison
+from mdp.scenarios.jacks import comparison
 
 
 def jacks_policy_iteration() -> comparison.Comparison:
     comparison_ = comparison.Comparison(
+        # environment_parameters=common.EnvironmentParameters(
+        #     environment_type=common.EnvironmentType.JACKS
+        # ),
         comparison_settings=common.Settings(
             runs=100,
             training_episodes=100,
