@@ -7,7 +7,8 @@ if TYPE_CHECKING:
 
 from mdp import common
 from mdp.model import environment
-from mdp.scenarios.position_move import state, action, grid_world
+from mdp.scenarios.position_move import grid_world
+from mdp.scenarios.jacks import action, state
 from mdp.scenarios.factory import actions_list_factory
 
 

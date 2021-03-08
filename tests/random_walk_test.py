@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from mdp import common
 from mdp.scenarios.factory import environment_factory
-from mdp.scenarios.position_move import state, action
+from mdp.scenarios.jacks import action, state
 
 
 def random_walk_test() -> bool:
