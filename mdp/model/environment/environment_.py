@@ -4,10 +4,9 @@ import abc
 
 if TYPE_CHECKING:
     from mdp.model import algorithm, policy
-    from mdp.model.environment import grid_world
+    from mdp.model.environment import grid_world, dynamics
 from mdp import common
-from mdp.model.environment import state, response
-from mdp.model.environment import action
+from mdp.model.environment import state, action, response
 
 
 class Environment(abc.ABC):
@@ -34,6 +33,9 @@ class Environment(abc.ABC):
         self._action: Optional[action.Action] = None
         self._square: Optional[common.Square] = None
         self._new_state: Optional[state.State] = None
+
+        # None to ensure not used when not used/initialised
+        self.dynamics: Optional[dynamics] = None
 
     def build(self):
         self._build_states()
