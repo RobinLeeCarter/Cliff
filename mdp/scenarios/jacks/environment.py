@@ -88,14 +88,19 @@ class Environment(environment.Environment):
         cars_sob_1 = state_.cars_cob_1 - action_.transfer_1_to_2
         cars_sob_2 = state_.cars_cob_2 + action_.transfer_1_to_2
 
-        location_outcome_1: location_outcome.LocationOutcome
-        location_outcome_2: location_outcome.LocationOutcome
-        for location_outcome_1 in self._location_1.daily_outcomes[cars_sob_1]:
-            for location_outcome_2 in self._location_2.daily_outcomes[cars_sob_2]:
+        location_outcome_1: location_outcome.LocationOutcome = self._location_1.daily_outcomes[cars_sob_1]
+        location_outcome_2: location_outcome.LocationOutcome = self._location_2.daily_outcomes[cars_sob_2]
+        for cars_cob_1, summary_1 in location_outcome_1.items():
+            for cars_cob_2, summary_2 in location_outcome_2.items():
+                new_state = state.State(cars_cob_1=cars_cob_1,
+                                        cars_cob_2=cars_cob_2,
+                                        is_terminal=False)
+
                 # print(location_outcome_1, location_outcome_2)
-                total_cars_rented = location_outcome_1.cars_rented + location_outcome_2.cars_rented
-                total_revenue = total_cars_rented * self._rental_revenue
-                joint_probability = location_outcome_1.probability * location_outcome_2.probability
+                total_cars_rented_x_probability = summary_1.sum_cars_rented_x_probability + \
+                                                  summary_2.sum_cars_rented_x_probability
+                total_revenue_x_probability = total_cars_rented_x_probability * self._rental_revenue
+                joint_probability = summary_1.probability * summary_2.probability
                 reward = total_revenue - total_costs
                 new_state = state.State(cars_cob_1=location_outcome_1.ending_cars,
                                         cars_cob_2=location_outcome_2.ending_cars,
