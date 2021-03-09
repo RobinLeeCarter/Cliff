@@ -1,8 +1,9 @@
 from __future__ import annotations
-from mdp.scenarios.jacks import location_summary
+from dataclasses import dataclass
 
 
-# ending_cars, location_summary
-class LocationOutcome(dict[int, location_summary.LocationSummary]):
-    pass
-
+@dataclass()
+class LocationOutcome:
+    ending_cars: int
+    cars_rented: int
+    probability: float

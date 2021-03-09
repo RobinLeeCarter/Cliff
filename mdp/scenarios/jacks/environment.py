@@ -74,10 +74,12 @@ class Environment(environment.Environment):
     # region Dynamics
     def _build_dynamics(self):
         for state_ in self.states:
+            print(f"state = {state_}")
+            print(f"cum dynamics entries = {self.counter}")
             for action_ in self.actions_for_state(state_):
-                print(state_, action_)
+                # print(state_, action_)
                 self._add_dynamics(state_, action_)
-        print(f"counter = {self.counter}")
+        print(f"total dynamics entries = {self.counter}")
         sys.exit()
 
     def _add_dynamics(self, state_: state.State, action_: action.Action):
@@ -88,23 +90,18 @@ class Environment(environment.Environment):
         cars_sob_1 = state_.cars_cob_1 - action_.transfer_1_to_2
         cars_sob_2 = state_.cars_cob_2 + action_.transfer_1_to_2
 
-        location_outcome_1: location_outcome.LocationOutcome = self._location_1.daily_outcomes[cars_sob_1]
-        location_outcome_2: location_outcome.LocationOutcome = self._location_2.daily_outcomes[cars_sob_2]
-        for cars_cob_1, summary_1 in location_outcome_1.items():
-            for cars_cob_2, summary_2 in location_outcome_2.items():
-                new_state = state.State(cars_cob_1=cars_cob_1,
-                                        cars_cob_2=cars_cob_2,
+        outcomes_1: list[location_outcome.LocationOutcome] = self._location_1.daily_outcomes[cars_sob_1]
+        outcomes_2: list[location_outcome.LocationOutcome] = self._location_2.daily_outcomes[cars_sob_2]
+        for outcome_1 in outcomes_1:
+            for outcome_2 in outcomes_2:
+                new_state = state.State(cars_cob_1=outcome_1.ending_cars,
+                                        cars_cob_2=outcome_2.ending_cars,
                                         is_terminal=False)
-
-                # print(location_outcome_1, location_outcome_2)
-                total_cars_rented_x_probability = summary_1.sum_cars_rented_x_probability + \
-                                                  summary_2.sum_cars_rented_x_probability
-                total_revenue_x_probability = total_cars_rented_x_probability * self._rental_revenue
-                joint_probability = summary_1.probability * summary_2.probability
+                joint_probability = outcome_1.probability * outcome_2.probability
+                total_cars_rented = outcome_1.cars_rented + outcome_2.cars_rented
+                total_revenue = total_cars_rented * self._rental_revenue
                 reward = total_revenue - total_costs
-                new_state = state.State(cars_cob_1=location_outcome_1.ending_cars,
-                                        cars_cob_2=location_outcome_2.ending_cars,
-                                        is_terminal=False)
+                probability_x_reward = joint_probability * reward
                 self.counter += 1
                 # self.dynamics.add(state_, action_, new_state, reward, joint_probability)
 
