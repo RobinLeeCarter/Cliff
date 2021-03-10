@@ -2,8 +2,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from mdp.model.environment.state import State
-    from mdp.model.environment.action import Action
+    from mdp.model.environment import State, Action
 
 from dataclasses import dataclass
 

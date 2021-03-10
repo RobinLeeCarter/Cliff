@@ -15,6 +15,8 @@ class DynamicProgramming(algorithm_.Algorithm, abc.ABC):
                  algorithm_parameters: common.AlgorithmParameters
                  ):
         super().__init__(environment_, agent_, algorithm_parameters)
+        self._dynamics: environment.Dynamics = self._environment.dynamics
+        assert self._dynamics is not None
 
     @abc.abstractmethod
     def run(self, iteration_timeout: int):

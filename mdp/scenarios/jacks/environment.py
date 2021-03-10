@@ -74,11 +74,15 @@ class Environment(environment.Environment):
     # region Dynamics
     def _build_dynamics(self):
         for state_ in self.states:
-            print(f"state = {state_}")
-            print(f"cum dynamics entries = {self.counter}")
+            # print(f"state = {state_}")
+            # print(f"cum dynamics entries = {self.counter}")
             for action_ in self.actions_for_state(state_):
                 # print(state_, action_)
                 self._add_dynamics(state_, action_)
+                # print(state_, action_, self.dynamics.get_expected_reward(state_, action_))
+                # next_state_distribution = self.dynamics.get_next_state_distribution(state_, action_)
+                # total_probability = sum(state_probability.probability for state_probability in next_state_distribution)
+                # print(total_probability)
         print(f"total dynamics entries = {self.counter}")
         sys.exit()
 
@@ -100,16 +104,19 @@ class Environment(environment.Environment):
         expected_revenue = expected_cars_rented * self._rental_revenue
         # sum_over_s'_r( p(s',r|s,a) . r )
         expected_reward = expected_revenue - total_costs
-        self._expected_reward[(state_, action_)] = expected_reward
+        self.dynamics.set_expected_reward(state_, action_, expected_reward)
+        # self._expected_reward[(state_, action_)] = expected_reward
 
         for outcome_1 in outcomes_1:
             for outcome_2 in outcomes_2:
                 # p(s'|s,a) = p(s1'|s1,a).p(s2'|s2,a)
                 probability = outcome_1.probability * outcome_2.probability
-                self.counter += 1
+
                 new_state = state.State(cars_cob_1=outcome_1.ending_cars,
                                         cars_cob_2=outcome_2.ending_cars,
                                         is_terminal=False)
+                self.dynamics.set_next_state_probability(state_, action_, new_state, probability)
+                self.counter += 1
 
                 # state, action reaches new_state with probability
                 # self.dynamics.add(state_, action_, new_state, probability)
