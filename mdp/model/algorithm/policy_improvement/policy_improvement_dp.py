@@ -4,26 +4,29 @@ from typing import TYPE_CHECKING, Optional
 if TYPE_CHECKING:
     from mdp.model import environment, agent, policy
 from mdp import common
-from mdp.model.algorithm import abstract
+from mdp.model.algorithm import abstract, value_function
 
 
 class PolicyImprovementDP(abstract.DynamicProgramming):
     def __init__(self,
                  environment_: environment.Environment,
                  agent_: agent.Agent,
-                 algorithm_parameters: common.AlgorithmParameters
+                 algorithm_parameters: common.AlgorithmParameters,
+                 v: Optional[value_function.StateFunction] = None
                  ):
         super().__init__(environment_, agent_, algorithm_parameters)
-        self._theta = self._algorithm_parameters.theta
         self._algorithm_type = common.AlgorithmType.POLICY_IMPROVEMENT_DP
         self.name = common.algorithm_name[self._algorithm_type]
-        self.title = f"{self.name} θ={self._theta}"
-        self._create_v()
+        self.title = f"{self.name}"
+        if v:
+            self.V = v
+        else:
+            self._create_v()
 
     def run(self):
-        self._policy_improvement()
+        self.policy_improvement()
 
-    def _policy_improvement(self):
+    def policy_improvement(self) -> bool:
         policy_: policy.Policy = self._agent.target_policy
         assert isinstance(policy_, policy.Deterministic)
         policy_: policy.Deterministic

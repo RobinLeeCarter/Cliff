@@ -1,17 +1,18 @@
 from __future__ import annotations
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Optional
 
 if TYPE_CHECKING:
     from mdp.model import environment, agent, policy
 from mdp import common
-from mdp.model.algorithm import abstract
+from mdp.model.algorithm import abstract, value_function
 
 
 class PolicyEvaluationDP(abstract.DynamicProgramming):
     def __init__(self,
                  environment_: environment.Environment,
                  agent_: agent.Agent,
-                 algorithm_parameters: common.AlgorithmParameters
+                 algorithm_parameters: common.AlgorithmParameters,
+                 v: Optional[value_function.StateFunction] = None
                  ):
         super().__init__(environment_, agent_, algorithm_parameters)
         self._theta = self._algorithm_parameters.theta
@@ -19,12 +20,15 @@ class PolicyEvaluationDP(abstract.DynamicProgramming):
         self._algorithm_type = common.AlgorithmType.POLICY_EVALUATION_DP
         self.name = common.algorithm_name[self._algorithm_type]
         self.title = f"{self.name} θ={self._theta}"
-        self._create_v()
+        if v:
+            self.V = v
+        else:
+            self._create_v()
 
     def run(self):
-        self._policy_evaluation()
+        self.policy_evaluation()
 
-    def _policy_evaluation(self):
+    def policy_evaluation(self):
         iteration: int = 0
         delta: float = 0.0
         policy_: policy.Policy = self._agent.policy
@@ -41,6 +45,7 @@ class PolicyEvaluationDP(abstract.DynamicProgramming):
                         new_v += self._get_expected_return(state, action)
                 self.V[state] = new_v
                 delta = max(delta, abs(new_v - v))
+            iteration += 1
 
         if iteration == self._iteration_timeout:
             print(f"Warning: Timed out at {iteration} iterations")
