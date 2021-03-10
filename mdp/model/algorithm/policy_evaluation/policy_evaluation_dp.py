@@ -15,17 +15,21 @@ class PolicyEvaluationDP(abstract.DynamicProgramming):
                  ):
         super().__init__(environment_, agent_, algorithm_parameters)
         self._theta = self._algorithm_parameters.theta
+        self._iteration_timeout = self._algorithm_parameters.iteration_timeout
         self._algorithm_type = common.AlgorithmType.POLICY_EVALUATION_DP
         self.name = common.algorithm_name[self._algorithm_type]
         self.title = f"{self.name} θ={self._theta}"
         self._create_v()
 
-    def run(self, iteration_timeout: int):
+    def run(self):
+        self._policy_evaluation()
+
+    def _policy_evaluation(self):
         iteration: int = 0
         delta: float = 0.0
         policy_: policy.Policy = self._agent.policy
 
-        while delta < self._theta and iteration < iteration_timeout:
+        while delta < self._theta and iteration < self._iteration_timeout:
             delta = 0.0
             for state in self._environment.states:
                 v = self.V[state]
@@ -38,7 +42,7 @@ class PolicyEvaluationDP(abstract.DynamicProgramming):
                 self.V[state] = new_v
                 delta = max(delta, abs(new_v - v))
 
-        if iteration == iteration_timeout:
+        if iteration == self._iteration_timeout:
             print(f"Warning: Timed out at {iteration} iterations")
 
     def _get_expected_return(self, state: environment.State, action: environment.Action) -> float:

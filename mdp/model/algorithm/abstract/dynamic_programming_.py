@@ -19,5 +19,5 @@ class DynamicProgramming(algorithm_.Algorithm, abc.ABC):
         assert self._dynamics is not None
 
     @abc.abstractmethod
-    def run(self, iteration_timeout: int):
+    def run(self):
         pass
