@@ -1,4 +1,4 @@
-from typing import Generator
+from typing import Generator, Optional
 
 import numpy as np
 from scipy import stats
@@ -20,7 +20,8 @@ class Location:
         self._return_prob: np.ndarray = np.zeros(self._max_cars + 1, float)
 
         # for each starting_cars find possible outcomes
-        self.daily_outcomes: dict[int, list[location_outcome.LocationOutcome]] = {}
+        # could have used dictionary of dictionaries but fast enough and that could be confusing
+        self.outcome_lookup: dict[int, list[location_outcome.LocationOutcome]] = {}
         self._counter: int = 0
 
         # given starting_cars as input, value is expected revenue
@@ -52,36 +53,49 @@ class Location:
     def _daily_outcome_tables(self):
         for starting_cars in range(self._max_cars + 1):
             outcome_list: list[location_outcome.LocationOutcome] = []
-            self.daily_outcomes[starting_cars] = outcome_list
+            self.outcome_lookup[starting_cars] = outcome_list
             for car_demand, demand_probability in enumerate(self._demand_prob):
                 cars_rented = min(starting_cars, car_demand)
                 for cars_returned, return_probability in enumerate(self._return_prob):
-                    joint_probability = demand_probability * return_probability
                     ending_cars = starting_cars - cars_rented + cars_returned
                     if ending_cars > 20:
                         ending_cars = 20
 
-                    added: bool = False
+                    # part of p(ending_cars, cars_rented | starting_cars)
+                    # aka eg. p(s1', r1 | s1, a)
+                    probability = demand_probability * return_probability
+                    # part of p(ending_cars, cars_rented | starting_cars) x cars_rented
+                    # aka eg. p(s1', r1 | s1, a) x r1
+                    probability_x_cars_rented = probability * cars_rented
+
+                    # summarise by ending_cars
+
+                    # find outcome to append to or add to list
+                    outcome_: Optional[location_outcome.LocationOutcome] = None
                     for location_outcome_ in outcome_list:
-                        if location_outcome_.ending_cars == ending_cars and \
-                                location_outcome_.cars_rented == cars_rented:
-                            location_outcome_.probability += joint_probability
-                            added = True
+                        if location_outcome_.ending_cars == ending_cars:
+                            outcome_ = location_outcome_
+                            outcome_.probability += probability
+                            outcome_.probability_x_cars_rented += probability_x_cars_rented
                             break
-                    if not added:
-                        outcome = location_outcome.LocationOutcome(ending_cars, cars_rented, joint_probability)
-                        self.daily_outcomes[starting_cars].append(outcome)
+                    if not outcome_:
+                        outcome = location_outcome.LocationOutcome(
+                            ending_cars=ending_cars,
+                            probability=probability,
+                            probability_x_cars_rented=probability_x_cars_rented
+                        )
+                        outcome_list.append(outcome)
                         self._counter += 1
 
-    def day_distribution(self, starting_cars) -> Generator[location_outcome.LocationOutcome, None, None]:
-        for car_demand, demand_probability in enumerate(self._demand_prob):
-            cars_rented = min(starting_cars, car_demand)
-            for cars_returned, return_probability in enumerate(self._return_prob):
-                joint_probability = demand_probability * return_probability
-                ending_cars = starting_cars - cars_rented + cars_returned
-                if ending_cars > 20:
-                    ending_cars = 20
-                yield location_outcome.LocationOutcome(cars_rented, ending_cars, joint_probability)
+    # def day_distribution(self, starting_cars) -> Generator[location_outcome.LocationOutcome, None, None]:
+    #     for car_demand, demand_probability in enumerate(self._demand_prob):
+    #         cars_rented = min(starting_cars, car_demand)
+    #         for cars_returned, return_probability in enumerate(self._return_prob):
+    #             joint_probability = demand_probability * return_probability
+    #             ending_cars = starting_cars - cars_rented + cars_returned
+    #             if ending_cars > 20:
+    #                 ending_cars = 20
+    #             yield location_outcome.LocationOutcome(cars_rented, ending_cars, joint_probability)
 
     def parking_costs(self, end_cars: int) -> float:
         if end_cars > 10:

@@ -36,7 +36,7 @@ class Environment(abc.ABC):
         self._reward: Optional[float] = None
 
         # None to ensure not used when not used/initialised
-        self.dynamics: Optional[dynamics] = None
+        self.dynamics: Optional[dynamics.Dynamics] = None
 
     def build(self):
         self._build_states()

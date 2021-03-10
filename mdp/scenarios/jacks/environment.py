@@ -90,20 +90,29 @@ class Environment(environment.Environment):
         cars_sob_1 = state_.cars_cob_1 - action_.transfer_1_to_2
         cars_sob_2 = state_.cars_cob_2 + action_.transfer_1_to_2
 
-        outcomes_1: list[location_outcome.LocationOutcome] = self._location_1.daily_outcomes[cars_sob_1]
-        outcomes_2: list[location_outcome.LocationOutcome] = self._location_2.daily_outcomes[cars_sob_2]
+        outcomes_1: list[location_outcome.LocationOutcome] = self._location_1.outcome_lookup[cars_sob_1]
+        outcomes_2: list[location_outcome.LocationOutcome] = self._location_2.outcome_lookup[cars_sob_2]
+
+        # calculated expected reward given s,a
+        expected_cars_rented_1: float = sum(outcome.probability_x_cars_rented for outcome in outcomes_1)
+        expected_cars_rented_2: float = sum(outcome.probability_x_cars_rented for outcome in outcomes_2)
+        expected_cars_rented = expected_cars_rented_1 + expected_cars_rented_2
+        expected_revenue = expected_cars_rented * self._rental_revenue
+        # sum_over_s'_r( p(s',r|s,a) . r )
+        expected_reward = expected_revenue - total_costs
+        self._expected_reward[(state_, action_)] = expected_reward
+
         for outcome_1 in outcomes_1:
             for outcome_2 in outcomes_2:
+                # p(s'|s,a) = p(s1'|s1,a).p(s2'|s2,a)
+                probability = outcome_1.probability * outcome_2.probability
+                self.counter += 1
                 new_state = state.State(cars_cob_1=outcome_1.ending_cars,
                                         cars_cob_2=outcome_2.ending_cars,
                                         is_terminal=False)
-                joint_probability = outcome_1.probability * outcome_2.probability
-                total_cars_rented = outcome_1.cars_rented + outcome_2.cars_rented
-                total_revenue = total_cars_rented * self._rental_revenue
-                reward = total_revenue - total_costs
-                probability_x_reward = joint_probability * reward
-                self.counter += 1
-                # self.dynamics.add(state_, action_, new_state, reward, joint_probability)
+
+                # state, action reaches new_state with probability
+                # self.dynamics.add(state_, action_, new_state, probability)
 
     def _calc_cost_of_transfers(self, transfer_1_to_2: int) -> float:
         """This will change for second part of problem"""
@@ -128,3 +137,10 @@ class Environment(environment.Environment):
             state=self._new_state
         )
     # endregion
+
+# # sum_over_1( p(s1,r|s,a) . r) = sum_over_r1( p(s1',r1|s1,a) . r1 ) + sum_over_r2( p(s2',r2|s2,a) . r2 )
+# probability_x_cars_rented = outcome_1.probability_x_cars_rented + outcome_2.probability_x_cars_rented
+# probability_x_revenue = probability_x_cars_rented * self._rental_revenue
+# probability_x_costs = probability * total_costs
+# # sum_over_1( p(s1,r|s,a) . r)
+# probability_x_reward = probability_x_revenue - probability_x_costs
