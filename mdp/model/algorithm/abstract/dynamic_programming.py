@@ -15,6 +15,8 @@ class DynamicProgramming(algorithm_.Algorithm, abc.ABC):
                  algorithm_parameters: common.AlgorithmParameters
                  ):
         super().__init__(environment_, agent_, algorithm_parameters)
+        self._theta = self._algorithm_parameters.theta
+        self._iteration_timeout = self._algorithm_parameters.iteration_timeout
         self._dynamics: environment.Dynamics = self._environment.dynamics
         assert self._dynamics is not None
 

@@ -23,9 +23,9 @@ class BreakdownType(enum.IntEnum):
 
 
 class AlgorithmType(enum.IntEnum):
-    POLICY_EVALUATION_DP = enum.auto()
-    POLICY_IMPROVEMENT_DP = enum.auto()
-    POLICY_ITERATION_DP = enum.auto()
+    POLICY_EVALUATION_DP_V = enum.auto()
+    POLICY_IMPROVEMENT_DP_V = enum.auto()
+    POLICY_ITERATION_DP_V = enum.auto()
 
     TD_0 = enum.auto()
     OFF_POLICY_MC_CONTROL = enum.auto()
