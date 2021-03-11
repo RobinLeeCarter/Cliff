@@ -60,7 +60,8 @@ class Model:
             timer.lap(name=str(settings.algorithm_title))
         timer.stop()
 
-        self.breakdown.compile()
+        if self.breakdown:
+            self.breakdown.compile()
         # graph_values: common.GraphValues = self.breakdown.get_graph_values()
 
     def prep_for_output(self):

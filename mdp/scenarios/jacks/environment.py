@@ -1,6 +1,10 @@
 from __future__ import annotations
+from typing import TYPE_CHECKING
 
 import random
+
+if TYPE_CHECKING:
+    from mdp.model import policy
 
 from mdp.model import environment
 from mdp.scenarios.jacks import state, action, environment_parameters, location, location_outcome   # grid_world
@@ -131,6 +135,11 @@ class Environment(environment.Environment):
     # endregion
 
     # region Operation
+    def initialize_policy(self, policy_: policy.Policy):
+        initial_action = action.Action(transfer_1_to_2=0)
+        for state_ in self.states:
+            policy_[state_] = initial_action
+
     def _get_a_start_state(self) -> state.State:
         return random.choice(self.states)
 

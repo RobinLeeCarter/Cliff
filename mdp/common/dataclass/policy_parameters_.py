@@ -11,12 +11,13 @@ from mdp.common import enums
 @dataclasses.dataclass
 class PolicyParameters:
     policy_type: Optional[enums.PolicyType] = None
-    # initial_policy: Optional[policy.Policy] = None
+    initialize: Optional[bool] = None
     epsilon: Optional[float] = None
 
 
 default: PolicyParameters = PolicyParameters(
     policy_type=enums.PolicyType.E_GREEDY,
+    initialize=False,
     epsilon=0.1,
 )
 

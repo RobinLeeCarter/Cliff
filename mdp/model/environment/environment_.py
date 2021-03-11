@@ -75,6 +75,9 @@ class Environment(abc.ABC):
     # endregion
 
     # region Operation
+    def initialize_policy(self, policy_: policy.Policy):
+        pass
+
     def start(self) -> response.Response:
         state_ = self._get_a_start_state()
         # if self.verbose:

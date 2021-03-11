@@ -14,6 +14,7 @@ def jacks_policy_evaluation() -> comparison.Comparison:
             training_episodes=100,
             policy_parameters=common.PolicyParameters(
                 policy_type=common.PolicyType.DETERMINISTIC,
+                initialize=True,
             ),
             algorithm_parameters=common.AlgorithmParameters(
                 theta=0.1   # accuracy of policy_evaluation
