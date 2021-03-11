@@ -66,7 +66,7 @@ class Trainer:
         for self.run_counter in range(1, settings.runs + 1):
             if self._verbose or self.run_counter % settings.run_print_frequency == 0:
                 print(f"run_counter = {self.run_counter}: {settings.training_episodes} episodes")
-            self._agent.initialize()
+            self._agent.algorithm.initialize()
 
             self.timestep = 0
             for self.episode_counter in range(1, settings.training_episodes + 1):
@@ -95,6 +95,7 @@ class Trainer:
 
     # noinspection PyUnusedLocal
     def _train_dynamic_programming(self, settings: common.Settings, algorithm_: algorithm.DynamicProgramming):
+        self._agent.algorithm.initialize()
         algorithm_.run()
 
     def step(self) -> bool:

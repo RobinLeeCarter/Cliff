@@ -12,9 +12,10 @@ class DynamicProgrammingV(dynamic_programming.DynamicProgramming, abc.ABC):
     def __init__(self,
                  environment_: environment.Environment,
                  agent_: agent.Agent,
-                 algorithm_parameters: common.AlgorithmParameters
+                 algorithm_parameters: common.AlgorithmParameters,
+                 policy_parameters: common.PolicyParameters
                  ):
-        super().__init__(environment_, agent_, algorithm_parameters)
+        super().__init__(environment_, agent_, algorithm_parameters, policy_parameters)
         self._create_v()
 
     def _get_expected_return(self, state: environment.State, action: environment.Action) -> float:

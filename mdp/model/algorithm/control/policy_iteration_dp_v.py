@@ -11,9 +11,10 @@ class PolicyIterationDpV(policy_evaluation.PolicyEvaluationDpV, policy_improveme
     def __init__(self,
                  environment_: environment.Environment,
                  agent_: agent.Agent,
-                 algorithm_parameters: common.AlgorithmParameters
+                 algorithm_parameters: common.AlgorithmParameters,
+                 policy_parameters: common.PolicyParameters
                  ):
-        super().__init__(environment_, agent_, algorithm_parameters)
+        super().__init__(environment_, agent_, algorithm_parameters, policy_parameters)
         self._algorithm_type = common.AlgorithmType.POLICY_ITERATION_DP_V
         self.name = common.algorithm_name[self._algorithm_type]
         self.title = f"{self.name} θ={self._theta}"

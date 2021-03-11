@@ -75,7 +75,7 @@ class Environment(abc.ABC):
     # endregion
 
     # region Operation
-    def initialize_policy(self, policy_: policy.Policy):
+    def initialize_policy(self, policy_: policy.Policy, policy_parameters: common.PolicyParameters):
         pass
 
     def start(self) -> response.Response:

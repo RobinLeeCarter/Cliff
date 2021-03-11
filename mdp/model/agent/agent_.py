@@ -82,15 +82,20 @@ class Agent:
         else:
             raise NotImplementedError
 
-        self._algorithm = algorithm_.factory(self._environment, self, settings.algorithm_parameters)
+        # set policy based on policy_parameters
+        self._algorithm = algorithm_.factory(environment_=self._environment,
+                                             agent_=self,
+                                             algorithm_parameters=settings.algorithm_parameters,
+                                             policy_parameters=settings.policy_parameters)
         self._episode_length_timeout = settings.episode_length_timeout
         self.gamma = settings.gamma
 
     def set_behaviour_policy(self, policy: policy_.Policy):
         self._behaviour_policy = policy
 
-    def initialize(self):
-        self._algorithm.initialize()
+    # def initialize(self):
+    #     # initialize policies here? pass in settings too?
+    #     self._algorithm.initialize()
 
     def parameter_changes(self, iteration: int):
         # potentially change epsilon here

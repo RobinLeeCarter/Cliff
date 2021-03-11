@@ -9,7 +9,9 @@ from mdp.model.algorithm import abstract, control, policy_evaluation, policy_imp
 
 def factory(environment_: environment.Environment,
             agent_: agent.Agent,
-            algorithm_parameters: common.Settings.algorithm_parameters) -> abstract.Algorithm:
+            algorithm_parameters: common.Settings.algorithm_parameters,
+            policy_parameters: common.PolicyParameters
+            ) -> abstract.Algorithm:
     a = common.AlgorithmType
     algorithm_lookup: dict[a, Type[abstract.Algorithm]] = {
         a.POLICY_EVALUATION_DP_V: policy_evaluation.PolicyEvaluationDpV,
@@ -26,5 +28,5 @@ def factory(environment_: environment.Environment,
         a.CONSTANT_ALPHA_MC: policy_evaluation.ConstantAlphaMC,
     }
     type_for_algorithm = algorithm_lookup[algorithm_parameters.algorithm_type]
-    algorithm_ = type_for_algorithm(environment_, agent_, algorithm_parameters)
+    algorithm_ = type_for_algorithm(environment_, agent_, algorithm_parameters, policy_parameters)
     return algorithm_

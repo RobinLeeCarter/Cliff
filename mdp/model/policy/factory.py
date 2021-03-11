@@ -22,7 +22,4 @@ def factory(environment_: environment.Environment, policy_parameters: common.Pol
     else:
         raise NotImplementedError
 
-    if policy_parameters.initialize:
-        environment_.initialize_policy(policy)
-
     return policy

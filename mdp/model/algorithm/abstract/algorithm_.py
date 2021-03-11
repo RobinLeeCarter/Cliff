@@ -12,11 +12,13 @@ class Algorithm(abc.ABC):
     def __init__(self,
                  environment_: environment.Environment,
                  agent_: agent.Agent,
-                 algorithm_parameters: common.AlgorithmParameters
+                 algorithm_parameters: common.AlgorithmParameters,
+                 policy_parameters: common.PolicyParameters
                  ):
         self._environment: environment.Environment = environment_
         self._agent: agent.Agent = agent_
         self._algorithm_parameters: common.AlgorithmParameters = algorithm_parameters
+        self._policy_parameters: common.PolicyParameters = policy_parameters
         self._verbose = self._algorithm_parameters.verbose
 
         self._algorithm_type: Optional[common.AlgorithmType] = None
