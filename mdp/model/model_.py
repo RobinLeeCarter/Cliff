@@ -40,7 +40,8 @@ class Model:
             model_step_callback=self._display_step,
             verbose=False
         )
-        self.breakdown.set_trainer(self.trainer)
+        if self.breakdown:
+            self.breakdown.set_trainer(self.trainer)
 
         # self.target_policy: policy.DeterministicPolicy = policy.DeterministicPolicy(self.environment)
         # self.behaviour_policy: policy.EGreedyPolicy = policy.EGreedyPolicy(self.environment,

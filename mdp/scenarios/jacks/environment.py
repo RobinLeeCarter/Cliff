@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import random
-import sys
 
 from mdp.model import environment
 from mdp.scenarios.jacks import state, action, environment_parameters, location, location_outcome   # grid_world
@@ -81,10 +80,10 @@ class Environment(environment.Environment):
                 self._add_dynamics(state_, action_)
                 # print(state_, action_, self.dynamics.get_expected_reward(state_, action_))
                 # next_state_distribution = self.dynamics.get_next_state_distribution(state_, action_)
-                # total_probability = sum(state_probability.probability for state_probability in next_state_distribution)
+                # total_probability = sum(state_probability.probability
+                # for state_probability in next_state_distribution)
                 # print(total_probability)
         print(f"total dynamics entries = {self.counter}")
-        sys.exit()
 
     def _add_dynamics(self, state_: state.State, action_: action.Action):
         total_costs: float = self._calc_cost_of_transfers(action_.transfer_1_to_2)
@@ -136,7 +135,8 @@ class Environment(environment.Environment):
         return random.choice(self.states)
 
     def _apply_action(self):
-        self._new_state, self._reward = self.dynamics.draw()
+        pass
+        # self._new_state, self._reward = self.dynamics.draw()
 
     def _get_response(self) -> environment.Response:
         return environment.Response(

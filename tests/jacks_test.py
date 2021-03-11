@@ -2,11 +2,11 @@ from __future__ import annotations
 
 from mdp import common
 from mdp.scenarios.factory import environment_factory
-from mdp.scenarios.jacks import action, state, comparisons
+from mdp.scenarios.jacks import comparisons  # action, state,
 
 
 def jacks_test() -> bool:
-    comparison: common.Comparison = comparisons.jacks_policy_iteration()
+    comparison: common.Comparison = comparisons.jacks_policy_evaluation()
     environment_ = environment_factory.environment_factory(comparison.environment_parameters)
 
     print("States...")

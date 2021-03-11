@@ -4,7 +4,7 @@ from mdp import common
 from mdp.scenarios.jacks import comparison
 
 
-def jacks_policy_iteration() -> comparison.Comparison:
+def jacks_policy_evaluation() -> comparison.Comparison:
     comparison_ = comparison.Comparison(
         # environment_parameters=common.EnvironmentParameters(
         #     environment_type=common.EnvironmentType.JACKS
@@ -13,7 +13,7 @@ def jacks_policy_iteration() -> comparison.Comparison:
             runs=100,
             training_episodes=100,
             policy_parameters=common.PolicyParameters(
-                policy_type=common.PolicyType.DETERMINISTIC
+                policy_type=common.PolicyType.DETERMINISTIC,
             ),
             algorithm_parameters=common.AlgorithmParameters(
                 theta=0.1   # accuracy of policy_evaluation
@@ -22,14 +22,15 @@ def jacks_policy_iteration() -> comparison.Comparison:
         settings_list=[
             common.Settings(
                 algorithm_parameters=common.AlgorithmParameters(
-                    algorithm_type=common.AlgorithmType.TD_0,
+                    algorithm_type=common.AlgorithmType.POLICY_EVALUATION_DP_V,
+                    verbose=True
                 )
             ),
         ],
         graph_values=common.GraphValues(
-            show_graph=True,
-            y_min=0.0,
-            y_max=0.25
+            show_graph=False,
+            # y_min=0.0,
+            # y_max=0.25
         ),
         grid_view_parameters=common.GridViewParameters(
             show_demo=False

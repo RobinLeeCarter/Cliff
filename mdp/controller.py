@@ -23,6 +23,7 @@ class Controller:
 
     def run(self):
         self._model.run()
+        # print(self._model.agent.algorithm.V)
 
         if self._comparison.graph_values.show_graph:
             graph_values: common.GraphValues = self._model.breakdown.get_graph_values()

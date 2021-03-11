@@ -19,9 +19,11 @@ class PolicyEvaluationDpV(abstract.DynamicProgrammingV):
         self.title = f"{self.name} θ={self._theta}"
 
     def run(self):
-        self.policy_evaluation()
+        self._policy_evaluation()
+        if self._verbose:
+            print(self.V)
 
-    def policy_evaluation(self):
+    def _policy_evaluation(self):
         iteration: int = 0
         delta: float = 0.0
         policy_: policy.Policy = self._agent.policy

@@ -4,7 +4,7 @@ from typing import TYPE_CHECKING, Type
 if TYPE_CHECKING:
     from mdp.model import environment, agent
 from mdp import common
-from mdp.model.algorithm import abstract, control, policy_evaluation
+from mdp.model.algorithm import abstract, control, policy_evaluation, policy_improvement
 
 
 def factory(environment_: environment.Environment,
@@ -12,6 +12,10 @@ def factory(environment_: environment.Environment,
             algorithm_parameters: common.Settings.algorithm_parameters) -> abstract.Algorithm:
     a = common.AlgorithmType
     algorithm_lookup: dict[a, Type[abstract.Algorithm]] = {
+        a.POLICY_EVALUATION_DP_V: policy_evaluation.PolicyEvaluationDpV,
+        a.POLICY_IMPROVEMENT_DP_V: policy_improvement.PolicyImprovementDpV,
+        a.POLICY_ITERATION_DP_V: control.PolicyIterationDpV,
+
         a.TD_0: policy_evaluation.TD0,
         a.OFF_POLICY_MC_CONTROL: control.OffPolicyMcControl,
 

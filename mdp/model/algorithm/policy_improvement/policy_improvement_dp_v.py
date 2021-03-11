@@ -19,9 +19,9 @@ class PolicyImprovementDpV(abstract.DynamicProgrammingV):
         self.title = f"{self.name}"
 
     def run(self):
-        self.policy_improvement()
+        self._policy_improvement()
 
-    def policy_improvement(self) -> bool:
+    def _policy_improvement(self) -> bool:
         policy_: policy.Policy = self._agent.target_policy
         assert isinstance(policy_, policy.Deterministic)
         policy_: policy.Deterministic

@@ -25,8 +25,8 @@ class PolicyIterationDpV(policy_evaluation.PolicyEvaluationDpV, policy_improveme
         iteration: int = 0
         policy_stable: bool = False
         while not policy_stable and iteration < self._iteration_timeout:
-            self.policy_evaluation()
-            policy_stable = self.policy_improvement()
+            self._policy_evaluation()
+            policy_stable = self._policy_improvement()
             iteration += 1
 
         if iteration == self._iteration_timeout:

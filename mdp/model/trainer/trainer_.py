@@ -3,18 +3,20 @@ from typing import TYPE_CHECKING, Optional, Callable
 
 if TYPE_CHECKING:
     from mdp import common
-    from mdp.model import breakdown, agent, algorithm
+    from mdp.model import breakdown, agent  # , algorithm
+
+from mdp.model import algorithm
 
 
 class Trainer:
     def __init__(self,
                  agent_: agent.Agent,
-                 breakdown_: breakdown.Breakdown,
+                 breakdown_: Optional[breakdown.Breakdown],
                  model_step_callback: Optional[Callable[[agent.Episode], None]] = None,
                  verbose: bool = False
                  ):
         self._agent: agent.Agent = agent_
-        self._breakdown: breakdown.Breakdown = breakdown_
+        self._breakdown: Optional[breakdown.Breakdown] = breakdown_
         self._model_step_callback: Optional[Callable[[agent.Episode], None]] = model_step_callback
         self._verbose = verbose
         self._cont: bool = True
@@ -39,7 +41,15 @@ class Trainer:
         self.settings = settings
         self._agent.apply_settings(self.settings)
         algorithm_: algorithm.Algorithm = self._agent.algorithm
-        algorithm_: algorithm.Episodic
+        if isinstance(algorithm_, algorithm.Episodic):
+            self._train_episodic(settings, algorithm_)
+        elif isinstance(algorithm_, algorithm.DynamicProgramming):
+            self._train_dynamic_programming(settings, algorithm_)
+        else:
+            raise NotImplementedError
+
+    def _train_episodic(self, settings: common.Settings, algorithm_: algorithm.Episodic):
+        # process settings
         episode_length_timeout = self.settings.episode_length_timeout
 
         # self.algorithm_ = self.agent.algorithm
@@ -82,6 +92,10 @@ class Trainer:
 
         if self._verbose:
             self._agent.print_statistics()
+
+    # noinspection PyUnusedLocal
+    def _train_dynamic_programming(self, settings: common.Settings, algorithm_: algorithm.DynamicProgramming):
+        algorithm_.run()
 
     def step(self) -> bool:
         if self.settings.review_every_step:
