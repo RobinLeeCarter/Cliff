@@ -2,9 +2,11 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 import random
+import numpy as np
 
 if TYPE_CHECKING:
     from mdp.model import policy
+    from mdp.model.algorithm.value_function import state_function
 
 from mdp import common
 from mdp.model import environment
@@ -153,6 +155,25 @@ class Environment(environment.Environment):
             reward=self._reward,
             state=self._new_state
         )
+
+    def insert_state_function_into_graph3d(self, comparison: common.Comparison, v: state_function.StateFunction):
+        x_values = np.arange(self._max_cars + 1, dtype=float)
+        y_values = np.arange(self._max_cars + 1, dtype=float)
+        z_values = np.empty(shape=(self._max_cars + 1, self._max_cars + 1), dtype=float)
+
+        for cars1 in range(self._max_cars+1):
+            for cars2 in range(self._max_cars+1):
+                state_: state.State = state.State(
+                    cars_cob_1=cars1,
+                    cars_cob_2=cars2,
+                    is_terminal=False,
+                )
+                z_values[cars1, cars2] = v[state_]
+
+        g = comparison.graph3d_values
+        g.x_series = common.Series(title=g.x_label, values=x_values)
+        g.y_series = common.Series(title=g.y_label, values=y_values)
+        g.z_series = common.Series(title=g.z_label, values=z_values)
     # endregion
 
 # # sum_over_1( p(s1,r|s,a) . r) = sum_over_r1( p(s1',r1|s1,a) . r1 ) + sum_over_r2( p(s2',r2|s2,a) . r2 )

@@ -8,7 +8,7 @@ if TYPE_CHECKING:
     from mdp import controller, common
     from mdp.model import environment
 from mdp.scenarios.factory import grid_view_factory
-from mdp.view import graph, grid_view
+from mdp.view import graph, graph3d, grid_view
 
 
 class View:
@@ -20,6 +20,7 @@ class View:
             raise Exception(f"{pygame_fail} pygame modules failed to load")
 
         self.graph = graph.Graph()
+        self.graph3d = graph3d.Graph3D()
         self.grid_view: Optional[grid_view.GridView] = None
 
     def set_controller(self, controller_: controller.Controller):

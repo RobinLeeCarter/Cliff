@@ -29,6 +29,13 @@ class Controller:
             graph_values: common.GraphValues = self._model.breakdown.get_graph_values()
             self._view.graph.make_plot(graph_values)
 
+        if self._comparison.graph3d_values.show_graph:
+            self._model.environment.insert_state_function_into_graph3d(
+                self._comparison,
+                self._model.agent.algorithm.V
+            )
+            self._view.graph3d.make_plot(self._comparison.graph3d_values)
+
         if self._comparison.grid_view_parameters.show_demo:
             self._model.prep_for_output()
             self._view.grid_view.demonstrate(self.new_episode_request)

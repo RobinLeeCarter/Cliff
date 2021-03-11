@@ -27,6 +27,9 @@ class PolicyImprovementDpV(abstract.DynamicProgrammingV):
         assert isinstance(policy_, policy.Deterministic)
         policy_: policy.Deterministic
 
+        if self._verbose:
+            print(f"Starting Policy Improvement ...")
+
         policy_stable: bool = True
         for state in self._environment.states:
             old_action: environment.Action = policy_[state]
@@ -40,4 +43,8 @@ class PolicyImprovementDpV(abstract.DynamicProgrammingV):
             policy_[state] = best_action
             if old_action != best_action:
                 policy_stable = False
+
+        if self._verbose:
+            print(f"Policy Improvement completed. policy_stable = {policy_stable}")
+
         return policy_stable

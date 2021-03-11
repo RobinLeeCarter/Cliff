@@ -25,11 +25,14 @@ class PolicyEvaluationDpV(abstract.DynamicProgrammingV):
             self.V.print_all_values()
 
     def _policy_evaluation(self):
-        iteration: int = 0
-        delta: float = 0.0
+        iteration: int = 1
+        delta: float = float('inf')
         policy_: policy.Policy = self._agent.policy
 
-        while delta < self._theta and iteration < self._iteration_timeout:
+        if self._verbose:
+            print(f"Starting Policy Evaluation ...")
+
+        while delta >= self._theta and iteration < self._iteration_timeout:
             delta = 0.0
             for state in self._environment.states:
                 v = self.V[state]
@@ -41,7 +44,12 @@ class PolicyEvaluationDpV(abstract.DynamicProgrammingV):
                         new_v += self._get_expected_return(state, action)
                 self.V[state] = new_v
                 delta = max(delta, abs(new_v - v))
+            if self._verbose:
+                print(f"iteration = {iteration}\tdelta={delta:.2f}")
             iteration += 1
 
         if iteration == self._iteration_timeout:
             print(f"Warning: Timed out at {iteration} iterations")
+        else:
+            if self._verbose:
+                print(f"Policy Evaluation completed. delta={delta:.2f}")

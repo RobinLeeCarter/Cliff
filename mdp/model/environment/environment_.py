@@ -5,6 +5,7 @@ import abc
 if TYPE_CHECKING:
     from mdp.model import algorithm, policy
     from mdp.model.environment import grid_world, dynamics
+    from mdp.model.algorithm.value_function import state_function
 from mdp import common
 from mdp.model.environment import state, action, response
 
@@ -76,6 +77,9 @@ class Environment(abc.ABC):
 
     # region Operation
     def initialize_policy(self, policy_: policy.Policy, policy_parameters: common.PolicyParameters):
+        pass
+
+    def insert_state_function_into_graph3d(self, comparison: common.Comparison, v: state_function.StateFunction):
         pass
 
     def start(self) -> response.Response:

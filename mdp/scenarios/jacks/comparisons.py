@@ -10,8 +10,7 @@ def jacks_policy_evaluation() -> comparison.Comparison:
         #     environment_type=common.EnvironmentType.JACKS
         # ),
         comparison_settings=common.Settings(
-            runs=100,
-            training_episodes=100,
+            gamma=0.9,
             policy_parameters=common.PolicyParameters(
                 policy_type=common.PolicyType.DETERMINISTIC,
             ),
@@ -31,6 +30,18 @@ def jacks_policy_evaluation() -> comparison.Comparison:
             show_graph=False,
             # y_min=0.0,
             # y_max=0.25
+        ),
+        graph3d_values=common.Graph3DValues(
+            show_graph=True,
+            x_label="Cars at 1st location",
+            y_label="Cars at 2nd location",
+            z_label="V(s)",
+            x_min=0,
+            x_max=20,
+            y_min=0,
+            y_max=20,
+            z_min=400.0,
+            z_max=700.0,
         ),
         grid_view_parameters=common.GridViewParameters(
             show_demo=False

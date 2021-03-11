@@ -23,12 +23,19 @@ class PolicyIterationDpV(policy_evaluation.PolicyEvaluationDpV, policy_improveme
         policy_: policy.Policy = self._agent.target_policy
         assert isinstance(policy_, policy.Deterministic)
 
-        iteration: int = 0
+        if self._verbose:
+            print(f"Starting Policy Iteration ...")
+
+        iteration: int = 1
         policy_stable: bool = False
         while not policy_stable and iteration < self._iteration_timeout:
+            print(f"Policy Iteration. Iteration = {iteration}")
             self._policy_evaluation()
             policy_stable = self._policy_improvement()
             iteration += 1
 
         if iteration == self._iteration_timeout:
             print(f"Warning: Timed out at {iteration} iterations")
+        else:
+            if self._verbose:
+                print(f"Policy Iteration completed ...")
