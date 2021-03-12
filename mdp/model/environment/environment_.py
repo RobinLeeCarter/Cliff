@@ -1,74 +1,78 @@
 from __future__ import annotations
 from typing import Generator, Optional, TYPE_CHECKING
-import abc
+from abc import ABC, abstractmethod
 
 if TYPE_CHECKING:
     from mdp.model import algorithm, policy
-    from mdp.model.environment import grid_world, dynamics
     from mdp.model.algorithm.value_function import state_function
 from mdp import common
-from mdp.model.environment import state, action, response
+
+from mdp.model.environment.state import State
+from mdp.model.environment.action import Action
+from mdp.model.environment.response import Response
+from mdp.model.environment.dynamics import Dynamics
+from mdp.model.environment.grid_world import GridWorld
 
 
-class Environment(abc.ABC):
+class Environment(ABC):
     """A GridWorld Environment - too hard to make general at this point"""
     def __init__(self,
                  environment_parameters: common.EnvironmentParameters,
-                 grid_world_: Optional[grid_world.GridWorld] = None):
+                 grid_world_: Optional[GridWorld] = None):
         self._environment_parameters = environment_parameters
-        self.grid_world: Optional[grid_world.GridWorld] = grid_world_
+        self.grid_world: Optional[GridWorld] = grid_world_
         self.verbose: bool = environment_parameters.verbose
 
         # state and states
-        self.states: list[state.State] = []
-        self.state_index: dict[state.State: int] = {}
-        self.state_type: type = state.State     # required?
+        self.states: list[State] = []
+        self.state_index: dict[State: int] = {}
+        self.state_type: type = State     # required?
 
         # action and actions
-        self.actions: list[action.Action] = []
-        self.action_index: dict[action.Action: int] = {}
-        self.action_type: type = action.Action  # required?
+        self.actions: list[Action] = []
+        self.action_index: dict[Action: int] = {}
+        self.action_type: type = Action  # required?
 
         # for processing response
-        self._state: Optional[state.State] = None
-        self._action: Optional[action.Action] = None
+        self._state: Optional[State] = None
+        self._action: Optional[Action] = None
         self._square: Optional[common.Square] = None
-        self._new_state: Optional[state.State] = None
+        self._new_state: Optional[State] = None
         self._reward: Optional[float] = None
 
         # None to ensure not used when not used/initialised
-        self.dynamics: Optional[dynamics.Dynamics] = None
+        self.dynamics: Optional[Dynamics] = None
 
     def build(self):
         self._build_states()
-        self.state_index = {state_: i for i, state_ in enumerate(self.states)}
+        self.state_index = {state: i for i, state in enumerate(self.states)}
         self._build_actions()
-        self.action_index = {action_: i for i, action_ in enumerate(self.actions)}
+        self.action_index = {action: i for i, action in enumerate(self.actions)}
         if self.dynamics:
             self._build_dynamics()
 
-    def state_action_index(self, state_: state.State, action_: action.Action) -> tuple[int, int]:
-        state_index = self.state_index[state_]
-        action_index = self.action_index[action_]
+    def state_action_index(self, state: State, action: Action) -> tuple[int, int]:
+        state_index = self.state_index[state]
+        action_index = self.action_index[action]
         return state_index, action_index
 
     # region Sets
-    @abc.abstractmethod
+    @abstractmethod
     def _build_states(self):
         pass
 
-    @abc.abstractmethod
+    @abstractmethod
     def _build_actions(self):
         pass
 
     # possible need to materialise this if it's slow since it will be at the bottom of the loop
-    def actions_for_state(self, state_: state.State) -> Generator[action.Action, None, None]:
+    def actions_for_state(self, state: State) -> Generator[Action, None, None]:
         """set A(s)"""
-        for action_ in self.actions:
-            if self.is_action_compatible_with_state(state_, action_):
-                yield action_
+        for action in self.actions:
+            if self.is_action_compatible_with_state(state, action):
+                yield action
 
-    def is_action_compatible_with_state(self, state_: state.State, action_: action.Action):
+    def is_action_compatible_with_state(self, state: State, action: Action):
         return True
 
     def _build_dynamics(self):
@@ -82,25 +86,25 @@ class Environment(abc.ABC):
     def insert_state_function_into_graph3d(self, comparison: common.Comparison, v: state_function.StateFunction):
         pass
 
-    def start(self) -> response.Response:
-        state_ = self._get_a_start_state()
+    def start(self) -> Response:
+        state = self._get_a_start_state()
         # if self.verbose:
-        #     self.trace_.start(state_)
-        return response.Response(state=state_, reward=None)
+        #     self.trace_.start(state)
+        return Response(state=state, reward=None)
 
-    @abc.abstractmethod
-    def _get_a_start_state(self) -> state.State:
+    @abstractmethod
+    def _get_a_start_state(self) -> State:
         pass
 
-    def from_state_perform_action(self, state_: state.State, action_: action.Action) -> response.Response:
-        if state_.is_terminal:
+    def from_state_perform_action(self, state: State, action: Action) -> Response:
+        if state.is_terminal:
             raise Exception("Environment: Trying to act in a terminal state.")
-        self._state = state_
-        self._action = action_
+        self._state = state
+        self._action = action
         self._apply_action()
         return self._get_response()
 
-    @abc.abstractmethod
+    @abstractmethod
     def _apply_action(self):
         pass
 
@@ -117,14 +121,14 @@ class Environment(abc.ABC):
             y = self.grid_world.max_y
         return common.XY(x=x, y=y)
 
-    @abc.abstractmethod
-    def _get_response(self) -> response.Response:
+    @abstractmethod
+    def _get_response(self) -> Response:
         pass
 
     def update_grid_value_functions(self, algorithm_: algorithm.Algorithm, policy_: policy.Policy):
         pass
 
-    def is_valued_state(self, state_: state.State) -> bool:
+    def is_valued_state(self, state: State) -> bool:
         return False
 
     def output_mode(self):

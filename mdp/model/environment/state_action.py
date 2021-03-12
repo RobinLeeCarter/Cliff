@@ -1,8 +1,8 @@
 from __future__ import annotations
-
-from mdp.model.environment import State, Action
-
 from dataclasses import dataclass
+
+from mdp.model.environment.state import State
+from mdp.model.environment.action import Action
 
 
 @dataclass(frozen=True)

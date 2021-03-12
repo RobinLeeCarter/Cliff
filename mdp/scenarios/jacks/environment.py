@@ -10,20 +10,25 @@ if TYPE_CHECKING:
 
 from mdp import common
 from mdp.model import environment
-from mdp.scenarios.jacks import state, action, environment_parameters, location, location_outcome   # grid_world
+
+from mdp.scenarios.jacks.state import State
+from mdp.scenarios.jacks.action import Action
+from mdp.scenarios.jacks.environment_parameters import EnvironmentParameters
+from mdp.scenarios.jacks.location import Location
+from mdp.scenarios.jacks.location_outcome import LocationOutcome
 
 
 class Environment(environment.Environment):
-    def __init__(self, environment_parameters_: environment_parameters.EnvironmentParameters):
+    def __init__(self, environment_parameters_: EnvironmentParameters):
         # grid_world_ = grid_world.GridWorld(environment_parameters_)
         super().__init__(environment_parameters_, grid_world_=None)
         # super().__init__(environment_parameters_, grid_world_)
 
         # downcast states and actions so properties can be used freely
-        self.states: list[state.State] = self.states
-        self.actions: list[action.Action] = self.actions
-        self._state: state.State = self._state
-        self._action: action.Action = self._action
+        self.states: list[State] = self.states
+        self.actions: list[Action] = self.actions
+        self._state: State = self._state
+        self._action: Action = self._action
 
         self.dynamics = environment.Dynamics()
 
@@ -33,13 +38,13 @@ class Environment(environment.Environment):
         self._transfer_cost: float = environment_parameters_.transfer_cost
         self._extra_rules: bool = environment_parameters_.extra_rules
 
-        self._location_1: location.Location = location.Location(
+        self._location_1: Location = Location(
             max_cars=self._max_cars,
             rental_rate=environment_parameters_.rental_rate_1,
             return_rate=environment_parameters_.return_rate_1,
             excess_parking_cost=environment_parameters_.excess_parking_cost,
         )
-        self._location_2: location.Location = location.Location(
+        self._location_2: Location = Location(
             max_cars=self._max_cars,
             rental_rate=environment_parameters_.rental_rate_2,
             return_rate=environment_parameters_.return_rate_2,
@@ -53,7 +58,7 @@ class Environment(environment.Environment):
         """set S"""
         for cars1 in range(self._max_cars+1):
             for cars2 in range(self._max_cars+1):
-                new_state: state.State = state.State(
+                new_state: State = State(
                     cars_cob_1=cars1,
                     cars_cob_2=cars2,
                     is_terminal=False,
@@ -62,12 +67,12 @@ class Environment(environment.Environment):
 
     def _build_actions(self):
         for cars in range(-self._max_transfers, self._max_transfers+1):
-            new_action: action.Action = action.Action(
+            new_action: Action = Action(
                 transfer_1_to_2=cars
             )
             self.actions.append(new_action)
 
-    def is_action_compatible_with_state(self, state_: state.State, action_: action.Action):
+    def is_action_compatible_with_state(self, state_: State, action_: Action):
         cars_sob_1 = state_.cars_cob_1 - action_.transfer_1_to_2
         cars_sob_2 = state_.cars_cob_2 + action_.transfer_1_to_2
         if 0 <= cars_sob_1 <= self._max_cars and \
@@ -92,7 +97,7 @@ class Environment(environment.Environment):
                 # print(total_probability)
         print(f"total dynamics entries = {self.counter}")
 
-    def _add_dynamics(self, state_: state.State, action_: action.Action):
+    def _add_dynamics(self, state_: State, action_: Action):
         total_costs: float = self._calc_cost_of_transfers(action_.transfer_1_to_2)
         if self._extra_rules:
             total_costs += self._location_1.parking_costs(state_.cars_cob_1)
@@ -100,8 +105,8 @@ class Environment(environment.Environment):
         cars_sob_1 = state_.cars_cob_1 - action_.transfer_1_to_2
         cars_sob_2 = state_.cars_cob_2 + action_.transfer_1_to_2
 
-        outcomes_1: list[location_outcome.LocationOutcome] = self._location_1.outcome_lookup[cars_sob_1]
-        outcomes_2: list[location_outcome.LocationOutcome] = self._location_2.outcome_lookup[cars_sob_2]
+        outcomes_1: list[LocationOutcome] = self._location_1.outcome_lookup[cars_sob_1]
+        outcomes_2: list[LocationOutcome] = self._location_2.outcome_lookup[cars_sob_2]
 
         # calculated expected reward given s,a
         expected_cars_rented_1: float = sum(outcome.probability_x_cars_rented for outcome in outcomes_1)
@@ -118,9 +123,9 @@ class Environment(environment.Environment):
                 # p(s'|s,a) = p(s1'|s1,a).p(s2'|s2,a)
                 probability = outcome_1.probability * outcome_2.probability
 
-                new_state = state.State(cars_cob_1=outcome_1.ending_cars,
-                                        cars_cob_2=outcome_2.ending_cars,
-                                        is_terminal=False)
+                new_state = State(cars_cob_1=outcome_1.ending_cars,
+                                  cars_cob_2=outcome_2.ending_cars,
+                                  is_terminal=False)
                 self.dynamics.set_next_state_probability(state_, action_, new_state, probability)
                 self.counter += 1
 
@@ -139,11 +144,11 @@ class Environment(environment.Environment):
 
     # region Operation
     def initialize_policy(self, policy_: policy.Policy, policy_parameters: common.PolicyParameters):
-        initial_action = action.Action(transfer_1_to_2=0)
+        initial_action = Action(transfer_1_to_2=0)
         for state_ in self.states:
             policy_[state_] = initial_action
 
-    def _get_a_start_state(self) -> state.State:
+    def _get_a_start_state(self) -> State:
         return random.choice(self.states)
 
     def _apply_action(self):
@@ -163,7 +168,7 @@ class Environment(environment.Environment):
 
         for cars1 in range(self._max_cars+1):
             for cars2 in range(self._max_cars+1):
-                state_: state.State = state.State(
+                state_: State = State(
                     cars_cob_1=cars1,
                     cars_cob_2=cars2,
                     is_terminal=False,
@@ -175,10 +180,3 @@ class Environment(environment.Environment):
         g.y_series = common.Series(title=g.y_label, values=y_values)
         g.z_series = common.Series(title=g.z_label, values=z_values)
     # endregion
-
-# # sum_over_1( p(s1,r|s,a) . r) = sum_over_r1( p(s1',r1|s1,a) . r1 ) + sum_over_r2( p(s2',r2|s2,a) . r2 )
-# probability_x_cars_rented = outcome_1.probability_x_cars_rented + outcome_2.probability_x_cars_rented
-# probability_x_revenue = probability_x_cars_rented * self._rental_revenue
-# probability_x_costs = probability * total_costs
-# # sum_over_1( p(s1,r|s,a) . r)
-# probability_x_reward = probability_x_revenue - probability_x_costs

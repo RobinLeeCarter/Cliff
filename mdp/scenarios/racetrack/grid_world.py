@@ -4,12 +4,13 @@ import numpy as np
 
 from mdp import common
 from mdp.model import environment
-from mdp.scenarios.racetrack import environment_parameters
+
+from mdp.scenarios.racetrack.environment_parameters import EnvironmentParameters
 
 
 class GridWorld(environment.GridWorld):
     """GridWorld doesn't know about states and actions it just deals in the rules of the grid"""
-    def __init__(self, environment_parameters_: environment_parameters.EnvironmentParameters):
+    def __init__(self, environment_parameters_: EnvironmentParameters):
         super().__init__(environment_parameters_)
         self._end_y: np.ndarray = (self._grid[:, self.max_x] == common.enums.Square.END)
         self.skid_probability: float = environment_parameters_.skid_probability

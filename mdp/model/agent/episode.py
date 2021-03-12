@@ -5,6 +5,7 @@ import numpy as np
 
 if TYPE_CHECKING:
     from mdp.model import environment
+
 from mdp.model.agent import rsa
 
 

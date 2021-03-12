@@ -1,1 +1,1 @@
-from mdp.model.environment.dynamics.dynamics_ import Dynamics
+from mdp.model.environment.dynamics.dynamics import Dynamics

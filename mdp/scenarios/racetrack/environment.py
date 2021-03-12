@@ -3,23 +3,27 @@ from typing import Optional
 
 from mdp import common
 from mdp.model import environment
-from mdp.scenarios.racetrack import action, grid_world, environment_parameters, state
+
+from mdp.scenarios.racetrack.action import Action
+from mdp.scenarios.racetrack.grid_world import GridWorld
+from mdp.scenarios.racetrack.environment_parameters import EnvironmentParameters
+from mdp.scenarios.racetrack.state import State
 
 
 class Environment(environment.Environment):
-    def __init__(self, environment_parameters_: environment_parameters.EnvironmentParameters):
-        grid_world_ = grid_world.GridWorld(environment_parameters_)
-        super().__init__(environment_parameters_, grid_world_)
+    def __init__(self, environment_parameters_: EnvironmentParameters):
+        grid_world = GridWorld(environment_parameters_)
+        super().__init__(environment_parameters_, grid_world)
 
         # downcast states and actions so properties can be used freely
-        self.states: list[state.State] = self.states
-        self.actions: list[action.Action] = self.actions
-        self._state: state.State = self._state
-        self._action: action.Action = self._action
-        self.grid_world: grid_world.GridWorld = self.grid_world
+        self.states: list[State] = self.states
+        self.actions: list[Action] = self.actions
+        self._state: State = self._state
+        self._action: Action = self._action
+        self.grid_world: GridWorld = self.grid_world
 
         self._reward: float = 0.0
-        self._next_state: Optional[state.State] = None
+        self._next_state: Optional[State] = None
         self._extra_reward_for_failure: float = environment_parameters_.extra_reward_for_failure
 
         # velocity
@@ -43,7 +47,7 @@ class Environment(environment.Environment):
                 is_terminal: bool = self.grid_world.is_at_goal(position)
                 for vx in range(self._min_vx, self._max_vx + 1):
                     for vy in range(self._min_vy, self._max_vy + 1):
-                        new_state: state.State = state.State(
+                        new_state: State = State(
                             is_terminal=is_terminal,
                             position=position,
                             velocity=common.XY(x=vx, y=vy)
@@ -53,14 +57,14 @@ class Environment(environment.Environment):
     def _build_actions(self):
         for ax in range(self._min_ax, self._max_ax + 1):
             for ay in range(self._min_ay, self._max_ay + 1):
-                new_action: action.Action = action.Action(
+                new_action: Action = Action(
                     acceleration=common.XY(x=ax, y=ay)
                 )
                 self.actions.append(new_action)
 
-    def is_action_compatible_with_state(self, state_: state.State, action_: action.Action):
-        new_vx = state_.velocity.x + action_.acceleration.x
-        new_vy = state_.velocity.y + action_.acceleration.y
+    def is_action_compatible_with_state(self, state: State, action: Action):
+        new_vx = state.velocity.x + action.acceleration.x
+        new_vy = state.velocity.y + action.acceleration.y
         if self._min_vx <= new_vx <= self._max_vx and \
             self._min_vy <= new_vy <= self._max_vy and \
                 not (new_vx == 0 and new_vy == 0):
@@ -70,9 +74,9 @@ class Environment(environment.Environment):
     # endregion
 
     # region Operation
-    def _get_a_start_state(self) -> state.State:
+    def _get_a_start_state(self) -> State:
         position: common.XY = self.grid_world.get_a_start_position()
-        return state.State(is_terminal=False, position=position, velocity=common.XY(x=0, y=0))
+        return State(is_terminal=False, position=position, velocity=common.XY(x=0, y=0))
 
     def _apply_action(self):
         if not self.is_action_compatible_with_state(self._state, self._action):
@@ -92,7 +96,7 @@ class Environment(environment.Environment):
         if self._square == common.Square.END:
             # success
             self._reward = 0.0
-            self._next_state = state.State(
+            self._next_state = State(
                 position=new_position,
                 velocity=new_velocity,
                 is_terminal=True
@@ -101,7 +105,7 @@ class Environment(environment.Environment):
                 print(f"Past finish line at {new_position}")
         elif self._square == common.Square.CLIFF:
             # failure, move back to start line
-            # self.pre_reset_state = state.State(x, y, vx, vy, is_reset=True)
+            # self.pre_reset_state = State(x, y, vx, vy, is_reset=True)
             self._reward = -1.0 + self._extra_reward_for_failure
             self._next_state = self._get_a_start_state()
             if self.verbose:
@@ -109,7 +113,7 @@ class Environment(environment.Environment):
         else:
             # TRACK or START so continue
             self._reward = -1.0
-            self._next_state = state.State(
+            self._next_state = State(
                 position=new_position,
                 velocity=new_velocity,
                 is_terminal=False

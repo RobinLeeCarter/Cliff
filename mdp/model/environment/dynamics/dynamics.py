@@ -5,7 +5,8 @@ if TYPE_CHECKING:
     from mdp.model.environment import State, Action
 
 from mdp.model.environment import StateAction
-from mdp.model.environment.dynamics import StateProbability, NextStateDistribution
+from mdp.model.environment.dynamics.state_probability import StateProbability
+from mdp.model.environment.dynamics.next_state_distribution import NextStateDistribution
 
 
 class Dynamics:

@@ -1,11 +1,11 @@
 from __future__ import annotations
 
 from mdp import common
-from mdp.scenarios.jacks import comparison
+from mdp.scenarios.jacks.comparison import Comparison
 
 
-def jacks_policy_evaluation() -> comparison.Comparison:
-    comparison_ = comparison.Comparison(
+def jacks_policy_evaluation() -> Comparison:
+    comparison = Comparison(
         # environment_parameters=common.EnvironmentParameters(
         #     environment_type=common.EnvironmentType.JACKS
         # ),
@@ -47,4 +47,4 @@ def jacks_policy_evaluation() -> comparison.Comparison:
             show_demo=False
         ),
     )
-    return comparison_
+    return comparison

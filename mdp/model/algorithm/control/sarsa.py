@@ -32,11 +32,11 @@ class Sarsa(abstract.EpisodicOnline):
         self._agent.take_action()
         self._agent.choose_action()
 
-        prev_state = self._agent.prev_state
-        prev_action = self._agent.prev_action
-        reward = self._agent.reward
-        state = self._agent.state
-        action = self._agent.action
+        prev_state: environment.State = self._agent.prev_state
+        prev_action: environment.Action = self._agent.prev_action
+        reward: float = self._agent.reward
+        state: environment.State = self._agent.state
+        action: environment.Action = self._agent.action
 
         target = reward + self._gamma * self.Q[state, action]
         delta = target - self.Q[prev_state, prev_action]
