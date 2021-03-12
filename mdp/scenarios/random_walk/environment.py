@@ -3,12 +3,13 @@ from __future__ import annotations
 from mdp import common
 from mdp.model import environment as base_environment
 from mdp.scenarios.position_move import environment, state
-from mdp.scenarios.random_walk import grid_world
+
+from mdp.scenarios.random_walk.grid_world import GridWorld
 
 
 class Environment(environment.Environment):
     def __init__(self, environment_parameters: common.EnvironmentParameters):
-        grid_world_ = grid_world.GridWorld(environment_parameters)
+        grid_world_ = GridWorld(environment_parameters)
         super().__init__(environment_parameters, grid_world_)
 
     def _get_response(self) -> base_environment.Response:
@@ -25,6 +26,6 @@ class Environment(environment.Environment):
         )
 
     def get_optimum(self, state_: state.State) -> float:
-        self.grid_world: grid_world.GridWorld
+        self.grid_world: GridWorld
         state_: state.State
         return self.grid_world.get_optimum(state_.position)

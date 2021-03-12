@@ -7,8 +7,11 @@ if TYPE_CHECKING:
 
 from mdp import common
 from mdp.model import environment
-from mdp.scenarios.position_move import grid_world, action, state
 from mdp.scenarios.factory import actions_list_factory
+
+from mdp.scenarios.position_move.grid_world import GridWorld
+from mdp.scenarios.position_move.action import Action
+from mdp.scenarios.position_move.state import State
 
 
 class Environment(environment.Environment, abc.ABC):
@@ -18,11 +21,11 @@ class Environment(environment.Environment, abc.ABC):
         super().__init__(environment_parameters, grid_world_)
 
         # downcast states and actions so properties can be used freely
-        self.states: list[state.State] = self.states
-        self.actions: list[action.Action] = self.actions
-        self._state: state.State = self._state
-        self._action: action.Action = self._action
-        self.grid_world: grid_world.GridWorld = self.grid_world
+        self.states: list[State] = self.states
+        self.actions: list[Action] = self.actions
+        self._state: State = self._state
+        self._action: Action = self._action
+        self.grid_world: GridWorld = self.grid_world
 
     # region Sets
     def _build_states(self):
@@ -31,7 +34,7 @@ class Environment(environment.Environment, abc.ABC):
             for y in range(self.grid_world.max_y+1):
                 position = common.XY(x=x, y=y)
                 is_terminal: bool = self.grid_world.is_at_goal(position)
-                new_state: state.State = state.State(
+                new_state: State = State(
                     position=position,
                     is_terminal=is_terminal,
                 )
@@ -40,17 +43,17 @@ class Environment(environment.Environment, abc.ABC):
     def _build_actions(self):
         self.actions = actions_list_factory.actions_list_factory(actions_list=self._environment_parameters.actions_list)
 
-    def actions_for_state(self, state_: state.State) -> Generator[action.Action, None, None]:
+    def actions_for_state(self, state: State) -> Generator[Action, None, None]:
         """set A(s)"""
         for action_ in self.actions:
-            if self.is_action_compatible_with_state(state_, action_):
+            if self.is_action_compatible_with_state(state, action_):
                 yield action_
     # endregion
 
     # region Operation
-    def _get_a_start_state(self) -> state.State:
+    def _get_a_start_state(self) -> State:
         position: common.XY = self.grid_world.get_a_start_position()
-        return state.State(is_terminal=False, position=position)
+        return State(is_terminal=False, position=position)
 
     def _apply_action(self):
         # apply grid world rules (eg. edges, wind)
@@ -66,32 +69,32 @@ class Environment(environment.Environment, abc.ABC):
             is_terminal = True
         else:
             is_terminal = False
-        self._new_state = state.State(is_terminal, new_position)
+        self._new_state = State(is_terminal, new_position)
 
     def update_grid_value_functions(self, algorithm_: algorithm.Algorithm, policy_: policy.Policy):
-        for state_ in self.states:
+        for state in self.states:
             if algorithm_.V:
                 self.grid_world.set_state_function(
-                    position=state_.position,
-                    v_value=algorithm_.V[state_]
+                    position=state.position,
+                    v_value=algorithm_.V[state]
                 )
             if algorithm_.Q:
-                policy_action: Optional[environment.Action] = policy_[state_]
-                policy_action: action.Action
+                policy_action: Optional[environment.Action] = policy_[state]
+                policy_action: Action
                 policy_move: Optional[common.XY] = None
                 if policy_action:
                     policy_move = policy_action.move
-                for action_ in self.actions_for_state(state_):
+                for action_ in self.actions_for_state(state):
                     is_policy: bool = (policy_move and policy_move == action_.move)
                     self.grid_world.set_state_action_function(
-                        position=state_.position,
+                        position=state.position,
                         move=action_.move,
-                        q_value=algorithm_.Q[state_, action_],
+                        q_value=algorithm_.Q[state, action_],
                         is_policy=is_policy
                     )
 
-    def is_valued_state(self, state_: state.State) -> bool:
-        _square: common.Square = self.grid_world.get_square(state_.position)
+    def is_valued_state(self, state: State) -> bool:
+        _square: common.Square = self.grid_world.get_square(state.position)
         square_enum = common.enums.Square
         if _square in (square_enum.END, square_enum.CLIFF):
             return False
