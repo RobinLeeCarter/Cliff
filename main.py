@@ -12,10 +12,10 @@ def main():
 
     # comparison: common.Comparison = scenarios.windy_timestep()
     # comparison: common.Comparison = scenarios.windy_timestep(random_wind=True)
-    # comparison: common.Comparison = scenarios.cliff_alpha()
+    comparison: common.Comparison = scenarios.cliff_alpha()
     # comparison: common.Comparison = scenarios.cliff_episode()
     # comparison: common.Comparison = scenarios.random_walk_episode()
-    comparison: common.Comparison = scenarios.racetrack_episode()
+    # comparison: common.Comparison = scenarios.racetrack_episode()
     # comparison: common.Comparison = scenarios.jacks_policy_evaluation()
 
     application.Application(comparison)

@@ -2,24 +2,23 @@ from __future__ import annotations
 
 
 from mdp import common
-from mdp.model import environment as base_environment
-from mdp.scenarios.position_move import environment, grid_world
+from mdp.model.environment import Response
+from mdp.scenarios.position_move.model import environment, GridWorld
 
 
 class Environment(environment.Environment):
     def __init__(self, environment_parameters: common.EnvironmentParameters):
-        grid_world_ = grid_world.GridWorld(environment_parameters)
+        grid_world_ = GridWorld(environment_parameters)
         super().__init__(environment_parameters, grid_world_)
 
-    def _get_response(self) -> base_environment.Response:
+    def _get_response(self) -> Response:
         if self._square == common.Square.CLIFF:
-            return base_environment.Response(
+            return Response(
                 reward=-100.0,
                 state=self._get_a_start_state()
             )
         else:
-            return base_environment.Response(
+            return Response(
                 reward=-1.0,
                 state=self._new_state
             )
-

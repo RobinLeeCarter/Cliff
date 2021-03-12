@@ -2,13 +2,13 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from mdp.model import environment as base_environment
+    from mdp.model.environment import Action
 
 from mdp import common
-from mdp.scenarios.position_move import action as pm
+from mdp.scenarios.position_move.model import action as pm
 
 
-def actions_list_factory(actions_list: common.ActionsList) -> list[base_environment.Action]:
+def actions_list_factory(actions_list: common.ActionsList) -> list[Action]:
     al = common.ActionsList
     if actions_list == al.NO_ACTIONS:
         return _no_actions()
@@ -25,7 +25,7 @@ def actions_list_factory(actions_list: common.ActionsList) -> list[base_environm
 
 
 # common moves that could be reused
-def _no_actions() -> list[base_environment.Action]:
+def _no_actions() -> list[Action]:
     return []
 
 
