@@ -4,23 +4,8 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from mdp.model.environment import State, Action
 
-from dataclasses import dataclass
-
-
-@dataclass(frozen=True)
-class StateAction:
-    state: State
-    action: Action
-
-
-@dataclass(frozen=True)
-class StateProbability:
-    state: State
-    probability: float
-
-
-class NextStateDistribution(list[StateProbability]):
-    pass
+from mdp.model.environment import StateAction
+from mdp.model.environment.dynamics import StateProbability, NextStateDistribution
 
 
 class Dynamics:
