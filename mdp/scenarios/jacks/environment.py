@@ -88,7 +88,9 @@ class Environment(environment.Environment):
         for state_ in self.states:
             # print(f"state = {state_}")
             # print(f"cum dynamics entries = {self.counter}")
+
             for action_ in self.actions_for_state(state_):
+                # for action_ in self.actions:
                 # print(state_, action_)
                 self._add_dynamics(state_, action_)
                 # print(state_, action_, self.dynamics.get_expected_reward(state_, action_))
@@ -99,6 +101,7 @@ class Environment(environment.Environment):
         print(f"total dynamics entries = {self.counter}")
 
     def _add_dynamics(self, state_: State, action_: Action):
+        # transfer_1_to_2: int = action_.transfer_1_to_2
         total_costs: float = self._calc_cost_of_transfers(action_.transfer_1_to_2)
         if self._extra_rules:
             total_costs += self._location_1.parking_costs(state_.cars_cob_1)
@@ -145,9 +148,12 @@ class Environment(environment.Environment):
 
     # region Operation
     def initialize_policy(self, policy_: policy.Policy, policy_parameters: common.PolicyParameters):
-        initial_action = Action(transfer_1_to_2=5)
-        for state_ in self.states:
-            policy_[state_] = initial_action
+        initial_action = Action(transfer_1_to_2=0)
+        for state in self.states:
+            # max_transfer = min(state.cars_cob_1, self._max_cars - state.cars_cob_2, self._max_transfers)
+            # initial_action = Action(transfer_1_to_2=max_transfer)
+            policy_[state] = initial_action
+            # print(state, initial_action)
 
     def _get_a_start_state(self) -> State:
         return random.choice(self.states)
@@ -169,12 +175,13 @@ class Environment(environment.Environment):
 
         for cars1 in range(self._max_cars+1):
             for cars2 in range(self._max_cars+1):
-                state_: State = State(
+                state: State = State(
                     cars_cob_1=cars1,
                     cars_cob_2=cars2,
                     is_terminal=False,
                 )
-                z_values[cars1, cars2] = v[state_]
+                z_values[cars2, cars1] = v[state]
+                # print(cars1, cars2, v[state])
 
         g = comparison.graph3d_values
         g.x_series = common.Series(title=g.x_label, values=x_values)
@@ -187,6 +194,7 @@ class Environment(environment.Environment):
             position: common.XY = common.XY(x=state.cars_cob_1, y=state.cars_cob_2)
             action: Action = policy_[state]
             transfer_1_to_2: int = action.transfer_1_to_2
+            # print(position, transfer_1_to_2)
             self.grid_world.set_policy_value(
                 position=position,
                 policy_value=transfer_1_to_2,
@@ -205,6 +213,7 @@ class Environment(environment.Environment):
             #             q_value=algorithm_.Q[state, action_],
             #             is_policy=is_policy
             #         )
+        # print(self.grid_world.output_squares)
 
     def is_valued_state(self, state: State) -> bool:
         return True

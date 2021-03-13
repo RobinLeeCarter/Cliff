@@ -21,8 +21,8 @@ class PolicyEvaluationDpV(abstract.DynamicProgrammingV):
 
     def run(self):
         self._policy_evaluation()
-        if self._verbose:
-            self.V.print_all_values()
+        # if self._verbose:
+        #     self.V.print_all_values()
 
     def _policy_evaluation(self):
         iteration: int = 1

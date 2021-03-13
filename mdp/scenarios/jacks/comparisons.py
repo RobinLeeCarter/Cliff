@@ -11,7 +11,9 @@ def jacks_policy_evaluation() -> Comparison:
     comparison = Comparison(
         environment_parameters=EnvironmentParameters(
             environment_type=common.EnvironmentType.JACKS,
-            max_cars=max_cars
+            max_cars=max_cars,
+            # rental_rate_2=0.0,
+            # return_rate_2=0.0,
         ),
         comparison_settings=common.Settings(
             gamma=0.9,
