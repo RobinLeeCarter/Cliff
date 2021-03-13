@@ -1,10 +1,12 @@
 from __future__ import annotations
+
 from typing import Optional, TYPE_CHECKING, Callable
 import abc
 import sys
 
 import pygame
 import pygame.freetype
+from matplotlib import cm, colors
 
 if TYPE_CHECKING:
     from mdp.model import agent, environment
@@ -37,12 +39,16 @@ class GridView(abc.ABC):
         self._prev_color: Optional[pygame.Color] = None
         self._prev_move_color: Optional[pygame.Color] = None
 
+        self._policy_cmap: Optional[colors.Colormap] = None
+        self._policy_color_normaliser: Optional[colors.Normalize] = None
+
         self._user_event: common.UserEvent = common.UserEvent.NONE
 
         self._t: int = 0
         self._episode: Optional[agent.Episode] = None
 
         self._build_color_lookup()
+        self._build_policy_color_map()
 
         # self._font: pygame.freetype.Font = pygame.freetype.Font(None, 12)
         self._font: pygame.freetype.Font = pygame.freetype.SysFont("Calibri", 12)
@@ -53,21 +59,32 @@ class GridView(abc.ABC):
 
     # noinspection SpellCheckingInspection
     def _build_color_lookup(self):
-        self._background_color: pygame.Color = pygame.Color('grey10')
-        self._policy_color: pygame.Color = pygame.Color('pink')
+        self._background_color = pygame.Color('grey10')
+        self._policy_color = pygame.Color('pink')
         self._color_lookup = {
             common.Square.NORMAL: pygame.Color('grey66'),
             common.Square.CLIFF: pygame.Color('red2'),
             common.Square.START: pygame.Color('yellow2'),
             common.Square.END: pygame.Color('goldenrod2'),
         }
-        self._agent_color: Optional[pygame.Color] = pygame.Color('deepskyblue2')
-        self._agent_move_color: Optional[pygame.Color] = pygame.Color('forestgreen')
-        self._prev_color: Optional[pygame.Color] = pygame.Color('grey76')
-        self._prev_move_color: Optional[pygame.Color] = pygame.Color('forestgreen')
+        self._agent_color = pygame.Color('deepskyblue2')
+        self._agent_move_color = pygame.Color('forestgreen')
+        self._prev_color = pygame.Color('grey76')
+        self._prev_move_color = pygame.Color('forestgreen')
 
-    def set_gridworld(self, grid_world_: environment.GridWorld):
-        self._grid_world = grid_world_
+    def _build_policy_color_map(self):
+        # noinspection PyUnresolvedReferences
+        self._policy_cmap = cm.coolwarm
+        self._policy_color_normaliser = colors.Normalize(vmin=0.0, vmax=1.0)
+
+    def _get_policy_value_color(self, un_normalised: float) -> pygame.Color:
+        normalised = self._policy_color_normaliser(un_normalised)
+        rgba: common.RGBA = common.RGBA(*self._policy_cmap(normalised, bytes=True))
+        color: pygame.Color = pygame.Color(rgba)
+        return color
+
+    def set_gridworld(self, grid_world: environment.GridWorld):
+        self._grid_world = grid_world
         self._max_x = self._grid_world.max_x
         self._max_y = self._grid_world.max_y
         self._load_gridworld()

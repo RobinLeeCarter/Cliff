@@ -151,11 +151,11 @@ class Environment(environment.Environment):
 
     # region Operation
     def initialize_policy(self, policy_: policy.Policy, policy_parameters: common.PolicyParameters):
-        initial_action = Action(transfer_1_to_2=0)
+        # initial_action = Action(transfer_1_to_2=0)
         for state in self.states:
             # max_transfer = min(state.cars_cob_1, self._max_cars - state.cars_cob_2, self._max_transfers)
-            # max_transfer = -min(state.cars_cob_2, self._max_cars - state.cars_cob_1, self._max_transfers)
-            # initial_action = Action(transfer_1_to_2=max_transfer)
+            max_transfer = -min(state.cars_cob_2, self._max_cars - state.cars_cob_1, self._max_transfers)
+            initial_action = Action(transfer_1_to_2=max_transfer)
             policy_[state] = initial_action
             # print(state, initial_action)
 
