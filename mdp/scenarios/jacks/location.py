@@ -46,6 +46,9 @@ class Location:
         self._return_prob = np.array([self._poisson(self._return_rate, c) for c in car_count])
         self._demand_prob[-1] += 1.0 - np.sum(self._demand_prob)
         self._return_prob[-1] += 1.0 - np.sum(self._return_prob)
+        # TODO: Remove
+        print(self._demand_prob)
+        print(self._return_prob)
 
     def _poisson(self, lambda_: float, n: int):
         return stats.poisson.pmf(k=n, mu=lambda_)
