@@ -98,6 +98,9 @@ class Environment(environment.Environment):
                 # total_probability = sum(state_probability.probability
                 # for state_probability in next_state_distribution)
                 # print(total_probability)
+        # test_state = State(is_terminal=False, cars_cob_1=10, cars_cob_2=10)
+        # test_action = Action(transfer_1_to_2=0)
+        # dist = self.dynamics.get_next_state_distribution(test_state, test_action)
         print(f"total dynamics entries = {self.counter}")
 
     def _add_dynamics(self, state_: State, action_: Action):
@@ -105,6 +108,7 @@ class Environment(environment.Environment):
         if self._extra_rules:
             total_costs += self._location_1.parking_costs(state_.cars_cob_1)
             total_costs += self._location_2.parking_costs(state_.cars_cob_2)
+
         cars_sob_1 = state_.cars_cob_1 - action_.transfer_1_to_2
         cars_sob_2 = state_.cars_cob_2 + action_.transfer_1_to_2
 
@@ -147,11 +151,11 @@ class Environment(environment.Environment):
 
     # region Operation
     def initialize_policy(self, policy_: policy.Policy, policy_parameters: common.PolicyParameters):
-        # initial_action = Action(transfer_1_to_2=0)
+        initial_action = Action(transfer_1_to_2=0)
         for state in self.states:
             # max_transfer = min(state.cars_cob_1, self._max_cars - state.cars_cob_2, self._max_transfers)
-            max_transfer = -min(state.cars_cob_2, self._max_cars - state.cars_cob_1, self._max_transfers)
-            initial_action = Action(transfer_1_to_2=max_transfer)
+            # max_transfer = -min(state.cars_cob_2, self._max_cars - state.cars_cob_1, self._max_transfers)
+            # initial_action = Action(transfer_1_to_2=max_transfer)
             policy_[state] = initial_action
             # print(state, initial_action)
 

@@ -41,7 +41,7 @@ class PolicyEvaluationDpV(abstract.DynamicProgrammingV):
                     # π(a|s)
                     policy_probability = policy_.get_probability(state, action)
                     if policy_probability > 0:
-                        new_v += self._get_expected_return(state, action)
+                        new_v += policy_probability * self._get_expected_return(state, action)
                 self.V[state] = new_v
                 delta = max(delta, abs(new_v - v))
             if self._verbose:
