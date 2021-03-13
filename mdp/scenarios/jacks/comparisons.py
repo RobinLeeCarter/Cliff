@@ -2,13 +2,17 @@ from __future__ import annotations
 
 from mdp import common
 from mdp.scenarios.jacks.comparison import Comparison
+from mdp.scenarios.jacks.environment_parameters import EnvironmentParameters
+
+max_cars: int = 10      # problem statement = 20
 
 
 def jacks_policy_evaluation() -> Comparison:
     comparison = Comparison(
-        # environment_parameters=common.EnvironmentParameters(
-        #     environment_type=common.EnvironmentType.JACKS
-        # ),
+        environment_parameters=EnvironmentParameters(
+            environment_type=common.EnvironmentType.JACKS,
+            max_cars=max_cars
+        ),
         comparison_settings=common.Settings(
             gamma=0.9,
             policy_parameters=common.PolicyParameters(
@@ -37,14 +41,16 @@ def jacks_policy_evaluation() -> Comparison:
             y_label="Cars at 2nd location",
             z_label="V(s)",
             x_min=0,
-            x_max=20,
+            x_max=max_cars,
             y_min=0,
-            y_max=20,
-            z_min=400.0,
-            z_max=700.0,
+            y_max=max_cars,
+            # z_min=400.0,
+            # z_max=700.0,
         ),
         grid_view_parameters=common.GridViewParameters(
-            show_demo=False
+            grid_view_type=common.GridViewType.JACKS,
+            show_demo=False,
+            show_values=True,
         ),
     )
     return comparison

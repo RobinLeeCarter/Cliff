@@ -58,8 +58,8 @@ class Location:
                 cars_rented = min(starting_cars, car_demand)
                 for cars_returned, return_probability in enumerate(self._return_prob):
                     ending_cars = starting_cars - cars_rented + cars_returned
-                    if ending_cars > 20:
-                        ending_cars = 20
+                    if ending_cars > self._max_cars:
+                        ending_cars = self._max_cars
 
                     # part of p(ending_cars, cars_rented | starting_cars)
                     # aka eg. p(s1', r1 | s1, a)

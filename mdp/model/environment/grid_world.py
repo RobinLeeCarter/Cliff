@@ -70,15 +70,19 @@ class GridWorld:
     def _move_flip(self, xy_in: common.XY) -> common.XY:
         return common.XY(x=xy_in.x, y=-xy_in.y)
 
-    def set_state_function(self, position: common.XY, v_value: Optional[float]):
+    def set_v_value(self, position: common.XY, v_value: Optional[float]):
         output_square: common.OutputSquare = self._get_output_square(position)
         output_square.v_value = v_value
 
-    def set_state_action_function(self,
-                                  position: common.XY,
-                                  move: common.XY,
-                                  q_value: Optional[float],
-                                  is_policy: bool = False):
+    def set_policy_value(self, position: common.XY, policy_value: Optional[float]):
+        output_square: common.OutputSquare = self._get_output_square(position)
+        output_square.policy_value = policy_value
+
+    def set_move_q_value(self,
+                         position: common.XY,
+                         move: common.XY,
+                         q_value: Optional[float],
+                         is_policy: bool = False):
         output_square: common.OutputSquare = self._get_output_square(position)
         move_value: common.MoveValue = common.MoveValue(move, q_value, is_policy)
         output_square.move_values[move] = move_value

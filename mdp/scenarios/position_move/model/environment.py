@@ -17,8 +17,8 @@ from mdp.scenarios.position_move.model.state import State
 class Environment(environment.Environment, abc.ABC):
     def __init__(self,
                  environment_parameters: common.EnvironmentParameters,
-                 grid_world_: environment.GridWorld):
-        super().__init__(environment_parameters, grid_world_)
+                 grid_world: environment.GridWorld):
+        super().__init__(environment_parameters, grid_world)
 
         # downcast states and actions so properties can be used freely
         self.states: list[State] = self.states
@@ -74,7 +74,7 @@ class Environment(environment.Environment, abc.ABC):
     def update_grid_value_functions(self, algorithm_: algorithm.Algorithm, policy_: policy.Policy):
         for state in self.states:
             if algorithm_.V:
-                self.grid_world.set_state_function(
+                self.grid_world.set_v_value(
                     position=state.position,
                     v_value=algorithm_.V[state]
                 )
@@ -86,7 +86,7 @@ class Environment(environment.Environment, abc.ABC):
                     policy_move = policy_action.move
                 for action_ in self.actions_for_state(state):
                     is_policy: bool = (policy_move and policy_move == action_.move)
-                    self.grid_world.set_state_action_function(
+                    self.grid_world.set_move_q_value(
                         position=state.position,
                         move=action_.move,
                         q_value=algorithm_.Q[state, action_],

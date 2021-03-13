@@ -5,7 +5,7 @@ import random
 import numpy as np
 
 if TYPE_CHECKING:
-    from mdp.model import policy
+    from mdp.model import algorithm, policy
     from mdp.model.algorithm.value_function import state_function
 
 from mdp import common
@@ -16,12 +16,13 @@ from mdp.scenarios.jacks.action import Action
 from mdp.scenarios.jacks.environment_parameters import EnvironmentParameters
 from mdp.scenarios.jacks.location import Location
 from mdp.scenarios.jacks.location_outcome import LocationOutcome
+from mdp.scenarios.jacks.grid_world import GridWorld
 
 
 class Environment(environment.Environment):
     def __init__(self, environment_parameters_: EnvironmentParameters):
-        # grid_world_ = grid_world.GridWorld(environment_parameters_)
-        super().__init__(environment_parameters_, grid_world_=None)
+        grid_world = GridWorld(environment_parameters_)
+        super().__init__(environment_parameters_, grid_world=grid_world)
         # super().__init__(environment_parameters_, grid_world_)
 
         # downcast states and actions so properties can be used freely
@@ -144,7 +145,7 @@ class Environment(environment.Environment):
 
     # region Operation
     def initialize_policy(self, policy_: policy.Policy, policy_parameters: common.PolicyParameters):
-        initial_action = Action(transfer_1_to_2=0)
+        initial_action = Action(transfer_1_to_2=5)
         for state_ in self.states:
             policy_[state_] = initial_action
 
@@ -179,4 +180,32 @@ class Environment(environment.Environment):
         g.x_series = common.Series(title=g.x_label, values=x_values)
         g.y_series = common.Series(title=g.y_label, values=y_values)
         g.z_series = common.Series(title=g.z_label, values=z_values)
+
+    def update_grid_value_functions(self, algorithm_: algorithm.Algorithm, policy_: policy.Policy):
+        # policy_: policy.Deterministic
+        for state in self.states:
+            position: common.XY = common.XY(x=state.cars_cob_1, y=state.cars_cob_2)
+            action: Action = policy_[state]
+            transfer_1_to_2: int = action.transfer_1_to_2
+            self.grid_world.set_policy_value(
+                position=position,
+                policy_value=transfer_1_to_2,
+            )
+            # if algorithm_.Q:
+            #     policy_action: Optional[environment.Action] = policy_[state]
+            #     policy_action: Action
+            #     policy_move: Optional[common.XY] = None
+            #     if policy_action:
+            #         policy_move = policy_action.move
+            #     for action_ in self.actions_for_state(state):
+            #         is_policy: bool = (policy_move and policy_move == action_.move)
+            #         self.grid_world.set_state_action_function(
+            #             position=state.position,
+            #             move=action_.move,
+            #             q_value=algorithm_.Q[state, action_],
+            #             is_policy=is_policy
+            #         )
+
+    def is_valued_state(self, state: State) -> bool:
+        return True
     # endregion

@@ -69,3 +69,4 @@ class ActionsList(enum.IntEnum):
 class GridViewType(enum.IntEnum):
     POSITION = enum.auto()
     POSITION_MOVE = enum.auto()
+    JACKS = enum.auto()

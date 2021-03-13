@@ -121,10 +121,13 @@ class GridView(abc.ABC):
             self._wait_for_event_of_interest()
             # self._handle_event()
 
-    def display_latest_step(self, episode_: agent.Episode):
+    def display_latest_step(self, episode_: Optional[agent.Episode] = None):
         self.open_window()  # if not already
         self._copy_grid_into_background()
-        self._frame_on_background_latest(episode_)
+        if episode_:
+            self._frame_on_background_latest(episode_)
+        else:
+            self._draw_frame_on_background()
         self._put_background_on_screen()
         self._wait_for_event_of_interest()
         if self._user_event == common.UserEvent.QUIT:
@@ -184,6 +187,12 @@ class GridView(abc.ABC):
     def _draw_v(self, surface: pygame.Surface, rect: pygame.Rect, output_square: common.OutputSquare):
         if output_square.v_value is not None:
             text: str = f"{output_square.v_value:.1f}"
+            sub_rect = self._get_sub_rect(rect, move=common.XY(x=0, y=0))
+            self._center_text(surface, sub_rect, text)
+
+    def _draw_policy(self, surface: pygame.Surface, rect: pygame.Rect, output_square: common.OutputSquare):
+        if output_square.policy_value is not None:
+            text: str = f"{output_square.policy_value:.1f}"
             sub_rect = self._get_sub_rect(rect, move=common.XY(x=0, y=0))
             self._center_text(surface, sub_rect, text)
 
@@ -268,10 +277,13 @@ class GridView(abc.ABC):
                      move_color: Optional[pygame.color] = None,
                      draw_move: bool = False,
                      draw_v: Optional[bool] = None,
+                     draw_policy: Optional[bool] = None,
                      draw_q: Optional[bool] = None
                      ):
         if draw_v is None:
             draw_v = self.grid_view_parameters.show_values
+        if draw_policy is None:
+            draw_policy = self.grid_view_parameters.show_values
         if draw_q is None:
             draw_q = self.grid_view_parameters.show_values
 
@@ -296,6 +308,8 @@ class GridView(abc.ABC):
         output_square: common.OutputSquare = self._grid_world.output_squares[row, col]
         if draw_v:
             self._draw_v(surface, rect, output_square)
+        if draw_policy:
+            self._draw_policy(surface, rect, output_square)
         if draw_q:
             self._draw_q(surface, rect, output_square)
 

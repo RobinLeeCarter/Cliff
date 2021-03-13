@@ -40,6 +40,11 @@ class Controller:
             self._model.prep_for_output()
             self._view.grid_view.demonstrate(self.new_episode_request)
 
+        # TODO: do a different way
+        self._model.prep_for_output()
+        self._view.grid_view.display_latest_step()
+        # self._view.grid_view.display_and_wait()
+
     # region Model requests
     def display_step(self, episode_: agent.Episode):
         self._view.grid_view.display_latest_step(episode_)
