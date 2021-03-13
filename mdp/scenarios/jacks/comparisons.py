@@ -4,14 +4,15 @@ from mdp import common
 from mdp.scenarios.jacks.comparison import Comparison
 from mdp.scenarios.jacks.environment_parameters import EnvironmentParameters
 
-max_cars: int = 10      # problem statement = 20
+_max_cars: int = 10      # problem statement = 20
 
 
 def jacks_policy_evaluation() -> Comparison:
     comparison = Comparison(
         environment_parameters=EnvironmentParameters(
             environment_type=common.EnvironmentType.JACKS,
-            max_cars=max_cars,
+            max_cars=_max_cars,
+            # extra_rules=True,
             # rental_rate_1=10.0,
             # return_rate_1=0.0,
             # rental_rate_2=0.0,
@@ -29,7 +30,7 @@ def jacks_policy_evaluation() -> Comparison:
         settings_list=[
             common.Settings(
                 algorithm_parameters=common.AlgorithmParameters(
-                    algorithm_type=common.AlgorithmType.POLICY_EVALUATION_DP_V,
+                    algorithm_type=common.AlgorithmType.POLICY_ITERATION_DP_V,
                     verbose=True
                 )
             ),
@@ -45,9 +46,9 @@ def jacks_policy_evaluation() -> Comparison:
             y_label="Cars at 2nd location",
             z_label="V(s)",
             x_min=0,
-            x_max=max_cars,
+            x_max=_max_cars,
             y_min=0,
-            y_max=max_cars,
+            y_max=_max_cars,
             # z_min=400.0,
             # z_max=700.0,
         ),

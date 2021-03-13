@@ -20,8 +20,8 @@ class PolicyIterationDpV(policy_evaluation.PolicyEvaluationDpV, policy_improveme
         self.title = f"{self.name} θ={self._theta}"
 
     def run(self):
-        policy_: policy.Policy = self._agent.target_policy
-        assert isinstance(policy_, policy.Deterministic)
+        # policy_: policy.Policy = self._agent.target_policy
+        # assert isinstance(policy_, policy.Deterministic)
 
         if self._verbose:
             print(f"Starting Policy Iteration ...")

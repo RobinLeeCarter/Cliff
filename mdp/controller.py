@@ -42,6 +42,7 @@ class Controller:
 
         # TODO: do a different way
         self._model.prep_for_output()
+        self._model.agent.algorithm.V.print_all_values()
         self._view.grid_view.display_latest_step()
         # self._view.grid_view.display_and_wait()
 
