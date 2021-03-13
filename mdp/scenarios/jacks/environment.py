@@ -195,7 +195,7 @@ class Environment(environment.Environment):
     def update_grid_value_functions(self, algorithm_: algorithm.Algorithm, policy_: policy.Policy):
         # policy_: policy.Deterministic
         for state in self.states:
-            position: common.XY = common.XY(x=state.cars_cob_1, y=state.cars_cob_2)
+            position: common.XY = common.XY(x=state.cars_cob_2, y=state.cars_cob_1)     # reversed like in book
             action: Action = policy_[state]
             transfer_1_to_2: int = action.transfer_1_to_2
             # print(position, transfer_1_to_2)
