@@ -40,15 +40,9 @@ class Controller:
             self._model.prep_for_output()
             self._view.grid_view.demonstrate(self.new_episode_request)
 
-        # TODO: do a different way
-        self._model.prep_for_output()
-        # self._model.agent.algorithm.V.print_all_values()
-        self._view.grid_view.display_latest_step()
-        # self._view.grid_view.display_and_wait()
-
     # region Model requests
-    # TODO maybe use this and make episode Optional
-    def display_step(self, episode_: agent.Episode):
+    def display_step(self, episode_: Optional[agent.Episode]):
+        # if self._comparison.grid_view_parameters.show_step:
         self._view.grid_view.display_latest_step(episode_)
     # endregion
 

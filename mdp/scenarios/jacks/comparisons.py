@@ -25,7 +25,8 @@ def jacks_policy_evaluation() -> Comparison:
             ),
             algorithm_parameters=common.AlgorithmParameters(
                 theta=0.1   # accuracy of policy_evaluation
-            )
+            ),
+            display_every_step=True
         ),
         settings_list=[
             common.Settings(

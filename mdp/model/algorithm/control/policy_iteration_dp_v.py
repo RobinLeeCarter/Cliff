@@ -2,7 +2,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from mdp.model import environment, agent, policy
+    from mdp.model import environment, agent
 from mdp import common
 from mdp.model.algorithm import policy_evaluation, policy_improvement
 
@@ -28,10 +28,15 @@ class PolicyIterationDpV(policy_evaluation.PolicyEvaluationDpV, policy_improveme
 
         iteration: int = 1
         policy_stable: bool = False
-        while not policy_stable and iteration < self._iteration_timeout:
+        cont: bool = True
+        if self._step_callback:
+            cont = self._step_callback()
+        while cont and not policy_stable and iteration < self._iteration_timeout:
             print(f"Policy Iteration. Iteration = {iteration}")
             self._policy_evaluation()
             policy_stable = self._policy_improvement()
+            if self._step_callback:
+                cont = self._step_callback()
             iteration += 1
 
         if iteration == self._iteration_timeout:
@@ -39,3 +44,4 @@ class PolicyIterationDpV(policy_evaluation.PolicyEvaluationDpV, policy_improveme
         else:
             if self._verbose:
                 print(f"Policy Iteration completed ...")
+

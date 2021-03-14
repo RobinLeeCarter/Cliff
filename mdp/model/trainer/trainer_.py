@@ -12,12 +12,12 @@ class Trainer:
     def __init__(self,
                  agent_: agent.Agent,
                  breakdown_: Optional[breakdown.Breakdown],
-                 model_step_callback: Optional[Callable[[agent.Episode], None]] = None,
+                 model_step_callback: Optional[Callable[[Optional[agent.Episode]], None]] = None,
                  verbose: bool = False
                  ):
         self._agent: agent.Agent = agent_
         self._breakdown: Optional[breakdown.Breakdown] = breakdown_
-        self._model_step_callback: Optional[Callable[[agent.Episode], None]] = model_step_callback
+        self._model_step_callback: Optional[Callable[[Optional[agent.Episode]], None]] = model_step_callback
         self._verbose = verbose
         self._cont: bool = True
 
@@ -95,7 +95,9 @@ class Trainer:
 
     # noinspection PyUnusedLocal
     def _train_dynamic_programming(self, settings: common.Settings, algorithm_: algorithm.DynamicProgramming):
-        self._agent.algorithm.initialize()
+        if settings.review_every_step or settings.display_every_step:
+            algorithm_.set_step_callback(self.step)
+        algorithm_.initialize()
         algorithm_.run()
 
     def step(self) -> bool:

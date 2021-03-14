@@ -233,6 +233,7 @@ class GridView(abc.ABC):
 
     def _wait_for_event_of_interest(self):
         self._user_event = common.UserEvent.NONE
+        pygame.event.clear()
         while self._user_event == common.UserEvent.NONE:
             # replaced: for event in pygame.event.get():
             event = pygame.event.wait()
