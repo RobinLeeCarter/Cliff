@@ -20,9 +20,10 @@ class PolicyImprovementDpV(abstract.DynamicProgrammingV):
         self.title = f"{self.name}"
 
     def run(self):
-        self._policy_improvement()
+        do_call_back: bool = bool(self._step_callback)
+        self._policy_improvement(do_call_back)
 
-    def _policy_improvement(self) -> bool:
+    def _policy_improvement(self, do_call_back: bool = False) -> bool:
         policy_: policy.Policy = self._agent.target_policy
         # assert isinstance(policy_, policy.Deterministic)
         # policy_: policy.Deterministic
@@ -46,5 +47,7 @@ class PolicyImprovementDpV(abstract.DynamicProgrammingV):
 
         if self._verbose:
             print(f"Policy Improvement completed. policy_stable = {policy_stable}")
+        if do_call_back:
+            self._step_callback()
 
         return policy_stable

@@ -12,7 +12,7 @@ def jacks_policy_evaluation() -> Comparison:
         environment_parameters=EnvironmentParameters(
             environment_type=common.EnvironmentType.JACKS,
             max_cars=_max_cars,
-            # extra_rules=True,
+            extra_rules=False,      # change this for extra rules in book as per challenge
             # rental_rate_1=10.0,
             # return_rate_1=0.0,
             # rental_rate_2=0.0,
@@ -56,6 +56,7 @@ def jacks_policy_evaluation() -> Comparison:
         grid_view_parameters=common.GridViewParameters(
             grid_view_type=common.GridViewType.JACKS,
             show_demo=False,
+            # show_result=False,
             show_values=True,
         ),
     )

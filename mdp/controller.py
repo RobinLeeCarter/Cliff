@@ -36,9 +36,13 @@ class Controller:
             )
             self._view.graph3d.make_plot(self._comparison.graph3d_values)
 
-        if self._comparison.grid_view_parameters.show_demo:
+        gvp = self._comparison.grid_view_parameters
+        if gvp.show_result or gvp.show_demo:
             self._model.prep_for_output()
-            self._view.grid_view.demonstrate(self.new_episode_request)
+            if gvp.show_result:
+                self._view.grid_view.display_latest_step()
+            if gvp.show_demo:
+                self._view.grid_view.demonstrate(self.new_episode_request)
 
     # region Model requests
     def display_step(self, episode_: Optional[agent.Episode]):
