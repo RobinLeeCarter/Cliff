@@ -19,8 +19,8 @@ from mdp.scenarios.jacks.grid_world import GridWorld
 from mdp.scenarios.jacks.dynamics.outcome import Outcome
 from mdp.scenarios.jacks.dynamics.location import Location
 from mdp.scenarios.jacks.dynamics.location_outcome import LocationOutcome
-from mdp.scenarios.jacks.dynamics.location_outcomes import LocationOutcomes
-from mdp.scenarios.jacks.dynamics.counter import Counter
+# from mdp.scenarios.jacks.dynamics.location_outcomes import LocationOutcomes
+from mdp.scenarios.jacks.dynamics.dict_zero import DictZero
 
 
 class Dynamics:
@@ -58,15 +58,15 @@ class Dynamics:
         cars_sob_1 = state.cars_cob_1 - action.transfer_1_to_2
         cars_sob_2 = state.cars_cob_2 + action.transfer_1_to_2
 
-        outcomes1: LocationOutcomes = self._location_1.get_outcomes(cars_sob_1)
-        outcomes2: LocationOutcomes = self._location_2.get_outcomes(cars_sob_2)
+        outcomes1: dict[LocationOutcome, float] = self._location_1.get_outcomes(cars_sob_1)
+        outcomes2: dict[LocationOutcome, float] = self._location_2.get_outcomes(cars_sob_2)
 
         # 27,000 for one state and action, up to 120m for all states and actions
         # total_possibilities = len(outcomes1) * len(outcomes2)
         # print(f"total_possibilities = {total_possibilities}")
 
         # outcome_dict[(new_state, cars_rented)] = probability
-        outcome_dict: Counter[tuple[State, int], float] = Counter()
+        outcome_dict: DictZero[tuple[State, int], float] = DictZero()
 
         for outcome1, probability1 in outcomes1.items():
             for outcome2, probability2 in outcomes2.items():
@@ -80,9 +80,6 @@ class Dynamics:
                 #     outcome_dict[outcome] += probability
                 # else:
                 #     outcome_dict[outcome] = probability
-
-        # compresses to 6,468 outcomes
-        print(len(outcome_dict))
 
         outcome_list: list[Outcome] = []
         for outcome, probability in outcome_dict.items():

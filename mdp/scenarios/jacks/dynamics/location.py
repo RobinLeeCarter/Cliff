@@ -3,8 +3,9 @@ from typing import Optional
 import numpy as np
 from scipy import stats
 
+from mdp.scenarios.jacks.dynamics.dict_zero import DictZero
 from mdp.scenarios.jacks.dynamics.location_outcome import LocationOutcome
-from mdp.scenarios.jacks.dynamics.location_outcomes import LocationOutcomes
+# from mdp.scenarios.jacks.dynamics.location_outcomes import LocationOutcomes
 
 
 class Location:
@@ -53,8 +54,8 @@ class Location:
     def _poisson(self, lambda_: float, n: int):
         return stats.poisson.pmf(k=n, mu=lambda_)
 
-    def get_outcomes(self, starting_cars: int) -> LocationOutcomes:
-        location_outcomes: LocationOutcomes = LocationOutcomes()
+    def get_outcomes(self, starting_cars: int) -> dict[LocationOutcome, float]:
+        location_outcomes: DictZero[LocationOutcome, float] = DictZero()
         for car_demand, demand_probability in enumerate(self._demand_prob):
             cars_rented = min(starting_cars, car_demand)
             for cars_returned, return_probability in enumerate(self._return_prob):
