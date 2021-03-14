@@ -3,6 +3,7 @@ from __future__ import annotations
 
 from mdp.scenarios.jacks.state import State
 from mdp.scenarios.jacks.action import Action
+from mdp.scenarios.jacks.response import Response
 from mdp.scenarios.jacks.comparisons import jacks_policy_evaluation
 from mdp.scenarios.jacks.dynamics.dynamics import Dynamics
 from mdp.scenarios.jacks.dynamics.outcome import Outcome
@@ -18,6 +19,18 @@ outcomes: list[Outcome] = dynamics.get_outcomes(state, action)
 
 # compresses to 6,468 outcomes
 print(len(outcomes))
+
+response: Response = dynamics.draw_response(state, action)
+print(response)
+response: Response = dynamics.draw_response(state, action)
+print(response)
+response: Response = dynamics.draw_response(state, action)
+print(response)
+response: Response = dynamics.draw_response(state, action)
+print(response)
+response: Response = dynamics.draw_response(state, action)
+print(response)
+
 
 # for outcome in outcomes:
 #     if outcome.probability > 0.001:

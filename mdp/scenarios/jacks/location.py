@@ -16,8 +16,9 @@ class Location:
         # self._revenue_per_car: float = 10.0
         # self._park_penalty: float = 4.0
 
-        self._demand_prob: np.ndarray = np.zeros(self._max_cars + 1, float)
-        self._return_prob: np.ndarray = np.zeros(self._max_cars + 1, float)
+        self._car_count: list[float] = []
+        self._demand_prob: list[float] = []
+        self._return_prob: list[float] = []
 
         # for each starting_cars find possible outcomes
         # could have used dictionary of dictionaries but fast enough and that could be confusing
@@ -41,15 +42,15 @@ class Location:
         # exit()
 
     def _rental_return_prob(self):
-        car_count = [c for c in range(self._max_cars + 1)]
-        self._demand_prob = np.array([self._poisson(self._rental_rate, c) for c in car_count])
-        self._return_prob = np.array([self._poisson(self._return_rate, c) for c in car_count])
-        self._demand_prob[-1] += 1.0 - np.sum(self._demand_prob)
-        self._return_prob[-1] += 1.0 - np.sum(self._return_prob)
+        self._car_count = [c for c in range(self._max_cars + 1)]
+        self._demand_prob = [self._poisson(self._rental_rate, c) for c in self._car_count]
+        self._return_prob = [self._poisson(self._return_rate, c) for c in self._car_count]
+        self._demand_prob[-1] += 1.0 - sum(self._demand_prob)
+        self._return_prob[-1] += 1.0 - sum(self._return_prob)
         # print(self._demand_prob)
         # print(self._return_prob)
 
-    def _poisson(self, lambda_: float, n: int):
+    def _poisson(self, lambda_: float, n: int) -> float:
         return stats.poisson.pmf(k=n, mu=lambda_)
 
     def _daily_outcome_tables(self):

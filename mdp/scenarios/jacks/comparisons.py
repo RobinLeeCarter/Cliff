@@ -4,7 +4,7 @@ from mdp import common
 from mdp.scenarios.jacks.comparison import Comparison
 from mdp.scenarios.jacks.environment_parameters import EnvironmentParameters
 
-_max_cars: int = 20      # problem statement = 20
+_max_cars: int = 10      # problem statement = 20
 
 
 def jacks_policy_evaluation() -> Comparison:

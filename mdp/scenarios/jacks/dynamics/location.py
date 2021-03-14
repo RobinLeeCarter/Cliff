@@ -1,6 +1,6 @@
 from typing import Optional
 
-import numpy as np
+import random
 from scipy import stats
 
 from mdp.scenarios.jacks.dynamics.dict_zero import DictZero
@@ -18,8 +18,9 @@ class Location:
         # self._revenue_per_car: float = 10.0
         # self._park_penalty: float = 4.0
 
-        self._demand_prob: np.ndarray = np.zeros(self._max_cars + 1, float)
-        self._return_prob: np.ndarray = np.zeros(self._max_cars + 1, float)
+        self._car_count: list[int] = []
+        self._demand_prob: list[float] = []
+        self._return_prob: list[float] = []
 
         # for each starting_cars find possible outcomes
         # could have used dictionary of dictionaries but fast enough and that could be confusing
@@ -43,25 +44,23 @@ class Location:
         # exit()
 
     def _rental_return_prob(self):
-        car_count = [c for c in range(self._max_cars + 1)]
-        self._demand_prob = np.array([self._poisson(self._rental_rate, c) for c in car_count])
-        self._return_prob = np.array([self._poisson(self._return_rate, c) for c in car_count])
-        self._demand_prob[-1] += 1.0 - np.sum(self._demand_prob)
-        self._return_prob[-1] += 1.0 - np.sum(self._return_prob)
+        self._car_count = [c for c in range(self._max_cars + 1)]
+        self._demand_prob = [self._poisson(self._rental_rate, c) for c in self._car_count]
+        self._return_prob = [self._poisson(self._return_rate, c) for c in self._car_count]
+        self._demand_prob[-1] += 1.0 - sum(self._demand_prob)
+        self._return_prob[-1] += 1.0 - sum(self._return_prob)
         # print(self._demand_prob)
         # print(self._return_prob)
 
-    def _poisson(self, lambda_: float, n: int):
+    def _poisson(self, lambda_: float, n: int) -> float:
         return stats.poisson.pmf(k=n, mu=lambda_)
 
     def get_outcomes(self, starting_cars: int) -> dict[LocationOutcome, float]:
         location_outcomes: DictZero[LocationOutcome, float] = DictZero()
         for car_demand, demand_probability in enumerate(self._demand_prob):
-            cars_rented = min(starting_cars, car_demand)
+            cars_rented = self._get_cars_rented(starting_cars, car_demand)
             for cars_returned, return_probability in enumerate(self._return_prob):
-                ending_cars = starting_cars - cars_rented + cars_returned
-                if ending_cars > self._max_cars:
-                    ending_cars = self._max_cars
+                ending_cars = self._get_ending_cars(starting_cars, cars_rented, cars_returned)
 
                 probability = demand_probability * return_probability
 
@@ -84,6 +83,22 @@ class Location:
                     #     outcome_list.append(outcome)
                     #     # self._counter += 1
         return location_outcomes
+
+    def draw_outcome(self, starting_cars: int) -> LocationOutcome:
+        car_demand: int = random.choices(population=self._car_count, weights=self._demand_prob)[0]
+        cars_rented = self._get_cars_rented(starting_cars, car_demand)
+        cars_returned = random.choices(population=self._car_count, weights=self._return_prob)[0]
+        ending_cars = self._get_ending_cars(starting_cars, cars_rented, cars_returned)
+        return LocationOutcome(ending_cars, cars_rented)
+
+    def _get_cars_rented(self, starting_cars: int, car_demand: int) -> int:
+        return min(starting_cars, car_demand)
+
+    def _get_ending_cars(self, starting_cars: int, cars_rented: int, cars_returned: int) -> int:
+        ending_cars = starting_cars - cars_rented + cars_returned
+        if ending_cars > self._max_cars:
+            ending_cars = self._max_cars
+        return ending_cars
 
     def _daily_outcome_tables(self):
         for starting_cars in range(self._max_cars + 1):

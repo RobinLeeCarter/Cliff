@@ -15,6 +15,7 @@ from mdp.scenarios.jacks.state import State
 from mdp.scenarios.jacks.action import Action
 from mdp.scenarios.jacks.environment_parameters import EnvironmentParameters
 from mdp.scenarios.jacks.grid_world import GridWorld
+from mdp.scenarios.jacks.response import Response
 
 from mdp.scenarios.jacks.dynamics.outcome import Outcome
 from mdp.scenarios.jacks.dynamics.location import Location
@@ -50,6 +51,11 @@ class Dynamics:
         pass
 
     def get_outcomes(self, state: State, action: Action) -> list[Outcome]:
+        """
+        list of possible outcomes for a single state and action
+        could be used for one state, action in theory
+        but too many for all states and actions so potentially not useful in practice
+        """
         total_costs: float = self._calc_cost_of_transfers(action.transfer_1_to_2)
         if self._extra_rules:
             total_costs += self._location_1.parking_costs(state.cars_cob_1)
@@ -90,6 +96,28 @@ class Dynamics:
             outcome_list.append(Outcome(new_state, reward, probability))
 
         return outcome_list
+
+    def draw_response(self, state: State, action: Action) -> Response:
+        """
+        draw a single outcome for a single state and action
+        standard call for episodic algorithms
+        """
+        total_costs: float = self._calc_cost_of_transfers(action.transfer_1_to_2)
+        if self._extra_rules:
+            total_costs += self._location_1.parking_costs(state.cars_cob_1)
+            total_costs += self._location_2.parking_costs(state.cars_cob_2)
+
+        cars_sob_1 = state.cars_cob_1 - action.transfer_1_to_2
+        cars_sob_2 = state.cars_cob_2 + action.transfer_1_to_2
+
+        outcome1: LocationOutcome = self._location_1.draw_outcome(cars_sob_1)
+        outcome2: LocationOutcome = self._location_2.draw_outcome(cars_sob_2)
+
+        new_state = State(is_terminal=False, cars_cob_1=outcome1.ending_cars, cars_cob_2=outcome2.ending_cars)
+        cars_rented = outcome1.cars_rented + outcome2.cars_rented
+        revenue: float = cars_rented * self._rental_revenue
+        reward: float = revenue - total_costs
+        return Response(reward, new_state)
 
     def _calc_cost_of_transfers(self, transfer_1_to_2: int) -> float:
         """This will change for second part of problem"""
