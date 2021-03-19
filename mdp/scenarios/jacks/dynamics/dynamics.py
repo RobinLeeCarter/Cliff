@@ -22,6 +22,7 @@ from mdp.scenarios.jacks.dynamics.location import Location
 from mdp.scenarios.jacks.dynamics.location_outcome import LocationOutcome
 # from mdp.scenarios.jacks.dynamics.location_outcomes import LocationOutcomes
 from mdp.scenarios.jacks.dynamics.dict_zero import DictZero
+from mdp.scenarios.jacks.dynamics.state_probability import StateProbability
 
 
 class Dynamics:
@@ -49,6 +50,46 @@ class Dynamics:
 
     def build(self):
         pass
+
+    def get_expected_reward(self, state: State, action: Action) -> float:
+        """
+        r(s,a) = E[Rt | S(t-1)=s, A(t-1)=a] = Sum_over_s'_r( p(s',r|s,a).r )
+        expected reward for a (state, action)
+        """
+        raise NotImplementedError
+
+    def get_expected_conditional_reward(self, next_state: State, state: State, action: Action) -> float:
+        """
+        r(s,a,s') = E[Rt | S(t)=s', S(t-1)=s, A(t-1=a)] = Sum_over_r( p(s',r|s,a).r ) / p(s'|s,a)
+        expected reward for a (state, action) given the next state
+        """
+        probability_x_reward = self.get_probability_x_reward(next_state, state, action)
+        next_state_probability = self.get_next_state_probability(next_state, state, action)
+        if next_state_probability == 0.0:
+            return 0.0
+        else:
+            return probability_x_reward / next_state_probability
+
+    def get_probability_x_reward(self, next_state: State, state: State, action: Action) -> float:
+        """
+        Sum_over_r( p(s',r|s,a).r )
+        probability_x_reward for a (state, action) given the next state
+        """
+        raise NotImplementedError
+
+    def get_next_state_probability(self, next_state: State, state: State, action: Action) -> float:
+        """
+        p(s'|s,a) = Sum_over_r( p(s',r|s,a) )
+        probability of a next state for a (state, action)
+        """
+        raise NotImplementedError
+
+    def get_next_state_distribution(self, state: State, action: Action) -> list[StateProbability]:
+        """
+        list[ s', p(s'|s,a) ]
+        distribution of next states for a (state, action)
+        """
+        raise NotImplementedError
 
     def get_outcomes(self, state: State, action: Action) -> list[Outcome]:
         """
