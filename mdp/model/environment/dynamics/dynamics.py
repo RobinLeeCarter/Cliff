@@ -2,38 +2,83 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from mdp.model.environment import State, Action
-
-from mdp.model.environment import StateAction
-from mdp.model.environment.dynamics.state_probability import StateProbability
-# from mdp.model.environment.dynamics.next_state_distribution import NextStateDistribution
+    from mdp import common
+    from mdp.model.environment.state import State
+    from mdp.model.environment.action import Action
+    from mdp.model.environment.response import Response
+    from mdp.model.environment.dynamics.outcome import Outcome
+    # from mdp.model.environment.dynamics.state_probability import StateProbability
 
 
 class Dynamics:
-    def __init__(self):
-        self.expected_reward_dict: dict[StateAction, float] = {}
-        self.next_state_dist_dict: dict[StateAction, list[StateProbability]] = {}
+    def __init__(self, environment_parameters_: common.EnvironmentParameters):
+        """init top down"""
+        self._environment_parameters: common.EnvironmentParameters = environment_parameters_
+        self.is_built: bool = False
 
-    def set_expected_reward(self, state: State, action: Action, expected_reward: float):
-        state_action = StateAction(state, action)
-        self.expected_reward_dict[state_action] = expected_reward
+    def build(self):
+        """build bottom up"""
+        self.is_built = True
 
     def get_expected_reward(self, state: State, action: Action) -> float:
-        state_action = StateAction(state, action)
-        return self.expected_reward_dict[state_action]
+        """
+        r(s,a) = E[Rt | S(t-1)=s, A(t-1)=a] = Sum_over_s'_r( p(s',r|s,a).r )
+        expected reward for a (state, action)
+        """
+        pass
 
-    def set_next_state_probability(self, state: State, action: Action,
-                                   next_state: State, probability: float):
-        state_action = StateAction(state, action)
+    def get_expected_conditional_reward(self, state: State, action: Action, next_state: State) -> float:
+        """
+        r(s,a,s') = E[Rt | S(t)=s', S(t-1)=s, A(t-1=a)] = Sum_over_r( p(s',r|s,a).r ) / p(s'|s,a)
+        expected reward for a (state, action) given the next state
+        """
+        probability_x_reward: float = self.get_probability_x_reward(state, action, next_state)
+        next_state_probability: float = self.get_next_state_probability(state, action, next_state)
+        if next_state_probability == 0.0:
+            return 0.0
+        else:
+            return probability_x_reward / next_state_probability
 
-        next_state_distribution = self.next_state_dist_dict.get(state_action)
-        if not next_state_distribution:
-            next_state_distribution: list[StateProbability] = []
-            self.next_state_dist_dict[state_action] = next_state_distribution
+    def get_probability_x_reward(self, state: State, action: Action, next_state: State) -> float:
+        """
+        Sum_over_r( p(s',r|s,a).r )
+        probability_x_reward for a (state, action) given the next state
+        """
+        pass
 
-        state_probability = StateProbability(next_state, probability)
-        next_state_distribution.append(state_probability)
+    def get_next_state_probability(self, state: State, action: Action, next_state: State) -> float:
+        """
+        p(s'|s,a) = Sum_over_r( p(s',r|s,a) )
+        probability of a next state for a (state, action)
+        """
+        pass
 
-    def get_next_state_distribution(self, state: State, action: Action) -> list[StateProbability]:
-        state_action = StateAction(state, action)
-        return self.next_state_dist_dict[state_action]
+    def get_next_state_distribution(self, state: State, action: Action) -> dict[State, float]:
+        """
+        list[ s', p(s'|s,a) ]
+        distribution of next states for a (state, action)
+        """
+        pass
+
+    # TODO: should Outcome not include probability? and this return a dict? could be slow if large number of outcomes
+    def get_summary_outcomes(self, state: State, action: Action) -> list[Outcome]:
+        """
+        list of possible outcomes for a single state and action
+        with the expected_reward given in place of reward
+        """
+        pass
+
+    def get_all_outcomes(self, state: State, action: Action) -> list[Outcome]:
+        """
+        list of possible outcomes for a single state and action
+        could be used for one state, action in theory
+        but too many for all states and actions so potentially not useful in practice
+        """
+        pass
+
+    def draw_response(self, state: State, action: Action) -> Response:
+        """
+        draw a single outcome for a single state and action
+        standard call for episodic algorithms
+        """
+        pass

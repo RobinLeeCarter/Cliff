@@ -1,19 +1,28 @@
 from __future__ import annotations
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Optional
 
+import random
+import numpy as np
 
 if TYPE_CHECKING:
-    from mdp.scenarios.jacks.action import Action
-    from mdp.scenarios.jacks.environment_parameters import EnvironmentParameters
-    from mdp.scenarios.jacks.dynamics.location_outcome import LocationOutcome
+    from mdp.model import algorithm, policy
+    from mdp.model.algorithm.value_function import state_function
 
+# from mdp import common
 from mdp.model import environment
+
 from mdp.scenarios.jacks.state import State
+from mdp.scenarios.jacks.action import Action
+from mdp.scenarios.jacks.environment_parameters import EnvironmentParameters
+# from mdp.scenarios.jacks.grid_world import GridWorld
 from mdp.scenarios.jacks.response import Response
 
 from mdp.scenarios.jacks.dynamics.outcome import Outcome
 from mdp.scenarios.jacks.dynamics.location import Location
+from mdp.scenarios.jacks.dynamics.location_outcome import LocationOutcome
+# from mdp.scenarios.jacks.dynamics.location_outcomes import LocationOutcomes
 from mdp.scenarios.jacks.dynamics.dict_zero import DictZero
+from mdp.scenarios.jacks.dynamics.state_probability import StateProbability
 
 
 class Dynamics(environment.Dynamics):
@@ -78,7 +87,6 @@ class Dynamics(environment.Dynamics):
         probability2 = self._location_2.get_transition_probability(self._starting_cars2, next_state.cars_cob_2)
         probability = probability1 * probability2
 
-        # THIS MAY BE WRONG
         probability_x_reward = self._calc_reward(cars_rented_x_probability, probability)
         return probability_x_reward
 
@@ -110,62 +118,50 @@ class Dynamics(environment.Dynamics):
                 next_state_distribution[next_state] = probability
         return next_state_distribution
 
-    def get_summary_outcomes(self, state: State, action: Action) -> list[Outcome]:
-        """
-        list of possible outcomes for a single state and action
-        with the expected_reward given in place of reward
-        """
-        self._calc_start_of_day(state, action)
-        l1 = self._location_1
-        l2 = self._location_2
-
-        ending_cars_dist1: dict[int, float] = l1.get_ending_cars_distribution(self._starting_cars1)
-        ending_cars_dist2: dict[int, float] = l2.get_ending_cars_distribution(self._starting_cars2)
-
-        outcome_list: list[Outcome] = []
-        for ending_cars1, probability1 in ending_cars_dist1.items():
-            cars_rented1 = l1.get_expected_cars_rented_given_ending_cars(self._starting_cars1, ending_cars1)
-            for ending_cars2, probability2 in ending_cars_dist2.items():
-                cars_rented2 = l2.get_expected_cars_rented_given_ending_cars(self._starting_cars2, ending_cars2)
-                cars_rented = cars_rented1 + cars_rented2
-                new_state = State(is_terminal=False, cars_cob_1=ending_cars1, cars_cob_2=ending_cars2)
-                probability = probability1 * probability2
-                reward = self._calc_reward(cars_rented)
-                outcome = Outcome(new_state, reward, probability)
-                outcome_list.append(outcome)
-
-        return outcome_list
-
-    def get_all_outcomes(self, state: State, action: Action) -> list[Outcome]:
+    def get_outcomes(self, state: State, action: Action) -> list[Outcome]:
         """
         list of possible outcomes for a single state and action
         could be used for one state, action in theory
         but too many for all states and actions so potentially not useful in practice
         """
-        self._calc_start_of_day(state, action)
-        l1 = self._location_1
-        l2 = self._location_2
+        total_costs: float = self._calc_cost_of_transfers(action.transfer_1_to_2)
+        if self._extra_rules:
+            total_costs += self._location_1.parking_costs(state.cars_cob_1)
+            total_costs += self._location_2.parking_costs(state.cars_cob_2)
 
-        outcomes1: dict[LocationOutcome, float] = l1.get_outcome_distribution(self._starting_cars1)
-        outcomes2: dict[LocationOutcome, float] = l2.get_outcome_distribution(self._starting_cars2)
+        cars_sob_1 = state.cars_cob_1 - action.transfer_1_to_2
+        cars_sob_2 = state.cars_cob_2 + action.transfer_1_to_2
 
-        # collate (s', r)
-        # outcome_dict: dict[(next_state, reward), probability]
-        outcome_dict: DictZero[tuple[State, float], float] = DictZero()
+        outcomes1: dict[LocationOutcome, float] = self._location_1.outcome_distributions[cars_sob_1]
+        outcomes2: dict[LocationOutcome, float] = self._location_2.outcome_distributions[cars_sob_2]
+
+        # 27,000 for one state and action, up to 120m for all states and actions
+        # total_possibilities = len(outcomes1) * len(outcomes2)
+        # print(f"total_possibilities = {total_possibilities}")
+
+        # outcome_dict[(new_state, cars_rented)] = probability
+        outcome_dict: DictZero[tuple[State, int], float] = DictZero()
+
         for outcome1, probability1 in outcomes1.items():
             for outcome2, probability2 in outcomes2.items():
+                new_state = State(is_terminal=False, cars_cob_1=outcome1.ending_cars, cars_cob_2=outcome2.ending_cars)
                 cars_rented = outcome1.cars_rented + outcome2.cars_rented
-                new_state = State(is_terminal=False,
-                                  cars_cob_1=outcome1.ending_cars,
-                                  cars_cob_2=outcome2.ending_cars)
                 probability = probability1 * probability2
-                reward = self._calc_reward(cars_rented)
-                outcome_dict[(new_state, reward)] += probability
+                outcome: tuple = (new_state, cars_rented)
+                outcome_dict[outcome] += probability
+                # probability: Optional[float] = outcome_dict.get(outcome)
+                # if probability:
+                #     outcome_dict[outcome] += probability
+                # else:
+                #     outcome_dict[outcome] = probability
 
         outcome_list: list[Outcome] = []
-        for (next_state, reward), probability in outcome_dict.items():
-            outcome = Outcome(next_state, reward, probability)
-            outcome_list.append(outcome)
+        for outcome, probability in outcome_dict.items():
+            new_state: State = outcome[0]
+            cars_rented: int = outcome[1]
+            revenue: float = cars_rented * self._rental_revenue
+            reward: float = revenue - total_costs
+            outcome_list.append(Outcome(new_state, reward, probability))
 
         return outcome_list
 
@@ -174,12 +170,21 @@ class Dynamics(environment.Dynamics):
         draw a single outcome for a single state and action
         standard call for episodic algorithms
         """
-        self._calc_start_of_day(state, action)
-        outcome1: LocationOutcome = self._location_1.draw_outcome(self._starting_cars1)
-        outcome2: LocationOutcome = self._location_2.draw_outcome(self._starting_cars2)
+        total_costs: float = self._calc_cost_of_transfers(action.transfer_1_to_2)
+        if self._extra_rules:
+            total_costs += self._location_1.parking_costs(state.cars_cob_1)
+            total_costs += self._location_2.parking_costs(state.cars_cob_2)
+
+        cars_sob_1 = state.cars_cob_1 - action.transfer_1_to_2
+        cars_sob_2 = state.cars_cob_2 + action.transfer_1_to_2
+
+        outcome1: LocationOutcome = self._location_1.draw_outcome(cars_sob_1)
+        outcome2: LocationOutcome = self._location_2.draw_outcome(cars_sob_2)
+
         new_state = State(is_terminal=False, cars_cob_1=outcome1.ending_cars, cars_cob_2=outcome2.ending_cars)
         cars_rented = outcome1.cars_rented + outcome2.cars_rented
-        reward: float = self._calc_reward(cars_rented)
+        revenue: float = cars_rented * self._rental_revenue
+        reward: float = revenue - total_costs
         return Response(reward, new_state)
 
     def _calc_start_of_day(self, state: State, action: Action):
@@ -191,10 +196,10 @@ class Dynamics(environment.Dynamics):
         self.cars_sob_1 = state.cars_cob_1 - action.transfer_1_to_2
         self.cars_sob_2 = state.cars_cob_2 + action.transfer_1_to_2
 
-    def _calc_reward(self, cars_rented: float, partial_probability: float = 1.0) -> float:
+    def _calc_reward(self, cars_rented: float, probability: float = 1.0) -> float:
         """caters for case where calculating probability * reward for only part of the probability distribution"""
         revenue: float = cars_rented * self._rental_revenue
-        reward: float = revenue - (self._total_costs * partial_probability)
+        reward: float = revenue - (self._total_costs * probability)
         return reward
 
     def _calc_cost_of_transfers(self, transfer_1_to_2: int) -> float:

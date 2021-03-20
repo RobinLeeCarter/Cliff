@@ -15,17 +15,24 @@ class Location:
         self._return_rate: float = return_rate
         self._excess_parking_cost: float = excess_parking_cost
 
-        # self._revenue_per_car: float = 10.0
-        # self._park_penalty: float = 4.0
-
         self._car_count: list[int] = []
         self._demand_prob: list[float] = []
         self._return_prob: list[float] = []
 
         # for each starting_cars find possible outcomes
-        # could have used dictionary of dictionaries but fast enough and that could be confusing
-        self.outcome_lookup: dict[int, list[LocationOutcome]] = {}
+        # dict[starting_cars, dict[LocationOutcome, probability]]
+        self.outcome_distributions: dict[int, dict[LocationOutcome, float]] = {}
         self._counter: int = 0
+
+        # summaries
+        # dict[starting_cars, cars_rented * probability]
+        self.expected_cars_rented: dict[int, float] = {}
+        # dict[starting_cars, dict[ending_cars, probability]]
+        self.ending_cars_distribution: dict[int, dict[int, float]] = {}
+        # dict[starting_cars, dict[ending_cars, cars_rented_x_probability]]
+        self.cars_rented_x_probability_by_ending_cars: dict[int, dict[int, float]] = {}
+        # dict[starting_cars, dict[ending_cars, expected_cars_rented]]
+        self.expected_cars_rented_by_ending_cars: dict[int, dict[int, float]] = {}
 
         # given starting_cars as input, value is expected revenue
         # E[r[l] | s, a]
@@ -35,13 +42,14 @@ class Location:
         # Pr(s'[l] | s, a)
         # self._prob_ending_cars: np.ndarray = np.zeros(shape=(self._max_cars + 1, self._max_cars + 1), dtype=float)
 
-        self._build()
-
-    def _build(self):
+    def build(self):
         self._rental_return_prob()
-        # self._daily_outcome_tables()
-        # print(f"daily_outcomes = {self._counter}")
-        # exit()
+        self._build_outcome_distributions()
+        for distribution in self.outcome_distributions.values():
+            for _ in distribution.keys():
+                self._counter += 1
+        print(f"daily_outcomes = {self._counter}")
+        self._build_summaries()
 
     def _rental_return_prob(self):
         self._car_count = [c for c in range(self._max_cars + 1)]
@@ -55,41 +63,25 @@ class Location:
     def _poisson(self, lambda_: float, n: int) -> float:
         return stats.poisson.pmf(k=n, mu=lambda_)
 
-    def get_outcomes(self, starting_cars: int) -> dict[LocationOutcome, float]:
-        location_outcomes: DictZero[LocationOutcome, float] = DictZero()
+    def _build_outcome_distributions(self):
+        for starting_cars in self._car_count:
+            self._build_outcome_distribution(starting_cars)
+
+    def _build_outcome_distribution(self, starting_cars: int):
+        outcome_distribution: DictZero[LocationOutcome, float] = DictZero()
+        # cars_rented_x_probability: float = 0.0
+
         for car_demand, demand_probability in enumerate(self._demand_prob):
             cars_rented = self._get_cars_rented(starting_cars, car_demand)
             for cars_returned, return_probability in enumerate(self._return_prob):
                 ending_cars = self._get_ending_cars(starting_cars, cars_rented, cars_returned)
-
                 probability = demand_probability * return_probability
 
                 if probability > 0.0:
                     location_outcome = LocationOutcome(ending_cars, cars_rented)
-                    location_outcomes[location_outcome] += probability
-                    # outcome_: Optional[LocationOutcome] = None
-                    # for location_outcome_ in outcome_list:
-                    #     if location_outcome_.ending_cars == ending_cars and \
-                    #             location_outcome_.cars_rented == cars_rented:
-                    #         outcome_ = location_outcome_
-                    #         outcome_.probability += probability
-                    #         break
-                    # if not outcome_:
-                    #     outcome = LocationOutcome(
-                    #         ending_cars=ending_cars,
-                    #         cars_rented=cars_rented,
-                    #         probability=probability,
-                    #     )
-                    #     outcome_list.append(outcome)
-                    #     # self._counter += 1
-        return location_outcomes
+                    outcome_distribution[location_outcome] += probability
 
-    def draw_outcome(self, starting_cars: int) -> LocationOutcome:
-        car_demand: int = random.choices(population=self._car_count, weights=self._demand_prob)[0]
-        cars_rented = self._get_cars_rented(starting_cars, car_demand)
-        cars_returned = random.choices(population=self._car_count, weights=self._return_prob)[0]
-        ending_cars = self._get_ending_cars(starting_cars, cars_rented, cars_returned)
-        return LocationOutcome(ending_cars, cars_rented)
+        self.outcome_distributions[starting_cars] = outcome_distribution
 
     def _get_cars_rented(self, starting_cars: int, car_demand: int) -> int:
         return min(starting_cars, car_demand)
@@ -100,52 +92,55 @@ class Location:
             ending_cars = self._max_cars
         return ending_cars
 
-    def _daily_outcome_tables(self):
-        for starting_cars in range(self._max_cars + 1):
-            outcome_list: list[LocationOutcome] = []
-            self.outcome_lookup[starting_cars] = outcome_list
-            for car_demand, demand_probability in enumerate(self._demand_prob):
-                cars_rented = min(starting_cars, car_demand)
-                for cars_returned, return_probability in enumerate(self._return_prob):
-                    ending_cars = starting_cars - cars_rented + cars_returned
-                    if ending_cars > self._max_cars:
-                        ending_cars = self._max_cars
+    def _build_summaries(self):
+        for starting_cars in self.outcome_distributions.keys():
+            expected_cars_rented: float = 0.0
+            ending_cars_distribution: DictZero[int, float] = DictZero()
+            cars_rented_x_probability_by_ending_cars: DictZero[int, float] = DictZero()
 
-                    # part of p(ending_cars, cars_rented | starting_cars)
-                    # aka eg. p(s1', r1 | s1, a)
-                    probability = demand_probability * return_probability
-                    # part of p(ending_cars, cars_rented | starting_cars) x cars_rented
-                    # aka eg. p(s1', r1 | s1, a) x r1
-                    probability_x_cars_rented = probability * cars_rented
+            for outcome, probability in self.outcome_distributions[starting_cars].items():
+                cars_rented_x_probability = outcome.cars_rented * probability
 
-                    # summarise by ending_cars
+                expected_cars_rented += cars_rented_x_probability
+                ending_cars_distribution[outcome.ending_cars] += probability
+                cars_rented_x_probability_by_ending_cars[outcome.ending_cars] += cars_rented_x_probability
 
-                    # find outcome to append to or add to list
-                    outcome_: Optional[LocationOutcome] = None
-                    for location_outcome_ in outcome_list:
-                        if location_outcome_.ending_cars == ending_cars:
-                            outcome_ = location_outcome_
-                            outcome_.probability += probability
-                            # outcome_.probability_x_cars_rented += probability_x_cars_rented
-                            break
-                    if not outcome_:
-                        outcome = LocationOutcome(
-                            ending_cars=ending_cars,
-                            probability=probability,
-                            # probability_x_cars_rented=probability_x_cars_rented
-                        )
-                        outcome_list.append(outcome)
-                        self._counter += 1
+            expected_cars_rented_by_ending_cars: DictZero[int, float] = DictZero()
+            for ending_cars, ending_cars_probability in ending_cars_distribution.items():
+                cars_rented_x_probability = cars_rented_x_probability_by_ending_cars[ending_cars]
+                # E[r|s,a,s'] = Sum_over_r( p(r,s'|s,a).r ) / p(s'|s,a)
+                expected_cars_rented = cars_rented_x_probability / ending_cars_probability
+                expected_cars_rented_by_ending_cars[ending_cars] = expected_cars_rented
 
-    # def day_distribution(self, starting_cars) -> Generator[LocationOutcome, None, None]:
-    #     for car_demand, demand_probability in enumerate(self._demand_prob):
-    #         cars_rented = min(starting_cars, car_demand)
-    #         for cars_returned, return_probability in enumerate(self._return_prob):
-    #             joint_probability = demand_probability * return_probability
-    #             ending_cars = starting_cars - cars_rented + cars_returned
-    #             if ending_cars > 20:
-    #                 ending_cars = 20
-    #             yield LocationOutcome(cars_rented, ending_cars, joint_probability)
+            self.expected_cars_rented[starting_cars] = expected_cars_rented
+            self.ending_cars_distribution[starting_cars] = ending_cars_distribution
+            self.cars_rented_x_probability_by_ending_cars[starting_cars] = cars_rented_x_probability_by_ending_cars
+            self.expected_cars_rented_by_ending_cars[starting_cars] = expected_cars_rented_by_ending_cars
+
+    def get_outcome_distribution(self, starting_cars: int) -> dict[LocationOutcome, float]:
+        return self.outcome_distributions[starting_cars]
+
+    def get_ending_cars_distribution(self, starting_cars: int) -> dict[int, float]:
+        return self.ending_cars_distribution[starting_cars]
+
+    def get_transition_probability(self, starting_cars: int, ending_cars: int) -> float:
+        return self.ending_cars_distribution[starting_cars][ending_cars]
+
+    def get_expected_cars_rented_given_ending_cars(self, starting_cars: int, ending_cars: int) -> float:
+        return self.expected_cars_rented_by_ending_cars[starting_cars][ending_cars]
+
+    def draw_outcome(self, starting_cars: int) -> LocationOutcome:
+        outcome_distribution = self.outcome_distributions[starting_cars]
+        outcome: LocationOutcome = random.choices(
+            population=list(outcome_distribution.keys()),
+            weights=list(outcome_distribution.values())
+        )[0]
+        return outcome
+        # car_demand: int = random.choices(population=self._car_count, weights=self._demand_prob)[0]
+        # cars_rented = self._get_cars_rented(starting_cars, car_demand)
+        # cars_returned = random.choices(population=self._car_count, weights=self._return_prob)[0]
+        # ending_cars = self._get_ending_cars(starting_cars, cars_rented, cars_returned)
+        # return LocationOutcome(ending_cars, cars_rented)
 
     def parking_costs(self, end_cars: int) -> float:
         if end_cars > 10:

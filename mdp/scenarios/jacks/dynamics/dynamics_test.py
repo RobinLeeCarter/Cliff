@@ -11,14 +11,26 @@ from mdp.scenarios.jacks.dynamics.outcome import Outcome
 comparison = jacks_policy_evaluation()
 
 dynamics = Dynamics(comparison.environment_parameters)
+dynamics.build()
 
 state = State(is_terminal=False, cars_cob_1=10, cars_cob_2=8)
 action = Action(transfer_1_to_2=2)
 
-outcomes: list[Outcome] = dynamics.get_outcomes(state, action)
+summary_outcomes: list[Outcome] = dynamics.get_summary_outcomes(state, action)
+all_outcomes: list[Outcome] = dynamics.get_all_outcomes(state, action)
 
 # compresses to 6,468 outcomes
-print(len(outcomes))
+print(len(summary_outcomes))
+print(len(all_outcomes))
+
+for outcome1, outcome2 in zip(summary_outcomes, all_outcomes):
+    print(outcome1)
+    print(outcome2)
+
+print("-----")
+
+for outcome in all_outcomes:
+    print(outcome)
 
 response: Response = dynamics.draw_response(state, action)
 print(response)
