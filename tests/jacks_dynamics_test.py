@@ -14,7 +14,7 @@ comparison = jacks_policy_evaluation()
 dynamics = Dynamics(comparison.environment_parameters)
 dynamics.build()
 
-state = State(is_terminal=False, cars_cob_1=10, cars_cob_2=8)
+state = State(is_terminal=False, ending_cars_1=10, ending_cars_2=8)
 action = Action(transfer_1_to_2=2)
 
 summary_outcomes: Distribution[Response] = dynamics.get_summary_outcomes(state, action)

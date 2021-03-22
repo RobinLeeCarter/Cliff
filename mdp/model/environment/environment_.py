@@ -36,20 +36,21 @@ class Environment(ABC):
         # for processing response
         self._state: Optional[State] = None
         self._action: Optional[Action] = None
-        self._square: Optional[common.Square] = None
-        self._new_state: Optional[State] = None
         self._reward: Optional[float] = None
+        self._new_state: Optional[State] = None
+        self._response: Optional[Response] = None
+
+        self._square: Optional[common.Square] = None
 
         # None to ensure not used when not used/initialised
-        self.dynamics: Optional[Dynamics] = None
+        self._dynamics: Optional[Dynamics] = None
 
     def build(self):
         self._build_states()
         self.state_index = {state: i for i, state in enumerate(self.states)}
         self._build_actions()
         self.action_index = {action: i for i, action in enumerate(self.actions)}
-        if self.dynamics:
-            self._build_dynamics()
+        self._build_dynamics()
 
     def state_action_index(self, state: State, action: Action) -> tuple[int, int]:
         state_index = self.state_index[state]
@@ -76,7 +77,8 @@ class Environment(ABC):
         return True
 
     def _build_dynamics(self):
-        pass
+        if self._dynamics:
+            self._dynamics.build()
     # endregion
 
     # region Operation
@@ -104,9 +106,8 @@ class Environment(ABC):
         self._apply_action()
         return self._get_response()
 
-    @abstractmethod
     def _apply_action(self):
-        pass
+        self._response = self._dynamics.draw_response(self._state, self._action)
 
     def _project_back_to_grid(self, requested_position: common.XY) -> common.XY:
         x = requested_position.x
@@ -121,9 +122,8 @@ class Environment(ABC):
             y = self.grid_world.max_y
         return common.XY(x=x, y=y)
 
-    @abstractmethod
     def _get_response(self) -> Response:
-        pass
+        return self._response
 
     def update_grid_value_functions(self, algorithm_: algorithm.Algorithm, policy_: policy.Policy):
         pass

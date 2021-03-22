@@ -10,10 +10,10 @@ from mdp.scenarios.cliff import environment_parameters
 environment_parameters_ = environment_parameters.default
 environment_ = environment_factory.environment_factory(environment_parameters_)
 states: list[State] = [
-    State(is_terminal=False, cars_cob_1=1, cars_cob_2=2),
-    State(is_terminal=False, cars_cob_1=3, cars_cob_2=2),
-    State(is_terminal=False, cars_cob_1=4, cars_cob_2=2),
-    State(is_terminal=False, cars_cob_1=5, cars_cob_2=2),
+    State(is_terminal=False, ending_cars_1=1, ending_cars_2=2),
+    State(is_terminal=False, ending_cars_1=3, ending_cars_2=2),
+    State(is_terminal=False, ending_cars_1=4, ending_cars_2=2),
+    State(is_terminal=False, ending_cars_1=5, ending_cars_2=2),
 ]
 probabilities: list[float] = [0.1, 0.2, 0.3, 0.4]
 

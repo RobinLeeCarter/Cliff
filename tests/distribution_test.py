@@ -6,8 +6,8 @@ from mdp.scenarios.jacks.state import State
 
 x: Distribution[State] = Distribution()
 
-my_state = State(is_terminal=False, cars_cob_1=5, cars_cob_2=6)
-my_state2 = State(is_terminal=False, cars_cob_1=7, cars_cob_2=6)
+my_state = State(is_terminal=False, ending_cars_1=5, ending_cars_2=6)
+my_state2 = State(is_terminal=False, ending_cars_1=7, ending_cars_2=6)
 
 x[my_state] = 0.8
 x[my_state2] += 0.2

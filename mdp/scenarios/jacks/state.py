@@ -6,5 +6,5 @@ from mdp.model import environment
 
 @dataclass(frozen=True)
 class State(environment.State):
-    cars_cob_1: int
-    cars_cob_2: int
+    ending_cars_1: int
+    ending_cars_2: int
