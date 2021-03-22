@@ -7,12 +7,12 @@ if TYPE_CHECKING:
     from mdp.scenarios.jacks.environment_parameters import EnvironmentParameters
     from mdp.scenarios.jacks.dynamics.location_outcome import LocationOutcome
 
+from mdp.common import Distribution
 from mdp.model import environment
+
 from mdp.scenarios.jacks.state import State
 from mdp.scenarios.jacks.response import Response
-
 from mdp.scenarios.jacks.dynamics.location import Location
-from mdp.common import Distribution
 
 
 class Dynamics(environment.Dynamics):

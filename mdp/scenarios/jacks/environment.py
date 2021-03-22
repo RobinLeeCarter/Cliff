@@ -17,6 +17,7 @@ from mdp.scenarios.jacks.environment_parameters import EnvironmentParameters
 from mdp.scenarios.jacks.location import Location
 from mdp.scenarios.jacks.location_outcome import LocationOutcome
 from mdp.scenarios.jacks.grid_world import GridWorld
+from mdp.scenarios.jacks.dynamics import Dynamics
 
 
 class Environment(environment.Environment):
