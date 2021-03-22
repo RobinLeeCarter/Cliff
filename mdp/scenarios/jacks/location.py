@@ -1,6 +1,5 @@
 from typing import Optional
 
-import numpy as np
 from scipy import stats
 
 from mdp.scenarios.jacks.location_outcome import LocationOutcome

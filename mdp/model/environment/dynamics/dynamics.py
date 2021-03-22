@@ -3,11 +3,10 @@ from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from mdp import common
+    from mdp.common import Distribution
     from mdp.model.environment.state import State
     from mdp.model.environment.action import Action
     from mdp.model.environment.response import Response
-    from mdp.model.environment.dynamics.outcome import Outcome
-    # from mdp.model.environment.dynamics.state_probability import StateProbability
 
 
 class Dynamics:
@@ -53,24 +52,24 @@ class Dynamics:
         """
         pass
 
-    def get_next_state_distribution(self, state: State, action: Action) -> dict[State, float]:
+    def get_next_state_distribution(self, state: State, action: Action) -> Distribution[State]:
         """
-        list[ s', p(s'|s,a) ]
+        dict[ s', p(s'|s,a) ]
         distribution of next states for a (state, action)
         """
         pass
 
     # TODO: should Outcome not include probability? and this return a dict? could be slow if large number of outcomes
-    def get_summary_outcomes(self, state: State, action: Action) -> list[Outcome]:
+    def get_summary_outcomes(self, state: State, action: Action) -> Distribution[Response]:
         """
-        list of possible outcomes for a single state and action
+        dict of possible responses for a single state and action
         with the expected_reward given in place of reward
         """
         pass
 
-    def get_all_outcomes(self, state: State, action: Action) -> list[Outcome]:
+    def get_all_outcomes(self, state: State, action: Action) -> Distribution[Response]:
         """
-        list of possible outcomes for a single state and action
+        dict of possible responses for a single state and action
         could be used for one state, action in theory
         but too many for all states and actions so potentially not useful in practice
         """

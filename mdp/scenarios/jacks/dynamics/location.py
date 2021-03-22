@@ -1,11 +1,8 @@
-from typing import Optional
-
 import random
 from scipy import stats
 
-from mdp.scenarios.jacks.dynamics.dict_zero import DictZero
+from mdp.common import DictZero, Distribution
 from mdp.scenarios.jacks.dynamics.location_outcome import LocationOutcome
-# from mdp.scenarios.jacks.dynamics.location_outcomes import LocationOutcomes
 
 
 class Location:
@@ -16,19 +13,19 @@ class Location:
         self._excess_parking_cost: float = excess_parking_cost
 
         self._car_count: list[int] = []
-        self._demand_prob: list[float] = []
-        self._return_prob: list[float] = []
+        self._demand_distribution: Distribution[int] = Distribution()
+        self._return_distribution: Distribution[int] = Distribution()
 
         # for each starting_cars find possible outcomes
         # dict[starting_cars, dict[LocationOutcome, probability]]
-        self.outcome_distributions: dict[int, dict[LocationOutcome, float]] = {}
+        self.outcome_distributions: dict[int, Distribution[LocationOutcome]] = {}
         self._counter: int = 0
 
         # summaries
         # dict[starting_cars, cars_rented * probability]
         self.expected_cars_rented: dict[int, float] = {}
         # dict[starting_cars, dict[ending_cars, probability]]
-        self.ending_cars_distribution: dict[int, dict[int, float]] = {}
+        self.ending_cars_distribution: dict[int, Distribution[int]] = {}
         # dict[starting_cars, dict[ending_cars, cars_rented_x_probability]]
         self.cars_rented_x_probability_by_ending_cars: dict[int, dict[int, float]] = {}
         # dict[starting_cars, dict[ending_cars, expected_cars_rented]]
@@ -43,7 +40,7 @@ class Location:
         # self._prob_ending_cars: np.ndarray = np.zeros(shape=(self._max_cars + 1, self._max_cars + 1), dtype=float)
 
     def build(self):
-        self._rental_return_prob()
+        self._build_rental_return_distributions()
         self._build_outcome_distributions()
         for distribution in self.outcome_distributions.values():
             for _ in distribution.keys():
@@ -51,14 +48,18 @@ class Location:
         print(f"daily_outcomes = {self._counter}")
         self._build_summaries()
 
-    def _rental_return_prob(self):
+    def _build_rental_return_distributions(self):
         self._car_count = [c for c in range(self._max_cars + 1)]
-        self._demand_prob = [self._poisson(self._rental_rate, c) for c in self._car_count]
-        self._return_prob = [self._poisson(self._return_rate, c) for c in self._car_count]
-        self._demand_prob[-1] += 1.0 - sum(self._demand_prob)
-        self._return_prob[-1] += 1.0 - sum(self._return_prob)
-        # print(self._demand_prob)
-        # print(self._return_prob)
+
+        self._demand_distribution = Distribution({c: self._poisson(self._rental_rate, c)
+                                                  for c in range(self._max_cars + 1)})
+        self._demand_distribution[self._max_cars] += 1.0 - sum(self._demand_distribution.values())
+        self._demand_distribution.self_check()
+
+        self._return_distribution = Distribution({c: self._poisson(self._return_rate, c)
+                                                  for c in range(self._max_cars + 1)})
+        self._return_distribution[self._max_cars] += 1.0 - sum(self._return_distribution.values())
+        self._return_distribution.self_check()
 
     def _poisson(self, lambda_: float, n: int) -> float:
         return stats.poisson.pmf(k=n, mu=lambda_)
@@ -68,18 +69,19 @@ class Location:
             self._build_outcome_distribution(starting_cars)
 
     def _build_outcome_distribution(self, starting_cars: int):
-        outcome_distribution: DictZero[LocationOutcome, float] = DictZero()
+        outcome_distribution: Distribution[LocationOutcome, float] = Distribution()
         # cars_rented_x_probability: float = 0.0
 
-        for car_demand, demand_probability in enumerate(self._demand_prob):
+        for car_demand, demand_probability in self._demand_distribution.items():
             cars_rented = self._get_cars_rented(starting_cars, car_demand)
-            for cars_returned, return_probability in enumerate(self._return_prob):
+            for cars_returned, return_probability in self._return_distribution.items():
                 ending_cars = self._get_ending_cars(starting_cars, cars_rented, cars_returned)
                 probability = demand_probability * return_probability
 
                 if probability > 0.0:
                     location_outcome = LocationOutcome(ending_cars, cars_rented)
                     outcome_distribution[location_outcome] += probability
+        outcome_distribution.self_check()
 
         self.outcome_distributions[starting_cars] = outcome_distribution
 
@@ -95,7 +97,7 @@ class Location:
     def _build_summaries(self):
         for starting_cars in self.outcome_distributions.keys():
             expected_cars_rented: float = 0.0
-            ending_cars_distribution: DictZero[int, float] = DictZero()
+            ending_cars_distribution: Distribution[int] = Distribution()
             cars_rented_x_probability_by_ending_cars: DictZero[int, float] = DictZero()
 
             for outcome, probability in self.outcome_distributions[starting_cars].items():
@@ -104,6 +106,7 @@ class Location:
                 expected_cars_rented += cars_rented_x_probability
                 ending_cars_distribution[outcome.ending_cars] += probability
                 cars_rented_x_probability_by_ending_cars[outcome.ending_cars] += cars_rented_x_probability
+            ending_cars_distribution.self_check()
 
             expected_cars_rented_by_ending_cars: DictZero[int, float] = DictZero()
             for ending_cars, ending_cars_probability in ending_cars_distribution.items():
@@ -117,7 +120,7 @@ class Location:
             self.cars_rented_x_probability_by_ending_cars[starting_cars] = cars_rented_x_probability_by_ending_cars
             self.expected_cars_rented_by_ending_cars[starting_cars] = expected_cars_rented_by_ending_cars
 
-    def get_outcome_distribution(self, starting_cars: int) -> dict[LocationOutcome, float]:
+    def get_outcome_distribution(self, starting_cars: int) -> Distribution[LocationOutcome]:
         return self.outcome_distributions[starting_cars]
 
     def get_ending_cars_distribution(self, starting_cars: int) -> dict[int, float]:

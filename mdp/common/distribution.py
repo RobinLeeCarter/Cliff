@@ -18,7 +18,7 @@ class Distribution(dict[T, float]):
     #     else:
     #         raise ValueError(f"Probability {probability} is not between 0.0 and 1.0, for {key}")
 
-    def self_test(self):
+    def self_check(self):
         cumulative_probability: float = 0.0
         for key, probability in self.items():
             if 0.0 <= probability <= 1.0:

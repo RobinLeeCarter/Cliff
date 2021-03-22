@@ -14,7 +14,7 @@ x[my_state2] += 0.2
 print(x[my_state])
 print(x[my_state2])
 
-x.self_test()
+x.self_check()
 
 
 

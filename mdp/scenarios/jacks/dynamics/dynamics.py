@@ -11,9 +11,8 @@ from mdp.model import environment
 from mdp.scenarios.jacks.state import State
 from mdp.scenarios.jacks.response import Response
 
-from mdp.scenarios.jacks.dynamics.outcome import Outcome
 from mdp.scenarios.jacks.dynamics.location import Location
-from mdp.scenarios.jacks.dynamics.dict_zero import DictZero
+from mdp.common import Distribution
 
 
 class Dynamics(environment.Dynamics):
@@ -78,7 +77,7 @@ class Dynamics(environment.Dynamics):
         probability2 = self._location_2.get_transition_probability(self._starting_cars2, next_state.cars_cob_2)
         probability = probability1 * probability2
 
-        # THIS MAY BE WRONG
+        # **** THIS MAY BE WRONG ****
         probability_x_reward = self._calc_reward(cars_rented_x_probability, probability)
         return probability_x_reward
 
@@ -93,26 +92,27 @@ class Dynamics(environment.Dynamics):
         probability = probability1 * probability2
         return probability
 
-    def get_next_state_distribution(self, state: State, action: Action) -> dict[State, float]:
+    def get_next_state_distribution(self, state: State, action: Action) -> Distribution[State]:
         """
-        list[ s', p(s'|s,a) ]
+        dict[ s', p(s'|s,a) ]
         distribution of next states for a (state, action)
         """
         self._calc_start_of_day(state, action)
         ending_cars_distribution1 = self._location_1.get_ending_cars_distribution(self._starting_cars1)
         ending_cars_distribution2 = self._location_2.get_ending_cars_distribution(self._starting_cars2)
 
-        next_state_distribution: dict[State, float] = {}
+        next_state_distribution: Distribution[State] = Distribution()
         for ending_cars1, probability1 in ending_cars_distribution1.items():
             for ending_cars2, probability2 in ending_cars_distribution2.items():
                 next_state = State(is_terminal=False, cars_cob_1=ending_cars1, cars_cob_2=ending_cars2)
                 probability = probability1 * probability2
                 next_state_distribution[next_state] = probability
+        next_state_distribution.self_check()
         return next_state_distribution
 
-    def get_summary_outcomes(self, state: State, action: Action) -> list[Outcome]:
+    def get_summary_outcomes(self, state: State, action: Action) -> Distribution[Response]:
         """
-        list of possible outcomes for a single state and action
+        dict of possible responses for a single state and action
         with the expected_reward given in place of reward
         """
         self._calc_start_of_day(state, action)
@@ -122,7 +122,7 @@ class Dynamics(environment.Dynamics):
         ending_cars_dist1: dict[int, float] = l1.get_ending_cars_distribution(self._starting_cars1)
         ending_cars_dist2: dict[int, float] = l2.get_ending_cars_distribution(self._starting_cars2)
 
-        outcome_list: list[Outcome] = []
+        response_distribution: Distribution[Response] = Distribution()
         for ending_cars1, probability1 in ending_cars_dist1.items():
             cars_rented1 = l1.get_expected_cars_rented_given_ending_cars(self._starting_cars1, ending_cars1)
             for ending_cars2, probability2 in ending_cars_dist2.items():
@@ -131,14 +131,14 @@ class Dynamics(environment.Dynamics):
                 new_state = State(is_terminal=False, cars_cob_1=ending_cars1, cars_cob_2=ending_cars2)
                 probability = probability1 * probability2
                 reward = self._calc_reward(cars_rented)
-                outcome = Outcome(new_state, reward, probability)
-                outcome_list.append(outcome)
+                response = Response(reward, new_state)
+                response_distribution[response] += probability
+        response_distribution.self_check()
+        return response_distribution
 
-        return outcome_list
-
-    def get_all_outcomes(self, state: State, action: Action) -> list[Outcome]:
+    def get_all_outcomes(self, state: State, action: Action) -> Distribution[Response]:
         """
-        list of possible outcomes for a single state and action
+        dict of possible responses for a single state and action
         could be used for one state, action in theory
         but too many for all states and actions so potentially not useful in practice
         """
@@ -146,12 +146,13 @@ class Dynamics(environment.Dynamics):
         l1 = self._location_1
         l2 = self._location_2
 
-        outcomes1: dict[LocationOutcome, float] = l1.get_outcome_distribution(self._starting_cars1)
-        outcomes2: dict[LocationOutcome, float] = l2.get_outcome_distribution(self._starting_cars2)
+        outcomes1: Distribution[LocationOutcome] = l1.get_outcome_distribution(self._starting_cars1)
+        outcomes2: Distribution[LocationOutcome] = l2.get_outcome_distribution(self._starting_cars2)
 
         # collate (s', r)
         # outcome_dict: dict[(next_state, reward), probability]
-        outcome_dict: DictZero[tuple[State, float], float] = DictZero()
+        # outcome_dict: DictZero[tuple[State, float], float] = DictZero()
+        response_distribution: Distribution[Response] = Distribution()
         for outcome1, probability1 in outcomes1.items():
             for outcome2, probability2 in outcomes2.items():
                 cars_rented = outcome1.cars_rented + outcome2.cars_rented
@@ -160,14 +161,10 @@ class Dynamics(environment.Dynamics):
                                   cars_cob_2=outcome2.ending_cars)
                 probability = probability1 * probability2
                 reward = self._calc_reward(cars_rented)
-                outcome_dict[(new_state, reward)] += probability
-
-        outcome_list: list[Outcome] = []
-        for (next_state, reward), probability in outcome_dict.items():
-            outcome = Outcome(next_state, reward, probability)
-            outcome_list.append(outcome)
-
-        return outcome_list
+                response = Response(reward, new_state)
+                response_distribution[response] += probability
+        response_distribution.self_check()
+        return response_distribution
 
     def draw_response(self, state: State, action: Action) -> Response:
         """
