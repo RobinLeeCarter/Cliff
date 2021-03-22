@@ -7,11 +7,13 @@ if TYPE_CHECKING:
     from mdp.model.environment.state import State
     from mdp.model.environment.action import Action
     from mdp.model.environment.response import Response
+    from mdp.model.environment.environment_ import Environment
 
 
 class Dynamics:
-    def __init__(self, environment_parameters_: common.EnvironmentParameters):
+    def __init__(self, environment_: Environment, environment_parameters_: common.EnvironmentParameters):
         """init top down"""
+        self._environment: Environment = environment_
         self._environment_parameters: common.EnvironmentParameters = environment_parameters_
         self.is_built: bool = False
 
@@ -59,7 +61,6 @@ class Dynamics:
         """
         pass
 
-    # TODO: should Outcome not include probability? and this return a dict? could be slow if large number of outcomes
     def get_summary_outcomes(self, state: State, action: Action) -> Distribution[Response]:
         """
         dict of possible responses for a single state and action

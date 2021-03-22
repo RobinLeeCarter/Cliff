@@ -43,7 +43,7 @@ class Environment(ABC):
         self._square: Optional[common.Square] = None
 
         # None to ensure not used when not used/initialised
-        self._dynamics: Optional[Dynamics] = None
+        self.dynamics: Optional[Dynamics] = None
 
     def build(self):
         self._build_states()
@@ -77,8 +77,8 @@ class Environment(ABC):
         return True
 
     def _build_dynamics(self):
-        if self._dynamics:
-            self._dynamics.build()
+        if self.dynamics:
+            self.dynamics.build()
     # endregion
 
     # region Operation
@@ -107,7 +107,7 @@ class Environment(ABC):
         return self._get_response()
 
     def _apply_action(self):
-        self._response = self._dynamics.draw_response(self._state, self._action)
+        self._response = self.dynamics.draw_response(self._state, self._action)
 
     def _project_back_to_grid(self, requested_position: common.XY) -> common.XY:
         x = requested_position.x

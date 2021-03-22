@@ -32,7 +32,7 @@ class Environment(environment.Environment):
         self._state: State = self._state
         self._action: Action = self._action
 
-        self._dynamics = Dynamics(environment_parameters_)
+        self.dynamics: Dynamics = Dynamics(self, environment_parameters_)
 
         self._max_cars: int = environment_parameters_.max_cars
         self._max_transfers: int = environment_parameters_.max_transfers

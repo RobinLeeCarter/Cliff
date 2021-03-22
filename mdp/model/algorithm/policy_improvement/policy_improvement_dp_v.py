@@ -21,7 +21,9 @@ class PolicyImprovementDpV(abstract.DynamicProgrammingV):
 
     def run(self):
         do_call_back: bool = bool(self._step_callback)
-        self._policy_improvement(do_call_back)
+        policy_stable: bool = False
+        while not policy_stable:
+            policy_stable = self._policy_improvement(do_call_back)
 
     def _policy_improvement(self, do_call_back: bool = False) -> bool:
         policy_: policy.Policy = self._agent.target_policy

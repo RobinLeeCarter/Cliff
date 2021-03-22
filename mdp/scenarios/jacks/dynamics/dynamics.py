@@ -4,6 +4,7 @@ from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from mdp.scenarios.jacks.action import Action
+    from mdp.scenarios.jacks.environment import Environment
     from mdp.scenarios.jacks.environment_parameters import EnvironmentParameters
     from mdp.scenarios.jacks.dynamics.location_outcome import LocationOutcome
 
@@ -16,8 +17,8 @@ from mdp.scenarios.jacks.dynamics.location import Location
 
 
 class Dynamics(environment.Dynamics):
-    def __init__(self, environment_parameters_: EnvironmentParameters):
-        super().__init__(environment_parameters_)
+    def __init__(self, environment_: Environment, environment_parameters_: EnvironmentParameters):
+        super().__init__(environment_, environment_parameters_)
 
         self._max_cars: int = environment_parameters_.max_cars
         self._rental_revenue: float = environment_parameters_.rental_revenue
@@ -39,35 +40,53 @@ class Dynamics(environment.Dynamics):
 
         # reused "current" variables
         self._total_costs: float = 0.0
-        self._starting_cars1: int = 0
-        self._starting_cars2: int = 0
+        self._starting_cars_1: int = 0
+        self._starting_cars_2: int = 0
+
+        # summaries
+        self._expected_reward: dict[tuple[State, Action], float] = {}
+        self._next_state_distribution: dict[tuple[State, Action], Distribution[State]] = {}
 
     def build(self):
-        self._location_1.build()
-        self._location_2.build()
-        self._build_summaries()
-        super().build()
-
-    def _build_summaries(self):
         """
         key functions to build summaries for are:
         - get_expected_reward
         - get_next_state_distribution
-
-        So summarise by starting_cars
         """
+        self._location_1.build()
+        self._location_2.build()
+        self._build_expected_reward_summary()
+        self._build_next_state_distribution_summary()
+        super().build()
+
+    def _build_expected_reward_summary(self):
+        for state in self._environment.states:
+            for action in self._environment.actions_for_state(state):
+                self._expected_reward[(state, action)] = self._calc_expected_reward(state, action)
+
+    def _build_next_state_distribution_summary(self):
+        for state in self._environment.states:
+            for action in self._environment.actions_for_state(state):
+                self._next_state_distribution[(state, action)] = self._calc_next_state_distribution(state, action)
+
+    def _calc_expected_reward(self, state: State, action: Action) -> float:
+        """
+        r(s,a) = E[Rt | S(t-1)=s, A(t-1)=a] = Sum_over_s'_r( p(s',r|s,a).r )
+        expected reward for a (state, action)
+        """
+        self._calc_start_of_day(state, action)
+        expected_cars_rented_1 = self._location_1.expected_cars_rented[self._starting_cars_1]
+        expected_cars_rented_2 = self._location_2.expected_cars_rented[self._starting_cars_2]
+        expected_cars_rented = expected_cars_rented_1 + expected_cars_rented_2
+        expected_reward = self._calc_reward(expected_cars_rented)
+        return expected_reward
 
     def get_expected_reward(self, state: State, action: Action) -> float:
         """
         r(s,a) = E[Rt | S(t-1)=s, A(t-1)=a] = Sum_over_s'_r( p(s',r|s,a).r )
         expected reward for a (state, action)
         """
-        self._calc_start_of_day(state, action)
-        expected_cars_rented_1 = self._location_1.expected_cars_rented[self._starting_cars1]
-        expected_cars_rented_2 = self._location_2.expected_cars_rented[self._starting_cars2]
-        expected_cars_rented = expected_cars_rented_1 + expected_cars_rented_2
-        expected_reward = self._calc_reward(expected_cars_rented)
-        return expected_reward
+        return self._expected_reward[(state, action)]
 
     def get_probability_x_reward(self, state: State, action: Action, next_state: State) -> float:
         """
@@ -75,14 +94,14 @@ class Dynamics(environment.Dynamics):
         probability_x_reward for a (state, action) given the next state
         """
         self._calc_start_of_day(state, action)
-        cars_rented_x_probability1 = self._location_1.get_expected_cars_rented_given_ending_cars(self._starting_cars1,
-                                                                                                 next_state.ending_cars_1)
-        cars_rented_x_probability2 = self._location_2.get_expected_cars_rented_given_ending_cars(self._starting_cars2,
-                                                                                                 next_state.ending_cars_2)
+        cars_rented_x_probability1 = self._location_1.get_expected_cars_rented_given_ending_cars(
+            self._starting_cars_1, next_state.ending_cars_1)
+        cars_rented_x_probability2 = self._location_2.get_expected_cars_rented_given_ending_cars(
+            self._starting_cars_2, next_state.ending_cars_2)
         cars_rented_x_probability = cars_rented_x_probability1 + cars_rented_x_probability2
 
-        probability1 = self._location_1.get_transition_probability(self._starting_cars1, next_state.ending_cars_1)
-        probability2 = self._location_2.get_transition_probability(self._starting_cars2, next_state.ending_cars_2)
+        probability1 = self._location_1.get_transition_probability(self._starting_cars_1, next_state.ending_cars_1)
+        probability2 = self._location_2.get_transition_probability(self._starting_cars_2, next_state.ending_cars_2)
         probability = probability1 * probability2
 
         # **** THIS MAY BE WRONG ****
@@ -95,19 +114,19 @@ class Dynamics(environment.Dynamics):
         probability of a next state for a (state, action)
         """
         self._calc_start_of_day(state, action)
-        probability1 = self._location_1.get_transition_probability(self._starting_cars1, next_state.ending_cars_1)
-        probability2 = self._location_2.get_transition_probability(self._starting_cars2, next_state.ending_cars_2)
+        probability1 = self._location_1.get_transition_probability(self._starting_cars_1, next_state.ending_cars_1)
+        probability2 = self._location_2.get_transition_probability(self._starting_cars_2, next_state.ending_cars_2)
         probability = probability1 * probability2
         return probability
 
-    def get_next_state_distribution(self, state: State, action: Action) -> Distribution[State]:
+    def _calc_next_state_distribution(self, state: State, action: Action) -> Distribution[State]:
         """
         dict[ s', p(s'|s,a) ]
         distribution of next states for a (state, action)
         """
         self._calc_start_of_day(state, action)
-        ending_cars_distribution1 = self._location_1.get_ending_cars_distribution(self._starting_cars1)
-        ending_cars_distribution2 = self._location_2.get_ending_cars_distribution(self._starting_cars2)
+        ending_cars_distribution1 = self._location_1.get_ending_cars_distribution(self._starting_cars_1)
+        ending_cars_distribution2 = self._location_2.get_ending_cars_distribution(self._starting_cars_2)
 
         next_state_distribution: Distribution[State] = Distribution()
         for ending_cars1, probability1 in ending_cars_distribution1.items():
@@ -118,6 +137,13 @@ class Dynamics(environment.Dynamics):
         next_state_distribution.self_check()
         return next_state_distribution
 
+    def get_next_state_distribution(self, state: State, action: Action) -> Distribution[State]:
+        """
+        dict[ s', p(s'|s,a) ]
+        distribution of next states for a (state, action)
+        """
+        return self._next_state_distribution[(state, action)]
+
     def get_summary_outcomes(self, state: State, action: Action) -> Distribution[Response]:
         """
         dict of possible responses for a single state and action
@@ -127,14 +153,14 @@ class Dynamics(environment.Dynamics):
         l1 = self._location_1
         l2 = self._location_2
 
-        ending_cars_dist1: dict[int, float] = l1.get_ending_cars_distribution(self._starting_cars1)
-        ending_cars_dist2: dict[int, float] = l2.get_ending_cars_distribution(self._starting_cars2)
+        ending_cars_dist1: dict[int, float] = l1.get_ending_cars_distribution(self._starting_cars_1)
+        ending_cars_dist2: dict[int, float] = l2.get_ending_cars_distribution(self._starting_cars_2)
 
         response_distribution: Distribution[Response] = Distribution()
         for ending_cars1, probability1 in ending_cars_dist1.items():
-            cars_rented1 = l1.get_expected_cars_rented_given_ending_cars(self._starting_cars1, ending_cars1)
+            cars_rented1 = l1.get_expected_cars_rented_given_ending_cars(self._starting_cars_1, ending_cars1)
             for ending_cars2, probability2 in ending_cars_dist2.items():
-                cars_rented2 = l2.get_expected_cars_rented_given_ending_cars(self._starting_cars2, ending_cars2)
+                cars_rented2 = l2.get_expected_cars_rented_given_ending_cars(self._starting_cars_2, ending_cars2)
                 cars_rented = cars_rented1 + cars_rented2
                 new_state = State(is_terminal=False, ending_cars_1=ending_cars1, ending_cars_2=ending_cars2)
                 probability = probability1 * probability2
@@ -154,8 +180,8 @@ class Dynamics(environment.Dynamics):
         l1 = self._location_1
         l2 = self._location_2
 
-        outcomes1: Distribution[LocationOutcome] = l1.get_outcome_distribution(self._starting_cars1)
-        outcomes2: Distribution[LocationOutcome] = l2.get_outcome_distribution(self._starting_cars2)
+        outcomes1: Distribution[LocationOutcome] = l1.get_outcome_distribution(self._starting_cars_1)
+        outcomes2: Distribution[LocationOutcome] = l2.get_outcome_distribution(self._starting_cars_2)
 
         # collate (s', r)
         # outcome_dict: dict[(next_state, reward), probability]
@@ -180,8 +206,8 @@ class Dynamics(environment.Dynamics):
         standard call for episodic algorithms
         """
         self._calc_start_of_day(state, action)
-        outcome1: LocationOutcome = self._location_1.draw_outcome(self._starting_cars1)
-        outcome2: LocationOutcome = self._location_2.draw_outcome(self._starting_cars2)
+        outcome1: LocationOutcome = self._location_1.draw_outcome(self._starting_cars_1)
+        outcome2: LocationOutcome = self._location_2.draw_outcome(self._starting_cars_2)
         new_state = State(is_terminal=False, ending_cars_1=outcome1.ending_cars, ending_cars_2=outcome2.ending_cars)
         cars_rented = outcome1.cars_rented + outcome2.cars_rented
         reward: float = self._calc_reward(cars_rented)
@@ -193,8 +219,8 @@ class Dynamics(environment.Dynamics):
             self._total_costs += self._location_1.parking_costs(state.ending_cars_1)
             self._total_costs += self._location_2.parking_costs(state.ending_cars_2)
 
-        self.starting_cars_1 = state.ending_cars_1 - action.transfer_1_to_2
-        self.starting_cars_2 = state.ending_cars_2 + action.transfer_1_to_2
+        self._starting_cars_1 = state.ending_cars_1 - action.transfer_1_to_2
+        self._starting_cars_2 = state.ending_cars_2 + action.transfer_1_to_2
 
     def _calc_reward(self, cars_rented: float, partial_probability: float = 1.0) -> float:
         """caters for case where calculating probability * reward for only part of the probability distribution"""

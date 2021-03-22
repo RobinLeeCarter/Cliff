@@ -6,13 +6,18 @@ from mdp.common import Distribution
 from mdp.scenarios.jacks.state import State
 from mdp.scenarios.jacks.action import Action
 from mdp.scenarios.jacks.response import Response
-from mdp.scenarios.jacks.comparisons import jacks_policy_evaluation
-from mdp.scenarios.jacks.dynamics.dynamics import Dynamics
+from mdp.scenarios.jacks.comparisons import jacks_comparison
+# from mdp.scenarios.jacks.dynamics.dynamics import Dynamics
 
-comparison = jacks_policy_evaluation()
+from mdp.scenarios.factory import environment_factory
 
-dynamics = Dynamics(comparison.environment_parameters)
-dynamics.build()
+
+comparison = jacks_comparison()
+environment_ = environment_factory.environment_factory(comparison.environment_parameters)
+
+# dynamics = Dynamics(environment_, comparison.environment_parameters)
+# dynamics.build()
+dynamics = environment_.dynamics
 
 state = State(is_terminal=False, ending_cars_1=10, ending_cars_2=8)
 action = Action(transfer_1_to_2=2)

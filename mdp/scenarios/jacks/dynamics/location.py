@@ -112,8 +112,8 @@ class Location:
             for ending_cars, ending_cars_probability in ending_cars_distribution.items():
                 cars_rented_x_probability = cars_rented_x_probability_by_ending_cars[ending_cars]
                 # E[r|s,a,s'] = Sum_over_r( p(r,s'|s,a).r ) / p(s'|s,a)
-                expected_cars_rented = cars_rented_x_probability / ending_cars_probability
-                expected_cars_rented_by_ending_cars[ending_cars] = expected_cars_rented
+                conditional_expected_cars_rented = cars_rented_x_probability / ending_cars_probability
+                expected_cars_rented_by_ending_cars[ending_cars] = conditional_expected_cars_rented
 
             self.expected_cars_rented[starting_cars] = expected_cars_rented
             self.ending_cars_distribution[starting_cars] = ending_cars_distribution
