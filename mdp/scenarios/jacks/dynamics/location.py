@@ -45,7 +45,7 @@ class Location:
         for distribution in self.outcome_distributions.values():
             for _ in distribution.keys():
                 self._counter += 1
-        print(f"daily_outcomes = {self._counter}")
+        # print(f"daily_outcomes = {self._counter}")
         self._build_summaries()
 
     def _build_rental_return_distributions(self):
