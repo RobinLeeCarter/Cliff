@@ -41,8 +41,8 @@ def cliff_episode() -> Comparison:
         #     actions_list=common.ActionsList.FOUR_MOVES,
         # ),
         comparison_settings=common.Settings(
-            runs=1,
-            training_episodes=100,
+            runs=50,
+            training_episodes=500,
             # display_every_step=True,
         ),
         breakdown_parameters=common.BreakdownParameters(
@@ -57,13 +57,13 @@ def cliff_episode() -> Comparison:
             #     algorithm_type=common.AlgorithmType.VQ,
             #     alpha=0.2
             # )),
-            # common.Settings(algorithm_parameters=common.AlgorithmParameters(
-            #     algorithm_type=common.AlgorithmType.Q_LEARNING,
-            #     alpha=0.5
-            # )),
+            common.Settings(algorithm_parameters=common.AlgorithmParameters(
+                algorithm_type=common.AlgorithmType.Q_LEARNING,
+                alpha=0.5
+            )),
             common.Settings(algorithm_parameters=common.AlgorithmParameters(
                 algorithm_type=common.AlgorithmType.SARSA,
-                alpha=1.0
+                alpha=0.5
             )),
         ],
         graph_values=common.GraphValues(
@@ -71,5 +71,8 @@ def cliff_episode() -> Comparison:
             y_min=-100,
             y_max=0
         ),
+        grid_view_parameters=common.GridViewParameters(
+            show_demo=False
+        )
     )
     return comparison
