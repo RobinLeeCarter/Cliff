@@ -11,7 +11,7 @@ def cliff_alpha() -> Comparison:
         #     actions_list=common.ActionsList.FOUR_MOVES,
         # ),
         comparison_settings=common.Settings(
-            runs=10,
+            runs=20,
             training_episodes=100,
         ),
         breakdown_parameters=common.BreakdownAlgorithmByAlpha(
@@ -67,7 +67,7 @@ def cliff_episode() -> Comparison:
             )),
         ],
         graph_values=common.GraphValues(
-            moving_average_window_size=19,
+            # moving_average_window_size=19,
             y_min=-100,
             y_max=0
         ),
