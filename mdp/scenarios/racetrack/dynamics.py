@@ -24,19 +24,6 @@ class Dynamics(environment.Dynamics):
 
         self._extra_reward_for_failure: float = environment_parameters.extra_reward_for_failure
 
-        # reused "current" variables
-        # self._total_costs: float = 0.0
-
-        # summaries
-        # self._expected_reward: dict[tuple[State, Action], float] = {}
-        # self._next_state_distribution: dict[tuple[State, Action], Distribution[State]] = {}
-
-    def build(self):
-        """
-        key functions to build summaries for are:
-        """
-        super().build()
-
     def get_a_start_state(self) -> State:
         position: common.XY = self._grid_world.get_a_start_position()
         return State(is_terminal=False, position=position, velocity=common.XY(x=0, y=0))

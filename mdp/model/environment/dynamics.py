@@ -2,7 +2,6 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 from abc import ABC, abstractmethod
-import random
 
 if TYPE_CHECKING:
     from mdp import common

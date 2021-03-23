@@ -9,9 +9,7 @@ from mdp import common
 from mdp.model import environment
 from mdp.scenarios.factory import actions_list_factory
 
-from mdp.scenarios.position_move.model.grid_world import GridWorld
-from mdp.scenarios.position_move.model.action import Action
-from mdp.scenarios.position_move.model.state import State
+from mdp.scenarios.position_move.model import State, Action, GridWorld, Dynamics
 
 
 class Environment(environment.Environment, abc.ABC):
@@ -24,6 +22,7 @@ class Environment(environment.Environment, abc.ABC):
         self._state: State = self._state
         self._action: Action = self._action
         self.grid_world: Optional[GridWorld] = None
+        self.dynamics: Optional[Dynamics] = None
 
     # region Sets
     def _build_states(self):
@@ -49,25 +48,25 @@ class Environment(environment.Environment, abc.ABC):
     # endregion
 
     # region Operation
-    def _get_a_start_state(self) -> State:
-        position: common.XY = self.grid_world.get_a_start_position()
-        return State(is_terminal=False, position=position)
+    # def _get_a_start_state(self) -> State:
+    #     position: common.XY = self.grid_world.get_a_start_position()
+    #     return State(is_terminal=False, position=position)
 
-    def _apply_action(self):
-        # apply grid world rules (eg. edges, wind)
-        move: Optional[common.XY] = None
-        if self._action:
-            move = self._action.move
-        new_position = self.grid_world.change_request(
-            current_position=self._state.position,
-            move=move)
-
-        self._square = self.grid_world.get_square(new_position)
-        if self._square == common.Square.END:
-            is_terminal = True
-        else:
-            is_terminal = False
-        self._new_state = State(is_terminal, new_position)
+    # def _apply_action(self):
+    #     # apply grid world rules (eg. edges, wind)
+    #     move: Optional[common.XY] = None
+    #     if self._action:
+    #         move = self._action.move
+    #     new_position = self.grid_world.change_request(
+    #         current_position=self._state.position,
+    #         move=move)
+    #
+    #     self._square = self.grid_world.get_square(new_position)
+    #     if self._square == common.Square.END:
+    #         is_terminal = True
+    #     else:
+    #         is_terminal = False
+    #     self._new_state = State(is_terminal, new_position)
 
     def update_grid_value_functions(self, algorithm_: algorithm.Algorithm, policy_: policy.Policy):
         for state in self.states:
