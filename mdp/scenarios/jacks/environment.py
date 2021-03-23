@@ -31,8 +31,8 @@ class Environment(environment.Environment):
         self._state: State = self._state
         self._action: Action = self._action
 
-        self.dynamics: Dynamics = Dynamics(environment_=self, environment_parameters=environment_parameters)
         self.grid_world: GridWorld = GridWorld(environment_parameters)
+        self.dynamics: Dynamics = Dynamics(environment_=self, environment_parameters=environment_parameters)
 
         self._max_cars: int = environment_parameters.max_cars
         self._max_transfers: int = environment_parameters.max_transfers

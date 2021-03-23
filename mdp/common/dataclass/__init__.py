@@ -1,4 +1,5 @@
 from mdp.common.dataclass.series import Series
+from mdp.common.dataclass.rgba import RGBA
 from mdp.common.dataclass.algorithm_parameters_ import AlgorithmParameters
 from mdp.common.dataclass.policy_parameters_ import PolicyParameters
 from mdp.common.dataclass.settings import Settings

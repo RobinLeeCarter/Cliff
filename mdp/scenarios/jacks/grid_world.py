@@ -32,11 +32,3 @@ class GridWorld(grid_world.GridWorld):
 
     def change_request(self, current_position: common.XY, move: Optional[common.XY]) -> common.XY:
         raise NotImplementedError
-        # requested_position: common.XY = common.XY(
-        #     x=current_position.x,
-        #     y=current_position.y
-        # )
-        # # project back to grid if outside
-        # new_position: common.XY = self._project_back_to_grid(requested_position)
-        # return new_position
-
