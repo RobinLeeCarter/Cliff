@@ -16,11 +16,8 @@ from mdp.model.environment.grid_world import GridWorld
 
 class Environment(ABC):
     """A GridWorld Environment - too hard to make general at this point"""
-    def __init__(self,
-                 environment_parameters: common.EnvironmentParameters,
-                 grid_world: Optional[GridWorld] = None):
+    def __init__(self, environment_parameters: common.EnvironmentParameters):
         self._environment_parameters = environment_parameters
-        self.grid_world: Optional[GridWorld] = grid_world
         self.verbose: bool = environment_parameters.verbose
 
         # state and states
@@ -36,20 +33,22 @@ class Environment(ABC):
         # for processing response
         self._state: Optional[State] = None
         self._action: Optional[Action] = None
-        self._square: Optional[common.Square] = None
-        self._new_state: Optional[State] = None
         self._reward: Optional[float] = None
+        self._new_state: Optional[State] = None
+        self._response: Optional[Response] = None
+
+        self._square: Optional[common.Square] = None
 
         # None to ensure not used when not used/initialised
         self.dynamics: Optional[Dynamics] = None
+        self.grid_world: Optional[GridWorld] = None
 
     def build(self):
         self._build_states()
         self.state_index = {state: i for i, state in enumerate(self.states)}
         self._build_actions()
         self.action_index = {action: i for i, action in enumerate(self.actions)}
-        if self.dynamics:
-            self._build_dynamics()
+        self.dynamics.build()
 
     def state_action_index(self, state: State, action: Action) -> tuple[int, int]:
         state_index = self.state_index[state]
@@ -74,9 +73,6 @@ class Environment(ABC):
 
     def is_action_compatible_with_state(self, state: State, action: Action):
         return True
-
-    def _build_dynamics(self):
-        pass
     # endregion
 
     # region Operation
@@ -88,25 +84,20 @@ class Environment(ABC):
 
     def start(self) -> Response:
         state = self._get_a_start_state()
-        # if self.verbose:
-        #     self.trace_.start(state)
         return Response(state=state, reward=None)
 
-    @abstractmethod
     def _get_a_start_state(self) -> State:
-        pass
+        return self.dynamics.get_a_start_state()
 
     def from_state_perform_action(self, state: State, action: Action) -> Response:
         if state.is_terminal:
             raise Exception("Environment: Trying to act in a terminal state.")
         self._state = state
         self._action = action
-        self._apply_action()
-        return self._get_response()
-
-    @abstractmethod
-    def _apply_action(self):
-        pass
+        if not self.is_action_compatible_with_state(self._state, self._action):
+            raise Exception(f"_apply_action state {self._state} incompatible with action {self._action}")
+        self._response = self.dynamics.draw_response(self._state, self._action)
+        return self._response
 
     def _project_back_to_grid(self, requested_position: common.XY) -> common.XY:
         x = requested_position.x
@@ -120,10 +111,6 @@ class Environment(ABC):
         if y > self.grid_world.max_y:
             y = self.grid_world.max_y
         return common.XY(x=x, y=y)
-
-    @abstractmethod
-    def _get_response(self) -> Response:
-        pass
 
     def update_grid_value_functions(self, algorithm_: algorithm.Algorithm, policy_: policy.Policy):
         pass

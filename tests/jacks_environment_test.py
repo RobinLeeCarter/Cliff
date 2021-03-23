@@ -6,7 +6,7 @@ from mdp.scenarios.jacks import comparisons  # action, state,
 
 
 def jacks_test() -> bool:
-    comparison: common.Comparison = comparisons.jacks_policy_evaluation()
+    comparison: common.Comparison = comparisons.jacks_comparison()
     environment_ = environment_factory.environment_factory(comparison.environment_parameters)
 
     print("States...")

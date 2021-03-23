@@ -80,7 +80,7 @@ class GridView(abc.ABC):
     def _get_policy_value_color(self, un_normalised: float) -> pygame.Color:
         normalised = self._policy_color_normaliser(un_normalised)
         rgba: common.RGBA = common.RGBA(*self._policy_cmap(normalised, bytes=True))
-        color: pygame.Color = pygame.Color(rgba)
+        color: pygame.Color = pygame.Color(rgba.as_tuple())
         return color
 
     def set_gridworld(self, grid_world: environment.GridWorld):

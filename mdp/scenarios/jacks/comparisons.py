@@ -7,12 +7,12 @@ from mdp.scenarios.jacks.environment_parameters import EnvironmentParameters
 _max_cars: int = 20      # problem statement = 20
 
 
-def jacks_policy_evaluation() -> Comparison:
+def jacks_comparison() -> Comparison:
     comparison = Comparison(
         environment_parameters=EnvironmentParameters(
             environment_type=common.EnvironmentType.JACKS,
             max_cars=_max_cars,
-            extra_rules=False,      # change this for extra rules in book as per challenge
+            extra_rules=True,      # change this for extra rules in book as per challenge
             # rental_rate_1=10.0,
             # return_rate_1=0.0,
             # rental_rate_2=0.0,
