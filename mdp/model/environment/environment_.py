@@ -16,11 +16,8 @@ from mdp.model.environment.grid_world import GridWorld
 
 class Environment(ABC):
     """A GridWorld Environment - too hard to make general at this point"""
-    def __init__(self,
-                 environment_parameters: common.EnvironmentParameters,
-                 grid_world: Optional[GridWorld] = None):
+    def __init__(self, environment_parameters: common.EnvironmentParameters):
         self._environment_parameters = environment_parameters
-        self.grid_world: Optional[GridWorld] = grid_world
         self.verbose: bool = environment_parameters.verbose
 
         # state and states
@@ -44,6 +41,7 @@ class Environment(ABC):
 
         # None to ensure not used when not used/initialised
         self.dynamics: Optional[Dynamics] = None
+        self.grid_world: Optional[GridWorld] = None
 
     def build(self):
         self._build_states()

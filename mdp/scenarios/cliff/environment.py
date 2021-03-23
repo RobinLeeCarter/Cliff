@@ -8,8 +8,8 @@ from mdp.scenarios.position_move.model import environment, GridWorld
 
 class Environment(environment.Environment):
     def __init__(self, environment_parameters: common.EnvironmentParameters):
-        grid_world_ = GridWorld(environment_parameters)
-        super().__init__(environment_parameters, grid_world_)
+        super().__init__(environment_parameters)
+        self.grid_world: GridWorld = GridWorld(environment_parameters)
 
     def _get_response(self) -> Response:
         if self._square == common.Square.CLIFF:

@@ -15,17 +15,15 @@ from mdp.scenarios.position_move.model.state import State
 
 
 class Environment(environment.Environment, abc.ABC):
-    def __init__(self,
-                 environment_parameters: common.EnvironmentParameters,
-                 grid_world: environment.GridWorld):
-        super().__init__(environment_parameters, grid_world)
+    def __init__(self, environment_parameters: common.EnvironmentParameters):
+        super().__init__(environment_parameters)
 
         # downcast states and actions so properties can be used freely
         self.states: list[State] = self.states
         self.actions: list[Action] = self.actions
         self._state: State = self._state
         self._action: Action = self._action
-        self.grid_world: GridWorld = self.grid_world
+        self.grid_world: Optional[GridWorld] = None
 
     # region Sets
     def _build_states(self):

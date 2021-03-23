@@ -11,10 +11,10 @@ if TYPE_CHECKING:
 
 
 class Dynamics:
-    def __init__(self, environment_: Environment, environment_parameters_: common.EnvironmentParameters):
+    def __init__(self, environment: Environment, environment_parameters: common.EnvironmentParameters):
         """init top down"""
-        self._environment: Environment = environment_
-        self._environment_parameters: common.EnvironmentParameters = environment_parameters_
+        self._environment: Environment = environment
+        self._environment_parameters: common.EnvironmentParameters = environment_parameters
         self.is_built: bool = False
 
     def build(self):

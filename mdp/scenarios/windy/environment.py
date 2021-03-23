@@ -6,13 +6,14 @@ if TYPE_CHECKING:
     from mdp import common
 from mdp.model.environment import Response
 from mdp.scenarios.position_move.model import environment
-from mdp.scenarios.windy import grid_world
+
+from mdp.scenarios.windy.grid_world import GridWorld
 
 
 class Environment(environment.Environment):
     def __init__(self, environment_parameters: common.EnvironmentParameters):
-        grid_world_ = grid_world.GridWorld(environment_parameters)
-        super().__init__(environment_parameters, grid_world_)
+        super().__init__(environment_parameters)
+        self.grid_world: GridWorld = GridWorld(environment_parameters)
 
     def _get_response(self) -> Response:
         return Response(

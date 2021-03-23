@@ -14,16 +14,15 @@ from mdp.model import environment
 from mdp.scenarios.jacks.state import State
 from mdp.scenarios.jacks.action import Action
 from mdp.scenarios.jacks.environment_parameters import EnvironmentParameters
-# from mdp.scenarios.jacks.location import Location
-# from mdp.scenarios.jacks.location_outcome import LocationOutcome
 from mdp.scenarios.jacks.grid_world import GridWorld
 from mdp.scenarios.jacks.dynamics import Dynamics
 
 
 class Environment(environment.Environment):
-    def __init__(self, environment_parameters_: EnvironmentParameters):
-        grid_world = GridWorld(environment_parameters_)
-        super().__init__(environment_parameters_, grid_world=grid_world)
+    def __init__(self, environment_parameters: EnvironmentParameters):
+
+        super().__init__(environment_parameters)
+
         # super().__init__(environment_parameters_, grid_world_)
 
         # downcast states and actions so properties can be used freely
@@ -32,10 +31,11 @@ class Environment(environment.Environment):
         self._state: State = self._state
         self._action: Action = self._action
 
-        self.dynamics: Dynamics = Dynamics(self, environment_parameters_)
+        self.dynamics: Dynamics = Dynamics(environment_=self, environment_parameters=environment_parameters)
+        self.grid_world: GridWorld = GridWorld(environment_parameters)
 
-        self._max_cars: int = environment_parameters_.max_cars
-        self._max_transfers: int = environment_parameters_.max_transfers
+        self._max_cars: int = environment_parameters.max_cars
+        self._max_transfers: int = environment_parameters.max_transfers
         # self._rental_revenue: float = environment_parameters_.rental_revenue
         # self._transfer_cost: float = environment_parameters_.transfer_cost
         # self._extra_rules: bool = environment_parameters_.extra_rules

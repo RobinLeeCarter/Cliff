@@ -12,15 +12,14 @@ from mdp.scenarios.racetrack.environment_parameters import EnvironmentParameters
 
 class Environment(environment.Environment):
     def __init__(self, environment_parameters_: EnvironmentParameters):
-        grid_world = GridWorld(environment_parameters_)
-        super().__init__(environment_parameters_, grid_world)
+        super().__init__(environment_parameters_)
 
         # downcast states and actions so properties can be used freely
         self.states: list[State] = self.states
         self.actions: list[Action] = self.actions
         self._state: State = self._state
         self._action: Action = self._action
-        self.grid_world: GridWorld = self.grid_world
+        self.grid_world: GridWorld = GridWorld(environment_parameters_)
 
         self._reward: float = 0.0
         self._next_state: Optional[State] = None

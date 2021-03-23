@@ -17,25 +17,28 @@ from mdp.scenarios.jacks.dynamics.location import Location
 
 
 class Dynamics(environment.Dynamics):
-    def __init__(self, environment_: Environment, environment_parameters_: EnvironmentParameters):
-        super().__init__(environment_, environment_parameters_)
+    def __init__(self, environment_: Environment, environment_parameters: EnvironmentParameters):
+        super().__init__(environment_, environment_parameters)
 
-        self._max_cars: int = environment_parameters_.max_cars
-        self._rental_revenue: float = environment_parameters_.rental_revenue
-        self._transfer_cost: float = environment_parameters_.transfer_cost
-        self._extra_rules: bool = environment_parameters_.extra_rules
+        # downcast
+        self._environment: Environment = self._environment
+
+        self._max_cars: int = environment_parameters.max_cars
+        self._rental_revenue: float = environment_parameters.rental_revenue
+        self._transfer_cost: float = environment_parameters.transfer_cost
+        self._extra_rules: bool = environment_parameters.extra_rules
 
         self._location_1: Location = Location(
             max_cars=self._max_cars,
-            rental_rate=environment_parameters_.rental_rate_1,
-            return_rate=environment_parameters_.return_rate_1,
-            excess_parking_cost=environment_parameters_.excess_parking_cost,
+            rental_rate=environment_parameters.rental_rate_1,
+            return_rate=environment_parameters.return_rate_1,
+            excess_parking_cost=environment_parameters.excess_parking_cost,
         )
         self._location_2: Location = Location(
             max_cars=self._max_cars,
-            rental_rate=environment_parameters_.rental_rate_2,
-            return_rate=environment_parameters_.return_rate_2,
-            excess_parking_cost=environment_parameters_.excess_parking_cost,
+            rental_rate=environment_parameters.rental_rate_2,
+            return_rate=environment_parameters.return_rate_2,
+            excess_parking_cost=environment_parameters.excess_parking_cost,
         )
 
         # reused "current" variables

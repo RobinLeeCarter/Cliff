@@ -15,8 +15,8 @@ from mdp.scenarios.random_walk.grid_world import GridWorld
 
 class Environment(environment.Environment):
     def __init__(self, environment_parameters: common.EnvironmentParameters):
-        grid_world_ = GridWorld(environment_parameters)
-        super().__init__(environment_parameters, grid_world_)
+        super().__init__(environment_parameters)
+        self.grid_world: GridWorld = GridWorld(environment_parameters)
 
     def _get_response(self) -> Response:
         reward: float
