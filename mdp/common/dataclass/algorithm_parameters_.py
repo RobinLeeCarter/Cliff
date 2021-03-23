@@ -12,12 +12,18 @@ class AlgorithmParameters:
     alpha_variable: Optional[bool] = None
     initial_v_value: Optional[float] = None
     initial_q_value: Optional[float] = None
+
+    theta: Optional[float] = None
+    iteration_timeout: Optional[int] = None
+
     verbose: Optional[bool] = None
 
 
 default: AlgorithmParameters = AlgorithmParameters(
     initial_v_value=0.0,
     initial_q_value=0.0,
+    theta=0.1,
+    iteration_timeout=1000,
     verbose=False,
 )
 

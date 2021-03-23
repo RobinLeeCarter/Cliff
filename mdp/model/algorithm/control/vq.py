@@ -12,8 +12,9 @@ class VQ(abstract.EpisodicOnline):
                  environment_: environment.Environment,
                  agent_: agent.Agent,
                  algorithm_parameters: common.AlgorithmParameters,
+                 policy_parameters: common.PolicyParameters
                  ):
-        super().__init__(environment_, agent_, algorithm_parameters)
+        super().__init__(environment_, agent_, algorithm_parameters, policy_parameters)
         self._alpha_variable: bool = self._algorithm_parameters.alpha_variable
         self._alpha: float = self._algorithm_parameters.alpha
         self._algorithm_type = common.AlgorithmType.VQ
@@ -24,6 +25,10 @@ class VQ(abstract.EpisodicOnline):
             self.title = f"{self.name} α={self._alpha}"
         self._create_v()
         self._create_q()
+
+    def initialize(self):
+        super().initialize()
+        self._make_policy_greedy_wrt_q()
 
     def parameter_changes(self, iteration: int):
         if self._alpha_variable:

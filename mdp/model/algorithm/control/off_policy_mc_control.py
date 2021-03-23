@@ -11,16 +11,20 @@ class OffPolicyMcControl(abstract.EpisodicMonteCarlo):
     def __init__(self,
                  environment_: environment.Environment,
                  agent_: agent.Agent,
-                 algorithm_parameters: common.AlgorithmParameters
+                 algorithm_parameters: common.AlgorithmParameters,
+                 policy_parameters: common.PolicyParameters
                  ):
-        super().__init__(environment_, agent_, algorithm_parameters)
+        super().__init__(environment_, agent_, algorithm_parameters, policy_parameters)
         self._algorithm_type = common.AlgorithmType.OFF_POLICY_MC_CONTROL
         self.name = common.algorithm_name[self._algorithm_type]
         self.title = f"{self.name}"
         self._W: float = 1.0
         self._create_q()
-        self._make_policy_greedy_wrt_q()
         self._C = value_function.StateActionVariable(self._environment, initial_value=0.0)
+
+    def initialize(self):
+        super().initialize()
+        self._make_policy_greedy_wrt_q()
 
     def _pre_process_episode(self):
         self._episode.generate_returns()

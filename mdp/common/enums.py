@@ -16,7 +16,6 @@ class UserEvent(enum.IntEnum):
 
 
 class BreakdownType(enum.IntEnum):
-    # NONE = enum.auto()
     EPISODE_BY_TIMESTEP = enum.auto()
     RETURN_BY_EPISODE = enum.auto()
     RMS_BY_EPISODE = enum.auto()
@@ -24,13 +23,18 @@ class BreakdownType(enum.IntEnum):
 
 
 class AlgorithmType(enum.IntEnum):
-    EXPECTED_SARSA = enum.auto()
-    VQ = enum.auto()
-    Q_LEARNING = enum.auto()
-    SARSA = enum.auto()
-    CONSTANT_ALPHA_MC = enum.auto()
+    POLICY_EVALUATION_DP_V = enum.auto()
+    POLICY_IMPROVEMENT_DP_V = enum.auto()
+    POLICY_ITERATION_DP_V = enum.auto()
+
     TD_0 = enum.auto()
     OFF_POLICY_MC_CONTROL = enum.auto()
+
+    CONSTANT_ALPHA_MC = enum.auto()
+    SARSA = enum.auto()
+    Q_LEARNING = enum.auto()
+    EXPECTED_SARSA = enum.auto()
+    VQ = enum.auto()
 
 
 class PolicyType(enum.IntEnum):
@@ -51,6 +55,7 @@ class EnvironmentType(enum.IntEnum):
     RANDOM_WALK = enum.auto()
     WINDY = enum.auto()
     RACETRACK = enum.auto()
+    JACKS = enum.auto()
 
 
 class ActionsList(enum.IntEnum):
@@ -64,3 +69,4 @@ class ActionsList(enum.IntEnum):
 class GridViewType(enum.IntEnum):
     POSITION = enum.auto()
     POSITION_MOVE = enum.auto()
+    JACKS = enum.auto()

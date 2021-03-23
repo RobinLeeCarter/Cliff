@@ -5,16 +5,17 @@ import abc
 if TYPE_CHECKING:
     from mdp.model import environment, agent
     from mdp import common
-from mdp.model.algorithm.abstract import episodic
+from mdp.model.algorithm.abstract import episodic_
 
 
-class EpisodicMonteCarlo(episodic.Episodic, abc.ABC):
+class EpisodicMonteCarlo(episodic_.Episodic, abc.ABC):
     def __init__(self,
                  environment_: environment.Environment,
                  agent_: agent.Agent,
-                 algorithm_parameters: common.AlgorithmParameters
+                 algorithm_parameters: common.AlgorithmParameters,
+                 policy_parameters: common.PolicyParameters
                  ):
-        super().__init__(environment_, agent_, algorithm_parameters)
+        super().__init__(environment_, agent_, algorithm_parameters, policy_parameters)
         self._episode: Optional[agent.Episode] = None
         self._exit_episode: bool = False
 

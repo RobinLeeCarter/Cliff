@@ -21,4 +21,5 @@ def factory(environment_: environment.Environment, policy_parameters: common.Pol
         policy = e_greedy.EGreedy(environment_, policy_parameters)
     else:
         raise NotImplementedError
+
     return policy

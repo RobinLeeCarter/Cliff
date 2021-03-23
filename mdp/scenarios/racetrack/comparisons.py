@@ -1,18 +1,21 @@
 from __future__ import annotations
 
 from mdp import common
-from mdp.scenarios.racetrack import comparison, environment_parameters, grids
+
+from mdp.scenarios.racetrack.comparison import Comparison
+from mdp.scenarios.racetrack.environment_parameters import EnvironmentParameters
+from mdp.scenarios.racetrack import grids
 
 
-def racetrack_episode() -> comparison.Comparison:
-    comparison_ = comparison.Comparison(
-        environment_parameters=environment_parameters.EnvironmentParameters(
+def racetrack_episode() -> Comparison:
+    comparison = Comparison(
+        environment_parameters=EnvironmentParameters(
             grid=grids.TRACK_3,
             extra_reward_for_failure=-100.0,  # 0.0 in problem statement
         ),
         comparison_settings=common.Settings(
             runs=1,
-            training_episodes=100_000,
+            training_episodes=10_000,
             episode_print_frequency=1000,
             # display_every_step=True,
             dual_policy_relationship=common.DualPolicyRelationship.LINKED_POLICIES
@@ -49,4 +52,4 @@ def racetrack_episode() -> comparison.Comparison:
             show_trail=True
         )
     )
-    return comparison_
+    return comparison

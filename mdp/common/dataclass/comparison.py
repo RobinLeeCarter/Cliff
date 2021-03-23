@@ -3,7 +3,8 @@ import dataclasses
 import abc
 
 from mdp.common import utils
-from mdp.common.dataclass import settings, graph_values_, grid_view_parameters_, environment_parameters_
+from mdp.common.dataclass import environment_parameters_, settings
+from mdp.common.dataclass import graph_values_, graph3d_values_, grid_view_parameters_
 from mdp.common.dataclass.breakdown_parameters import breakdown_parameters_, breakdown_algorithm_by_alpha
 
 
@@ -21,9 +22,13 @@ class Comparison(abc.ABC):
     breakdown_parameters: breakdown_parameters_.BreakdownParameters = \
         dataclasses.field(default_factory=breakdown_parameters_.default_factory)
 
-    # graph output
+    # 2D graph output
     graph_values: graph_values_.GraphValues = \
         dataclasses.field(default_factory=graph_values_.default_factory)
+
+    # 3D graph output
+    graph3d_values: graph3d_values_.Graph3DValues = \
+        dataclasses.field(default_factory=graph3d_values_.default_factory)
 
     # grid view output
     grid_view_parameters: grid_view_parameters_.GridViewParameters = \

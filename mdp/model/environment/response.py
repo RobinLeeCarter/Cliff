@@ -1,12 +1,11 @@
 from __future__ import annotations
 from dataclasses import dataclass
-from typing import Optional, TYPE_CHECKING
+from typing import Optional
 
-if TYPE_CHECKING:
-    from mdp.model.environment import state
+from mdp.model.environment.state import State
 
 
 @dataclass(frozen=True)
 class Response:
     reward: Optional[float]
-    state: state.State
+    state: State

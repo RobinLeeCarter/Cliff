@@ -8,7 +8,7 @@ if TYPE_CHECKING:
     from mdp import controller, common
     from mdp.model import environment
 from mdp.scenarios.factory import grid_view_factory
-from mdp.view import graph, grid_view
+from mdp.view import graph, graph3d, grid_view
 
 
 class View:
@@ -20,14 +20,19 @@ class View:
             raise Exception(f"{pygame_fail} pygame modules failed to load")
 
         self.graph = graph.Graph()
+        self.graph3d = graph3d.Graph3D()
         self.grid_view: Optional[grid_view.GridView] = None
 
     def set_controller(self, controller_: controller.Controller):
         self._controller = controller_
 
-    def build(self, grid_world_: environment.GridWorld, comparison: common.Comparison):
-        self.grid_view = grid_view_factory.grid_view_factory(comparison.grid_view_parameters)
-        self.grid_view.set_gridworld(grid_world_)
+    def build(self, grid_world_: Optional[environment.GridWorld], comparison: common.Comparison):
+        if grid_world_:
+            self.grid_view = grid_view_factory.grid_view_factory(comparison.grid_view_parameters)
+            self.grid_view.set_gridworld(grid_world_)
 
     def demonstrate(self):
-        self.grid_view.demonstrate(self._controller.new_episode_request)
+        if self.grid_view:
+            self.grid_view.demonstrate(self._controller.new_episode_request)
+        else:
+            raise Exception("self.grid_view is None, possibly grid_world_ is None")

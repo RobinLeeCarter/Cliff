@@ -1,10 +1,12 @@
 from __future__ import annotations
+
 from typing import Optional, TYPE_CHECKING, Callable
 import abc
 import sys
 
 import pygame
 import pygame.freetype
+from matplotlib import cm, colors
 
 if TYPE_CHECKING:
     from mdp.model import agent, environment
@@ -37,12 +39,16 @@ class GridView(abc.ABC):
         self._prev_color: Optional[pygame.Color] = None
         self._prev_move_color: Optional[pygame.Color] = None
 
+        self._policy_cmap: Optional[colors.Colormap] = None
+        self._policy_color_normaliser: Optional[colors.Normalize] = None
+
         self._user_event: common.UserEvent = common.UserEvent.NONE
 
         self._t: int = 0
         self._episode: Optional[agent.Episode] = None
 
         self._build_color_lookup()
+        self._build_policy_color_map()
 
         # self._font: pygame.freetype.Font = pygame.freetype.Font(None, 12)
         self._font: pygame.freetype.Font = pygame.freetype.SysFont("Calibri", 12)
@@ -53,21 +59,32 @@ class GridView(abc.ABC):
 
     # noinspection SpellCheckingInspection
     def _build_color_lookup(self):
-        self._background_color: pygame.Color = pygame.Color('grey10')
-        self._policy_color: pygame.Color = pygame.Color('pink')
+        self._background_color = pygame.Color('grey10')
+        self._policy_color = pygame.Color('pink')
         self._color_lookup = {
             common.Square.NORMAL: pygame.Color('grey66'),
             common.Square.CLIFF: pygame.Color('red2'),
             common.Square.START: pygame.Color('yellow2'),
             common.Square.END: pygame.Color('goldenrod2'),
         }
-        self._agent_color: Optional[pygame.Color] = pygame.Color('deepskyblue2')
-        self._agent_move_color: Optional[pygame.Color] = pygame.Color('forestgreen')
-        self._prev_color: Optional[pygame.Color] = pygame.Color('grey76')
-        self._prev_move_color: Optional[pygame.Color] = pygame.Color('forestgreen')
+        self._agent_color = pygame.Color('deepskyblue2')
+        self._agent_move_color = pygame.Color('forestgreen')
+        self._prev_color = pygame.Color('grey76')
+        self._prev_move_color = pygame.Color('forestgreen')
 
-    def set_gridworld(self, grid_world_: environment.GridWorld):
-        self._grid_world = grid_world_
+    def _build_policy_color_map(self):
+        # noinspection PyUnresolvedReferences
+        self._policy_cmap = cm.coolwarm
+        self._policy_color_normaliser = colors.Normalize(vmin=0.0, vmax=1.0)
+
+    def _get_policy_value_color(self, un_normalised: float) -> pygame.Color:
+        normalised = self._policy_color_normaliser(un_normalised)
+        rgba: common.RGBA = common.RGBA(*self._policy_cmap(normalised, bytes=True))
+        color: pygame.Color = pygame.Color(rgba.as_tuple())
+        return color
+
+    def set_gridworld(self, grid_world: environment.GridWorld):
+        self._grid_world = grid_world
         self._max_x = self._grid_world.max_x
         self._max_y = self._grid_world.max_y
         self._load_gridworld()
@@ -121,10 +138,13 @@ class GridView(abc.ABC):
             self._wait_for_event_of_interest()
             # self._handle_event()
 
-    def display_latest_step(self, episode_: agent.Episode):
+    def display_latest_step(self, episode_: Optional[agent.Episode] = None):
         self.open_window()  # if not already
         self._copy_grid_into_background()
-        self._frame_on_background_latest(episode_)
+        if episode_:
+            self._frame_on_background_latest(episode_)
+        else:
+            self._draw_frame_on_background()
         self._put_background_on_screen()
         self._wait_for_event_of_interest()
         if self._user_event == common.UserEvent.QUIT:
@@ -187,6 +207,12 @@ class GridView(abc.ABC):
             sub_rect = self._get_sub_rect(rect, move=common.XY(x=0, y=0))
             self._center_text(surface, sub_rect, text)
 
+    def _draw_policy(self, surface: pygame.Surface, rect: pygame.Rect, output_square: common.OutputSquare):
+        if output_square.policy_value is not None:
+            text: str = f"{output_square.policy_value:.1f}"
+            sub_rect = self._get_sub_rect(rect, move=common.XY(x=0, y=0))
+            self._center_text(surface, sub_rect, text)
+
     def _draw_q(self, surface: pygame.Surface, rect: pygame.Rect, output_square: common.OutputSquare):
         for move_value in output_square.move_values.values():
             if move_value.q_value is not None:
@@ -207,6 +233,7 @@ class GridView(abc.ABC):
 
     def _wait_for_event_of_interest(self):
         self._user_event = common.UserEvent.NONE
+        pygame.event.clear()
         while self._user_event == common.UserEvent.NONE:
             # replaced: for event in pygame.event.get():
             event = pygame.event.wait()
@@ -268,10 +295,13 @@ class GridView(abc.ABC):
                      move_color: Optional[pygame.color] = None,
                      draw_move: bool = False,
                      draw_v: Optional[bool] = None,
+                     draw_policy: Optional[bool] = None,
                      draw_q: Optional[bool] = None
                      ):
         if draw_v is None:
             draw_v = self.grid_view_parameters.show_values
+        if draw_policy is None:
+            draw_policy = self.grid_view_parameters.show_values
         if draw_q is None:
             draw_q = self.grid_view_parameters.show_values
 
@@ -296,6 +326,8 @@ class GridView(abc.ABC):
         output_square: common.OutputSquare = self._grid_world.output_squares[row, col]
         if draw_v:
             self._draw_v(surface, rect, output_square)
+        if draw_policy:
+            self._draw_policy(surface, rect, output_square)
         if draw_q:
             self._draw_q(surface, rect, output_square)
 

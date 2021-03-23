@@ -40,7 +40,8 @@ class Model:
             model_step_callback=self._display_step,
             verbose=False
         )
-        self.breakdown.set_trainer(self.trainer)
+        if self.breakdown:
+            self.breakdown.set_trainer(self.trainer)
 
         # self.target_policy: policy.DeterministicPolicy = policy.DeterministicPolicy(self.environment)
         # self.behaviour_policy: policy.EGreedyPolicy = policy.EGreedyPolicy(self.environment,
@@ -59,7 +60,8 @@ class Model:
             timer.lap(name=str(settings.algorithm_title))
         timer.stop()
 
-        self.breakdown.compile()
+        if self.breakdown:
+            self.breakdown.compile()
         # graph_values: common.GraphValues = self.breakdown.get_graph_values()
 
     def prep_for_output(self):
@@ -76,6 +78,6 @@ class Model:
         policy_for_display = self.agent.policy.linked_policy
         self.environment.update_grid_value_functions(algorithm_=self.agent.algorithm, policy_=policy_for_display)
 
-    def _display_step(self, episode_: agent.Episode):
+    def _display_step(self, episode_: Optional[agent.Episode]):
         self.update_grid_value_functions()
         self._controller.display_step(episode_)

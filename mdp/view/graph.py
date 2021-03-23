@@ -32,7 +32,7 @@ class Graph:
 
         self.pre_plot()
         if gv.moving_average_window_size is None:
-            self.plot_arrays(gv.x_series, gv.graph_series)
+            self.plot(gv.x_series, gv.graph_series)
         else:
             self.moving_average_plot(gv.x_series, gv.graph_series, gv.moving_average_window_size)
         self.post_plot()
@@ -41,6 +41,10 @@ class Graph:
     def pre_plot(self):
         self.fig: figure.Figure = plt.figure()
         self.ax: figure.Axes = self.fig.subplots()
+
+    def plot(self, x_series: common.Series, graph_series: list[common.Series]):
+        for series_ in graph_series:
+            self.ax.plot(x_series.values, series_.values, label=series_.title)
 
     def post_plot(self):
         gv = self.graph_values
@@ -54,10 +58,6 @@ class Graph:
         if gv.has_legend:
             self.ax.legend()
 
-    def plot_arrays(self, x_series: common.Series, graph_series: list[common.Series]):
-        for series_ in graph_series:
-            self.ax.plot(x_series.values, series_.values, label=series_.title)
-
     def moving_average_plot(self,
                             x_series: common.Series,
                             graph_series: list[common.Series],
@@ -67,7 +67,7 @@ class Graph:
         for series_ma in graph_series_ma:
             values_ma = self.moving_average(series_ma.values, window_size=moving_average_window_size)
             series_ma.values = values_ma
-        self.plot_arrays(x_series, graph_series_ma)
+        self.plot(x_series, graph_series_ma)
 
     def moving_average(self, values: np.ndarray, window_size: int) -> np.ndarray:
         cum_sum = np.cumsum(np.insert(values, 0, 0))

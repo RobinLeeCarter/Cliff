@@ -40,6 +40,10 @@ class StateFunction:
         state_index = self._environment.state_index[state]
         self._values[state_index] = value
 
+    def print_all_values(self):
+        print("V._values ...")
+        print(self._values)
+
     def print_coverage_statistics(self):
         v_size = self._values.size
         v_non_zero = np.count_nonzero(self._values)

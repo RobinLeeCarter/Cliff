@@ -1,11 +1,12 @@
 from __future__ import annotations
 
 from mdp import common
-from mdp.scenarios.random_walk import comparison
+
+from mdp.scenarios.random_walk.comparison import Comparison
 
 
-def random_walk_episode() -> comparison.Comparison:
-    comparison_ = comparison.Comparison(
+def random_walk_episode() -> Comparison:
+    comparison = Comparison(
         comparison_settings=common.Settings(
             runs=100,
             training_episodes=100,
@@ -72,4 +73,4 @@ def random_walk_episode() -> comparison.Comparison:
             show_demo=False
         ),
     )
-    return comparison_
+    return comparison

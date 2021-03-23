@@ -3,6 +3,7 @@ import dataclasses
 
 from mdp.common import utils
 from mdp.common.dataclass import comparison
+
 from mdp.scenarios.racetrack import environment_parameters
 
 

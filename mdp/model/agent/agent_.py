@@ -21,7 +21,7 @@ class Agent:
 
         self._policy: Optional[policy_.Policy] = None
         self._behaviour_policy: Optional[policy_.Policy] = None     # if on-policy = self._policy
-        self._algorithm: Optional[algorithm_.Episodic] = None
+        self._algorithm: Optional[algorithm_.Algorithm] = None
         self._episode: Optional[episode_.Episode] = None
         self._episode_length_timeout: Optional[int] = None
 
@@ -59,12 +59,8 @@ class Agent:
         return self._behaviour_policy
 
     @property
-    def algorithm(self) -> algorithm_.Episodic:
+    def algorithm(self) -> algorithm_.Algorithm:
         return self._algorithm
-
-    @property
-    def algorithm_title(self) -> str:
-        return self._algorithm.title
 
     @property
     def episode(self) -> episode_.Episode:
@@ -86,22 +82,24 @@ class Agent:
         else:
             raise NotImplementedError
 
-        self._algorithm = algorithm_.factory(self._environment, self, settings.algorithm_parameters)
+        # set policy based on policy_parameters
+        self._algorithm = algorithm_.factory(environment_=self._environment,
+                                             agent_=self,
+                                             algorithm_parameters=settings.algorithm_parameters,
+                                             policy_parameters=settings.policy_parameters)
         self._episode_length_timeout = settings.episode_length_timeout
         self.gamma = settings.gamma
 
     def set_behaviour_policy(self, policy: policy_.Policy):
         self._behaviour_policy = policy
 
-    def initialize(self):
-        self._algorithm.initialize()
+    # def initialize(self):
+    #     # initialize policies here? pass in settings too?
+    #     self._algorithm.initialize()
 
     def parameter_changes(self, iteration: int):
         # potentially change epsilon here
         self._algorithm.parameter_changes(iteration)
-
-    def do_episode(self):
-        self._algorithm.do_episode(self._episode_length_timeout)
 
     def set_step_callback(self, step_callback: Optional[Callable[[], bool]] = None):
         self._step_callback = step_callback

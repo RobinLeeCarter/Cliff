@@ -10,6 +10,7 @@ from mdp.common import enums
 class GridViewParameters:
     grid_view_type: Optional[enums.GridViewType] = None
     show_demo: Optional[bool] = None
+    show_result: Optional[bool] = None
     window_title: Optional[str] = None
     show_trail: Optional[bool] = None
     show_values: Optional[bool] = None
@@ -20,6 +21,7 @@ class GridViewParameters:
 default: GridViewParameters = GridViewParameters(
     grid_view_type=enums.GridViewType.POSITION_MOVE,
     show_demo=True,
+    show_result=False,
     window_title="Grid World",
     show_trail=False,
     show_values=True,

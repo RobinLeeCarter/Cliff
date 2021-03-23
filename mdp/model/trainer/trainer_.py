@@ -3,19 +3,21 @@ from typing import TYPE_CHECKING, Optional, Callable
 
 if TYPE_CHECKING:
     from mdp import common
-    from mdp.model import breakdown, agent
+    from mdp.model import breakdown, agent  # , algorithm
+
+from mdp.model import algorithm
 
 
 class Trainer:
     def __init__(self,
                  agent_: agent.Agent,
-                 breakdown_: breakdown.Breakdown,
-                 model_step_callback: Optional[Callable[[agent.Episode], None]] = None,
+                 breakdown_: Optional[breakdown.Breakdown],
+                 model_step_callback: Optional[Callable[[Optional[agent.Episode]], None]] = None,
                  verbose: bool = False
                  ):
         self._agent: agent.Agent = agent_
-        self._breakdown: breakdown.Breakdown = breakdown_
-        self._model_step_callback: Optional[Callable[[agent.Episode], None]] = model_step_callback
+        self._breakdown: Optional[breakdown.Breakdown] = breakdown_
+        self._model_step_callback: Optional[Callable[[Optional[agent.Episode]], None]] = model_step_callback
         self._verbose = verbose
         self._cont: bool = True
 
@@ -38,22 +40,33 @@ class Trainer:
         # process settings
         self.settings = settings
         self._agent.apply_settings(self.settings)
-        # self.algorithm_ = self.agent.algorithm
+        algorithm_: algorithm.Algorithm = self._agent.algorithm
+        if isinstance(algorithm_, algorithm.Episodic):
+            self._train_episodic(settings, algorithm_)
+        elif isinstance(algorithm_, algorithm.DynamicProgramming):
+            self._train_dynamic_programming(settings, algorithm_)
+        else:
+            raise NotImplementedError
 
+    def _train_episodic(self, settings: common.Settings, algorithm_: algorithm.Episodic):
+        # process settings
+        episode_length_timeout = self.settings.episode_length_timeout
+
+        # self.algorithm_ = self.agent.algorithm
         # self.algorithm_ = self.algorithm_factory[self.settings.algorithm_parameters]
         # self.algorithm_.agent.new_policy(settings.policy_parameters)
         # self.algorithm_.agent.set_gamma(settings.gamma)
 
         if settings.review_every_step or settings.display_every_step:
             self._agent.set_step_callback(self.step)
-        settings.algorithm_title = self._agent.algorithm_title
+        settings.algorithm_title = algorithm_.title
         print(f"{settings.algorithm_title}: {settings.runs} runs")
 
         self.max_timestep = 0
         for self.run_counter in range(1, settings.runs + 1):
             if self._verbose or self.run_counter % settings.run_print_frequency == 0:
                 print(f"run_counter = {self.run_counter}: {settings.training_episodes} episodes")
-            self._agent.initialize()
+            self._agent.algorithm.initialize()
 
             self.timestep = 0
             for self.episode_counter in range(1, settings.training_episodes + 1):
@@ -64,7 +77,7 @@ class Trainer:
 
                 if not settings.review_every_step and self.timestep != 0:
                     self.timestep += 1  # start next episode from the next timestep
-                self._agent.do_episode()
+                algorithm_.do_episode(episode_length_timeout)
 
                 if self._verbose:
                     episode = self._agent.episode
@@ -79,6 +92,13 @@ class Trainer:
 
         if self._verbose:
             self._agent.print_statistics()
+
+    # noinspection PyUnusedLocal
+    def _train_dynamic_programming(self, settings: common.Settings, algorithm_: algorithm.DynamicProgramming):
+        if settings.review_every_step or settings.display_every_step:
+            algorithm_.set_step_callback(self.step)
+        algorithm_.initialize()
+        algorithm_.run()
 
     def step(self) -> bool:
         if self.settings.review_every_step:

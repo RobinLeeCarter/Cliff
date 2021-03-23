@@ -11,14 +11,19 @@ class QLearning(abstract.EpisodicOnline):
     def __init__(self,
                  environment_: environment.Environment,
                  agent_: agent.Agent,
-                 algorithm_parameters: common.AlgorithmParameters
+                 algorithm_parameters: common.AlgorithmParameters,
+                 policy_parameters: common.PolicyParameters
                  ):
-        super().__init__(environment_, agent_, algorithm_parameters)
+        super().__init__(environment_, agent_, algorithm_parameters, policy_parameters)
         self._alpha = self._algorithm_parameters.alpha
         self._algorithm_type = common.AlgorithmType.Q_LEARNING
         self.name = common.algorithm_name[self._algorithm_type]
         self.title = f"{self.name} α={self._alpha}"
         self._create_q()
+
+    def initialize(self):
+        super().initialize()
+        self._make_policy_greedy_wrt_q()
 
     def _do_training_step(self):
         self._agent.choose_action()

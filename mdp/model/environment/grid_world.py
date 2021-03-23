@@ -9,22 +9,22 @@ from mdp import common
 class GridWorld:
     """GridWorld doesn't know about states and actions it just deals in the rules of the grid"""
     def __init__(self, environment_parameters: common.EnvironmentParameters):
-        self._grid_array: np.ndarray = environment_parameters.grid
-        self.max_y: int = self._grid_array.shape[0] - 1
-        self.max_x: int = self._grid_array.shape[1] - 1
-        starts: np.ndarray = (self._grid_array[:, :] == common.Square.START)
+        self._grid: np.ndarray = environment_parameters.grid
+        self.max_y: int = self._grid.shape[0] - 1
+        self.max_x: int = self._grid.shape[1] - 1
+        starts: np.ndarray = (self._grid[:, :] == common.Square.START)
         self._starts_flat: np.ndarray = np.flatnonzero(starts)
         self._single_start: Optional[common.XY] = None
         self._test_single_start()
 
-        self.output_squares: np.ndarray = np.empty(shape=self._grid_array.shape, dtype=common.OutputSquare)
+        self.output_squares: np.ndarray = np.empty(shape=self._grid.shape, dtype=common.OutputSquare)
         # set_gridworld output_squares so don't have to test for existance.
         for index in np.ndindex(self.output_squares.shape):
             self.output_squares[index] = common.OutputSquare()
 
     def _test_single_start(self):
         if len(self._starts_flat) == 1:
-            iy, ix = np.unravel_index(self._starts_flat[0], shape=self._grid_array.shape)
+            iy, ix = np.unravel_index(self._starts_flat[0], shape=self._grid.shape)
             self._single_start = self._position_flip(common.XY(ix, iy))
 
     def get_a_start_position(self) -> common.XY:
@@ -32,7 +32,7 @@ class GridWorld:
             return self._single_start
         else:
             start_flat = common.rng.choice(self._starts_flat)
-            iy, ix = np.unravel_index(start_flat, shape=self._grid_array.shape)
+            iy, ix = np.unravel_index(start_flat, shape=self._grid.shape)
             return self._position_flip(common.XY(ix, iy))
 
     def is_at_goal(self, position: common.XY) -> bool:
@@ -43,7 +43,7 @@ class GridWorld:
                0 <= position.y <= self.max_y
 
     def get_square(self, position: common.XY) -> common.Square:
-        value: int = self._grid_array[self.max_y - position.y, position.x]
+        value: int = self._grid[self.max_y - position.y, position.x]
         # noinspection PyArgumentList
         return common.Square(value)  # pycharm inspection bug
 
@@ -70,15 +70,19 @@ class GridWorld:
     def _move_flip(self, xy_in: common.XY) -> common.XY:
         return common.XY(x=xy_in.x, y=-xy_in.y)
 
-    def set_state_function(self, position: common.XY, v_value: Optional[float]):
+    def set_v_value(self, position: common.XY, v_value: Optional[float]):
         output_square: common.OutputSquare = self._get_output_square(position)
         output_square.v_value = v_value
 
-    def set_state_action_function(self,
-                                  position: common.XY,
-                                  move: common.XY,
-                                  q_value: Optional[float],
-                                  is_policy: bool = False):
+    def set_policy_value(self, position: common.XY, policy_value: Optional[float]):
+        output_square: common.OutputSquare = self._get_output_square(position)
+        output_square.policy_value = policy_value
+
+    def set_move_q_value(self,
+                         position: common.XY,
+                         move: common.XY,
+                         q_value: Optional[float],
+                         is_policy: bool = False):
         output_square: common.OutputSquare = self._get_output_square(position)
         move_value: common.MoveValue = common.MoveValue(move, q_value, is_policy)
         output_square.move_values[move] = move_value
