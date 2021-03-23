@@ -15,8 +15,8 @@ def main():
     # comparison: common.Comparison = scenarios.cliff_alpha()
     # comparison: common.Comparison = scenarios.cliff_episode()
     # comparison: common.Comparison = scenarios.random_walk_episode()
-    # comparison: common.Comparison = scenarios.racetrack_episode()
-    comparison: common.Comparison = scenarios.jacks_comparison()
+    comparison: common.Comparison = scenarios.racetrack_episode()
+    # comparison: common.Comparison = scenarios.jacks_comparison()
 
     application.Application(comparison)
 

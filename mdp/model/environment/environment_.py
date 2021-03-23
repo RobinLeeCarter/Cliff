@@ -88,13 +88,10 @@ class Environment(ABC):
 
     def start(self) -> Response:
         state = self._get_a_start_state()
-        # if self.verbose:
-        #     self.trace_.start(state)
         return Response(state=state, reward=None)
 
-    @abstractmethod
     def _get_a_start_state(self) -> State:
-        pass
+        return self.dynamics.get_a_start_state()
 
     def from_state_perform_action(self, state: State, action: Action) -> Response:
         if state.is_terminal:
@@ -105,6 +102,8 @@ class Environment(ABC):
         return self._get_response()
 
     def _apply_action(self):
+        if not self.is_action_compatible_with_state(self._state, self._action):
+            raise Exception(f"_apply_action state {self._state} incompatible with action {self._action}")
         self._response = self.dynamics.draw_response(self._state, self._action)
 
     def _project_back_to_grid(self, requested_position: common.XY) -> common.XY:

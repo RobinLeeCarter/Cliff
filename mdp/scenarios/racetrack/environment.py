@@ -7,35 +7,36 @@ from mdp.model import environment
 from mdp.scenarios.racetrack.state import State
 from mdp.scenarios.racetrack.action import Action
 from mdp.scenarios.racetrack.grid_world import GridWorld
+from mdp.scenarios.racetrack.dynamics import Dynamics
 from mdp.scenarios.racetrack.environment_parameters import EnvironmentParameters
 
 
 class Environment(environment.Environment):
-    def __init__(self, environment_parameters_: EnvironmentParameters):
-        super().__init__(environment_parameters_)
+    def __init__(self, environment_parameters: EnvironmentParameters):
+        super().__init__(environment_parameters)
 
         # downcast states and actions so properties can be used freely
         self.states: list[State] = self.states
         self.actions: list[Action] = self.actions
         self._state: State = self._state
         self._action: Action = self._action
-        self.grid_world: GridWorld = GridWorld(environment_parameters_)
+        self.grid_world: GridWorld = GridWorld(environment_parameters)
+        self.dynamics: Dynamics = Dynamics(environment_=self, environment_parameters=environment_parameters)
 
         self._reward: float = 0.0
         self._next_state: Optional[State] = None
-        self._extra_reward_for_failure: float = environment_parameters_.extra_reward_for_failure
 
         # velocity
-        self._min_vx: int = environment_parameters_.min_velocity
-        self._max_vx: int = environment_parameters_.max_velocity
-        self._min_vy: int = environment_parameters_.min_velocity
-        self._max_vy: int = environment_parameters_.max_velocity
+        self._min_vx: int = environment_parameters.min_velocity
+        self._max_vx: int = environment_parameters.max_velocity
+        self._min_vy: int = environment_parameters.min_velocity
+        self._max_vy: int = environment_parameters.max_velocity
 
         # acceleration
-        self._min_ax: int = environment_parameters_.min_acceleration
-        self._max_ax: int = environment_parameters_.max_acceleration
-        self._min_ay: int = environment_parameters_.min_acceleration
-        self._max_ay: int = environment_parameters_.max_acceleration
+        self._min_ax: int = environment_parameters.min_acceleration
+        self._max_ax: int = environment_parameters.max_acceleration
+        self._min_ay: int = environment_parameters.min_acceleration
+        self._max_ay: int = environment_parameters.max_acceleration
 
     # region Sets
     def _build_states(self):
@@ -73,57 +74,6 @@ class Environment(environment.Environment):
     # endregion
 
     # region Operation
-    def _get_a_start_state(self) -> State:
-        position: common.XY = self.grid_world.get_a_start_position()
-        return State(is_terminal=False, position=position, velocity=common.XY(x=0, y=0))
-
-    def _apply_action(self):
-        if not self.is_action_compatible_with_state(self._state, self._action):
-            raise Exception(f"apply_action_to_state state {self._state} incompatible with action {self._action}")
-
-        # apply grid world rules (eg. edges, wind)
-        acceleration: Optional[common.XY] = None
-        if self._action:
-            acceleration = self._action.acceleration
-        new_position, new_velocity = self.grid_world.change_request(
-            position=self._state.position,
-            velocity=self._state.velocity,
-            acceleration=acceleration
-            )
-
-        self._square = self.grid_world.get_square(new_position)
-        if self._square == common.Square.END:
-            # success
-            self._reward = 0.0
-            self._next_state = State(
-                position=new_position,
-                velocity=new_velocity,
-                is_terminal=True
-            )
-            if self.verbose:
-                print(f"Past finish line at {new_position}")
-        elif self._square == common.Square.CLIFF:
-            # failure, move back to start line
-            # self.pre_reset_state = State(x, y, vx, vy, is_reset=True)
-            self._reward = -1.0 + self._extra_reward_for_failure
-            self._next_state = self._get_a_start_state()
-            if self.verbose:
-                print(f"Grass at {new_position}")
-        else:
-            # TRACK or START so continue
-            self._reward = -1.0
-            self._next_state = State(
-                position=new_position,
-                velocity=new_velocity,
-                is_terminal=False
-            )
-
-    def _get_response(self) -> environment.Response:
-        return environment.Response(
-            reward=self._reward,
-            state=self._next_state
-        )
-
     def output_mode(self):
         self.grid_world.skid_probability = 0.0
     # endregion

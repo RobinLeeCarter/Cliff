@@ -1,6 +1,9 @@
 from __future__ import annotations
 from typing import TYPE_CHECKING
 
+from abc import ABC, abstractmethod
+import random
+
 if TYPE_CHECKING:
     from mdp import common
     from mdp.common import Distribution
@@ -10,11 +13,12 @@ if TYPE_CHECKING:
     from mdp.model.environment.environment_ import Environment
 
 
-class Dynamics:
+class Dynamics(ABC):
     def __init__(self, environment: Environment, environment_parameters: common.EnvironmentParameters):
         """init top down"""
         self._environment: Environment = environment
         self._environment_parameters: common.EnvironmentParameters = environment_parameters
+        self._verbose: bool = environment_parameters.verbose
         self.is_built: bool = False
 
     def build(self):
@@ -74,6 +78,10 @@ class Dynamics:
         could be used for one state, action in theory
         but too many for all states and actions so potentially not useful in practice
         """
+        pass
+
+    @abstractmethod
+    def get_a_start_state(self) -> State:
         pass
 
     def draw_response(self, state: State, action: Action) -> Response:

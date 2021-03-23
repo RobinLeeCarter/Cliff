@@ -36,24 +36,6 @@ class Environment(environment.Environment):
 
         self._max_cars: int = environment_parameters.max_cars
         self._max_transfers: int = environment_parameters.max_transfers
-        # self._rental_revenue: float = environment_parameters_.rental_revenue
-        # self._transfer_cost: float = environment_parameters_.transfer_cost
-        # self._extra_rules: bool = environment_parameters_.extra_rules
-
-        # self._location_1: Location = Location(
-        #     max_cars=self._max_cars,
-        #     rental_rate=environment_parameters_.rental_rate_1,
-        #     return_rate=environment_parameters_.return_rate_1,
-        #     excess_parking_cost=environment_parameters_.excess_parking_cost,
-        # )
-        # self._location_2: Location = Location(
-        #     max_cars=self._max_cars,
-        #     rental_rate=environment_parameters_.rental_rate_2,
-        #     return_rate=environment_parameters_.return_rate_2,
-        #     excess_parking_cost=environment_parameters_.excess_parking_cost,
-        # )
-        #
-        # self.counter: int = 0
 
     # region Sets
     def _build_states(self):
@@ -84,43 +66,6 @@ class Environment(environment.Environment):
             return False
     # endregion
 
-    # region Dynamics
-    # def _add_dynamics(self, state_: State, action_: Action):
-    #     total_costs: float = self._calc_cost_of_transfers(action_.transfer_1_to_2)
-    #     if self._extra_rules:
-    #         total_costs += self._location_1.parking_costs(state_.ending_cars_1)
-    #         total_costs += self._location_2.parking_costs(state_.ending_cars_2)
-    #
-    #     cars_sob_1 = state_.ending_cars_1 - action_.transfer_1_to_2
-    #     cars_sob_2 = state_.ending_cars_2 + action_.transfer_1_to_2
-    #
-    #     outcomes_1: list[LocationOutcome] = self._location_1.outcome_lookup[cars_sob_1]
-    #     outcomes_2: list[LocationOutcome] = self._location_2.outcome_lookup[cars_sob_2]
-    #
-    #     # calculated expected reward given s,a
-    #     expected_cars_rented_1: float = sum(outcome.probability_x_cars_rented for outcome in outcomes_1)
-    #     expected_cars_rented_2: float = sum(outcome.probability_x_cars_rented for outcome in outcomes_2)
-    #     expected_cars_rented = expected_cars_rented_1 + expected_cars_rented_2
-    #     expected_revenue = expected_cars_rented * self._rental_revenue
-    #     # sum_over_s'_r( p(s',r|s,a) . r )
-    #     expected_reward = expected_revenue - total_costs
-    #     self.dynamics.set_expected_reward(state_, action_, expected_reward)
-    #     # self._expected_reward[(state_, action_)] = expected_reward
-    #
-    #     for outcome_1 in outcomes_1:
-    #         for outcome_2 in outcomes_2:
-    #             # p(s'|s,a) = p(s1'|s1,a).p(s2'|s2,a)
-    #             probability = outcome_1.probability * outcome_2.probability
-    #
-    #             new_state = State(cars_cob_1=outcome_1.ending_cars,
-    #                               cars_cob_2=outcome_2.ending_cars,
-    #                               is_terminal=False)
-    #             self.dynamics.set_next_state_probability(state_, action_, new_state, probability)
-    #             self.counter += 1
-    # state, action reaches new_state with probability
-    # self.dynamics.add(state_, action_, new_state, probability)
-    # endregion
-
     # region Operation
     def initialize_policy(self, policy_: policy.Policy, policy_parameters: common.PolicyParameters):
         initial_action = Action(transfer_1_to_2=0)
@@ -130,9 +75,6 @@ class Environment(environment.Environment):
             # initial_action = Action(transfer_1_to_2=max_transfer)
             policy_[state] = initial_action
             # print(state, initial_action)
-
-    def _get_a_start_state(self) -> State:
-        return random.choice(self.states)
 
     def insert_state_function_into_graph3d(self, comparison: common.Comparison, v: state_function.StateFunction):
         x_values = np.arange(self._max_cars + 1, dtype=float)

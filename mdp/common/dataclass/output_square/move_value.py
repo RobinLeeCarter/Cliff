@@ -2,11 +2,11 @@ from __future__ import annotations
 import dataclasses
 from typing import Optional
 
-from mdp import common
+from mdp.common.dataclass.xy import XY
 
 
 @dataclasses.dataclass
 class MoveValue:
-    move: common.XY
+    move: XY
     q_value: Optional[float] = None
     is_policy: bool = False

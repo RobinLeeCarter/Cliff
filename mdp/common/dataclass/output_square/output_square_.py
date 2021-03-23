@@ -2,12 +2,12 @@ from __future__ import annotations
 from typing import Optional
 import dataclasses
 
-from mdp.common.dataclass import xy
-from mdp.common.dataclass.output_square import move_value
+from mdp.common.dataclass.xy import XY
+from mdp.common.dataclass.output_square.move_value import MoveValue
 
 
 @dataclasses.dataclass
 class OutputSquare:
     v_value: Optional[float] = None
     policy_value: Optional[float] = None
-    move_values: dict[xy.XY, move_value.MoveValue] = dataclasses.field(default_factory=dict)
+    move_values: dict[XY, MoveValue] = dataclasses.field(default_factory=dict)

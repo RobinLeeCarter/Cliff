@@ -1,12 +1,13 @@
 from __future__ import annotations
 from typing import TYPE_CHECKING
 
-
 if TYPE_CHECKING:
     from mdp.scenarios.jacks.action import Action
     from mdp.scenarios.jacks.environment import Environment
     from mdp.scenarios.jacks.environment_parameters import EnvironmentParameters
     from mdp.scenarios.jacks.dynamics.location_outcome import LocationOutcome
+
+import random
 
 from mdp.common import Distribution
 from mdp.model import environment
@@ -202,6 +203,9 @@ class Dynamics(environment.Dynamics):
                 response_distribution[response] += probability
         response_distribution.self_check()
         return response_distribution
+
+    def get_a_start_state(self) -> State:
+        return random.choice(self._environment.states)
 
     def draw_response(self, state: State, action: Action) -> Response:
         """
