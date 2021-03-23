@@ -11,12 +11,12 @@ def main():
     os_environ_settings.dummy = None    # for pycharm code inspection only
 
     # comparison: common.Comparison = scenarios.windy_timestep()
-    comparison: common.Comparison = scenarios.windy_timestep(random_wind=True)
+    # comparison: common.Comparison = scenarios.windy_timestep(random_wind=True)
     # comparison: common.Comparison = scenarios.cliff_alpha()
     # comparison: common.Comparison = scenarios.cliff_episode()
     # comparison: common.Comparison = scenarios.random_walk_episode()
     # comparison: common.Comparison = scenarios.racetrack_episode()
-    # comparison: common.Comparison = scenarios.jacks_comparison()
+    comparison: common.Comparison = scenarios.jacks_comparison()
 
     application.Application(comparison)
 

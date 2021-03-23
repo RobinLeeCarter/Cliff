@@ -68,4 +68,3 @@ class Dynamics(environment.Dynamics):
                 is_terminal=False
             )
         return Response(reward, next_state)
-

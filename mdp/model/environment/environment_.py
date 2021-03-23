@@ -48,7 +48,7 @@ class Environment(ABC):
         self.state_index = {state: i for i, state in enumerate(self.states)}
         self._build_actions()
         self.action_index = {action: i for i, action in enumerate(self.actions)}
-        self._build_dynamics()
+        self.dynamics.build()
 
     def state_action_index(self, state: State, action: Action) -> tuple[int, int]:
         state_index = self.state_index[state]
@@ -73,10 +73,6 @@ class Environment(ABC):
 
     def is_action_compatible_with_state(self, state: State, action: Action):
         return True
-
-    def _build_dynamics(self):
-        if self.dynamics:
-            self.dynamics.build()
     # endregion
 
     # region Operation
@@ -98,13 +94,10 @@ class Environment(ABC):
             raise Exception("Environment: Trying to act in a terminal state.")
         self._state = state
         self._action = action
-        self._apply_action()
-        return self._get_response()
-
-    def _apply_action(self):
         if not self.is_action_compatible_with_state(self._state, self._action):
             raise Exception(f"_apply_action state {self._state} incompatible with action {self._action}")
         self._response = self.dynamics.draw_response(self._state, self._action)
+        return self._response
 
     def _project_back_to_grid(self, requested_position: common.XY) -> common.XY:
         x = requested_position.x
@@ -118,9 +111,6 @@ class Environment(ABC):
         if y > self.grid_world.max_y:
             y = self.grid_world.max_y
         return common.XY(x=x, y=y)
-
-    def _get_response(self) -> Response:
-        return self._response
 
     def update_grid_value_functions(self, algorithm_: algorithm.Algorithm, policy_: policy.Policy):
         pass

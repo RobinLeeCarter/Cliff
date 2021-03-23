@@ -19,7 +19,6 @@ class DynamicProgramming(algorithm_.Algorithm, abc.ABC):
         self._theta = self._algorithm_parameters.theta
         self._iteration_timeout = self._algorithm_parameters.iteration_timeout
         self._dynamics: environment.Dynamics = self._environment.dynamics
-        assert self._dynamics is not None
         self._iteration: int = 0
 
         # trainer callback
