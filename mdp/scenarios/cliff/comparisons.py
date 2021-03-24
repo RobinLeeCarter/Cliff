@@ -11,17 +11,17 @@ def cliff_alpha() -> Comparison:
         #     actions_list=common.ActionsList.FOUR_MOVES,
         # ),
         comparison_settings=common.Settings(
-            runs=10,
+            runs=1000,
             training_episodes=100,
         ),
         breakdown_parameters=common.BreakdownAlgorithmByAlpha(
             breakdown_type=common.BreakdownType.RETURN_BY_ALPHA,
             alpha_min=0.1,
             alpha_max=1.0,
-            alpha_step=0.1,
+            alpha_step=0.05,
             algorithm_type_list=[
                 common.AlgorithmType.EXPECTED_SARSA,
-                common.AlgorithmType.VQ,
+                # common.AlgorithmType.VQ,
                 common.AlgorithmType.Q_LEARNING,
                 common.AlgorithmType.SARSA
             ],
