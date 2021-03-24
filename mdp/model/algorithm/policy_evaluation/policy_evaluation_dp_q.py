@@ -7,7 +7,7 @@ from mdp import common
 from mdp.model.algorithm import abstract
 
 
-class PolicyEvaluationDpV(abstract.DynamicProgrammingV):
+class PolicyEvaluationDpQ(abstract.DynamicProgrammingQ):
     def __init__(self,
                  environment_: environment.Environment,
                  agent_: agent.Agent,
@@ -15,15 +15,13 @@ class PolicyEvaluationDpV(abstract.DynamicProgrammingV):
                  policy_parameters: common.PolicyParameters
                  ):
         super().__init__(environment_, agent_, algorithm_parameters, policy_parameters)
-        self._algorithm_type = common.AlgorithmType.POLICY_EVALUATION_DP_V
+        self._algorithm_type = common.AlgorithmType.POLICY_EVALUATION_DP_Q
         self.name = common.algorithm_name[self._algorithm_type]
         self.title = f"{self.name} θ={self._theta}"
 
     def run(self):
         do_call_back: bool = bool(self._step_callback)
         self._policy_evaluation(do_call_back)
-        # if self._verbose:
-        #     self.V.print_all_values()
 
     def _policy_evaluation(self, do_call_back: bool = False):
         iteration: int = 1
@@ -36,15 +34,11 @@ class PolicyEvaluationDpV(abstract.DynamicProgrammingV):
         while cont and delta >= self._theta and iteration < self._iteration_timeout:
             delta = 0.0
             for state in self._environment.states:
-                v = self.V[state]
-                new_v: float = 0.0
                 for action in self._environment.actions_for_state(state):
-                    # π(a|s)
-                    policy_probability = self._agent.policy.get_probability(state, action)
-                    if policy_probability > 0:
-                        new_v += policy_probability * self._get_expected_return(state, action)
-                self.V[state] = new_v
-                delta = max(delta, abs(new_v - v))
+                    q = self.Q[state, action]
+                    new_q: float = self._get_expected_return(state, action)
+                    self.Q[state, action] = new_q
+                    delta = max(delta, abs(new_q - q))
             if self._verbose:
                 print(f"iteration = {iteration}\tdelta={delta:.2f}")
             if do_call_back:
