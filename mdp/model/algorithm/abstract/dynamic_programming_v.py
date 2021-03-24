@@ -20,6 +20,8 @@ class DynamicProgrammingV(dynamic_programming.DynamicProgramming, abc.ABC):
 
     def _get_expected_return(self, state: environment.State, action: environment.Action) -> float:
         expected_return: float = self._dynamics.get_expected_reward(state, action)
-        for state, probability in self._dynamics.get_next_state_distribution(state, action).items():
-            expected_return += probability * self._agent.gamma * self.V[state]
+        next_state_expected_return: float = 0.0
+        for next_state, probability in self._dynamics.get_next_state_distribution(state, action).items():
+            next_state_expected_return += probability * self.V[next_state]
+        expected_return += self._agent.gamma * next_state_expected_return
         return expected_return

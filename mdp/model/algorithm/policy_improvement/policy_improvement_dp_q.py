@@ -26,7 +26,6 @@ class PolicyImprovementDpQ(abstract.DynamicProgrammingQ):
             policy_stable = self._policy_improvement(do_call_back)
 
     def _policy_improvement(self, do_call_back: bool = False) -> bool:
-        # TODO: Change
         policy_: policy.Policy = self._agent.target_policy
         # assert isinstance(policy_, policy.Deterministic)
         # policy_: policy.Deterministic
@@ -37,13 +36,7 @@ class PolicyImprovementDpQ(abstract.DynamicProgrammingQ):
         policy_stable: bool = True
         for state in self._environment.states:
             old_action: environment.Action = policy_[state]
-            best_action: Optional[environment.Action] = None
-            best_expected_return: float = float('-inf')
-            for action in self._environment.actions_for_state(state):
-                expected_return = self._get_expected_return(state, action)
-                if expected_return > best_expected_return:
-                    best_action = action
-                    best_expected_return = expected_return
+            best_action: environment.Action = self.Q.argmax_over_actions(state)
             policy_[state] = best_action
             if old_action != best_action:
                 policy_stable = False

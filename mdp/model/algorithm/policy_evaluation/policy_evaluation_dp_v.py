@@ -2,7 +2,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from mdp.model import environment, agent, policy
+    from mdp.model import environment, agent
 from mdp import common
 from mdp.model.algorithm import abstract
 
@@ -28,7 +28,6 @@ class PolicyEvaluationDpV(abstract.DynamicProgrammingV):
     def _policy_evaluation(self, do_call_back: bool = False):
         iteration: int = 1
         delta: float = float('inf')
-        policy_: policy.Policy = self._agent.policy
         cont: bool = True
 
         if self._verbose:
@@ -41,7 +40,7 @@ class PolicyEvaluationDpV(abstract.DynamicProgrammingV):
                 new_v: float = 0.0
                 for action in self._environment.actions_for_state(state):
                     # π(a|s)
-                    policy_probability = policy_.get_probability(state, action)
+                    policy_probability = self._agent.policy.get_probability(state, action)
                     if policy_probability > 0:
                         new_v += policy_probability * self._get_expected_return(state, action)
                 self.V[state] = new_v
