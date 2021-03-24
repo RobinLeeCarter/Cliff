@@ -18,6 +18,10 @@ def factory(environment_: environment.Environment,
         a.POLICY_IMPROVEMENT_DP_V: policy_improvement.PolicyImprovementDpV,
         a.POLICY_ITERATION_DP_V: control.PolicyIterationDpV,
 
+        a.POLICY_EVALUATION_DP_Q: policy_evaluation.PolicyEvaluationDpQ,
+        a.POLICY_IMPROVEMENT_DP_Q: policy_improvement.PolicyImprovementDpQ,
+        a.POLICY_ITERATION_DP_Q: control.PolicyIterationDpQ,
+
         a.TD_0: policy_evaluation.TD0,
         a.OFF_POLICY_MC_CONTROL: control.OffPolicyMcControl,
 
