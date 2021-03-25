@@ -1,9 +1,6 @@
 from __future__ import annotations
 from typing import TYPE_CHECKING, Optional
 
-import random
-from scipy import stats
-
 if TYPE_CHECKING:
     from mdp.scenarios.blackjack.action import Action
     from mdp.scenarios.blackjack.environment import Environment
@@ -46,6 +43,7 @@ class Dynamics(environment.Dynamics):
         player_sum: int = state.player_sum
         usable_ace: bool = state.usable_ace
         result: Optional[Result] = None
+        dealers_sum: int = state.dealers_card
 
         # if player_sum == 21:    # natural
         #     dealers_sum = self.dealers_turn(state.dealers_card)
@@ -55,6 +53,8 @@ class Dynamics(environment.Dynamics):
         #         result = Result.WIN
         if player_sum < 21 and action.hit:
             card = self._card_distribution.draw_one()
+            if self._verbose:
+                print(f"player card = {card}")
             # once player sum is 12 an extra ace can never be 'usable' so just counts as 1
             player_sum += card
 
@@ -70,6 +70,10 @@ class Dynamics(environment.Dynamics):
             dealers_sum = self.dealers_turn(state.dealers_card)
             result = self.get_result(player_sum, dealers_sum)
 
+        if self._verbose:
+            print(f"player_sum = {player_sum}")
+            print(f"dealers_sum = {dealers_sum}")
+            print(f"result = {result}")
         if result is None:
             # continue players turn
             return Response(
@@ -91,6 +95,8 @@ class Dynamics(environment.Dynamics):
             raise NotImplementedError
 
     def dealers_turn(self, starting_card: int) -> int:
+        dealers_sum: int
+        dealers_usable_ace: bool
         if starting_card == 1:
             dealers_sum = 11
             dealers_usable_ace = True
@@ -98,7 +104,19 @@ class Dynamics(environment.Dynamics):
             dealers_sum = starting_card
             dealers_usable_ace = False
 
-        card = self._card_distribution.draw_one()
+        while dealers_sum < 17:
+            card = self._card_distribution.draw_one()
+            if self._verbose:
+                print(f"dealers card = {card}")
+            if card == 1 and not dealers_usable_ace and dealers_sum + 11 <= 21:
+                # drawn an ace and is usable
+                dealers_usable_ace = True
+                dealers_sum += 11
+            else:
+                dealers_sum += card
+                if dealers_sum > 21 and dealers_usable_ace:
+                    # use ace - switch from counting as 11 to counting as 1
+                    dealers_sum -= 10
 
         return dealers_sum
 
