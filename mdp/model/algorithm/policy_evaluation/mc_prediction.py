@@ -21,18 +21,17 @@ class MCPrediction(abstract.EpisodicMonteCarlo):
         self._create_v()
         self._N = value_function.StateVariable(self._environment, initial_value=0.0)
 
+    def initialize(self):
+        super().initialize()
+        self._environment.initialize_policy(self._agent.policy, self._policy_parameters)
+
     def _process_time_step(self, t: int):
         # only do updates on the time-steps that should be done
-        if self.first_visit:
-            if self._episode.is_first_visit[t]:
-                self._update_v(t)
-        else:
-            self._update_v(t)
-
-    def _update_v(self, t: int):
-        state = self._episode[t].state
-        target = self._episode.G[t]
-        delta = target - self.V[state]
-        self._N[state] += 1
-        # V[St] = V[St] + (1/N(s)).(G(t) - V(St))
-        self.V[state] += delta / self._N[state]
+        if (self.first_visit and self._episode.is_first_visit[t]) \
+                or not self.first_visit:
+            state = self._episode[t].state
+            target = self._episode.G[t]
+            delta = target - self.V[state]
+            self._N[state] += 1
+            # V[St] = V[St] + (1/N(s)).(G(t) - V(St))
+            self.V[state] += delta / self._N[state]

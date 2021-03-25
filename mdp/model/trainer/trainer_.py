@@ -87,7 +87,8 @@ class Trainer:
                         print(f"max_t = {max_t} \ttotal_return = {total_return:.2f}")
                 if not settings.review_every_step:
                     self.timestep += self._agent.episode.max_t
-                    self._breakdown.review()
+                    if self._breakdown:
+                        self._breakdown.review()
             self.max_timestep = max(self.max_timestep, self.timestep)
 
         if self._verbose:

@@ -14,11 +14,12 @@ def main():
     # comparison: common.Comparison = scenarios.jacks_comparison_q()
     # comparison: common.Comparison = scenarios.windy_timestep()
     # comparison: common.Comparison = scenarios.windy_timestep(random_wind=True)
-    comparison: common.Comparison = scenarios.cliff_alpha_start()
+    # comparison: common.Comparison = scenarios.cliff_alpha_start()
     # comparison: common.Comparison = scenarios.cliff_alpha_end()
     # comparison: common.Comparison = scenarios.cliff_episode()
     # comparison: common.Comparison = scenarios.random_walk_episode()
     # comparison: common.Comparison = scenarios.racetrack_episode()
+    comparison: common.Comparison = scenarios.blackjack_comparison_v()
 
     application.Application(comparison)
 

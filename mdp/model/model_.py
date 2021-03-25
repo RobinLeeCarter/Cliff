@@ -33,7 +33,7 @@ class Model:
         # create agent (and it will create the algorithm and the policy when it is given Settings)
         self.agent = agent.Agent(self.environment)
 
-        self.breakdown: breakdown.Breakdown = breakdown.factory(self.comparison)
+        self.breakdown: Optional[breakdown.Breakdown] = breakdown.factory(self.comparison)
         self.trainer: trainer.Trainer = trainer.Trainer(
             agent_=self.agent,
             breakdown_=self.breakdown,
