@@ -1,11 +1,11 @@
 from __future__ import annotations
 from typing import TYPE_CHECKING
 
-import numpy as np
+# import numpy as np
 
 if TYPE_CHECKING:
-    from mdp.model import algorithm, policy
-    from mdp.model.algorithm.value_function import state_function
+    from mdp.model import policy
+    # from mdp.model.algorithm.value_function import state_function
 
 from mdp import common
 from mdp.model import environment
@@ -32,9 +32,6 @@ class Environment(environment.Environment):
 
         # self.grid_world: GridWorld = GridWorld(environment_parameters)
         self.dynamics: Dynamics = Dynamics(environment_=self, environment_parameters=environment_parameters)
-
-        self._max_cars: int = environment_parameters.max_cars
-        self._max_transfers: int = environment_parameters.max_transfers
 
     # region Sets
     def _build_states(self):

@@ -16,6 +16,7 @@ from mdp.model import environment
 
 from mdp.scenarios.blackjack.state import State
 from mdp.scenarios.blackjack.response import Response
+from mdp.scenarios.blackjack.enums import Result
 
 
 class Dynamics(environment.Dynamics):
@@ -29,8 +30,8 @@ class Dynamics(environment.Dynamics):
 
     def build(self):
         thirteenth: float = 1.0 / 13.0  # 13 cards in a suit
-        self._card_distribution = Distribution({c: thirteenth for c in range(self._max_card)})
-        self._card_distribution[self._max_card] += 4.0 * thirteenth     # 10, J, Q or K
+        self._card_distribution = Distribution({c: thirteenth for c in range(1, self._max_card)})
+        self._card_distribution[self._max_card] = 4.0 * thirteenth     # 10, J, Q or K
         self._card_distribution.self_check()
         super().build()
 
@@ -44,36 +45,69 @@ class Dynamics(environment.Dynamics):
         """
         player_sum: int = state.player_sum
         usable_ace: bool = state.usable_ace
-        bust: bool = False
+        result: Optional[Result] = None
 
-        if action.hit:
+        # if player_sum == 21:    # natural
+        #     dealers_sum = self.dealers_turn(state.dealers_card)
+        #     if dealers_sum == 21:
+        #         result = Result.DRAW
+        #     else:
+        #         result = Result.WIN
+        if player_sum < 21 and action.hit:
             card = self._card_distribution.draw_one()
-            # once player sum is 12 an extra ace can never be 'usable' so just count as 1
-            player_sum = state.player_sum + card
+            # once player sum is 12 an extra ace can never be 'usable' so just counts as 1
+            player_sum += card
+
+            if player_sum > 21 and usable_ace:
+                # use ace
+                player_sum -= 10
+                usable_ace = False
+
             if player_sum > 21:
-                if usable_ace:
-                    # use ace
-                    player_sum -= 10
-                    usable_ace = False
-                else:
-                    bust = True
-            if bust:
-                new_state = State(is_terminal=True, result=-1)
-            else:
-                new_state = State(is_terminal=False,
-                                  player_sum=player_sum,
-                                  usable_ace=usable_ace,
-                                  dealers_card=state.dealers_card)
+                result = Result.LOSE
         else:
-            # TODO: dealers turn
-            # dealers turn
-            card = self._card_distribution.draw_one()
-            # etc...
+            # dealers_turn
+            dealers_sum = self.dealers_turn(state.dealers_card)
+            result = self.get_result(player_sum, dealers_sum)
 
-        new_state = State(is_terminal=False, )
-        reward: float
-        return Response(reward, new_state)
+        if result is None:
+            # continue players turn
+            return Response(
+                reward=0.0,
+                state=State(
+                    is_terminal=False,
+                    player_sum=player_sum,
+                    usable_ace=usable_ace,
+                    dealers_card=state.dealers_card
+                )
+            )
+        if result == result.LOSE:
+            return Response(reward=-1.0, state=State(is_terminal=True, result=-1))
+        elif result == result.DRAW:
+            return Response(reward=0.0, state=State(is_terminal=True, result=0))
+        elif result == result.WIN:
+            return Response(reward=1.0, state=State(is_terminal=True, result=1))
+        else:
+            raise NotImplementedError
 
+    def dealers_turn(self, starting_card: int) -> int:
+        if starting_card == 1:
+            dealers_sum = 11
+            dealers_usable_ace = True
+        else:
+            dealers_sum = starting_card
+            dealers_usable_ace = False
 
+        card = self._card_distribution.draw_one()
 
+        return dealers_sum
 
+    def get_result(self, player_sum, dealers_sum) -> Result:
+        if dealers_sum > 21:
+            return Result.WIN
+        elif dealers_sum > player_sum:
+            return Result.LOSE
+        elif dealers_sum == player_sum:
+            return Result.DRAW
+        else:
+            return Result.WIN
