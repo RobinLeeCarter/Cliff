@@ -1,5 +1,5 @@
 from __future__ import annotations
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Optional
 
 import numpy as np
 
@@ -75,7 +75,10 @@ class Environment(environment.Environment):
             policy_[state] = initial_action
             # print(state, initial_action)
 
-    def insert_state_function_into_graph3d(self, comparison: common.Comparison, v: state_function.StateFunction):
+    def insert_state_function_into_graph3d(self,
+                                           comparison: common.Comparison,
+                                           v: state_function.StateFunction,
+                                           parameter: Optional[any] = None):
         x_values = np.arange(self._max_cars + 1, dtype=float)
         y_values = np.arange(self._max_cars + 1, dtype=float)
         z_values = np.empty(shape=(self._max_cars + 1, self._max_cars + 1), dtype=float)

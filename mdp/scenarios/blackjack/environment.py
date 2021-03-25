@@ -1,11 +1,11 @@
 from __future__ import annotations
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Optional
 
-# import numpy as np
+import numpy as np
 
 if TYPE_CHECKING:
     from mdp.model import policy
-    # from mdp.model.algorithm.value_function import state_function
+    from mdp.model.algorithm.value_function import state_function
 
 from mdp import common
 from mdp.model import environment
@@ -33,13 +33,20 @@ class Environment(environment.Environment):
         # self.grid_world: GridWorld = GridWorld(environment_parameters)
         self.dynamics: Dynamics = Dynamics(environment_=self, environment_parameters=environment_parameters)
 
+        self._player_sum_min = 12
+        self._player_sum_max = 21
+        self._dealers_card_min = 1
+        self._dealers_card_max = 10
+        self._player_sums = [x for x in range(self._player_sum_min, self._player_sum_max+1)]
+        self._dealers_cards = [x for x in range(self._dealers_card_min, self._dealers_card_max+1)]
+
     # region Sets
     def _build_states(self):
         """set S"""
         # non-terminal states
-        for player_sum in range(12, 21+1):
+        for player_sum in self._player_sums:
             for usable_ace in [False, True]:
-                for dealers_card in range(1, 10+1):
+                for dealers_card in self._dealers_cards:
                     new_state: State = State(
                         is_terminal=False,
                         player_sum=player_sum,
@@ -80,25 +87,36 @@ class Environment(environment.Environment):
                 initial_action = Action(hit)
                 policy_[state] = initial_action
 
-    # def insert_state_function_into_graph3d(self, comparison: common.Comparison, v: state_function.StateFunction):
-    #     x_values = np.arange(self._max_cars + 1, dtype=float)
-    #     y_values = np.arange(self._max_cars + 1, dtype=float)
-    #     z_values = np.empty(shape=(self._max_cars + 1, self._max_cars + 1), dtype=float)
-    #
-    #     for cars1 in range(self._max_cars+1):
-    #         for cars2 in range(self._max_cars+1):
-    #             state: State = State(
-    #                 ending_cars_1=cars1,
-    #                 ending_cars_2=cars2,
-    #                 is_terminal=False,
-    #             )
-    #             z_values[cars2, cars1] = v[state]
-    #             # print(cars1, cars2, v[state])
-    #
-    #     g = comparison.graph3d_values
-    #     g.x_series = common.Series(title=g.x_label, values=x_values)
-    #     g.y_series = common.Series(title=g.y_label, values=y_values)
-    #     g.z_series = common.Series(title=g.z_label, values=z_values)
+    def insert_state_function_into_graph3d(self,
+                                           comparison: common.Comparison,
+                                           v: state_function.StateFunction,
+                                           parameter: Optional[any] = None):
+        usable_ace: bool = parameter
+        x_values = np.array(self._player_sums, dtype=int)
+        y_values = np.array(self._dealers_cards, dtype=int)
+        z_values = np.empty(shape=y_values.shape + x_values.shape, dtype=float)
+
+        for player_sum in self._player_sums:
+            for dealer_card in self._dealers_cards:
+                state: State = State(
+                    is_terminal=False,
+                    player_sum=player_sum,
+                    usable_ace=usable_ace,
+                    dealers_card=dealer_card,
+                )
+                x = player_sum - self._player_sum_min
+                y = dealer_card - self._dealers_card_min
+                z_values[y, x] = v[state]
+                # print(player_sum, dealer_card, v[state])
+
+        g = comparison.graph3d_values
+        if usable_ace:
+            g.title = "Usable Ace"
+        else:
+            g.title = "No usable Ace"
+        g.x_series = common.Series(title=g.x_label, values=x_values)
+        g.y_series = common.Series(title=g.y_label, values=y_values)
+        g.z_series = common.Series(title=g.z_label, values=z_values)
 
     # def update_grid_value_functions(self, algorithm_: algorithm.Algorithm, policy_: policy.Policy):
     #     # policy_: policy.Deterministic

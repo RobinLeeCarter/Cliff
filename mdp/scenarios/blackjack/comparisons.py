@@ -13,7 +13,8 @@ def blackjack_comparison_v() -> Comparison:
         comparison_settings=common.Settings(
             gamma=1.0,
             runs=1,
-            training_episodes=100,
+            training_episodes=500_000,
+            episode_print_frequency=10_000,
             policy_parameters=common.PolicyParameters(
                 policy_type=common.PolicyType.DETERMINISTIC,
             ),
@@ -33,16 +34,17 @@ def blackjack_comparison_v() -> Comparison:
             # y_max=0.25
         ),
         graph3d_values=common.Graph3DValues(
-            show_graph=False,
-            # x_label="Cars at 1st location",
-            # y_label="Cars at 2nd location",
-            # z_label="V(s)",
-            # x_min=0,
-            # x_max=_max_cars,
-            # y_min=0,
-            # y_max=_max_cars,
-            # z_min=400.0,
-            # z_max=700.0,
+            show_graph=True,
+            x_label="Player sum",
+            y_label="Dealer showing",
+            z_label="V(s)",
+            x_min=12,
+            x_max=21,
+            y_min=1,
+            y_max=10,
+            z_min=-1.0,
+            z_max=1.0,
+            multi_graph_parameter=[False, True]
         ),
         grid_view_parameters=common.GridViewParameters(
             show_demo=False,
