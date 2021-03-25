@@ -31,6 +31,7 @@ class AlgorithmType(enum.IntEnum):
     POLICY_IMPROVEMENT_DP_Q = enum.auto()
     POLICY_ITERATION_DP_Q = enum.auto()
 
+    MC_PREDICTION = enum.auto()
     TD_0 = enum.auto()
     OFF_POLICY_MC_CONTROL = enum.auto()
 

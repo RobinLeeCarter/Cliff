@@ -13,16 +13,23 @@ class Episode:
     """Just makes a record laid out in the standard way with Reward, State, Action for each _t"""
     def __init__(self,
                  gamma: float,
-                 step_callback: Optional[Callable[[], bool]] = None):
+                 step_callback: Optional[Callable[[], bool]] = None,
+                 record_first_visits: bool = False):
         self.gamma: float = gamma
+        self._step_callback: Optional[Callable[[], bool]] = step_callback
+        self.record_first_visits = record_first_visits
+
         # S0, A0, R1, S1, A1, R2 ... S(T-1), A(T-1), R(T)
         self.trajectory: list[rsa.RSA] = []
         self.terminates: bool = False
         self.T: Optional[int] = None
         self.G: np.ndarray = np.array([], dtype=float)
 
-        self._step_callback: Optional[Callable[[], bool]] = step_callback
         self.cont: bool = True
+
+        if self.record_first_visits:
+            self.is_first_visit: list[bool] = []
+            self.visited_states: set[environment.State] = set()
 
     @property
     def last_state(self) -> Optional[environment.State]:
@@ -61,6 +68,8 @@ class Episode:
         if state.is_terminal:
             self.terminates = True
             self.T = len(self.trajectory) - 1
+        if self.record_first_visits:
+            self._first_visit_check(state)
         if self._step_callback:
             self.cont = self._step_callback()
 
@@ -70,6 +79,12 @@ class Episode:
             self.G[self.T] = 0.0
             for t in range(self.T - 1, -1, -1):     # T-1, T-2, ... 1, 0
                 self.G[t] = self[t+1].reward + self.gamma * self.G[t + 1]
+
+    def _first_visit_check(self, state: environment.State):
+        is_first_visit = state not in self.visited_states
+        self.is_first_visit.append(is_first_visit)
+        if is_first_visit:
+            self.visited_states.add(state)
 
     def __getitem__(self, t: int) -> rsa.RSA:
         return self.trajectory[t]

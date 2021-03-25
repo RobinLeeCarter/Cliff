@@ -23,6 +23,7 @@ class Agent:
         self._behaviour_policy: Optional[policy_.Policy] = None     # if on-policy = self._policy
         self._algorithm: Optional[algorithm_.Algorithm] = None
         self._episode: Optional[episode_.Episode] = None
+        self._record_first_visits: bool = False
         self._episode_length_timeout: Optional[int] = None
 
         # not None to avoid unboxing cost of Optional
@@ -88,6 +89,11 @@ class Agent:
                                              algorithm_parameters=settings.algorithm_parameters,
                                              policy_parameters=settings.policy_parameters)
         self._episode_length_timeout = settings.episode_length_timeout
+        if isinstance(self._algorithm, algorithm_.Episodic):
+            self._record_first_visits = self._algorithm.first_visit
+        else:
+            self._record_first_visits = False
+
         self.gamma = settings.gamma
 
     def set_behaviour_policy(self, policy: policy_.Policy):
@@ -125,7 +131,8 @@ class Agent:
         if self._verbose:
             print("start episode...")
         self.t = 0
-        self._episode = episode_.Episode(self.gamma, self._step_callback)
+
+        self._episode = episode_.Episode(self.gamma, self._step_callback, self._record_first_visits)
 
         # get starting state, reward will be None
         self._response = self._environment.start()
