@@ -43,6 +43,8 @@ def racetrack_episode() -> Comparison:
         ],
         graph_values=common.GraphValues(
             show_graph=True,
+            has_grid=True,
+            has_legend=True,
             moving_average_window_size=101,
             y_min=-200,
             y_max=0

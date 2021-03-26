@@ -129,7 +129,7 @@ class Agent:
             print(f"t={self.t} \t state = {self.state} (terminal)")
         return self._episode
 
-    def start_episode(self, exploring_starts: bool):
+    def start_episode(self, exploring_starts: bool = False):
         """Gets initial state and sets initial reward to None"""
         if self._verbose:
             print("start episode...")

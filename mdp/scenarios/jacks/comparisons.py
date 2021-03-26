@@ -55,9 +55,8 @@ def jacks_comparison_v() -> Comparison:
         ),
         grid_view_parameters=common.GridViewParameters(
             grid_view_type=common.GridViewType.JACKS,
-            show_demo=False,
             show_result=True,
-            show_v=True,
+            show_policy=True,
         ),
     )
     return comparison
@@ -112,7 +111,6 @@ def jacks_comparison_q() -> Comparison:
         ),
         grid_view_parameters=common.GridViewParameters(
             grid_view_type=common.GridViewType.JACKS,
-            show_demo=False,
             show_result=True,
             show_policy=True,
         ),

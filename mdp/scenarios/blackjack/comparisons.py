@@ -41,6 +41,11 @@ def blackjack_evaluation_v() -> Comparison:
             z_max=1.0,
             multi_parameter=[False, True]
         ),
+        grid_view_parameters=common.GridViewParameters(
+            grid_view_type=common.GridViewType.BLACKJACK,
+            show_result=True,
+            show_policy=True,
+        ),
     )
     return comparison
 
@@ -137,4 +142,3 @@ def blackjack_control_es() -> Comparison:
         ),
     )
     return comparison
-

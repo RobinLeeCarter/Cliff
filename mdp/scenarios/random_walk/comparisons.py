@@ -66,6 +66,8 @@ def random_walk_episode() -> Comparison:
         ],
         graph_values=common.GraphValues(
             show_graph=True,
+            has_grid=True,
+            has_legend=True,
             y_min=0.0,
             y_max=0.25
         ),
