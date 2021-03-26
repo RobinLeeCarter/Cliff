@@ -121,7 +121,7 @@ def blackjack_control_es() -> Comparison:
             x_label="Player sum",
             y_label="Dealer showing",
             z_label="V(s)",
-            x_min=12,
+            x_min=11,
             x_max=21,
             y_min=1,
             y_max=10,
