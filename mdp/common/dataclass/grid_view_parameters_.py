@@ -21,6 +21,8 @@ class GridViewParameters:
     screen_width: Optional[int] = None
     screen_height: Optional[int] = None
 
+    multi_parameter: list = dataclasses.field(default_factory=list)
+
 
 default: GridViewParameters = GridViewParameters(
     grid_view_type=enums.GridViewType.POSITION_MOVE,

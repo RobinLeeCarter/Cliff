@@ -31,8 +31,8 @@ class Controller:
 
         g3d = self._comparison.graph3d_values
         if g3d.show_graph:
-            if g3d.multi_graph_parameter:
-                for parameter in g3d.multi_graph_parameter:
+            if g3d.multi_parameter:
+                for parameter in g3d.multi_parameter:
                     self._model.environment.insert_state_function_into_graph3d(
                         self._comparison,
                         self._model.agent.algorithm.V,
@@ -48,11 +48,16 @@ class Controller:
 
         gvp = self._comparison.grid_view_parameters
         if gvp.show_result or gvp.show_demo:
-            self._model.prep_for_output()
-            if gvp.show_result:
-                self._view.grid_view.display_latest_step()
-            if gvp.show_demo:
-                self._view.grid_view.demonstrate(self.new_episode_request)
+            if g3d.multi_parameter and gvp.show_result:
+                for parameter in g3d.multi_parameter:
+                    self._model.prep_for_output(parameter)
+                    self._view.grid_view.display_latest_step()
+            else:
+                self._model.prep_for_output()
+                if gvp.show_result:
+                    self._view.grid_view.display_latest_step()
+                if gvp.show_demo:
+                    self._view.grid_view.demonstrate(self.new_episode_request)
 
     # region Model requests
     def display_step(self, episode_: Optional[agent.Episode]):

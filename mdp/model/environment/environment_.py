@@ -115,7 +115,10 @@ class Environment(ABC):
             y = self.grid_world.max_y
         return common.XY(x=x, y=y)
 
-    def update_grid_value_functions(self, algorithm_: algorithm.Algorithm, policy_: policy.Policy):
+    def update_grid_value_functions(self,
+                                    algorithm_: algorithm.Algorithm,
+                                    policy_: policy.Policy,
+                                    parameter: any = None):
         pass
 
     def is_valued_state(self, state: State) -> bool:

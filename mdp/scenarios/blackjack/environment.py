@@ -120,10 +120,14 @@ class Environment(environment.Environment):
         g.y_series = common.Series(title=g.y_label, values=y_values)
         g.z_series = common.Series(title=g.z_label, values=z_values)
 
-    def update_grid_value_functions(self, algorithm_: algorithm.Algorithm, policy_: policy.Policy):
+    def update_grid_value_functions(self,
+                                    algorithm_: algorithm.Algorithm,
+                                    policy_: policy.Policy,
+                                    parameter: any = None):
+        usable_ace: bool = parameter
         # policy_: policy.Deterministic
         for state in self.states:
-            if not state.is_terminal:
+            if not state.is_terminal and state.usable_ace == usable_ace:
                 # dealer_card is x, player_sum is y : following the table in the book
                 x = state.dealers_card - self._dealers_card_min
                 y = state.player_sum - self._player_sum_min

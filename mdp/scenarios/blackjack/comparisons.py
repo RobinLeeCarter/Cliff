@@ -114,7 +114,7 @@ def blackjack_control() -> Comparison:
         comparison_settings=common.Settings(
             gamma=1.0,
             runs=1,
-            training_episodes=500_000,
+            training_episodes=50_000,
             episode_print_frequency=10_000,
             policy_parameters=common.PolicyParameters(
                 policy_type=common.PolicyType.DETERMINISTIC,
@@ -146,12 +146,13 @@ def blackjack_control() -> Comparison:
             y_max=10,
             z_min=-1.0,
             z_max=1.0,
-            multi_graph_parameter=[False, True]
+            multi_parameter=[False, True],
         ),
         grid_view_parameters=common.GridViewParameters(
             grid_view_type=common.GridViewType.BLACKJACK,
             show_result=True,
             show_policy=True,
+            multi_parameter=[False, True],
         ),
     )
     return comparison

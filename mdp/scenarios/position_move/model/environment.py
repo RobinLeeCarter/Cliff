@@ -48,7 +48,11 @@ class Environment(environment.Environment, abc.ABC):
     # endregion
 
     # region Operation
-    def update_grid_value_functions(self, algorithm_: algorithm.Algorithm, policy_: policy.Policy):
+    def update_grid_value_functions(self,
+                                    algorithm_: algorithm.Algorithm,
+                                    policy_: policy.Policy,
+                                    parameter: any = None
+                                    ):
         for state in self.states:
             if algorithm_.V:
                 self.grid_world.set_v_value(
