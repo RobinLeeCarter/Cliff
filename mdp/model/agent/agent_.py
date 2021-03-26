@@ -137,14 +137,19 @@ class Agent:
 
         self._episode = episode_.Episode(self.gamma, self._step_callback, self._record_first_visits)
 
-        # get starting state, reward will be None
-        self._response = self._environment.start()
-        self.reward = self._response.reward
-        self.state = self._response.state
         if exploring_starts:
-            action = self._environment.get_random_action(self.state)
+            # completely random starting state and action, reward will be None
+            state, action = self._environment.dynamics.get_random_state_action()
+            self.state = state
+            self.reward = None
+            # action = self._environment.dynamics.get_random_action_for_state(self.state)
             self.choose_action(action)
             self.take_action()
+        else:
+            # get starting state, reward will be None
+            self._response = self._environment.start()
+            self.reward = self._response.reward
+            self.state = self._response.state
 
     def choose_action(self, action: Optional[environment.Action] = None):
         """

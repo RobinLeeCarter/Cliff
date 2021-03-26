@@ -45,13 +45,7 @@ class Dynamics(environment.Dynamics):
         result: Optional[Result] = None
         dealers_sum: int = state.dealers_card
 
-        # if player_sum == 21:    # natural
-        #     dealers_sum = self.dealers_turn(state.dealers_card)
-        #     if dealers_sum == 21:
-        #         result = Result.DRAW
-        #     else:
-        #         result = Result.WIN
-        if player_sum < 21 and action.hit:
+        if action.hit:
             card = self._card_distribution.draw_one()
             if self._verbose:
                 print(f"player card = {card}")

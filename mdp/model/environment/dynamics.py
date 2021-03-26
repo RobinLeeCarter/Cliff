@@ -84,8 +84,10 @@ class Dynamics(ABC):
     def get_a_start_state(self) -> State:
         pass
 
-    def get_random_action_for_state(self, state: State) -> Action:
-        return random.choice([action for action in self._environment.actions_for_state(state)])
+    def get_random_state_action(self) -> tuple[State, Action]:
+        state = random.choice([state for state in self._environment.states if not state.is_terminal])
+        action = random.choice([action for action in self._environment.actions_for_state(state)])
+        return state, action
 
     def draw_response(self, state: State, action: Action) -> Response:
         """

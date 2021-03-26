@@ -30,7 +30,7 @@ class Environment(environment.Environment):
         self._state: State = self._state
         self._action: Action = self._action
 
-        self._player_sum_min = 12
+        self._player_sum_min = 11
         self._player_sum_max = 21
         self._dealers_card_min = 1
         self._dealers_card_max = 10
@@ -73,7 +73,10 @@ class Environment(environment.Environment):
             self.actions.append(new_action)
 
     def is_action_compatible_with_state(self, state_: State, action_: Action):
-        return True
+        if state_.player_sum == 21 and action_.hit:
+            return False
+        else:
+            return True
     # endregion
 
     # region Operation

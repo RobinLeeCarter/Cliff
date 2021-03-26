@@ -99,7 +99,7 @@ def blackjack_control_es() -> Comparison:
         comparison_settings=common.Settings(
             gamma=1.0,
             runs=1,
-            training_episodes=100_000_000,
+            training_episodes=100_000,
             episode_print_frequency=10_000,
             policy_parameters=common.PolicyParameters(
                 policy_type=common.PolicyType.DETERMINISTIC,
