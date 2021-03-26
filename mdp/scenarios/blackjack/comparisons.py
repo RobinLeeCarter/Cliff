@@ -99,7 +99,7 @@ def blackjack_control() -> Comparison:
         comparison_settings=common.Settings(
             gamma=1.0,
             runs=1,
-            training_episodes=5_000_000,
+            training_episodes=10_000_000,
             episode_print_frequency=10_000,
             policy_parameters=common.PolicyParameters(
                 policy_type=common.PolicyType.DETERMINISTIC,
@@ -110,7 +110,8 @@ def blackjack_control() -> Comparison:
                 algorithm_parameters=common.AlgorithmParameters(
                     algorithm_type=common.AlgorithmType.ON_POLICY_MC_CONTROL_ES,
                     first_visit=True,
-                    verbose=True
+                    exploring_starts=True,
+                    verbose=True,
                 ),
                 derive_v_from_q_as_final_step=True
             ),

@@ -17,6 +17,7 @@ class AlgorithmParameters:
     iteration_timeout: Optional[int] = None
 
     first_visit: Optional[bool] = None
+    exploring_starts: Optional[bool] = None
 
     verbose: Optional[bool] = None
 
@@ -27,6 +28,7 @@ default: AlgorithmParameters = AlgorithmParameters(
     theta=0.1,
     iteration_timeout=1000,
     first_visit=False,
+    exploring_starts=False,
     verbose=False,
 )
 

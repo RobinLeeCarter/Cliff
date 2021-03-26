@@ -92,6 +92,9 @@ class Environment(ABC):
     def _get_a_start_state(self) -> State:
         return self.dynamics.get_a_start_state()
 
+    def get_random_action(self, state: State) -> Action:
+        return self.dynamics.get_random_action_for_state(state)
+
     def from_state_perform_action(self, state: State, action: Action) -> Response:
         if state.is_terminal:
             raise Exception("Environment: Trying to act in a terminal state.")

@@ -110,11 +110,14 @@ class Agent:
     def set_step_callback(self, step_callback: Optional[Callable[[], bool]] = None):
         self._step_callback = step_callback
 
-    def generate_episode(self, episode_length_timeout: Optional[int] = None) -> episode_.Episode:
+    def generate_episode(self,
+                         episode_length_timeout: Optional[int] = None,
+                         exploring_starts: bool = False
+                         ) -> episode_.Episode:
         if not episode_length_timeout:
             episode_length_timeout = self._episode_length_timeout
 
-        self.start_episode()
+        self.start_episode(exploring_starts)
         while not self.state.is_terminal and self.t < episode_length_timeout:
             self.choose_action()
             if self._verbose:
@@ -126,7 +129,7 @@ class Agent:
             print(f"t={self.t} \t state = {self.state} (terminal)")
         return self._episode
 
-    def start_episode(self):
+    def start_episode(self, exploring_starts: bool):
         """Gets initial state and sets initial reward to None"""
         if self._verbose:
             print("start episode...")
@@ -138,15 +141,22 @@ class Agent:
         self._response = self._environment.start()
         self.reward = self._response.reward
         self.state = self._response.state
+        if exploring_starts:
+            action = self._environment.get_random_action(self.state)
+            self.choose_action(action)
+            self.take_action()
 
-    def choose_action(self):
+    def choose_action(self, action: Optional[environment.Action] = None):
         """
         Have the policy choose an action
         We then have a complete r, s, a to add to episode
         The reward being is response from the previous action (if there was one, or otherwise reward=None)
         Note that the action is NOT applied yet.
         """
-        self.action = self._behaviour_policy[self.state]
+        if action:
+            self.action = action
+        else:
+            self.action = self._behaviour_policy[self.state]
         self._episode.add_rsa(reward=self.reward, state=self.state, action=self.action)
         if self._verbose:
             print(f"state = {self.state} \t action = {self.action}")
