@@ -13,18 +13,26 @@ class GridViewParameters:
     show_result: Optional[bool] = None
     window_title: Optional[str] = None
     show_trail: Optional[bool] = None
-    show_values: Optional[bool] = None
+    
+    show_v: Optional[bool] = None
+    show_q: Optional[bool] = None
+    show_policy: Optional[bool] = None
+    
     screen_width: Optional[int] = None
     screen_height: Optional[int] = None
+
+    multi_parameter: list = dataclasses.field(default_factory=list)
 
 
 default: GridViewParameters = GridViewParameters(
     grid_view_type=enums.GridViewType.POSITION_MOVE,
-    show_demo=True,
+    show_demo=False,
     show_result=False,
     window_title="Grid World",
     show_trail=False,
-    show_values=True,
+    show_v=False,
+    show_q=False,
+    show_policy=False,
     screen_width=1500,
     screen_height=1000,
 )

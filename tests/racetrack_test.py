@@ -43,7 +43,7 @@ def racetrack_test() -> bool:
         ),
         grid_view_parameters=common.GridViewParameters(
             grid_view_type=common.GridViewType.POSITION,
-            show_values=False,
+            show_demo=True,
             show_trail=True
         )
     )

@@ -3,7 +3,7 @@ from typing import TYPE_CHECKING, Optional
 import abc
 
 if TYPE_CHECKING:
-    from mdp.model import environment, agent
+    from mdp.model import environment, agent, policy
     from mdp import common
 from mdp.model.algorithm import value_function
 
@@ -54,3 +54,20 @@ class Algorithm(abc.ABC):
 
     def __repr__(self):
         return f"{self.title}"
+
+    def derive_v_from_q(self, policy_: Optional[policy.Policy] = None):
+        if not policy_:
+            policy_ = self._agent.policy
+
+        if not self.V:
+            self._create_v()
+
+        for state in self._environment.states:
+            # Sum_over_a( π(a|s).Q(s,a) )
+            expected_v: float = 0.0
+            for action in self._environment.actions_for_state(state):
+                # π(a|s)
+                policy_probability = policy_.get_probability(state, action)
+                # π(a|s).Q(s,a)
+                expected_v += policy_probability * self.Q[state, action]
+            self.V[state] = expected_v

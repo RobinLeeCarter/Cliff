@@ -79,7 +79,10 @@ class Environment(ABC):
     def initialize_policy(self, policy_: policy.Policy, policy_parameters: common.PolicyParameters):
         pass
 
-    def insert_state_function_into_graph3d(self, comparison: common.Comparison, v: state_function.StateFunction):
+    def insert_state_function_into_graph3d(self,
+                                           comparison: common.Comparison,
+                                           v: state_function.StateFunction,
+                                           parameter: Optional[any] = None):
         pass
 
     def start(self) -> Response:
@@ -112,7 +115,10 @@ class Environment(ABC):
             y = self.grid_world.max_y
         return common.XY(x=x, y=y)
 
-    def update_grid_value_functions(self, algorithm_: algorithm.Algorithm, policy_: policy.Policy):
+    def update_grid_value_functions(self,
+                                    algorithm_: algorithm.Algorithm,
+                                    policy_: policy.Policy,
+                                    parameter: any = None):
         pass
 
     def is_valued_state(self, state: State) -> bool:

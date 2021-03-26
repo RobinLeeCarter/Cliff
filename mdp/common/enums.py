@@ -31,10 +31,14 @@ class AlgorithmType(enum.IntEnum):
     POLICY_IMPROVEMENT_DP_Q = enum.auto()
     POLICY_ITERATION_DP_Q = enum.auto()
 
+    MC_PREDICTION_V = enum.auto()
+    MC_PREDICTION_Q = enum.auto()
+    ON_POLICY_MC_CONTROL = enum.auto()
+
+    CONSTANT_ALPHA_MC = enum.auto()
     TD_0 = enum.auto()
     OFF_POLICY_MC_CONTROL = enum.auto()
 
-    CONSTANT_ALPHA_MC = enum.auto()
     SARSA = enum.auto()
     Q_LEARNING = enum.auto()
     EXPECTED_SARSA = enum.auto()
@@ -60,6 +64,7 @@ class EnvironmentType(enum.IntEnum):
     WINDY = enum.auto()
     RACETRACK = enum.auto()
     JACKS = enum.auto()
+    BLACKJACK = enum.auto()
 
 
 class ActionsList(enum.IntEnum):
@@ -74,3 +79,4 @@ class GridViewType(enum.IntEnum):
     POSITION = enum.auto()
     POSITION_MOVE = enum.auto()
     JACKS = enum.auto()
+    BLACKJACK = enum.auto()

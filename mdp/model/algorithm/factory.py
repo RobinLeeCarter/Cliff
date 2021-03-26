@@ -22,6 +22,11 @@ def factory(environment_: environment.Environment,
         a.POLICY_IMPROVEMENT_DP_Q: policy_improvement.PolicyImprovementDpQ,
         a.POLICY_ITERATION_DP_Q: control.PolicyIterationDpQ,
 
+        a.MC_PREDICTION_V: policy_evaluation.MCPredictionV,
+        a.MC_PREDICTION_Q: policy_evaluation.MCPredictionQ,
+        a.ON_POLICY_MC_CONTROL: control.OnPolicyMcControl,
+
+        a.CONSTANT_ALPHA_MC: policy_evaluation.ConstantAlphaMC,
         a.TD_0: policy_evaluation.TD0,
         a.OFF_POLICY_MC_CONTROL: control.OffPolicyMcControl,
 
@@ -29,7 +34,6 @@ def factory(environment_: environment.Environment,
         a.Q_LEARNING: control.QLearning,
         a.SARSA: control.Sarsa,
         a.VQ: control.VQ,
-        a.CONSTANT_ALPHA_MC: policy_evaluation.ConstantAlphaMC,
     }
     type_for_algorithm = algorithm_lookup[algorithm_parameters.algorithm_type]
     algorithm_ = type_for_algorithm(environment_, agent_, algorithm_parameters, policy_parameters)

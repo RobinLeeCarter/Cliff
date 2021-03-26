@@ -9,6 +9,7 @@ from mdp.scenarios.random_walk.environment import Environment as RandomWalkEnvir
 from mdp.scenarios.windy.environment import Environment as WindyEnvironment
 from mdp.scenarios.racetrack.environment import Environment as RacetrackEnvironment
 from mdp.scenarios.jacks.environment import Environment as JacksEnvironment
+from mdp.scenarios.blackjack.environment import Environment as BlackjackEnvironment
 
 
 def environment_factory(environment_parameters: common.EnvironmentParameters) -> base_environment.Environment:
@@ -25,6 +26,8 @@ def environment_factory(environment_parameters: common.EnvironmentParameters) ->
         environment_ = RacetrackEnvironment(environment_parameters)
     elif environment_type == et.JACKS:
         environment_ = JacksEnvironment(environment_parameters)
+    elif environment_type == et.BLACKJACK:
+        environment_ = BlackjackEnvironment(environment_parameters)
     else:
         raise NotImplementedError
     environment_.build()

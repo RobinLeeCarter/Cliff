@@ -66,11 +66,14 @@ def random_walk_episode() -> Comparison:
         ],
         graph_values=common.GraphValues(
             show_graph=True,
+            has_grid=True,
+            has_legend=True,
             y_min=0.0,
             y_max=0.25
         ),
         grid_view_parameters=common.GridViewParameters(
-            show_demo=False
+            show_result=True,
+            show_v=True,
         ),
     )
     return comparison

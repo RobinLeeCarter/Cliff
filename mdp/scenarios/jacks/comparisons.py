@@ -36,11 +36,11 @@ def jacks_comparison_v() -> Comparison:
                 )
             ),
         ],
-        graph_values=common.GraphValues(
-            show_graph=False,
-            # y_min=0.0,
-            # y_max=0.25
-        ),
+        # graph_values=common.GraphValues(
+        #     show_graph=False,
+        #     # y_min=0.0,
+        #     # y_max=0.25
+        # ),
         graph3d_values=common.Graph3DValues(
             show_graph=True,
             x_label="Cars at 1st location",
@@ -55,9 +55,8 @@ def jacks_comparison_v() -> Comparison:
         ),
         grid_view_parameters=common.GridViewParameters(
             grid_view_type=common.GridViewType.JACKS,
-            show_demo=False,
-            # show_result=False,
-            show_values=True,
+            show_result=True,
+            show_policy=True,
         ),
     )
     return comparison
@@ -82,7 +81,8 @@ def jacks_comparison_q() -> Comparison:
             algorithm_parameters=common.AlgorithmParameters(
                 theta=0.1   # accuracy of policy_evaluation
             ),
-            display_every_step=True
+            display_every_step=True,
+            derive_v_from_q_as_final_step=True,
         ),
         settings_list=[
             common.Settings(
@@ -92,13 +92,13 @@ def jacks_comparison_q() -> Comparison:
                 )
             ),
         ],
-        graph_values=common.GraphValues(
-            show_graph=False,
-            # y_min=0.0,
-            # y_max=0.25
-        ),
+        # graph_values=common.GraphValues(
+        #     show_graph=False,
+        #     # y_min=0.0,
+        #     # y_max=0.25
+        # ),
         graph3d_values=common.Graph3DValues(
-            show_graph=False,
+            show_graph=True,
             x_label="Cars at 1st location",
             y_label="Cars at 2nd location",
             z_label="V(s)",
@@ -111,9 +111,8 @@ def jacks_comparison_q() -> Comparison:
         ),
         grid_view_parameters=common.GridViewParameters(
             grid_view_type=common.GridViewType.JACKS,
-            show_demo=False,
-            # show_result=False,
-            show_values=True,
+            show_result=True,
+            show_policy=True,
         ),
     )
     return comparison

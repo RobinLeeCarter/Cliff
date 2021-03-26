@@ -1,5 +1,5 @@
 from __future__ import annotations
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Optional
 
 import numpy as np
 
@@ -75,7 +75,10 @@ class Environment(environment.Environment):
             policy_[state] = initial_action
             # print(state, initial_action)
 
-    def insert_state_function_into_graph3d(self, comparison: common.Comparison, v: state_function.StateFunction):
+    def insert_state_function_into_graph3d(self,
+                                           comparison: common.Comparison,
+                                           v: state_function.StateFunction,
+                                           parameter: Optional[any] = None):
         x_values = np.arange(self._max_cars + 1, dtype=float)
         y_values = np.arange(self._max_cars + 1, dtype=float)
         z_values = np.empty(shape=(self._max_cars + 1, self._max_cars + 1), dtype=float)
@@ -95,7 +98,10 @@ class Environment(environment.Environment):
         g.y_series = common.Series(title=g.y_label, values=y_values)
         g.z_series = common.Series(title=g.z_label, values=z_values)
 
-    def update_grid_value_functions(self, algorithm_: algorithm.Algorithm, policy_: policy.Policy):
+    def update_grid_value_functions(self,
+                                    algorithm_: algorithm.Algorithm,
+                                    policy_: policy.Policy,
+                                    parameter: any = None):
         # policy_: policy.Deterministic
         for state in self.states:
             position: common.XY = common.XY(x=state.ending_cars_2, y=state.ending_cars_1)     # reversed like in book

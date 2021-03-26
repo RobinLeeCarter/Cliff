@@ -1,6 +1,7 @@
 from __future__ import annotations
 from typing import TypeVar
 import math
+import random
 
 
 T = TypeVar('T')
@@ -29,3 +30,9 @@ class Distribution(dict[T, float]):
             types = set(type(key) for key in self.keys())
             raise ValueError(f"Distribution sums to {cumulative_probability} instead of 1.0, "
                              f"for distribution over {types.pop()}")
+
+    def draw_one(self) -> T:
+        return random.choices(
+            population=list(self.keys()),
+            weights=list(self.values())
+        )[0]
