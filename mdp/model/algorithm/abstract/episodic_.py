@@ -16,6 +16,7 @@ class Episodic(algorithm_.Algorithm, abc.ABC):
                  policy_parameters: common.PolicyParameters
                  ):
         super().__init__(environment_, agent_, algorithm_parameters, policy_parameters)
+        self.first_visit = self._algorithm_parameters.first_visit
 
     @abc.abstractmethod
     def do_episode(self, episode_length_timeout: int):

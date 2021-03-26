@@ -26,6 +26,7 @@ class GridView(abc.ABC):
         self._cell_pixels: Optional[int] = None
 
         self._is_window_open: bool = False
+        self._window_title: str = self.grid_view_parameters.window_title
 
         self._screen: Optional[pygame.Surface] = None
         self._background: Optional[pygame.Surface] = None
@@ -115,7 +116,7 @@ class GridView(abc.ABC):
         safe to call repeatedly"""
         if not self._is_window_open:
             self._screen = pygame.display.set_mode(size=self.screen_size)
-            pygame.display.set_caption(self.grid_view_parameters.window_title)
+            pygame.display.set_caption(self._window_title)
             # self.background = pygame.Surface(size=self.screen_size).convert()
             self._background = self._background.convert()
             self._grid_surface = self._grid_surface.convert()
@@ -126,6 +127,13 @@ class GridView(abc.ABC):
     def close_window(self):
         pygame.quit()
         self._is_window_open = False
+
+    def display_parameter(self, parameter: any = None):
+        pass
+
+    def _set_title(self, title: str):
+        self._window_title = title
+        pygame.display.set_caption(title)
 
     def display_and_wait(self):
         self.open_window()
@@ -299,11 +307,11 @@ class GridView(abc.ABC):
                      draw_q: Optional[bool] = None
                      ):
         if draw_v is None:
-            draw_v = self.grid_view_parameters.show_values
-        if draw_policy is None:
-            draw_policy = self.grid_view_parameters.show_values
+            draw_v = self.grid_view_parameters.show_v
         if draw_q is None:
-            draw_q = self.grid_view_parameters.show_values
+            draw_q = self.grid_view_parameters.show_q
+        if draw_policy is None:
+            draw_policy = self.grid_view_parameters.show_policy
 
         # make rect
         row = self._max_y - position.y

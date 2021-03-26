@@ -47,6 +47,8 @@ class Trainer:
             self._train_dynamic_programming(settings, algorithm_)
         else:
             raise NotImplementedError
+        if settings.derive_v_from_q_as_final_step:
+            algorithm_.derive_v_from_q()
 
     def _train_episodic(self, settings: common.Settings, algorithm_: algorithm.Episodic):
         # process settings
@@ -87,7 +89,8 @@ class Trainer:
                         print(f"max_t = {max_t} \ttotal_return = {total_return:.2f}")
                 if not settings.review_every_step:
                     self.timestep += self._agent.episode.max_t
-                    self._breakdown.review()
+                    if self._breakdown:
+                        self._breakdown.review()
             self.max_timestep = max(self.max_timestep, self.timestep)
 
         if self._verbose:

@@ -1,1 +1,2 @@
+from mdp.model.algorithm.policy_improvement.policy_improvement_dp_q import PolicyImprovementDpQ
 from mdp.model.algorithm.policy_improvement.policy_improvement_dp_v import PolicyImprovementDpV

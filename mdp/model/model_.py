@@ -33,7 +33,7 @@ class Model:
         # create agent (and it will create the algorithm and the policy when it is given Settings)
         self.agent = agent.Agent(self.environment)
 
-        self.breakdown: breakdown.Breakdown = breakdown.factory(self.comparison)
+        self.breakdown: Optional[breakdown.Breakdown] = breakdown.factory(self.comparison)
         self.trainer: trainer.Trainer = trainer.Trainer(
             agent_=self.agent,
             breakdown_=self.breakdown,
@@ -64,19 +64,21 @@ class Model:
             self.breakdown.compile()
         # graph_values: common.GraphValues = self.breakdown.get_graph_values()
 
-    def prep_for_output(self):
+    def prep_for_output(self, parameter: any = None):
         self.environment.output_mode()
         self.switch_to_target_policy()
-        self.update_grid_value_functions()
+        self.update_grid_value_functions(parameter)
 
     def switch_to_target_policy(self):
         # if self.comparison.comparison_settings.dual_policy_relationship in \
         #     (common.DualPolicyRelationship.LINKED_POLICIES, common.DualPolicyRelationship.INDEPENDENT_POLICIES):
         self.agent.set_behaviour_policy(self.agent.target_policy)
 
-    def update_grid_value_functions(self):
+    def update_grid_value_functions(self, parameter: any = None):
         policy_for_display = self.agent.policy.linked_policy
-        self.environment.update_grid_value_functions(algorithm_=self.agent.algorithm, policy_=policy_for_display)
+        self.environment.update_grid_value_functions(algorithm_=self.agent.algorithm,
+                                                     policy_=policy_for_display,
+                                                     parameter=parameter)
 
     def _display_step(self, episode_: Optional[agent.Episode]):
         self.update_grid_value_functions()

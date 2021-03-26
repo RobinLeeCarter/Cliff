@@ -27,6 +27,7 @@ class Graph3DValues:
 
     has_grid: Optional[bool] = None
     has_legend: Optional[bool] = None
+    multi_parameter: list = dataclasses.field(default_factory=list)
 
 
 default: Graph3DValues = Graph3DValues(

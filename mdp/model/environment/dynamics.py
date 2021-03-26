@@ -2,6 +2,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 from abc import ABC, abstractmethod
+import random
 
 if TYPE_CHECKING:
     from mdp import common
@@ -82,6 +83,11 @@ class Dynamics(ABC):
     @abstractmethod
     def get_a_start_state(self) -> State:
         pass
+
+    def get_random_state_action(self) -> tuple[State, Action]:
+        state = random.choice([state for state in self._environment.states if not state.is_terminal])
+        action = random.choice([action for action in self._environment.actions_for_state(state)])
+        return state, action
 
     def draw_response(self, state: State, action: Action) -> Response:
         """

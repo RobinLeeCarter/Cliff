@@ -33,6 +33,8 @@ class Settings:
     review_every_step: Optional[bool] = None
     display_every_step: Optional[bool] = None
 
+    derive_v_from_q_as_final_step: Optional[bool] = None
+
     # algorithm title will be populated by Trainer later whether it's used or not
     algorithm_title: str = dataclasses.field(default="", init=False)
 
@@ -55,7 +57,8 @@ default = Settings(
     episode_to_start_recording=0,
     episode_recording_frequency=1,
     review_every_step=False,
-    display_every_step=False
+    display_every_step=False,
+    derive_v_from_q_as_final_step=False
 )
 
 
