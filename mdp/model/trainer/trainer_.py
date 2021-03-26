@@ -47,6 +47,8 @@ class Trainer:
             self._train_dynamic_programming(settings, algorithm_)
         else:
             raise NotImplementedError
+        if settings.derive_v_from_q_as_final_step:
+            algorithm_.derive_v_from_q()
 
     def _train_episodic(self, settings: common.Settings, algorithm_: algorithm.Episodic):
         # process settings
