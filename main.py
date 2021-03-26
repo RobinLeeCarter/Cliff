@@ -21,7 +21,7 @@ def main():
     # comparison: common.Comparison = scenarios.racetrack_episode()
     # comparison: common.Comparison = scenarios.blackjack_evaluation_v()
     # comparison: common.Comparison = scenarios.blackjack_evaluation_q()
-    comparison: common.Comparison = scenarios.blackjack_control()
+    comparison: common.Comparison = scenarios.blackjack_control_es()
 
     application.Application(comparison)
 

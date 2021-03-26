@@ -24,7 +24,7 @@ def factory(environment_: environment.Environment,
 
         a.MC_PREDICTION_V: policy_evaluation.MCPredictionV,
         a.MC_PREDICTION_Q: policy_evaluation.MCPredictionQ,
-        a.ON_POLICY_MC_CONTROL_ES: control.OnPolicyMcControlES,
+        a.ON_POLICY_MC_CONTROL: control.OnPolicyMcControl,
 
         a.CONSTANT_ALPHA_MC: policy_evaluation.ConstantAlphaMC,
         a.TD_0: policy_evaluation.TD0,

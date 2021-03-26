@@ -33,7 +33,7 @@ class AlgorithmType(enum.IntEnum):
 
     MC_PREDICTION_V = enum.auto()
     MC_PREDICTION_Q = enum.auto()
-    ON_POLICY_MC_CONTROL_ES = enum.auto()
+    ON_POLICY_MC_CONTROL = enum.auto()
 
     CONSTANT_ALPHA_MC = enum.auto()
     TD_0 = enum.auto()

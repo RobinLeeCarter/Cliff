@@ -91,7 +91,7 @@ def blackjack_evaluation_q() -> Comparison:
     return comparison
 
 
-def blackjack_control() -> Comparison:
+def blackjack_control_es() -> Comparison:
     comparison = Comparison(
         environment_parameters=EnvironmentParameters(
             environment_type=common.EnvironmentType.BLACKJACK,
@@ -99,7 +99,7 @@ def blackjack_control() -> Comparison:
         comparison_settings=common.Settings(
             gamma=1.0,
             runs=1,
-            training_episodes=10_000_000,
+            training_episodes=100_000_000,
             episode_print_frequency=10_000,
             policy_parameters=common.PolicyParameters(
                 policy_type=common.PolicyType.DETERMINISTIC,
@@ -108,7 +108,7 @@ def blackjack_control() -> Comparison:
         settings_list=[
             common.Settings(
                 algorithm_parameters=common.AlgorithmParameters(
-                    algorithm_type=common.AlgorithmType.ON_POLICY_MC_CONTROL_ES,
+                    algorithm_type=common.AlgorithmType.ON_POLICY_MC_CONTROL,
                     first_visit=True,
                     exploring_starts=True,
                     verbose=True,

@@ -13,7 +13,7 @@ algorithm_name: dict[enums.AlgorithmType, str] = {
 
     enums.AlgorithmType.MC_PREDICTION_V: 'MC Prediction (V)',
     enums.AlgorithmType.MC_PREDICTION_Q: 'MC Prediction (Q)',
-    enums.AlgorithmType.ON_POLICY_MC_CONTROL_ES: 'On-policy MC Control ES',
+    enums.AlgorithmType.ON_POLICY_MC_CONTROL: 'On-policy MC Control',
 
     enums.AlgorithmType.CONSTANT_ALPHA_MC: 'Constant-α MC',
     enums.AlgorithmType.TD_0: 'TD(0)',
