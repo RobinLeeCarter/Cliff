@@ -70,7 +70,8 @@ def random_walk_episode() -> Comparison:
             y_max=0.25
         ),
         grid_view_parameters=common.GridViewParameters(
-            show_demo=False
+            show_result=True,
+            show_v=True,
         ),
     )
     return comparison

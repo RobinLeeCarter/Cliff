@@ -4,7 +4,7 @@ from typing import TYPE_CHECKING, Optional
 import numpy as np
 
 if TYPE_CHECKING:
-    from mdp.model import policy
+    from mdp.model import algorithm, policy
     from mdp.model.algorithm.value_function import state_function
 
 from mdp import common
@@ -13,7 +13,7 @@ from mdp.model import environment
 from mdp.scenarios.blackjack.state import State
 from mdp.scenarios.blackjack.action import Action
 from mdp.scenarios.blackjack.environment_parameters import EnvironmentParameters
-# from mdp.scenarios.blackjack.grid_world import GridWorld
+from mdp.scenarios.blackjack.grid_world import GridWorld
 from mdp.scenarios.blackjack.dynamics import Dynamics
 
 
@@ -30,15 +30,17 @@ class Environment(environment.Environment):
         self._state: State = self._state
         self._action: Action = self._action
 
-        # self.grid_world: GridWorld = GridWorld(environment_parameters)
-        self.dynamics: Dynamics = Dynamics(environment_=self, environment_parameters=environment_parameters)
-
         self._player_sum_min = 12
         self._player_sum_max = 21
         self._dealers_card_min = 1
         self._dealers_card_max = 10
         self._player_sums = [x for x in range(self._player_sum_min, self._player_sum_max+1)]
         self._dealers_cards = [x for x in range(self._dealers_card_min, self._dealers_card_max+1)]
+
+        # dealer_card is x, player_sum is y : following the table in the book
+        grid_shape = (len(self._player_sums), len(self._dealers_cards))
+        self.grid_world: GridWorld = GridWorld(environment_parameters=environment_parameters, grid_shape=grid_shape)
+        self.dynamics: Dynamics = Dynamics(environment_=self, environment_parameters=environment_parameters)
 
     # region Sets
     def _build_states(self):
@@ -97,15 +99,15 @@ class Environment(environment.Environment):
         z_values = np.empty(shape=y_values.shape + x_values.shape, dtype=float)
 
         for player_sum in self._player_sums:
-            for dealer_card in self._dealers_cards:
+            for dealers_card in self._dealers_cards:
                 state: State = State(
                     is_terminal=False,
                     player_sum=player_sum,
                     usable_ace=usable_ace,
-                    dealers_card=dealer_card,
+                    dealers_card=dealers_card,
                 )
                 x = player_sum - self._player_sum_min
-                y = dealer_card - self._dealers_card_min
+                y = dealers_card - self._dealers_card_min
                 z_values[y, x] = v[state]
                 # print(player_sum, dealer_card, v[state])
 
@@ -118,32 +120,21 @@ class Environment(environment.Environment):
         g.y_series = common.Series(title=g.y_label, values=y_values)
         g.z_series = common.Series(title=g.z_label, values=z_values)
 
-    # def update_grid_value_functions(self, algorithm_: algorithm.Algorithm, policy_: policy.Policy):
-    #     # policy_: policy.Deterministic
-    #     for state in self.states:
-    #         position: common.XY = common.XY(x=state.ending_cars_2, y=state.ending_cars_1)     # reversed like in book
-    #         action: Action = policy_[state]
-    #         transfer_1_to_2: int = action.transfer_1_to_2
-    #         # print(position, transfer_1_to_2)
-    #         self.grid_world.set_policy_value(
-    #             position=position,
-    #             policy_value=transfer_1_to_2,
-    #         )
-    #         # if algorithm_.Q:
-    #         #     policy_action: Optional[environment.Action] = policy_[state]
-    #         #     policy_action: Action
-    #         #     policy_move: Optional[common.XY] = None
-    #         #     if policy_action:
-    #         #         policy_move = policy_action.move
-    #         #     for action_ in self.actions_for_state(state):
-    #         #         is_policy: bool = (policy_move and policy_move == action_.move)
-    #         #         self.grid_world.set_state_action_function(
-    #         #             position=state.position,
-    #         #             move=action_.move,
-    #         #             q_value=algorithm_.Q[state, action_],
-    #         #             is_policy=is_policy
-    #         #         )
-    #     # print(self.grid_world.output_squares)
+    def update_grid_value_functions(self, algorithm_: algorithm.Algorithm, policy_: policy.Policy):
+        # policy_: policy.Deterministic
+        for state in self.states:
+            if not state.is_terminal:
+                # dealer_card is x, player_sum is y : following the table in the book
+                x = state.dealers_card - self._dealers_card_min
+                y = state.player_sum - self._player_sum_min
+                position: common.XY = common.XY(x, y)
+                action: Action = policy_[state]
+                policy_value: int = int(action.hit)
+                # print(position, transfer_1_to_2)
+                self.grid_world.set_policy_value(
+                    position=position,
+                    policy_value=policy_value,
+                )
 
     def is_valued_state(self, state: State) -> bool:
         return not state.is_terminal

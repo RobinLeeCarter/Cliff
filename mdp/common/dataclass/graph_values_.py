@@ -28,9 +28,9 @@ class GraphValues:
 
 
 default: GraphValues = GraphValues(
-    show_graph=True,
-    has_grid=True,
-    has_legend=True
+    show_graph=False,
+    has_grid=False,
+    has_legend=False
 )
 
 

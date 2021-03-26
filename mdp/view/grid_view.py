@@ -299,11 +299,11 @@ class GridView(abc.ABC):
                      draw_q: Optional[bool] = None
                      ):
         if draw_v is None:
-            draw_v = self.grid_view_parameters.show_values
-        if draw_policy is None:
-            draw_policy = self.grid_view_parameters.show_values
+            draw_v = self.grid_view_parameters.show_v
         if draw_q is None:
-            draw_q = self.grid_view_parameters.show_values
+            draw_q = self.grid_view_parameters.show_q
+        if draw_policy is None:
+            draw_policy = self.grid_view_parameters.show_policy
 
         # make rect
         row = self._max_y - position.y

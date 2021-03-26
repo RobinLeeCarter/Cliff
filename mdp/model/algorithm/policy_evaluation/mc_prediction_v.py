@@ -33,5 +33,5 @@ class MCPredictionV(abstract.EpisodicMonteCarlo):
             target = self._episode.G[t]
             delta = target - self.V[state]
             self._N[state] += 1
-            # V[St] = V[St] + (1/N(s)).(G(t) - V(St))
+            # V(s) = V(s) + (1/N(s)).(G(t) - V(s))
             self.V[state] += delta / self._N[state]

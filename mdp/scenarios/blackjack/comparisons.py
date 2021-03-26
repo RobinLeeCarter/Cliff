@@ -5,7 +5,7 @@ from mdp.scenarios.blackjack.comparison import Comparison
 from mdp.scenarios.blackjack.environment_parameters import EnvironmentParameters
 
 
-def blackjack_comparison_v() -> Comparison:
+def blackjack_evaluation_v() -> Comparison:
     comparison = Comparison(
         environment_parameters=EnvironmentParameters(
             environment_type=common.EnvironmentType.BLACKJACK,
@@ -28,11 +28,11 @@ def blackjack_comparison_v() -> Comparison:
                 )
             ),
         ],
-        graph_values=common.GraphValues(
-            show_graph=False,
-            # y_min=0.0,
-            # y_max=0.25
-        ),
+        # graph_values=common.GraphValues(
+        #     show_graph=False,
+        #     # y_min=0.0,
+        #     # y_max=0.25
+        # ),
         graph3d_values=common.Graph3DValues(
             show_graph=True,
             x_label="Player sum",
@@ -46,14 +46,16 @@ def blackjack_comparison_v() -> Comparison:
             z_max=1.0,
             multi_graph_parameter=[False, True]
         ),
-        grid_view_parameters=common.GridViewParameters(
-            show_demo=False,
-        ),
+        # grid_view_parameters=common.GridViewParameters(
+        #     grid_view_type=common.GridViewType.BLACKJACK,
+        #     show_result=True,
+        #     show_policy=True,
+        # ),
     )
     return comparison
 
 
-def blackjack_comparison_q() -> Comparison:
+def blackjack_evaluation_q() -> Comparison:
     comparison = Comparison(
         environment_parameters=EnvironmentParameters(
             environment_type=common.EnvironmentType.BLACKJACK,
@@ -77,11 +79,11 @@ def blackjack_comparison_q() -> Comparison:
                 derive_v_from_q_as_final_step=True
             ),
         ],
-        graph_values=common.GraphValues(
-            show_graph=False,
-            # y_min=0.0,
-            # y_max=0.25
-        ),
+        # graph_values=common.GraphValues(
+        #     show_graph=False,
+        #     # y_min=0.0,
+        #     # y_max=0.25
+        # ),
         graph3d_values=common.Graph3DValues(
             show_graph=True,
             x_label="Player sum",
@@ -96,7 +98,61 @@ def blackjack_comparison_q() -> Comparison:
             multi_graph_parameter=[False, True]
         ),
         grid_view_parameters=common.GridViewParameters(
-            show_demo=False,
+            grid_view_type=common.GridViewType.BLACKJACK,
+            show_result=True,
+            show_policy=True,
         ),
     )
     return comparison
+
+
+def blackjack_control() -> Comparison:
+    comparison = Comparison(
+        environment_parameters=EnvironmentParameters(
+            environment_type=common.EnvironmentType.BLACKJACK,
+        ),
+        comparison_settings=common.Settings(
+            gamma=1.0,
+            runs=1,
+            training_episodes=500_000,
+            episode_print_frequency=10_000,
+            policy_parameters=common.PolicyParameters(
+                policy_type=common.PolicyType.DETERMINISTIC,
+            ),
+        ),
+        settings_list=[
+            common.Settings(
+                algorithm_parameters=common.AlgorithmParameters(
+                    algorithm_type=common.AlgorithmType.ON_POLICY_MC_CONTROL_ES,
+                    first_visit=True,
+                    verbose=True
+                ),
+                derive_v_from_q_as_final_step=True
+            ),
+        ],
+        # graph_values=common.GraphValues(
+        #     show_graph=False,
+        #     # y_min=0.0,
+        #     # y_max=0.25
+        # ),
+        graph3d_values=common.Graph3DValues(
+            show_graph=True,
+            x_label="Player sum",
+            y_label="Dealer showing",
+            z_label="V(s)",
+            x_min=12,
+            x_max=21,
+            y_min=1,
+            y_max=10,
+            z_min=-1.0,
+            z_max=1.0,
+            multi_graph_parameter=[False, True]
+        ),
+        grid_view_parameters=common.GridViewParameters(
+            grid_view_type=common.GridViewType.BLACKJACK,
+            show_result=True,
+            show_policy=True,
+        ),
+    )
+    return comparison
+

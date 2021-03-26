@@ -31,8 +31,9 @@ def windy_timestep(random_wind: bool = False) -> comparison.Comparison:
         # graph_values=common.GraphValues(
         #     show_graph=False
         # ),
-        # grid_view_parameters=common.GridViewParameters(
-        #     show_demo=False
-        # )
+        grid_view_parameters=common.GridViewParameters(
+            show_demo=True,
+            show_q=True,
+        )
     )
     return comparison_

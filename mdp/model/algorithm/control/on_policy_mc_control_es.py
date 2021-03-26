@@ -7,7 +7,7 @@ from mdp import common
 from mdp.model.algorithm import abstract, value_function
 
 
-class MCPredictionQ(abstract.EpisodicMonteCarlo):
+class OnPolicyMcControlES(abstract.EpisodicMonteCarlo):
     def __init__(self,
                  environment_: environment.Environment,
                  agent_: agent.Agent,
@@ -36,3 +36,4 @@ class MCPredictionQ(abstract.EpisodicMonteCarlo):
             self._N[state, action] += 1
             # Q(s,a) = Q(s,a) + (1/N(s,a)).(G(t) - Q(s,a))
             self.Q[state, action] += delta / self._N[state, action]
+            self._agent.policy[state] = self.Q.argmax_over_actions(state)

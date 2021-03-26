@@ -27,12 +27,13 @@ def cliff_alpha_start() -> Comparison:
             ],
         ),
         graph_values=common.GraphValues(
+            show_graph=True,
             y_min=-140,
             y_max=0,
         ),
-        grid_view_parameters=common.GridViewParameters(
-            show_demo=False
-        )
+        # grid_view_parameters=common.GridViewParameters(
+        #     show_demo=False
+        # )
     )
     return comparison
 
@@ -60,12 +61,13 @@ def cliff_alpha_end() -> Comparison:
             ],
         ),
         graph_values=common.GraphValues(
+            show_graph=True,
             y_min=-140,
             y_max=0,
         ),
-        grid_view_parameters=common.GridViewParameters(
-            show_demo=False
-        )
+        # grid_view_parameters=common.GridViewParameters(
+        #     show_demo=False
+        # )
     )
     return comparison
 
@@ -103,12 +105,13 @@ def cliff_episode() -> Comparison:
             )),
         ],
         graph_values=common.GraphValues(
+            show_graph=True,
             # moving_average_window_size=19,
             y_min=-100,
-            y_max=0
+            y_max=0,
         ),
-        grid_view_parameters=common.GridViewParameters(
-            show_demo=False
-        )
+        # grid_view_parameters=common.GridViewParameters(
+        #     show_demo=False
+        # )
     )
     return comparison

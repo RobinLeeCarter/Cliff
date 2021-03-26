@@ -10,7 +10,7 @@ from mdp.scenarios.blackjack.environment import Environment
 
 
 def blackjack_test() -> bool:
-    comparison: common.Comparison = comparisons.blackjack_comparison_v()
+    comparison: common.Comparison = comparisons.blackjack_evaluation_v()
     environment = environment_factory.environment_factory(comparison.environment_parameters)
 
     # print("States...")
