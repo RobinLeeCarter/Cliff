@@ -28,11 +28,6 @@ def blackjack_evaluation_v() -> Comparison:
                 )
             ),
         ],
-        # graph_values=common.GraphValues(
-        #     show_graph=False,
-        #     # y_min=0.0,
-        #     # y_max=0.25
-        # ),
         graph3d_values=common.Graph3DValues(
             show_graph=True,
             x_label="Player sum",
@@ -44,13 +39,8 @@ def blackjack_evaluation_v() -> Comparison:
             y_max=10,
             z_min=-1.0,
             z_max=1.0,
-            multi_graph_parameter=[False, True]
+            multi_parameter=[False, True]
         ),
-        # grid_view_parameters=common.GridViewParameters(
-        #     grid_view_type=common.GridViewType.BLACKJACK,
-        #     show_result=True,
-        #     show_policy=True,
-        # ),
     )
     return comparison
 
@@ -79,11 +69,6 @@ def blackjack_evaluation_q() -> Comparison:
                 derive_v_from_q_as_final_step=True
             ),
         ],
-        # graph_values=common.GraphValues(
-        #     show_graph=False,
-        #     # y_min=0.0,
-        #     # y_max=0.25
-        # ),
         graph3d_values=common.Graph3DValues(
             show_graph=True,
             x_label="Player sum",
@@ -95,7 +80,7 @@ def blackjack_evaluation_q() -> Comparison:
             y_max=10,
             z_min=-1.0,
             z_max=1.0,
-            multi_graph_parameter=[False, True]
+            multi_parameter=[False, True]
         ),
         grid_view_parameters=common.GridViewParameters(
             grid_view_type=common.GridViewType.BLACKJACK,
@@ -114,7 +99,7 @@ def blackjack_control() -> Comparison:
         comparison_settings=common.Settings(
             gamma=1.0,
             runs=1,
-            training_episodes=50_000,
+            training_episodes=5_000_000,
             episode_print_frequency=10_000,
             policy_parameters=common.PolicyParameters(
                 policy_type=common.PolicyType.DETERMINISTIC,
@@ -130,11 +115,6 @@ def blackjack_control() -> Comparison:
                 derive_v_from_q_as_final_step=True
             ),
         ],
-        # graph_values=common.GraphValues(
-        #     show_graph=False,
-        #     # y_min=0.0,
-        #     # y_max=0.25
-        # ),
         graph3d_values=common.Graph3DValues(
             show_graph=True,
             x_label="Player sum",

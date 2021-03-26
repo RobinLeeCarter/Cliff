@@ -26,6 +26,14 @@ class GridView(grid_view.GridView):
             vmax=self._grid_world.policy_max
         )
 
+    def display_parameter(self, parameter: any = None):
+        usable_ace: bool = parameter
+        if usable_ace:
+            title = "Usable Ace"
+        else:
+            title = "No usable Ace"
+        self._set_title(title)
+
     def _draw_policy(self, surface: pygame.Surface, rect: pygame.Rect, output_square: common.OutputSquare):
         policy_value = output_square.policy_value
         if policy_value is not None:

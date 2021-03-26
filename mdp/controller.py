@@ -51,6 +51,7 @@ class Controller:
             if g3d.multi_parameter and gvp.show_result:
                 for parameter in g3d.multi_parameter:
                     self._model.prep_for_output(parameter)
+                    self._view.grid_view.display_parameter(parameter)
                     self._view.grid_view.display_latest_step()
             else:
                 self._model.prep_for_output()

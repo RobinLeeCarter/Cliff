@@ -15,7 +15,7 @@ class OnPolicyMcControlES(abstract.EpisodicMonteCarlo):
                  policy_parameters: common.PolicyParameters
                  ):
         super().__init__(environment_, agent_, algorithm_parameters, policy_parameters)
-        self._algorithm_type = common.AlgorithmType.MC_PREDICTION_Q
+        self._algorithm_type = common.AlgorithmType.ON_POLICY_MC_CONTROL_ES
         self.name = common.algorithm_name[self._algorithm_type]
         self.title = f"{self.name} first_visit={self.first_visit}"
         self._create_q()
