@@ -112,7 +112,7 @@ class Dynamics(environment.Dynamics):
         probability_x_reward = self._calc_reward(cars_rented_x_probability, probability)
         return probability_x_reward
 
-    def get_next_state_probability(self, state: State, action: Action, next_state: State) -> float:
+    def get_state_transition_probability(self, state: State, action: Action, next_state: State) -> float:
         """
         p(s'|s,a) = Sum_over_r( p(s',r|s,a) )
         probability of a next state for a (state, action)
@@ -141,7 +141,7 @@ class Dynamics(environment.Dynamics):
         next_state_distribution.self_check()
         return next_state_distribution
 
-    def get_next_state_distribution(self, state: State, action: Action) -> Distribution[State]:
+    def get_state_transition_distribution(self, state: State, action: Action) -> Distribution[State]:
         """
         dict[ s', p(s'|s,a) ]
         distribution of next states for a (state, action)

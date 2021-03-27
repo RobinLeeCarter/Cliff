@@ -133,12 +133,13 @@ class Location:
         return self.expected_cars_rented_by_ending_cars[starting_cars][ending_cars]
 
     def draw_outcome(self, starting_cars: int) -> LocationOutcome:
-        outcome_distribution = self.outcome_distributions[starting_cars]
-        outcome: LocationOutcome = random.choices(
-            population=list(outcome_distribution.keys()),
-            weights=list(outcome_distribution.values())
-        )[0]
-        return outcome
+        return self.outcome_distributions[starting_cars].draw_one()
+        # outcome_distribution = self.outcome_distributions[starting_cars]
+        # outcome: LocationOutcome = random.choices(
+        #     population=list(outcome_distribution.keys()),
+        #     weights=list(outcome_distribution.values())
+        # )[0]
+        # return outcome
         # car_demand: int = random.choices(population=self._car_count, weights=self._demand_prob)[0]
         # cars_rented = self._get_cars_rented(starting_cars, car_demand)
         # cars_returned = random.choices(population=self._car_count, weights=self._return_prob)[0]
