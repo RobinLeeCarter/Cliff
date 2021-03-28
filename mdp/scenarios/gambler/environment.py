@@ -1,9 +1,11 @@
 from __future__ import annotations
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Optional
+
+import numpy as np
 
 if TYPE_CHECKING:
-    from mdp.model import policy    # algorithm,
-    # from mdp.model.algorithm.value_function import state_function
+    from mdp.model import policy, algorithm
+    from mdp.model.algorithm.value_function import state_function
 
 from mdp import common
 from mdp.model import environment
@@ -71,6 +73,61 @@ class Environment(environment.Environment):
             else:
                 initial_action = Action(stake=1)
             policy_[state] = initial_action
+
+    def insert_state_function_into_graph2d(self,
+                                           comparison: common.Comparison,
+                                           v: state_function.StateFunction,
+                                           parameter: Optional[any] = None):
+        x_values = np.array([state.capital for state in self.states], dtype=int)
+        y_values = np.empty(shape=x_values.shape, dtype=float)
+
+        for state in self.states:
+            x = state.capital
+            y_values[x] = v[state]
+
+        g = comparison.graph_values
+        g.x_series = common.Series(title=g.x_label, values=x_values)
+        g.graph_series = [common.Series(title=g.y_label, values=y_values)]
+        g.show_graph = True
+        g.title = "V(s)"
+        g.x_label = "Capital"
+        g.y_label = "V(s)"
+        g.x_min = 0.0
+        g.x_max = 100.0
+        g.y_min = 0.0
+        g.y_max = 1.0
+        g.has_grid = True
+        g.has_legend = False
+
+    def insert_policy_into_graph2d(self,
+                                   comparison: common.Comparison,
+                                   policy_: policy.Policy,
+                                   parameter: Optional[any] = None):
+        x_values = np.array([state.capital for state in self.states], dtype=int)
+        y_values = np.empty(shape=x_values.shape, dtype=float)
+        policy_: policy.Deterministic
+
+        for state in self.states:
+            x = state.capital
+            action: Action = policy_[state]
+            if action:
+                y_values[x] = float(action.stake)
+            else:
+                y_values[x] = 0.0
+
+        g = comparison.graph_values
+        g.x_series = common.Series(title=g.x_label, values=x_values)
+        g.graph_series = [common.Series(title=g.y_label, values=y_values)]
+        g.show_graph = True
+        g.title = "Policy"
+        g.x_label = "Capital"
+        g.y_label = "Stake"
+        g.x_min = 0.0
+        g.x_max = 100.0
+        g.y_min = 0.0
+        g.y_max = None
+        g.has_grid = True
+        g.has_legend = False
 
     # def insert_state_function_into_graph3d(self,
     #                                        comparison: common.Comparison,

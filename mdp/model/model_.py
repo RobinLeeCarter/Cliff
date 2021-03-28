@@ -14,7 +14,7 @@ class Model:
     def __init__(self, verbose: bool = False):
         self.verbose: bool = verbose
         self._controller: Optional[controller.Controller] = None
-        self.comparison: Optional[common.Comparison] = None
+        self._comparison: Optional[common.Comparison] = None
         self.environment: Optional[environment.Environment] = None
         self.agent: Optional[agent.Agent] = None
         self.breakdown: Optional[breakdown.Breakdown] = None
@@ -26,14 +26,14 @@ class Model:
         self._controller = controller_
 
     def build(self, comparison: common.Comparison):
-        self.comparison = comparison
+        self._comparison = comparison
 
-        self.environment = environment_factory.environment_factory(self.comparison.environment_parameters)
+        self.environment = environment_factory.environment_factory(self._comparison.environment_parameters)
 
         # create agent (and it will create the algorithm and the policy when it is given Settings)
         self.agent = agent.Agent(self.environment)
 
-        self.breakdown: Optional[breakdown.Breakdown] = breakdown.factory(self.comparison)
+        self.breakdown: Optional[breakdown.Breakdown] = breakdown.factory(self._comparison)
         self.trainer: trainer.Trainer = trainer.Trainer(
             agent_=self.agent,
             breakdown_=self.breakdown,
@@ -53,7 +53,7 @@ class Model:
     def run(self):
         timer: utils.Timer = utils.Timer()
         timer.start()
-        for settings in self.comparison.settings_list:
+        for settings in self._comparison.settings_list:
             self.trainer.train(settings)
             if not self._cont:
                 break
