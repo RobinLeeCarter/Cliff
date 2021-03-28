@@ -26,6 +26,7 @@ class AlgorithmType(enum.IntEnum):
     POLICY_EVALUATION_DP_V = enum.auto()
     POLICY_IMPROVEMENT_DP_V = enum.auto()
     POLICY_ITERATION_DP_V = enum.auto()
+    VALUE_ITERATION_DP_V = enum.auto()
 
     POLICY_EVALUATION_DP_Q = enum.auto()
     POLICY_IMPROVEMENT_DP_Q = enum.auto()

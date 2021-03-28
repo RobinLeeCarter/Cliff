@@ -1,4 +1,3 @@
-import random
 from scipy import stats
 
 from mdp.common import DictZero, Distribution
