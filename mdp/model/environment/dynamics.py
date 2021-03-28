@@ -38,7 +38,7 @@ class Dynamics(ABC):
         expected reward for a (state, action) given the next state
         """
         probability_x_reward: float = self.get_probability_x_reward(state, action, next_state)
-        next_state_probability: float = self.get_next_state_probability(state, action, next_state)
+        next_state_probability: float = self.get_state_transition_probability(state, action, next_state)
         if next_state_probability == 0.0:
             return 0.0
         else:
@@ -51,14 +51,14 @@ class Dynamics(ABC):
         """
         pass
 
-    def get_next_state_probability(self, state: State, action: Action, next_state: State) -> float:
+    def get_state_transition_probability(self, state: State, action: Action, next_state: State) -> float:
         """
         p(s'|s,a) = Sum_over_r( p(s',r|s,a) )
         probability of a next state for a (state, action)
         """
         pass
 
-    def get_next_state_distribution(self, state: State, action: Action) -> Distribution[State]:
+    def get_state_transition_distribution(self, state: State, action: Action) -> Distribution[State]:
         """
         dict[ s', p(s'|s,a) ]
         distribution of next states for a (state, action)

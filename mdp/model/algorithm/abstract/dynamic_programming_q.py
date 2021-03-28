@@ -28,7 +28,7 @@ class DynamicProgrammingQ(dynamic_programming.DynamicProgramming, abc.ABC):
         # Sum_over_s'( p(s'|s,a) . Sum_over_a'( π(a'|s').Q(s',a') )
         next_state_expected_return: float = 0.0
         # s', p(s'|s,a)
-        for next_state, probability in self._dynamics.get_next_state_distribution(state, action).items():
+        for next_state, probability in self._dynamics.get_state_transition_distribution(state, action).items():
             # Sum_over_a'( π(a'|s').Q(s',a') )
             next_state_return: float = 0
 

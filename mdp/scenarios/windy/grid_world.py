@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-import numpy as np
+import random
 
 from mdp import common
 from mdp.scenarios.position_move.model import grid_world
@@ -11,9 +11,11 @@ class GridWorld(grid_world.GridWorld):
     """GridWorld doesn't know about states and actions it just deals in the rules of the grid"""
     def __init__(self, environment_parameters_: environment_parameters.EnvironmentParameters):
         super().__init__(environment_parameters_)
-        self.upward_wind: np.ndarray = environment_parameters_.upward_wind
+        # noinspection PyTypeChecker
+        self.upward_wind: list[int] = environment_parameters_.upward_wind.tolist()
         self.random_wind: bool = environment_parameters_.random_wind
-        self._random_wind_choices: np.ndarray = environment_parameters_.random_wind_choices
+        # noinspection PyTypeChecker
+        self._random_wind_choices: list[int] = environment_parameters_.random_wind_choices.tolist()
 
     def change_request(self, current_position: common.XY, move: common.XY) -> common.XY:
         wind = self._get_wind(current_position)
@@ -28,7 +30,8 @@ class GridWorld(grid_world.GridWorld):
     def _get_wind(self, current_position: common.XY) -> common.XY:
         extra_wind: int
         if self.random_wind:
-            extra_wind = common.rng.choice(self._random_wind_choices)
+            extra_wind = random.choice(self._random_wind_choices)
+            # extra_wind = common.rng.choice(self._random_wind_choices)
         else:
             extra_wind = 0
 
