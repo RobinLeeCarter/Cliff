@@ -31,7 +31,7 @@ class ValueIterationDpV(abstract.DynamicProgrammingV):
 
         while cont and delta >= self._theta and iteration < self._iteration_timeout:
             delta = 0.0
-            for state in self._environment.states:
+            for state in self._environment.non_terminal_states():
                 v = self.V[state]
                 new_v: float = max(self._get_expected_return(state, action)
                                    for action in self._environment.actions_for_state(state))
@@ -44,7 +44,7 @@ class ValueIterationDpV(abstract.DynamicProgrammingV):
             iteration += 1
 
         # get greedy policy
-        for state in self._environment.states:
+        for state in self._environment.non_terminal_states():
             action_value: dict[environment.Action, float] = \
                 {action: self._get_expected_return(state, action)
                  for action in self._environment.actions_for_state(state)}
@@ -55,4 +55,3 @@ class ValueIterationDpV(abstract.DynamicProgrammingV):
         else:
             if self._verbose:
                 print(f"Value Iteration completed ...")
-

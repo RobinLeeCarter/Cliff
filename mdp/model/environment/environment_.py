@@ -64,6 +64,12 @@ class Environment(ABC):
     def _build_actions(self):
         pass
 
+    def non_terminal_states(self) -> Generator[State, None, None]:
+        """set A(s)"""
+        for state in self.states:
+            if not state.is_terminal:
+                yield state
+
     # possible need to materialise this if it's slow since it will be at the bottom of the loop
     def actions_for_state(self, state: State) -> Generator[Action, None, None]:
         """set A(s)"""

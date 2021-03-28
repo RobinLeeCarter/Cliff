@@ -23,18 +23,43 @@ class Dynamics(environment.Dynamics):
         # downcast
         self._environment: Environment = self._environment
         self._environment_parameters: EnvironmentParameters = self._environment_parameters
-        # self._probability_heads: float = self._environment_parameters.probability_heads
+        self._probability_heads: float = self._environment_parameters.probability_heads
         self._toss_distribution: Distribution[Toss] = Distribution()
 
     def build(self):
-        ph = self._environment_parameters.probability_heads
-        self._toss_distribution[Toss.HEADS] = ph
-        self._toss_distribution[Toss.TAILS] = 1.0 - ph
+        self._toss_distribution[Toss.HEADS] = self._probability_heads
+        self._toss_distribution[Toss.TAILS] = 1.0 - self._probability_heads
         self._toss_distribution.self_check()
         super().build()
 
     def get_a_start_state(self) -> State:
         return random.choice([state for state in self._environment.states if not state.is_terminal])
+
+    def get_expected_reward(self, state: State, action: Action) -> float:
+        """
+        r(s,a) = E[Rt | S(t-1)=s, A(t-1)=a] = Sum_over_s'_r( p(s',r|s,a).r )
+        expected reward for a (state, action)
+        """
+        if state.capital + action.stake == 100:
+            expected_reward = self._probability_heads   # (* 1.0)
+        else:
+            expected_reward = 0.0
+        return expected_reward
+
+    def get_state_transition_distribution(self, state: State, action: Action) -> Distribution[State]:
+        """
+        dict[ s', p(s'|s,a) ]
+        distribution of next states for a (state, action)
+        """
+        distribution: Distribution[State] = Distribution()
+        for toss in [Toss.HEADS, Toss.TAILS]:
+            probability = self._toss_distribution[toss]
+            new_capital = state.capital + action.stake
+            is_terminal: bool = (new_capital == 0 or new_capital == self._environment_parameters.max_capital)
+            next_state = State(is_terminal=is_terminal, capital=new_capital)
+            distribution[next_state] = probability
+
+        return distribution
 
     def draw_response(self, state: State, action: Action) -> Response:
         """
@@ -43,7 +68,7 @@ class Dynamics(environment.Dynamics):
         """
         toss: Toss = self._toss_distribution.draw_one()
         if toss == Toss.HEADS:
-            new_capital = state.capital + action.stake * 2.0
+            new_capital = state.capital + action.stake
         else:
             new_capital = state.capital - action.stake
 

@@ -55,7 +55,7 @@ class Environment(environment.Environment):
             self.actions.append(new_action)
 
     def is_action_compatible_with_state(self, state: State, action: Action):
-        if action.stake >= state.capital and \
+        if action.stake <= state.capital and \
                 state.capital + action.stake <= self._max_capital:
             return True
         else:
@@ -66,10 +66,11 @@ class Environment(environment.Environment):
     def initialize_policy(self, policy_: policy.Policy, policy_parameters: common.PolicyParameters):
         hit: bool
         for state in self.states:
-            # don't add a policy for terminal states at all
-            if not state.is_terminal:
+            if state.is_terminal:
+                initial_action = Action(stake=0)    # for graphs
+            else:
                 initial_action = Action(stake=1)
-                policy_[state] = initial_action
+            policy_[state] = initial_action
 
     # def insert_state_function_into_graph3d(self,
     #                                        comparison: common.Comparison,
