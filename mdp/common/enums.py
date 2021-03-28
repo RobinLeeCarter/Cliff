@@ -66,6 +66,7 @@ class EnvironmentType(enum.IntEnum):
     RACETRACK = enum.auto()
     JACKS = enum.auto()
     BLACKJACK = enum.auto()
+    GAMBLER = enum.auto()
 
 
 class ActionsList(enum.IntEnum):
