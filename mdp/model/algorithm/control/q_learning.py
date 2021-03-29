@@ -5,10 +5,10 @@ if TYPE_CHECKING:
     from mdp.model.environment.environment import Environment
     from mdp.model.agent.agent import Agent
 from mdp import common
-from mdp.model.algorithm import abstract
+from mdp.model.algorithm.abstract.episodic_online import EpisodicOnline
 
 
-class QLearning(abstract.EpisodicOnline):
+class QLearning(EpisodicOnline):
     def __init__(self,
                  environment_: Environment,
                  agent_: Agent,

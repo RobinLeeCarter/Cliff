@@ -3,7 +3,7 @@ from typing import Generator, Optional, TYPE_CHECKING
 from abc import ABC, abstractmethod
 
 if TYPE_CHECKING:
-    from mdp.model import algorithm
+    from mdp.model.algorithm.abstract.algorithm_ import Algorithm
     from mdp.model.policy.policy import Policy
     from mdp.model.algorithm.value_function import state_function
 from mdp import common
@@ -117,7 +117,7 @@ class Environment(ABC):
         return common.XY(x=x, y=y)
 
     def update_grid_value_functions(self,
-                                    algorithm_: algorithm.Algorithm,
+                                    algorithm_: Algorithm,
                                     policy_: Policy,
                                     parameter: any = None):
         pass

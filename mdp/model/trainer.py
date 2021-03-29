@@ -7,7 +7,9 @@ if TYPE_CHECKING:
     from mdp.model.agent.episode import Episode
     from mdp.model.breakdown.breakdown import Breakdown
 
-from mdp.model import algorithm
+from mdp.model.algorithm.abstract.algorithm_ import Algorithm
+from mdp.model.algorithm.abstract.episodic_ import Episodic
+from mdp.model.algorithm.abstract.dynamic_programming import DynamicProgramming
 
 
 class Trainer:
@@ -42,17 +44,17 @@ class Trainer:
         # process settings
         self.settings = settings
         self._agent.apply_settings(self.settings)
-        algorithm_: algorithm.Algorithm = self._agent.algorithm
-        if isinstance(algorithm_, algorithm.Episodic):
+        algorithm_: Algorithm = self._agent.algorithm
+        if isinstance(algorithm_, Episodic):
             self._train_episodic(settings, algorithm_)
-        elif isinstance(algorithm_, algorithm.DynamicProgramming):
+        elif isinstance(algorithm_, DynamicProgramming):
             self._train_dynamic_programming(settings, algorithm_)
         else:
             raise NotImplementedError
         if settings.derive_v_from_q_as_final_step:
             algorithm_.derive_v_from_q()
 
-    def _train_episodic(self, settings: common.Settings, algorithm_: algorithm.Episodic):
+    def _train_episodic(self, settings: common.Settings, algorithm_: Episodic):
         # process settings
         episode_length_timeout = self.settings.episode_length_timeout
 
@@ -99,7 +101,7 @@ class Trainer:
             self._agent.print_statistics()
 
     # noinspection PyUnusedLocal
-    def _train_dynamic_programming(self, settings: common.Settings, algorithm_: algorithm.DynamicProgramming):
+    def _train_dynamic_programming(self, settings: common.Settings, algorithm_: DynamicProgramming):
         if settings.review_every_step or settings.display_every_step:
             algorithm_.set_step_callback(self.step)
         algorithm_.initialize()

@@ -10,10 +10,10 @@ from mdp import application, scenarios
 def main():
     os_environ_settings.dummy = None    # for pycharm code inspection only
 
-    # comparison: common.Comparison = scenarios.jacks_policy_iteration_v()
+    comparison: common.Comparison = scenarios.jacks_policy_iteration_v()
     # comparison: common.Comparison = scenarios.jacks_value_iteration_v()
     # comparison: common.Comparison = scenarios.jacks_policy_iteration_q()
-    comparison: common.Comparison = scenarios.windy_timestep()
+    # comparison: common.Comparison = scenarios.windy_timestep()
     # comparison: common.Comparison = scenarios.windy_timestep(random_wind=True)
     # comparison: common.Comparison = scenarios.cliff_alpha_start()
     # comparison: common.Comparison = scenarios.cliff_alpha_end()

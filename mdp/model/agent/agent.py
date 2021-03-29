@@ -10,9 +10,11 @@ if TYPE_CHECKING:
     from mdp.model.environment.environment import Environment
 from mdp import common
 # renamed to avoid name conflicts
-from mdp.model import algorithm as algorithm_
+from mdp.model.algorithm.abstract.algorithm_ import Algorithm
+from mdp.model.algorithm.abstract.episodic_ import Episodic
+from mdp.model.algorithm.factory import algorithm_factory
 from mdp.model.policy.policy import Policy
-from mdp.model.policy import factory
+from mdp.model.policy.factory import policy_factory
 from mdp.model.agent import episode as episode_
 
 
@@ -25,7 +27,7 @@ class Agent:
 
         self._policy: Optional[Policy] = None
         self._behaviour_policy: Optional[Policy] = None     # if on-policy = self._policy
-        self._algorithm: Optional[algorithm_.Algorithm] = None
+        self._algorithm: Optional[Algorithm] = None
         self._episode: Optional[episode_.Episode] = None
         self._record_first_visits: bool = False
         self._episode_length_timeout: Optional[int] = None
@@ -64,7 +66,7 @@ class Agent:
         return self._behaviour_policy
 
     @property
-    def algorithm(self) -> algorithm_.Algorithm:
+    def algorithm(self) -> Algorithm:
         return self._algorithm
 
     @property
@@ -73,14 +75,14 @@ class Agent:
 
     def apply_settings(self, settings: common.Settings):
         # sort out policies
-        primary_policy = factory.policy_factory(self._environment, settings.policy_parameters)
+        primary_policy = policy_factory(self._environment, settings.policy_parameters)
         r: common.DualPolicyRelationship = settings.dual_policy_relationship
         if r == common.DualPolicyRelationship.SINGLE_POLICY:
             self._policy = primary_policy
             self._behaviour_policy = primary_policy
         elif r == common.DualPolicyRelationship.INDEPENDENT_POLICIES:
             self._policy = primary_policy
-            self._behaviour_policy = factory.policy_factory(self._environment, settings.behaviour_policy_parameters)
+            self._behaviour_policy = policy_factory(self._environment, settings.behaviour_policy_parameters)
         elif r == common.DualPolicyRelationship.LINKED_POLICIES:
             self._policy = primary_policy.linked_policy     # typically the deterministic part we want to output
             self._behaviour_policy = primary_policy
@@ -88,12 +90,12 @@ class Agent:
             raise NotImplementedError
 
         # set policy based on policy_parameters
-        self._algorithm = algorithm_.algorithm_factory(environment_=self._environment,
-                                                       agent_=self,
-                                                       algorithm_parameters=settings.algorithm_parameters,
-                                                       policy_parameters=settings.policy_parameters)
+        self._algorithm = algorithm_factory(environment_=self._environment,
+                                            agent_=self,
+                                            algorithm_parameters=settings.algorithm_parameters,
+                                            policy_parameters=settings.policy_parameters)
         self._episode_length_timeout = settings.episode_length_timeout
-        if isinstance(self._algorithm, algorithm_.Episodic):
+        if isinstance(self._algorithm, Episodic):
             self._record_first_visits = self._algorithm.first_visit
         else:
             self._record_first_visits = False

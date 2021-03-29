@@ -5,10 +5,10 @@ if TYPE_CHECKING:
     from mdp.model.environment.environment import Environment
     from mdp.model.agent.agent import Agent
 from mdp import common
-from mdp.model.algorithm import abstract
+from mdp.model.algorithm.abstract.episodic_monte_carlo import EpisodicMonteCarlo
 
 
-class ConstantAlphaMC(abstract.EpisodicMonteCarlo):
+class ConstantAlphaMC(EpisodicMonteCarlo):
     def __init__(self,
                  environment_: Environment,
                  agent_: Agent,

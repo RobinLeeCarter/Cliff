@@ -5,10 +5,11 @@ if TYPE_CHECKING:
     from mdp.model.environment.environment import Environment
     from mdp.model.agent.agent import Agent
 from mdp import common
-from mdp.model.algorithm import policy_evaluation, policy_improvement
+from mdp.model.algorithm.policy_evaluation.policy_evaluation_dp_v import PolicyEvaluationDpV
+from mdp.model.algorithm.policy_improvement.policy_improvement_dp_v import PolicyImprovementDpV
 
 
-class PolicyIterationDpV(policy_evaluation.PolicyEvaluationDpV, policy_improvement.PolicyImprovementDpV):
+class PolicyIterationDpV(PolicyEvaluationDpV, PolicyImprovementDpV):
     def __init__(self,
                  environment_: Environment,
                  agent_: Agent,

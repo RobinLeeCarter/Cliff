@@ -4,7 +4,7 @@ from typing import TYPE_CHECKING, Optional
 import numpy as np
 
 if TYPE_CHECKING:
-    from mdp.model import algorithm
+    from mdp.model.algorithm.abstract.algorithm_ import Algorithm
     from mdp.model.policy.policy import Policy
     from mdp.model.algorithm.value_function import state_function
 
@@ -100,7 +100,7 @@ class Environment(environment.Environment):
         g.z_series = common.Series(title=g.z_label, values=z_values)
 
     def update_grid_value_functions(self,
-                                    algorithm_: algorithm.Algorithm,
+                                    algorithm_: Algorithm,
                                     policy_: Policy,
                                     parameter: any = None):
         # policy_: policy.Deterministic

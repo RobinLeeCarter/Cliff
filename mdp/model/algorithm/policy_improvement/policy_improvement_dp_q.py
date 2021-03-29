@@ -7,10 +7,10 @@ if TYPE_CHECKING:
     from mdp.model.agent.agent import Agent
     from mdp.model.policy.policy import Policy
 from mdp import common
-from mdp.model.algorithm import abstract
+from mdp.model.algorithm.abstract.dynamic_programming_q import DynamicProgrammingQ
 
 
-class PolicyImprovementDpQ(abstract.DynamicProgrammingQ):
+class PolicyImprovementDpQ(DynamicProgrammingQ):
     def __init__(self,
                  environment_: Environment,
                  agent_: Agent,
