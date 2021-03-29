@@ -4,7 +4,7 @@ from typing import TYPE_CHECKING
 from mdp import common
 if TYPE_CHECKING:
     from mdp.model import environment
-    from mdp.model.policy import policy_
+    from mdp.model.policy import policy
 from mdp.model.policy import random, deterministic
 
 
@@ -25,7 +25,7 @@ class EGreedy(random.Random):
         self.greedy_policy[state] = action
 
     @property
-    def linked_policy(self) -> policy_.Policy:
+    def linked_policy(self) -> policy.Policy:
         return self.greedy_policy
 
     def get_probability(self, state_: environment.State, action_: environment.Action) -> float:

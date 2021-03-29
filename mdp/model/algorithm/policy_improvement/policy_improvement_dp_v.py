@@ -2,7 +2,8 @@ from __future__ import annotations
 from typing import TYPE_CHECKING, Optional
 
 if TYPE_CHECKING:
-    from mdp.model import environment, agent, policy
+    from mdp.model import environment, agent
+    from mdp.model.policy.policy import Policy
 from mdp import common
 from mdp.model.algorithm import abstract
 
@@ -26,7 +27,7 @@ class PolicyImprovementDpV(abstract.DynamicProgrammingV):
             policy_stable = self._policy_improvement(do_call_back)
 
     def _policy_improvement(self, do_call_back: bool = False) -> bool:
-        policy_: policy.Policy = self._agent.target_policy
+        policy_: Policy = self._agent.target_policy
         # assert isinstance(policy_, policy.Deterministic)
         # policy_: policy.Deterministic
 

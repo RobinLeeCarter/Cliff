@@ -2,10 +2,10 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from mdp.model.environment import Action
+    from mdp.model.environment.action import Action
 
 from mdp import common
-from mdp.scenarios.position_move.model import action as pm
+from mdp.scenarios.position_move import action as pm
 
 
 def actions_list_factory(actions_list: common.ActionsList) -> list[Action]:

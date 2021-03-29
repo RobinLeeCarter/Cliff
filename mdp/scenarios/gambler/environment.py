@@ -4,7 +4,8 @@ from typing import TYPE_CHECKING, Optional
 import numpy as np
 
 if TYPE_CHECKING:
-    from mdp.model import policy   # , algorithm
+    from mdp.model.policy.policy import Policy
+    from mdp.model.policy.deterministic import Deterministic
     from mdp.model.algorithm.value_function import state_function
 
 from mdp import common
@@ -65,7 +66,7 @@ class Environment(environment.Environment):
     # endregion
 
     # region Operation
-    def initialize_policy(self, policy_: policy.Policy, policy_parameters: common.PolicyParameters):
+    def initialize_policy(self, policy_: Policy, policy_parameters: common.PolicyParameters):
         hit: bool
         for state in self.states:
             if state.is_terminal:
@@ -74,6 +75,7 @@ class Environment(environment.Environment):
                 initial_action = Action(stake=1)
             policy_[state] = initial_action
 
+    # noinspection PyUnusedLocal
     def insert_state_function_into_graph2d(self,
                                            comparison: common.Comparison,
                                            v: state_function.StateFunction,
@@ -102,11 +104,12 @@ class Environment(environment.Environment):
         g.has_grid = True
         g.has_legend = False
 
+    # noinspection PyUnusedLocal
     def insert_policy_into_graph2d(self,
                                    comparison: common.Comparison,
-                                   policy_: policy.Policy,
+                                   policy_: Policy,
                                    parameter: Optional[any] = None):
-        policy_: policy.Deterministic
+        policy_: Deterministic
 
         x_list: list[int] = []
         y_list: list[float] = []

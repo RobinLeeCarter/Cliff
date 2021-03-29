@@ -2,7 +2,8 @@ from __future__ import annotations
 
 from mdp import common
 
-from mdp.scenarios.position_move.model import environment, State
+from mdp.scenarios.position_move.state import State
+from mdp.scenarios.position_move import environment
 
 from mdp.scenarios.random_walk.dynamics import Dynamics
 from mdp.scenarios.random_walk.grid_world import GridWorld

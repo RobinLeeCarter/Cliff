@@ -38,7 +38,7 @@ SETUP_CODE = '''
 import timeit
 import time
 
-from mdp.scenarios.factory import environment_factory
+from mdp.scenarios.policy_factory import environment_factory
 from mdp.scenarios.jacks.state import State
 from mdp.scenarios.jacks.environment import Environment
 from mdp.scenarios.jacks import environment_parameters

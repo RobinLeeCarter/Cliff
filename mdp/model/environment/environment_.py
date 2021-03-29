@@ -3,7 +3,8 @@ from typing import Generator, Optional, TYPE_CHECKING
 from abc import ABC, abstractmethod
 
 if TYPE_CHECKING:
-    from mdp.model import algorithm, policy
+    from mdp.model import algorithm
+    from mdp.model.policy.policy import Policy
     from mdp.model.algorithm.value_function import state_function
 from mdp import common
 
@@ -76,7 +77,7 @@ class Environment(ABC):
     # endregion
 
     # region Operation
-    def initialize_policy(self, policy_: policy.Policy, policy_parameters: common.PolicyParameters):
+    def initialize_policy(self, policy_: Policy, policy_parameters: common.PolicyParameters):
         pass
 
     def insert_state_function_into_graph3d(self,
@@ -117,7 +118,7 @@ class Environment(ABC):
 
     def update_grid_value_functions(self,
                                     algorithm_: algorithm.Algorithm,
-                                    policy_: policy.Policy,
+                                    policy_: Policy,
                                     parameter: any = None):
         pass
 

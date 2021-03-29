@@ -2,7 +2,8 @@ from __future__ import annotations
 
 
 from mdp import common
-from mdp.scenarios.position_move.model import environment, GridWorld
+from mdp.scenarios.position_move.grid_world import GridWorld
+from mdp.scenarios.position_move import environment
 from mdp.scenarios.cliff.dynamics import Dynamics
 
 

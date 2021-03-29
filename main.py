@@ -13,7 +13,7 @@ def main():
     # comparison: common.Comparison = scenarios.jacks_policy_iteration_v()
     # comparison: common.Comparison = scenarios.jacks_value_iteration_v()
     # comparison: common.Comparison = scenarios.jacks_policy_iteration_q()
-    # comparison: common.Comparison = scenarios.windy_timestep()
+    comparison: common.Comparison = scenarios.windy_timestep()
     # comparison: common.Comparison = scenarios.windy_timestep(random_wind=True)
     # comparison: common.Comparison = scenarios.cliff_alpha_start()
     # comparison: common.Comparison = scenarios.cliff_alpha_end()
@@ -23,7 +23,7 @@ def main():
     # comparison: common.Comparison = scenarios.blackjack_evaluation_v()
     # comparison: common.Comparison = scenarios.blackjack_evaluation_q()
     # comparison: common.Comparison = scenarios.blackjack_control_es()
-    comparison: common.Comparison = scenarios.gambler_value_iteration_v()
+    # comparison: common.Comparison = scenarios.gambler_value_iteration_v()
 
     application.Application(comparison)
 

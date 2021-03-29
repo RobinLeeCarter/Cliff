@@ -3,7 +3,7 @@ from __future__ import annotations
 import random
 
 from mdp import common
-from mdp.scenarios.position_move.model import grid_world
+from mdp.scenarios.position_move import grid_world
 from mdp.scenarios.windy import environment_parameters
 
 

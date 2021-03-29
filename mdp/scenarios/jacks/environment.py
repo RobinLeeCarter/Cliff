@@ -4,7 +4,8 @@ from typing import TYPE_CHECKING, Optional
 import numpy as np
 
 if TYPE_CHECKING:
-    from mdp.model import algorithm, policy
+    from mdp.model import algorithm
+    from mdp.model.policy.policy import Policy
     from mdp.model.algorithm.value_function import state_function
 
 from mdp import common
@@ -14,7 +15,7 @@ from mdp.scenarios.jacks.state import State
 from mdp.scenarios.jacks.action import Action
 from mdp.scenarios.jacks.environment_parameters import EnvironmentParameters
 from mdp.scenarios.jacks.grid_world import GridWorld
-from mdp.scenarios.jacks.dynamics import Dynamics
+from mdp.scenarios.jacks.dynamics.dynamics import Dynamics
 
 
 class Environment(environment.Environment):
@@ -66,7 +67,7 @@ class Environment(environment.Environment):
     # endregion
 
     # region Operation
-    def initialize_policy(self, policy_: policy.Policy, policy_parameters: common.PolicyParameters):
+    def initialize_policy(self, policy_: Policy, policy_parameters: common.PolicyParameters):
         initial_action = Action(transfer_1_to_2=0)
         for state in self.states:
             # max_transfer = min(state.cars_cob_1, self._max_cars - state.cars_cob_2, self._max_transfers)
@@ -100,7 +101,7 @@ class Environment(environment.Environment):
 
     def update_grid_value_functions(self,
                                     algorithm_: algorithm.Algorithm,
-                                    policy_: policy.Policy,
+                                    policy_: Policy,
                                     parameter: any = None):
         # policy_: policy.Deterministic
         for state in self.states:

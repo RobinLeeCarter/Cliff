@@ -4,10 +4,10 @@ from typing import TYPE_CHECKING, Optional
 if TYPE_CHECKING:
     from mdp import common
     from mdp.model import environment
-from mdp.model.policy import policy_
+from mdp.model.policy import policy
 
 
-class NoPolicy(policy_.Policy):
+class NoPolicy(policy.Policy):
     def __init__(self, environment_: environment.Environment, policy_parameters: common.PolicyParameters):
         super().__init__(environment_, policy_parameters)
         # actions: list[environment.Action] = [action for action in environment_.actions()]

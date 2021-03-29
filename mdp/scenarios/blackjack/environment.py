@@ -4,7 +4,8 @@ from typing import TYPE_CHECKING, Optional
 import numpy as np
 
 if TYPE_CHECKING:
-    from mdp.model import algorithm, policy
+    from mdp.model import algorithm
+    from mdp.model.policy.policy import Policy
     from mdp.model.algorithm.value_function import state_function
 
 from mdp import common
@@ -80,7 +81,7 @@ class Environment(environment.Environment):
     # endregion
 
     # region Operation
-    def initialize_policy(self, policy_: policy.Policy, policy_parameters: common.PolicyParameters):
+    def initialize_policy(self, policy_: Policy, policy_parameters: common.PolicyParameters):
         hit: bool
         for state in self.states:
             # don't add a policy for terminal states at all
@@ -125,7 +126,7 @@ class Environment(environment.Environment):
 
     def update_grid_value_functions(self,
                                     algorithm_: algorithm.Algorithm,
-                                    policy_: policy.Policy,
+                                    policy_: Policy,
                                     parameter: any = None):
         usable_ace: bool = parameter
         # policy_: policy.Deterministic

@@ -4,10 +4,10 @@ from typing import List, TYPE_CHECKING
 if TYPE_CHECKING:
     from mdp.model import environment
 from mdp import common
-from mdp.model.policy import policy_
+from mdp.model.policy import policy
 
 
-class Random(policy_.Policy):
+class Random(policy.Policy):
     # fully random
     def __init__(self, environment_: environment.Environment, policy_parameters: common.PolicyParameters):
         super().__init__(environment_, policy_parameters)

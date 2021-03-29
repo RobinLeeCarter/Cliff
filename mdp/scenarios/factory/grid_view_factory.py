@@ -2,7 +2,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from mdp.view import grid_view as base_grid_view
+    from mdp.view.grid_view import GridView as BaseGridView
 from mdp import common
 from mdp.scenarios.position.grid_view import GridView as PositionGridView
 from mdp.scenarios.position_move.grid_view import GridView as PositionMoveGridView
@@ -10,7 +10,7 @@ from mdp.scenarios.jacks.grid_view import GridView as JacksGridView
 from mdp.scenarios.blackjack.grid_view import GridView as BlackjackGridView
 
 
-def grid_view_factory(grid_view_parameters: common.GridViewParameters) -> base_grid_view.GridView:
+def grid_view_factory(grid_view_parameters: common.GridViewParameters) -> BaseGridView:
     grid_view_type = grid_view_parameters.grid_view_type
     gvt = common.GridViewType
 

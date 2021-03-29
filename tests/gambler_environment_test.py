@@ -71,8 +71,6 @@ def gambler_test() -> bool:
     # print(response)
     # print()
 
-
-
     # print(state, action)
     # response: Response = environment.from_state_perform_action(state, action)
     # print(response)
@@ -110,6 +108,7 @@ def gambler_test() -> bool:
 def random_round(environment: Environment):
     response: Response = environment.start()
     state: State = response.state
+    # noinspection PyProtectedMember
     max_stake = min(state.capital, environment._max_capital-state.capital)
     stake = random.choice(range(1, max_stake+1))
     action = Action(stake=stake)

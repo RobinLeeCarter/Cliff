@@ -3,7 +3,8 @@ from typing import TYPE_CHECKING, Optional
 import abc
 
 if TYPE_CHECKING:
-    from mdp.model import environment, agent, policy
+    from mdp.model import environment, agent
+    from mdp.model.policy.policy import Policy
     from mdp import common
 from mdp.model.algorithm import value_function
 
@@ -56,7 +57,7 @@ class Algorithm(abc.ABC):
     def __repr__(self):
         return f"{self.title}"
 
-    def derive_v_from_q(self, policy_: Optional[policy.Policy] = None):
+    def derive_v_from_q(self, policy_: Optional[Policy] = None):
         if not policy_:
             policy_ = self._agent.policy
 

@@ -39,7 +39,7 @@ import timeit
 import time
 
 from mdp import common
-from mdp.scenarios.factory import environment_factory
+from mdp.scenarios.policy_factory import environment_factory
 from mdp.scenarios.jacks.state import State
 from mdp.scenarios.cliff import environment_parameters
 
