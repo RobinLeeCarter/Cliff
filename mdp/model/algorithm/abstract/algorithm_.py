@@ -46,8 +46,9 @@ class Algorithm(abc.ABC):
 
     def _make_policy_greedy_wrt_q(self):
         for state_ in self._environment.states:
-            # works for single policy or dual policies
-            self._agent.target_policy[state_] = self.Q.argmax_over_actions(state_)
+            if not state_.is_terminal:
+                # works for single policy or dual policies
+                self._agent.target_policy[state_] = self.Q.argmax_over_actions(state_)
 
     def print_q_coverage_statistics(self):
         self.Q.print_coverage_statistics()

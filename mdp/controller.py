@@ -39,8 +39,9 @@ class Controller:
             )
             self._view.graph.make_plot(self._comparison.graph_values)
 
-            # graph_values: common.GraphValues = self._model.breakdown.get_graph_values()
-            # self._view.graph.make_plot(graph_values)
+            if self._model.breakdown:
+                graph_values: common.GraphValues = self._model.breakdown.get_graph_values()
+                self._view.graph.make_plot(graph_values)
 
         g3d = self._comparison.graph3d_values
         if g3d.show_graph:
@@ -74,8 +75,8 @@ class Controller:
                     self._view.grid_view.demonstrate(self.new_episode_request)
 
     # region Model requests
-    def display_graph_2d(self, graph_values: common.GraphValues):
-        self._view.graph.make_plot(graph_values)
+    # def display_graph_2d(self, graph_values: common.GraphValues):
+    #     self._view.graph.make_plot(graph_values)
 
     def display_step(self, episode_: Optional[agent.Episode]):
         # if self._comparison.grid_view_parameters.show_step:

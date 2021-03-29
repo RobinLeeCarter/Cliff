@@ -9,7 +9,7 @@ def gambler_value_iteration_v() -> Comparison:
     comparison = Comparison(
         environment_parameters=EnvironmentParameters(
             environment_type=common.EnvironmentType.GAMBLER,
-            probability_heads=0.5,
+            probability_heads=0.4,
         ),
         comparison_settings=common.Settings(
             gamma=1.0,      # 0.99999
@@ -17,7 +17,7 @@ def gambler_value_iteration_v() -> Comparison:
                 policy_type=common.PolicyType.DETERMINISTIC,
             ),
             algorithm_parameters=common.AlgorithmParameters(
-                theta=0.001   # accuracy of policy_evaluation
+                theta=0.00001   # accuracy of policy_evaluation
             ),
             display_every_step=False
         ),

@@ -46,16 +46,13 @@ class ValueIterationDpV(abstract.DynamicProgrammingV):
                 print(f"iteration = {iteration}\tdelta={delta:.2f}")
             if self._step_callback:
                 cont = self._step_callback()
+
+            # if iteration == 2:
+            #     break
             iteration += 1
 
-        # get greedy policy
-        for state in self._environment.states:
-            if not state.is_terminal:
-                action_value: dict[environment.Action, float] = \
-                    {action: self._get_expected_return(state, action)
-                     for action in self._environment.actions_for_state(state)}
-                # argmax https://stackoverflow.com/questions/268272/getting-key-with-maximum-value-in-dictionary
-                self._agent.policy[state] = max(action_value, key=action_value.get)
+        self._make_policy_greedy_wrt_v(round_first=True)
+
         if iteration == self._iteration_timeout:
             print(f"Warning: Timed out at {iteration} iterations")
         else:
