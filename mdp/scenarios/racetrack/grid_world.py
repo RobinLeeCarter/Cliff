@@ -3,12 +3,12 @@ from __future__ import annotations
 import numpy as np
 
 from mdp import common
-from mdp.model import environment
+from mdp.model.environment import grid_world
 
 from mdp.scenarios.racetrack.environment_parameters import EnvironmentParameters
 
 
-class GridWorld(environment.GridWorld):
+class GridWorld(grid_world.GridWorld):
     """GridWorld doesn't know about states and actions it just deals in the rules of the grid"""
     def __init__(self, environment_parameters_: EnvironmentParameters):
         super().__init__(environment_parameters_)

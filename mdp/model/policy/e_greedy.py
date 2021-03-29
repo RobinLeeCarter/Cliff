@@ -3,32 +3,34 @@ from typing import TYPE_CHECKING
 
 from mdp import common
 if TYPE_CHECKING:
-    from mdp.model import environment
+    from mdp.model.environment.state import State
+    from mdp.model.environment.action import Action
+    from mdp.model.environment.environment import Environment
     from mdp.model.policy import policy
 from mdp.model.policy import random, deterministic
 
 
 class EGreedy(random.Random):
-    def __init__(self, environment_: environment.Environment, policy_parameters: common.PolicyParameters):
+    def __init__(self, environment_: Environment, policy_parameters: common.PolicyParameters):
         super().__init__(environment_, policy_parameters)
         self.greedy_policy: deterministic.Deterministic =\
             deterministic.Deterministic(self._environment, self._policy_parameters)
         self.epsilon = self._policy_parameters.epsilon
 
-    def _get_action(self, state: environment.State) -> environment.Action:
+    def _get_action(self, state: State) -> Action:
         if common.rng.uniform() > self.epsilon:
             return self.greedy_policy[state]
         else:
             return random.Random._get_action(self, state)
 
-    def __setitem__(self, state: environment.State, action: environment.Action):
+    def __setitem__(self, state: State, action: Action):
         self.greedy_policy[state] = action
 
     @property
     def linked_policy(self) -> policy.Policy:
         return self.greedy_policy
 
-    def get_probability(self, state_: environment.State, action_: environment.Action) -> float:
+    def get_probability(self, state_: State, action_: Action) -> float:
         self.set_possible_actions(state_)
         non_greedy_p = self.epsilon * (1.0 / len(self.possible_actions))
         if action_ == self.greedy_policy[state_]:

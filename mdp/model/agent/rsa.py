@@ -3,14 +3,15 @@ from typing import Optional, TYPE_CHECKING
 from dataclasses import dataclass
 
 if TYPE_CHECKING:
-    from mdp.model import environment
+    from mdp.model.environment.state import State
+    from mdp.model.environment.action import Action
 
 
 @dataclass
 class RSA:
     reward: Optional[float]
-    state: Optional[environment.State]
-    action: Optional[environment.Action]
+    state: Optional[State]
+    action: Optional[Action]
 
     @property
     def tuple(self) -> tuple:

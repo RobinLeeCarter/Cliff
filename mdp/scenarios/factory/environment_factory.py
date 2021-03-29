@@ -2,7 +2,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from mdp.model.environment.environment_ import Environment as BaseEnvironment
+    from mdp.model.environment.environment import Environment as BaseEnvironment
 from mdp import common
 from mdp.scenarios.cliff.environment import Environment as CliffEnvironment
 from mdp.scenarios.random_walk.environment import Environment as RandomWalkEnvironment

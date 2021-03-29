@@ -2,7 +2,9 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from mdp.model import environment, agent
+    from mdp.model.environment.action import Action
+    from mdp.model.environment.environment import Environment
+    from mdp.model.agent.agent import Agent
     from mdp.model.policy.policy import Policy
 from mdp import common
 from mdp.model.algorithm import abstract
@@ -10,8 +12,8 @@ from mdp.model.algorithm import abstract
 
 class PolicyImprovementDpQ(abstract.DynamicProgrammingQ):
     def __init__(self,
-                 environment_: environment.Environment,
-                 agent_: agent.Agent,
+                 environment_: Environment,
+                 agent_: Agent,
                  algorithm_parameters: common.AlgorithmParameters,
                  policy_parameters: common.PolicyParameters
                  ):
@@ -36,8 +38,8 @@ class PolicyImprovementDpQ(abstract.DynamicProgrammingQ):
 
         policy_stable: bool = True
         for state in self._environment.states:
-            old_action: environment.Action = policy_[state]
-            best_action: environment.Action = self.Q.argmax_over_actions(state)
+            old_action: Action = policy_[state]
+            best_action: Action = self.Q.argmax_over_actions(state)
             policy_[state] = best_action
             if old_action != best_action:
                 policy_stable = False

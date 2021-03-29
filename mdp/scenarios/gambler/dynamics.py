@@ -9,14 +9,14 @@ if TYPE_CHECKING:
 import random
 
 from mdp.common import Distribution
-from mdp.model import environment
+from mdp.model.environment import dynamics
 
 from mdp.scenarios.gambler.state import State
 from mdp.scenarios.gambler.response import Response
 from mdp.scenarios.gambler.enums import Toss, Result
 
 
-class Dynamics(environment.Dynamics):
+class Dynamics(dynamics.Dynamics):
     def __init__(self, environment_: Environment, environment_parameters: EnvironmentParameters):
         super().__init__(environment_, environment_parameters)
 

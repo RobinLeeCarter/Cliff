@@ -2,7 +2,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING, Optional
 
 if TYPE_CHECKING:
-    from mdp.model import agent
+    from mdp.model.agent.episode import Episode
 
 from mdp import common
 from mdp.model import model_
@@ -78,12 +78,12 @@ class Controller:
     # def display_graph_2d(self, graph_values: common.GraphValues):
     #     self._view.graph.make_plot(graph_values)
 
-    def display_step(self, episode_: Optional[agent.Episode]):
+    def display_step(self, episode_: Optional[Episode]):
         # if self._comparison.grid_view_parameters.show_step:
         self._view.grid_view.display_latest_step(episode_)
     # endregion
 
     # region View requests
-    def new_episode_request(self) -> agent.Episode:
+    def new_episode_request(self) -> Episode:
         return self._model.agent.generate_episode()
     # endregion

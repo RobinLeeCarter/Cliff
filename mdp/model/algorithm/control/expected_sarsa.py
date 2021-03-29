@@ -2,15 +2,17 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from mdp.model import environment, agent
+    from mdp.model.environment.state import State
+    from mdp.model.environment.environment import Environment
+    from mdp.model.agent.agent import Agent
 from mdp import common
 from mdp.model.algorithm import abstract
 
 
 class ExpectedSarsa(abstract.EpisodicOnline):
     def __init__(self,
-                 environment_: environment.Environment,
-                 agent_: agent.Agent,
+                 environment_: Environment,
+                 agent_: Agent,
                  algorithm_parameters: common.AlgorithmParameters,
                  policy_parameters: common.PolicyParameters
                  ):
@@ -41,7 +43,7 @@ class ExpectedSarsa(abstract.EpisodicOnline):
         # update policy to be in-line with Q
         self._agent.policy[prev_state] = self.Q.argmax_over_actions(prev_state)
 
-    def _get_expectation_over_a(self, state: environment.State) -> float:
+    def _get_expectation_over_a(self, state: State) -> float:
         expectation: float = 0.0
         for action in self._environment.actions:
             probability = self._agent.policy.get_probability(state, action)

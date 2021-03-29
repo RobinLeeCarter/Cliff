@@ -2,7 +2,7 @@ from __future__ import annotations
 from typing import Optional, TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from mdp.model import agent
+    from mdp.model.agent.episode import Episode
     
     from mdp.scenarios.position_move.action import Action
     from mdp.scenarios.position_move.state import State
@@ -12,7 +12,7 @@ from mdp.view import grid_view
 
 
 class GridView(grid_view.GridView):
-    def _frame_on_background_latest(self, episode_: agent.Episode):
+    def _frame_on_background_latest(self, episode_: Episode):
         last_state: Optional[State] = episode_.last_state
         agent_position: common.XY = last_state.position
         agent_move: Optional[common.XY] = None
@@ -33,7 +33,7 @@ class GridView(grid_view.GridView):
 
         self._draw_frame_on_background(agent_position, agent_move, prev_position, prev_move)
 
-    def _frame_on_background_for_t(self, episode_: agent.Episode, t: int):
+    def _frame_on_background_for_t(self, episode_: Episode, t: int):
         state: Optional[State] = episode_[t].state
         agent_position: common.XY = state.position
         agent_move: Optional[common.XY] = None

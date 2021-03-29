@@ -3,25 +3,27 @@ from typing import Optional, TYPE_CHECKING
 import abc
 
 if TYPE_CHECKING:
-    from mdp.model import environment, agent
+    from mdp.model.environment.environment import Environment
+    from mdp.model.agent.agent import Agent
+    from mdp.model.agent.episode import Episode
     from mdp import common
 from mdp.model.algorithm.abstract import episodic_
 
 
 class EpisodicMonteCarlo(episodic_.Episodic, abc.ABC):
     def __init__(self,
-                 environment_: environment.Environment,
-                 agent_: agent.Agent,
+                 environment_: Environment,
+                 agent_: Agent,
                  algorithm_parameters: common.AlgorithmParameters,
                  policy_parameters: common.PolicyParameters
                  ):
         super().__init__(environment_, agent_, algorithm_parameters, policy_parameters)
-        self._episode: Optional[agent.Episode] = None
+        self._episode: Optional[Episode] = None
         self._exit_episode: bool = False
         self._exploring_starts: bool = algorithm_parameters.exploring_starts
 
     @property
-    def episode(self) -> Optional[agent.Episode]:
+    def episode(self) -> Optional[Episode]:
         return self._episode
 
     def do_episode(self, episode_length_timeout: int):

@@ -4,7 +4,10 @@ from typing import Optional, TYPE_CHECKING, Callable
 import math
 
 if TYPE_CHECKING:
-    from mdp.model import environment
+    from mdp.model.environment.state import State
+    from mdp.model.environment.action import Action
+    from mdp.model.environment.response import Response
+    from mdp.model.environment.environment import Environment
 from mdp import common
 # renamed to avoid name conflicts
 from mdp.model import algorithm as algorithm_
@@ -15,9 +18,9 @@ from mdp.model.agent import episode as episode_
 
 class Agent:
     def __init__(self,
-                 environment_: environment.Environment,
+                 environment_: Environment,
                  verbose: bool = False):
-        self._environment: environment.Environment = environment_
+        self._environment: Environment = environment_
         self._verbose: bool = verbose
 
         self._policy: Optional[Policy] = None
@@ -33,15 +36,15 @@ class Agent:
 
         # always refers to values for time-step _t
         self.reward: Optional[float] = None
-        self.state: Optional[environment.State] = None
-        self.action: Optional[environment.Action] = None
+        self.state: Optional[State] = None
+        self.action: Optional[Action] = None
 
         # always refers to values for time-step _t-1
         self.prev_reward: Optional[float] = None
-        self.prev_state: Optional[environment.State] = None
-        self.prev_action: Optional[environment.Action] = None
+        self.prev_state: Optional[State] = None
+        self.prev_action: Optional[Action] = None
 
-        self._response: Optional[environment.Response] = None
+        self._response: Optional[Response] = None
 
         # trainer callback
         self._step_callback: Optional[Callable[[], bool]] = None
@@ -85,10 +88,10 @@ class Agent:
             raise NotImplementedError
 
         # set policy based on policy_parameters
-        self._algorithm = algorithm_.factory(environment_=self._environment,
-                                             agent_=self,
-                                             algorithm_parameters=settings.algorithm_parameters,
-                                             policy_parameters=settings.policy_parameters)
+        self._algorithm = algorithm_.algorithm_factory(environment_=self._environment,
+                                                       agent_=self,
+                                                       algorithm_parameters=settings.algorithm_parameters,
+                                                       policy_parameters=settings.policy_parameters)
         self._episode_length_timeout = settings.episode_length_timeout
         if isinstance(self._algorithm, algorithm_.Episodic):
             self._record_first_visits = self._algorithm.first_visit
@@ -152,7 +155,7 @@ class Agent:
             self.reward = self._response.reward
             self.state = self._response.state
 
-    def choose_action(self, action: Optional[environment.Action] = None):
+    def choose_action(self, action: Optional[Action] = None):
         """
         Have the policy choose an action
         We then have a complete r, s, a to add to episode

@@ -2,12 +2,16 @@ from __future__ import annotations
 from typing import Optional, TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from mdp.model import environment
+    from mdp.model.environment.environment import Environment
+    from mdp.model.agent.episode import Episode
+    from mdp.model.breakdown.breakdown import Breakdown
 
 import utils
 from mdp import controller, common
 from mdp.scenarios.factory import environment_factory
-from mdp.model import breakdown, trainer, agent
+from mdp.model.agent.agent import Agent
+from mdp.model.breakdown import factory
+from mdp.model.trainer import Trainer
 
 
 class Model:
@@ -15,10 +19,10 @@ class Model:
         self.verbose: bool = verbose
         self._controller: Optional[controller.Controller] = None
         self._comparison: Optional[common.Comparison] = None
-        self.environment: Optional[environment.Environment] = None
-        self.agent: Optional[agent.Agent] = None
-        self.breakdown: Optional[breakdown.Breakdown] = None
-        self.trainer: Optional[trainer.Trainer] = None
+        self.environment: Optional[Environment] = None
+        self.agent: Optional[Agent] = None
+        self.breakdown: Optional[Breakdown] = None
+        self.trainer: Optional[Trainer] = None
 
         self._cont: bool = True
 
@@ -31,10 +35,10 @@ class Model:
         self.environment = environment_factory.environment_factory(self._comparison.environment_parameters)
 
         # create agent (and it will create the algorithm and the policy when it is given Settings)
-        self.agent = agent.Agent(self.environment)
+        self.agent = Agent(self.environment)
 
-        self.breakdown: Optional[breakdown.Breakdown] = breakdown.factory(self._comparison)
-        self.trainer: trainer.Trainer = trainer.Trainer(
+        self.breakdown: Optional[Breakdown] = factory.breakdown_factory(self._comparison)
+        self.trainer: Trainer = Trainer(
             agent_=self.agent,
             breakdown_=self.breakdown,
             model_step_callback=self._display_step,
@@ -80,6 +84,6 @@ class Model:
                                                      policy_=policy_for_display,
                                                      parameter=parameter)
 
-    def _display_step(self, episode_: Optional[agent.Episode]):
+    def _display_step(self, episode_: Optional[Episode]):
         self.update_grid_value_functions()
         self._controller.display_step(episode_)

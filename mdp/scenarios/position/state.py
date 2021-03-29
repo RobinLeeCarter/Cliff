@@ -4,10 +4,10 @@ from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from mdp import common
-from mdp.model import environment
+from mdp.model.environment import state
 
 
 @dataclass(frozen=True)
-class State(environment.State):
+class State(state.State):
     # origin at bottom left
     position: common.XY

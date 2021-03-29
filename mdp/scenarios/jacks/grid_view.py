@@ -2,9 +2,8 @@ from __future__ import annotations
 from typing import TYPE_CHECKING, Optional  # , Optional
 
 if TYPE_CHECKING:
-    from mdp.model import agent, environment
+    from mdp.model.agent.episode import Episode
     from mdp.scenarios.jacks.grid_world import GridWorld
-    # from mdp.scenarios.position.state import State
 
 import pygame
 from matplotlib import colors
@@ -18,7 +17,7 @@ class GridView(grid_view.GridView):
         super().__init__(grid_view_parameters)
         self._grid_world: Optional[GridWorld] = self._grid_world
 
-    def set_gridworld(self, grid_world: environment.GridWorld):
+    def set_gridworld(self, grid_world: GridWorld):
         super().set_gridworld(grid_world)
         self._policy_color_normaliser = colors.Normalize(
             vmin=self._grid_world.policy_min,
@@ -35,11 +34,11 @@ class GridView(grid_view.GridView):
             sub_rect = self._get_sub_rect(rect, move=common.XY(x=0, y=0))
             self._center_text(surface, sub_rect, text)
 
-    def _frame_on_background_latest(self, episode_: agent.Episode):
+    def _frame_on_background_latest(self, episode_: Episode):
         raise NotImplementedError
         # self._draw_frame_on_background()
 
-    def _frame_on_background_for_t(self, episode: agent.Episode, t: int):
+    def _frame_on_background_for_t(self, episode: Episode, t: int):
         raise NotImplementedError
         # state: Optional[State] = episode[t].state
         # agent_position: common.XY = state.position

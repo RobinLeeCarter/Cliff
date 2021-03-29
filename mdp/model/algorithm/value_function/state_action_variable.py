@@ -4,15 +4,17 @@ from typing import TYPE_CHECKING
 import numpy as np
 
 if TYPE_CHECKING:
-    from mdp.model import environment
+    from mdp.model.environment.state import State
+    from mdp.model.environment.action import Action
+    from mdp.model.environment.environment import Environment
 
 
 class StateActionVariable:
     def __init__(self,
-                 environment_: environment.Environment,
+                 environment_: Environment,
                  initial_value: float = 0.0
                  ):
-        self._environment: environment.Environment = environment_
+        self._environment: Environment = environment_
         self._initial_value: float = initial_value
 
         self._values: np.ndarray = np.empty(
@@ -28,12 +30,12 @@ class StateActionVariable:
                 state_action_index = self._environment.state_action_index(state_, action_)
                 self._values[state_action_index] = self._initial_value
 
-    def __getitem__(self, state_action: tuple[environment.State, environment.Action]) -> float:
+    def __getitem__(self, state_action: tuple[State, Action]) -> float:
         state, action = state_action
         state_action_index = self._environment.state_action_index(state, action)
         return self._values[state_action_index]
 
-    def __setitem__(self, state_action: tuple[environment.State, environment.Action], value: float):
+    def __setitem__(self, state_action: tuple[State, Action], value: float):
         state, action = state_action
         state_action_index = self._environment.state_action_index(state, action)
         self._values[state_action_index] = value

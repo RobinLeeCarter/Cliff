@@ -9,7 +9,7 @@ if TYPE_CHECKING:
     from mdp.model.algorithm.value_function import state_function
 
 from mdp import common
-from mdp.model import environment
+from mdp.model.environment import environment
 
 from mdp.scenarios.blackjack.state import State
 from mdp.scenarios.blackjack.action import Action

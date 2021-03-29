@@ -3,21 +3,23 @@ from typing import TYPE_CHECKING, Optional, Callable
 
 if TYPE_CHECKING:
     from mdp import common
-    from mdp.model import breakdown, agent  # , algorithm
+    from mdp.model.agent.agent import Agent
+    from mdp.model.agent.episode import Episode
+    from mdp.model.breakdown.breakdown import Breakdown
 
 from mdp.model import algorithm
 
 
 class Trainer:
     def __init__(self,
-                 agent_: agent.Agent,
-                 breakdown_: Optional[breakdown.Breakdown],
-                 model_step_callback: Optional[Callable[[Optional[agent.Episode]], None]] = None,
+                 agent_: Agent,
+                 breakdown_: Optional[Breakdown],
+                 model_step_callback: Optional[Callable[[Optional[Episode]], None]] = None,
                  verbose: bool = False
                  ):
-        self._agent: agent.Agent = agent_
-        self._breakdown: Optional[breakdown.Breakdown] = breakdown_
-        self._model_step_callback: Optional[Callable[[Optional[agent.Episode]], None]] = model_step_callback
+        self._agent: Agent = agent_
+        self._breakdown: Optional[Breakdown] = breakdown_
+        self._model_step_callback: Optional[Callable[[Optional[Episode]], None]] = model_step_callback
         self._verbose = verbose
         self._cont: bool = True
 
@@ -29,11 +31,11 @@ class Trainer:
         self.max_timestep: int = 0  # max timestep across all runs
 
     @property
-    def episode(self) -> agent.Episode:
+    def episode(self) -> Episode:
         return self._agent.episode
 
     @property
-    def agent(self) -> agent.Agent:
+    def agent(self) -> Agent:
         return self._agent
 
     def train(self, settings: common.Settings):

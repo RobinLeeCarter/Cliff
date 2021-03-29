@@ -8,13 +8,13 @@ if TYPE_CHECKING:
     from mdp.scenarios.racetrack.grid_world import GridWorld
 
 from mdp import common
-from mdp.model import environment
+from mdp.model.environment import dynamics
 
 from mdp.scenarios.racetrack.state import State
 from mdp.scenarios.racetrack.response import Response
 
 
-class Dynamics(environment.Dynamics):
+class Dynamics(dynamics.Dynamics):
     def __init__(self, environment_: Environment, environment_parameters: EnvironmentParameters):
         super().__init__(environment_, environment_parameters)
 

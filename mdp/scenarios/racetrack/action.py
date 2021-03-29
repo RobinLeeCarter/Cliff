@@ -4,10 +4,10 @@ from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from mdp import common
-from mdp.model import environment
+from mdp.model.environment import action
 
 
 @dataclass(frozen=True)
-class Action(environment.Action):
+class Action(action.Action):
     # origin at bottom left
     acceleration: common.XY

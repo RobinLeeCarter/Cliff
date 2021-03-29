@@ -2,7 +2,7 @@ from __future__ import annotations
 from typing import Optional
 
 from mdp import common
-from mdp.model import environment
+from mdp.model.environment import environment
 
 from mdp.scenarios.racetrack.state import State
 from mdp.scenarios.racetrack.action import Action

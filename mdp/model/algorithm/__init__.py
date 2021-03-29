@@ -8,4 +8,4 @@ from mdp.model.algorithm.policy_evaluation import *
 from mdp.model.algorithm.policy_improvement import *
 
 # policy_factory to generate an algorithm from a Settings
-from mdp.model.algorithm.factory import factory
+from mdp.model.algorithm.factory import algorithm_factory

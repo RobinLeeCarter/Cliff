@@ -3,10 +3,10 @@ from __future__ import annotations
 import numpy as np
 
 from mdp import common
-from mdp.model.breakdown import recorder, breakdown_
+from mdp.model.breakdown import recorder, breakdown
 
 
-class EpisodeByTimestep(breakdown_.Breakdown):
+class EpisodeByTimestep(breakdown.Breakdown):
     def __init__(self, comparison: common.Comparison):
         super().__init__(comparison)
 

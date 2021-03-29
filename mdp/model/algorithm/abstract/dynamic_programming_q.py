@@ -3,22 +3,25 @@ from typing import TYPE_CHECKING
 import abc
 
 if TYPE_CHECKING:
-    from mdp.model import environment, agent
+    from mdp.model.environment.state import State
+    from mdp.model.environment.action import Action
+    from mdp.model.environment.environment import Environment
+    from mdp.model.agent.agent import Agent
     from mdp import common
 from mdp.model.algorithm.abstract import dynamic_programming
 
 
 class DynamicProgrammingQ(dynamic_programming.DynamicProgramming, abc.ABC):
     def __init__(self,
-                 environment_: environment.Environment,
-                 agent_: agent.Agent,
+                 environment_: Environment,
+                 agent_: Agent,
                  algorithm_parameters: common.AlgorithmParameters,
                  policy_parameters: common.PolicyParameters
                  ):
         super().__init__(environment_, agent_, algorithm_parameters, policy_parameters)
         self._create_q()
 
-    def _get_expected_return(self, state: environment.State, action: environment.Action) -> float:
+    def _get_expected_return(self, state: State, action: Action) -> float:
         # expected_return: Sum_over_s'_r(
         #   p(s',r|s,a).(r + γ.Sum_over_a'( π(a'|s').Q(s',a') ) )
         # )

@@ -2,16 +2,17 @@ from __future__ import annotations
 from typing import TYPE_CHECKING, Type
 
 if TYPE_CHECKING:
-    from mdp.model import environment, agent
+    from mdp.model.environment.environment import Environment
+    from mdp.model.agent.agent import Agent
 from mdp import common
 from mdp.model.algorithm import abstract, control, policy_evaluation, policy_improvement
 
 
-def factory(environment_: environment.Environment,
-            agent_: agent.Agent,
-            algorithm_parameters: common.Settings.algorithm_parameters,
-            policy_parameters: common.PolicyParameters
-            ) -> abstract.Algorithm:
+def algorithm_factory(environment_: Environment,
+                      agent_: Agent,
+                      algorithm_parameters: common.Settings.algorithm_parameters,
+                      policy_parameters: common.PolicyParameters
+                      ) -> abstract.Algorithm:
     a = common.AlgorithmType
     algorithm_lookup: dict[a, Type[abstract.Algorithm]] = {
         a.POLICY_EVALUATION_DP_V: policy_evaluation.PolicyEvaluationDpV,

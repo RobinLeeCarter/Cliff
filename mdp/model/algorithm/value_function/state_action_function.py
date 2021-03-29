@@ -5,15 +5,17 @@ from typing import TYPE_CHECKING
 import numpy as np
 
 if TYPE_CHECKING:
-    from mdp.model import environment
+    from mdp.model.environment.state import State
+    from mdp.model.environment.action import Action
+    from mdp.model.environment.environment import Environment
 
 
 class StateActionFunction:
     def __init__(self,
-                 environment_: environment.Environment,
+                 environment_: Environment,
                  initial_q_value: float
                  ):
-        self._environment: environment.Environment = environment_
+        self._environment: Environment = environment_
         self._initial_q_value: float = initial_q_value
 
         self._values: np.ndarray = np.empty(
@@ -35,7 +37,7 @@ class StateActionFunction:
                 else:
                     self._values[state_action_index] = self._initial_q_value
 
-    def __getitem__(self, state_action: tuple[environment.State, environment.Action]) -> float:
+    def __getitem__(self, state_action: tuple[State, Action]) -> float:
         state, action = state_action
         if state.is_terminal or action is None:
             return 0.0
@@ -43,12 +45,12 @@ class StateActionFunction:
             state_action_index = self._environment.state_action_index(state, action)
             return self._values[state_action_index]
 
-    def __setitem__(self, state_action: tuple[environment.State, environment.Action], value: float):
+    def __setitem__(self, state_action: tuple[State, Action], value: float):
         state, action = state_action
         state_action_index = self._environment.state_action_index(state, action)
         self._values[state_action_index] = value
 
-    def argmax_over_actions(self, state: environment.State) -> environment.Action:
+    def argmax_over_actions(self, state: State) -> Action:
         """set target_policy to argmax over a of Q breaking ties consistently"""
         # state_index = self.get_index_from_state(state_)
         # print(f"state_index {state_index}")
@@ -92,7 +94,7 @@ class StateActionFunction:
 
         return best_action
 
-    def max_over_actions(self, state: environment.State) -> float:
+    def max_over_actions(self, state: State) -> float:
         """max_over_a Q[state, a]"""
         state_index = self._environment.state_index[state]
         q_state: np.ndarray = self._values[state_index, :]

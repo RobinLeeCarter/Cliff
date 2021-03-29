@@ -2,15 +2,18 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from mdp.model import environment, agent
+    from mdp.model.environment.state import State
+    from mdp.model.environment.action import Action
+    from mdp.model.environment.environment import Environment
+    from mdp.model.agent.agent import Agent
 from mdp import common
 from mdp.model.algorithm import abstract
 
 
 class Sarsa(abstract.EpisodicOnline):
     def __init__(self,
-                 environment_: environment.Environment,
-                 agent_: agent.Agent,
+                 environment_: Environment,
+                 agent_: Agent,
                  algorithm_parameters: common.AlgorithmParameters,
                  policy_parameters: common.PolicyParameters
                  ):
@@ -32,11 +35,11 @@ class Sarsa(abstract.EpisodicOnline):
         self._agent.take_action()
         self._agent.choose_action()
 
-        prev_state: environment.State = self._agent.prev_state
-        prev_action: environment.Action = self._agent.prev_action
+        prev_state: State = self._agent.prev_state
+        prev_action: Action = self._agent.prev_action
         reward: float = self._agent.reward
-        state: environment.State = self._agent.state
-        action: environment.Action = self._agent.action
+        state: State = self._agent.state
+        action: Action = self._agent.action
 
         target = reward + self._gamma * self.Q[state, action]
         delta = target - self.Q[prev_state, prev_action]

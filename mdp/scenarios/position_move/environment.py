@@ -7,7 +7,7 @@ if TYPE_CHECKING:
     from mdp.model.policy.policy import Policy
 
 from mdp import common
-from mdp.model import environment
+from mdp.model.environment import environment
 from mdp.scenarios.factory import actions_list_factory
 
 from mdp.scenarios.position_move.state import State
@@ -64,7 +64,7 @@ class Environment(environment.Environment, abc.ABC):
                     v_value=algorithm_.V[state]
                 )
             if algorithm_.Q:
-                policy_action: Optional[environment.Action] = policy_[state]
+                policy_action: Optional[Action] = policy_[state]
                 policy_action: Action
                 policy_move: Optional[common.XY] = None
                 if policy_action:
