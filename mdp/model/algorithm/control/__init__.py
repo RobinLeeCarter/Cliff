@@ -6,3 +6,4 @@ from mdp.model.algorithm.control.on_policy_mc_control import OnPolicyMcControl
 from mdp.model.algorithm.control.off_policy_mc_control import OffPolicyMcControl
 from mdp.model.algorithm.control.policy_iteration_dp_q import PolicyIterationDpQ
 from mdp.model.algorithm.control.policy_iteration_dp_v import PolicyIterationDpV
+from mdp.model.algorithm.control.value_iteration_dp_v import ValueIterationDpV

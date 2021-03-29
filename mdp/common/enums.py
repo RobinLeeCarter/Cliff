@@ -26,6 +26,7 @@ class AlgorithmType(enum.IntEnum):
     POLICY_EVALUATION_DP_V = enum.auto()
     POLICY_IMPROVEMENT_DP_V = enum.auto()
     POLICY_ITERATION_DP_V = enum.auto()
+    VALUE_ITERATION_DP_V = enum.auto()
 
     POLICY_EVALUATION_DP_Q = enum.auto()
     POLICY_IMPROVEMENT_DP_Q = enum.auto()
@@ -65,6 +66,7 @@ class EnvironmentType(enum.IntEnum):
     RACETRACK = enum.auto()
     JACKS = enum.auto()
     BLACKJACK = enum.auto()
+    GAMBLER = enum.auto()
 
 
 class ActionsList(enum.IntEnum):

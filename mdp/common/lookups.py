@@ -6,6 +6,7 @@ algorithm_name: dict[enums.AlgorithmType, str] = {
     enums.AlgorithmType.POLICY_EVALUATION_DP_V: 'Policy Evaluation DP (V)',
     enums.AlgorithmType.POLICY_IMPROVEMENT_DP_V: 'Policy Improvement DP (V)',
     enums.AlgorithmType.POLICY_ITERATION_DP_V: 'Policy Iteration DP (V)',
+    enums.AlgorithmType.VALUE_ITERATION_DP_V: 'Value Iteration DP (V)',
 
     enums.AlgorithmType.POLICY_EVALUATION_DP_Q: 'Policy Evaluation DP (Q)',
     enums.AlgorithmType.POLICY_IMPROVEMENT_DP_Q: 'Policy Improvement DP (Q)',

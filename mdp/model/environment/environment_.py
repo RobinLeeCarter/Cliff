@@ -64,7 +64,7 @@ class Environment(ABC):
     def _build_actions(self):
         pass
 
-    # possible need to materialise this if it's slow since it will be at the bottom of the loop
+    # TODO: materialise this and remove generator
     def actions_for_state(self, state: State) -> Generator[Action, None, None]:
         """set A(s)"""
         for action in self.actions:
