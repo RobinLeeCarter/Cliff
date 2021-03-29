@@ -12,7 +12,7 @@ def gambler_value_iteration_v() -> Comparison:
             probability_heads=0.5,
         ),
         comparison_settings=common.Settings(
-            gamma=1.0,
+            gamma=1.0,      # 0.99999
             policy_parameters=common.PolicyParameters(
                 policy_type=common.PolicyType.DETERMINISTIC,
             ),

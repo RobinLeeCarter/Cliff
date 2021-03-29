@@ -4,7 +4,7 @@ from typing import TYPE_CHECKING, Optional
 import numpy as np
 
 if TYPE_CHECKING:
-    from mdp.model import policy, algorithm
+    from mdp.model import policy   # , algorithm
     from mdp.model.algorithm.value_function import state_function
 
 from mdp import common
@@ -78,12 +78,15 @@ class Environment(environment.Environment):
                                            comparison: common.Comparison,
                                            v: state_function.StateFunction,
                                            parameter: Optional[any] = None):
-        x_values = np.array([state.capital for state in self.states], dtype=int)
-        y_values = np.empty(shape=x_values.shape, dtype=float)
-
+        x_list: list[int] = []
+        y_list: list[float] = []
         for state in self.states:
-            x = state.capital
-            y_values[x] = v[state]
+            if not state.is_terminal:
+                x_list.append(state.capital)
+                y_list.append(v[state])
+                # print(state.capital, v[state])
+        x_values = np.array(x_list, dtype=int)
+        y_values = np.array(y_list, dtype=float)
 
         g = comparison.graph_values
         g.x_series = common.Series(title=g.x_label, values=x_values)
@@ -103,17 +106,18 @@ class Environment(environment.Environment):
                                    comparison: common.Comparison,
                                    policy_: policy.Policy,
                                    parameter: Optional[any] = None):
-        x_values = np.array([state.capital for state in self.states], dtype=int)
-        y_values = np.empty(shape=x_values.shape, dtype=float)
         policy_: policy.Deterministic
 
+        x_list: list[int] = []
+        y_list: list[float] = []
         for state in self.states:
-            x = state.capital
-            action: Action = policy_[state]
-            if action:
-                y_values[x] = float(action.stake)
-            else:
-                y_values[x] = 0.0
+            if not state.is_terminal:
+                x_list.append(state.capital)
+                action: Action = policy_[state]
+                y_list.append(float(action.stake))
+                # print(state.capital, v[state])
+        x_values = np.array(x_list, dtype=int)
+        y_values = np.array(y_list, dtype=float)
 
         g = comparison.graph_values
         g.x_series = common.Series(title=g.x_label, values=x_values)

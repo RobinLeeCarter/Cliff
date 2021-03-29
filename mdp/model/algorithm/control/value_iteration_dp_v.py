@@ -19,6 +19,10 @@ class ValueIterationDpV(abstract.DynamicProgrammingV):
         self.name = common.algorithm_name[self._algorithm_type]
         self.title = f"{self.name} θ={self._theta}"
 
+    # def initialize(self):
+    #     super().initialize()
+    #     # self._environment.initialize_value_function(self.V)
+
     def run(self):
         # policy_: policy.Policy = self._agent.target_policy
         # assert isinstance(policy_, policy.Deterministic)

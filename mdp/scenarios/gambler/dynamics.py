@@ -54,7 +54,10 @@ class Dynamics(environment.Dynamics):
         distribution: Distribution[State] = Distribution()
         for toss in [Toss.HEADS, Toss.TAILS]:
             probability = self._toss_distribution[toss]
-            new_capital = state.capital + action.stake
+            if toss == Toss.HEADS:
+                new_capital = state.capital + action.stake
+            else:
+                new_capital = state.capital - action.stake
             is_terminal: bool = (new_capital == 0 or new_capital == self._environment_parameters.max_capital)
             next_state = State(is_terminal=is_terminal, capital=new_capital)
             distribution[next_state] = probability
