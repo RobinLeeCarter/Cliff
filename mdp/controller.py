@@ -5,15 +5,21 @@ if TYPE_CHECKING:
     from mdp.model.agent.episode import Episode
 
 from mdp import common
-from mdp.model import model_
-from mdp.view import view_
+from mdp.model.model import Model
+from mdp.view.view import View
 
 
 class Controller:
-    def __init__(self, model: model_.Model, view: view_.View):
-        self._model: model_.Model = model
-        self._view: view_.View = view
+    def __init__(self):
+        self._model: Optional[Model] = None
+        self._view: Optional[View] = None
         self._comparison: Optional[common.Comparison] = None
+
+    def link_mvc(self, model: Model, view: View):
+        self._model: Model = model
+        self._view: View = view
+        self._model.set_controller(self)
+        self._view.set_controller(self)
 
     def build(self, comparison: common.Comparison):
         # self._view.open() to determine user environment only

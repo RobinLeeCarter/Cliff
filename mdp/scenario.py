@@ -3,36 +3,50 @@ from abc import ABC, abstractmethod
 from typing import Optional
 
 from mdp import common
-from mdp.model.model_ import Model
-from mdp.view.view_ import View
+from mdp.model.model import Model
+from mdp.view.view import View
 from mdp.controller import Controller
 
 
 class Scenario(ABC):
     def __init__(self, comparison_type: common.ComparisonType, scenario_type: common.ScenarioType):
-        self.comparison_type: common.ComparisonType = comparison_type
-        self.scenario_type: common.ScenarioType = scenario_type
-        self.comparison: Optional[common.Comparison] = None
+        self._comparison_type: common.ComparisonType = comparison_type
+        self._scenario_type: common.ScenarioType = scenario_type
+        self._comparison: Optional[common.Comparison] = None
 
-        self.model: Optional[Model] = None
-        self.view: Optional[View] = None
-        self.controller: Optional[Controller] = None
+        # self._model: Optional[Model] = None
+        # self._view: Optional[View] = None
+        # self._controller: Optional[Controller] = None
+
+        self._model: Model = self._get_model()
+        self._view: View = self._get_view()
+        self._controller: Controller = self._get_controller()
+        # self._model.set_controller(self._controller)
+        # self._view.set_controller(self._controller)
+        self._controller.link_mvc(self._model, self._view)
 
     def build(self):
-        self.comparison = self._get_comparison(self.comparison_type)
-        self.model = self.get_model()
-        self.view = self.get_view()
-        self.controller = self.get_controller()
+        self._set_comparison()
+        # self._comparison = self._get_comparison(self._comparison_type)
+        self._controller.build(self._comparison)
 
-    def get_model(self) -> Model:
+    def run(self):
+        self._controller.run()
+
+    def _get_model(self) -> Model:
         return Model()
 
-    def get_view(self) -> View:
+    def _get_view(self) -> View:
         return View()
 
-    def get_controller(self) -> Controller:
-        return Controller(self.model, self.view)
+    def _get_controller(self) -> Controller:
+        return Controller()
 
     @abstractmethod
-    def _get_comparison(self, comparison_type: common.ComparisonType) -> common.Comparison:
+    def _set_comparison(self):
         pass
+
+    # @abstractmethod
+    # def _get_comparison(self, comparison_type: common.ComparisonType) -> common.Comparison:
+    #     pass
+
