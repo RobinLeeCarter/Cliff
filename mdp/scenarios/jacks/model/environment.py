@@ -4,7 +4,6 @@ from typing import TYPE_CHECKING, Optional
 import numpy as np
 
 if TYPE_CHECKING:
-    from mdp.model.algorithm.abstract.algorithm_ import Algorithm
     from mdp.model.policy.policy import Policy
     from mdp.model.algorithm.value_function import state_function
 
@@ -15,7 +14,7 @@ from mdp.scenarios.jacks.model.state import State
 from mdp.scenarios.jacks.model.action import Action
 from mdp.scenarios.jacks.model.environment_parameters import EnvironmentParameters
 from mdp.scenarios.jacks.model.grid_world import GridWorld
-from mdp.scenarios.jacks.dynamics.dynamics import Dynamics
+from mdp.scenarios.jacks.model.dynamics.dynamics import Dynamics
 
 
 class Environment(environment.Environment):

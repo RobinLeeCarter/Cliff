@@ -1,7 +1,7 @@
 from scipy import stats
 
 from mdp.common import DictZero, Distribution
-from mdp.scenarios.jacks.dynamics.location_outcome import LocationOutcome
+from mdp.scenarios.jacks.model.dynamics.location_outcome import LocationOutcome
 
 
 class Location:

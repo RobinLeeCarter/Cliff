@@ -5,7 +5,7 @@ if TYPE_CHECKING:
     from mdp.scenarios.jacks.model.action import Action
     from mdp.scenarios.jacks.model.environment import Environment
     from mdp.scenarios.jacks.model.environment_parameters import EnvironmentParameters
-    from mdp.scenarios.jacks.dynamics.location_outcome import LocationOutcome
+    from mdp.scenarios.jacks.model.dynamics.location_outcome import LocationOutcome
 
 import random
 
@@ -14,7 +14,7 @@ from mdp.model.environment import dynamics
 
 from mdp.scenarios.jacks.model.state import State
 from mdp.scenarios.jacks.model.response import Response
-from mdp.scenarios.jacks.dynamics.location import Location
+from mdp.scenarios.jacks.model.dynamics.location import Location
 
 
 class Dynamics(dynamics.Dynamics):

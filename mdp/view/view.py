@@ -5,7 +5,8 @@ import pygame
 import pygame.freetype
 
 if TYPE_CHECKING:
-    from mdp import controller, common
+    from mdp import common
+    from mdp.controller import Controller
     from mdp.model.environment.grid_world import GridWorld
 from mdp.scenarios.factory import grid_view_factory
 from mdp.view import graph, graph3d, grid_view
@@ -13,7 +14,7 @@ from mdp.view import graph, graph3d, grid_view
 
 class View:
     def __init__(self):
-        self._controller: Optional[controller.Controller] = None
+        self._controller: Optional[Controller] = None
 
         pygame_pass, pygame_fail = pygame.init()
         if pygame_fail > 0:
@@ -23,8 +24,8 @@ class View:
         self.graph3d = graph3d.Graph3D()
         self.grid_view: Optional[grid_view.GridView] = None
 
-    def set_controller(self, controller_: controller.Controller):
-        self._controller = controller_
+    def set_controller(self, controller_: Controller):
+        self._controller: Controller = controller_
 
     def build(self, grid_world_: Optional[GridWorld], comparison: common.Comparison):
         if grid_world_:

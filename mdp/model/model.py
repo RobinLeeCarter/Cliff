@@ -5,9 +5,10 @@ if TYPE_CHECKING:
     from mdp.model.environment.environment import Environment
     from mdp.model.agent.episode import Episode
     from mdp.model.breakdown.breakdown import Breakdown
+    from mdp.controller import Controller
 
 import utils
-from mdp import controller, common
+from mdp import common
 from mdp.scenarios.factory import environment_factory
 from mdp.model.agent.agent import Agent
 from mdp.model.breakdown import factory
@@ -17,7 +18,7 @@ from mdp.model.trainer import Trainer
 class Model:
     def __init__(self, verbose: bool = False):
         self.verbose: bool = verbose
-        self._controller: Optional[controller.Controller] = None
+        self._controller: Optional[Controller] = None
         self._comparison: Optional[common.Comparison] = None
         self.environment: Optional[Environment] = None
         self.agent: Optional[Agent] = None
@@ -26,8 +27,8 @@ class Model:
 
         self._cont: bool = True
 
-    def set_controller(self, controller_: controller.Controller):
-        self._controller = controller_
+    def set_controller(self, controller_: Controller):
+        self._controller: Controller = controller_
 
     def build(self, comparison: common.Comparison):
         self._comparison = comparison
