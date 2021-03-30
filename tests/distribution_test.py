@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from mdp.common import Distribution
-from mdp.scenarios.jacks.state import State
+from mdp.scenarios.jacks.model.state import State
 
 
 x: Distribution[State] = Distribution()

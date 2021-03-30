@@ -3,9 +3,8 @@ import time
 
 from mdp import common
 from mdp.scenarios.factory import environment_factory
-from mdp.scenarios.jacks.state import State
-from mdp.scenarios.jacks import environment_parameters
-
+from mdp.scenarios.jacks.model.state import State
+from mdp.scenarios.jacks.model import environment_parameters
 
 environment_parameters_ = environment_parameters.default
 environment_ = environment_factory.environment_factory(environment_parameters_)

@@ -1,11 +1,11 @@
 from __future__ import annotations
 
 from mdp import common
-from mdp.scenarios.jacks.scenario import Scenario
-from mdp.scenarios.jacks.comparison import Comparison
+from mdp.scenarios.jacks.scenario.scenario import Scenario
+from mdp.scenarios.jacks.model.comparison import Comparison
 
 
-class PolicyIterationV(Scenario):
+class JacksPolicyIterationV(Scenario):
     def _set_comparison(self):
         self._comparison = Comparison(
             environment_parameters=self._environment_parameters,

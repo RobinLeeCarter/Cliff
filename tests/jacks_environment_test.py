@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from mdp import common
 from mdp.scenarios.factory import environment_factory
-from mdp.scenarios.jacks import scenario  # action, state,
+from mdp.scenarios.jacks.scenario import scenario
 
 
 def jacks_test() -> bool:

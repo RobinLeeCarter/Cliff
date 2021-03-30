@@ -4,7 +4,7 @@ import dataclasses
 from mdp.common import utils
 from mdp.common.dataclass import comparison
 
-from mdp.scenarios.jacks import environment_parameters
+from mdp.scenarios.jacks.model import environment_parameters
 
 
 @dataclasses.dataclass

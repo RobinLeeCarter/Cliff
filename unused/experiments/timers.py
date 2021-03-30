@@ -4,7 +4,7 @@ import time
 import random
 
 from mdp.scenarios.factory import environment_factory
-from mdp.scenarios.jacks import action
+from mdp.scenarios.jacks.model import action
 from mdp.scenarios.cliff import environment_parameters
 
 

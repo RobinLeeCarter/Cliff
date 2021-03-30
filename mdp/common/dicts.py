@@ -34,26 +34,26 @@ policy_name: dict[PolicyType, str] = {
     PolicyType.RANDOM: 'Random'
 }
 
-comparison_to_scenario: dict[ComparisonType, ScenarioType] = {
-    ComparisonType.BLACKJACK_EVALUATION_V: ScenarioType.BLACKJACK,
-    ComparisonType.BLACKJACK_EVALUATION_Q: ScenarioType.BLACKJACK,
-    ComparisonType.BLACKJACK_CONTROL_ES: ScenarioType.BLACKJACK,
-
-    ComparisonType.CLIFF_ALPHA_START: ScenarioType.CLIFF,
-    ComparisonType.CLIFF_ALPHA_END: ScenarioType.CLIFF,
-    ComparisonType.CLIFF_EPISODE: ScenarioType.CLIFF,
-
-    ComparisonType.GAMBLER_VALUE_ITERATION_V: ScenarioType.GAMBLER,
-
-    ComparisonType.JACKS_POLICY_ITERATION_V: ScenarioType.JACKS,
-    ComparisonType.JACKS_VALUE_ITERATION_V: ScenarioType.JACKS,
-    ComparisonType.JACKS_POLICY_ITERATION_Q: ScenarioType.JACKS,
-
-    ComparisonType.RACETRACK_EPISODE: ScenarioType.RACETRACK,
-
-    ComparisonType.RANDOM_WALK_EPISODE: ScenarioType.RANDOM_WALK,
-
-    ComparisonType.WINDY_TIMESTEP: ScenarioType.RANDOM_WALK,
-    ComparisonType.WINDY_TIMESTEP_RANDOM: ScenarioType.WINDY,
-}
+# comparison_to_scenario: dict[ComparisonType, ScenarioType] = {
+#     ComparisonType.BLACKJACK_EVALUATION_V: ScenarioType.BLACKJACK,
+#     ComparisonType.BLACKJACK_EVALUATION_Q: ScenarioType.BLACKJACK,
+#     ComparisonType.BLACKJACK_CONTROL_ES: ScenarioType.BLACKJACK,
+#
+#     ComparisonType.CLIFF_ALPHA_START: ScenarioType.CLIFF,
+#     ComparisonType.CLIFF_ALPHA_END: ScenarioType.CLIFF,
+#     ComparisonType.CLIFF_EPISODE: ScenarioType.CLIFF,
+#
+#     ComparisonType.GAMBLER_VALUE_ITERATION_V: ScenarioType.GAMBLER,
+#
+#     ComparisonType.JACKS_POLICY_ITERATION_V: ScenarioType.JACKS,
+#     ComparisonType.JACKS_VALUE_ITERATION_V: ScenarioType.JACKS,
+#     ComparisonType.JACKS_POLICY_ITERATION_Q: ScenarioType.JACKS,
+#
+#     ComparisonType.RACETRACK_EPISODE: ScenarioType.RACETRACK,
+#
+#     ComparisonType.RANDOM_WALK_EPISODE: ScenarioType.RANDOM_WALK,
+#
+#     ComparisonType.WINDY_TIMESTEP: ScenarioType.RANDOM_WALK,
+#     ComparisonType.WINDY_TIMESTEP_RANDOM: ScenarioType.WINDY,
+# }
 

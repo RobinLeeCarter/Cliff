@@ -6,7 +6,7 @@ import numpy as np
 
 from mdp import common
 from mdp.model.environment import grid_world
-from mdp.scenarios.jacks.environment_parameters import EnvironmentParameters
+from mdp.scenarios.jacks.model.environment_parameters import EnvironmentParameters
 
 
 class GridWorld(grid_world.GridWorld):

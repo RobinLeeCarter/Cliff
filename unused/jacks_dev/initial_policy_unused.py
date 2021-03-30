@@ -3,10 +3,9 @@ from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from mdp import common
-    from mdp.scenarios.jacks import environment
 
 from mdp.model import policy
-from mdp.scenarios.jacks import action
+from mdp.scenarios.jacks.model import action, environment
 
 
 def get_initial_policy(environment_: environment.Environment,

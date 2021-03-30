@@ -8,7 +8,7 @@ from mdp.scenarios.cliff.environment import Environment as CliffEnvironment
 from mdp.scenarios.random_walk.environment import Environment as RandomWalkEnvironment
 from mdp.scenarios.windy.environment import Environment as WindyEnvironment
 from mdp.scenarios.racetrack.environment import Environment as RacetrackEnvironment
-from mdp.scenarios.jacks.environment import Environment as JacksEnvironment
+from mdp.scenarios.jacks.model.environment import Environment as JacksEnvironment
 from mdp.scenarios.blackjack.environment import Environment as BlackjackEnvironment
 from mdp.scenarios.gambler.environment import Environment as GamblerEnvironment
 

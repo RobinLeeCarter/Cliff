@@ -9,9 +9,8 @@ from mdp.controller import Controller
 
 
 class Scenario(ABC):
-    def __init__(self, comparison_type: common.ComparisonType, scenario_type: common.ScenarioType):
+    def __init__(self, comparison_type: common.ComparisonType):
         self._comparison_type: common.ComparisonType = comparison_type
-        self._scenario_type: common.ScenarioType = scenario_type
         self._comparison: Optional[common.Comparison] = None
 
         # self._model: Optional[Model] = None
@@ -32,6 +31,7 @@ class Scenario(ABC):
 
     def run(self):
         self._controller.run()
+        self._controller.output()
 
     def _get_model(self) -> Model:
         return Model()

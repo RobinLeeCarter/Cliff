@@ -1,15 +1,14 @@
 from __future__ import annotations
 from abc import ABC
 
-from mdp import common
-from mdp import scenario
+from mdp import common, scenario
 # from mdp.scenarios.jacks.comparison import Comparison
-from mdp.scenarios.jacks.environment_parameters import EnvironmentParameters
+from mdp.scenarios.jacks.model.environment_parameters import EnvironmentParameters
 
 
 class Scenario(scenario.Scenario, ABC):
-    def __init__(self, comparison_type: common.ComparisonType, scenario_type: common.ScenarioType):
-        super().__init__(comparison_type, scenario_type)
+    def __init__(self, comparison_type: common.ComparisonType):
+        super().__init__(comparison_type)
         self._max_cars: int = 20      # problem statement = 20
         self._environment_parameters: EnvironmentParameters = EnvironmentParameters(
             environment_type=common.ScenarioType.JACKS,

@@ -25,12 +25,13 @@ class Controller:
         # self._view.open() to determine user environment only
         self._comparison = comparison
         self._model.build(self._comparison)
+        # TODO: don't pass grid_world here - too specific
         self._view.build(grid_world_=self._model.environment.grid_world, comparison=self._comparison)
 
     def run(self):
         self._model.run()
-        # print(self._model.agent.algorithm.V)
 
+    def output(self):
         if self._comparison.graph_values.show_graph:
             # TODO: Overhaul
             # self._model.environment.insert_state_function_into_graph2d(

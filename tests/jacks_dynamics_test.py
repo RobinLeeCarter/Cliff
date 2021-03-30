@@ -3,10 +3,10 @@ from __future__ import annotations
 
 from mdp.common import Distribution
 
-from mdp.scenarios.jacks.state import State
-from mdp.scenarios.jacks.action import Action
-from mdp.scenarios.jacks.response import Response
-from mdp.scenarios.jacks.scenario import jacks_policy_iteration_v
+from mdp.scenarios.jacks.model.state import State
+from mdp.scenarios.jacks.model.action import Action
+from mdp.scenarios.jacks.model.response import Response
+from mdp.scenarios.jacks.scenario.scenario import jacks_policy_iteration_v
 # from mdp.scenarios.jacks.dynamics.dynamics import Dynamics
 
 from mdp.scenarios.factory import environment_factory

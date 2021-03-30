@@ -6,7 +6,7 @@ if TYPE_CHECKING:
 from mdp import common
 from mdp.scenarios.position.grid_view import GridView as PositionGridView
 from mdp.scenarios.position_move.grid_view import GridView as PositionMoveGridView
-from mdp.scenarios.jacks.grid_view import GridView as JacksGridView
+from mdp.scenarios.jacks.view.grid_view import GridView as JacksGridView
 from mdp.scenarios.blackjack.grid_view import GridView as BlackjackGridView
 
 

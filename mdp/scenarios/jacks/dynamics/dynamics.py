@@ -2,9 +2,9 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from mdp.scenarios.jacks.action import Action
-    from mdp.scenarios.jacks.environment import Environment
-    from mdp.scenarios.jacks.environment_parameters import EnvironmentParameters
+    from mdp.scenarios.jacks.model.action import Action
+    from mdp.scenarios.jacks.model.environment import Environment
+    from mdp.scenarios.jacks.model.environment_parameters import EnvironmentParameters
     from mdp.scenarios.jacks.dynamics.location_outcome import LocationOutcome
 
 import random
@@ -12,8 +12,8 @@ import random
 from mdp.common import Distribution
 from mdp.model.environment import dynamics
 
-from mdp.scenarios.jacks.state import State
-from mdp.scenarios.jacks.response import Response
+from mdp.scenarios.jacks.model.state import State
+from mdp.scenarios.jacks.model.response import Response
 from mdp.scenarios.jacks.dynamics.location import Location
 
 

@@ -3,25 +3,25 @@ from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from mdp.scenario import Scenario as BaseScenario
-    from mdp.model.environment.environment import Environment as BaseEnvironment
 from mdp import common
 
-from mdp.scenarios.jacks.scenario import Scenario as JacksScenario
-
-from mdp.scenarios.cliff.environment import Environment as CliffEnvironment
-from mdp.scenarios.random_walk.environment import Environment as RandomWalkEnvironment
-from mdp.scenarios.windy.environment import Environment as WindyEnvironment
-from mdp.scenarios.racetrack.environment import Environment as RacetrackEnvironment
-
-from mdp.scenarios.blackjack.environment import Environment as BlackjackEnvironment
-from mdp.scenarios.gambler.environment import Environment as GamblerEnvironment
+from mdp.scenarios.jacks.scenario.jacks_policy_iteration_v import JacksPolicyIterationV
+from mdp.scenarios.jacks.scenario.jacks_policy_iteration_q import JacksPolicyIterationQ
+from mdp.scenarios.jacks.scenario.jacks_value_iteration_v import JacksValueIterationV
 
 
 def scenario_factory(comparison_type: common.ComparisonType) -> BaseScenario:
-    scenario_type = common.comparison_to_scenario[comparison_type]
-    st = common.ScenarioType
-    if scenario_type == st.JACKS:
-        scenario = JacksScenario(comparison_type, scenario_type)
+    ct = common.ComparisonType
+    if comparison_type == ct.JACKS_POLICY_ITERATION_V:
+        scenario = JacksPolicyIterationV(comparison_type)
+    elif comparison_type == ct.JACKS_POLICY_ITERATION_Q:
+        scenario = JacksPolicyIterationQ(comparison_type)
+    elif comparison_type == ct.JACKS_VALUE_ITERATION_V:
+        scenario = JacksValueIterationV(comparison_type)
+
+    # elif comparison_type == ct.JACKS_VALUE_ITERATION_V:
+    #     scenario = JacksValueIterationV(comparison_type)
+
     # elif environment_type == et.RANDOM_WALK:
     #     environment_ = RandomWalkEnvironment(environment_parameters)
     # elif environment_type == et.WINDY:
