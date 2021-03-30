@@ -8,7 +8,7 @@ from mdp.scenarios.gambler.environment_parameters import EnvironmentParameters
 def gambler_value_iteration_v() -> Comparison:
     comparison = Comparison(
         environment_parameters=EnvironmentParameters(
-            environment_type=common.EnvironmentType.GAMBLER,
+            environment_type=common.ScenarioType.GAMBLER,
             probability_heads=0.4,
         ),
         comparison_settings=common.Settings(

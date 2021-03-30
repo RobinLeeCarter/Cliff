@@ -59,14 +59,14 @@ class DualPolicyRelationship(enum.IntEnum):
     INDEPENDENT_POLICIES = enum.auto()
 
 
-class EnvironmentType(enum.IntEnum):
+class ScenarioType(enum.IntEnum):
+    BLACKJACK = enum.auto()
     CLIFF = enum.auto()
+    GAMBLER = enum.auto()
+    JACKS = enum.auto()
+    RACETRACK = enum.auto()
     RANDOM_WALK = enum.auto()
     WINDY = enum.auto()
-    RACETRACK = enum.auto()
-    JACKS = enum.auto()
-    BLACKJACK = enum.auto()
-    GAMBLER = enum.auto()
 
 
 class ActionsList(enum.IntEnum):

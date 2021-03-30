@@ -19,7 +19,7 @@ class EnvironmentParameters(common.EnvironmentParameters):
 
 
 default: EnvironmentParameters = EnvironmentParameters(
-    environment_type=common.EnvironmentType.RACETRACK,
+    environment_type=common.ScenarioType.RACETRACK,
     verbose=False,
     grid=grids.TRACK_1,
     min_velocity=0,

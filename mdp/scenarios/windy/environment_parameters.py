@@ -17,7 +17,7 @@ class EnvironmentParameters(common.EnvironmentParameters):
 
 
 default: EnvironmentParameters = EnvironmentParameters(
-    environment_type=common.EnvironmentType.WINDY,
+    environment_type=common.ScenarioType.WINDY,
     actions_list=common.ActionsList.FOUR_MOVES,
     grid=grids.GRID_1,
     verbose=False,

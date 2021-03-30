@@ -7,7 +7,7 @@ from mdp.scenarios.position_move import action, state
 
 def random_walk_test() -> bool:
     environment_parameters = common.EnvironmentParameters(
-        environment_type=common.EnvironmentType.RANDOM_WALK,
+        environment_type=common.ScenarioType.RANDOM_WALK,
         actions_list=common.ActionsList.NO_ACTIONS
     )
     environment_ = environment_factory.environment_factory(environment_parameters)

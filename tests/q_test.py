@@ -8,7 +8,7 @@ from mdp.scenarios.position_move import action, state
 
 def q_test() -> bool:
     environment_parameters = common.EnvironmentParameters(
-        environment_type=common.EnvironmentType.CLIFF,
+        environment_type=common.ScenarioType.CLIFF,
         actions_list=common.ActionsList.FOUR_MOVES
     )
     environment_ = environment_factory.environment_factory(environment_parameters)

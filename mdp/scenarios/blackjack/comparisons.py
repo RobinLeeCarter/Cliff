@@ -8,7 +8,7 @@ from mdp.scenarios.blackjack.environment_parameters import EnvironmentParameters
 def blackjack_evaluation_v() -> Comparison:
     comparison = Comparison(
         environment_parameters=EnvironmentParameters(
-            environment_type=common.EnvironmentType.BLACKJACK,
+            environment_type=common.ScenarioType.BLACKJACK,
         ),
         comparison_settings=common.Settings(
             gamma=1.0,
@@ -53,7 +53,7 @@ def blackjack_evaluation_v() -> Comparison:
 def blackjack_evaluation_q() -> Comparison:
     comparison = Comparison(
         environment_parameters=EnvironmentParameters(
-            environment_type=common.EnvironmentType.BLACKJACK,
+            environment_type=common.ScenarioType.BLACKJACK,
         ),
         comparison_settings=common.Settings(
             gamma=1.0,
@@ -99,7 +99,7 @@ def blackjack_evaluation_q() -> Comparison:
 def blackjack_control_es() -> Comparison:
     comparison = Comparison(
         environment_parameters=EnvironmentParameters(
-            environment_type=common.EnvironmentType.BLACKJACK,
+            environment_type=common.ScenarioType.BLACKJACK,
         ),
         comparison_settings=common.Settings(
             gamma=1.0,

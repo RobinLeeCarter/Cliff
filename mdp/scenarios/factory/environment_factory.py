@@ -15,7 +15,7 @@ from mdp.scenarios.gambler.environment import Environment as GamblerEnvironment
 
 def environment_factory(environment_parameters: common.EnvironmentParameters) -> BaseEnvironment:
     environment_type = environment_parameters.environment_type
-    et = common.EnvironmentType
+    et = common.ScenarioType
 
     if environment_type == et.CLIFF:
         environment_ = CliffEnvironment(environment_parameters)

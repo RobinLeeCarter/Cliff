@@ -13,7 +13,7 @@ class EnvironmentParameters(common.EnvironmentParameters):
 
 
 default: EnvironmentParameters = EnvironmentParameters(
-    environment_type=common.EnvironmentType.GAMBLER,
+    environment_type=common.ScenarioType.GAMBLER,
     probability_heads=0.5,
     max_capital=100,
     verbose=False,

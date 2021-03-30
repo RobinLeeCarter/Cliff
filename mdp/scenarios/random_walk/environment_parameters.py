@@ -17,7 +17,7 @@ class EnvironmentParameters(common.EnvironmentParameters):
 
 
 default: EnvironmentParameters = EnvironmentParameters(
-    environment_type=common.EnvironmentType.RANDOM_WALK,
+    environment_type=common.ScenarioType.RANDOM_WALK,
     actions_list=common.ActionsList.NO_ACTIONS,
     grid=grids.GRID,
     verbose=False,

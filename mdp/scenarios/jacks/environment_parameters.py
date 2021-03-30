@@ -22,7 +22,7 @@ class EnvironmentParameters(common.EnvironmentParameters):
 
 
 default: EnvironmentParameters = EnvironmentParameters(
-    environment_type=common.EnvironmentType.JACKS,
+    environment_type=common.ScenarioType.JACKS,
     max_cars=20,
     max_transfers=5,
     rental_rate_1=3.0,

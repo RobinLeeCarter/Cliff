@@ -12,7 +12,7 @@ class EnvironmentParameters(common.EnvironmentParameters):
 
 
 default: EnvironmentParameters = EnvironmentParameters(
-    environment_type=common.EnvironmentType.BLACKJACK,
+    environment_type=common.ScenarioType.BLACKJACK,
     verbose=False,
 )
 

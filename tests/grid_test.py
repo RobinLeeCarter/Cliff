@@ -8,7 +8,7 @@ from mdp.scenarios.factory import environment_factory
 
 def grid_test() -> bool:
     environment_parameters = common.EnvironmentParameters(
-        environment_type=common.EnvironmentType.CLIFF,
+        environment_type=common.ScenarioType.CLIFF,
         actions_list=common.ActionsList.FOUR_MOVES
     )
     cliff = environment_factory.environment_factory(environment_parameters)

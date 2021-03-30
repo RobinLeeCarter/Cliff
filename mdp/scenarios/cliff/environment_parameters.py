@@ -13,7 +13,7 @@ class EnvironmentParameters(common.EnvironmentParameters):
 
 
 default: EnvironmentParameters = EnvironmentParameters(
-    environment_type=common.EnvironmentType.CLIFF,
+    environment_type=common.ScenarioType.CLIFF,
     actions_list=common.ActionsList.FOUR_MOVES,
     grid=grids.CLIFF_1,
     verbose=False,
