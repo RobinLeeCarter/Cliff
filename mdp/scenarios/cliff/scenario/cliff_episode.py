@@ -45,4 +45,8 @@ class CliffEpisode(Scenario):
                 y_min=-100,
                 y_max=0,
             ),
+            grid_view_parameters=common.GridViewParameters(
+                show_demo=True,
+                show_q=True
+            )
         )
