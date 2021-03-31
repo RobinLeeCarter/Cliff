@@ -1,5 +1,5 @@
 from __future__ import annotations
-from typing import TYPE_CHECKING, Optional
+from typing import TYPE_CHECKING
 
 import numpy as np
 
@@ -20,7 +20,6 @@ from mdp.scenarios.gambler.model.dynamics import Dynamics
 
 class Environment(environment.Environment):
     def __init__(self, environment_parameters: EnvironmentParameters):
-
         super().__init__(environment_parameters)
 
         # super().__init__(environment_parameters_, grid_world_)
@@ -30,6 +29,7 @@ class Environment(environment.Environment):
         self.actions: list[Action] = self.actions
         self._state: State = self._state
         self._action: Action = self._action
+        self._environment_parameters: EnvironmentParameters = self._environment_parameters
 
         self._max_capital: int = environment_parameters.max_capital
 

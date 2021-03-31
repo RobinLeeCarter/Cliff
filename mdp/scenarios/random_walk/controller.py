@@ -2,8 +2,8 @@ from __future__ import annotations
 from typing import Optional, TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from mdp.scenarios.racetrack.model.model import Model
-    from mdp.scenarios.racetrack.view.view import View
+    from mdp.scenarios.random_walk.model.model import Model
+    from mdp.scenarios.random_walk.view.view import View
 
 from mdp import controller
 
@@ -17,8 +17,5 @@ class Controller(controller.Controller):
     def output(self):
         self._breakdown_graph()
 
-        # prep for output
-        self._model.environment.grid_world.skid_probability = 0.0
-        self._model.switch_to_target_policy()
-        # output demo
-        self._view.grid_view.demonstrate(self.new_episode_request)
+        self._model.update_grid_value_functions()
+        self._view.grid_view.display_latest_step()

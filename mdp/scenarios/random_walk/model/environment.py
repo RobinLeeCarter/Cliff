@@ -5,8 +5,8 @@ from mdp import common
 from mdp.scenarios.position_move.model.state import State
 from mdp.scenarios.position_move.model import environment
 
-from mdp.scenarios.random_walk.dynamics import Dynamics
-from mdp.scenarios.random_walk.grid_world import GridWorld
+from mdp.scenarios.random_walk.model.dynamics import Dynamics
+from mdp.scenarios.random_walk.model.grid_world import GridWorld
 
 
 class Environment(environment.Environment):

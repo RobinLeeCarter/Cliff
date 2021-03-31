@@ -80,6 +80,10 @@ class Controller:
                 if gvp.show_demo:
                     self._view.grid_view.demonstrate(self.new_episode_request)
 
+    def _breakdown_graph(self):
+        graph_values: common.GraphValues = self._model.breakdown.get_graph_values()
+        self._view.graph.make_plot(graph_values)
+
     # region Model requests
     # def display_graph_2d(self, graph_values: common.GraphValues):
     #     self._view.graph.make_plot(graph_values)

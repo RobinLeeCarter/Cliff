@@ -118,8 +118,7 @@ class Environment(ABC):
 
     def update_grid_value_functions(self,
                                     algorithm_: Algorithm,
-                                    policy_: Policy,
-                                    parameter: any = None):
+                                    policy_: Policy):
         pass
 
     def is_valued_state(self, state: State) -> bool:

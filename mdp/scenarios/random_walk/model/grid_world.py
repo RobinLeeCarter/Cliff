@@ -7,7 +7,7 @@ import numpy as np
 from mdp import common
 from mdp.scenarios.position_move.model import grid_world
 
-from mdp.scenarios.random_walk.environment_parameters import EnvironmentParameters
+from mdp.scenarios.random_walk.model.environment_parameters import EnvironmentParameters
 
 
 class GridWorld(grid_world.GridWorld):

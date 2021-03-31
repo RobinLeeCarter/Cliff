@@ -7,7 +7,7 @@ import numpy as np
 
 from mdp import common
 
-from mdp.scenarios.random_walk import grids
+from mdp.scenarios.random_walk.model import grids
 
 
 @dataclasses.dataclass

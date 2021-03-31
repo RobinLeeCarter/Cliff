@@ -54,8 +54,7 @@ class Environment(environment.Environment, abc.ABC):
     # region Operation
     def update_grid_value_functions(self,
                                     algorithm_: Algorithm,
-                                    policy_: Policy,
-                                    parameter: any = None
+                                    policy_: Policy
                                     ):
         for state in self.states:
             if algorithm_.V:

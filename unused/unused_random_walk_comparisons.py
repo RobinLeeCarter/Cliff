@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from mdp import common
 
-from mdp.scenarios.random_walk.comparison import Comparison
+from mdp.scenarios.random_walk.scenario.comparison import Comparison
 
 
 def random_walk_episode() -> Comparison:
