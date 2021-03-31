@@ -4,8 +4,8 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from mdp.view.grid_view import GridView as BaseGridView
 from mdp import common
-from mdp.scenarios.position.grid_view import GridView as PositionGridView
-from mdp.scenarios.position_move.grid_view import GridView as PositionMoveGridView
+from mdp.scenarios.position.view.grid_view import GridView as PositionGridView
+from mdp.scenarios.position_move.view.grid_view import GridView as PositionMoveGridView
 from mdp.scenarios.jacks.view.grid_view import GridView as JacksGridView
 from mdp.scenarios.blackjack.view.grid_view import GridView as BlackjackGridView
 

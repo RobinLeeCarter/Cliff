@@ -3,15 +3,15 @@ from typing import TYPE_CHECKING, Optional
 from abc import ABC
 
 if TYPE_CHECKING:
-    from mdp.scenarios.position_move.action import Action
-    from mdp.scenarios.position_move.environment import Environment
-    from mdp.scenarios.position_move.grid_world import GridWorld
+    from mdp.scenarios.position_move.model.action import Action
+    from mdp.scenarios.position_move.model.environment import Environment
+    from mdp.scenarios.position_move.model.grid_world import GridWorld
     from mdp.common import EnvironmentParameters
 
 from mdp import common
 from mdp.model.environment import dynamics
 
-from mdp.scenarios.position_move.state import State
+from mdp.scenarios.position_move.model.state import State
 
 
 class Dynamics(dynamics.Dynamics, ABC):

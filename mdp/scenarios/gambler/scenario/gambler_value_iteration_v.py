@@ -3,7 +3,7 @@ from __future__ import annotations
 from mdp import common
 from mdp.scenarios.gambler.scenario.scenario import Scenario
 from mdp.scenarios.gambler.scenario.comparison import Comparison
-from mdp.scenarios.gambler.model.environment_parameters import EnvironmentParameters
+# from mdp.scenarios.gambler.model.environment_parameters import EnvironmentParameters
 
 
 class GamblerValueIterationV(Scenario):

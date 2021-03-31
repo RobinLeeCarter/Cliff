@@ -2,11 +2,11 @@ from __future__ import annotations
 from typing import TYPE_CHECKING, Optional
 
 if TYPE_CHECKING:
-    from mdp.scenarios.jacks.controller import Controller
+    from mdp.scenarios.racetrack.controller import Controller
     from mdp import common
 
 from mdp.view import view
-from mdp.scenarios.jacks.view.grid_view import GridView
+from mdp.scenarios.position.view.grid_view import GridView
 
 
 class View(view.View):

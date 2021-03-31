@@ -4,7 +4,7 @@ from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from mdp import common
-from mdp.scenarios.position_move import environment
+from mdp.scenarios.position_move.model import environment
 
 from mdp.scenarios.windy.grid_world import GridWorld
 from mdp.scenarios.windy.dynamics import Dynamics

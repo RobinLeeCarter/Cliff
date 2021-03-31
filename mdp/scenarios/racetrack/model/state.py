@@ -4,7 +4,7 @@ from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from mdp import common
-from mdp.scenarios.position import state
+from mdp.scenarios.position.model import state
 
 
 @dataclass(frozen=True)

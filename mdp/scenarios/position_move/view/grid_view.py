@@ -4,8 +4,8 @@ from typing import Optional, TYPE_CHECKING
 if TYPE_CHECKING:
     from mdp.model.agent.episode import Episode
     
-    from mdp.scenarios.position_move.action import Action
-    from mdp.scenarios.position_move.state import State
+    from mdp.scenarios.position_move.model.action import Action
+    from mdp.scenarios.position_move.model.state import State
 
 from mdp import common
 from mdp.view import grid_view

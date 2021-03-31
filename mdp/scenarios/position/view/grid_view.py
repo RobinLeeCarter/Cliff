@@ -3,7 +3,7 @@ from typing import Optional, TYPE_CHECKING
 
 if TYPE_CHECKING:
     from mdp.model.agent.episode import Episode
-    from mdp.scenarios.position.state import State
+    from mdp.scenarios.position.model.state import State
 
 from mdp import common
 from mdp.view import grid_view

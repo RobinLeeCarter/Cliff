@@ -2,16 +2,16 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from mdp.scenarios.racetrack.action import Action
-    from mdp.scenarios.racetrack.environment import Environment
-    from mdp.scenarios.racetrack.environment_parameters import EnvironmentParameters
-    from mdp.scenarios.racetrack.grid_world import GridWorld
+    from mdp.scenarios.racetrack.model.action import Action
+    from mdp.scenarios.racetrack.model.environment import Environment
+    from mdp.scenarios.racetrack.model.environment_parameters import EnvironmentParameters
+    from mdp.scenarios.racetrack.model.grid_world import GridWorld
 
 from mdp import common
 from mdp.model.environment import dynamics
 
-from mdp.scenarios.racetrack.state import State
-from mdp.scenarios.racetrack.response import Response
+from mdp.scenarios.racetrack.model.state import State
+from mdp.scenarios.racetrack.model.response import Response
 
 
 class Dynamics(dynamics.Dynamics):

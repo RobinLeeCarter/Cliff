@@ -3,7 +3,7 @@ from __future__ import annotations
 from mdp import common
 from mdp.model.algorithm.value_function import state_action_function
 from unused import unused_environment_factory
-from mdp.scenarios.position_move import action, state
+from mdp.scenarios.position_move.model import action, state
 
 
 def q_test() -> bool:

@@ -4,11 +4,11 @@ from typing import Optional
 from mdp import common
 from mdp.model.environment import environment
 
-from mdp.scenarios.racetrack.state import State
-from mdp.scenarios.racetrack.action import Action
-from mdp.scenarios.racetrack.grid_world import GridWorld
-from mdp.scenarios.racetrack.dynamics import Dynamics
-from mdp.scenarios.racetrack.environment_parameters import EnvironmentParameters
+from mdp.scenarios.racetrack.model.state import State
+from mdp.scenarios.racetrack.model.action import Action
+from mdp.scenarios.racetrack.model.grid_world import GridWorld
+from mdp.scenarios.racetrack.model.dynamics import Dynamics
+from mdp.scenarios.racetrack.model.environment_parameters import EnvironmentParameters
 
 
 class Environment(environment.Environment):

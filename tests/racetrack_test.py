@@ -2,7 +2,8 @@ from __future__ import annotations
 
 from mdp import common
 from unused import unused_environment_factory
-from mdp.scenarios.racetrack import state, action, comparison, environment_parameters, grids
+from mdp.scenarios.racetrack.scenario import comparison
+from mdp.scenarios.racetrack.model import action, grids, state, environment_parameters
 
 
 def racetrack_test() -> bool:

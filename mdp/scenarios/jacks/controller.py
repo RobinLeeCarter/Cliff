@@ -2,11 +2,11 @@ from __future__ import annotations
 from typing import Optional, TYPE_CHECKING
 
 if TYPE_CHECKING:
+    from mdp.scenarios.jacks.model.model import Model
     from mdp.model.agent.agent import Agent
     from mdp.scenarios.jacks.model.environment import Environment
 
 from mdp import controller
-from mdp.scenarios.jacks.model.model import Model
 
 
 class Controller(controller.Controller):

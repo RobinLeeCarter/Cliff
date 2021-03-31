@@ -5,7 +5,7 @@ import random
 import numpy as np
 
 from mdp import common
-from mdp.scenarios.position_move import grid_world
+from mdp.scenarios.position_move.model import grid_world
 
 from mdp.scenarios.random_walk.environment_parameters import EnvironmentParameters
 

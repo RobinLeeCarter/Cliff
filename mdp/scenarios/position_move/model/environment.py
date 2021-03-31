@@ -10,10 +10,10 @@ from mdp import common
 from mdp.model.environment import environment
 from mdp.scenarios.factory import actions_list_factory
 
-from mdp.scenarios.position_move.state import State
-from mdp.scenarios.position_move.action import Action
-from mdp.scenarios.position_move.grid_world import GridWorld
-from mdp.scenarios.position_move.dynamics import Dynamics
+from mdp.scenarios.position_move.model.state import State
+from mdp.scenarios.position_move.model.action import Action
+from mdp.scenarios.position_move.model.grid_world import GridWorld
+from mdp.scenarios.position_move.model.dynamics import Dynamics
 
 
 class Environment(environment.Environment, abc.ABC):

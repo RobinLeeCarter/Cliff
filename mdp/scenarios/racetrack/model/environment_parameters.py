@@ -5,7 +5,7 @@ import copy
 
 from mdp import common
 
-from mdp.scenarios.racetrack import grids
+from mdp.scenarios.racetrack.model import grids
 
 
 @dataclasses.dataclass

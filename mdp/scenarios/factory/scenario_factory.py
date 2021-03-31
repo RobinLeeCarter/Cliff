@@ -15,6 +15,8 @@ from mdp.scenarios.blackjack.scenario.blackjack_evaluation_v import BlackjackEva
 
 from mdp.scenarios.gambler.scenario.gambler_value_iteration_v import GamblerValueIterationV
 
+from mdp.scenarios.racetrack.scenario.racetrack_episode import RacetrackEpisode
+
 
 def scenario_factory(comparison_type: common.ComparisonType) -> BaseScenario:
     ct = common.ComparisonType
@@ -34,6 +36,9 @@ def scenario_factory(comparison_type: common.ComparisonType) -> BaseScenario:
 
     elif comparison_type == ct.GAMBLER_VALUE_ITERATION_V:
         scenario = GamblerValueIterationV()
+
+    elif comparison_type == ct.RACETRACK_EPISODE:
+        scenario = RacetrackEpisode()
 
     # elif environment_type == et.RANDOM_WALK:
     #     environment_ = RandomWalkEnvironment(environment_parameters)
