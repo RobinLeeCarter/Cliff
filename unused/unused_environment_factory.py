@@ -10,7 +10,7 @@ from mdp.scenarios.windy.environment import Environment as WindyEnvironment
 from mdp.scenarios.racetrack.environment import Environment as RacetrackEnvironment
 from mdp.scenarios.jacks.model.environment import Environment as JacksEnvironment
 from mdp.scenarios.blackjack.model.environment import Environment as BlackjackEnvironment
-from mdp.scenarios.gambler.environment import Environment as GamblerEnvironment
+from mdp.scenarios.gambler.model.environment import Environment as GamblerEnvironment
 
 
 def environment_factory(environment_parameters: common.EnvironmentParameters) -> BaseEnvironment:

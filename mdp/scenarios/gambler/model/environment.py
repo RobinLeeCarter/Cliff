@@ -11,11 +11,11 @@ if TYPE_CHECKING:
 from mdp import common
 from mdp.model.environment import environment
 
-from mdp.scenarios.gambler.state import State
-from mdp.scenarios.gambler.action import Action
-from mdp.scenarios.gambler.environment_parameters import EnvironmentParameters
+from mdp.scenarios.gambler.model.state import State
+from mdp.scenarios.gambler.model.action import Action
+from mdp.scenarios.gambler.model.environment_parameters import EnvironmentParameters
 # from mdp.scenarios.gambler.grid_world import GridWorld
-from mdp.scenarios.gambler.dynamics import Dynamics
+from mdp.scenarios.gambler.model.dynamics import Dynamics
 
 
 class Environment(environment.Environment):
@@ -75,11 +75,9 @@ class Environment(environment.Environment):
                 initial_action = Action(stake=1)
             policy_[state] = initial_action
 
-    # noinspection PyUnusedLocal
     def insert_state_function_into_graph2d(self,
                                            comparison: common.Comparison,
-                                           v: state_function.StateFunction,
-                                           parameter: Optional[any] = None):
+                                           v: state_function.StateFunction):
         x_list: list[int] = []
         y_list: list[float] = []
         for state in self.states:
@@ -104,11 +102,9 @@ class Environment(environment.Environment):
         g.has_grid = True
         g.has_legend = False
 
-    # noinspection PyUnusedLocal
     def insert_policy_into_graph2d(self,
                                    comparison: common.Comparison,
-                                   policy_: Policy,
-                                   parameter: Optional[any] = None):
+                                   policy_: Policy):
         policy_: Deterministic
 
         x_list: list[int] = []

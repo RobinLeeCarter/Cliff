@@ -12,7 +12,7 @@ import mdp
 
 def main():
     os_environ_settings.dummy = None    # for pycharm code inspection only
-    mdp.Application(comparison_type=mdp.ComparisonType.BLACKJACK_CONTROL_ES)
+    mdp.Application(comparison_type=mdp.ComparisonType.GAMBLER_VALUE_ITERATION_V)
 
     # comparison: common.Comparison = mdp.scenarios._jacks_policy_iteration_v()
     # comparison: common.Comparison = scenarios._jacks_value_iteration_v()

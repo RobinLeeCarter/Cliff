@@ -1,8 +1,8 @@
 from __future__ import annotations
 
 from mdp import common
-from mdp.scenarios.gambler.comparison import Comparison
-from mdp.scenarios.gambler.environment_parameters import EnvironmentParameters
+from mdp.scenarios.gambler.scenario.comparison import Comparison
+from mdp.scenarios.gambler.model.environment_parameters import EnvironmentParameters
 
 
 def gambler_value_iteration_v() -> Comparison:

@@ -2,18 +2,18 @@ from __future__ import annotations
 from typing import TYPE_CHECKING, Optional
 
 if TYPE_CHECKING:
-    from mdp.scenarios.gambler.action import Action
-    from mdp.scenarios.gambler.environment import Environment
-    from mdp.scenarios.gambler.environment_parameters import EnvironmentParameters
+    from mdp.scenarios.gambler.model.action import Action
+    from mdp.scenarios.gambler.model.environment import Environment
+    from mdp.scenarios.gambler.model.environment_parameters import EnvironmentParameters
 
 import random
 
 from mdp.common import Distribution
 from mdp.model.environment import dynamics
 
-from mdp.scenarios.gambler.state import State
-from mdp.scenarios.gambler.response import Response
-from mdp.scenarios.gambler.enums import Toss, Result
+from mdp.scenarios.gambler.model.state import State
+from mdp.scenarios.gambler.model.response import Response
+from mdp.scenarios.gambler.model.enums import Toss, Result
 
 
 class Dynamics(dynamics.Dynamics):
