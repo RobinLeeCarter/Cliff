@@ -3,8 +3,9 @@ from abc import ABC
 
 from mdp import common, scenario
 from mdp.scenarios.jacks.model.environment_parameters import EnvironmentParameters
-from mdp.scenarios.jacks.model.model import Model
 from mdp.scenarios.jacks.controller import Controller
+from mdp.scenarios.jacks.model.model import Model
+from mdp.scenarios.jacks.view.view import View
 
 
 class Scenario(scenario.Scenario, ABC):
@@ -44,6 +45,9 @@ class Scenario(scenario.Scenario, ABC):
 
     def _create_model(self) -> Model:
         return Model()
+
+    def _create_view(self) -> View:
+        return View()
 
     def _get_controller(self) -> Controller:
         return Controller()
