@@ -19,6 +19,10 @@ from mdp.scenarios.racetrack.scenario.racetrack_episode import RacetrackEpisode
 
 from mdp.scenarios.random_walk.scenario.random_walk_episode import RandomWalkEpisode
 
+from mdp.scenarios.cliff.scenario.cliff_alpha_start import CliffAlphaStart
+from mdp.scenarios.cliff.scenario.cliff_alpha_end import CliffAlphaEnd
+from mdp.scenarios.cliff.scenario.cliff_episode import CliffEpisode
+
 
 def scenario_factory(comparison_type: common.ComparisonType) -> BaseScenario:
     ct = common.ComparisonType
@@ -44,6 +48,13 @@ def scenario_factory(comparison_type: common.ComparisonType) -> BaseScenario:
 
     elif comparison_type == ct.RANDOM_WALK_EPISODE:
         scenario = RandomWalkEpisode()
+
+    elif comparison_type == ct.CLIFF_ALPHA_END:
+        scenario = CliffAlphaEnd()
+    elif comparison_type == ct.CLIFF_ALPHA_START:
+        scenario = CliffAlphaStart()
+    elif comparison_type == ct.CLIFF_EPISODE:
+        scenario = CliffEpisode()
 
     # elif environment_type == et.RANDOM_WALK:
     #     environment_ = RandomWalkEnvironment(environment_parameters)

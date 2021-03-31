@@ -3,7 +3,7 @@ from __future__ import annotations
 from mdp import common
 from unused import unused_environment_factory
 from mdp.scenarios.position_move.model import action, state
-from mdp.scenarios.cliff import environment_parameters
+from mdp.scenarios.cliff.model import environment_parameters
 
 
 def cliff_test() -> bool:

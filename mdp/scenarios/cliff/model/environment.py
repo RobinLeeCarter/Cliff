@@ -4,7 +4,7 @@ from __future__ import annotations
 from mdp import common
 from mdp.scenarios.position_move.model.grid_world import GridWorld
 from mdp.scenarios.position_move.model import environment
-from mdp.scenarios.cliff.dynamics import Dynamics
+from mdp.scenarios.cliff.model.dynamics import Dynamics
 
 
 class Environment(environment.Environment):

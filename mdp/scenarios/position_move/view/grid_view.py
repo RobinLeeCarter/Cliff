@@ -3,15 +3,19 @@ from typing import Optional, TYPE_CHECKING
 
 if TYPE_CHECKING:
     from mdp.model.agent.episode import Episode
-    
     from mdp.scenarios.position_move.model.action import Action
     from mdp.scenarios.position_move.model.state import State
+    from mdp.scenarios.position_move.model.grid_world import GridWorld
 
 from mdp import common
 from mdp.view import grid_view
 
 
 class GridView(grid_view.GridView):
+    def __init__(self, grid_view_parameters: common.GridViewParameters):
+        super().__init__(grid_view_parameters)
+        self._grid_world: Optional[GridWorld] = self._grid_world
+
     def _frame_on_background_latest(self, episode_: Episode):
         last_state: Optional[State] = episode_.last_state
         agent_position: common.XY = last_state.position

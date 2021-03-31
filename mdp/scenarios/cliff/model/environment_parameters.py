@@ -4,7 +4,7 @@ import copy
 
 from mdp import common
 
-from mdp.scenarios.cliff import grids
+from mdp.scenarios.cliff.model import grids
 
 
 @dataclasses.dataclass

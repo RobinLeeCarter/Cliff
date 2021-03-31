@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from mdp import common
-from mdp.scenarios.cliff.comparison import Comparison
+from mdp.scenarios.cliff.scenario.comparison import Comparison
 
 
 def cliff_alpha_start() -> Comparison:

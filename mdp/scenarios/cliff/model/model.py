@@ -3,12 +3,12 @@ from __future__ import annotations
 from typing import Optional, TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from mdp.scenarios.jacks.controller import Controller
+    from mdp.scenarios.cliff.controller import Controller
     # from mdp.model.agent.episode import Episode
-    from mdp.scenarios.blackjack.model.environment_parameters import EnvironmentParameters
+    from mdp.scenarios.cliff.model.environment_parameters import EnvironmentParameters
 
 from mdp.model import model
-from mdp.scenarios.blackjack.model.environment import Environment
+from mdp.scenarios.cliff.model.environment import Environment
 
 
 class Model(model.Model):

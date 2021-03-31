@@ -4,7 +4,7 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from mdp.common import EnvironmentParameters
     from mdp.scenarios.position_move.model.action import Action
-    from mdp.scenarios.cliff.environment import Environment
+    from mdp.scenarios.cliff.model.environment import Environment
 
 
 from mdp import common

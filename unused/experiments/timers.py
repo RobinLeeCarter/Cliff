@@ -5,8 +5,7 @@ import random
 
 from unused import unused_environment_factory
 from mdp.scenarios.jacks.model import action
-from mdp.scenarios.cliff import environment_parameters
-
+from mdp.scenarios.cliff.model import environment_parameters
 
 environment_parameters_ = environment_parameters.default
 environment_ = unused_environment_factory.environment_factory(environment_parameters_)
