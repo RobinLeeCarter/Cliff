@@ -1,5 +1,6 @@
 from __future__ import annotations
 from typing import Optional, TYPE_CHECKING
+from abc import ABC, abstractmethod
 
 if TYPE_CHECKING:
     from mdp.model.environment.environment import Environment
@@ -9,13 +10,13 @@ if TYPE_CHECKING:
 
 import utils
 from mdp import common
-from mdp.scenarios.factory import environment_factory
+# from mdp.scenarios.factory import environment_factory
 from mdp.model.agent.agent import Agent
 from mdp.model.breakdown import factory
 from mdp.model.trainer import Trainer
 
 
-class Model:
+class Model(ABC):
     def __init__(self, verbose: bool = False):
         self.verbose: bool = verbose
         self._controller: Optional[Controller] = None
@@ -33,7 +34,10 @@ class Model:
     def build(self, comparison: common.Comparison):
         self._comparison = comparison
 
-        self.environment = environment_factory.environment_factory(self._comparison.environment_parameters)
+        # different for each scenario and environment_parameters
+        self.environment: Environment = self._create_environment(self._comparison.environment_parameters)
+        self.environment.build()
+        # self.environment = environment_factory.environment_factory(self._comparison.environment_parameters)
 
         # create agent (and it will create the algorithm and the policy when it is given Settings)
         self.agent = Agent(self.environment)
@@ -54,6 +58,10 @@ class Model:
         # self.behaviour_policy: policy.RandomPolicy = policy.RandomPolicy(self.environment)
         # self.target_agent = agent.Agent(self.environment, self.target_policy)
         # self.behaviour_agent = agent.Agent(self.environment, self.behaviour_policy)
+
+    @abstractmethod
+    def _create_environment(self, environment_parameters: common.EnvironmentParameters) -> Environment:
+        pass
 
     def run(self):
         timer: utils.Timer = utils.Timer()

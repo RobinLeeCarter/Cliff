@@ -17,8 +17,8 @@ class Scenario(ABC):
         # self._view: Optional[View] = None
         # self._controller: Optional[Controller] = None
 
-        self._model: Model = self._get_model()
-        self._view: View = self._get_view()
+        self._model: Model = self._create_model()
+        self._view: View = self._create_view()
         self._controller: Controller = self._get_controller()
         # self._model.set_controller(self._controller)
         # self._view.set_controller(self._controller)
@@ -33,10 +33,10 @@ class Scenario(ABC):
         self._controller.run()
         self._controller.output()
 
-    def _get_model(self) -> Model:
+    def _create_model(self) -> Model:
         return Model()
 
-    def _get_view(self) -> View:
+    def _create_view(self) -> View:
         return View()
 
     def _get_controller(self) -> Controller:

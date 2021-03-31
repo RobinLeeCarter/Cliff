@@ -42,7 +42,7 @@ class Scenario(scenario.Scenario, ABC):
             show_policy=True,
         )
 
-    def _get_model(self) -> Model:
+    def _create_model(self) -> Model:
         return Model()
 
     def _get_controller(self) -> Controller:
