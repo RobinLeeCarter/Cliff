@@ -1,14 +1,14 @@
 from __future__ import annotations
 
 from mdp import common
-from mdp.scenarios.factory import environment_factory
+from unused import unused_environment_factory
 from mdp.scenarios.position_move import action, state
 from mdp.scenarios.cliff import environment_parameters
 
 
 def cliff_test() -> bool:
     environment_parameters_ = environment_parameters.default
-    environment_ = environment_factory.environment_factory(environment_parameters_)
+    environment_ = unused_environment_factory.environment_factory(environment_parameters_)
     print(type(environment_))
 
     for state_ in environment_.states:

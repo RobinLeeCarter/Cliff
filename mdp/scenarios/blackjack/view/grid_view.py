@@ -3,7 +3,7 @@ from typing import TYPE_CHECKING, Optional  # , Optional
 
 if TYPE_CHECKING:
     from mdp.model.agent.episode import Episode
-    from mdp.scenarios.blackjack.grid_world import GridWorld
+    from mdp.scenarios.blackjack.model.grid_world import GridWorld
 
 import pygame
 from matplotlib import cm, colors
@@ -26,8 +26,7 @@ class GridView(grid_view.GridView):
             vmax=self._grid_world.policy_max
         )
 
-    def display_parameter(self, parameter: any = None):
-        usable_ace: bool = parameter
+    def set_title(self, usable_ace: bool):
         if usable_ace:
             title = "Usable Ace"
         else:
@@ -46,9 +45,3 @@ class GridView(grid_view.GridView):
                 text = "Stick"
             sub_rect = self._get_sub_rect(rect, move=common.XY(x=0, y=0))
             self._center_text(surface, sub_rect, text)
-
-    def _frame_on_background_latest(self, episode_: Episode):
-        raise NotImplementedError
-
-    def _frame_on_background_for_t(self, episode: Episode, t: int):
-        raise NotImplementedError

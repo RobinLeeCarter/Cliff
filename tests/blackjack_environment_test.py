@@ -1,17 +1,16 @@
 from __future__ import annotations
 
 from mdp import common
-from mdp.scenarios.factory import environment_factory
-from mdp.scenarios.blackjack import comparisons  # action, state,
-from mdp.scenarios.blackjack.state import State
-from mdp.scenarios.blackjack.action import Action
-from mdp.scenarios.blackjack.response import Response
-from mdp.scenarios.blackjack.environment import Environment
+from unused import unused_blackjack_comparisons, unused_environment_factory
+from mdp.scenarios.blackjack.model.state import State
+from mdp.scenarios.blackjack.model.action import Action
+from mdp.scenarios.blackjack.model.response import Response
+from mdp.scenarios.blackjack.model.environment import Environment
 
 
 def blackjack_test() -> bool:
-    comparison: common.Comparison = comparisons.blackjack_evaluation_v()
-    environment = environment_factory.environment_factory(comparison.environment_parameters)
+    comparison: common.Comparison = unused_blackjack_comparisons.blackjack_evaluation_v()
+    environment = unused_environment_factory.environment_factory(comparison.environment_parameters)
 
     # print("States...")
     # for state in environment.states:

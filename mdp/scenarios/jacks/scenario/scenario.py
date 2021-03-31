@@ -9,10 +9,10 @@ from mdp.scenarios.jacks.view.view import View
 
 
 class Scenario(scenario.Scenario, ABC):
-    def __init__(self, comparison_type: common.ComparisonType):
-        super().__init__(comparison_type)
+    def __init__(self):
+        super().__init__()
         self._max_cars: int = 20      # problem statement = 20
-        self._environment_parameters: EnvironmentParameters = EnvironmentParameters(
+        self._environment_parameters = EnvironmentParameters(
             environment_type=common.ScenarioType.JACKS,
             max_cars=self._max_cars,
             extra_rules=True,  # change this for extra rules in book as per challenge
@@ -49,5 +49,5 @@ class Scenario(scenario.Scenario, ABC):
     def _create_view(self) -> View:
         return View()
 
-    def _get_controller(self) -> Controller:
+    def _create_controller(self) -> Controller:
         return Controller()

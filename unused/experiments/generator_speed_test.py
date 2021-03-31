@@ -1,13 +1,13 @@
 import timeit
 import time
 
-from mdp.scenarios.factory import environment_factory
+from unused import unused_environment_factory
 from mdp.scenarios.jacks.model.state import State
 from mdp.scenarios.jacks.model.environment import Environment
 from mdp.scenarios.jacks.model import environment_parameters
 
 environment_parameters_ = environment_parameters.default
-environment: Environment = environment_factory.environment_factory(environment_parameters_)
+environment: Environment = unused_environment_factory.environment_factory(environment_parameters_)
 
 state: State
 

@@ -3,7 +3,7 @@ from __future__ import annotations
 import random
 
 from mdp import common
-from mdp.scenarios.factory import environment_factory
+from unused import unused_environment_factory
 from mdp.scenarios.gambler import comparisons  # action, state,
 from mdp.scenarios.gambler.state import State
 from mdp.scenarios.gambler.action import Action
@@ -13,7 +13,7 @@ from mdp.scenarios.gambler.environment import Environment
 
 def gambler_test() -> bool:
     comparison: common.Comparison = comparisons.gambler_value_iteration_v()
-    environment = environment_factory.environment_factory(comparison.environment_parameters)
+    environment = unused_environment_factory.environment_factory(comparison.environment_parameters)
 
     # print("States...")
     # for state in environment.states:

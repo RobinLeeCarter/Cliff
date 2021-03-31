@@ -1,8 +1,8 @@
 from __future__ import annotations
 
 from mdp import common
-from mdp.scenarios.blackjack.comparison import Comparison
-from mdp.scenarios.blackjack.environment_parameters import EnvironmentParameters
+from mdp.scenarios.blackjack.scenario.comparison import Comparison
+from mdp.scenarios.blackjack.model.environment_parameters import EnvironmentParameters
 
 
 def blackjack_evaluation_v() -> Comparison:

@@ -129,9 +129,6 @@ class GridView(abc.ABC):
         pygame.quit()
         self._is_window_open = False
 
-    def display_parameter(self, parameter: any = None):
-        pass
-
     def _set_title(self, title: str):
         self._window_title = title
         pygame.display.set_caption(title)
@@ -197,12 +194,10 @@ class GridView(abc.ABC):
             self._t += 1
         return self._user_event
 
-    @abc.abstractmethod
     def _frame_on_background_latest(self, episode_: Episode):
         """draw frame onto background for the latest state, action (& previous) from in-progress episode"""
         pass
 
-    @abc.abstractmethod
     def _frame_on_background_for_t(self, episode_: Episode, t: int):
         """draw frame onto background for S(t), A(t) (& previous) from episode"""
         pass

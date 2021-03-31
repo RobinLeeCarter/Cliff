@@ -1,5 +1,5 @@
 from __future__ import annotations
-from typing import TYPE_CHECKING
+# from typing import TYPE_CHECKING
 
 # if TYPE_CHECKING:
 #     from mdp import common
@@ -12,7 +12,7 @@ import mdp
 
 def main():
     os_environ_settings.dummy = None    # for pycharm code inspection only
-    mdp.Application(comparison_type=mdp.ComparisonType.JACKS_POLICY_ITERATION_V)
+    mdp.Application(comparison_type=mdp.ComparisonType.BLACKJACK_CONTROL_ES)
 
     # comparison: common.Comparison = mdp.scenarios._jacks_policy_iteration_v()
     # comparison: common.Comparison = scenarios._jacks_value_iteration_v()

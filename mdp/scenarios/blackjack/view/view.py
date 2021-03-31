@@ -5,7 +5,7 @@ if TYPE_CHECKING:
     from mdp import common
 
 from mdp.view import view
-from mdp.scenarios.jacks.view.grid_view import GridView
+from mdp.scenarios.blackjack.view.grid_view import GridView
 
 
 class View(view.View):

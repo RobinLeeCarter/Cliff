@@ -2,12 +2,12 @@ from __future__ import annotations
 
 from mdp import common
 from mdp.scenarios.jacks.scenario.scenario import Scenario
-from mdp.scenarios.jacks.model.comparison import Comparison
+from mdp.scenarios.jacks.scenario.comparison import Comparison
 
 
 class JacksValueIterationV(Scenario):
-    def _set_comparison(self):
-        self._comparison = Comparison(
+    def _create_comparison(self) -> Comparison:
+        return Comparison(
             environment_parameters=self._environment_parameters,
             comparison_settings=self._comparison_settings,
             settings_list=[

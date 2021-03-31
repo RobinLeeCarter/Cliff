@@ -9,23 +9,16 @@ from mdp.controller import Controller
 
 
 class Scenario(ABC):
-    def __init__(self, comparison_type: common.ComparisonType):
-        self._comparison_type: common.ComparisonType = comparison_type
-        self._comparison: Optional[common.Comparison] = None
-
-        # self._model: Optional[Model] = None
-        # self._view: Optional[View] = None
-        # self._controller: Optional[Controller] = None
-
+    def __init__(self):
+        # self._comparison_type: common.ComparisonType = comparison_type
         self._model: Model = self._create_model()
         self._view: View = self._create_view()
-        self._controller: Controller = self._get_controller()
-        # self._model.set_controller(self._controller)
-        # self._view.set_controller(self._controller)
+        self._controller: Controller = self._create_controller()
         self._controller.link_mvc(self._model, self._view)
+        self._comparison: Optional[common.Comparison] = None
 
     def build(self):
-        self._set_comparison()
+        self._comparison: common.Comparison = self._create_comparison()
         # self._comparison = self._get_comparison(self._comparison_type)
         self._controller.build(self._comparison)
 
@@ -39,11 +32,11 @@ class Scenario(ABC):
     def _create_view(self) -> View:
         return View()
 
-    def _get_controller(self) -> Controller:
+    def _create_controller(self) -> Controller:
         return Controller()
 
     @abstractmethod
-    def _set_comparison(self):
+    def _create_comparison(self) -> common.Comparison:
         pass
 
     # @abstractmethod

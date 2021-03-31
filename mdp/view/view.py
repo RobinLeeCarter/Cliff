@@ -9,8 +9,6 @@ if TYPE_CHECKING:
     from mdp import common
     from mdp.controller import Controller
     from mdp.model.environment.grid_world import GridWorld
-# from mdp.scenarios.factory import grid_view_factory
-# from mdp.view import graph, graph3d, grid_view
 
 from mdp.view.graph import Graph
 from mdp.view.graph3d import Graph3D

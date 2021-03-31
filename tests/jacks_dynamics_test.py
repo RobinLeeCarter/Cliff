@@ -9,11 +9,10 @@ from mdp.scenarios.jacks.model.response import Response
 from mdp.scenarios.jacks.scenario.scenario import jacks_policy_iteration_v
 # from mdp.scenarios.jacks.dynamics.dynamics import Dynamics
 
-from mdp.scenarios.factory import environment_factory
-
+from unused import unused_environment_factory
 
 comparison = jacks_policy_iteration_v()
-environment_ = environment_factory.environment_factory(comparison.environment_parameters)
+environment_ = unused_environment_factory.environment_factory(comparison.environment_parameters)
 
 # dynamics = Dynamics(environment_, comparison.environment_parameters)
 # dynamics.build()

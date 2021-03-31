@@ -2,18 +2,18 @@ from __future__ import annotations
 from typing import TYPE_CHECKING, Optional
 
 if TYPE_CHECKING:
-    from mdp.scenarios.blackjack.action import Action
-    from mdp.scenarios.blackjack.environment import Environment
-    from mdp.scenarios.blackjack.environment_parameters import EnvironmentParameters
+    from mdp.scenarios.blackjack.model.action import Action
+    from mdp.scenarios.blackjack.model.environment import Environment
+    from mdp.scenarios.blackjack.model.environment_parameters import EnvironmentParameters
 
 import random
 
 from mdp.common import Distribution
 from mdp.model.environment import dynamics
 
-from mdp.scenarios.blackjack.state import State
-from mdp.scenarios.blackjack.response import Response
-from mdp.scenarios.blackjack.enums import Result
+from mdp.scenarios.blackjack.model.state import State
+from mdp.scenarios.blackjack.model.response import Response
+from mdp.scenarios.blackjack.model.enums import Result
 
 
 class Dynamics(dynamics.Dynamics):
