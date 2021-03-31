@@ -3,7 +3,7 @@ import dataclasses
 
 from mdp.common import utils
 from mdp.common.dataclass import comparison
-from mdp.scenarios.windy import environment_parameters
+from mdp.scenarios.windy.model import environment_parameters
 
 
 @dataclasses.dataclass

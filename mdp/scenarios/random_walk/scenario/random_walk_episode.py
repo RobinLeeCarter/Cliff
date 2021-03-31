@@ -9,7 +9,7 @@ from mdp.scenarios.random_walk.scenario.comparison import Comparison
 class RandomWalkEpisode(Scenario):
     def _create_comparison(self):
         return Comparison(
-            environment_parameters=self._environment_parameters,
+            # environment_parameters=self._environment_parameters,
             comparison_settings=common.Settings(
                 runs=100,
                 training_episodes=100,

@@ -6,7 +6,7 @@ import copy
 import numpy as np
 
 from mdp import common
-from mdp.scenarios.windy import grids
+from mdp.scenarios.windy.model import grids
 
 
 @dataclasses.dataclass

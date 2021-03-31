@@ -6,7 +6,7 @@ if TYPE_CHECKING:
 from mdp import common
 from mdp.scenarios.cliff.model.environment import Environment as CliffEnvironment
 from mdp.scenarios.random_walk.model.environment import Environment as RandomWalkEnvironment
-from mdp.scenarios.windy.environment import Environment as WindyEnvironment
+from mdp.scenarios.windy.model.environment import Environment as WindyEnvironment
 from mdp.scenarios.racetrack.model.environment import Environment as RacetrackEnvironment
 from mdp.scenarios.jacks.model.environment import Environment as JacksEnvironment
 from mdp.scenarios.blackjack.model.environment import Environment as BlackjackEnvironment

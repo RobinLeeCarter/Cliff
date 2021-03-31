@@ -4,7 +4,7 @@ import random
 
 from mdp import common
 from mdp.scenarios.position_move.model import grid_world
-from mdp.scenarios.windy import environment_parameters
+from mdp.scenarios.windy.model import environment_parameters
 
 
 class GridWorld(grid_world.GridWorld):

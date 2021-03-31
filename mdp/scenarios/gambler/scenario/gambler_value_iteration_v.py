@@ -9,7 +9,7 @@ from mdp.scenarios.gambler.scenario.comparison import Comparison
 class GamblerValueIterationV(Scenario):
     def _create_comparison(self):
         return Comparison(
-            environment_parameters=self._environment_parameters,
+            # environment_parameters=self._environment_parameters,
             comparison_settings=common.Settings(
                 gamma=1.0,      # 0.99999
                 policy_parameters=common.PolicyParameters(

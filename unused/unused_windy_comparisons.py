@@ -1,7 +1,8 @@
 from __future__ import annotations
 
 from mdp import common
-from mdp.scenarios.windy import comparison, environment_parameters
+from mdp.scenarios.windy.model import environment_parameters
+from mdp.scenarios.windy.scenario import comparison
 
 
 def windy_timestep(random_wind: bool = False) -> comparison.Comparison:

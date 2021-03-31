@@ -23,6 +23,8 @@ from mdp.scenarios.cliff.scenario.cliff_alpha_start import CliffAlphaStart
 from mdp.scenarios.cliff.scenario.cliff_alpha_end import CliffAlphaEnd
 from mdp.scenarios.cliff.scenario.cliff_episode import CliffEpisode
 
+from mdp.scenarios.windy.scenario.windy_timestep import WindyTimestep
+
 
 def scenario_factory(comparison_type: common.ComparisonType) -> BaseScenario:
     ct = common.ComparisonType
@@ -56,19 +58,12 @@ def scenario_factory(comparison_type: common.ComparisonType) -> BaseScenario:
     elif comparison_type == ct.CLIFF_EPISODE:
         scenario = CliffEpisode()
 
-    # elif environment_type == et.RANDOM_WALK:
-    #     environment_ = RandomWalkEnvironment(environment_parameters)
-    # elif environment_type == et.WINDY:
-    #     environment_ = WindyEnvironment(environment_parameters)
-    # elif environment_type == et.RACETRACK:
-    #     environment_ = RacetrackEnvironment(environment_parameters)
-    # elif environment_type == et.JACKS:
-    #     environment_ = JacksEnvironment(environment_parameters)
-    # elif environment_type == et.BLACKJACK:
-    #     environment_ = BlackjackEnvironment(environment_parameters)
-    # elif environment_type == et.GAMBLER:
-    #     environment_ = GamblerEnvironment(environment_parameters)
+    elif comparison_type == ct.WINDY_TIMESTEP:
+        scenario = WindyTimestep(random_wind=False)
+    elif comparison_type == ct.WINDY_TIMESTEP_RANDOM:
+        scenario = WindyTimestep(random_wind=True)
+
     else:
-        raise ValueError(scenario_type)
+        raise ValueError(comparison_type)
     # environment_.build()
     return scenario

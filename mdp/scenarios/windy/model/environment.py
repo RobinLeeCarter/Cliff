@@ -6,8 +6,8 @@ if TYPE_CHECKING:
     from mdp import common
 from mdp.scenarios.position_move.model import environment
 
-from mdp.scenarios.windy.grid_world import GridWorld
-from mdp.scenarios.windy.dynamics import Dynamics
+from mdp.scenarios.windy.model.grid_world import GridWorld
+from mdp.scenarios.windy.model.dynamics import Dynamics
 
 
 class Environment(environment.Environment):

@@ -9,9 +9,6 @@ from mdp.scenarios.racetrack.view.view import View
 
 
 class Scenario(scenario.Scenario, ABC):
-    def __init__(self):
-        super().__init__()
-
     def _create_model(self) -> Model:
         return Model()
 

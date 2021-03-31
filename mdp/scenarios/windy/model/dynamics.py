@@ -4,8 +4,8 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from mdp.common import EnvironmentParameters
     from mdp.scenarios.position_move.model.action import Action
-    from mdp.scenarios.windy.environment import Environment
-    from mdp.scenarios.windy.grid_world import GridWorld
+    from mdp.scenarios.windy.model.environment import Environment
+    from mdp.scenarios.windy.model.grid_world import GridWorld
 
 from mdp.scenarios.position_move.model.state import State
 from mdp.scenarios.position_move.model.response import Response
