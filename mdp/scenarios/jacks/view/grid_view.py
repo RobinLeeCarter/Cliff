@@ -1,8 +1,7 @@
 from __future__ import annotations
-from typing import TYPE_CHECKING, Optional  # , Optional
+from typing import TYPE_CHECKING, Optional
 
 if TYPE_CHECKING:
-    from mdp.model.agent.episode import Episode
     from mdp.scenarios.jacks.model.grid_world import GridWorld
 
 import pygame
