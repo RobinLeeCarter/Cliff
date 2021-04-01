@@ -2,12 +2,8 @@ import timeit
 import time
 
 from mdp import common
-from unused import unused_environment_factory
 from mdp.scenarios.jacks.model.state import State
-from mdp.scenarios.jacks.model import environment_parameters
 
-environment_parameters_ = environment_parameters.default
-environment_ = unused_environment_factory.environment_factory(environment_parameters_)
 states: list[State] = [
     State(is_terminal=False, ending_cars_1=1, ending_cars_2=2),
     State(is_terminal=False, ending_cars_1=3, ending_cars_2=2),
@@ -38,13 +34,8 @@ import timeit
 import time
 
 from mdp import common
-from mdp.scenarios.policy_factory import environment_factory
-from mdp.scenarios.jacks.state import State
-from mdp.scenarios.cliff import environment_parameters
+from mdp.scenarios.jacks.model.state import State
 
-
-environment_parameters_ = environment_parameters.default
-environment_ = environment_factory.environment_factory(environment_parameters_)
 states: list[State] = [
     State(is_terminal=False, ending_cars_1=1, ending_cars_2=2),
     State(is_terminal=False, ending_cars_1=3, ending_cars_2=2),

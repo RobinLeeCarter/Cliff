@@ -1,15 +1,22 @@
 import timeit
 import time
+from typing import Generator
 
-from unused import unused_environment_factory
+from mdp import common
+from mdp.scenarios import scenario_factory
 from mdp.scenarios.jacks.model.state import State
-from mdp.scenarios.jacks.model.environment import Environment
-from mdp.scenarios.jacks.model import environment_parameters
 
-environment_parameters_ = environment_parameters.default
-environment: Environment = unused_environment_factory.environment_factory(environment_parameters_)
+scenario = scenario_factory.scenario_factory(common.ComparisonType.JACKS_POLICY_ITERATION_V)
+scenario.build()
+# noinspection PyProtectedMember
+environment = scenario._model.environment
 
-state: State
+
+def non_terminal_states() -> Generator[State, None, None]:
+    for state_ in environment.states:
+        if not state_.is_terminal:
+            yield state_
+
 
 for state in environment.states:
     if not state.is_terminal:
@@ -18,7 +25,7 @@ for state in environment.states:
 for state in [state for state in environment.states if not state.is_terminal]:
     pass
 
-for state in environment.non_terminal_states():
+for state in non_terminal_states():
     pass
 
 print("start")
@@ -36,17 +43,22 @@ def get_time_ns(stmt: str) -> float:
 SETUP_CODE = '''
 import timeit
 import time
+from typing import Generator
 
-from mdp.scenarios.policy_factory import environment_factory
-from mdp.scenarios.jacks.state import State
-from mdp.scenarios.jacks.environment import Environment
-from mdp.scenarios.jacks import environment_parameters
+from mdp import common
+from mdp.scenarios import scenario_factory
+from mdp.scenarios.jacks.model.state import State
+
+scenario = scenario_factory.scenario_factory(common.ComparisonType.JACKS_POLICY_ITERATION_V)
+scenario.build()
+# noinspection PyProtectedMember
+environment = scenario._model.environment
 
 
-environment_parameters_ = environment_parameters.default
-environment: Environment = environment_factory.environment_factory(environment_parameters_)
-
-state: State
+def non_terminal_states() -> Generator[State, None, None]:
+    for state_ in environment.states:
+        if not state_.is_terminal:
+            yield state_
 '''
 
 list_code = '''
@@ -61,7 +73,7 @@ for state in [state for state in environment.states if not state.is_terminal]:
 '''
 
 generator_code = '''
-for state in environment.non_terminal_states():
+for state in non_terminal_states():
     pass
 '''
 
