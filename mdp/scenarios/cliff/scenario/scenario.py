@@ -1,7 +1,7 @@
 from __future__ import annotations
 from abc import ABC
 
-from mdp.scenarios import scenario
+from mdp import scenario
 from mdp.scenarios.cliff.controller import Controller
 from mdp.scenarios.cliff.model.model import Model
 from mdp.scenarios.cliff.view.view import View

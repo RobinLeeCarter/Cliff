@@ -1,8 +1,7 @@
 from __future__ import annotations
 from abc import ABC
 
-from mdp import common
-from mdp.scenarios import scenario
+from mdp import common, scenario
 from mdp.scenarios.jacks.model.environment_parameters import EnvironmentParameters
 from mdp.scenarios.jacks.controller import Controller
 from mdp.scenarios.jacks.model.model import Model

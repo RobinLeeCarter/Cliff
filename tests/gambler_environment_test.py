@@ -3,7 +3,7 @@ from __future__ import annotations
 import random
 
 from mdp import common
-from unused import unused_environment_factory, unused_comparisons
+from mdp.scenarios import scenario_factory
 from mdp.scenarios.gambler.model.state import State
 from mdp.scenarios.gambler.model.action import Action
 from mdp.scenarios.gambler.model.response import Response
@@ -11,8 +11,13 @@ from mdp.scenarios.gambler.model.environment import Environment
 
 
 def gambler_test() -> bool:
-    comparison: common.Comparison = unused_comparisons.gambler_value_iteration_v()
-    environment = unused_environment_factory.environment_factory(comparison.environment_parameters)
+    scenario = scenario_factory.scenario_factory(common.ComparisonType.GAMBLER_VALUE_ITERATION_V)
+    scenario.build()
+    # noinspection PyProtectedMember
+    environment: Environment = scenario._model.environment
+
+    # comparison: common.Comparison = unused_comparisons.gambler_value_iteration_v()
+    # environment = unused_environment_factory.environment_factory(comparison.environment_parameters)
 
     # print("States...")
     # for state in environment.states:

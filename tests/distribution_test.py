@@ -16,5 +16,4 @@ print(x[my_state2])
 
 x.self_check()
 
-
-
+print(x.draw_one())

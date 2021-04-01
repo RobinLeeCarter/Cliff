@@ -12,10 +12,10 @@ if TYPE_CHECKING:
 
 class StateActionFunction:
     def __init__(self,
-                 environment_: Environment,
+                 environment: Environment,
                  initial_q_value: float
                  ):
-        self._environment: Environment = environment_
+        self._environment: Environment = environment
         self._initial_q_value: float = initial_q_value
 
         self._values: np.ndarray = np.empty(

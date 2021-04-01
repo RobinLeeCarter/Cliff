@@ -1,7 +1,8 @@
 from __future__ import annotations
 
+
 from mdp import common
-from unused import unused_blackjack_comparisons, unused_environment_factory
+from mdp.scenarios import scenario_factory
 from mdp.scenarios.blackjack.model.state import State
 from mdp.scenarios.blackjack.model.action import Action
 from mdp.scenarios.blackjack.model.response import Response
@@ -9,8 +10,10 @@ from mdp.scenarios.blackjack.model.environment import Environment
 
 
 def blackjack_test() -> bool:
-    comparison: common.Comparison = unused_blackjack_comparisons.blackjack_evaluation_v()
-    environment = unused_environment_factory.environment_factory(comparison.environment_parameters)
+    scenario = scenario_factory.scenario_factory(common.ComparisonType.BLACKJACK_EVALUATION_V)
+    scenario.build()
+    # noinspection PyProtectedMember
+    environment: Environment = scenario._model.environment
 
     # print("States...")
     # for state in environment.states:

@@ -3,7 +3,6 @@ import dataclasses
 import copy
 
 from mdp import common
-
 from mdp.scenarios.cliff.model import grids
 
 

@@ -1,7 +1,7 @@
 from __future__ import annotations
 from abc import ABC
 
-from mdp.scenarios import scenario
+from mdp import scenario
 # from mdp.scenarios.gambler.model.environment_parameters import EnvironmentParameters
 from mdp.scenarios.gambler.model.model import Model
 from mdp.scenarios.gambler.controller import Controller

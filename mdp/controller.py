@@ -31,54 +31,7 @@ class Controller:
         self._model.run()
 
     def output(self):
-        if self._comparison.graph_values.show_graph:
-            # TODO: Overhaul
-            # self._model.environment.insert_state_function_into_graph2d(
-            #     self._comparison,
-            #     self._model.agent.algorithm.V
-            # )
-            # self._view.graph.make_plot(self._comparison.graph_values)
-            #
-            # self._model.environment.insert_policy_into_graph2d(
-            #     self._comparison,
-            #     self._model.agent.policy
-            # )
-            # self._view.graph.make_plot(self._comparison.graph_values)
-
-            if self._model.breakdown:
-                graph_values: common.GraphValues = self._model.breakdown.get_graph_values()
-                self._view.graph.make_plot(graph_values)
-
-        g3d = self._comparison.graph3d_values
-        if g3d.show_graph:
-            if g3d.multi_parameter:
-                for parameter in g3d.multi_parameter:
-                    self._model.environment.insert_state_function_into_graph3d(
-                        self._comparison,
-                        self._model.agent.algorithm.V,
-                        parameter
-                    )
-                    self._view.graph3d.make_plot(self._comparison.graph3d_values)
-            else:
-                self._model.environment.insert_state_function_into_graph3d(
-                    self._comparison,
-                    self._model.agent.algorithm.V
-                )
-                self._view.graph3d.make_plot(self._comparison.graph3d_values)
-
-        gvp = self._comparison.grid_view_parameters
-        if gvp.show_result or gvp.show_demo:
-            if g3d.multi_parameter and gvp.show_result:
-                for parameter in g3d.multi_parameter:
-                    self._model.prep_for_output(parameter)
-                    # self._view.grid_view.display_parameter(parameter)
-                    self._view.grid_view.display_latest_step()
-            else:
-                self._model.prep_for_output()
-                if gvp.show_result:
-                    self._view.grid_view.display_latest_step()
-                if gvp.show_demo:
-                    self._view.grid_view.demonstrate(self.new_episode_request)
+        pass
 
     def _breakdown_graph(self):
         graph_values: common.GraphValues = self._model.breakdown.get_graph_values()
