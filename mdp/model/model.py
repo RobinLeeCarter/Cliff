@@ -12,7 +12,7 @@ import utils
 from mdp import common
 # from mdp.scenarios.factory import environment_factory
 from mdp.model.agent.agent import Agent
-from mdp.model.breakdown import factory
+from mdp.model.breakdown import breakdown_factory
 from mdp.model.trainer import Trainer
 
 
@@ -42,7 +42,7 @@ class Model(ABC):
         # create agent (and it will create the algorithm and the policy when it is given Settings)
         self.agent = Agent(self.environment)
 
-        self.breakdown: Optional[Breakdown] = factory.breakdown_factory(self._comparison)
+        self.breakdown: Optional[Breakdown] = breakdown_factory.breakdown_factory(self._comparison)
         self.trainer: Trainer = Trainer(
             agent_=self.agent,
             breakdown_=self.breakdown,

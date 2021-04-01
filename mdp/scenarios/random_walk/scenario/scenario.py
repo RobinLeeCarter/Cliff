@@ -1,7 +1,7 @@
 from __future__ import annotations
 from abc import ABC
 
-from mdp import scenario
+from mdp.scenarios import scenario
 # from mdp.scenarios.random_walk.model.environment_parameters import EnvironmentParameters
 from mdp.scenarios.random_walk.model.model import Model
 from mdp.scenarios.random_walk.controller import Controller

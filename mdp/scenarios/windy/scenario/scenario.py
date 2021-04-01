@@ -1,8 +1,7 @@
 from __future__ import annotations
 from abc import ABC
 
-from mdp import common, scenario
-from mdp.scenarios.windy.model.environment_parameters import EnvironmentParameters
+from mdp.scenarios import scenario
 from mdp.scenarios.windy.controller import Controller
 from mdp.scenarios.windy.model.model import Model
 from mdp.scenarios.windy.view.view import View

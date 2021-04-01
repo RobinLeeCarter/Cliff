@@ -1,7 +1,8 @@
 from __future__ import annotations
 from abc import ABC
 
-from mdp import common, scenario
+from mdp import common
+from mdp.scenarios import scenario
 from mdp.scenarios.blackjack.model.environment_parameters import EnvironmentParameters
 from mdp.scenarios.blackjack.controller import Controller
 from mdp.scenarios.blackjack.model.model import Model

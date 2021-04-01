@@ -1,5 +1,4 @@
 from mdp.common.enums import *
-from mdp.common.comparison_enum import ComparisonType
 from mdp.common.constants import *
 from mdp.common.dicts import *
 from mdp.common.dataclass import *

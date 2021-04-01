@@ -1,7 +1,7 @@
 from __future__ import annotations
 from abc import ABC
 
-from mdp import scenario
+from mdp.scenarios import scenario
 # from mdp.scenarios.racetrack.model.environment_parameters import EnvironmentParameters
 from mdp.scenarios.racetrack.model.model import Model
 from mdp.scenarios.racetrack.controller import Controller
