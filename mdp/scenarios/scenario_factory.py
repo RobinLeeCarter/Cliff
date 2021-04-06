@@ -8,6 +8,8 @@ from mdp import common
 from mdp.scenarios.jacks.scenario.jacks_policy_iteration_v import JacksPolicyIterationV
 from mdp.scenarios.jacks.scenario.jacks_policy_iteration_q import JacksPolicyIterationQ
 from mdp.scenarios.jacks.scenario.jacks_value_iteration_v import JacksValueIterationV
+from mdp.scenarios.jacks.scenario.jacks_policy_iteration_v_profile import JacksPolicyIterationVProfile
+
 
 from mdp.scenarios.blackjack.scenario.blackjack_control_es import BlackjackControlES
 from mdp.scenarios.blackjack.scenario.blackjack_evaluation_q import BlackjackEvaluationQ
@@ -30,6 +32,8 @@ def scenario_factory(comparison_type: common.ComparisonType) -> BaseScenario:
     ct = common.ComparisonType
     if comparison_type == ct.JACKS_POLICY_ITERATION_V:
         scenario = JacksPolicyIterationV()
+    elif comparison_type == ct.JACKS_POLICY_ITERATION_V_PROFILE:
+        scenario = JacksPolicyIterationVProfile()
     elif comparison_type == ct.JACKS_POLICY_ITERATION_Q:
         scenario = JacksPolicyIterationQ()
     elif comparison_type == ct.JACKS_VALUE_ITERATION_V:

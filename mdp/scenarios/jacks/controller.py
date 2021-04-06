@@ -13,11 +13,13 @@ class Controller(controller.Controller):
         self._model: Optional[Model] = self._model
 
     def output(self):
-        self._model.environment.insert_state_function_into_graph3d(
-            comparison=self._comparison,
-            v=self._model.agent.algorithm.V
-        )
-        self._view.graph3d.make_plot(self._comparison.graph3d_values)
+        if self._comparison.graph3d_values.show_graph:
+            self._model.environment.insert_state_function_into_graph3d(
+                comparison=self._comparison,
+                v=self._model.agent.algorithm.V
+            )
+            self._view.graph3d.make_plot(self._comparison.graph3d_values)
 
-        self._model.environment.update_grid_policy(policy=self._model.agent.policy)
-        self._view.grid_view.display_latest_step()
+        if self._comparison.grid_view_parameters.show_result:
+            self._model.environment.update_grid_policy(policy=self._model.agent.policy)
+            self._view.grid_view.display_latest_step()

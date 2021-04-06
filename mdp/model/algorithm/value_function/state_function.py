@@ -30,6 +30,7 @@ class StateFunction:
             else:
                 self._values[state_index] = self._initial_v_value
 
+    @profile
     def __getitem__(self, state: State) -> float:
         if state.is_terminal:
             return 0.0

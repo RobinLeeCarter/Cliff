@@ -14,6 +14,7 @@ class ComparisonType(enum.IntEnum):
     GAMBLER_VALUE_ITERATION_V = enum.auto()
 
     JACKS_POLICY_ITERATION_V = enum.auto()
+    JACKS_POLICY_ITERATION_V_PROFILE = enum.auto()
     JACKS_VALUE_ITERATION_V = enum.auto()
     JACKS_POLICY_ITERATION_Q = enum.auto()
 
