@@ -1,6 +1,8 @@
 from __future__ import annotations
 from typing import TYPE_CHECKING
 
+import numpy as np
+
 if TYPE_CHECKING:
     from mdp import common
     from mdp.model.environment.state import State
@@ -32,3 +34,9 @@ class Deterministic(policy.Policy):
             return 1.0
         else:
             return 0.0
+
+    def set_policy_vector(self, policy_vector: np.ndarray):
+        for s, state in enumerate(self._environment.states):
+            a = policy_vector[s]
+            action: Action = self._environment.actions[a]
+            self._action_for_state[state] = action

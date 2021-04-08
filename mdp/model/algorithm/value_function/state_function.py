@@ -42,8 +42,13 @@ class StateFunction:
         state_index = self._environment.state_index[state]
         self._values[state_index] = value
 
-    def get_vector(self) -> np.ndarray:
+    @property
+    def vector(self) -> np.ndarray:
         return self._values
+
+    @vector.setter
+    def vector(self, v: np.ndarray):
+        self._values = v
 
     def print_all_values(self):
         print("V._values ...")

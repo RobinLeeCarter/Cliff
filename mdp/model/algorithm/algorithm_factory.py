@@ -17,6 +17,7 @@ from mdp.model.algorithm.policy_evaluation.mc_prediction_v import MCPredictionV
 
 from mdp.model.algorithm.policy_improvement.policy_improvement_dp_q import PolicyImprovementDpQ
 from mdp.model.algorithm.policy_improvement.policy_improvement_dp_v import PolicyImprovementDpV
+from mdp.model.algorithm.policy_improvement.policy_improvement_dp_v_np import PolicyImprovementDpVNp
 
 from mdp.model.algorithm.control.on_policy_mc_control import OnPolicyMcControl
 from mdp.model.algorithm.control.off_policy_mc_control import OffPolicyMcControl
@@ -27,7 +28,9 @@ from mdp.model.algorithm.control.q_learning import QLearning
 
 from mdp.model.algorithm.control.policy_iteration_dp_q import PolicyIterationDpQ
 from mdp.model.algorithm.control.policy_iteration_dp_v import PolicyIterationDpV
+from mdp.model.algorithm.control.policy_iteration_dp_v_np import PolicyIterationDpVNp
 from mdp.model.algorithm.control.value_iteration_dp_v import ValueIterationDpV
+from mdp.model.algorithm.control.value_iteration_dp_v_np import ValueIterationDpVNp
 
 
 def algorithm_factory(environment_: Environment,
@@ -40,8 +43,11 @@ def algorithm_factory(environment_: Environment,
         a.POLICY_EVALUATION_DP_V: PolicyEvaluationDpV,
         a.POLICY_EVALUATION_DP_V_NP: PolicyEvaluationDpVNp,
         a.POLICY_IMPROVEMENT_DP_V: PolicyImprovementDpV,
+        a.POLICY_IMPROVEMENT_DP_V_NP: PolicyImprovementDpVNp,
         a.POLICY_ITERATION_DP_V: PolicyIterationDpV,
+        a.POLICY_ITERATION_DP_V_NP: PolicyIterationDpVNp,
         a.VALUE_ITERATION_DP_V: ValueIterationDpV,
+        a.VALUE_ITERATION_DP_V_NP: ValueIterationDpVNp,
 
         a.POLICY_EVALUATION_DP_Q: PolicyEvaluationDpQ,
         a.POLICY_IMPROVEMENT_DP_Q: PolicyImprovementDpQ,

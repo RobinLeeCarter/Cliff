@@ -84,7 +84,8 @@ class Dynamics(dynamics.Dynamics):
         tensor_shape = (state_count, action_count, state_count)
         self.state_transition_probabilities = np.zeros(shape=tensor_shape, dtype=np.float)
         for s0, state in enumerate(self._environment.states):
-            for a0, action in enumerate(self._environment.actions_for_state(state)):
+            for action in self._environment.actions_for_state(state):
+                a0 = self._environment.action_index[action]
                 next_state_distribution = self._next_state_distribution[(state, action)]
                 for next_state, probability in next_state_distribution.items():
                     s1 = self._environment.state_index[next_state]
@@ -96,7 +97,8 @@ class Dynamics(dynamics.Dynamics):
         # (state, action)
         self.expected_reward_np = np.zeros(shape=(state_count, action_count), dtype=np.float)
         for s, state in enumerate(self._environment.states):
-            for a, action in enumerate(self._environment.actions_for_state(state)):
+            for action in self._environment.actions_for_state(state):
+                a = self._environment.action_index[action]
                 self.expected_reward_np[s, a] = self._expected_reward[state, action]
 
     def _calc_expected_reward(self, state: State, action: Action) -> float:
