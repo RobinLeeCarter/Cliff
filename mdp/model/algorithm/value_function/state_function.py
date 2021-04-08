@@ -30,7 +30,7 @@ class StateFunction:
             else:
                 self._values[state_index] = self._initial_v_value
 
-    @profile
+    # @profile
     def __getitem__(self, state: State) -> float:
         if state.is_terminal:
             return 0.0
@@ -41,6 +41,9 @@ class StateFunction:
     def __setitem__(self, state: State, value: float):
         state_index = self._environment.state_index[state]
         self._values[state_index] = value
+
+    def get_vector(self) -> np.ndarray:
+        return self._values
 
     def print_all_values(self):
         print("V._values ...")

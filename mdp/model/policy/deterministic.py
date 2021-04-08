@@ -27,8 +27,8 @@ class Deterministic(policy.Policy):
         # state_index = self._environment.state_index[state]
         # self._action_given_state[state_index] = action
 
-    def get_probability(self, state_: State, action_: Action) -> float:
-        if action_ == self[state_]:
+    def get_probability(self, state: State, action: Action) -> float:
+        if action == self[state]:
             return 1.0
         else:
             return 0.0

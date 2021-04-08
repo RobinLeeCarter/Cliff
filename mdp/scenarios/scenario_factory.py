@@ -5,11 +5,12 @@ if TYPE_CHECKING:
     from mdp.scenario import Scenario as BaseScenario
 from mdp import common
 
+from mdp.scenarios.jacks.scenario.jacks_policy_evaluation_v import JacksPolicyEvaluationV
+from mdp.scenarios.jacks.scenario.jacks_policy_evaluation_v_np import JacksPolicyEvaluationVNp
 from mdp.scenarios.jacks.scenario.jacks_policy_iteration_v import JacksPolicyIterationV
 from mdp.scenarios.jacks.scenario.jacks_policy_iteration_q import JacksPolicyIterationQ
 from mdp.scenarios.jacks.scenario.jacks_value_iteration_v import JacksValueIterationV
 from mdp.scenarios.jacks.scenario.jacks_policy_iteration_v_profile import JacksPolicyIterationVProfile
-
 
 from mdp.scenarios.blackjack.scenario.blackjack_control_es import BlackjackControlES
 from mdp.scenarios.blackjack.scenario.blackjack_evaluation_q import BlackjackEvaluationQ
@@ -30,7 +31,11 @@ from mdp.scenarios.windy.scenario.windy_timestep import WindyTimestep
 
 def scenario_factory(comparison_type: common.ComparisonType) -> BaseScenario:
     ct = common.ComparisonType
-    if comparison_type == ct.JACKS_POLICY_ITERATION_V:
+    if comparison_type == ct.JACKS_POLICY_EVALUATION_V:
+        scenario = JacksPolicyEvaluationV()
+    elif comparison_type == ct.JACKS_POLICY_EVALUATION_V_NP:
+        scenario = JacksPolicyEvaluationVNp()
+    elif comparison_type == ct.JACKS_POLICY_ITERATION_V:
         scenario = JacksPolicyIterationV()
     elif comparison_type == ct.JACKS_POLICY_ITERATION_V_PROFILE:
         scenario = JacksPolicyIterationVProfile()

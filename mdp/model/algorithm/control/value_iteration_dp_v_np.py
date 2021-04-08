@@ -8,7 +8,7 @@ from mdp import common
 from mdp.model.algorithm.abstract.dynamic_programming_v import DynamicProgrammingV
 
 
-class PolicyEvaluationDpV(DynamicProgrammingV):
+class ValueIterationDpVNp(DynamicProgrammingV):
     def __init__(self,
                  environment_: Environment,
                  agent_: Agent,
@@ -16,44 +16,47 @@ class PolicyEvaluationDpV(DynamicProgrammingV):
                  policy_parameters: common.PolicyParameters
                  ):
         super().__init__(environment_, agent_, algorithm_parameters, policy_parameters)
-        self._algorithm_type = common.AlgorithmType.POLICY_EVALUATION_DP_V
+        self._algorithm_type = common.AlgorithmType.POLICY_ITERATION_DP_V
         self.name = common.algorithm_name[self._algorithm_type]
         self.title = f"{self.name} θ={self._theta}"
 
-    def run(self):
-        do_call_back: bool = bool(self._step_callback)
-        self._policy_evaluation(do_call_back)
-        # if self._verbose:
-        #     self.V.print_all_values()
+    # def initialize(self):
+    #     super().initialize()
+    #     # self._environment.initialize_value_function(self.V)
 
-    def _policy_evaluation(self, do_call_back: bool = False):
+    def run(self):
+        # policy_: policy.Policy = self._agent.target_policy
+        # assert isinstance(policy_, policy.Deterministic)
         iteration: int = 1
         cont: bool = True
         delta: float = float('inf')
+        # TODO: Write
 
         if self._verbose:
-            print(f"Starting Policy Evaluation PolicyEvaluationDpV ...")
+            print(f"Starting Value Iteration ...")
 
         while cont and delta >= self._theta and iteration < self._iteration_timeout:
             delta = 0.0
             for state in self._environment.states:
-                v = self.V[state]
-                new_v: float = 0.0
-                for action in self._environment.actions_for_state(state):
-                    # π(a|s)
-                    policy_probability = self._agent.policy.get_probability(state, action)
-                    if policy_probability > 0:
-                        new_v += policy_probability * self._get_expected_return(state, action)
-                self.V[state] = new_v
-                delta = max(delta, abs(new_v - v))
+                if not state.is_terminal:
+                    v = self.V[state]
+                    new_v: float = max(self._get_expected_return(state, action)
+                                       for action in self._environment.actions_for_state(state))
+                    self.V[state] = new_v
+                    delta = max(delta, abs(new_v - v))
             if self._verbose:
                 print(f"iteration = {iteration}\tdelta={delta:.2f}")
-            if do_call_back:
+            if self._step_callback:
                 cont = self._step_callback()
+
+            # if iteration == 2:
+            #     break
             iteration += 1
+
+        self._make_policy_greedy_wrt_v(round_first=True)
 
         if iteration == self._iteration_timeout:
             print(f"Warning: Timed out at {iteration} iterations")
         else:
             if self._verbose:
-                print(f"Policy Evaluation completed. delta={delta:.2f}")
+                print(f"Value Iteration completed ...")

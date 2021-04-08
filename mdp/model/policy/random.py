@@ -22,8 +22,8 @@ class Random(policy.Policy):
         self.set_possible_actions(state)
         return common.rng.choice(self.possible_actions)
 
-    def get_probability(self, state_: State, action_: Action) -> float:
-        self.set_possible_actions(state_)
+    def get_probability(self, state: State, action: Action) -> float:
+        self.set_possible_actions(state)
         return 1.0 / len(self.possible_actions)
 
     def set_possible_actions(self, state: State):

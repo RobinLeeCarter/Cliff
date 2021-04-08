@@ -30,10 +30,10 @@ class EGreedy(random.Random):
     def linked_policy(self) -> policy.Policy:
         return self.greedy_policy
 
-    def get_probability(self, state_: State, action_: Action) -> float:
-        self.set_possible_actions(state_)
+    def get_probability(self, state: State, action: Action) -> float:
+        self.set_possible_actions(state)
         non_greedy_p = self.epsilon * (1.0 / len(self.possible_actions))
-        if action_ == self.greedy_policy[state_]:
+        if action == self.greedy_policy[state]:
             greedy_p = (1 - self.epsilon) + non_greedy_p
             return greedy_p
         else:

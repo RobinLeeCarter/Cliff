@@ -13,6 +13,8 @@ class ComparisonType(enum.IntEnum):
 
     GAMBLER_VALUE_ITERATION_V = enum.auto()
 
+    JACKS_POLICY_EVALUATION_V = enum.auto()
+    JACKS_POLICY_EVALUATION_V_NP = enum.auto()
     JACKS_POLICY_ITERATION_V = enum.auto()
     JACKS_POLICY_ITERATION_V_PROFILE = enum.auto()
     JACKS_VALUE_ITERATION_V = enum.auto()
@@ -47,6 +49,7 @@ class BreakdownType(enum.IntEnum):
 
 class AlgorithmType(enum.IntEnum):
     POLICY_EVALUATION_DP_V = enum.auto()
+    POLICY_EVALUATION_DP_V_NP = enum.auto()
     POLICY_IMPROVEMENT_DP_V = enum.auto()
     POLICY_ITERATION_DP_V = enum.auto()
     VALUE_ITERATION_DP_V = enum.auto()

@@ -21,8 +21,8 @@ class NoPolicy(policy.Policy):
     def __setitem__(self, state: State, action: Action):
         super().__setitem__(state, action)
 
-    def get_probability(self, state_: State, action_: Action) -> float:
-        if action_ is None:
+    def get_probability(self, state: State, action: Action) -> float:
+        if action is None:
             return 1.0
         else:
             return 0.0

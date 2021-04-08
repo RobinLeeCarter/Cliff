@@ -2,12 +2,14 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
+    from mdp.model.policy.policy import Policy
     from mdp.scenarios.jacks.model.action import Action
     from mdp.scenarios.jacks.model.environment import Environment
     from mdp.scenarios.jacks.model.environment_parameters import EnvironmentParameters
     from mdp.scenarios.jacks.model.dynamics.location_outcome import LocationOutcome
 
 import random
+import numpy as np
 
 from mdp.common import Distribution
 from mdp.model.environment import dynamics
@@ -61,6 +63,8 @@ class Dynamics(dynamics.Dynamics):
         self._location_2.build()
         self._build_expected_reward_summary()
         self._build_next_state_distribution_summary()
+        self._build_state_transition_probabilities()
+        self._build_expected_reward_np()
         super().build()
 
     def _build_expected_reward_summary(self):
@@ -72,6 +76,28 @@ class Dynamics(dynamics.Dynamics):
         for state in self._environment.states:
             for action in self._environment.actions_for_state(state):
                 self._next_state_distribution[(state, action)] = self._calc_next_state_distribution(state, action)
+
+    def _build_state_transition_probabilities(self):
+        state_count = len(self._environment.states)
+        action_count = len(self._environment.actions)
+        # (state, action, next_state)
+        tensor_shape = (state_count, action_count, state_count)
+        self.state_transition_probabilities = np.zeros(shape=tensor_shape, dtype=np.float)
+        for s0, state in enumerate(self._environment.states):
+            for a0, action in enumerate(self._environment.actions_for_state(state)):
+                next_state_distribution = self._next_state_distribution[(state, action)]
+                for next_state, probability in next_state_distribution.items():
+                    s1 = self._environment.state_index[next_state]
+                    self.state_transition_probabilities[s0, a0, s1] = probability
+
+    def _build_expected_reward_np(self):
+        state_count = len(self._environment.states)
+        action_count = len(self._environment.actions)
+        # (state, action)
+        self.expected_reward_np = np.zeros(shape=(state_count, action_count), dtype=np.float)
+        for s, state in enumerate(self._environment.states):
+            for a, action in enumerate(self._environment.actions_for_state(state)):
+                self.expected_reward_np[s, a] = self._expected_reward[state, action]
 
     def _calc_expected_reward(self, state: State, action: Action) -> float:
         """

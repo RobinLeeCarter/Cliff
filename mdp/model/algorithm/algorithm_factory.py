@@ -9,6 +9,7 @@ from mdp.model.algorithm.abstract.algorithm_ import Algorithm as BaseAlgorithm
 
 from mdp.model.algorithm.policy_evaluation.policy_evaluation_dp_q import PolicyEvaluationDpQ
 from mdp.model.algorithm.policy_evaluation.policy_evaluation_dp_v import PolicyEvaluationDpV
+from mdp.model.algorithm.policy_evaluation.policy_evaluation_dp_v_np import PolicyEvaluationDpVNp
 from mdp.model.algorithm.policy_evaluation.constant_alpha_mc import ConstantAlphaMC
 from mdp.model.algorithm.policy_evaluation.td_0 import TD0
 from mdp.model.algorithm.policy_evaluation.mc_prediction_q import MCPredictionQ
@@ -37,6 +38,7 @@ def algorithm_factory(environment_: Environment,
     a = common.AlgorithmType
     algorithm_lookup: dict[a, Type[BaseAlgorithm]] = {
         a.POLICY_EVALUATION_DP_V: PolicyEvaluationDpV,
+        a.POLICY_EVALUATION_DP_V_NP: PolicyEvaluationDpVNp,
         a.POLICY_IMPROVEMENT_DP_V: PolicyImprovementDpV,
         a.POLICY_ITERATION_DP_V: PolicyIterationDpV,
         a.VALUE_ITERATION_DP_V: ValueIterationDpV,

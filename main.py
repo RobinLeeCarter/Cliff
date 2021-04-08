@@ -13,10 +13,10 @@ import mdp
 
 def main():
     os_environ_settings.dummy = None    # for pycharm code inspection only
-    mdp.Application(comparison_type=mdp.ComparisonType.JACKS_POLICY_ITERATION_V_PROFILE)
+    mdp.Application(comparison_type=mdp.ComparisonType.JACKS_POLICY_EVALUATION_V_NP)
 
 
-if __name__ == '__main__':
-    main()
+# if __name__ == '__main__':
+#     main()
 
-# cProfile.run('main()', 'jacks_policy_iteration_v_profile.prof')
+cProfile.run('main()', 'jacks_policy_evaluation_v.prof')
