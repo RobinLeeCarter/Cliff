@@ -5,7 +5,7 @@ from mdp.scenarios.jacks.scenario.scenario import Scenario
 from mdp.scenarios.jacks.scenario.comparison import Comparison
 
 
-class JacksPolicyIterationVNp(Scenario):
+class JacksPolicyIterationVNpJit(Scenario):
     def _create_comparison(self) -> Comparison:
         comparison_settings = self._comparison_settings
         comparison_settings.display_every_step = False
@@ -22,7 +22,7 @@ class JacksPolicyIterationVNp(Scenario):
             settings_list=[
                 common.Settings(
                     algorithm_parameters=common.AlgorithmParameters(
-                        algorithm_type=common.AlgorithmType.POLICY_ITERATION_DP_V_NP,
+                        algorithm_type=common.AlgorithmType.POLICY_ITERATION_DP_V_NP_JIT,
                         verbose=False
                     )
                 ),

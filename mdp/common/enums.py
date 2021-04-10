@@ -19,6 +19,7 @@ class ComparisonType(enum.IntEnum):
     JACKS_POLICY_IMPROVEMENT_V_NP = enum.auto()
     JACKS_POLICY_ITERATION_V = enum.auto()
     JACKS_POLICY_ITERATION_V_NP = enum.auto()
+    JACKS_POLICY_ITERATION_V_NP_JIT = enum.auto()
     JACKS_POLICY_ITERATION_V_PROFILE = enum.auto()
     JACKS_VALUE_ITERATION_V = enum.auto()
     JACKS_VALUE_ITERATION_V_NP = enum.auto()
@@ -58,6 +59,7 @@ class AlgorithmType(enum.IntEnum):
     POLICY_IMPROVEMENT_DP_V_NP = enum.auto()
     POLICY_ITERATION_DP_V = enum.auto()
     POLICY_ITERATION_DP_V_NP = enum.auto()
+    POLICY_ITERATION_DP_V_NP_JIT = enum.auto()
     VALUE_ITERATION_DP_V = enum.auto()
     VALUE_ITERATION_DP_V_NP = enum.auto()
 

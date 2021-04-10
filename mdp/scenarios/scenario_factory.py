@@ -12,6 +12,7 @@ from mdp.scenarios.jacks.scenario.jacks_policy_improvement_v_np import JacksPoli
 from mdp.scenarios.jacks.scenario.jacks_policy_iteration_v import JacksPolicyIterationV
 from mdp.scenarios.jacks.scenario.jacks_policy_iteration_v_profile import JacksPolicyIterationVProfile
 from mdp.scenarios.jacks.scenario.jacks_policy_iteration_v_np import JacksPolicyIterationVNp
+from mdp.scenarios.jacks.scenario.jacks_policy_iteration_v_np_jit import JacksPolicyIterationVNpJit
 from mdp.scenarios.jacks.scenario.jacks_policy_iteration_q import JacksPolicyIterationQ
 from mdp.scenarios.jacks.scenario.jacks_value_iteration_v import JacksValueIterationV
 from mdp.scenarios.jacks.scenario.jacks_value_iteration_v_np import JacksValueIterationVNp
@@ -48,6 +49,8 @@ def scenario_factory(comparison_type: common.ComparisonType) -> BaseScenario:
         scenario = JacksPolicyIterationV()
     elif comparison_type == ct.JACKS_POLICY_ITERATION_V_NP:
         scenario = JacksPolicyIterationVNp()
+    elif comparison_type == ct.JACKS_POLICY_ITERATION_V_NP_JIT:
+        scenario = JacksPolicyIterationVNpJit()
     elif comparison_type == ct.JACKS_POLICY_ITERATION_V_PROFILE:
         scenario = JacksPolicyIterationVProfile()
     elif comparison_type == ct.JACKS_POLICY_ITERATION_Q:

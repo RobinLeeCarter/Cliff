@@ -1,8 +1,12 @@
 from __future__ import annotations
 from typing import Optional, TYPE_CHECKING
 
+import numpy as np
+
 if TYPE_CHECKING:
     from mdp.scenarios.jacks.model.model import Model
+    from mdp.scenarios.jacks.model.action import Action
+    from mdp.model.algorithm.abstract.dynamic_programming_v import DynamicProgrammingV
 
 from mdp import controller
 
@@ -23,3 +27,15 @@ class Controller(controller.Controller):
         if self._comparison.grid_view_parameters.show_result:
             self._model.environment.update_grid_policy(policy=self._model.agent.policy)
             self._view.grid_view.display_latest_step()
+
+        policy = self._model.agent.policy
+        total_transfers: int = 0
+        for state in self._model.environment.states:
+            if not state.is_terminal:
+                action: Action = policy[state]
+                total_transfers += action.transfer_1_to_2
+        v: np.ndarray = self._model.agent.algorithm.V.vector
+        total_v: float = v.sum()
+
+        print(f"total_t: {total_transfers}")
+        print(f"total_v: {total_v:.0f}")

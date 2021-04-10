@@ -34,7 +34,8 @@ class PolicyIterationDpV(PolicyEvaluationDpV, PolicyImprovementDpV):
         if self._step_callback:
             cont = self._step_callback()
         while cont and not policy_stable and iteration < self._iteration_timeout:
-            print(f"Policy Iteration. Iteration = {iteration}")
+            if self._verbose:
+                print(f"Policy Iteration. Iteration = {iteration}")
             self._policy_evaluation()
             policy_stable = self._policy_improvement()
             if self._step_callback:
