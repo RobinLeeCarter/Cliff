@@ -30,9 +30,6 @@ class Controller:
     def run(self):
         import cProfile
         cProfile.runctx('self._model.run()', globals(), locals(), 'cProfiles/test.prof')
-        # model_run = self._model.run
-        # cProfile.run('model_run()', 'test.prof')
-        # cProfile.run('model_run()', 'cProfiles/test.prof')
         # self._model.run()
 
     def output(self):

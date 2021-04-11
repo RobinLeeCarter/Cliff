@@ -1,19 +1,21 @@
 from __future__ import annotations
-from typing import TYPE_CHECKING
+# from typing import TYPE_CHECKING
 
 import numpy as np
 from numba import njit, prange, float64, int64, types
 
 
-if TYPE_CHECKING:
-    from mdp.model.environment.environment import Environment
-    from mdp.model.agent.agent import Agent
-from mdp import common
-from mdp.model.algorithm.abstract.dynamic_programming_v import DynamicProgrammingV
+# if TYPE_CHECKING:
+#     from mdp.model.environment.environment import Environment
+#     from mdp.model.agent.agent import Agent
+# from mdp import common
+# from mdp.model.algorithm.abstract.dynamic_programming_v import DynamicProgrammingV
 
 
-@njit(float64[::, ::1](float64[::, ::1], float64[::, ::, ::1]),
-      parallel=True, cache=True)
+@njit(float64[::, ::1](
+        float64[::, ::1],
+        float64[::, ::, ::1]
+        ), parallel=True, cache=True)
 def get_state_transition_probability_matrix(policy_matrix: np.ndarray,
                                             state_transition_probabilities: np.ndarray
                                             ) -> np.ndarray:
@@ -22,14 +24,14 @@ def get_state_transition_probability_matrix(policy_matrix: np.ndarray,
     # state_transition_probability_matrix[s, s'] = p(s'|s) = Σa π(a|s) . p(s'|s,a)
     # so sum over axis 1 of policy_matrix and axis 1 of self.state_transition_probabilities
 
-    n_states: int = policy_matrix.shape[0]
-    n_actions: int = policy_matrix.shape[1]
-
     # state_transition_probability_matrix: np.ndarray = np.einsum(
     #     'ij,ijk->ik',
     #     policy_matrix,
     #     state_transition_probabilities
     # )
+
+    n_states: int = policy_matrix.shape[0]
+    n_actions: int = policy_matrix.shape[1]
 
     out = np.zeros(shape=(n_states, n_states), dtype=np.float64)
     for i in prange(n_states):
@@ -40,12 +42,10 @@ def get_state_transition_probability_matrix(policy_matrix: np.ndarray,
     return out
 
 
-@njit(float64[::1]
-    (
+@njit(float64[::1](
         float64[::, ::1],
         float64[::, ::1]
-    ),
-      parallel=True, cache=True)
+        ), parallel=True, cache=True)
 def get_reward_vector(policy_matrix: np.ndarray,
                       expected_reward: np.ndarray
                       ) -> np.ndarray:
@@ -82,7 +82,7 @@ def get_reward_vector(policy_matrix: np.ndarray,
 #         int64
 #         ), parallel=True, cache=True)
 
-@njit(cache=True)
+@njit(parallel=False, cache=True)
 def policy_evaluation_algorithm(gamma: float,
                                 theta: float,
                                 v: np.ndarray,
