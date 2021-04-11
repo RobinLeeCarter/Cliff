@@ -1,5 +1,5 @@
 kernprof -l -v main.py
 
-python -m line_profiler main.py.lprof
+python -m line_profiler Profiles\main.py.lprof
 
-snakeviz jacks_policy_evaluation_v.prof
+snakeviz test.prof

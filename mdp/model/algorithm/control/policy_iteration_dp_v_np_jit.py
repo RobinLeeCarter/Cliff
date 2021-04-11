@@ -6,6 +6,7 @@ import numpy as np
 if TYPE_CHECKING:
     from mdp.model.environment.environment import Environment
     from mdp.model.agent.agent import Agent
+    from mdp.model.policy.deterministic import Deterministic
 from mdp import common
 from mdp.model.algorithm.abstract.dynamic_programming_v import DynamicProgrammingV
 from mdp.model.algorithm.control import policy_iteration_dp_v_np_jit_m as jit
@@ -54,8 +55,12 @@ class PolicyIterationDpVNpJit(DynamicProgrammingV):
         if self._verbose:
             print(f"Starting Policy Evaluation PolicyEvaluationDpVNpJit ...")
 
-        # policy_matrix[s, a] = π(a|s)
-        policy_matrix: np.ndarray = self._agent.policy.get_policy_matrix()
+        # # policy_matrix[s, a] = π(a|s)
+        # policy_matrix: np.ndarray = self._agent.policy.get_policy_matrix()
+        # policy_vector[s] = a ; π(a|s) deterministic
+        # noinspection PyTypeChecker
+        policy: Deterministic = self._agent.policy
+        policy_vector: np.ndarray = policy.get_policy_vector()
         # state_transition_probabilities[s, a, s'] = p(s'|s,a)
         state_transition_probabilities: np.ndarray = self._environment.dynamics.state_transition_probabilities
         # expected_reward_np[s,a] = E[r|s,a] = Σs',r p(s',r|s,a).r
@@ -68,7 +73,7 @@ class PolicyIterationDpVNpJit(DynamicProgrammingV):
             gamma,
             self._theta,
             v,
-            policy_matrix,
+            policy_vector,
             state_transition_probabilities,
             expected_reward,
             self._iteration_timeout)
@@ -171,9 +176,15 @@ class PolicyIterationDpVNpJit(DynamicProgrammingV):
         if self._verbose:
             print(f"Starting Policy Improvement ...")
 
-        # policy_matrix[s, a] = π(a|s)
-        policy_matrix: np.ndarray = self._agent.policy.get_policy_matrix()
-        old_policy_vector: np.ndarray = policy_matrix.argmax(axis=1)
+        # # policy_matrix[s, a] = π(a|s)
+        # policy_matrix: np.ndarray = self._agent.policy.get_policy_matrix()
+
+        # policy_vector[s] = a ; π(a|s) deterministic
+        # noinspection PyTypeChecker
+        policy: Deterministic = self._agent.policy
+        policy_vector: np.ndarray = policy.get_policy_vector()
+        # old_policy_vector: np.ndarray = policy_vector.copy()
+        # old_policy_vector: np.ndarray = policy_matrix.argmax(axis=1)
         # state_transition_probabilities[s, a, s'] = p(s'|s,a)
         state_transition_probabilities: np.ndarray = self._environment.dynamics.state_transition_probabilities
         # expected_reward_np[s,a] = E[r|s,a] = Σs',r p(s',r|s,a).r
@@ -187,9 +198,8 @@ class PolicyIterationDpVNpJit(DynamicProgrammingV):
 
         # argmax(a) Σs',r p(s',r|s,a).(r + γ.v(s'))
         new_policy_vector: np.ndarray = expected_return.argmax(axis=1)
+        policy_stable: bool = np.allclose(policy_vector, new_policy_vector)
         self._agent.policy.set_policy_vector(new_policy_vector)
-
-        policy_stable: bool = np.allclose(old_policy_vector, new_policy_vector)
 
         if self._verbose:
             print(f"Policy Improvement completed. policy_stable = {policy_stable}")

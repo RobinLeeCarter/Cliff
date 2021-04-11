@@ -17,6 +17,9 @@ class Policy(abc.ABC):
         self._policy_parameters: common.PolicyParameters = policy_parameters
         # TODO: maintain policy matrix
 
+    # def reset(self):
+    #     pass
+
     def __getitem__(self, state: State) -> Optional[Action]:
         if state.is_terminal:
             return None

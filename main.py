@@ -4,7 +4,7 @@ from __future__ import annotations
 # if TYPE_CHECKING:
 #     from mdp import common
 import os_environ_settings
-import cProfile
+# import cProfile
 
 import mdp
 

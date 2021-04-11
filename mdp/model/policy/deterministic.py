@@ -17,9 +17,17 @@ class Deterministic(policy.Policy):
         self._action_for_state: dict[State, Action] = {}
 
         state_count = len(self._environment.states)
-        action_count = len(self._environment.actions)
-        self._action_for_state_np: np.ndarray = np.zeros(shape=state_count, dtype=int)
-        self._policy_matrix: np.ndarray = np.zeros(shape=(state_count, action_count), dtype=float)
+        # action_count = len(self._environment.actions)
+        self._policy_vector: np.ndarray = np.zeros(shape=state_count, dtype=int)
+        # self._policy_matrix: np.ndarray = np.zeros(shape=(state_count, action_count), dtype=float)
+
+    # def reset(self):
+    #     self._action_for_state: dict[State, Action] = {}
+    #
+    #     state_count = len(self._environment.states)
+    #     action_count = len(self._environment.actions)
+    #     self._policy_vector: np.ndarray = np.zeros(shape=state_count, dtype=int)
+    #     self._policy_matrix: np.ndarray = np.zeros(shape=(state_count, action_count), dtype=float)
 
     def _get_action(self, state: State) -> Action:
         return self._action_for_state[state]
@@ -31,26 +39,28 @@ class Deterministic(policy.Policy):
 
         s: int = self._environment.state_index[state]
         a: int = self._environment.action_index[action]
-        prev_a = self._action_for_state_np[s]
-        self._action_for_state_np[s] = a
-        self._policy_matrix[s, prev_a] = 0.0
-        self._policy_matrix[s, a] = 1.0
-        # state_index = self._environment.state_index[state]
-        # self._action_given_state[state_index] = action
+        # prev_a = self._policy_vector[s]
+        self._policy_vector[s] = a
+        # self._policy_matrix[s, prev_a] = 0.0
+        # self._policy_matrix[s, a] = 1.0
 
     def set_policy_vector(self, policy_vector: np.ndarray):
+        self._policy_vector = policy_vector
         for s, state in enumerate(self._environment.states):
             a = policy_vector[s]
             action: Action = self._environment.actions[a]
             self._action_for_state[state] = action
 
-            prev_a = self._action_for_state_np[s]
-            self._action_for_state_np[s] = a
-            self._policy_matrix[s, prev_a] = 0.0
-            self._policy_matrix[s, a] = 1.0
+            # prev_a = self._policy_vector[s]
+            # self._policy_vector[s] = a
+            # self._policy_matrix[s, prev_a] = 0.0
+            # self._policy_matrix[s, a] = 1.0
 
-    def get_policy_matrix(self) -> np.ndarray:
-        return self._policy_matrix
+    def get_policy_vector(self) -> np.ndarray:
+        return self._policy_vector
+
+    # def get_policy_matrix(self) -> np.ndarray:
+    #     return self._policy_matrix
 
         # state_count = len(self._environment.states)
         # action_count = len(self._environment.actions)

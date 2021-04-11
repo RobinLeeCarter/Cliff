@@ -3,10 +3,11 @@ from typing import Optional, TYPE_CHECKING
 from abc import ABC, abstractmethod
 
 if TYPE_CHECKING:
+    from mdp.controller import Controller
     from mdp.model.environment.environment import Environment
     from mdp.model.agent.episode import Episode
     from mdp.model.breakdown.breakdown import Breakdown
-    from mdp.controller import Controller
+    from mdp.model.policy.deterministic import Deterministic
 
 import utils
 from mdp import common
@@ -66,11 +67,16 @@ class Model(ABC):
     def run(self):
         timer: utils.Timer = utils.Timer()
         timer.start()
-        for settings in self._comparison.settings_list:
-            self.trainer.train(settings)
-            if not self._cont:
-                break
-            timer.lap(name=str(settings.algorithm_title))
+        for i in range(1000):
+            # if i > 0:
+            #     self.agent.algorithm.initialize()
+            #     self.environment.initialize_policy(self.agent.policy,
+            #                                        self._comparison.comparison_settings.policy_parameters)
+            for settings in self._comparison.settings_list:
+                self.trainer.train(settings)
+                if not self._cont:
+                    break
+                # timer.lap(name=str(settings.algorithm_title), show=False)
         timer.stop()
 
         if self.breakdown:
