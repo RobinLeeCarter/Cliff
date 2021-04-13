@@ -9,7 +9,7 @@ if TYPE_CHECKING:
     from mdp.model.policy.deterministic import Deterministic
 from mdp import common
 from mdp.model.algorithm.abstract.dynamic_programming_v import DynamicProgrammingV
-from mdp.model.algorithm.control import policy_iteration_dp_v_np_jit_m as jit
+from mdp.model.algorithm.control import policy_iteration_dp_v_np_jit_v as jit
 
 
 class PolicyIterationDpVNpJit(DynamicProgrammingV):
@@ -55,7 +55,7 @@ class PolicyIterationDpVNpJit(DynamicProgrammingV):
         if self._verbose:
             print(f"Starting Policy Evaluation PolicyEvaluationDpVNpJit ...")
 
-        # # policy_matrix[s, a] = π(a|s)
+        # policy_matrix[s, a] = π(a|s)
         # policy_matrix: np.ndarray = self._agent.policy.get_policy_matrix()
         # policy_vector[s] = a ; π(a|s) deterministic
         # noinspection PyTypeChecker
