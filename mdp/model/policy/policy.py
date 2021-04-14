@@ -53,5 +53,5 @@ class Policy(abc.ABC):
                 policy_matrix[s, a] = probability
         return policy_matrix
 
-    def set_policy_vector(self, policy_matrix: np.ndarray):
+    def set_policy_vector(self, policy_matrix: np.ndarray, update_dict: bool = True):
         pass

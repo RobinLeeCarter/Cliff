@@ -12,10 +12,36 @@ from numba import njit, prange, float64, int64, void
 # from mdp.model.algorithm.abstract.dynamic_programming_v import DynamicProgrammingV
 
 
-@njit(float64[::, ::1](
-        int64[::1],
-        float64[::, ::, ::1]
-        ), parallel=True, cache=True, fastmath=True)
+# @njit(float64[::, ::1](
+#         int64[::1],
+#         float64[::, ::, ::1]
+#         ), parallel=True, cache=True, fastmath=True)
+
+@njit(parallel=True, cache=True)
+def get_state_transition_probability_matrix_jit(policy_vector: np.ndarray,
+                                                state_transition_probabilities: np.ndarray
+                                                ) -> np.ndarray:
+    # policy_vector[s] = a ; π(a|s) deterministic
+    # state_transition_probabilities[s, a, s'] = p(s'|s,a)
+    # state_transition_probability_matrix[s, s'] = p(s'|s) = Σa π(a|s) . p(s'|s,a)
+    # so sum over axis 1 of policy_matrix and axis 1 of self.state_transition_probabilities
+
+    # state_transition_probability_matrix: np.ndarray = np.einsum(
+    #     'ij,ijk->ik',
+    #     policy_matrix,
+    #     state_transition_probabilities
+    # )
+
+    n_states: int = len(policy_vector)
+
+    out = np.empty(shape=(n_states, n_states), dtype=np.float64)
+    for i in prange(n_states):
+        j = policy_vector[i]
+        out[i, :] = state_transition_probabilities[i, j, :]
+
+    return out
+
+
 def get_state_transition_probability_matrix(policy_vector: np.ndarray,
                                             state_transition_probabilities: np.ndarray
                                             ) -> np.ndarray:
@@ -30,15 +56,19 @@ def get_state_transition_probability_matrix(policy_vector: np.ndarray,
     #     state_transition_probabilities
     # )
 
-    n_states: int = state_transition_probabilities.shape[0]
+    # n_states: int = state_transition_probabilities.shape[0]
+    i = np.arange(len(policy_vector))
     # n_actions: int = state_transition_probabilities.shape[1]
 
-    out = np.zeros(shape=(n_states, n_states), dtype=np.float64)
-    for i in prange(n_states):
-        j = policy_vector[i]
-        out[i, :] += state_transition_probabilities[i, j, :]
-        # for k in range(n_states):
-        #     out[i, k] += state_transition_probabilities[i, j, k]
+    # out = state_transition_probabilities[np.arange(n_states), policy_vector, :]
+    out = state_transition_probabilities[i, policy_vector, :]
+
+    # out = np.empty(shape=(n_states, n_states), dtype=np.float64)
+    # for i in prange(n_states):
+    #     j = policy_vector[i]
+    #     out[i, :] = state_transition_probabilities[i, j, :]
+    #     # for k in range(n_states):
+    #     #     out[i, k] += state_transition_probabilities[i, j, k]
 
     return out
 
@@ -48,7 +78,27 @@ def get_state_transition_probability_matrix(policy_vector: np.ndarray,
 #         float64[::, ::1]
 #         ), parallel=True, cache=True)
 
-@njit(parallel=True, cache=True, fastmath=True)
+@njit(parallel=True, cache=True)
+def get_reward_vector_jit(policy_vector: np.ndarray,
+                          expected_reward: np.ndarray,
+                          ) -> np.ndarray:
+    # policy_vector[s] = a ; π(a|s) deterministic
+    # expected_reward[s,a] = Σs',r p(s',r|s,a).r
+    # reward_vector[s] = Σa π(a|s) . Σs',r p(s',r|s,a).r
+    # so sum over axis 1 of policy_matrix and axis 1 of expected_reward
+
+    n_states = len(policy_vector)
+    # n_actions = expected_reward.shape[1]
+
+    reward_vector = np.empty(shape=n_states, dtype=np.float64)
+
+    for i in prange(n_states):
+        j = policy_vector[i]
+        reward_vector[i] = expected_reward[i, j]
+
+    return reward_vector
+
+
 def get_reward_vector(policy_vector: np.ndarray,
                       expected_reward: np.ndarray,
                       ) -> np.ndarray:
@@ -57,22 +107,9 @@ def get_reward_vector(policy_vector: np.ndarray,
     # reward_vector[s] = Σa π(a|s) . Σs',r p(s',r|s,a).r
     # so sum over axis 1 of policy_matrix and axis 1 of expected_reward
 
-    # reward_vector: np.ndarray = np.einsum(
-    #     'ij,ij->i',
-    #     policy_matrix,
-    #     expected_reward
-    # )
+    i = np.arange(len(policy_vector))
 
-    n_states = expected_reward.shape[0]
-    # n_actions = expected_reward.shape[1]
-
-    reward_vector = np.zeros(shape=n_states, dtype=np.float64)
-
-    for i in prange(n_states):
-        j = policy_vector[i]
-        reward_vector[i] += expected_reward[i, j]
-
-    return reward_vector
+    return expected_reward[i, policy_vector]
 
 
 # @njit(void(
@@ -116,13 +153,23 @@ def get_reward_vector(policy_vector: np.ndarray,
 #     float64[::1]
 #     ), parallel=True, cache=True)
 
-@njit(parallel=True, cache=True, fastmath=True)
-def apply_bellman_operator(
-        r: np.ndarray,
-        gamma: float,
-        t: np.ndarray,
-        v: np.ndarray
-) -> np.ndarray:
+# @njit(parallel=True, cache=True, fastmath=True)
+# def apply_bellman_operator(
+#         r: np.ndarray,
+#         gamma: float,
+#         t: np.ndarray,
+#         v: np.ndarray
+# ) -> np.ndarray:
+#     n_states = v.shape[0]
+#     new_v = np.zeros_like(v)
+#     for i in prange(n_states):
+#         for j in range(n_states):
+#             new_v[i] += t[i, j] * v[j]
+#         new_v[i] *= gamma
+#         new_v[i] += r[i]
+#
+#     return new_v
+
     # policy_vector[s] = a ; π(a|s) deterministic
     # expected_reward[s,a] = Σs',r p(s',r|s,a).r
     # reward_vector[s] = Σa π(a|s) . Σs',r p(s',r|s,a).r
@@ -145,15 +192,6 @@ def apply_bellman_operator(
 
     # new_v = r + gamma * np.dot(t, v)
 
-    n_states = v.shape[0]
-    new_v = np.zeros_like(v)
-    for i in prange(n_states):
-        for j in range(n_states):
-            new_v[i] += t[i, j] * v[j]
-        new_v[i] *= gamma
-        new_v[i] += r[i]
-
-    return new_v
 
 # @njit(types.Tuple((float64[::1], int64, float64))(
 #         float64,
@@ -172,9 +210,10 @@ def apply_bellman_operator(
 
 # @njit(cache=True)
 
+
 # @profile
 
-@njit(cache=True)
+# @njit()
 def policy_evaluation_algorithm(gamma: float,
                                 theta: float,
                                 v: np.ndarray,
@@ -190,10 +229,14 @@ def policy_evaluation_algorithm(gamma: float,
     # state_transition_probability_matrix
     # T[s, s'] = p(s'|s) = Σa π(a|s).p(s'|s,a)
     # noinspection PyPep8Naming
-    T: np.ndarray = get_state_transition_probability_matrix(policy_vector, state_transition_probabilities)
+    T: np.ndarray = get_state_transition_probability_matrix_jit(policy_vector, state_transition_probabilities)
+
+    # noinspection PyPep8Naming
+    # T: np.ndarray = state_transition_probabilities[np.arange(policy_vector.shape[0]), policy_vector, :]
+
     # r[s] = E[r|s,a=π(a|s)] = Σa π(a|s) Σs',r p(s',r|s,a).r
     # r = np.zeros(shape=policy_vector.shape, dtype=np.float64)
-    r: np.ndarray = get_reward_vector(policy_vector, expected_reward)
+    r: np.ndarray = get_reward_vector_jit(policy_vector, expected_reward)
     # prev_v = np.empty_like(v)
 
     while cont and delta >= theta and iteration < iteration_timeout:

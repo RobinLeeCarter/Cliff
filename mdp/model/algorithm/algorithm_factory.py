@@ -9,7 +9,7 @@ from mdp.model.algorithm.abstract.algorithm_ import Algorithm as BaseAlgorithm
 
 from mdp.model.algorithm.policy_evaluation.policy_evaluation_dp_q import PolicyEvaluationDpQ
 from mdp.model.algorithm.policy_evaluation.policy_evaluation_dp_v import PolicyEvaluationDpV
-from mdp.model.algorithm.policy_evaluation.policy_evaluation_dp_v_np import PolicyEvaluationDpVNp
+from mdp.model.algorithm.policy_evaluation.policy_evaluation_dp_v_np_deterministic import PolicyEvaluationDpVNp
 from mdp.model.algorithm.policy_evaluation.constant_alpha_mc import ConstantAlphaMC
 from mdp.model.algorithm.policy_evaluation.td_0 import TD0
 from mdp.model.algorithm.policy_evaluation.mc_prediction_q import MCPredictionQ
@@ -17,7 +17,7 @@ from mdp.model.algorithm.policy_evaluation.mc_prediction_v import MCPredictionV
 
 from mdp.model.algorithm.policy_improvement.policy_improvement_dp_q import PolicyImprovementDpQ
 from mdp.model.algorithm.policy_improvement.policy_improvement_dp_v import PolicyImprovementDpV
-from mdp.model.algorithm.policy_improvement.policy_improvement_dp_v_np import PolicyImprovementDpVNp
+from mdp.model.algorithm.policy_improvement.policy_improvement_dp_v_np_deterministic import PolicyImprovementDpVNp
 
 from mdp.model.algorithm.control.on_policy_mc_control import OnPolicyMcControl
 from mdp.model.algorithm.control.off_policy_mc_control import OffPolicyMcControl

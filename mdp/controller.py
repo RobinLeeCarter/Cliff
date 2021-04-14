@@ -29,7 +29,7 @@ class Controller:
 
     def run(self):
         # import cProfile
-        # cProfile.runctx('self._model.run()', globals(), locals(), 'Profiles/test.prof')
+        # cProfile.runctx('self._model.run()', globals(), locals(), 'model_run.prof')
         self._model.run()
 
     def output(self):

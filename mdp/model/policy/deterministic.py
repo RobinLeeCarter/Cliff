@@ -44,12 +44,13 @@ class Deterministic(policy.Policy):
         # self._policy_matrix[s, prev_a] = 0.0
         # self._policy_matrix[s, a] = 1.0
 
-    def set_policy_vector(self, policy_vector: np.ndarray):
+    def set_policy_vector(self, policy_vector: np.ndarray, update_dict: bool = True):
         self._policy_vector = policy_vector
-        for s, state in enumerate(self._environment.states):
-            a = policy_vector[s]
-            action: Action = self._environment.actions[a]
-            self._action_for_state[state] = action
+        if update_dict:
+            for s, state in enumerate(self._environment.states):
+                a = policy_vector[s]
+                action: Action = self._environment.actions[a]
+                self._action_for_state[state] = action
 
             # prev_a = self._policy_vector[s]
             # self._policy_vector[s] = a
