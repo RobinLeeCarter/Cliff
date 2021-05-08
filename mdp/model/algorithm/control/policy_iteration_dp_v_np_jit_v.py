@@ -45,6 +45,7 @@ def get_state_transition_probability_matrix_jit(policy_vector: np.ndarray,
 def get_state_transition_probability_matrix(policy_vector: np.ndarray,
                                             state_transition_probabilities: np.ndarray
                                             ) -> np.ndarray:
+    """faster version with fancy indexing"""
     # policy_vector[s] = a ; π(a|s) deterministic
     # state_transition_probabilities[s, a, s'] = p(s'|s,a)
     # state_transition_probability_matrix[s, s'] = p(s'|s) = Σa π(a|s) . p(s'|s,a)
@@ -61,6 +62,7 @@ def get_state_transition_probability_matrix(policy_vector: np.ndarray,
     # n_actions: int = state_transition_probabilities.shape[1]
 
     # out = state_transition_probabilities[np.arange(n_states), policy_vector, :]
+    # advanced fancy indexing
     out = state_transition_probabilities[i, policy_vector, :]
 
     # out = np.empty(shape=(n_states, n_states), dtype=np.float64)
@@ -102,6 +104,7 @@ def get_reward_vector_jit(policy_vector: np.ndarray,
 def get_reward_vector(policy_vector: np.ndarray,
                       expected_reward: np.ndarray,
                       ) -> np.ndarray:
+    """faster version with fancy indexing"""
     # policy_vector[s] = a ; π(a|s) deterministic
     # expected_reward[s,a] = Σs',r p(s',r|s,a).r
     # reward_vector[s] = Σa π(a|s) . Σs',r p(s',r|s,a).r
@@ -229,14 +232,14 @@ def policy_evaluation_algorithm(gamma: float,
     # state_transition_probability_matrix
     # T[s, s'] = p(s'|s) = Σa π(a|s).p(s'|s,a)
     # noinspection PyPep8Naming
-    T: np.ndarray = get_state_transition_probability_matrix_jit(policy_vector, state_transition_probabilities)
+    T: np.ndarray = get_state_transition_probability_matrix(policy_vector, state_transition_probabilities)
 
     # noinspection PyPep8Naming
     # T: np.ndarray = state_transition_probabilities[np.arange(policy_vector.shape[0]), policy_vector, :]
 
     # r[s] = E[r|s,a=π(a|s)] = Σa π(a|s) Σs',r p(s',r|s,a).r
     # r = np.zeros(shape=policy_vector.shape, dtype=np.float64)
-    r: np.ndarray = get_reward_vector_jit(policy_vector, expected_reward)
+    r: np.ndarray = get_reward_vector(policy_vector, expected_reward)
     # prev_v = np.empty_like(v)
 
     while cont and delta >= theta and iteration < iteration_timeout:

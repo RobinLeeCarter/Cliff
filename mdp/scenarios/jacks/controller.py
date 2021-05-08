@@ -37,5 +37,5 @@ class Controller(controller.Controller):
         v: np.ndarray = self._model.agent.algorithm.V.vector
         total_v: float = v.sum()
 
-        print(f"total_t: {total_transfers}")
+        print(f"total_transfers: {total_transfers}")
         print(f"total_v: {total_v:.0f}")
