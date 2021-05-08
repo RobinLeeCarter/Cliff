@@ -57,3 +57,4 @@ class PolicyIterationDpVNp(PolicyEvaluationDpVNp, PolicyImprovementDpVNp):
             if self._verbose:
                 print(f"Policy Iteration completed ...")
 
+        # print(f"iterations: {iteration-1}")

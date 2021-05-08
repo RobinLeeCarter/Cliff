@@ -2,7 +2,8 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 import numpy as np
-from numba import njit
+from numba import njit, prange
+from numba import float64, int64, void, types
 
 if TYPE_CHECKING:
     from mdp.model.environment.environment import Environment
@@ -71,15 +72,17 @@ class PolicyEvaluationDpVNp(DynamicProgrammingV):
         # r: np.ndarray = self._get_reward_vector(policy_vector, expected_reward)
 
         while cont and above_theta and iteration < self._iteration_timeout:
-            # prev_v = v.copy()
+            prev_v = v.copy()
             # bellman operator v'[s] = Σa π(a|s) Σs',r p(s',r|s,a).(r + γ.v(s'))
             # v = r + γTv
-            new_v = r + gamma*np.dot(T, v)
+            partially_inplace_update(v, r, T, gamma)
+            # v = self.perform_update(v, r, T, gamma)
+            # new_v = r + gamma*np.dot(T, v)
             # check for convergence
             # diff = abs(v - prev_v)
             # delta = np.linalg.norm(diff, ord=1)
-            above_theta = l1_norm_above(v, new_v, self._theta)
-            v = new_v
+            above_theta = l1_norm_above(prev_v, v, self._theta)
+            # v = new_v
 
             if self._verbose:
                 print(f"iteration = {iteration}")
@@ -94,8 +97,41 @@ class PolicyEvaluationDpVNp(DynamicProgrammingV):
             if self._verbose:
                 print(f"Policy Evaluation completed.")
                 # print(f"Policy Evaluation completed. delta={delta:.2f}")
+        # print(f"iterations: {iteration - 1}")
 
         self.V.vector = v
+
+    # noinspection PyPep8Naming
+    def perform_update(self, v: np.ndarray, r: np.ndarray, T: np.ndarray, gamma: float) -> np.ndarray:
+        new_v = r + gamma * np.dot(T, v)
+        return new_v
+
+
+# noinspection PyPep8Naming
+# @njit(cache=True, parallel=True)
+
+# partially in-place was 24s vs. 8s so about 3 times as slow
+@njit(void(
+    float64[::1],
+    float64[::1],
+    float64[::, ::1],
+    float64,
+        ), cache=True)
+def partially_inplace_update(v: np.ndarray, r: np.ndarray, T: np.ndarray, gamma: float):
+    batch: int = 32     # 4 iteration per processor
+    total: int = v.shape[0]     # 441
+    # new_v = v.copy()
+    # 14 batches for a complete sweep of state
+    for i in range(0, total, batch):
+        stop = min(total, i+batch)
+        # state_range = slice(i, stop)
+        # for j in range(i, stop):
+        #     dot: float = 0.0
+        #     for k in range(total):
+        #         dot += T[j, k] * v[k]
+        #     new_v[j] = r[j] + gamma * dot
+        v[i:stop] = r[i:stop] + gamma * np.dot(T[i:stop, :], v)
+        # v[state_range] = new_v[state_range]
 
 
 @njit(cache=True)
@@ -159,3 +195,8 @@ def l1_norm_above(v1: np.ndarray, v2: np.ndarray, theta: float) -> bool:
     #             reward_vector[s] += policy_matrix[s, a] * expected_reward[s, a]
     #
     #     return reward_vector
+
+
+# if __name__ == '__main__':
+    # partially_inplace_update.inspect_types()
+    #     partially_inplace_update.parallel_diagnostics(level=4)
