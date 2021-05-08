@@ -2,8 +2,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 import numpy as np
-from numba import njit, prange
-from numba import float64, int64, void, types
+from numba import njit
 
 if TYPE_CHECKING:
     from mdp.model.environment.environment import Environment
@@ -72,17 +71,14 @@ class PolicyEvaluationDpVNp(DynamicProgrammingV):
         # r: np.ndarray = self._get_reward_vector(policy_vector, expected_reward)
 
         while cont and above_theta and iteration < self._iteration_timeout:
-            prev_v = v.copy()
             # bellman operator v'[s] = Σa π(a|s) Σs',r p(s',r|s,a).(r + γ.v(s'))
             # v = r + γTv
-            partially_inplace_update(v, r, T, gamma)
-            # v = self.perform_update(v, r, T, gamma)
-            # new_v = r + gamma*np.dot(T, v)
+            new_v = r + gamma*np.dot(T, v)
             # check for convergence
             # diff = abs(v - prev_v)
             # delta = np.linalg.norm(diff, ord=1)
-            above_theta = l1_norm_above(prev_v, v, self._theta)
-            # v = new_v
+            above_theta = l1_norm_above(new_v, v, self._theta)
+            v = new_v
 
             if self._verbose:
                 print(f"iteration = {iteration}")
@@ -107,33 +103,6 @@ class PolicyEvaluationDpVNp(DynamicProgrammingV):
         return new_v
 
 
-# noinspection PyPep8Naming
-# @njit(cache=True, parallel=True)
-
-# partially in-place was 24s vs. 8s so about 3 times as slow
-@njit(void(
-    float64[::1],
-    float64[::1],
-    float64[::, ::1],
-    float64,
-        ), cache=True)
-def partially_inplace_update(v: np.ndarray, r: np.ndarray, T: np.ndarray, gamma: float):
-    batch: int = 32     # 4 iteration per processor
-    total: int = v.shape[0]     # 441
-    # new_v = v.copy()
-    # 14 batches for a complete sweep of state
-    for i in range(0, total, batch):
-        stop = min(total, i+batch)
-        # state_range = slice(i, stop)
-        # for j in range(i, stop):
-        #     dot: float = 0.0
-        #     for k in range(total):
-        #         dot += T[j, k] * v[k]
-        #     new_v[j] = r[j] + gamma * dot
-        v[i:stop] = r[i:stop] + gamma * np.dot(T[i:stop, :], v)
-        # v[state_range] = new_v[state_range]
-
-
 @njit(cache=True)
 def l1_norm_above(v1: np.ndarray, v2: np.ndarray, theta: float) -> bool:
     l1_norm: float = 0.0
@@ -144,57 +113,6 @@ def l1_norm_above(v1: np.ndarray, v2: np.ndarray, theta: float) -> bool:
             above_theta: bool = True
             break
     return above_theta
-
-    # def _get_state_transition_probability_matrix(self,
-    #                                              policy_matrix: np.ndarray,
-    #                                              state_transition_probabilities: np.ndarray
-    #                                              ) -> np.ndarray:
-    #     # policy_matrix[s, a] = π(a|s)
-    #     # state_transition_probabilities[s, a, s'] = p(s'|s,a)
-    #     # state_transition_probability_matrix[s, s'] = p(s'|s) = Σa π(a|s) . p(s'|s,a)
-    #     # so sum over axis 1 of policy_matrix and axis 1 of self.state_transition_probabilities
-    #     state_transition_probability_matrix: np.ndarray = np.einsum(
-    #         'ij,ijk->ik',
-    #         policy_matrix,
-    #         state_transition_probabilities
-    #     )
-    #     return state_transition_probability_matrix
-
-    # def _get_reward_vector(self,
-    #                        policy_matrix: np.ndarray,
-    #                        expected_reward: np.ndarray
-    #                        ) -> np.ndarray:
-    #     # policy_matrix[s,a] = π(a|s)
-    #     # expected_reward[s,a] = Σs',r p(s',r|s,a).r
-    #     # reward_vector[s] = Σa π(a|s) . Σs',r p(s',r|s,a).r
-    #     # so sum over axis 1 of policy_matrix and axis 1 of expected_reward
-    #
-    #     reward_vector: np.ndarray = np.einsum(
-    #         'ij,ij->i',
-    #         policy_matrix,
-    #         expected_reward
-    #     )
-    #     return reward_vector
-
-    # def _get_reward_vector_looping(self,
-    #                                policy_matrix: np.ndarray,
-    #                                expected_reward: np.ndarray
-    #                                ) -> np.ndarray:
-    #     # policy_matrix[s,a] = π(a|s)
-    #     # expected_reward[s,a] = Σs',r p(s',r|s,a).r
-    #     # reward_vector[s] = Σa π(a|s) . Σs',r p(s',r|s,a).r
-    #     # so sum over axis 1 of policy_matrix and axis 1 of expected_reward
-    #
-    #     states = policy_matrix.shape[0]
-    #     actions = policy_matrix.shape[1]
-    #
-    #     reward_vector: np.ndarray = np.zeros(shape=policy_matrix.shape[0])
-    #
-    #     for s in range(states):
-    #         for a in range(actions):
-    #             reward_vector[s] += policy_matrix[s, a] * expected_reward[s, a]
-    #
-    #     return reward_vector
 
 
 # if __name__ == '__main__':
