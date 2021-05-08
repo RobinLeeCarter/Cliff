@@ -29,7 +29,7 @@ from mdp.model.algorithm.control.q_learning import QLearning
 from mdp.model.algorithm.control.policy_iteration_dp_q import PolicyIterationDpQ
 from mdp.model.algorithm.control.policy_iteration_dp_v import PolicyIterationDpV
 from mdp.model.algorithm.control.policy_iteration_dp_v_np import PolicyIterationDpVNp
-from mdp.model.algorithm.control.policy_iteration_dp_v_np_jit import PolicyIterationDpVNpJit
+from mdp.model.algorithm.control.unused_policy_iteration_dp_v_np_jit import PolicyIterationDpVNpJit
 from mdp.model.algorithm.control.value_iteration_dp_v import ValueIterationDpV
 from mdp.model.algorithm.control.value_iteration_dp_v_np import ValueIterationDpVNp
 
@@ -47,7 +47,7 @@ def algorithm_factory(environment_: Environment,
         a.POLICY_IMPROVEMENT_DP_V_NP: PolicyImprovementDpVNp,
         a.POLICY_ITERATION_DP_V: PolicyIterationDpV,
         a.POLICY_ITERATION_DP_V_NP: PolicyIterationDpVNp,
-        a.POLICY_ITERATION_DP_V_NP_JIT: PolicyIterationDpVNpJit,
+        # a.POLICY_ITERATION_DP_V_NP_JIT: PolicyIterationDpVNpJit,
         a.VALUE_ITERATION_DP_V: ValueIterationDpV,
         a.VALUE_ITERATION_DP_V_NP: ValueIterationDpVNp,
 

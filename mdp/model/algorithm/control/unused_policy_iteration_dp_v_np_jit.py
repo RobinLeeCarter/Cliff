@@ -9,7 +9,7 @@ if TYPE_CHECKING:
     from mdp.model.policy.deterministic import Deterministic
 from mdp import common
 from mdp.model.algorithm.abstract.dynamic_programming_v import DynamicProgrammingV
-from mdp.model.algorithm.control import policy_iteration_dp_v_np_jit_v as jit
+from mdp.model.algorithm.control import unused_policy_iteration_dp_v_np_jit_v as jit
 
 
 class PolicyIterationDpVNpJit(DynamicProgrammingV):
