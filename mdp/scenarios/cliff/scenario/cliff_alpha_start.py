@@ -19,12 +19,12 @@ class CliffAlphaStart(Scenario):
                 breakdown_type=common.BreakdownType.RETURN_BY_ALPHA,
                 alpha_min=0.1,
                 alpha_max=1.0,
-                alpha_step=0.05,
+                alpha_step=0.1,
                 algorithm_type_list=[
                     common.AlgorithmType.EXPECTED_SARSA,
                     # common.AlgorithmType.VQ,
-                    common.AlgorithmType.Q_LEARNING,
-                    common.AlgorithmType.SARSA
+                    # common.AlgorithmType.Q_LEARNING,
+                    # common.AlgorithmType.SARSA
                 ],
             ),
             graph_values=common.GraphValues(

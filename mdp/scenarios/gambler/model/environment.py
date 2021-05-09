@@ -27,8 +27,8 @@ class Environment(environment.Environment):
         # downcast states and actions so properties can be used freely
         self.states: list[State] = self.states
         self.actions: list[Action] = self.actions
-        self._state: State = self._state
-        self._action: Action = self._action
+        # self._state: State = self._state
+        # self._action: Action = self._action
         self._environment_parameters: EnvironmentParameters = self._environment_parameters
 
         self._max_capital: int = environment_parameters.max_capital

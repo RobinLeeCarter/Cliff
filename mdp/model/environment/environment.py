@@ -36,11 +36,11 @@ class Environment(ABC):
         self.s_a_compatibility: np.ndarray = np.empty(0, dtype=bool)
 
         # for processing response
-        self._state: Optional[State] = None
-        self._action: Optional[Action] = None
-        self._reward: Optional[float] = None
-        self._new_state: Optional[State] = None
-        self._response: Optional[Response] = None
+        # self._state: Optional[State] = None
+        # self._action: Optional[Action] = None
+        # self._reward: Optional[float] = None
+        # self._new_state: Optional[State] = None
+        # self._response: Optional[Response] = None
 
         self._square: Optional[common.Square] = None
 
@@ -53,7 +53,7 @@ class Environment(ABC):
         self.state_index = {state: i for i, state in enumerate(self.states)}
         self._build_actions()
         self.action_index = {action: i for i, action in enumerate(self.actions)}
-        self._build_actions_for_states()
+        self._build_state_actions()
         self.dynamics.build()
 
     def state_action_index(self, state: State, action: Action) -> tuple[int, int]:
@@ -70,17 +70,17 @@ class Environment(ABC):
     def _build_actions(self):
         pass
 
-    def _build_actions_for_states(self):
+    def _build_state_actions(self):
         """materialise A(s)"""
         self.s_a_compatibility = np.empty(shape=(len(self.states), len(self.actions),), dtype=bool)
         for s, state in enumerate(self.states):
-            state_actions: list[Action] = []
+            actions_for_state: list[Action] = []
             for a, action in enumerate(self.actions):
                 compatible: bool = self.is_action_compatible_with_state(state, action)
                 self.s_a_compatibility[s, a] = compatible
                 if compatible:
-                    state_actions.append(action)
-            self.actions_for_state[state] = state_actions
+                    actions_for_state.append(action)
+            self.actions_for_state[state] = actions_for_state
 
     def is_action_compatible_with_state(self, state: State, action: Action):
         return True
@@ -100,19 +100,34 @@ class Environment(ABC):
         state = self._get_a_start_state()
         return Response(state=state, reward=None)
 
+    def start_s(self) -> int:
+        state = self._get_a_start_state()
+        s: int = self.state_index[state]
+        return s
+
     def _get_a_start_state(self) -> State:
         return self.dynamics.get_a_start_state()
 
     def from_state_perform_action(self, state: State, action: Action) -> Response:
         if state.is_terminal:
             raise Exception("Environment: Trying to act in a terminal state.")
-        self._state = state
-        self._action = action
-        if not self.is_action_compatible_with_state(self._state, self._action):
-            raise Exception(f"_apply_action state {self._state} incompatible with action {self._action}")
-        self._response = self.dynamics.draw_response(self._state, self._action)
-        return self._response
+        if not self.is_action_compatible_with_state(state, action):
+            raise Exception(f"_apply_action state {state} incompatible with action {action}")
+        response: Response = self.dynamics.draw_response(state, action)
+        return response
 
+    def from_s_perform_a(self, s: int, a: int) -> tuple[float, int]:
+        state = self.states[s]
+        action = self.actions[a]
+        if state.is_terminal:
+            raise Exception("Environment: Trying to act in a terminal state.")
+        if not self.s_a_compatibility[s, a]:
+            raise Exception(f"_apply_action state {state} incompatible with action {action}")
+        response = self.dynamics.draw_response(state, action)
+        new_s = self.state_index[self]
+        return response.reward, new_s
+
+    # TODO: move down hierarchy, too general for top level
     def _project_back_to_grid(self, requested_position: common.XY) -> common.XY:
         x = requested_position.x
         y = requested_position.y
