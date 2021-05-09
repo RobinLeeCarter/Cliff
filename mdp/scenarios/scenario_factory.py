@@ -10,9 +10,7 @@ from mdp.scenarios.jacks.scenario.jacks_policy_evaluation_v_np import JacksPolic
 from mdp.scenarios.jacks.scenario.jacks_policy_improvement_v import JacksPolicyImprovementV
 from mdp.scenarios.jacks.scenario.jacks_policy_improvement_v_np import JacksPolicyImprovementVNp
 from mdp.scenarios.jacks.scenario.jacks_policy_iteration_v import JacksPolicyIterationV
-from mdp.scenarios.jacks.scenario.unused_jacks_policy_iteration_v_profile import JacksPolicyIterationVProfile
 from mdp.scenarios.jacks.scenario.jacks_policy_iteration_v_np import JacksPolicyIterationVNp
-from mdp.scenarios.jacks.scenario.unused_jacks_policy_iteration_v_np_jit import JacksPolicyIterationVNpJit
 from mdp.scenarios.jacks.scenario.jacks_policy_iteration_q import JacksPolicyIterationQ
 from mdp.scenarios.jacks.scenario.jacks_value_iteration_v import JacksValueIterationV
 from mdp.scenarios.jacks.scenario.jacks_value_iteration_v_np import JacksValueIterationVNp

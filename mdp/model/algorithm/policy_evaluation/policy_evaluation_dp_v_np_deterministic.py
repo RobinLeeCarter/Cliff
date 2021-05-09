@@ -101,7 +101,7 @@ class PolicyEvaluationDpVNp(DynamicProgrammingV):
         self.V.vector = v
 
 
-# marginally faster for larger runs (10,000 times)
+# UNUSED marginally faster for larger runs (10,000 times)
 # noinspection PyPep8Naming
 @njit(cache=True)
 def converge_v(v: np.ndarray, r: np.ndarray, T: np.ndarray, gamma: float,

@@ -29,7 +29,6 @@ from mdp.model.algorithm.control.q_learning import QLearning
 from mdp.model.algorithm.control.policy_iteration_dp_q import PolicyIterationDpQ
 from mdp.model.algorithm.control.policy_iteration_dp_v import PolicyIterationDpV
 from mdp.model.algorithm.control.policy_iteration_dp_v_np import PolicyIterationDpVNp
-from mdp.model.algorithm.control.unused_policy_iteration_dp_v_np_jit import PolicyIterationDpVNpJit
 from mdp.model.algorithm.control.value_iteration_dp_v import ValueIterationDpV
 from mdp.model.algorithm.control.value_iteration_dp_v_np import ValueIterationDpVNp
 
