@@ -1,13 +1,11 @@
 from __future__ import annotations
-from typing import TYPE_CHECKING, Optional
+from typing import TYPE_CHECKING
 
 import numpy as np
 
 if TYPE_CHECKING:
-    from mdp.model.environment.action import Action
     from mdp.model.environment.environment import Environment
     from mdp.model.agent.agent import Agent
-    from mdp.model.policy.policy import Policy
     from mdp.model.policy.deterministic import Deterministic
 from mdp import common
 from mdp.model.algorithm.abstract.dynamic_programming_v import DynamicProgrammingV

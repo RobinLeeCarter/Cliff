@@ -39,7 +39,7 @@ class PolicyEvaluationDpV(DynamicProgrammingV):
             for state in self._environment.states:
                 v = self.V[state]
                 new_v: float = 0.0
-                for action in self._environment.actions_for_state(state):
+                for action in self._environment.actions_for_state[state]:
                     # π(a|s)
                     policy_probability = self._agent.policy.get_probability(state, action)
                     if policy_probability > 0:

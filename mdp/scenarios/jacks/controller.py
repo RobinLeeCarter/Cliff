@@ -6,7 +6,6 @@ import numpy as np
 if TYPE_CHECKING:
     from mdp.scenarios.jacks.model.model import Model
     from mdp.scenarios.jacks.model.action import Action
-    from mdp.model.algorithm.abstract.dynamic_programming_v import DynamicProgrammingV
 
 from mdp import controller
 

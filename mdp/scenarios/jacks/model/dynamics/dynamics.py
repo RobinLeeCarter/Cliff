@@ -2,7 +2,6 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from mdp.model.policy.policy import Policy
     from mdp.scenarios.jacks.model.action import Action
     from mdp.scenarios.jacks.model.environment import Environment
     from mdp.scenarios.jacks.model.environment_parameters import EnvironmentParameters
@@ -69,12 +68,12 @@ class Dynamics(dynamics.Dynamics):
 
     def _build_expected_reward_summary(self):
         for state in self._environment.states:
-            for action in self._environment.actions_for_state(state):
+            for action in self._environment.actions_for_state[state]:
                 self._expected_reward[(state, action)] = self._calc_expected_reward(state, action)
 
     def _build_next_state_distribution_summary(self):
         for state in self._environment.states:
-            for action in self._environment.actions_for_state(state):
+            for action in self._environment.actions_for_state[state]:
                 self._next_state_distribution[(state, action)] = self._calc_next_state_distribution(state, action)
 
     def _build_state_transition_probabilities(self):
@@ -84,7 +83,7 @@ class Dynamics(dynamics.Dynamics):
         tensor_shape = (state_count, action_count, state_count)
         self.state_transition_probabilities = np.zeros(shape=tensor_shape, dtype=np.float)
         for s0, state in enumerate(self._environment.states):
-            for action in self._environment.actions_for_state(state):
+            for action in self._environment.actions_for_state[state]:
                 a0 = self._environment.action_index[action]
                 next_state_distribution = self._next_state_distribution[(state, action)]
                 for next_state, probability in next_state_distribution.items():
@@ -97,7 +96,7 @@ class Dynamics(dynamics.Dynamics):
         # (state, action)
         self.expected_reward_np = np.zeros(shape=(state_count, action_count), dtype=np.float)
         for s, state in enumerate(self._environment.states):
-            for action in self._environment.actions_for_state(state):
+            for action in self._environment.actions_for_state[state]:
                 a = self._environment.action_index[action]
                 self.expected_reward_np[s, a] = self._expected_reward[state, action]
 

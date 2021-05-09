@@ -35,7 +35,7 @@ class DynamicProgrammingV(dynamic_programming.DynamicProgramming, abc.ABC):
         for state in self._environment.states:
             if not state.is_terminal:
                 action_values: dict[Action, float] = {}
-                for action in self._environment.actions_for_state(state):
+                for action in self._environment.actions_for_state[state]:
                     value: float = self._get_expected_return(state, action)
                     if round_first:
                         value = round(value / self._theta, 0) * self._theta

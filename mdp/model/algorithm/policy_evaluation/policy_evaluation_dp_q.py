@@ -35,7 +35,7 @@ class PolicyEvaluationDpQ(DynamicProgrammingQ):
         while cont and delta >= self._theta and iteration < self._iteration_timeout:
             delta = 0.0
             for state in self._environment.states:
-                for action in self._environment.actions_for_state(state):
+                for action in self._environment.actions_for_state[state]:
                     q = self.Q[state, action]
                     new_q: float = self._get_expected_return(state, action)
                     self.Q[state, action] = new_q

@@ -1,6 +1,8 @@
 from __future__ import annotations
-from typing import Generator, Optional, TYPE_CHECKING
+from typing import Optional, TYPE_CHECKING
 from abc import ABC, abstractmethod
+
+import numpy as np
 
 if TYPE_CHECKING:
     from mdp.model.algorithm.abstract.algorithm_ import Algorithm
@@ -30,6 +32,8 @@ class Environment(ABC):
         self.actions: list[Action] = []
         self.action_index: dict[Action: int] = {}
         self.action_type: type = Action  # required?
+        self.actions_for_state: dict[State, list[Action]] = {}
+        self.s_a_compatibility: np.ndarray = np.empty(0, dtype=bool)
 
         # for processing response
         self._state: Optional[State] = None
@@ -49,6 +53,7 @@ class Environment(ABC):
         self.state_index = {state: i for i, state in enumerate(self.states)}
         self._build_actions()
         self.action_index = {action: i for i, action in enumerate(self.actions)}
+        self._build_actions_for_states()
         self.dynamics.build()
 
     def state_action_index(self, state: State, action: Action) -> tuple[int, int]:
@@ -65,12 +70,17 @@ class Environment(ABC):
     def _build_actions(self):
         pass
 
-    # TODO: materialise this and remove generator
-    def actions_for_state(self, state: State) -> Generator[Action, None, None]:
-        """set A(s)"""
-        for action in self.actions:
-            if self.is_action_compatible_with_state(state, action):
-                yield action
+    def _build_actions_for_states(self):
+        """materialise A(s)"""
+        self.s_a_compatibility = np.empty(shape=(len(self.states), len(self.actions),), dtype=bool)
+        for s, state in enumerate(self.states):
+            state_actions: list[Action] = []
+            for a, action in enumerate(self.actions):
+                compatible: bool = self.is_action_compatible_with_state(state, action)
+                self.s_a_compatibility[s, a] = compatible
+                if compatible:
+                    state_actions.append(action)
+            self.actions_for_state[state] = state_actions
 
     def is_action_compatible_with_state(self, state: State, action: Action):
         return True

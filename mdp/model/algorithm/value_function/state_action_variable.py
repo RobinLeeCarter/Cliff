@@ -26,7 +26,7 @@ class StateActionVariable:
 
     def initialize_values(self):
         for state_ in self._environment.states:
-            for action_ in self._environment.actions_for_state(state_):
+            for action_ in self._environment.actions_for_state[state_]:
                 state_action_index = self._environment.state_action_index(state_, action_)
                 self._values[state_action_index] = self._initial_value
 

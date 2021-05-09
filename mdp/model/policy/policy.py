@@ -47,7 +47,7 @@ class Policy(abc.ABC):
         action_count = len(self._environment.actions)
         policy_matrix = np.zeros(shape=(state_count, action_count), dtype=float)
         for s, state in enumerate(self._environment.states):
-            for action in self._environment.actions_for_state(state):
+            for action in self._environment.actions_for_state[state]:
                 a = self._environment.action_index[action]
                 probability = self.get_probability(state, action)
                 policy_matrix[s, a] = probability

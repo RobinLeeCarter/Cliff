@@ -40,7 +40,7 @@ class ValueIterationDpV(DynamicProgrammingV):
                 if not state.is_terminal:
                     v = self.V[state]
                     new_v: float = max(self._get_expected_return(state, action)
-                                       for action in self._environment.actions_for_state(state))
+                                       for action in self._environment.actions_for_state[state])
                     self.V[state] = new_v
                     delta = max(delta, abs(new_v - v))
             if self._verbose:

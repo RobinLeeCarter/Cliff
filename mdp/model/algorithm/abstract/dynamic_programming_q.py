@@ -35,7 +35,7 @@ class DynamicProgrammingQ(dynamic_programming.DynamicProgramming, abc.ABC):
             # Sum_over_a'( π(a'|s').Q(s',a') )
             next_state_return: float = 0
 
-            for next_action in self._environment.actions_for_state(next_state):
+            for next_action in self._environment.actions_for_state[next_state]:
                 # π(a'|s')
                 policy_probability = self._agent.policy.get_probability(next_state, next_action)
                 if policy_probability > 0:

@@ -41,7 +41,7 @@ class PolicyImprovementDpV(DynamicProgrammingV):
             old_action: Action = policy_[state]
             best_action: Optional[Action] = None
             best_expected_return: float = float('-inf')
-            for action in self._environment.actions_for_state(state):
+            for action in self._environment.actions_for_state[state]:
                 expected_return = self._get_expected_return(state, action)
                 if expected_return > best_expected_return:
                     best_action = action

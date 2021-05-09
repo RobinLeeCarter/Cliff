@@ -69,7 +69,7 @@ class Algorithm(abc.ABC):
         for state in self._environment.states:
             # Sum_over_a( π(a|s).Q(s,a) )
             expected_v: float = 0.0
-            for action in self._environment.actions_for_state(state):
+            for action in self._environment.actions_for_state[state]:
                 # π(a|s)
                 policy_probability = policy_.get_probability(state, action)
                 # π(a|s).Q(s,a)
