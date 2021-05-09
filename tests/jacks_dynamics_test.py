@@ -2,22 +2,27 @@ from __future__ import annotations
 # from typing import TYPE_CHECKING
 
 from mdp.common import Distribution
+from mdp import common
+from mdp.scenarios import scenario_factory
 
-from mdp.scenarios.jacks.state import State
-from mdp.scenarios.jacks.action import Action
-from mdp.scenarios.jacks.response import Response
-from mdp.scenarios.jacks.comparisons import jacks_policy_iteration_v
-# from mdp.scenarios.jacks.dynamics.dynamics import Dynamics
-
-from mdp.scenarios.factory import environment_factory
+from mdp.scenarios.jacks.model.state import State
+from mdp.scenarios.jacks.model.action import Action
+from mdp.scenarios.jacks.model.response import Response
+from mdp.scenarios.jacks.model.environment import Environment
+from mdp.scenarios.jacks.model.dynamics.dynamics import Dynamics
 
 
-comparison = jacks_policy_iteration_v()
-environment_ = environment_factory.environment_factory(comparison.environment_parameters)
+scenario = scenario_factory.scenario_factory(common.ComparisonType.JACKS_POLICY_ITERATION_V)
+scenario.build()
+# noinspection PyProtectedMember
+environment: Environment = scenario._model.environment
+
+# comparison = jacks_policy_iteration_v()
+# environment_ = unused_environment_factory.environment_factory(comparison.environment_parameters)
 
 # dynamics = Dynamics(environment_, comparison.environment_parameters)
 # dynamics.build()
-dynamics = environment_.dynamics
+dynamics: Dynamics = environment.dynamics
 
 state = State(is_terminal=False, ending_cars_1=10, ending_cars_2=8)
 action = Action(transfer_1_to_2=2)

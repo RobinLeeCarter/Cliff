@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from mdp.common import Distribution
-from mdp.scenarios.jacks.state import State
+from mdp.scenarios.jacks.model.state import State
 
 
 x: Distribution[State] = Distribution()
@@ -16,5 +16,4 @@ print(x[my_state2])
 
 x.self_check()
 
-
-
+print(x.draw_one())

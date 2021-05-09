@@ -3,17 +3,21 @@ from __future__ import annotations
 import random
 
 from mdp import common
-from mdp.scenarios.factory import environment_factory
-from mdp.scenarios.gambler import comparisons  # action, state,
-from mdp.scenarios.gambler.state import State
-from mdp.scenarios.gambler.action import Action
-from mdp.scenarios.gambler.response import Response
-from mdp.scenarios.gambler.environment import Environment
+from mdp.scenarios import scenario_factory
+from mdp.scenarios.gambler.model.state import State
+from mdp.scenarios.gambler.model.action import Action
+from mdp.scenarios.gambler.model.response import Response
+from mdp.scenarios.gambler.model.environment import Environment
 
 
 def gambler_test() -> bool:
-    comparison: common.Comparison = comparisons.gambler_value_iteration_v()
-    environment = environment_factory.environment_factory(comparison.environment_parameters)
+    scenario = scenario_factory.scenario_factory(common.ComparisonType.GAMBLER_VALUE_ITERATION_V)
+    scenario.build()
+    # noinspection PyProtectedMember
+    environment: Environment = scenario._model.environment
+
+    # comparison: common.Comparison = unused_comparisons.gambler_value_iteration_v()
+    # environment = unused_environment_factory.environment_factory(comparison.environment_parameters)
 
     # print("States...")
     # for state in environment.states:
@@ -71,8 +75,6 @@ def gambler_test() -> bool:
     # print(response)
     # print()
 
-
-
     # print(state, action)
     # response: Response = environment.from_state_perform_action(state, action)
     # print(response)
@@ -110,6 +112,7 @@ def gambler_test() -> bool:
 def random_round(environment: Environment):
     response: Response = environment.start()
     state: State = response.state
+    # noinspection PyProtectedMember
     max_stake = min(state.capital, environment._max_capital-state.capital)
     stake = random.choice(range(1, max_stake+1))
     action = Action(stake=stake)

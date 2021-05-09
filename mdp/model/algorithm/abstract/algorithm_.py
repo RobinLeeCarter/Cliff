@@ -3,20 +3,23 @@ from typing import TYPE_CHECKING, Optional
 import abc
 
 if TYPE_CHECKING:
-    from mdp.model import environment, agent, policy
+    from mdp.model.environment.environment import Environment
+    from mdp.model.agent.agent import Agent
+    from mdp.model.policy.policy import Policy
     from mdp import common
-from mdp.model.algorithm import value_function
+from mdp.model.algorithm.value_function.state_function import StateFunction
+from mdp.model.algorithm.value_function.state_action_function import StateActionFunction
 
 
 class Algorithm(abc.ABC):
     def __init__(self,
-                 environment_: environment.Environment,
-                 agent_: agent.Agent,
+                 environment_: Environment,
+                 agent_: Agent,
                  algorithm_parameters: common.AlgorithmParameters,
                  policy_parameters: common.PolicyParameters
                  ):
-        self._environment: environment.Environment = environment_
-        self._agent: agent.Agent = agent_
+        self._environment: Environment = environment_
+        self._agent: Agent = agent_
         self._algorithm_parameters: common.AlgorithmParameters = algorithm_parameters
         self._policy_parameters: common.PolicyParameters = policy_parameters
         self._verbose = self._algorithm_parameters.verbose
@@ -26,14 +29,14 @@ class Algorithm(abc.ABC):
         self.title: str = "Error: Untitled"
 
         self._gamma: float = self._agent.gamma
-        self.V: Optional[value_function.StateFunction] = None
-        self.Q: Optional[value_function.StateActionFunction] = None
+        self.V: Optional[StateFunction] = None
+        self.Q: Optional[StateActionFunction] = None
 
     def _create_v(self):
-        self.V = value_function.StateFunction(self._environment, self._algorithm_parameters.initial_v_value)
+        self.V = StateFunction(self._environment, self._algorithm_parameters.initial_v_value)
 
     def _create_q(self):
-        self.Q = value_function.StateActionFunction(self._environment, self._algorithm_parameters.initial_q_value)
+        self.Q = StateActionFunction(self._environment, self._algorithm_parameters.initial_q_value)
 
     def initialize(self):
         if self.V:
@@ -56,7 +59,7 @@ class Algorithm(abc.ABC):
     def __repr__(self):
         return f"{self.title}"
 
-    def derive_v_from_q(self, policy_: Optional[policy.Policy] = None):
+    def derive_v_from_q(self, policy_: Optional[Policy] = None):
         if not policy_:
             policy_ = self._agent.policy
 

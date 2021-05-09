@@ -10,7 +10,7 @@ from mdp.common import enums
 
 @dataclasses.dataclass
 class EnvironmentParameters(abc.ABC):
-    environment_type: Optional[enums.EnvironmentType] = None
+    environment_type: Optional[enums.ScenarioType] = None
     grid: Optional[np.ndarray] = None
     actions_list: Optional[enums.ActionsList] = None
     verbose: Optional[bool] = None

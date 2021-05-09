@@ -3,15 +3,15 @@ import time
 
 import random
 
-from mdp.scenarios.factory import environment_factory
-from mdp.scenarios.jacks import action
-from mdp.scenarios.cliff import environment_parameters
-
+from mdp.scenarios.position_move.model import action
+from mdp.scenarios.cliff.model import environment_parameters
+from mdp.scenarios.cliff.model.environment import Environment
 
 environment_parameters_ = environment_parameters.default
-environment_ = environment_factory.environment_factory(environment_parameters_)
+environment = Environment(environment_parameters_)
+environment.build()
 # left, right, top, bottom
-moves: list[action.Action] = environment_.actions
+moves: list[action.Action] = environment.actions
 probabilities: list[float] = [0.1, 0.2, 0.3, 0.4]
 
 my_action = random.choices(moves, weights=probabilities)
@@ -21,15 +21,15 @@ SETUP_CODE = '''
 import random
 import numpy as np
 
-from mdp.scenarios.factory import environment_factory
-from mdp.scenarios.position_move import state, action
-from mdp.scenarios.cliff import environment_parameters
-
+from mdp.scenarios.position_move.model import action
+from mdp.scenarios.cliff.model import environment_parameters
+from mdp.scenarios.cliff.model.environment import Environment
 
 environment_parameters_ = environment_parameters.default
-environment_ = environment_factory.environment_factory(environment_parameters_)
+environment = Environment(environment_parameters_)
+environment.build()
 # left, right, top, bottom
-moves: list[action.Action] = environment_.actions
+moves: list[action.Action] = environment.actions
 probabilities: list[float] = [0.1, 0.2, 0.3, 0.4]
 '''
 

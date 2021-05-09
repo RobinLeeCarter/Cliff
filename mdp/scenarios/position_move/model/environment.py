@@ -3,13 +3,17 @@ import abc
 from typing import Optional, TYPE_CHECKING, Generator
 
 if TYPE_CHECKING:
-    from mdp.model import algorithm, policy
+    from mdp.model.algorithm.abstract.algorithm_ import Algorithm
+    from mdp.model.policy.policy import Policy
 
 from mdp import common
-from mdp.model import environment
-from mdp.scenarios.factory import actions_list_factory
+from mdp.model.environment import environment
 
-from mdp.scenarios.position_move.model import State, Action, GridWorld, Dynamics
+from mdp.scenarios.position_move.model.state import State
+from mdp.scenarios.position_move.model.action import Action
+from mdp.scenarios.position_move.model import actions_list_factory
+from mdp.scenarios.position_move.model.grid_world import GridWorld
+from mdp.scenarios.position_move.model.dynamics import Dynamics
 
 
 class Environment(environment.Environment, abc.ABC):
@@ -49,9 +53,8 @@ class Environment(environment.Environment, abc.ABC):
 
     # region Operation
     def update_grid_value_functions(self,
-                                    algorithm_: algorithm.Algorithm,
-                                    policy_: policy.Policy,
-                                    parameter: any = None
+                                    algorithm_: Algorithm,
+                                    policy_: Policy
                                     ):
         for state in self.states:
             if algorithm_.V:
@@ -60,7 +63,7 @@ class Environment(environment.Environment, abc.ABC):
                     v_value=algorithm_.V[state]
                 )
             if algorithm_.Q:
-                policy_action: Optional[environment.Action] = policy_[state]
+                policy_action: Optional[Action] = policy_[state]
                 policy_action: Action
                 policy_move: Optional[common.XY] = None
                 if policy_action:

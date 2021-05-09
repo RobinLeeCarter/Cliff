@@ -2,15 +2,17 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from mdp.model import environment, agent
+    from mdp.model.environment.environment import Environment
+    from mdp.model.agent.agent import Agent
 from mdp import common
-from mdp.model.algorithm import policy_evaluation, policy_improvement
+from mdp.model.algorithm.policy_evaluation.policy_evaluation_dp_q import PolicyEvaluationDpQ
+from mdp.model.algorithm.policy_improvement.policy_improvement_dp_q import PolicyImprovementDpQ
 
 
-class PolicyIterationDpQ(policy_evaluation.PolicyEvaluationDpQ, policy_improvement.PolicyImprovementDpQ):
+class PolicyIterationDpQ(PolicyEvaluationDpQ, PolicyImprovementDpQ):
     def __init__(self,
-                 environment_: environment.Environment,
-                 agent_: agent.Agent,
+                 environment_: Environment,
+                 agent_: Agent,
                  algorithm_parameters: common.AlgorithmParameters,
                  policy_parameters: common.PolicyParameters
                  ):

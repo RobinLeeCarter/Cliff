@@ -2,10 +2,10 @@ from __future__ import annotations
 from typing import Optional
 
 from mdp import common
-from mdp.model import environment
+from mdp.model.environment import grid_world
 
 
-class GridWorld(environment.GridWorld):
+class GridWorld(grid_world.GridWorld):
     def change_request(self, current_position: common.XY, move: Optional[common.XY]) -> common.XY:
         if move is None:
             requested_position: common.XY = current_position
