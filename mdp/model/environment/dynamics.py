@@ -3,14 +3,16 @@ from typing import TYPE_CHECKING
 
 from abc import ABC, abstractmethod
 import random
+import numpy as np
 
 if TYPE_CHECKING:
+    # from mdp.model.policy.policy import Policy
     from mdp import common
     from mdp.common import Distribution
     from mdp.model.environment.state import State
     from mdp.model.environment.action import Action
     from mdp.model.environment.response import Response
-    from mdp.model.environment.environment_ import Environment
+    from mdp.model.environment.environment import Environment
 
 
 class Dynamics(ABC):
@@ -20,6 +22,10 @@ class Dynamics(ABC):
         self._environment_parameters: common.EnvironmentParameters = environment_parameters
         self._verbose: bool = environment_parameters.verbose
         self.is_built: bool = False
+        # state_transition_probabilities[s',s,a] = p(s'|s,a)
+        self.state_transition_probabilities: np.ndarray = np.array([], dtype=np.float)
+        # expected_reward_np[s,a] = E[r|s,a] = Σs',r p(s',r|s,a).r
+        self.expected_reward_np: np.ndarray = np.array([], dtype=np.float)
 
     def build(self):
         """build bottom up"""
@@ -38,7 +44,7 @@ class Dynamics(ABC):
         expected reward for a (state, action) given the next state
         """
         probability_x_reward: float = self.get_probability_x_reward(state, action, next_state)
-        next_state_probability: float = self.get_next_state_probability(state, action, next_state)
+        next_state_probability: float = self.get_state_transition_probability(state, action, next_state)
         if next_state_probability == 0.0:
             return 0.0
         else:
@@ -51,19 +57,22 @@ class Dynamics(ABC):
         """
         pass
 
-    def get_next_state_probability(self, state: State, action: Action, next_state: State) -> float:
+    def get_state_transition_probability(self, state: State, action: Action, next_state: State) -> float:
         """
         p(s'|s,a) = Sum_over_r( p(s',r|s,a) )
         probability of a next state for a (state, action)
         """
         pass
 
-    def get_next_state_distribution(self, state: State, action: Action) -> Distribution[State]:
+    def get_state_transition_distribution(self, state: State, action: Action) -> Distribution[State]:
         """
         dict[ s', p(s'|s,a) ]
         distribution of next states for a (state, action)
         """
         pass
+
+    # def get_state_transition_probability_matrix(self, policy: Policy) -> np.ndarray:
+    #     pass
 
     def get_summary_outcomes(self, state: State, action: Action) -> Distribution[Response]:
         """

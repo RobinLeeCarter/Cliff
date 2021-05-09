@@ -2,15 +2,17 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from mdp.model import environment, agent
+    from mdp.model.environment.environment import Environment
+    from mdp.model.agent.agent import Agent
 from mdp import common
-from mdp.model.algorithm import abstract, value_function
+from mdp.model.algorithm.abstract.episodic_monte_carlo import EpisodicMonteCarlo
+from mdp.model.algorithm.value_function.state_action_variable import StateActionVariable
 
 
-class MCPredictionQ(abstract.EpisodicMonteCarlo):
+class MCPredictionQ(EpisodicMonteCarlo):
     def __init__(self,
-                 environment_: environment.Environment,
-                 agent_: agent.Agent,
+                 environment_: Environment,
+                 agent_: Agent,
                  algorithm_parameters: common.AlgorithmParameters,
                  policy_parameters: common.PolicyParameters
                  ):
@@ -19,7 +21,7 @@ class MCPredictionQ(abstract.EpisodicMonteCarlo):
         self.name = common.algorithm_name[self._algorithm_type]
         self.title = f"{self.name} first_visit={self.first_visit}"
         self._create_q()
-        self._N = value_function.StateActionVariable(self._environment, initial_value=0.0)
+        self._N = StateActionVariable(self._environment, initial_value=0.0)
 
     def initialize(self):
         super().initialize()

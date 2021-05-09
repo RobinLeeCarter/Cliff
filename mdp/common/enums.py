@@ -2,6 +2,34 @@ from __future__ import annotations
 import enum
 
 
+class ComparisonType(enum.IntEnum):
+    BLACKJACK_EVALUATION_V = enum.auto()
+    BLACKJACK_EVALUATION_Q = enum.auto()
+    BLACKJACK_CONTROL_ES = enum.auto()
+
+    CLIFF_ALPHA_START = enum.auto()
+    CLIFF_ALPHA_END = enum.auto()
+    CLIFF_EPISODE = enum.auto()
+
+    GAMBLER_VALUE_ITERATION_V = enum.auto()
+
+    JACKS_POLICY_EVALUATION_V = enum.auto()
+    JACKS_POLICY_EVALUATION_V_NP = enum.auto()
+    JACKS_POLICY_IMPROVEMENT_V = enum.auto()
+    JACKS_POLICY_IMPROVEMENT_V_NP = enum.auto()
+    JACKS_POLICY_ITERATION_V = enum.auto()
+    JACKS_POLICY_ITERATION_V_NP = enum.auto()
+    JACKS_VALUE_ITERATION_V = enum.auto()
+    JACKS_VALUE_ITERATION_V_NP = enum.auto()
+    JACKS_POLICY_ITERATION_Q = enum.auto()
+
+    RACETRACK_EPISODE = enum.auto()
+
+    RANDOM_WALK_EPISODE = enum.auto()
+    WINDY_TIMESTEP = enum.auto()
+    WINDY_TIMESTEP_RANDOM = enum.auto()
+
+
 class Square(enum.IntEnum):
     NORMAL = 0
     CLIFF = 1   # or grass
@@ -24,8 +52,13 @@ class BreakdownType(enum.IntEnum):
 
 class AlgorithmType(enum.IntEnum):
     POLICY_EVALUATION_DP_V = enum.auto()
+    POLICY_EVALUATION_DP_V_NP = enum.auto()
     POLICY_IMPROVEMENT_DP_V = enum.auto()
+    POLICY_IMPROVEMENT_DP_V_NP = enum.auto()
     POLICY_ITERATION_DP_V = enum.auto()
+    POLICY_ITERATION_DP_V_NP = enum.auto()
+    VALUE_ITERATION_DP_V = enum.auto()
+    VALUE_ITERATION_DP_V_NP = enum.auto()
 
     POLICY_EVALUATION_DP_Q = enum.auto()
     POLICY_IMPROVEMENT_DP_Q = enum.auto()
@@ -58,13 +91,14 @@ class DualPolicyRelationship(enum.IntEnum):
     INDEPENDENT_POLICIES = enum.auto()
 
 
-class EnvironmentType(enum.IntEnum):
+class ScenarioType(enum.IntEnum):
+    BLACKJACK = enum.auto()
     CLIFF = enum.auto()
+    GAMBLER = enum.auto()
+    JACKS = enum.auto()
+    RACETRACK = enum.auto()
     RANDOM_WALK = enum.auto()
     WINDY = enum.auto()
-    RACETRACK = enum.auto()
-    JACKS = enum.auto()
-    BLACKJACK = enum.auto()
 
 
 class ActionsList(enum.IntEnum):

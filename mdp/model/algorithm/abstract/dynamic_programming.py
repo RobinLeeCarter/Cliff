@@ -3,22 +3,24 @@ from typing import TYPE_CHECKING, Optional, Callable
 import abc
 
 if TYPE_CHECKING:
-    from mdp.model import environment, agent
+    from mdp.model.environment.environment import Environment
+    from mdp.model.environment.dynamics import Dynamics
+    from mdp.model.agent.agent import Agent
     from mdp import common
 from mdp.model.algorithm.abstract import algorithm_
 
 
 class DynamicProgramming(algorithm_.Algorithm, abc.ABC):
     def __init__(self,
-                 environment_: environment.Environment,
-                 agent_: agent.Agent,
+                 environment_: Environment,
+                 agent_: Agent,
                  algorithm_parameters: common.AlgorithmParameters,
                  policy_parameters: common.PolicyParameters
                  ):
         super().__init__(environment_, agent_, algorithm_parameters, policy_parameters)
         self._theta = self._algorithm_parameters.theta
         self._iteration_timeout = self._algorithm_parameters.iteration_timeout
-        self._dynamics: environment.Dynamics = self._environment.dynamics
+        self._dynamics: Dynamics = self._environment.dynamics
         self._iteration: int = 0
 
         # trainer callback

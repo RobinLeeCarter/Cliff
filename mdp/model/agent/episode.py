@@ -4,7 +4,8 @@ from typing import Optional, TYPE_CHECKING, Callable
 import numpy as np
 
 if TYPE_CHECKING:
-    from mdp.model import environment
+    from mdp.model.environment.state import State
+    from mdp.model.environment.action import Action
 
 from mdp.model.agent import rsa
 
@@ -29,31 +30,31 @@ class Episode:
 
         if self.record_first_visits:
             self.is_first_visit: list[bool] = []
-            self.visited_states: set[environment.State] = set()
+            self.visited_states: set[State] = set()
 
     @property
-    def last_state(self) -> Optional[environment.State]:
+    def last_state(self) -> Optional[State]:
         if self.trajectory:
             return self.trajectory[-1].state
         else:
             return None
 
     @property
-    def last_action(self) -> Optional[environment.Action]:
+    def last_action(self) -> Optional[Action]:
         if self.trajectory:
             return self.trajectory[-1].action
         else:
             return None
 
     @property
-    def prev_state(self) -> Optional[environment.State]:
+    def prev_state(self) -> Optional[State]:
         if self.trajectory and len(self.trajectory) > 1:
             return self.trajectory[-2].state
         else:
             return None
 
     @property
-    def prev_action(self) -> Optional[environment.Action]:
+    def prev_action(self) -> Optional[Action]:
         if self.trajectory and len(self.trajectory) > 1:
             return self.trajectory[-2].action
         else:
@@ -61,8 +62,8 @@ class Episode:
 
     def add_rsa(self,
                 reward: Optional[float],
-                state: environment.State,
-                action: Optional[environment.Action]):
+                state: State,
+                action: Optional[Action]):
         rsa_ = rsa.RSA(reward, state, action)
         self.trajectory.append(rsa_)
         if state.is_terminal:
@@ -80,7 +81,7 @@ class Episode:
             for t in range(self.T - 1, -1, -1):     # T-1, T-2, ... 1, 0
                 self.G[t] = self[t+1].reward + self.gamma * self.G[t + 1]
 
-    def _first_visit_check(self, state: environment.State):
+    def _first_visit_check(self, state: State):
         is_first_visit = state not in self.visited_states
         self.is_first_visit.append(is_first_visit)
         if is_first_visit:

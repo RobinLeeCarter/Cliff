@@ -1,21 +1,27 @@
 from __future__ import annotations
 
 from mdp import common
-from mdp.scenarios.factory import environment_factory
-from mdp.scenarios.jacks import comparisons  # action, state,
+from mdp.scenarios import scenario_factory
+
+# from mdp.scenarios.jacks.model.state import State
+# from mdp.scenarios.jacks.model.action import Action
+# from mdp.scenarios.jacks.model.response import Response
+from mdp.scenarios.jacks.model.environment import Environment
 
 
 def jacks_test() -> bool:
-    comparison: common.Comparison = comparisons.jacks_comparison_v()
-    environment_ = environment_factory.environment_factory(comparison.environment_parameters)
+    scenario = scenario_factory.scenario_factory(common.ComparisonType.JACKS_POLICY_ITERATION_V)
+    scenario.build()
+    # noinspection PyProtectedMember
+    environment: Environment = scenario._model.environment
 
     print("States...")
-    for state_ in environment_.states:
+    for state_ in environment.states:
         print(f"{state_}")
     print()
 
     print("Actions...")
-    for action_ in environment_.actions:
+    for action_ in environment.actions:
         print(f"{action_}")
     print()
 

@@ -2,15 +2,18 @@ from __future__ import annotations
 from typing import TYPE_CHECKING, Optional
 
 if TYPE_CHECKING:
-    from mdp.model import environment, agent, policy
+    from mdp.model.environment.action import Action
+    from mdp.model.environment.environment import Environment
+    from mdp.model.agent.agent import Agent
+    from mdp.model.policy.policy import Policy
 from mdp import common
-from mdp.model.algorithm import abstract
+from mdp.model.algorithm.abstract.dynamic_programming_v import DynamicProgrammingV
 
 
-class PolicyImprovementDpV(abstract.DynamicProgrammingV):
+class PolicyImprovementDpV(DynamicProgrammingV):
     def __init__(self,
-                 environment_: environment.Environment,
-                 agent_: agent.Agent,
+                 environment_: Environment,
+                 agent_: Agent,
                  algorithm_parameters: common.AlgorithmParameters,
                  policy_parameters: common.PolicyParameters
                  ):
@@ -26,7 +29,7 @@ class PolicyImprovementDpV(abstract.DynamicProgrammingV):
             policy_stable = self._policy_improvement(do_call_back)
 
     def _policy_improvement(self, do_call_back: bool = False) -> bool:
-        policy_: policy.Policy = self._agent.target_policy
+        policy_: Policy = self._agent.target_policy
         # assert isinstance(policy_, policy.Deterministic)
         # policy_: policy.Deterministic
 
@@ -35,8 +38,8 @@ class PolicyImprovementDpV(abstract.DynamicProgrammingV):
 
         policy_stable: bool = True
         for state in self._environment.states:
-            old_action: environment.Action = policy_[state]
-            best_action: Optional[environment.Action] = None
+            old_action: Action = policy_[state]
+            best_action: Optional[Action] = None
             best_expected_return: float = float('-inf')
             for action in self._environment.actions_for_state(state):
                 expected_return = self._get_expected_return(state, action)

@@ -9,14 +9,15 @@ import pygame.freetype
 from matplotlib import cm, colors
 
 if TYPE_CHECKING:
-    from mdp.model import agent, environment
+    from mdp.model.environment.grid_world import GridWorld
+    from mdp.model.agent.episode import Episode
 from mdp import common
 
 
 class GridView(abc.ABC):
     def __init__(self, grid_view_parameters: common.GridViewParameters):
         self.grid_view_parameters: common.GridViewParameters = grid_view_parameters
-        self._grid_world: Optional[environment.GridWorld] = None
+        self._grid_world: Optional[GridWorld] = None
 
         self._max_x: Optional[int] = None
         self._max_y: Optional[int] = None
@@ -46,7 +47,7 @@ class GridView(abc.ABC):
         self._user_event: common.UserEvent = common.UserEvent.NONE
 
         self._t: int = 0
-        self._episode: Optional[agent.Episode] = None
+        self._episode: Optional[Episode] = None
 
         self._build_color_lookup()
         self._build_policy_color_map()
@@ -84,7 +85,7 @@ class GridView(abc.ABC):
         color: pygame.Color = pygame.Color(rgba.as_tuple())
         return color
 
-    def set_gridworld(self, grid_world: environment.GridWorld):
+    def set_gridworld(self, grid_world: GridWorld):
         self._grid_world = grid_world
         self._max_x = self._grid_world.max_x
         self._max_y = self._grid_world.max_y
@@ -128,9 +129,6 @@ class GridView(abc.ABC):
         pygame.quit()
         self._is_window_open = False
 
-    def display_parameter(self, parameter: any = None):
-        pass
-
     def _set_title(self, title: str):
         self._window_title = title
         pygame.display.set_caption(title)
@@ -146,7 +144,7 @@ class GridView(abc.ABC):
             self._wait_for_event_of_interest()
             # self._handle_event()
 
-    def display_latest_step(self, episode_: Optional[agent.Episode] = None):
+    def display_latest_step(self, episode_: Optional[Episode] = None):
         self.open_window()  # if not already
         self._copy_grid_into_background()
         if episode_:
@@ -159,13 +157,13 @@ class GridView(abc.ABC):
             self.close_window()
             sys.exit()
 
-    def demonstrate(self, new_episode_request: Callable[[], agent.Episode]):
+    def demonstrate(self, new_episode_request: Callable[[], Episode]):
         self.open_window()
         running_average = 0
         count = 0
         while True:
             count += 1
-            episode: agent.Episode = new_episode_request()
+            episode: Episode = new_episode_request()
             print(f"max_t: {episode.max_t} \t total_return: {episode.total_return:.0f}")
             running_average += (1/count) * (episode.total_return - running_average)
             print(f"count: {count} \t running_average: {running_average:.1f}")
@@ -174,7 +172,7 @@ class GridView(abc.ABC):
                 break
         self.close_window()
 
-    def display_episode(self, episode_: agent.Episode) -> common.UserEvent:
+    def display_episode(self, episode_: Episode) -> common.UserEvent:
         # print(episode_.trajectory)
         # print(f"len(self._episode.trajectory) = {len(episode_.trajectory)}")
         self._copy_grid_into_background()
@@ -196,13 +194,11 @@ class GridView(abc.ABC):
             self._t += 1
         return self._user_event
 
-    @abc.abstractmethod
-    def _frame_on_background_latest(self, episode_: agent.Episode):
+    def _frame_on_background_latest(self, episode_: Episode):
         """draw frame onto background for the latest state, action (& previous) from in-progress episode"""
         pass
 
-    @abc.abstractmethod
-    def _frame_on_background_for_t(self, episode_: agent.Episode, t: int):
+    def _frame_on_background_for_t(self, episode_: Episode, t: int):
         """draw frame onto background for S(t), A(t) (& previous) from episode"""
         pass
 
