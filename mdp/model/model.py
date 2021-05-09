@@ -66,16 +66,20 @@ class Model(ABC):
     def run(self):
         timer: utils.Timer = utils.Timer()
         timer.start()
-        for i in range(1000):
-            # if i > 0:
-            #     self.agent.algorithm.initialize()
-            #     self.environment.initialize_policy(self.agent.policy,
-            #                                        self._comparison.comparison_settings.policy_parameters)
-            for settings in self._comparison.settings_list:
-                self.trainer.train(settings)
-                if not self._cont:
-                    break
-                # timer.lap(name=str(settings.algorithm_title), show=False)
+        for settings in self._comparison.settings_list:
+            self.trainer.train(settings)
+            if not self._cont:
+                break
+        # for i in range(1000):
+        #     # if i > 0:
+        #     #     self.agent.algorithm.initialize()
+        #     #     self.environment.initialize_policy(self.agent.policy,
+        #     #                                        self._comparison.comparison_settings.policy_parameters)
+        #     for settings in self._comparison.settings_list:
+        #         self.trainer.train(settings)
+        #         if not self._cont:
+        #             break
+        #         # timer.lap(name=str(settings.algorithm_title), show=False)
         timer.stop()
 
         if self.breakdown:
