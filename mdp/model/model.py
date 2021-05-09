@@ -7,7 +7,6 @@ if TYPE_CHECKING:
     from mdp.model.environment.environment import Environment
     from mdp.model.agent.episode import Episode
     from mdp.model.breakdown.breakdown import Breakdown
-    from mdp.model.policy.deterministic import Deterministic
 
 import utils
 from mdp import common

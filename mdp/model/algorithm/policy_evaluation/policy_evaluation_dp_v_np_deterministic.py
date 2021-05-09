@@ -70,10 +70,13 @@ class PolicyEvaluationDpVNp(DynamicProgrammingV):
         r: np.ndarray = expected_reward[i, policy_vector]
         # r: np.ndarray = self._get_reward_vector(policy_vector, expected_reward)
 
+        # v = converge_v(v, r, T, gamma, self._theta, self._iteration_timeout)
+
         while cont and above_theta and iteration < self._iteration_timeout:
             # bellman operator v'[s] = Σa π(a|s) Σs',r p(s',r|s,a).(r + γ.v(s'))
             # v = r + γTv
-            new_v = r + gamma*np.dot(T, v)
+            new_v = perform_update(v, r, T, gamma)
+            # new_v = r + gamma*np.dot(T, v)
             # check for convergence
             # diff = abs(v - prev_v)
             # delta = np.linalg.norm(diff, ord=1)
@@ -97,10 +100,48 @@ class PolicyEvaluationDpVNp(DynamicProgrammingV):
 
         self.V.vector = v
 
-    # noinspection PyPep8Naming
-    def perform_update(self, v: np.ndarray, r: np.ndarray, T: np.ndarray, gamma: float) -> np.ndarray:
-        new_v = r + gamma * np.dot(T, v)
-        return new_v
+
+# marginally faster for larger runs (10,000 times)
+# noinspection PyPep8Naming
+@njit(cache=True)
+def converge_v(v: np.ndarray, r: np.ndarray, T: np.ndarray, gamma: float,
+               theta: float, iteration_timeout: int) -> np.ndarray:
+    above_theta: bool = True
+    iteration: int = 0
+    v1 = v
+    v2 = v.copy()
+    is_v1_update: bool = False
+    while above_theta and iteration < iteration_timeout:
+        iteration += 1
+        is_v1_update = not is_v1_update
+        if is_v1_update:
+            # slower
+            # np.dot(T, v2, out=v1)
+            # v1 = r + gamma * v1
+
+            # fastest
+            v1 = r + gamma * np.dot(T, v2)
+
+            # slower
+            # v1 = perform_update(v2, r, T, gamma)
+        else:
+            # np.dot(T, v1, out=v2)
+            # v2 = r + gamma * v2
+            v2 = r + gamma * np.dot(T, v1)
+            # v2 = perform_update(v1, r, T, gamma)
+        above_theta = l1_norm_above(v1, v2, theta)
+    if iteration == iteration_timeout:
+        print("Warning: Timed out at max iterations")
+    if is_v1_update:
+        return v1
+    else:
+        return v2
+
+
+# noinspection PyPep8Naming
+@njit(cache=True)
+def perform_update(v: np.ndarray, r: np.ndarray, T: np.ndarray, gamma: float) -> np.ndarray:
+    return r + gamma * np.dot(T, v)
 
 
 @njit(cache=True)
