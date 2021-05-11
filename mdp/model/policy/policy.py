@@ -47,5 +47,8 @@ class Policy(abc.ABC):
                     policy_matrix[s, a] = self.get_probability(s, a)
         return policy_matrix
 
-    def set_policy_vector(self, policy_matrix: np.ndarray, update_dict: bool = True):
+    def get_policy_vector(self) -> np.ndarray:
+        pass
+
+    def set_policy_vector(self, policy_vector: np.ndarray):
         pass

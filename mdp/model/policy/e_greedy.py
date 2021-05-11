@@ -1,6 +1,8 @@
 from __future__ import annotations
 from typing import TYPE_CHECKING
 
+import numpy as np
+
 from mdp import common
 if TYPE_CHECKING:
     from mdp.model.environment.environment import Environment
@@ -35,3 +37,9 @@ class EGreedy(random.Random):
             return greedy_p
         else:
             return non_greedy_p
+
+    def get_policy_vector(self) -> np.ndarray:
+        return self.greedy_policy.policy_vector
+
+    def set_policy_vector(self, policy_vector: np.ndarray):
+        self.greedy_policy.policy_vector = policy_vector

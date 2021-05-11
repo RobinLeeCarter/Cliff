@@ -55,9 +55,6 @@ class Deterministic(policy.Policy):
     #         # self._policy_matrix[s, prev_a] = 0.0
     #         # self._policy_matrix[s, a] = 1.0
 
-    # def get_policy_vector(self) -> np.ndarray:
-    #     return self._policy_vector
-
     # def get_policy_matrix(self) -> np.ndarray:
     #     return self._policy_matrix
 
@@ -74,3 +71,9 @@ class Deterministic(policy.Policy):
             return 1.0
         else:
             return 0.0
+
+    def get_policy_vector(self) -> np.ndarray:
+        return self.policy_vector
+
+    def set_policy_vector(self, policy_vector: np.ndarray):
+        self.policy_vector = policy_vector

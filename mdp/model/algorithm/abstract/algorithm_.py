@@ -2,6 +2,8 @@ from __future__ import annotations
 from typing import TYPE_CHECKING, Optional
 import abc
 
+import numpy as np
+
 if TYPE_CHECKING:
     from mdp.model.environment.environment import Environment
     from mdp.model.agent.agent import Agent
@@ -48,10 +50,14 @@ class Algorithm(abc.ABC):
         pass
 
     def _make_policy_greedy_wrt_q(self):
-        for state_ in self._environment.states:
-            if not state_.is_terminal:
-                # works for single policy or dual policies
-                self._agent.target_policy[state_] = self.Q.argmax_over_actions(state_)
+        # easier and probably faster to include terminal states
+        new_policy_vector = np.argmax(self.Q.matrix, axis=1)
+        self._agent.target_policy.set_policy_vector(new_policy_vector)
+
+        # for s in range(len(self._environment.states)):
+        #     if not self._environment.is_terminal[s]:
+        #         # works for single policy or dual policies
+        #         self._agent.target_policy[s] = self.Q.argmax_over_actions(s)
 
     def print_q_coverage_statistics(self):
         self.Q.print_coverage_statistics()
@@ -59,19 +65,24 @@ class Algorithm(abc.ABC):
     def __repr__(self):
         return f"{self.title}"
 
-    def derive_v_from_q(self, policy_: Optional[Policy] = None):
-        if not policy_:
-            policy_ = self._agent.policy
+    def derive_v_from_q(self, policy: Optional[Policy] = None):
+        if not policy:
+            policy = self._agent.policy
 
         if not self.V:
             self._create_v()
+
+        policy_matrix = policy.get_policy_matrix()
+        q_matrix = self.Q.matrix
+
+        expected_v = np.sum( np.dot(policy_matrix, q_matrix.T), axis=1 )    # or something...
 
         for state in self._environment.states:
             # Sum_over_a( π(a|s).Q(s,a) )
             expected_v: float = 0.0
             for action in self._environment.actions_for_state[state]:
                 # π(a|s)
-                policy_probability = policy_.get_probability(state, action)
+                policy_probability = policy.get_probability(state, action)
                 # π(a|s).Q(s,a)
                 expected_v += policy_probability * self.Q[state, action]
             self.V[state] = expected_v
