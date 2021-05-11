@@ -57,7 +57,7 @@ class Environment(environment.Environment):
             )
             self.actions.append(new_action)
 
-    def is_action_compatible_with_state(self, state: State, action: Action):
+    def _is_action_compatible_with_state(self, state: State, action: Action):
         if action.stake <= state.capital and \
                 state.capital + action.stake <= self._max_capital:
             return True

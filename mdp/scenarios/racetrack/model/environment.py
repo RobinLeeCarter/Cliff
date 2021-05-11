@@ -62,7 +62,7 @@ class Environment(environment.Environment):
                 )
                 self.actions.append(new_action)
 
-    def is_action_compatible_with_state(self, state: State, action: Action):
+    def _is_action_compatible_with_state(self, state: State, action: Action):
         new_vx = state.velocity.x + action.acceleration.x
         new_vy = state.velocity.y + action.acceleration.y
         if self._min_vx <= new_vx <= self._max_vx and \

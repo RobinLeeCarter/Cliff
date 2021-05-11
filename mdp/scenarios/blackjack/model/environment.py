@@ -72,7 +72,7 @@ class Environment(environment.Environment):
             )
             self.actions.append(new_action)
 
-    def is_action_compatible_with_state(self, state_: State, action_: Action):
+    def _is_action_compatible_with_state(self, state_: State, action_: Action):
         if state_.player_sum == 21 and action_.hit:
             return False
         else:

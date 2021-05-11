@@ -1,7 +1,6 @@
 from __future__ import annotations
 from typing import Optional, TYPE_CHECKING
 from abc import ABC, abstractmethod
-import random
 
 import numpy as np
 
@@ -39,6 +38,14 @@ class Environment(ABC):
         # exception boolean array of whether a in A(s) for a given [s, a]
         # possibly should be part of agent to enforce API but should be able to have mutliple agents for one evironment
         self.s_a_compatibility: np.ndarray = np.empty(0, dtype=bool)
+        # TODO: add cached helper arrays to avoid repeatedly calculating
+        # - is_terminal[s]
+        # - possible_actions[s]
+        # - one_over_possible_actions[s]
+
+        self.is_terminal: np.ndarray = np.empty(0, dtype=bool)
+        self.possible_actions: np.ndarray = np.empty(0, dtype=int)
+        self.one_over_possible_actions: np.ndarray = np.empty(0, dtype=float)
 
         # for processing response
         # self._state: Optional[State] = None
@@ -59,6 +66,7 @@ class Environment(ABC):
         self._build_actions()
         self.action_index = {action: i for i, action in enumerate(self.actions)}
         self._build_state_actions()
+        self._build_helper_arrays()
         self.dynamics.build()
 
     def state_action_index(self, state: State, action: Action) -> tuple[int, int]:
@@ -77,18 +85,26 @@ class Environment(ABC):
 
     def _build_state_actions(self):
         """materialise A(s)"""
-        self.s_a_compatibility = np.zeros(shape=(len(self.states), len(self.actions),), dtype=bool)
+        self.s_a_compatibility = np.zeros(shape=(len(self.states), len(self.actions)), dtype=bool)
         for s, state in enumerate(self.states):
             actions_for_state: list[Action] = []
             if not state.is_terminal:
                 for a, action in enumerate(self.actions):
-                    if self.is_action_compatible_with_state(state, action):
+                    if self._is_action_compatible_with_state(state, action):
                         actions_for_state.append(action)
                         self.s_a_compatibility[s, a] = True
             self.actions_for_state[state] = actions_for_state
 
-    def is_action_compatible_with_state(self, state: State, action: Action):
+    def _is_action_compatible_with_state(self, state: State, action: Action):
         return True
+
+    def _build_helper_arrays(self):
+        is_terminal = [state.is_terminal for state in self.states]
+        self.is_terminal = np.array(is_terminal, dtype=bool)
+        # self.one_over_possible_actions = np.zeros(shape=(len(self.states)), dtype=float)
+        self.possible_actions = np.count_nonzero(self.s_a_compatibility, axis=1)
+        self.one_over_possible_actions = 1.0 / self.possible_actions
+
     # endregion
 
     # region Operation

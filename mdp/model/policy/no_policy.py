@@ -1,28 +1,28 @@
 from __future__ import annotations
-from typing import TYPE_CHECKING, Optional
+from typing import Optional
 
-if TYPE_CHECKING:
-    from mdp import common
-    from mdp.model.environment.state import State
-    from mdp.model.environment.action import Action
-    from mdp.model.environment.environment import Environment
+# if TYPE_CHECKING:
+#     from mdp import common
+#     from mdp.model.environment.state import State
+#     from mdp.model.environment.action import Action
+#     from mdp.model.environment.environment import Environment
 from mdp.model.policy import policy
 
 
 class NoPolicy(policy.Policy):
-    def __init__(self, environment_: Environment, policy_parameters: common.PolicyParameters):
-        super().__init__(environment_, policy_parameters)
-        # actions: list[environment.Action] = [action for action in environment_.actions()]
-        # self.action = actions[0]    # always pick first action (presumably stationary)
+    # def __init__(self, environment_: Environment, policy_parameters: common.PolicyParameters):
+    #     super().__init__(environment_, policy_parameters)
+    #     # actions: list[environment.Action] = [action for action in environment_.actions()]
+    #     # self.action = actions[0]    # always pick first action (presumably stationary)
 
-    def _get_action(self, state: State) -> Optional[Action]:
+    def _get_action(self, s: int) -> Optional[int]:
         return None
 
-    def __setitem__(self, state: State, action: Action):
-        super().__setitem__(state, action)
+    def __setitem__(self, s: int, a: int):
+        super().__setitem__(s, a)
 
-    def get_probability(self, state: State, action: Action) -> float:
-        if action is None:
+    def get_probability(self, s: int, a: Optional[int]) -> float:
+        if a is None:
             return 1.0
         else:
             return 0.0

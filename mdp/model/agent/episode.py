@@ -1,10 +1,10 @@
 from __future__ import annotations
-from typing import Optional, Callable, TYPE_CHECKING
+from typing import Optional, Callable
 
 import numpy as np
 
-if TYPE_CHECKING:
-    from mdp.model.environment.environment import Environment
+# if TYPE_CHECKING:
+#     from mdp.model.environment.environment import Environment
 
 from mdp.model.agent import rsa
 

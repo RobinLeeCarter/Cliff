@@ -55,7 +55,7 @@ class Environment(environment.Environment):
             )
             self.actions.append(new_action)
 
-    def is_action_compatible_with_state(self, state_: State, action_: Action):
+    def _is_action_compatible_with_state(self, state_: State, action_: Action):
         starting_cars_1 = state_.ending_cars_1 - action_.transfer_1_to_2
         starting_cars_2 = state_.ending_cars_2 + action_.transfer_1_to_2
         if 0 <= starting_cars_1 <= self._max_cars and \
