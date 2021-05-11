@@ -7,10 +7,10 @@ if TYPE_CHECKING:
     from mdp.model.environment.dynamics import Dynamics
     from mdp.model.agent.agent import Agent
     from mdp import common
-from mdp.model.algorithm.abstract import algorithm_
+from mdp.model.algorithm.abstract.algorithm import Algorithm
 
 
-class DynamicProgramming(algorithm_.Algorithm, abc.ABC):
+class DynamicProgramming(Algorithm, abc.ABC):
     def __init__(self,
                  environment_: Environment,
                  agent_: Agent,

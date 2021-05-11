@@ -5,7 +5,7 @@ if TYPE_CHECKING:
     from mdp.model.environment.environment import Environment
     from mdp.model.agent.agent import Agent
 from mdp import common
-from mdp.model.algorithm.abstract.algorithm_ import Algorithm as BaseAlgorithm
+from mdp.model.algorithm.abstract.algorithm import Algorithm as BaseAlgorithm
 
 from mdp.model.algorithm.policy_evaluation.policy_evaluation_dp_q import PolicyEvaluationDpQ
 from mdp.model.algorithm.policy_evaluation.policy_evaluation_dp_v import PolicyEvaluationDpV

@@ -10,8 +10,8 @@ if TYPE_CHECKING:
     from mdp.model.environment.environment import Environment
 from mdp import common
 # renamed to avoid name conflicts
-from mdp.model.algorithm.abstract.algorithm_ import Algorithm
-from mdp.model.algorithm.abstract.episodic_ import Episodic
+from mdp.model.algorithm.abstract.algorithm import Algorithm
+from mdp.model.algorithm.abstract.episodic import Episodic
 from mdp.model.agent.episode import Episode
 from mdp.model.policy.policy import Policy
 from mdp.model.algorithm import algorithm_factory

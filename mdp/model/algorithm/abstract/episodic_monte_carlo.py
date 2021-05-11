@@ -7,10 +7,10 @@ if TYPE_CHECKING:
     from mdp.model.agent.agent import Agent
     from mdp.model.agent.episode import Episode
     from mdp import common
-from mdp.model.algorithm.abstract import episodic_
+from mdp.model.algorithm.abstract.episodic import Episodic
 
 
-class EpisodicMonteCarlo(episodic_.Episodic, abc.ABC):
+class EpisodicMonteCarlo(Episodic, abc.ABC):
     def __init__(self,
                  environment_: Environment,
                  agent_: Agent,

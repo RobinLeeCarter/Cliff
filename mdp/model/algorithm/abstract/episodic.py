@@ -6,10 +6,10 @@ if TYPE_CHECKING:
     from mdp.model.environment.environment import Environment
     from mdp.model.agent.agent import Agent
     from mdp import common
-from mdp.model.algorithm.abstract import algorithm_
+from mdp.model.algorithm.abstract.algorithm import Algorithm
 
 
-class Episodic(algorithm_.Algorithm, abc.ABC):
+class Episodic(Algorithm, abc.ABC):
     def __init__(self,
                  environment_: Environment,
                  agent_: Agent,

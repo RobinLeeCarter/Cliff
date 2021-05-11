@@ -19,6 +19,8 @@ class StateActionFunction:
             shape=(len(self._environment.states),
                    len(self._environment.actions)),
             dtype=float)
+        self.max: np.ndarray = np.empty(shape=len(self._environment.states), dtype=float)
+        self.argmax: np.ndarray = np.empty(shape=len(self._environment.states), dtype=int)
 
         self.initialize_values()
 
@@ -33,6 +35,8 @@ class StateActionFunction:
                 else:
                     # incompatible actions must never be selected
                     self.matrix[s, a] = np.NINF
+        self.max = np.max(self.matrix, axis=1)
+        self.argmax = np.argmax(self.matrix, axis=1)
 
     def __getitem__(self, s_a: tuple[int, int]) -> float:
         return self.matrix[s_a]
@@ -40,13 +44,23 @@ class StateActionFunction:
     def __setitem__(self, s_a: tuple[int, int], value: float):
         self.matrix[s_a] = value
 
+        s, a = s_a
+        current_max = self.max[s]
+        if value > current_max:
+            self.max[s] = value
+            self.argmax[s] = a
+        elif value == current_max and a < self.argmax[s]:   # so consistent
+            self.argmax[s] = a
+
     def argmax_over_actions(self, s: int) -> int:
-        """set target_policy to argmax over a of Q breaking ties consistently"""
-        return int(np.argmax(self.matrix[s, :]))
+        """argmax over a of Q breaking ties consistently"""
+        return self.argmax[s]
+        # return int(np.argmax(self.matrix[s, :]))
 
     def max_over_actions(self, s: int) -> float:
         """max_over_a Q[state, a]"""
-        return np.max(self.matrix[s, :])
+        return self.max[s]
+        # return np.max(self.matrix[s, :])
 
     def print_coverage_statistics(self):
         q_size = self.matrix.size

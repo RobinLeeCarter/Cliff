@@ -1,16 +1,16 @@
 from __future__ import annotations
 from typing import TYPE_CHECKING
 
+import numpy as np
+
 if TYPE_CHECKING:
-    from mdp.model.environment.state import State
-    from mdp.model.environment.action import Action
     from mdp.model.environment.environment import Environment
     from mdp.model.agent.agent import Agent
 from mdp import common
-from mdp.model.algorithm.abstract.episodic_online import EpisodicOnline
+from mdp.model.algorithm.abstract.episodic_online_control import EpisodicOnlineControl
 
 
-class Sarsa(EpisodicOnline):
+class Sarsa(EpisodicOnlineControl):
     def __init__(self,
                  environment_: Environment,
                  agent_: Agent,
@@ -24,25 +24,18 @@ class Sarsa(EpisodicOnline):
         self.title = f"{self.name} α={self._alpha}"
         self._create_q()
 
-    def initialize(self):
-        super().initialize()
-        self._make_policy_greedy_wrt_q()
-
     def _start_episode(self):
         self._agent.choose_action()
 
     def _do_training_step(self):
-        self._agent.take_action()
-        self._agent.choose_action()
+        ag = self._agent
+        ag.take_action()
+        ag.choose_action()
 
-        prev_state: State = self._agent.prev_state
-        prev_action: Action = self._agent.prev_action
-        reward: float = self._agent.reward
-        state: State = self._agent.state
-        action: Action = self._agent.action
+        target: float = ag.r + self._gamma * self.Q[ag.s, ag.a]
+        delta: float = target - self.Q[ag.prev_s, ag.prev_a]
+        self.Q[ag.prev_s, ag.prev_a] += self._alpha * delta
+        ag.policy[ag.prev_s] = self.Q.argmax[ag.prev_s]
 
-        target = reward + self._gamma * self.Q[state, action]
-        delta = target - self.Q[prev_state, prev_action]
-        self.Q[prev_state, prev_action] += self._alpha * delta
-        # update policy to be in-line with Q
-        self._agent.policy[prev_state] = self.Q.argmax_over_actions(prev_state)
+        # previous verison: update policy to be in-line with Q by recalculation every time
+        # ag.policy[ag.prev_s] = self.Q.argmax_over_actions(ag.prev_s)

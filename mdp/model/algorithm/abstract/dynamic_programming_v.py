@@ -9,10 +9,10 @@ if TYPE_CHECKING:
     from mdp.model.environment.environment import Environment
     from mdp.model.agent.agent import Agent
     from mdp import common
-from mdp.model.algorithm.abstract import dynamic_programming
+from mdp.model.algorithm.abstract.dynamic_programming import DynamicProgramming
 
 
-class DynamicProgrammingV(dynamic_programming.DynamicProgramming, abc.ABC):
+class DynamicProgrammingV(DynamicProgramming, abc.ABC):
     def __init__(self,
                  environment_: Environment,
                  agent_: Agent,

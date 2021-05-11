@@ -72,6 +72,24 @@ class Deterministic(policy.Policy):
         else:
             return 0.0
 
+    def get_probability_vector(self, s: int) -> np.ndarray:
+        action_count = len(self._environment.actions)
+        probability_vector = np.zeros(shape=action_count, dtype=float)
+        a = self.policy_vector[s]
+        probability_vector[a] = 1.0
+        return probability_vector
+
+    def get_probability_matrix(self) -> np.ndarray:
+        state_count = len(self._environment.states)
+        action_count = len(self._environment.actions)
+        policy_matrix = np.zeros(shape=(state_count, action_count), dtype=float)
+        i = np.arange(state_count)
+        policy_matrix[i, self.policy_vector] = 1.0
+        # for s in range(state_count):
+        #     a = self.policy_vector[s]
+        #     policy_matrix[s, a] = 1.0
+        return policy_matrix
+
     def get_policy_vector(self) -> np.ndarray:
         return self.policy_vector
 

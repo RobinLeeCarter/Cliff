@@ -6,10 +6,10 @@ if TYPE_CHECKING:
     from mdp.model.environment.environment import Environment
     from mdp.model.agent.agent import Agent
     from mdp import common
-from mdp.model.algorithm.abstract import episodic_
+from mdp.model.algorithm.abstract.episodic import Episodic
 
 
-class EpisodicOnline(episodic_.Episodic, abc.ABC):
+class EpisodicOnline(Episodic, abc.ABC):
     def __init__(self,
                  environment_: Environment,
                  agent_: Agent,
@@ -21,7 +21,7 @@ class EpisodicOnline(episodic_.Episodic, abc.ABC):
     def do_episode(self, episode_length_timeout: int):
         self._agent.start_episode()
         self._start_episode()
-        while (not self._agent.state.is_terminal)\
+        while (not self._agent.is_terminal)\
                 and self._agent.t < episode_length_timeout\
                 and self._agent.episode.cont:
             self._do_training_step()
@@ -32,3 +32,12 @@ class EpisodicOnline(episodic_.Episodic, abc.ABC):
     @abc.abstractmethod
     def _do_training_step(self):
         pass
+
+    # def _change_q_and_update_policy(self, s: int, a: int, value: float):
+    #     self.Q[s, a] = value
+    #     # update policy to be in-line with Q if it needs to change
+    #     self._agent.policy[s] = self.Q.argmax[s]
+
+        # if value > self.Q.max[s]:
+        #     self._max_q[s] = value
+        #     self._agent.policy[s] = a

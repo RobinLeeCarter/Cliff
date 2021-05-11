@@ -1,15 +1,16 @@
 from __future__ import annotations
 from typing import TYPE_CHECKING
 
+import numpy as np
+
 if TYPE_CHECKING:
-    from mdp.model.environment.state import State
     from mdp.model.environment.environment import Environment
     from mdp.model.agent.agent import Agent
 from mdp import common
-from mdp.model.algorithm.abstract.episodic_online import EpisodicOnline
+from mdp.model.algorithm.abstract.episodic_online_control import EpisodicOnlineControl
 
 
-class ExpectedSarsa(EpisodicOnline):
+class ExpectedSarsa(EpisodicOnlineControl):
     def __init__(self,
                  environment_: Environment,
                  agent_: Agent,
@@ -23,29 +24,26 @@ class ExpectedSarsa(EpisodicOnline):
         self.title = f"{self.name} α={self._alpha}"
         self._create_q()
 
-    def initialize(self):
-        super().initialize()
-        self._make_policy_greedy_wrt_q()
-
     def _do_training_step(self):
-        self._agent.choose_action()
-        self._agent.take_action()
+        ag = self._agent
+        ag.choose_action()
+        ag.take_action()
 
-        prev_state = self._agent.prev_state
-        prev_action = self._agent.prev_action
-        reward = self._agent.reward
-        state = self._agent.state
-
-        q_expectation_over_a = self._get_expectation_over_a(state)
-        target = reward + self._gamma * q_expectation_over_a
-        delta = target - self.Q[prev_state, prev_action]
-        self.Q[prev_state, prev_action] += self._alpha * delta
+        q_expectation_over_a = self._get_expectation_over_a(ag.s)
+        target = ag.r + self._gamma * q_expectation_over_a
+        delta = target - self.Q[ag.prev_s, ag.prev_a]
+        self.Q[ag.prev_s, ag.prev_a] += self._alpha * delta
         # update policy to be in-line with Q
-        self._agent.policy[prev_state] = self.Q.argmax_over_actions(prev_state)
+        self._agent.policy[ag.prev_s] = self.Q.argmax[ag.prev_s]
 
-    def _get_expectation_over_a(self, state: State) -> float:
-        expectation: float = 0.0
-        for action in self._environment.actions:
-            probability = self._agent.policy.get_probability(state, action)
-            expectation += probability * self.Q[state, action]
+    def _get_expectation_over_a(self, s: int) -> float:
+        probability_vector: np.ndarray = self._agent.policy.get_probability_vector(s)
+        q_slice: np.ndarray = self.Q.matrix[s, :]
+        expectation: float = float(np.dot(probability_vector, q_slice))
         return expectation
+
+        # expectation: float = 0.0
+        # for action in self._environment.actions:
+        #     probability = self._agent.policy.get_probability(state, action)
+        #     expectation += probability * self.Q[state, action]
+        # return expectation

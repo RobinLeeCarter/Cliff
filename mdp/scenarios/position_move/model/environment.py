@@ -3,7 +3,7 @@ import abc
 from typing import Optional, TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from mdp.model.algorithm.abstract.algorithm_ import Algorithm
+    from mdp.model.algorithm.abstract.algorithm import Algorithm
     from mdp.model.policy.policy import Policy
 
 from mdp import common

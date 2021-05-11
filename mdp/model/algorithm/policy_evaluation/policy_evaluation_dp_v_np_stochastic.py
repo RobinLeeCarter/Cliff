@@ -42,7 +42,7 @@ class PolicyEvaluationDpVNp(DynamicProgrammingV):
             print(f"Starting Policy Evaluation PolicyEvaluationDpVNp ...")
 
         # policy_matrix[s, a] = π(a|s)
-        policy_matrix: np.ndarray = self._agent.policy.get_policy_matrix()
+        policy_matrix: np.ndarray = self._agent.policy.get_probability_matrix()
         # state_transition_probabilities[s, a, s'] = p(s'|s,a)
         state_transition_probabilities: np.ndarray = self._environment.dynamics.state_transition_probabilities
         # expected_reward_np[s,a] = E[r|s,a] = Σs',r p(s',r|s,a).r

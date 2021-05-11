@@ -33,6 +33,31 @@ class Random(policy.Policy):
         # possible_actions: int = np.count_nonzero(self._environment.s_a_compatibility[s, :])
         # return 1.0 / possible_actions
 
+    def get_probability_vector(self, s: int) -> np.ndarray:
+        # TODO: Decide whether to maintain probability_matrix as policy updates
+        action_count: int = len(self._environment.actions)
+        probability_vector: np.ndarray = np.zeros(shape=action_count, dtype=float)
+
+        probability: float = self._environment.one_over_possible_actions[s]
+
+        compatible_actions: np.ndarray = self._environment.s_a_compatibility[s, :]
+        probability_vector[compatible_actions] = probability
+
+        return probability_vector
+
+    def get_probability_matrix(self) -> np.ndarray:
+        # TODO: Decide whether to maintain probability_matrix as policy updates
+        state_count = len(self._environment.states)
+        action_count = len(self._environment.actions)
+        probability_matrix = np.zeros(shape=(state_count, action_count), dtype=float)
+
+        probabilities: np.ndarray = self._environment.one_over_possible_actions
+
+        compatible_actions: np.ndarray = self._environment.s_a_compatibility
+        probability_matrix[compatible_actions] = probabilities
+
+        return probability_matrix
+
     # def set_possible_actions(self, state: State):
     #     # if self.state is None or state != self.state:
     #     #       can'_t use cached version

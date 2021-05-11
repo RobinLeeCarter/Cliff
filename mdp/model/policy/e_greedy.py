@@ -38,6 +38,40 @@ class EGreedy(random.Random):
         else:
             return non_greedy_p
 
+    def get_probability_vector(self, s: int) -> np.ndarray:
+        # TODO: Decide whether to maintain probability_matrix as policy updates
+        action_count: int = len(self._environment.actions)
+        probability_vector: np.ndarray = np.zeros(shape=action_count, dtype=float)
+
+        non_greedy_p: float = self.epsilon * self._environment.one_over_possible_actions[s]
+        greedy_p: float = (1 - self.epsilon) + non_greedy_p
+
+        compatible_actions: np.ndarray = self._environment.s_a_compatibility[s, :]
+        probability_vector[compatible_actions] = non_greedy_p
+
+        a = self.greedy_policy[s]
+        probability_vector[a] = greedy_p
+
+        return probability_vector
+
+    def get_probability_matrix(self) -> np.ndarray:
+        # TODO: Decide whether to maintain probability_matrix as policy updates
+        state_count = len(self._environment.states)
+        action_count = len(self._environment.actions)
+        probability_matrix = np.zeros(shape=(state_count, action_count), dtype=float)
+
+        non_greedy_p: np.ndarray = self.epsilon * self._environment.one_over_possible_actions
+        greedy_p: np.ndarray = (1 - self.epsilon) + non_greedy_p
+
+        compatible_actions: np.ndarray = self._environment.s_a_compatibility
+        probability_matrix[compatible_actions] = non_greedy_p
+
+        i = np.arange(state_count)
+        policy_vector = self.greedy_policy.policy_vector
+        probability_matrix[i, policy_vector] = greedy_p
+
+        return probability_matrix
+
     def get_policy_vector(self) -> np.ndarray:
         return self.greedy_policy.policy_vector
 

@@ -37,15 +37,24 @@ class Policy(abc.ABC):
     def get_probability(self, s: int, a: int) -> float:
         pass
 
-    def get_policy_matrix(self) -> np.ndarray:
+    def get_probability_vector(self, s: int) -> np.ndarray:
+        action_count = len(self._environment.actions)
+        probability_vector = np.zeros(shape=action_count, dtype=float)
+        for a in range(action_count):
+            if self._environment.s_a_compatibility[s, a]:
+                probability_vector[s, a] = self.get_probability(s, a)
+        return probability_vector
+
+    def get_probability_matrix(self) -> np.ndarray:
         state_count = len(self._environment.states)
         action_count = len(self._environment.actions)
-        policy_matrix = np.zeros(shape=(state_count, action_count), dtype=float)
+        probability_matrix = np.zeros(shape=(state_count, action_count), dtype=float)
         for s in range(state_count):
-            for a in range(action_count):
-                if self._environment.s_a_compatibility[s, a]:
-                    policy_matrix[s, a] = self.get_probability(s, a)
-        return policy_matrix
+            probability_matrix[s, :] = self.get_probability_vector(s)
+            # for a in range(action_count):
+            #     if self._environment.s_a_compatibility[s, a]:
+            #         probability_matrix[s, a] = self.get_probability(s, a)
+        return probability_matrix
 
     def get_policy_vector(self) -> np.ndarray:
         pass

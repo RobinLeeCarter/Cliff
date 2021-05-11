@@ -50,9 +50,9 @@ class PolicyIterationDpVNp(PolicyEvaluationDpVNp, PolicyImprovementDpVNp):
             print(f"Warning: Timed out at {iteration} iterations")
         else:
             # noinspection PyTypeChecker
-            policy: Deterministic = self._agent.policy
-            policy_vector: np.ndarray = policy.get_policy_vector()
-            policy.set_policy_vector(policy_vector, update_dict=True)
+            # policy: Deterministic = self._agent.policy
+            # policy_vector: np.ndarray = policy.get_policy_vector()
+            # policy.set_policy_vector(policy_vector, update_dict=True)
 
             if self._verbose:
                 print(f"Policy Iteration completed ...")

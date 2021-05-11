@@ -36,7 +36,7 @@ class PolicyImprovementDpVNp(DynamicProgrammingV):
             print(f"Starting Policy Improvement ...")
 
         # policy_matrix[s, a] = π(a|s)
-        policy_matrix: np.ndarray = self._agent.policy.get_policy_matrix()
+        policy_matrix: np.ndarray = self._agent.policy.get_probability_matrix()
         old_policy_vector: np.ndarray = policy_matrix.argmax(axis=1)
         # state_transition_probabilities[s, a, s'] = p(s'|s,a)
         state_transition_probabilities: np.ndarray = self._environment.dynamics.state_transition_probabilities

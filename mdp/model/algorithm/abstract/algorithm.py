@@ -2,6 +2,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING, Optional
 import abc
 
+from numba import njit, prange
 import numpy as np
 
 if TYPE_CHECKING:
@@ -21,6 +22,7 @@ class Algorithm(abc.ABC):
                  policy_parameters: common.PolicyParameters
                  ):
         self._environment: Environment = environment_
+        # TODO: rename agent_ to agent
         self._agent: Agent = agent_
         self._algorithm_parameters: common.AlgorithmParameters = algorithm_parameters
         self._policy_parameters: common.PolicyParameters = policy_parameters
@@ -50,9 +52,11 @@ class Algorithm(abc.ABC):
         pass
 
     def _make_policy_greedy_wrt_q(self):
+        self._agent.target_policy.set_policy_vector(self.Q.argmax)
+
         # easier and probably faster to include terminal states
-        new_policy_vector = np.argmax(self.Q.matrix, axis=1)
-        self._agent.target_policy.set_policy_vector(new_policy_vector)
+        # new_policy_vector = np.argmax(self.Q.matrix, axis=1)
+        # self._agent.target_policy.set_policy_vector(new_policy_vector)
 
         # for s in range(len(self._environment.states)):
         #     if not self._environment.is_terminal[s]:
@@ -72,17 +76,37 @@ class Algorithm(abc.ABC):
         if not self.V:
             self._create_v()
 
-        policy_matrix = policy.get_policy_matrix()
+        # π(a|s)
+        policy_matrix = policy.get_probability_matrix()
+        # Q(s,a)
         q_matrix = self.Q.matrix
+        # Sum_over_a( π(a|s).Q(s,a) )
+        self.V.vector = expected_q(policy_matrix, q_matrix)
 
-        expected_v = np.sum( np.dot(policy_matrix, q_matrix.T), axis=1 )    # or something...
+        # 30% slower version on 8-core machine
+        # self.V.vector = np.einsum('ij,ij->i', policy_matrix, q_matrix)
+        # 3x slower version
+        # self.V.vector = np.sum(policy_matrix * q_matrix, axis=1)
+        # Much slower version!
+        # for state in self._environment.states:
+        #     # Sum_over_a( π(a|s).Q(s,a) )
+        #     expected_v: float = 0.0
+        #     for action in self._environment.actions_for_state[state]:
+        #         # π(a|s)
+        #         policy_probability = policy.get_probability(state, action)
+        #         # π(a|s).Q(s,a)
+        #         expected_v += policy_probability * self.Q[state, action]
+        #     self.V[state] = expected_v
 
-        for state in self._environment.states:
-            # Sum_over_a( π(a|s).Q(s,a) )
-            expected_v: float = 0.0
-            for action in self._environment.actions_for_state[state]:
-                # π(a|s)
-                policy_probability = policy.get_probability(state, action)
-                # π(a|s).Q(s,a)
-                expected_v += policy_probability * self.Q[state, action]
-            self.V[state] = expected_v
+
+@njit(cache=True, parallel=True)
+def expected_q(p: np.ndarray, q: np.ndarray) -> np.ndarray:
+    """
+    Sum_over_a( π(a|s).Q(s,a) )
+    :returns np.einsum('ij,ij->i', policy_matrix, q_matrix)
+    """
+    out = np.zeros(shape=p.shape[0], dtype=np.float64)
+    for i in prange(p.shape[0]):
+        for j in range(p.shape[1]):
+            out[i] += p[i, j] * q[i, j]
+    return out

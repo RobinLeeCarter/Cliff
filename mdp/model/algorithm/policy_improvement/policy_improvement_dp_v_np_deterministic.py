@@ -53,10 +53,12 @@ class PolicyImprovementDpVNp(DynamicProgrammingV):
 
         # expected_return[s,a] = ( Σs',r p(s',r|s,a).r ) + ( γ . Σs' p(s'|s,a).v(s') )
         expected_return: np.ndarray = expected_reward + gamma * np.dot(state_transition_probabilities, v)
+        # state_transition_probabilities is a 3D array so numba does not support dot as of 2021-05-11
+        # https://numba.pydata.org/numba-doc/dev/reference/numpysupported.html#functions
 
         # argmax(a) Σs',r p(s',r|s,a).(r + γ.v(s'))
         new_policy_vector: np.ndarray = expected_return.argmax(axis=1)
-        self._agent.policy.set_policy_vector(new_policy_vector, update_dict=False)
+        self._agent.policy.set_policy_vector(new_policy_vector)
 
         policy_stable: bool = np.array_equal(old_policy_vector, new_policy_vector)
 
