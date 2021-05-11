@@ -16,7 +16,7 @@ def q_test() -> bool:
     common.set_none_to_default(environment_parameters, default)
     environment = Environment(environment_parameters)
     environment.build()
-    q = state_action_function.StateActionFunction(environment, initial_q_value=-7.0)
+    q = state_action_function.StateActionFunction(environment, initial_value=-7.0)
 
     state_ = state.State(is_terminal=False, position=common.XY(x=4, y=2))
     state_index = environment.state_index[state_]
@@ -32,7 +32,7 @@ def q_test() -> bool:
     print(q[state_, action_])
 
     # noinspection PyProtectedMember
-    print(f"q {q._values}")
+    print(f"q {q.values}")
 
     return True
 

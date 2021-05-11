@@ -1,36 +1,16 @@
 from __future__ import annotations
-from typing import TYPE_CHECKING
 
-import numpy as np
-
-if TYPE_CHECKING:
-    from mdp.model.environment.state import State
-    from mdp.model.environment.environment import Environment
+from mdp.model.algorithm.value_function.state_function import StateFunction
 
 
-class StateVariable:
-    def __init__(self,
-                 environment_: Environment,
-                 initial_value: float
-                 ):
-        self._environment: Environment = environment_
-        self._initial_value: float = initial_value
-
-        self._values: np.ndarray = np.empty(
-            shape=len(self._environment.states),
-            dtype=float)
-
-        self.initialize_values()
-
+class StateVariable(StateFunction):
     def initialize_values(self):
-        for state_ in self._environment.states:
-            state_index = self._environment.state_index[state_]
-            self._values[state_index] = self._initial_value
+        for s in range(len(self._environment.states)):
+            self.vector[s] = self._initial_value
 
-    def __getitem__(self, state: State) -> float:
-        state_index = self._environment.state_index[state]
-        return self._values[state_index]
+    def print_all_values(self):
+        print("Variable vector ...")
+        print(self.vector)
 
-    def __setitem__(self, state: State, value: float):
-        state_index = self._environment.state_index[state]
-        self._values[state_index] = value
+    def print_coverage_statistics(self):
+        raise NotImplementedError
