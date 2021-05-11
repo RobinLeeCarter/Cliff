@@ -30,7 +30,7 @@ class Random(policy.Policy):
         # if self.state is None or state != self.state:
         #       can'_t use cached version
         # self.state = state
-        self.possible_actions = [action for action in self._environment.actions_for_state[state]]
+        self.possible_actions = self._environment.actions_for_state[state]
         if not self.possible_actions:
             raise Exception(f"Random state: {state} no possible actions")
 

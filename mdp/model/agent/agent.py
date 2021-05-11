@@ -36,15 +36,16 @@ class Agent:
         self.gamma: float = 1.0
         self.t: int = 0
 
-        # always refers to values for time-step _t
-        self.reward: Optional[float] = None
-        self.state: Optional[State] = None
-        self.action: Optional[Action] = None
+        # always refers to values for time-step t
+        self.r: Optional[float] = None
+        self.s: Optional[int] = None
+        self.a: Optional[int] = None
+        self.is_terminal: bool = False  # stored for performance
 
-        # always refers to values for time-step _t-1
-        self.prev_reward: Optional[float] = None
-        self.prev_state: Optional[State] = None
-        self.prev_action: Optional[Action] = None
+        # always refers to values for time-step t-1
+        self.prev_r: Optional[float] = None
+        self.prev_s: Optional[int] = None
+        self.prev_a: Optional[int] = None
 
         self._response: Optional[Response] = None
 
@@ -126,15 +127,19 @@ class Agent:
             episode_length_timeout = self._episode_length_timeout
 
         self.start_episode(exploring_starts)
-        while not self.state.is_terminal and self.t < episode_length_timeout:
+        while not self.is_terminal and self.t < episode_length_timeout:
             self.choose_action()
             if self._verbose:
-                print(f"t={self.t} \t state = {self.state} \t action = {self.action}")
+                state: State = self._environment.states[self.s]
+                action: Action = self._environment.actions[self.a]
+                print(f"t={self.t} \t state = {state} \t action = {action}")
             self.take_action()
+
         if self.t == episode_length_timeout:
             print("Failed to terminate")
         if self._verbose:
-            print(f"t={self.t} \t state = {self.state} (terminal)")
+            state: State = self._environment.states[self.s]
+            print(f"t={self.t} \t state = {state} (terminal)")
         return self._episode
 
     def start_episode(self, exploring_starts: bool = False):
@@ -146,33 +151,35 @@ class Agent:
         self._episode = Episode(self.gamma, self._step_callback, self._record_first_visits)
 
         if exploring_starts:
-            # completely random starting state and action, reward will be None
-            state, action = self._environment.dynamics.get_random_state_action()
-            self.state = state
-            self.reward = None
+            # completely random starting state and action and take the action, reward will be None
+            # state, action = self._environment.get_random_state_action()
+            self.s, self.a = self._environment.get_random_state_action()
+            self.r = None
             # action = self._environment.dynamics.get_random_action_for_state(self.state)
-            self.choose_action(action)
+            self.choose_action(self.a)
             self.take_action()
         else:
             # get starting state, reward will be None
-            self._response = self._environment.start()
-            self.reward = self._response.reward
-            self.state = self._response.state
+            self.s = self._environment.start_state()
+            self.r = None
 
-    def choose_action(self, action: Optional[Action] = None):
+    def choose_action(self, a: Optional[int] = None):
         """
         Have the policy choose an action
         We then have a complete r, s, a to add to episode
         The reward being is response from the previous action (if there was one, or otherwise reward=None)
         Note that the action is NOT applied yet.
         """
-        if action:
-            self.action = action
+        if a:
+            self.a = a
         else:
-            self.action = self._behaviour_policy[self.state]
-        self._episode.add_rsa(reward=self.reward, state=self.state, action=self.action)
+            self.a = self._behaviour_policy[self.s]
+        # is_terminal = self._environment.states[self.s].is_terminal
+        self._episode.add_rsa(self.r, self.s, self.a, self.is_terminal)
         if self._verbose:
-            print(f"state = {self.state} \t action = {self.action}")
+            state: State = self._environment.states[self.s]
+            action: Action = self._environment.actions[self.a]
+            print(f"state = {state} \t action = {action}")
 
     def take_action(self):
         """With state and action are already set,
@@ -180,16 +187,16 @@ class Agent:
         Get new reward and state in response.
         Start a new time step with the new reward and state
         """
-        self._response = self._environment.from_state_perform_action(self.state, self.action)
+        new_r, new_s, self.is_terminal = self._environment.from_state_perform_action(self.s, self.a)
 
         # move time-step forward
         self.t += 1
-        self.prev_reward, self.prev_state, self.prev_action = self.reward, self.state, self.action
-        self.reward, self.state, self.action = self._response.reward, self._response.state, None
+        self.prev_r, self.prev_s, self.prev_a = self.r, self.s, self.a
+        self.r, self.s, self.a = new_r, new_s, None
 
-        if self.state.is_terminal:
+        if self.is_terminal:
             # add terminating step here as should not select another action
-            self._episode.add_rsa(reward=self.reward, state=self.state, action=self.action)
+            self._episode.add_rsa(self.r, self.s, self.a, self.is_terminal)
 
     def print_statistics(self):
         self._algorithm.print_q_coverage_statistics()
@@ -201,8 +208,9 @@ class Agent:
 
         squared_error: float = 0.0
         count: int = 0
-        for state in self._environment.states:
+        for s, state in enumerate(self._environment.states):
             if self._environment.is_valued_state(state):
+                # TODO: change to s
                 value: float = self._algorithm.V[state]
                 # noinspection PyUnresolvedReferences
                 optimum: float = self._environment.get_optimum(state)

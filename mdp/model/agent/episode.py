@@ -1,11 +1,10 @@
 from __future__ import annotations
-from typing import Optional, TYPE_CHECKING, Callable
+from typing import Optional, Callable, TYPE_CHECKING
 
 import numpy as np
 
 if TYPE_CHECKING:
-    from mdp.model.environment.state import State
-    from mdp.model.environment.action import Action
+    from mdp.model.environment.environment import Environment
 
 from mdp.model.agent import rsa
 
@@ -17,6 +16,7 @@ class Episode:
                  step_callback: Optional[Callable[[], bool]] = None,
                  record_first_visits: bool = False):
         self.gamma: float = gamma
+        # TODO: move step_callback up to agent or even to algorithm
         self._step_callback: Optional[Callable[[], bool]] = step_callback
         self.record_first_visits = record_first_visits
 
@@ -30,47 +30,48 @@ class Episode:
 
         if self.record_first_visits:
             self.is_first_visit: list[bool] = []
-            self.visited_states: set[State] = set()
+            self.visited_s: set[int] = set()
 
     @property
-    def last_state(self) -> Optional[State]:
+    def last_s(self) -> Optional[int]:
         if self.trajectory:
-            return self.trajectory[-1].state
+            return self.trajectory[-1].s
         else:
             return None
 
     @property
-    def last_action(self) -> Optional[Action]:
+    def last_a(self) -> Optional[int]:
         if self.trajectory:
-            return self.trajectory[-1].action
+            return self.trajectory[-1].a
         else:
             return None
 
     @property
-    def prev_state(self) -> Optional[State]:
+    def prev_s(self) -> Optional[int]:
         if self.trajectory and len(self.trajectory) > 1:
-            return self.trajectory[-2].state
+            return self.trajectory[-2].s
         else:
             return None
 
     @property
-    def prev_action(self) -> Optional[Action]:
+    def prev_a(self) -> Optional[int]:
         if self.trajectory and len(self.trajectory) > 1:
-            return self.trajectory[-2].action
+            return self.trajectory[-2].a
         else:
             return None
 
     def add_rsa(self,
-                reward: Optional[float],
-                state: State,
-                action: Optional[Action]):
-        rsa_ = rsa.RSA(reward, state, action)
+                r: Optional[float],
+                s: int,
+                a: Optional[int],
+                is_terminal: bool):
+        rsa_ = rsa.RSA(r, s, a)
         self.trajectory.append(rsa_)
-        if state.is_terminal:
+        if is_terminal:
             self.terminates = True
             self.T = len(self.trajectory) - 1
         if self.record_first_visits:
-            self._first_visit_check(state)
+            self._first_visit_check(s)
         if self._step_callback:
             self.cont = self._step_callback()
 
@@ -79,13 +80,13 @@ class Episode:
             self.G = np.zeros(shape=self.T+1, dtype=float)
             self.G[self.T] = 0.0
             for t in range(self.T - 1, -1, -1):     # T-1, T-2, ... 1, 0
-                self.G[t] = self[t+1].reward + self.gamma * self.G[t + 1]
+                self.G[t] = self[t+1].r + self.gamma * self.G[t + 1]
 
-    def _first_visit_check(self, state: State):
-        is_first_visit = state not in self.visited_states
+    def _first_visit_check(self, s: int):
+        is_first_visit = (s not in self.visited_s)
         self.is_first_visit.append(is_first_visit)
         if is_first_visit:
-            self.visited_states.add(state)
+            self.visited_s.add(s)
 
     def __getitem__(self, t: int) -> rsa.RSA:
         return self.trajectory[t]
@@ -102,5 +103,5 @@ class Episode:
         g: float = 0
         for t, rsa_ in enumerate(self.trajectory):
             if t > 0:
-                g = rsa_.reward + self.gamma * g
+                g = rsa_.r + self.gamma * g
         return g

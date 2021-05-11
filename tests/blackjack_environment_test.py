@@ -74,7 +74,7 @@ def blackjack_test() -> bool:
 
 
 def random_round(environment: Environment):
-    response: Response = environment.start()
+    response: Response = environment.start_state()
     state: State = response.state
     if state.player_sum >= 20:
         action = Action(hit=False)

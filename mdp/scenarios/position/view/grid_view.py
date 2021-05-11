@@ -11,11 +11,11 @@ from mdp.view import grid_view
 
 class GridView(grid_view.GridView):
     def _frame_on_background_latest(self, episode_: Episode):
-        last_state: Optional[State] = episode_.last_state
+        last_state: Optional[State] = episode_.last_s
         agent_position: common.XY = last_state.position
         prev_position: Optional[common.XY] = None
 
-        prev_state: Optional[State] = episode_.prev_state
+        prev_state: Optional[State] = episode_.prev_s
         if prev_state:
             prev_position = prev_state.position
 
