@@ -84,10 +84,12 @@ class EGreedy(Policy):
         policy_matrix = np.zeros(shape=(state_count, action_count), dtype=float)
 
         non_greedy_p: np.ndarray = self.epsilon * self._environment.one_over_possible_actions
+        # TODO: greedy_p to zero when non_greedy_p is zero
         greedy_p: np.ndarray = (1 - self.epsilon) + non_greedy_p
 
+        # broadcast (|S|,) to (|S|,|A|)
+        non_greedy_p_broadcast = np.broadcast_to(non_greedy_p[:, np.newaxis], shape=policy_matrix.shape)
         compatible_actions: np.ndarray = self._environment.s_a_compatibility
-        non_greedy_p_broadcast = np.broadcast_to(np.expand_dims(non_greedy_p, 1), shape=policy_matrix.shape)
         policy_matrix[compatible_actions] = non_greedy_p_broadcast[compatible_actions]
 
         i = np.arange(state_count)

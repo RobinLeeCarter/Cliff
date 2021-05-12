@@ -49,8 +49,14 @@ class StateActionFunction:
         if value > current_max:
             self.max[s] = value
             self.argmax[s] = a
-        elif value == current_max and a < self.argmax[s]:   # so consistent
-            self.argmax[s] = a
+        elif value == current_max:
+            if a < self.argmax[s]:   # so consistent
+                self.argmax[s] = a
+        else:
+            if a == self.argmax[s]:
+                new_argmax = np.argmax(self.matrix[s, :])
+                self.argmax[s] = new_argmax
+                self.max[s] = self.matrix[s, new_argmax]
 
     def argmax_over_actions(self, s: int) -> int:
         """argmax over a of Q breaking ties consistently"""

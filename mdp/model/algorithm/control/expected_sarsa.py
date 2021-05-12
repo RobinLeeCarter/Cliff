@@ -33,6 +33,7 @@ class ExpectedSarsa(EpisodicOnlineControl):
         target = ag.r + self._gamma * q_expectation_over_a
         delta = target - self.Q[ag.prev_s, ag.prev_a]
         self.Q[ag.prev_s, ag.prev_a] += self._alpha * delta
+        print(ag.prev_s, ag.prev_a)
         # update policy to be in-line with Q
         self._agent.policy[ag.prev_s] = self.Q.argmax[ag.prev_s]
 

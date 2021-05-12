@@ -42,14 +42,17 @@ class Random(Policy):
     def _calc_policy_matrix(self) -> np.ndarray:
         state_count = len(self._environment.states)
         action_count = len(self._environment.actions)
-        probability_matrix = np.zeros(shape=(state_count, action_count), dtype=float)
+        policy_matrix = np.zeros(shape=(state_count, action_count), dtype=float)
 
         probabilities: np.ndarray = self._environment.one_over_possible_actions
 
-        compatible_actions: np.ndarray = self._environment.s_a_compatibility
-        probability_matrix[compatible_actions] = probabilities
+        # broadcast (|S|,) to (|S|,|A|)
+        probabilities_broadcast = np.broadcast_to(probabilities[:, np.newaxis], shape=policy_matrix.shape)
 
-        return probability_matrix
+        compatible_actions: np.ndarray = self._environment.s_a_compatibility
+        policy_matrix[compatible_actions] = probabilities[compatible_actions]
+
+        return policy_matrix
 
     # pycharm is asking for this to be implemented even though it's not an abstract method, might be a pycharm bug
     def __setitem__(self, s: int, a: int):

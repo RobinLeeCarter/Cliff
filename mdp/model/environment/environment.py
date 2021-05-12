@@ -98,10 +98,10 @@ class Environment(ABC):
         is_terminal = [state.is_terminal for state in self.states]
         self.is_terminal = np.array(is_terminal, dtype=bool)
         # self.one_over_possible_actions = np.zeros(shape=(len(self.states)), dtype=float)
-        self.possible_actions = np.count_nonzero(self.s_a_compatibility, axis=1)
-        self.one_over_possible_actions = 1.0 / self.possible_actions
-        self.one_over_possible_actions[self.possible_actions == 0.0] = 0.0
-
+        self.possible_actions = np.count_nonzero(self.s_a_compatibility, axis=1).astype(dtype=float)
+        self.one_over_possible_actions = np.zeros_like(self.possible_actions)
+        non_zero = (self.possible_actions != 0.0)
+        np.reciprocal(self.possible_actions, out=self.one_over_possible_actions, where=non_zero)
     # endregion
 
     # region Operation
