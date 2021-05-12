@@ -6,11 +6,11 @@ import numpy as np
 from mdp import common
 if TYPE_CHECKING:
     from mdp.model.environment.environment import Environment
-from mdp.model.policy.random import Random
+from mdp.model.policy.policy import Policy
 from mdp.model.policy.deterministic import Deterministic
 
 
-class EGreedy(Random):
+class EGreedy(Policy):
     def __init__(self, environment_: Environment, policy_parameters: common.PolicyParameters):
         super().__init__(environment_, policy_parameters)
         self.epsilon: float = self._policy_parameters.epsilon
@@ -33,10 +33,18 @@ class EGreedy(Random):
         return self.greedy_policy.policy_vector
 
     def _get_a(self, s: int) -> int:
-        if common.rng.uniform() > self.epsilon:
-            return self.greedy_policy[s]
+        if self._store_matrix:
+            return common.rng.choice(
+                a=len(self._environment.actions),
+                p=self._policy_matrix[s, :]
+            )
         else:
-            return Random._get_a(self, s)
+            if common.rng.uniform() > self.epsilon:
+                return self.greedy_policy[s]
+            else:
+                return common.rng.choice(
+                    np.flatnonzero(self._environment.s_a_compatibility[s, :])
+                )
 
     def __setitem__(self, s: int, a: int):
         if self._store_matrix:
@@ -79,7 +87,8 @@ class EGreedy(Random):
         greedy_p: np.ndarray = (1 - self.epsilon) + non_greedy_p
 
         compatible_actions: np.ndarray = self._environment.s_a_compatibility
-        policy_matrix[compatible_actions] = non_greedy_p
+        non_greedy_p_broadcast = np.broadcast_to(np.expand_dims(non_greedy_p, 1), shape=policy_matrix.shape)
+        policy_matrix[compatible_actions] = non_greedy_p_broadcast[compatible_actions]
 
         i = np.arange(state_count)
         policy_vector = self.greedy_policy.policy_vector

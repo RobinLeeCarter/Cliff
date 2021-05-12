@@ -100,6 +100,7 @@ class Environment(ABC):
         # self.one_over_possible_actions = np.zeros(shape=(len(self.states)), dtype=float)
         self.possible_actions = np.count_nonzero(self.s_a_compatibility, axis=1)
         self.one_over_possible_actions = 1.0 / self.possible_actions
+        self.one_over_possible_actions[self.possible_actions == 0.0] = 0.0
 
     # endregion
 
