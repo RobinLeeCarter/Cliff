@@ -80,17 +80,17 @@ class Environment(environment.Environment):
     # endregion
 
     # region Operation
-    def initialize_policy(self, policy_: Policy, policy_parameters: common.PolicyParameters):
+    def initialize_policy(self, policy: Policy, policy_parameters: common.PolicyParameters):
         hit: bool
-        for state in self.states:
-            # don't add a policy for terminal states at all
+        for s, state in enumerate(self.states):
+            # don't add an action to the policy for terminal states at all
             if not state.is_terminal:
                 if state.player_sum >= 20:
                     hit = False
                 else:
                     hit = True
-                initial_action = Action(hit)
-                policy_[state] = initial_action
+                initial_action: Action = Action(hit)
+                policy.set_action(s, initial_action)
 
     def insert_state_function_into_graph3d_ace(self,
                                                comparison: common.Comparison,
@@ -110,7 +110,8 @@ class Environment(environment.Environment):
                 )
                 x = player_sum - self._player_sum_min
                 y = dealers_card - self._dealers_card_min
-                z_values[y, x] = v[state]
+                s = self.state_index[state]
+                z_values[y, x] = v[s]
                 # print(player_sum, dealer_card, v[state])
 
         g = comparison.graph3d_values
@@ -124,13 +125,13 @@ class Environment(environment.Environment):
 
     def update_grid_policy_ace(self, policy: Policy, usable_ace: bool):
         # policy_: policy.Deterministic
-        for state in self.states:
+        for s, state in enumerate(self.states):
             if not state.is_terminal and state.usable_ace == usable_ace:
                 # dealer_card is x, player_sum is y : following the table in the book
                 x = state.dealers_card - self._dealers_card_min
                 y = state.player_sum - self._player_sum_min
                 position: common.XY = common.XY(x, y)
-                action: Action = policy[state]
+                action: Action = policy.get_action(s)
                 policy_value: int = int(action.hit)
                 # print(position, transfer_1_to_2)
                 self.grid_world.set_policy_value(

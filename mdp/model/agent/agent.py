@@ -148,7 +148,7 @@ class Agent:
             print("start episode...")
         self.t = 0
 
-        self._episode = Episode(self.gamma, self._step_callback, self._record_first_visits)
+        self._episode = Episode(self._environment, self.gamma, self._step_callback, self._record_first_visits)
 
         if exploring_starts:
             # completely random starting state and action and take the action, reward will be None
@@ -160,7 +160,7 @@ class Agent:
             self.take_action()
         else:
             # get starting state, reward will be None
-            self.s = self._environment.start_state()
+            self.s = self._environment.start_s()
             self.r = None
 
     def choose_action(self, a: Optional[int] = None):
@@ -187,7 +187,7 @@ class Agent:
         Get new reward and state in response.
         Start a new time step with the new reward and state
         """
-        new_r, new_s, self.is_terminal = self._environment.from_state_perform_action(self.s, self.a)
+        new_r, new_s, self.is_terminal = self._environment.from_s_perform_a(self.s, self.a)
 
         # move time-step forward
         self.t += 1

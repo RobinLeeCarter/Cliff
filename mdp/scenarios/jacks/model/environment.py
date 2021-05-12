@@ -67,12 +67,13 @@ class Environment(environment.Environment):
 
     # region Operation
     def initialize_policy(self, policy_: Policy, policy_parameters: common.PolicyParameters):
-        initial_action = Action(transfer_1_to_2=0)
-        for state in self.states:
+        initial_action: Action = Action(transfer_1_to_2=0)
+        initial_a: int = self.action_index[initial_action]
+        for s, state in enumerate(self.states):
             # max_transfer = min(state.cars_cob_1, self._max_cars - state.cars_cob_2, self._max_transfers)
             # max_transfer = -min(state.cars_cob_2, self._max_cars - state.cars_cob_1, self._max_transfers)
             # initial_action = Action(transfer_1_to_2=max_transfer)
-            policy_[state] = initial_action
+            policy_[s] = initial_a
             # print(state, initial_action)
 
     def insert_state_function_into_graph3d(self,
@@ -90,7 +91,8 @@ class Environment(environment.Environment):
                     ending_cars_2=cars2,
                     is_terminal=False,
                 )
-                z_values[cars2, cars1] = v[state]
+                s: int = self.state_index[state]
+                z_values[cars2, cars1] = v[s]
                 # print(cars1, cars2, v[state])
 
         g = comparison.graph3d_values
@@ -100,9 +102,9 @@ class Environment(environment.Environment):
 
     def update_grid_policy(self, policy: Policy):
         # policy_: policy.Deterministic
-        for state in self.states:
+        for s, state in enumerate(self.states):
             position: common.XY = common.XY(x=state.ending_cars_2, y=state.ending_cars_1)     # reversed like in book
-            action: Action = policy[state]
+            action: Action = policy.get_action(s)
             transfer_1_to_2: int = action.transfer_1_to_2
             # print(position, transfer_1_to_2)
             self.grid_world.set_policy_value(

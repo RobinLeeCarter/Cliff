@@ -5,7 +5,7 @@ from mdp.model.policy import policy
 
 
 class NoPolicy(policy.Policy):
-    def _get_action(self, s: int) -> Optional[int]:
+    def _get_a(self, s: int) -> Optional[int]:
         return None
 
     def __setitem__(self, s: int, a: int):

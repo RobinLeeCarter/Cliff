@@ -15,7 +15,7 @@ class Deterministic(policy.Policy):
         state_count = len(self._environment.states)
         self.policy_vector: np.ndarray = np.zeros(shape=state_count, dtype=int)
 
-    def _get_action(self, s: int) -> int:
+    def _get_a(self, s: int) -> int:
         return self.policy_vector[s]
 
     def __setitem__(self, s: int, a: int):

@@ -32,17 +32,13 @@ class Environment(ABC):
         self.actions: list[Action] = []
         self.action_index: dict[Action: int] = {}
         self.action_type: type = Action  # required?
+        # TODO: eliminate actions_for_state?
         self.actions_for_state: dict[State, list[Action]] = {}
 
         # almost all interactions with environment must be using state and action
         # exception boolean array of whether a in A(s) for a given [s, a]
         # possibly should be part of agent to enforce API but should be able to have mutliple agents for one evironment
         self.s_a_compatibility: np.ndarray = np.empty(0, dtype=bool)
-        # TODO: add cached helper arrays to avoid repeatedly calculating
-        # - is_terminal[s]
-        # - possible_actions[s]
-        # - one_over_possible_actions[s]
-
         self.is_terminal: np.ndarray = np.empty(0, dtype=bool)
         self.possible_actions: np.ndarray = np.empty(0, dtype=int)
         self.one_over_possible_actions: np.ndarray = np.empty(0, dtype=float)
@@ -128,7 +124,10 @@ class Environment(ABC):
                                            parameter: Optional[any] = None):
         pass
 
-    def start_state(self) -> int:
+    def start_state(self) -> State:
+        return self.dynamics.get_a_start_state()
+
+    def start_s(self) -> int:
         state = self.dynamics.get_a_start_state()
         return self.state_index[state]
 
@@ -145,7 +144,17 @@ class Environment(ABC):
     #     response: Response = self.dynamics.draw_response(state, action)
     #     return response
 
-    def from_state_perform_action(self, s: int, a: int) -> tuple[float, int, bool]:
+    def from_state_perform_action(self, state: State, action: Action) -> Response:
+        s = self.state_index[state]
+        a = self.action_index[action]
+        if state.is_terminal:
+            raise Exception("Environment: Trying to act in a terminal state.")
+        if not self.s_a_compatibility[s, a]:
+            raise Exception(f"_apply_action state {state} incompatible with action {action}")
+        response: Response = self.dynamics.draw_response(state, action)
+        return response
+
+    def from_s_perform_a(self, s: int, a: int) -> tuple[float, int, bool]:
         state = self.states[s]
         action = self.actions[a]
         if state.is_terminal:

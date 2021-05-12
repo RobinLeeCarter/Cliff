@@ -66,24 +66,24 @@ class Environment(environment.Environment):
     # endregion
 
     # region Operation
-    def initialize_policy(self, policy_: Policy, policy_parameters: common.PolicyParameters):
+    def initialize_policy(self, policy: Policy, policy_parameters: common.PolicyParameters):
         hit: bool
-        for state in self.states:
+        for s, state in enumerate(self.states):
             if state.is_terminal:
                 initial_action = Action(stake=0)    # for graphs
             else:
                 initial_action = Action(stake=1)
-            policy_[state] = initial_action
+            policy.set_action(s, initial_action)
 
     def insert_state_function_into_graph2d(self,
                                            comparison: common.Comparison,
                                            v: state_function.StateFunction):
         x_list: list[int] = []
         y_list: list[float] = []
-        for state in self.states:
+        for s, state in enumerate(self.states):
             if not state.is_terminal:
                 x_list.append(state.capital)
-                y_list.append(v[state])
+                y_list.append(v[s])
                 # print(state.capital, v[state])
         x_values = np.array(x_list, dtype=int)
         y_values = np.array(y_list, dtype=float)
@@ -104,15 +104,15 @@ class Environment(environment.Environment):
 
     def insert_policy_into_graph2d(self,
                                    comparison: common.Comparison,
-                                   policy_: Policy):
-        policy_: Deterministic
+                                   policy: Policy):
+        policy: Deterministic
 
         x_list: list[int] = []
         y_list: list[float] = []
-        for state in self.states:
+        for s, state in enumerate(self.states):
             if not state.is_terminal:
                 x_list.append(state.capital)
-                action: Action = policy_[state]
+                action: Action = policy.get_action(s)
                 y_list.append(float(action.stake))
                 # print(state.capital, v[state])
         x_values = np.array(x_list, dtype=int)

@@ -110,8 +110,7 @@ def gambler_test() -> bool:
 
 
 def random_round(environment: Environment):
-    response: Response = environment.start_state()
-    state: State = response.state
+    state: State = environment.start_state()
     # noinspection PyProtectedMember
     max_stake = min(state.capital, environment._max_capital-state.capital)
     stake = random.choice(range(1, max_stake+1))

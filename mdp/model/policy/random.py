@@ -15,7 +15,7 @@ class Random(policy.Policy):
         if self._store_matrix:
             self._policy_matrix = self._calc_policy_matrix()
 
-    def _get_action(self, s: int) -> int:
+    def _get_a(self, s: int) -> int:
         return common.rng.choice(
             np.flatnonzero(
                 self._environment.s_a_compatibility[s, :]

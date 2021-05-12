@@ -6,6 +6,7 @@ import numpy as np
 
 if TYPE_CHECKING:
     from mdp import common
+    from mdp.model.environment.action import Action
     from mdp.model.environment.environment import Environment
 
 
@@ -20,11 +21,24 @@ class Policy(abc.ABC):
         if self._environment.is_terminal[s]:
             return None
         else:
-            # this of course will go to the level in inheritance hierarchy set by self
-            return self._get_action(s)
+            return self._get_a(s)
 
     def __setitem__(self, s: int, a: int):
         raise NotImplementedError(f"__setitem__ not implemented for Policy: {type(self)}")
+
+    def get_action(self, s: int) -> Optional[Action]:
+        if self._environment.is_terminal[s]:
+            return None
+        else:
+            a: Optional[int] = self._get_a(s)
+            if a is None:
+                return None
+            else:
+                return self._environment.action_index[a]
+
+    def set_action(self, s: int, action: Action):
+        a = self._environment.action_index[action]
+        self.__setitem__(s, a)
 
     @property
     def linked_policy(self) -> Policy:
@@ -32,7 +46,7 @@ class Policy(abc.ABC):
         return self
 
     @abc.abstractmethod
-    def _get_action(self, s: int) -> Optional[int]:
+    def _get_a(self, s: int) -> Optional[int]:
         pass
 
     def get_probability(self, s: int, a: int) -> float:

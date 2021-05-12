@@ -32,11 +32,11 @@ class EGreedy(Random):
     def get_policy_vector(self) -> np.ndarray:
         return self.greedy_policy.policy_vector
 
-    def _get_action(self, s: int) -> int:
+    def _get_a(self, s: int) -> int:
         if common.rng.uniform() > self.epsilon:
             return self.greedy_policy[s]
         else:
-            return Random._get_action(self, s)
+            return Random._get_a(self, s)
 
     def __setitem__(self, s: int, a: int):
         if self._store_matrix:

@@ -1,10 +1,12 @@
 from __future__ import annotations
-from typing import Optional, Callable
+from typing import Optional, Callable, TYPE_CHECKING
 
 import numpy as np
 
-# if TYPE_CHECKING:
-#     from mdp.model.environment.environment import Environment
+if TYPE_CHECKING:
+    from mdp.model.environment.action import Action
+    from mdp.model.environment.state import State
+    from mdp.model.environment.environment import Environment
 
 from mdp.model.agent import rsa
 
@@ -12,9 +14,11 @@ from mdp.model.agent import rsa
 class Episode:
     """Just makes a record laid out in the standard way with Reward, State, Action for each _t"""
     def __init__(self,
+                 environment: Environment,
                  gamma: float,
                  step_callback: Optional[Callable[[], bool]] = None,
                  record_first_visits: bool = False):
+        self._environment = environment
         self.gamma: float = gamma
         # TODO: move step_callback up to agent or even to algorithm
         self._step_callback: Optional[Callable[[], bool]] = step_callback
@@ -105,3 +109,13 @@ class Episode:
             if t > 0:
                 g = rsa_.r + self.gamma * g
         return g
+
+    def get_state(self, t: int) -> State:
+        s: int = self.trajectory[t].s
+        state: State = self._environment.states[s]
+        return state
+
+    def get_action(self, t: int) -> Action:
+        a: int = self.trajectory[t].a
+        action: Action = self._environment.actions[a]
+        return action

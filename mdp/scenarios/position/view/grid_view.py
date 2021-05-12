@@ -22,12 +22,12 @@ class GridView(grid_view.GridView):
         self._draw_frame_on_background(agent_position=agent_position, prev_position=prev_position)
 
     def _frame_on_background_for_t(self, episode: Episode, t: int):
-        state: Optional[State] = episode[t].state
+        state: State = episode.get_state(t)
         agent_position: common.XY = state.position
         prev_position: Optional[common.XY] = None
 
         if t >= 1 and not self.grid_view_parameters.show_trail:
-            prev_state: Optional[State] = episode[t - 1].state
+            prev_state: Optional[State] = episode.get_state(t - 1)
             prev_position = prev_state.position
 
         if self._grid_world.is_inside(agent_position):
