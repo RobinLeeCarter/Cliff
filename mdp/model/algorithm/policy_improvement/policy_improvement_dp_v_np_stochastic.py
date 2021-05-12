@@ -29,6 +29,7 @@ class PolicyImprovementDpVNp(DynamicProgrammingV):
             policy_stable = self._policy_improvement(do_call_back)
 
     def _policy_improvement(self, do_call_back: bool = False) -> bool:
+        # TODO: check this is required and not just the same as deterministic
         # assert isinstance(policy_, policy.Deterministic)
         # policy_: policy.Deterministic
 

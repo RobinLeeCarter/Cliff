@@ -1,12 +1,9 @@
 from __future__ import annotations
 from typing import TYPE_CHECKING
 
-import numpy as np
-
 if TYPE_CHECKING:
     from mdp.model.environment.environment import Environment
     from mdp.model.agent.agent import Agent
-    from mdp.model.policy.deterministic import Deterministic
 from mdp import common
 from mdp.model.algorithm.policy_evaluation.policy_evaluation_dp_v_np_deterministic import PolicyEvaluationDpVNp
 from mdp.model.algorithm.policy_improvement.policy_improvement_dp_v_np_deterministic import PolicyImprovementDpVNp
@@ -26,9 +23,6 @@ class PolicyIterationDpVNp(PolicyEvaluationDpVNp, PolicyImprovementDpVNp):
 
     # @profile
     def run(self):
-        # policy_: policy.Policy = self._agent.target_policy
-        # assert isinstance(policy_, policy.Deterministic)
-
         if self._verbose:
             print(f"Starting Policy Iteration ...")
 

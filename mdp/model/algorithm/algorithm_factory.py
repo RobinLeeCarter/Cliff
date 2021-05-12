@@ -7,16 +7,16 @@ if TYPE_CHECKING:
 from mdp import common
 from mdp.model.algorithm.abstract.algorithm import Algorithm as BaseAlgorithm
 
-from mdp.model.algorithm.policy_evaluation.policy_evaluation_dp_q import PolicyEvaluationDpQ
-from mdp.model.algorithm.policy_evaluation.policy_evaluation_dp_v import PolicyEvaluationDpV
+from unused.object_style_algorithms.unused_policy_evaluation_dp_q import PolicyEvaluationDpQ
+from unused.object_style_algorithms.unused_policy_evaluation_dp_v import PolicyEvaluationDpV
 from mdp.model.algorithm.policy_evaluation.policy_evaluation_dp_v_np_deterministic import PolicyEvaluationDpVNp
 from mdp.model.algorithm.policy_evaluation.constant_alpha_mc import ConstantAlphaMC
 from mdp.model.algorithm.policy_evaluation.td_0 import TD0
 from mdp.model.algorithm.policy_evaluation.mc_prediction_q import MCPredictionQ
 from mdp.model.algorithm.policy_evaluation.mc_prediction_v import MCPredictionV
 
-from mdp.model.algorithm.policy_improvement.policy_improvement_dp_q import PolicyImprovementDpQ
-from mdp.model.algorithm.policy_improvement.policy_improvement_dp_v import PolicyImprovementDpV
+from unused.object_style_algorithms.unused_policy_improvement_dp_q import PolicyImprovementDpQ
+from unused.object_style_algorithms.unused_policy_improvement_dp_v import PolicyImprovementDpV
 from mdp.model.algorithm.policy_improvement.policy_improvement_dp_v_np_deterministic import PolicyImprovementDpVNp
 
 from mdp.model.algorithm.control.on_policy_mc_control import OnPolicyMcControl
@@ -26,11 +26,11 @@ from mdp.model.algorithm.control.expected_sarsa import ExpectedSarsa
 from mdp.model.algorithm.control.sarsa import Sarsa
 from mdp.model.algorithm.control.q_learning import QLearning
 
-from mdp.model.algorithm.control.policy_iteration_dp_q import PolicyIterationDpQ
-from mdp.model.algorithm.control.policy_iteration_dp_v import PolicyIterationDpV
+from unused.object_style_algorithms.unused_policy_iteration_dp_q import PolicyIterationDpQ
+from unused.object_style_algorithms.unused_policy_iteration_dp_v import PolicyIterationDpV
 from mdp.model.algorithm.control.policy_iteration_dp_v_np import PolicyIterationDpVNp
-from mdp.model.algorithm.control.value_iteration_dp_v import ValueIterationDpV
-from mdp.model.algorithm.control.value_iteration_dp_v_np import ValueIterationDpVNp
+from unused.object_style_algorithms.unused_value_iteration_dp_v import ValueIterationDpV
+from unused.object_style_algorithms.un_written_value_iteration_dp_v_np import ValueIterationDpVNp
 
 
 def algorithm_factory(environment_: Environment,

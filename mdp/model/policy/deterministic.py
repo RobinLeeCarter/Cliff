@@ -33,14 +33,20 @@ class Deterministic(policy.Policy):
         # return self._action_given_state[state_index]
 
     def __setitem__(self, s: int, a: int):
-        # self._action_for_state[state] = action
-
-        # s: int = self._environment.state_index[state]
-        # a: int = self._environment.action_index[action]
-        # prev_a = self._policy_vector[s]
+        if self._store_matrix:
+            prev_a = self.policy_vector[s]
+            self._policy_matrix[s, prev_a] = 0.0
+            self._policy_matrix[s, a] = 1.0
         self.policy_vector[s] = a
-        # self._policy_matrix[s, prev_a] = 0.0
-        # self._policy_matrix[s, a] = 1.0
+
+    # self._action_for_state[state] = action
+
+    # s: int = self._environment.state_index[state]
+    # a: int = self._environment.action_index[action]
+    # prev_a = self._policy_vector[s]
+
+    # self._policy_matrix[s, prev_a] = 0.0
+    # self._policy_matrix[s, a] = 1.0
 
     # def set_policy_vector(self, policy_vector: np.ndarray, update_dict: bool = True):
     #     self._policy_vector = policy_vector
@@ -66,20 +72,20 @@ class Deterministic(policy.Policy):
         #     policy_matrix[s, a] = 1.0
         # return policy_matrix
 
-    def get_probability(self, s: int, a: int) -> float:
+    def _calc_probability(self, s: int, a: int) -> float:
         if a == self.policy_vector[s]:
             return 1.0
         else:
             return 0.0
 
-    def get_probability_vector(self, s: int) -> np.ndarray:
+    def _calc_probability_vector(self, s: int) -> np.ndarray:
         action_count = len(self._environment.actions)
         probability_vector = np.zeros(shape=action_count, dtype=float)
         a = self.policy_vector[s]
         probability_vector[a] = 1.0
         return probability_vector
 
-    def get_probability_matrix(self) -> np.ndarray:
+    def _calc_policy_matrix(self) -> np.ndarray:
         state_count = len(self._environment.states)
         action_count = len(self._environment.actions)
         policy_matrix = np.zeros(shape=(state_count, action_count), dtype=float)
@@ -95,3 +101,5 @@ class Deterministic(policy.Policy):
 
     def set_policy_vector(self, policy_vector: np.ndarray):
         self.policy_vector = policy_vector
+        if self._store_matrix:
+            self._policy_matrix = self._calc_policy_matrix()

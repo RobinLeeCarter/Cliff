@@ -51,7 +51,7 @@ class Algorithm(abc.ABC):
     def parameter_changes(self, iteration: int):
         pass
 
-    def _make_policy_greedy_wrt_q(self):
+    def _set_policy_greedy_wrt_q(self):
         self._agent.target_policy.set_policy_vector(self.Q.argmax)
 
         # easier and probably faster to include terminal states

@@ -23,13 +23,10 @@ class TD0(EpisodicOnline):
         self._create_v()
 
     def _do_training_step(self):
-        self._agent.choose_action()
-        self._agent.take_action()
+        ag = self._agent
+        ag.choose_action()
+        ag.take_action()
 
-        prev_state = self._agent.prev_state
-        reward = self._agent.reward
-        state = self._agent.state
-
-        target = reward + self._gamma * self.V[state]
-        delta = target - self.V[prev_state]
-        self.V[prev_state] += self._alpha * delta
+        target = ag.r + self._gamma * self.V[ag.s]
+        delta = target - self.V[ag.prev_s]
+        self.V[ag.prev_s] += self._alpha * delta

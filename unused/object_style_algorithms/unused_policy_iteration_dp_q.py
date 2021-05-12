@@ -5,11 +5,11 @@ if TYPE_CHECKING:
     from mdp.model.environment.environment import Environment
     from mdp.model.agent.agent import Agent
 from mdp import common
-from mdp.model.algorithm.policy_evaluation.policy_evaluation_dp_v import PolicyEvaluationDpV
-from mdp.model.algorithm.policy_improvement.policy_improvement_dp_v import PolicyImprovementDpV
+from unused.object_style_algorithms.unused_policy_evaluation_dp_q import PolicyEvaluationDpQ
+from unused.object_style_algorithms.unused_policy_improvement_dp_q import PolicyImprovementDpQ
 
 
-class PolicyIterationDpV(PolicyEvaluationDpV, PolicyImprovementDpV):
+class PolicyIterationDpQ(PolicyEvaluationDpQ, PolicyImprovementDpQ):
     def __init__(self,
                  environment_: Environment,
                  agent_: Agent,
@@ -17,7 +17,7 @@ class PolicyIterationDpV(PolicyEvaluationDpV, PolicyImprovementDpV):
                  policy_parameters: common.PolicyParameters
                  ):
         super().__init__(environment_, agent_, algorithm_parameters, policy_parameters)
-        self._algorithm_type = common.AlgorithmType.POLICY_ITERATION_DP_V
+        self._algorithm_type = common.AlgorithmType.POLICY_ITERATION_DP_Q
         self.name = common.algorithm_name[self._algorithm_type]
         self.title = f"{self.name} θ={self._theta}"
 
@@ -34,8 +34,7 @@ class PolicyIterationDpV(PolicyEvaluationDpV, PolicyImprovementDpV):
         if self._step_callback:
             cont = self._step_callback()
         while cont and not policy_stable and iteration < self._iteration_timeout:
-            if self._verbose:
-                print(f"Policy Iteration. Iteration = {iteration}")
+            print(f"Policy Iteration. Iteration = {iteration}")
             self._policy_evaluation()
             policy_stable = self._policy_improvement()
             if self._step_callback:

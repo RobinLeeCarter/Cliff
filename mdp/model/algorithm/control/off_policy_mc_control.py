@@ -26,25 +26,25 @@ class OffPolicyMcControl(EpisodicMonteCarlo):
 
     def initialize(self):
         super().initialize()
-        self._make_policy_greedy_wrt_q()
+        self._set_policy_greedy_wrt_q()
 
     def _pre_process_episode(self):
         self._episode.generate_returns()
         self._W = 1.0
 
     def _process_time_step(self, t: int):
-        state = self._episode[t].state
-        action = self._episode[t].action
+        s = self._episode[t].s
+        a = self._episode[t].a
 
-        self._C[state, action] += self._W
+        self._C[s, a] += self._W
         target = self._episode.G[t]
-        delta = target - self.Q[state, action]
-        step_size = self._W / self._C[state, action]
-        self.Q[state, action] += step_size * delta
-        best_action = self.Q.argmax_over_actions(state)
-        self._agent.target_policy[state] = best_action
-        if action != best_action:
+        delta = target - self.Q[s, a]
+        step_size = self._W / self._C[s, a]
+        self.Q[s, a] += step_size * delta
+        best_a = self.Q.argmax[s]
+        self._agent.target_policy[s] = best_a
+        if a != best_a:
             self._exit_episode = True
         else:
-            behaviour_probability = self._agent.behaviour_policy.get_probability(state, action)
+            behaviour_probability = self._agent.behaviour_policy.get_probability(s, a)
             self._W /= behaviour_probability

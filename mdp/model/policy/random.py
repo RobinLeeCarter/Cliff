@@ -33,7 +33,7 @@ class Random(policy.Policy):
         # possible_actions: int = np.count_nonzero(self._environment.s_a_compatibility[s, :])
         # return 1.0 / possible_actions
 
-    def get_probability_vector(self, s: int) -> np.ndarray:
+    def _calc_probability_vector(self, s: int) -> np.ndarray:
         # TODO: Decide whether to maintain probability_matrix as policy updates
         action_count: int = len(self._environment.actions)
         probability_vector: np.ndarray = np.zeros(shape=action_count, dtype=float)
@@ -45,7 +45,7 @@ class Random(policy.Policy):
 
         return probability_vector
 
-    def get_probability_matrix(self) -> np.ndarray:
+    def _calc_policy_matrix(self) -> np.ndarray:
         # TODO: Decide whether to maintain probability_matrix as policy updates
         state_count = len(self._environment.states)
         action_count = len(self._environment.actions)

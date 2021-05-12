@@ -7,4 +7,4 @@ from mdp.model.algorithm.abstract.episodic_online import EpisodicOnline
 class EpisodicOnlineControl(EpisodicOnline, abc.ABC):
     def initialize(self):
         super().initialize()
-        self._make_policy_greedy_wrt_q()
+        self._set_policy_greedy_wrt_q()

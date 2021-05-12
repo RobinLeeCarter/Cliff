@@ -31,11 +31,11 @@ class OnPolicyMcControl(EpisodicMonteCarlo):
         # only do updates on the time-steps that should be done
         if (self.first_visit and self._episode.is_first_visit[t]) \
                 or not self.first_visit:
-            state = self._episode[t].state
-            action = self._episode[t].action
+            s = self._episode[t].s
+            a = self._episode[t].a
             target = self._episode.G[t]
-            delta = target - self.Q[state, action]
-            self._N[state, action] += 1
+            delta = target - self.Q[s, a]
+            self._N[s, a] += 1
             # Q(s,a) = Q(s,a) + (1/N(s,a)).(G(t) - Q(s,a))
-            self.Q[state, action] += delta / self._N[state, action]
-            self._agent.policy[state] = self.Q.argmax_over_actions(state)
+            self.Q[s, a] += delta / self._N[s, a]
+            self._agent.policy[s] = self.Q.argmax[s]
