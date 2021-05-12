@@ -210,8 +210,7 @@ class Agent:
         count: int = 0
         for s, state in enumerate(self._environment.states):
             if self._environment.is_valued_state(state):
-                # TODO: change to s
-                value: float = self._algorithm.V[state]
+                value: float = self._algorithm.V[s]
                 # noinspection PyUnresolvedReferences
                 optimum: float = self._environment.get_optimum(state)
                 squared_error += (value - optimum)**2

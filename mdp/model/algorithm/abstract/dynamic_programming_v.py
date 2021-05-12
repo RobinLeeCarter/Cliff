@@ -1,11 +1,8 @@
 from __future__ import annotations
 from typing import TYPE_CHECKING
 import abc
-# import math
 
 if TYPE_CHECKING:
-    from mdp.model.environment.state import State
-    from mdp.model.environment.action import Action
     from mdp.model.environment.environment import Environment
     from mdp.model.agent.agent import Agent
     from mdp import common
