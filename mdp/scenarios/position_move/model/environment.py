@@ -47,16 +47,16 @@ class Environment(environment.Environment, abc.ABC):
 
     # region Operation
     def update_grid_value_functions(self,
-                                    algorithm_: Algorithm,
+                                    algorithm: Algorithm,
                                     policy: Policy
                                     ):
         for s, state in enumerate(self.states):
-            if algorithm_.V:
+            if algorithm.V:
                 self.grid_world.set_v_value(
                     position=state.position,
-                    v_value=algorithm_.V[s]
+                    v_value=algorithm.V[s]
                 )
-            if algorithm_.Q:
+            if algorithm.Q:
                 policy_action: Optional[Action] = policy.get_action(s)
                 policy_action: Action
                 policy_move: Optional[common.XY] = None
@@ -69,7 +69,7 @@ class Environment(environment.Environment, abc.ABC):
                     self.grid_world.set_move_q_value(
                         position=state.position,
                         move=action.move,
-                        q_value=algorithm_.Q[s, a],
+                        q_value=algorithm.Q[s, a],
                         is_policy=is_policy
                     )
 

@@ -33,7 +33,7 @@ class ExpectedSarsa(EpisodicOnlineControl):
         target = ag.r + self._gamma * q_expectation_over_a
         delta = target - self.Q[ag.prev_s, ag.prev_a]
 
-        # print(f"s: {ag.prev_s}, a: {ag.prev_a}, s' {ag.s}")
+        # print(f"s: {ag.prev_s} \ta: {ag.prev_a} \ts' {ag.s}")
         # print(f"E: {q_expectation_over_a}")
         # print(f"t: {target}")
         # print(f"d: {delta}")

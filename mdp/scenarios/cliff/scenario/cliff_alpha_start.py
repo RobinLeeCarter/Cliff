@@ -14,6 +14,7 @@ class CliffAlphaStart(Scenario):
             comparison_settings=common.Settings(
                 runs=10,
                 training_episodes=100,
+                display_every_step=True,
             ),
             breakdown_parameters=common.BreakdownAlgorithmByAlpha(
                 breakdown_type=common.BreakdownType.RETURN_BY_ALPHA,

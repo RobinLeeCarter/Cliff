@@ -110,11 +110,11 @@ class Environment(ABC):
     #     action = random.choice(self.actions_for_state[state])
     #     return state, action
 
-    def get_random_state_action(self) -> tuple[int, int]:
+    def get_random_state_action(self) -> tuple[int, bool, int]:
         flat = np.flatnonzero(self.s_a_compatibility)
         choice = np.random.choice(flat)
         s, a = np.unravel_index(choice, self.s_a_compatibility.shape)
-        return s, a
+        return s, self.is_terminal[s], a
 
     def initialize_policy(self, policy_: Policy, policy_parameters: common.PolicyParameters):
         pass
@@ -128,9 +128,9 @@ class Environment(ABC):
     def start_state(self) -> State:
         return self.dynamics.get_a_start_state()
 
-    def start_s(self) -> int:
+    def start_s(self) -> tuple[int, bool]:
         state = self.dynamics.get_a_start_state()
-        return self.state_index[state]
+        return self.state_index[state], state.is_terminal
 
     # def start_s(self) -> int:
     #     state = self._get_a_start_state()
@@ -193,8 +193,8 @@ class Environment(ABC):
         return common.XY(x=x, y=y)
 
     def update_grid_value_functions(self,
-                                    algorithm_: Algorithm,
-                                    policy_: Policy):
+                                    algorithm: Algorithm,
+                                    policy: Policy):
         pass
 
     def is_valued_state(self, state: State) -> bool:

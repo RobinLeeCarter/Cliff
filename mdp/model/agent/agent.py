@@ -153,14 +153,14 @@ class Agent:
         if exploring_starts:
             # completely random starting state and action and take the action, reward will be None
             # state, action = self._environment.get_random_state_action()
-            self.s, self.a = self._environment.get_random_state_action()
+            self.s, self.is_terminal, self.a = self._environment.get_random_state_action()
             self.r = None
             # action = self._environment.dynamics.get_random_action_for_state(self.state)
             self.choose_action(self.a)
             self.take_action()
         else:
             # get starting state, reward will be None
-            self.s = self._environment.start_s()
+            self.s, self.is_terminal = self._environment.start_s()
             self.r = None
 
     def choose_action(self, a: Optional[int] = None):

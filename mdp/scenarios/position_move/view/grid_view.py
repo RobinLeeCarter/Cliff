@@ -17,21 +17,21 @@ class GridView(grid_view.GridView):
         self._grid_world: Optional[GridWorld] = self._grid_world
 
     def _frame_on_background_latest(self, episode: Episode):
-        last_state: Optional[State] = episode.last_s
+        last_state: Optional[State] = episode.last_state
         agent_position: common.XY = last_state.position
         agent_move: Optional[common.XY] = None
         prev_position: Optional[common.XY] = None
         prev_move: Optional[common.XY] = None
 
-        last_action: Optional[Action] = episode.last_a
+        last_action: Optional[Action] = episode.last_action
         if last_action:
             agent_move = last_action.move
 
-        prev_state: Optional[State] = episode.prev_s
+        prev_state: Optional[State] = episode.prev_state
         if prev_state:
             prev_position = prev_state.position
 
-        prev_action: Optional[Action] = episode.prev_a
+        prev_action: Optional[Action] = episode.prev_action
         if prev_action:
             prev_move = prev_action.move
 

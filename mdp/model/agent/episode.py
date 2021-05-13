@@ -37,30 +37,34 @@ class Episode:
             self.visited_s: set[int] = set()
 
     @property
-    def last_s(self) -> Optional[int]:
+    def last_state(self) -> Optional[State]:
         if self.trajectory:
-            return self.trajectory[-1].s
+            last_s = self.trajectory[-1].s
+            return self._environment.states[last_s]
         else:
             return None
 
     @property
-    def last_a(self) -> Optional[int]:
+    def last_action(self) -> Optional[Action]:
         if self.trajectory:
-            return self.trajectory[-1].a
+            last_a = self.trajectory[-1].a
+            return self._environment.actions[last_a]
         else:
             return None
 
     @property
-    def prev_s(self) -> Optional[int]:
+    def prev_state(self) -> Optional[State]:
         if self.trajectory and len(self.trajectory) > 1:
-            return self.trajectory[-2].s
+            prev_s = self.trajectory[-2].s
+            return self._environment.states[prev_s]
         else:
             return None
 
     @property
-    def prev_a(self) -> Optional[int]:
+    def prev_action(self) -> Optional[Action]:
         if self.trajectory and len(self.trajectory) > 1:
-            return self.trajectory[-2].a
+            prev_a = self.trajectory[-2].a
+            return self._environment.actions[prev_a]
         else:
             return None
 

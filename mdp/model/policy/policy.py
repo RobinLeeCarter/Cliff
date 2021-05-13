@@ -34,7 +34,7 @@ class Policy(abc.ABC):
             if a is None:
                 return None
             else:
-                return self._environment.action_index[a]
+                return self._environment.actions[a]
 
     def set_action(self, s: int, action: Action):
         a = self._environment.action_index[action]

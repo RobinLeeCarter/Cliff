@@ -98,8 +98,8 @@ class Model(ABC):
 
     def update_grid_value_functions(self):
         policy_for_display = self.agent.policy.linked_policy
-        self.environment.update_grid_value_functions(algorithm_=self.agent.algorithm,
-                                                     policy_=policy_for_display)
+        self.environment.update_grid_value_functions(algorithm=self.agent.algorithm,
+                                                     policy=policy_for_display)
 
     def _display_step(self, episode_: Optional[Episode]):
         self.update_grid_value_functions()
