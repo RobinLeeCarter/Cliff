@@ -3,6 +3,8 @@ from typing import TYPE_CHECKING
 
 import numpy as np
 
+import utils
+
 if TYPE_CHECKING:
     from mdp.model.environment.environment import Environment
 from mdp import common
@@ -12,15 +14,19 @@ from mdp.model.policy.policy import Policy
 class Random(Policy):
     def __init__(self, environment_: Environment, policy_parameters: common.PolicyParameters):
         super().__init__(environment_, policy_parameters)
-        if self._store_matrix:  # and isinstance(self, Random)
+        if self._store_matrix:
             self._policy_matrix = self._calc_policy_matrix()
 
     def _get_a(self, s: int) -> int:
-        return common.rng.choice(
-            np.flatnonzero(
-                self._environment.s_a_compatibility[s, :]
+        if self._store_matrix:
+            return utils.p_choice(p=self._policy_matrix[s, :])
+        else:
+            # could also jit this if needed
+            return common.rng.choice(
+                np.flatnonzero(
+                    self._environment.s_a_compatibility[s, :]
+                )
             )
-        )
 
     def _calc_probability(self, s: int, a: int) -> float:
         if self._environment.s_a_compatibility[s, a]:
@@ -50,7 +56,7 @@ class Random(Policy):
         probabilities_broadcast = np.broadcast_to(probabilities[:, np.newaxis], shape=policy_matrix.shape)
 
         compatible_actions: np.ndarray = self._environment.s_a_compatibility
-        policy_matrix[compatible_actions] = probabilities[compatible_actions]
+        policy_matrix[compatible_actions] = probabilities_broadcast[compatible_actions]
 
         return policy_matrix
 

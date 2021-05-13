@@ -43,6 +43,7 @@ class StateActionFunction:
         return self.matrix[s_a]
 
     def __setitem__(self, s_a: tuple[int, int], value: float):
+        # print(f"s_a: {s_a} \tvalue: {value}")
         self.matrix[s_a] = value
 
         s, a = s_a

@@ -24,8 +24,8 @@ class CliffAlphaStart(Scenario):
                 algorithm_type_list=[
                     common.AlgorithmType.EXPECTED_SARSA,
                     # common.AlgorithmType.VQ,
-                    # common.AlgorithmType.Q_LEARNING,
-                    # common.AlgorithmType.SARSA
+                    common.AlgorithmType.Q_LEARNING,
+                    common.AlgorithmType.SARSA
                 ],
             ),
             graph_values=common.GraphValues(

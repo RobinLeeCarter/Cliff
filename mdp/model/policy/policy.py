@@ -17,24 +17,17 @@ class Policy(abc.ABC):
         self._store_matrix: bool = self._policy_parameters.store_matrix
         self._policy_matrix: Optional[np.ndarray] = None
 
-    def __getitem__(self, s: int) -> Optional[int]:
+    def __getitem__(self, s: int) -> int:
         if self._environment.is_terminal[s]:
-            return None
+            return 0        # None
         else:
             return self._get_a(s)
 
     def __setitem__(self, s: int, a: int):
         raise NotImplementedError(f"__setitem__ not implemented for Policy: {type(self)}")
 
-    def get_action(self, s: int) -> Optional[Action]:
-        if self._environment.is_terminal[s]:
-            return None
-        else:
-            a: Optional[int] = self._get_a(s)
-            if a is None:
-                return None
-            else:
-                return self._environment.actions[a]
+    def get_action(self, s: int) -> Action:
+        return self._environment.actions[self._get_a(s)]
 
     def set_action(self, s: int, action: Action):
         a = self._environment.action_index[action]
@@ -46,7 +39,7 @@ class Policy(abc.ABC):
         return self
 
     @abc.abstractmethod
-    def _get_a(self, s: int) -> Optional[int]:
+    def _get_a(self, s: int) -> int:
         pass
 
     def get_probability(self, s: int, a: int) -> float:

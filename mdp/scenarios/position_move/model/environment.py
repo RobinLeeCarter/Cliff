@@ -2,6 +2,8 @@ from __future__ import annotations
 import abc
 from typing import Optional, TYPE_CHECKING
 
+import numpy as np
+
 if TYPE_CHECKING:
     from mdp.model.algorithm.abstract.algorithm import Algorithm
     from mdp.model.policy.policy import Policy
@@ -57,21 +59,18 @@ class Environment(environment.Environment, abc.ABC):
                     v_value=algorithm.V[s]
                 )
             if algorithm.Q:
-                policy_action: Optional[Action] = policy.get_action(s)
-                policy_action: Action
-                policy_move: Optional[common.XY] = None
-                if policy_action:
-                    policy_move = policy_action.move
+                is_terminal: bool = self.is_terminal[s]
+                policy_a: int = policy[s]
                 # for a in np.flatnonzero(self.s_a_compatibility[s]):
-                #     action = self.actions[a]
-                for a, action in enumerate(self.actions_for_state[state]):
-                    is_policy: bool = (policy_move and policy_move == action.move)
-                    self.grid_world.set_move_q_value(
-                        position=state.position,
-                        move=action.move,
-                        q_value=algorithm.Q[s, a],
-                        is_policy=is_policy
-                    )
+                for a, action in enumerate(self.actions):
+                    if self.s_a_compatibility[s, a]:
+                        is_policy: bool = (not is_terminal and policy_a == a)
+                        self.grid_world.set_move_q_value(
+                            position=state.position,
+                            move=action.move,
+                            q_value=algorithm.Q[s, a],
+                            is_policy=is_policy
+                        )
 
     def is_valued_state(self, state: State) -> bool:
         _square: common.Square = self.grid_world.get_square(state.position)

@@ -32,6 +32,11 @@ class Sarsa(EpisodicOnlineControl):
 
         target: float = ag.r + self._gamma * self.Q[ag.s, ag.a]
         delta: float = target - self.Q[ag.prev_s, ag.prev_a]
+        # print(f"a: {ag.a}"
+        #       f"\tQ[curr]: {self.Q[ag.s, ag.a]}"
+        #       f"\tQ[prev]: {self.Q[ag.prev_s, ag.prev_a]}"
+        #       f"\tdelta: {delta}"
+        #       f"\talpha: {self._alpha}")
         self.Q[ag.prev_s, ag.prev_a] += self._alpha * delta
         ag.policy[ag.prev_s] = self.Q.argmax[ag.prev_s]
 
