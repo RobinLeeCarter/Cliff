@@ -1,9 +1,10 @@
 from __future__ import annotations
 from typing import TYPE_CHECKING
+import random
 
 import numpy as np
+from numba import njit
 
-import utils
 from mdp import common
 if TYPE_CHECKING:
     from mdp.model.environment.environment import Environment
@@ -33,11 +34,29 @@ class EGreedy(Policy):
     def get_policy_vector(self) -> np.ndarray:
         return self.greedy_policy.policy_vector
 
+    @profile
     def _get_a(self, s: int) -> int:
         if self._store_matrix:
-            return utils.p_choice(p=self._policy_matrix[s, :])
+            # numpy_direct_choice = common.rng.choice(
+            #     a=len(self._environment.actions),
+            #     p=self._policy_matrix[s, :]
+            # )
+            # numpy_uniform_choice = self._numpy_uniform_choice(s)
+            # python_choice = self._python_choice(s)
+            # a_greedy = self.greedy_policy[s]
+            # compatibility = self._environment.s_a_compatibility[s, :]
+            # numba_uniform_choice = _numba_uniform_choice(self.epsilon, a_greedy, compatibility)
+
+            numba_p_unsliced = _numba_p_unsliced(p=self._policy_matrix, s=s)
+
+            numba_p_choice = _numba_p_choice(p=self._policy_matrix[s, :])
+
+            cum_p: np.ndarray = _numba_cum_p(self._policy_matrix[s, :])
+            x: float = _numba_get_x()
+            numba_p_x_choice = _numba_cum_p_x_choice(cum_p, x)
+
+            return numba_p_x_choice
         else:
-            # could also jit this if needed
             if common.rng.uniform() > self.epsilon:
                 return self.greedy_policy[s]
             else:
@@ -97,3 +116,94 @@ class EGreedy(Policy):
         policy_matrix[i, policy_vector] = greedy_p
 
         return policy_matrix
+
+    def _numpy_uniform_choice(self, s: int) -> int:
+        if common.rng.uniform() > self.epsilon:
+            return self.greedy_policy[s]
+        else:
+            return common.rng.choice(
+                np.flatnonzero(self._environment.s_a_compatibility[s, :])
+            )
+
+    def _python_choice(self, s: int) -> int:
+        return random.choices(
+            population=range(len(self._environment.actions)),
+            weights=list(self._policy_matrix[s, :])
+        )[0]
+
+
+@njit
+def _numba_uniform_choice(epsilon: float,
+                          a_greedy: int,
+                          compatibility: np.ndarray,
+                          ) -> int:
+    if np.random.uniform(0.0, 1.0) > epsilon:
+        return a_greedy
+    else:
+        return np.random.choice(
+            np.flatnonzero(compatibility)
+        )
+
+
+@njit(cache=True)
+def _numba_p_unsliced(p: np.ndarray, s: int):
+    """Return an index value from a probability distribution p"""
+    lo: int = 0
+    hi: int = p.shape[1]
+    # x: float = random.random()
+    x: float = np.random.uniform(0.0, 1.0)
+    cum_p: np.ndarray = np.cumsum(p[s, :])
+    while lo < hi:
+        mid = (lo + hi)//2
+        # Use __lt__ to match the logic in list.sort() and in heapq
+        if x < cum_p[mid]:
+            hi = mid
+        else:
+            lo = mid + 1
+    return lo
+
+
+@njit(cache=True)
+def _numba_p_choice(p: np.ndarray):
+    """Return an index value from a probability distribution p"""
+    lo: int = 0
+    hi: int = p.shape[0]
+    # x: float = random.random()
+    x: float = np.random.uniform(0.0, 1.0)
+    cum_p: np.ndarray = np.cumsum(p)
+    while lo < hi:
+        mid = (lo + hi)//2
+        # Use __lt__ to match the logic in list.sort() and in heapq
+        if x < cum_p[mid]:
+            hi = mid
+        else:
+            lo = mid + 1
+    return lo
+
+
+@njit(cache=True)
+def _numba_cum_p(p: np.ndarray):
+    return np.cumsum(p)
+
+
+@njit(cache=True)
+def _numba_get_x() -> float:
+    return random.random()
+
+
+@njit(cache=True)
+def _numba_cum_p_x_choice(cum_p: np.ndarray, x: float):
+    """Return an index value from a probability distribution p"""
+    lo: int = 0
+    hi: int = cum_p.shape[0]
+    # x: float = random.random()
+    # x: float = np.random.uniform(0.0, 1.0)
+    while lo < hi:
+        mid = (lo + hi)//2
+        # Use __lt__ to match the logic in list.sort() and in heapq
+        if x < cum_p[mid]:
+            hi = mid
+        else:
+            lo = mid + 1
+    return lo
+
