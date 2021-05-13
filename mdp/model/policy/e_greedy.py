@@ -54,6 +54,7 @@ class EGreedy(Policy):
             self._policy_matrix[s, prev_a] = non_greedy_p
             self._policy_matrix[s, a] = greedy_p
         self.greedy_policy[s] = a
+        # print(f"greedy_policy[{s}] = {self.greedy_policy[s]}")
 
     def _calc_probability(self, s: int, a: int) -> float:
         non_greedy_p = self.epsilon * self._environment.one_over_possible_actions[s]

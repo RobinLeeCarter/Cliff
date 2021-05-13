@@ -52,7 +52,7 @@ class Algorithm(abc.ABC):
         pass
 
     def _set_policy_greedy_wrt_q(self):
-        self._agent.target_policy.set_policy_vector(self.Q.argmax)
+        self._agent.target_policy.set_policy_vector(self.Q.argmax.copy())
 
         # easier and probably faster to include terminal states
         # new_policy_vector = np.argmax(self.Q.matrix, axis=1)
