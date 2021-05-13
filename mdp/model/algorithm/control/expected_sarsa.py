@@ -55,6 +55,8 @@ class ExpectedSarsa(EpisodicOnlineControl):
     def _get_expectation_over_a(self, s: int) -> float:
         probability_vector: np.ndarray = self._agent.policy.get_probability_vector(s)
         q_slice: np.ndarray = self.Q.matrix[s, :]
+        # print(probability_vector)
+        # print(q_slice)
         expectation: float = float(np.dot(probability_vector, q_slice))
         return expectation
 

@@ -27,14 +27,15 @@ class StateActionFunction:
     def initialize_values(self):
         for s in range(len(self._environment.states)):
             for a in range(len(self._environment.actions)):
-                if self._environment.s_a_compatibility[s, a]:
-                    if self._environment.is_terminal[s]:
-                        self.matrix[s, a] = 0.0
-                    else:
-                        self.matrix[s, a] = self._initial_value
+                if self._environment.is_terminal[s]:
+                    self.matrix[s, a] = 0.0
                 else:
-                    # incompatible actions must never be selected
-                    self.matrix[s, a] = np.NINF
+                    if self._environment.s_a_compatibility[s, a]:
+                        self.matrix[s, a] = self._initial_value
+                    else:
+                        # incompatible actions must never be selected
+                        self.matrix[s, a] = np.NINF
+
         self.max = np.max(self.matrix, axis=1)
         self.argmax = np.argmax(self.matrix, axis=1)
 

@@ -40,15 +40,21 @@ class Episode:
     def last_state(self) -> Optional[State]:
         if self.trajectory:
             last_s = self.trajectory[-1].s
-            return self._environment.states[last_s]
+            if last_s is None:
+                return None
+            else:
+                return self._environment.states[last_s]
         else:
             return None
 
     @property
     def last_action(self) -> Optional[Action]:
         if self.trajectory:
-            last_a = self.trajectory[-1].a
-            return self._environment.actions[last_a]
+            last_a: Optional[int] = self.trajectory[-1].a
+            if last_a is None:
+                return None
+            else:
+                return self._environment.actions[last_a]
         else:
             return None
 
@@ -56,7 +62,10 @@ class Episode:
     def prev_state(self) -> Optional[State]:
         if self.trajectory and len(self.trajectory) > 1:
             prev_s = self.trajectory[-2].s
-            return self._environment.states[prev_s]
+            if prev_s is None:
+                return None
+            else:
+                return self._environment.states[prev_s]
         else:
             return None
 
@@ -64,7 +73,10 @@ class Episode:
     def prev_action(self) -> Optional[Action]:
         if self.trajectory and len(self.trajectory) > 1:
             prev_a = self.trajectory[-2].a
-            return self._environment.actions[prev_a]
+            if prev_a is None:
+                return None
+            else:
+                return self._environment.actions[prev_a]
         else:
             return None
 
