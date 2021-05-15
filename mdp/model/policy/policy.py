@@ -17,7 +17,7 @@ class Policy(abc.ABC):
         self._store_matrix: bool = self._policy_parameters.store_matrix
         self._policy_matrix: Optional[np.ndarray] = None
 
-    def zero(self):
+    def zero_state_action(self):
         if self._store_matrix:
             state_count = len(self._environment.states)
             action_count = len(self._environment.actions)

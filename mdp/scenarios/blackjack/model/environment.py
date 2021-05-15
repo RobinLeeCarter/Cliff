@@ -83,8 +83,7 @@ class Environment(environment.Environment):
     def initialize_policy(self, policy: Policy, policy_parameters: common.PolicyParameters):
         hit: bool
 
-        policy.zero()
-
+        policy.zero_state_action()
         for s, state in enumerate(self.states):
             # don't add an action to the policy for terminal states at all
             if not state.is_terminal:

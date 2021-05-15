@@ -30,7 +30,7 @@ from unused.object_style_algorithms.unused_policy_iteration_dp_q import PolicyIt
 from unused.object_style_algorithms.unused_policy_iteration_dp_v import PolicyIterationDpV
 from mdp.model.algorithm.control.policy_iteration_dp_v_np import PolicyIterationDpVNp
 from unused.object_style_algorithms.unused_value_iteration_dp_v import ValueIterationDpV
-from unused.object_style_algorithms.un_written_value_iteration_dp_v_np import ValueIterationDpVNp
+from mdp.model.algorithm.control.value_iteration_dp_v_np_deterministic import ValueIterationDpVNp
 
 
 def algorithm_factory(environment_: Environment,

@@ -51,23 +51,28 @@ class Environment(environment.Environment):
             self.states.append(new_state)
 
     def _build_actions(self):
-        for stake in range(1, self._max_capital):
+        for stake in range(0, self._max_capital):       # 0 stake is for graphs for terminal state
             new_action: Action = Action(
                 stake=stake
             )
             self.actions.append(new_action)
 
     def _is_action_compatible_with_state(self, state: State, action: Action):
-        if action.stake <= state.capital and \
-                state.capital + action.stake <= self._max_capital:
-            return True
+        if state.is_terminal:
+            return action.stake == 0
         else:
-            return False
+            if 0 < action.stake <= state.capital and \
+                    state.capital + action.stake <= self._max_capital:
+                return True
+            else:
+                return False
     # endregion
 
     # region Operation
     def initialize_policy(self, policy: Policy, policy_parameters: common.PolicyParameters):
         hit: bool
+
+        policy.zero_state_action()
         for s, state in enumerate(self.states):
             if state.is_terminal:
                 initial_action = Action(stake=0)    # for graphs

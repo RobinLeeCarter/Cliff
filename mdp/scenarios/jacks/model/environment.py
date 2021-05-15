@@ -66,14 +66,16 @@ class Environment(environment.Environment):
     # endregion
 
     # region Operation
-    def initialize_policy(self, policy_: Policy, policy_parameters: common.PolicyParameters):
+    def initialize_policy(self, policy: Policy, policy_parameters: common.PolicyParameters):
+        policy.zero_state_action()
+
         initial_action: Action = Action(transfer_1_to_2=0)
         initial_a: int = self.action_index[initial_action]
         for s, state in enumerate(self.states):
             # max_transfer = min(state.cars_cob_1, self._max_cars - state.cars_cob_2, self._max_transfers)
             # max_transfer = -min(state.cars_cob_2, self._max_cars - state.cars_cob_1, self._max_transfers)
             # initial_action = Action(transfer_1_to_2=max_transfer)
-            policy_[s] = initial_a
+            policy[s] = initial_a
             # print(state, initial_action)
 
     def insert_state_function_into_graph3d(self,
