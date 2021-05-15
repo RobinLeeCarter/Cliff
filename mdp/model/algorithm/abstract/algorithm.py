@@ -108,5 +108,6 @@ def expected_q(p: np.ndarray, q: np.ndarray) -> np.ndarray:
     out = np.zeros(shape=p.shape[0], dtype=np.float64)
     for i in prange(p.shape[0]):
         for j in range(p.shape[1]):
-            out[i] += p[i, j] * q[i, j]
+            if p[i, j] != 0.0:  # also side-stepping q[i, j] = -inf
+                out[i] += p[i, j] * q[i, j]
     return out

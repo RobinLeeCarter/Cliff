@@ -27,8 +27,8 @@ class Environment(environment.Environment):
         # downcast states and actions so properties can be used freely
         self.states: list[State] = self.states
         self.actions: list[Action] = self.actions
-        self._state: State = self._state
-        self._action: Action = self._action
+        # self._state: State = self._state
+        # self._action: Action = self._action
 
         self._player_sum_min = 11
         self._player_sum_max = 21
@@ -82,6 +82,9 @@ class Environment(environment.Environment):
     # region Operation
     def initialize_policy(self, policy: Policy, policy_parameters: common.PolicyParameters):
         hit: bool
+
+        policy.zero()
+
         for s, state in enumerate(self.states):
             # don't add an action to the policy for terminal states at all
             if not state.is_terminal:

@@ -131,7 +131,10 @@ class Episode:
         state: State = self._environment.states[s]
         return state
 
-    def get_action(self, t: int) -> Action:
-        a: int = self.trajectory[t].a
-        action: Action = self._environment.actions[a]
-        return action
+    def get_action(self, t: int) -> Optional[Action]:
+        a: Optional[int] = self.trajectory[t].a
+        if a is None:
+            return None
+        else:
+            action: Action = self._environment.actions[a]
+            return action

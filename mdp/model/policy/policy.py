@@ -17,6 +17,12 @@ class Policy(abc.ABC):
         self._store_matrix: bool = self._policy_parameters.store_matrix
         self._policy_matrix: Optional[np.ndarray] = None
 
+    def zero(self):
+        if self._store_matrix:
+            state_count = len(self._environment.states)
+            action_count = len(self._environment.actions)
+            self._policy_matrix = np.zeros(shape=(state_count, action_count), dtype=float)
+
     def __getitem__(self, s: int) -> int:
         if self._environment.is_terminal[s]:
             return 0        # None
@@ -31,6 +37,7 @@ class Policy(abc.ABC):
 
     def set_action(self, s: int, action: Action):
         a = self._environment.action_index[action]
+        # print(s, action, a)
         self.__setitem__(s, a)
 
     @property

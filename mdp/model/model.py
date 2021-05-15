@@ -66,10 +66,13 @@ class Model(ABC):
     def run(self):
         timer: utils.Timer = utils.Timer()
         timer.start()
+        # TODO: Add multiprocessing fan-out here - may need separate objects: trainer, agent, environment?
+        # How to get recorder results out?
         for settings in self._comparison.settings_list:
             self.trainer.train(settings)
             if not self._cont:
                 break
+
         # for i in range(1000):
         #     # if i > 0:
         #     #     self.agent.algorithm.initialize()
