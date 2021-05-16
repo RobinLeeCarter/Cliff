@@ -2,7 +2,7 @@ from __future__ import annotations
 import abc
 from typing import Optional, TYPE_CHECKING
 
-import numpy as np
+# import numpy as np
 
 if TYPE_CHECKING:
     from mdp.model.algorithm.abstract.algorithm import Algorithm

@@ -31,8 +31,8 @@ summary_outcomes: Distribution[Response] = dynamics.get_summary_outcomes(state, 
 all_outcomes: Distribution[Response] = dynamics.get_all_outcomes(state, action)
 
 # compresses to 6,468 outcomes
-print(len(summary_outcomes))
-print(len(all_outcomes))
+print(len(summary_outcomes.dict))
+print(len(all_outcomes.dict))
 
 for outcome1, outcome2 in zip(summary_outcomes, all_outcomes):
     print(outcome1)

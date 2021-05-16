@@ -29,7 +29,7 @@ class Dynamics(dynamics.Dynamics):
         thirteenth: float = 1.0 / 13.0  # 13 cards in a suit
         self._card_distribution = Distribution({c: thirteenth for c in range(1, self._max_card)})
         self._card_distribution[self._max_card] = 4.0 * thirteenth     # 10, J, Q or K
-        self._card_distribution.self_check()
+        self._card_distribution.seal()
         super().build()
 
     def get_a_start_state(self) -> State:

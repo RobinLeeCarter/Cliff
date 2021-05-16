@@ -8,11 +8,13 @@ x: Distribution[State] = Distribution()
 
 my_state = State(is_terminal=False, ending_cars_1=5, ending_cars_2=6)
 my_state2 = State(is_terminal=False, ending_cars_1=7, ending_cars_2=6)
+my_state3 = State(is_terminal=False, ending_cars_1=9, ending_cars_2=6)
 
 x[my_state] = 0.8
 x[my_state2] += 0.2
 print(x[my_state])
 print(x[my_state2])
+print(x[my_state3])
 
 x.seal()
 

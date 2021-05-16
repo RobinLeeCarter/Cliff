@@ -165,7 +165,7 @@ class Dynamics(dynamics.Dynamics):
                 next_state = State(is_terminal=False, ending_cars_1=ending_cars1, ending_cars_2=ending_cars2)
                 probability = probability1 * probability2
                 next_state_distribution[next_state] = probability
-        next_state_distribution.self_check()
+        next_state_distribution.seal()
         return next_state_distribution
 
     def get_state_transition_distribution(self, state: State, action: Action) -> Distribution[State]:
@@ -184,8 +184,8 @@ class Dynamics(dynamics.Dynamics):
         l1 = self._location_1
         l2 = self._location_2
 
-        ending_cars_dist1: dict[int, float] = l1.get_ending_cars_distribution(self._starting_cars_1)
-        ending_cars_dist2: dict[int, float] = l2.get_ending_cars_distribution(self._starting_cars_2)
+        ending_cars_dist1: Distribution[int] = l1.get_ending_cars_distribution(self._starting_cars_1)
+        ending_cars_dist2: Distribution[int] = l2.get_ending_cars_distribution(self._starting_cars_2)
 
         response_distribution: Distribution[Response] = Distribution()
         for ending_cars1, probability1 in ending_cars_dist1.items():
@@ -198,7 +198,7 @@ class Dynamics(dynamics.Dynamics):
                 reward = self._calc_reward(cars_rented)
                 response = Response(reward, new_state)
                 response_distribution[response] += probability
-        response_distribution.self_check()
+        response_distribution.seal()
         return response_distribution
 
     def get_all_outcomes(self, state: State, action: Action) -> Distribution[Response]:
@@ -228,7 +228,7 @@ class Dynamics(dynamics.Dynamics):
                 reward = self._calc_reward(cars_rented)
                 response = Response(reward, new_state)
                 response_distribution[response] += probability
-        response_distribution.self_check()
+        response_distribution.seal()
         return response_distribution
 
     def get_a_start_state(self) -> State:

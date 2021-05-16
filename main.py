@@ -13,7 +13,7 @@ import mdp
 
 def main():
     os_environ_settings.dummy = None    # for pycharm code inspection only
-    mdp.Application(comparison_type=mdp.ComparisonType.GAMBLER_VALUE_ITERATION_V)
+    mdp.Application(comparison_type=mdp.ComparisonType.BLACKJACK_EVALUATION_V)
 
 
 # if __name__ == '__main__':

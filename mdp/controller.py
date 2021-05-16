@@ -28,9 +28,9 @@ class Controller:
         self._view.build(grid_world_=self._model.environment.grid_world, comparison=self._comparison)
 
     def run(self):
-        # import cProfile
-        # cProfile.runctx('self._model.run()', globals(), locals(), 'model_run.prof')
-        self._model.run()
+        import cProfile
+        cProfile.runctx('self._model.run()', globals(), locals(), 'model_run.prof')
+        # self._model.run()
 
     def output(self):
         pass

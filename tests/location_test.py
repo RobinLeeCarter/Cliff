@@ -23,4 +23,4 @@ print(_demand_distribution)
 _demand_distribution[_max_cars] += 1.0 - sum(_demand_distribution.values())
 print(_demand_distribution)
 
-_demand_distribution.self_check()
+_demand_distribution.seal()
