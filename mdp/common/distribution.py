@@ -10,13 +10,12 @@ T = TypeVar('T')
 
 
 class Distribution(Generic[T]):
-    def __init__(self, full_dict: Optional[dict] = None):
+    def __init__(self, initial_dict: Optional[dict] = None):
         self._k: list[T] = []
         self._p: np.ndarray = np.array(0, dtype=float)
         self._cum_p: np.ndarray = np.array(0, dtype=float)
-        if full_dict:
-            self._dict = full_dict
-            self.seal()
+        if initial_dict:
+            self._dict = initial_dict
         else:
             self._dict: DictZero = DictZero()
 
@@ -25,7 +24,7 @@ class Distribution(Generic[T]):
 
     def set_dict(self, full_dict: dict):
         self._dict = full_dict
-        self.seal()
+        self.enable()
 
     @property
     def dict(self) -> dict:
@@ -43,7 +42,7 @@ class Distribution(Generic[T]):
     def keys(self):
         return self._dict.keys()
 
-    def seal(self, do_self_check: bool = True):
+    def enable(self, do_self_check: bool = True):
         """must call this before drawing examples from distribution"""
         if do_self_check:
             self._self_check()

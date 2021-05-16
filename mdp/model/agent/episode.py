@@ -80,6 +80,7 @@ class Episode:
         else:
             return None
 
+    # @profile
     def add_rsa(self,
                 r: Optional[float],
                 s: int,

@@ -14,6 +14,6 @@ x[my_state2] += 0.2
 print(x[my_state])
 print(x[my_state2])
 
-x.seal()
+x.enable()
 
 print(x.draw_one())

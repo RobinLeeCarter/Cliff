@@ -29,7 +29,7 @@ class Dynamics(dynamics.Dynamics):
     def build(self):
         self._toss_distribution[Toss.HEADS] = self._probability_heads
         self._toss_distribution[Toss.TAILS] = 1.0 - self._probability_heads
-        self._toss_distribution.seal()
+        self._toss_distribution.enable()
         super().build()
 
     def get_a_start_state(self) -> State:
@@ -61,7 +61,7 @@ class Dynamics(dynamics.Dynamics):
             is_terminal: bool = (new_capital == 0 or new_capital == self._environment_parameters.max_capital)
             next_state = State(is_terminal=is_terminal, capital=new_capital)
             distribution[next_state] = probability
-        distribution.seal(do_self_check=False)
+        distribution.enable(do_self_check=False)
 
         return distribution
 

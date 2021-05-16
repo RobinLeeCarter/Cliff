@@ -6,8 +6,6 @@ if TYPE_CHECKING:
     from mdp.scenarios.blackjack.model.environment import Environment
     from mdp.scenarios.blackjack.model.environment_parameters import EnvironmentParameters
 
-import random
-
 from mdp.common import Distribution
 from mdp.model.environment import dynamics
 
@@ -24,16 +22,23 @@ class Dynamics(dynamics.Dynamics):
         self._environment: Environment = self._environment
         self._max_card: int = 10    # 10, J, Q or K combined
         self._card_distribution: Distribution[int] = Distribution()
+        self._start_distribution: Distribution[State] = Distribution()
 
     def build(self):
         thirteenth: float = 1.0 / 13.0  # 13 cards in a suit
-        self._card_distribution = Distribution({c: thirteenth for c in range(1, self._max_card)})
+        self._card_distribution = Distribution[int]({c: thirteenth for c in range(1, self._max_card)})
         self._card_distribution[self._max_card] = 4.0 * thirteenth     # 10, J, Q or K
-        self._card_distribution.seal()
+        self._card_distribution.enable()
+
+        start_states: list[State] = [state for state in self._environment.states if not state.is_terminal]
+        start_p: float = 1 / len(start_states)
+        self._start_distribution = Distribution[State]({state: start_p for state in start_states})
+        self._start_distribution.enable()
+
         super().build()
 
     def get_a_start_state(self) -> State:
-        return random.choice([state for state in self._environment.states if not state.is_terminal])
+        return self._start_distribution.draw_one()
 
     def draw_response(self, state: State, action: Action) -> Response:
         """
