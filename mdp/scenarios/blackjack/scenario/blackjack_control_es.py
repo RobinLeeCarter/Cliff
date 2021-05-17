@@ -9,7 +9,7 @@ class BlackjackControlES(Scenario):
     def _create_comparison(self) -> Comparison:
         # self._comparison_settings.training_episodes = 100_000
 
-        return Comparison(
+        comparison = Comparison(
             environment_parameters=self._environment_parameters,
             comparison_settings=self._comparison_settings,
             settings_list=[
@@ -28,3 +28,4 @@ class BlackjackControlES(Scenario):
             graph3d_values=self._graph3d_values,
             grid_view_parameters=self._grid_view_parameters,
         )
+        return comparison

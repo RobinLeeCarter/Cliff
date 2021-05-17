@@ -1,6 +1,8 @@
 from __future__ import annotations
 from typing import TYPE_CHECKING
 
+import numpy as np
+
 if TYPE_CHECKING:
     from mdp.model.environment.environment import Environment
     from mdp.model.agent.agent import Agent
@@ -38,4 +40,6 @@ class OnPolicyMcControl(EpisodicMonteCarlo):
             self._N[s, a] += 1.0
             # Q(s,a) = Q(s,a) + (1/N(s,a)).(G(t) - Q(s,a))
             self.Q[s, a] += delta / self._N[s, a]
-            self._agent.policy[s] = self.Q.argmax[s]
+            a: int = int(np.argmax(self.Q.matrix[s, :]))
+            self._agent.policy[s] = a
+            # self._agent.policy[s] = self.Q.argmax[s]
