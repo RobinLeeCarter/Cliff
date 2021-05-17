@@ -7,9 +7,9 @@ import numpy as np
 if TYPE_CHECKING:
     from mdp import common
     from mdp.common import Distribution
-    from mdp.model.environment.state import State
     from mdp.model.environment.action import Action
     from mdp.model.environment.environment import Environment
+from mdp.model.environment.state import State
 
 Response = tuple[float, State]
 
