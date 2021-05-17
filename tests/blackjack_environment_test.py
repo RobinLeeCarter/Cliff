@@ -5,7 +5,6 @@ from mdp import common
 from mdp.scenarios import scenario_factory
 from mdp.scenarios.blackjack.model.state import State
 from mdp.scenarios.blackjack.model.action import Action
-from mdp.scenarios.blackjack.model.response import Response
 from mdp.scenarios.blackjack.model.environment import Environment
 
 
@@ -81,8 +80,8 @@ def random_round(environment: Environment):
         action = Action(hit=True)
 
     print(state, action)
-    response: Response = environment.from_state_perform_action(state, action)
-    print(response)
+    reward, new_state = environment.from_state_perform_action(state, action)
+    print(reward, new_state)
     print()
 
 

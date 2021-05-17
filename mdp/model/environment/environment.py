@@ -8,11 +8,10 @@ if TYPE_CHECKING:
     from mdp.model.algorithm.abstract.algorithm import Algorithm
     from mdp.model.policy.policy import Policy
     from mdp.model.algorithm.value_function import state_function
+import utils
 from mdp import common
-
 from mdp.model.environment.state import State
 from mdp.model.environment.action import Action
-from mdp.model.environment.response import Response
 from mdp.model.environment.dynamics import Dynamics
 from mdp.model.environment.grid_world import GridWorld
 
@@ -34,22 +33,17 @@ class Environment(ABC):
         self.action_type: type = Action  # required?
         # TODO: eliminate actions_for_state?
         self.actions_for_state: dict[State, list[Action]] = {}
+        self.is_terminal: np.ndarray = np.empty(0, dtype=bool)
 
         # almost all interactions with environment must be using state and action
         # exception boolean array of whether a in A(s) for a given [s, a]
         # possibly should be part of agent to enforce API but should be able to have mutliple agents for one evironment
         self.s_a_compatibility: np.ndarray = np.empty(0, dtype=bool)
-        self.is_terminal: np.ndarray = np.empty(0, dtype=bool)
+        self.compatible_s_a: list[tuple[int, int]] = []                 # for rapid access
         self.possible_actions: np.ndarray = np.empty(0, dtype=int)
         self.one_over_possible_actions: np.ndarray = np.empty(0, dtype=float)
 
-        # for processing response
-        # self._state: Optional[State] = None
-        # self._action: Optional[Action] = None
-        # self._reward: Optional[float] = None
-        # self._new_state: Optional[State] = None
-        # self._response: Optional[Response] = None
-
+        # TODO: move this down as too specific
         self._square: Optional[common.Square] = None
 
         # None to ensure not used when not used/initialised
@@ -89,6 +83,7 @@ class Environment(ABC):
                     if self._is_action_compatible_with_state(state, action):
                         actions_for_state.append(action)
                         self.s_a_compatibility[s, a] = True
+                        self.compatible_s_a.append((s, a))
             self.actions_for_state[state] = actions_for_state
 
     def _is_action_compatible_with_state(self, state: State, action: Action):
@@ -110,10 +105,14 @@ class Environment(ABC):
     #     action = random.choice(self.actions_for_state[state])
     #     return state, action
 
-    def get_random_state_action(self) -> tuple[int, bool, int]:
-        flat = np.flatnonzero(self.s_a_compatibility)
-        choice = np.random.choice(flat)
-        s, a = np.unravel_index(choice, self.s_a_compatibility.shape)
+    # @profile
+    def get_random_s_a(self) -> tuple[int, bool, int]:
+        # flat = np.flatnonzero(self.s_a_compatibility)
+        # choice = np.random.choice(flat)
+        # s, a = np.unravel_index(choice, self.s_a_compatibility.shape)
+        # return s, self.is_terminal[s], a
+        choice = utils.n_choice(len(self.compatible_s_a))
+        s, a = self.compatible_s_a[choice]
         return s, self.is_terminal[s], a
 
     def initialize_policy(self, policy_: Policy, policy_parameters: common.PolicyParameters):
@@ -145,38 +144,43 @@ class Environment(ABC):
     #     response: Response = self.dynamics.draw_response(state, action)
     #     return response
 
-    def from_state_perform_action(self, state: State, action: Action) -> Response:
+    def from_state_perform_action(self, state: State, action: Action) -> tuple[float, State]:
         s = self.state_index[state]
         a = self.action_index[action]
         if state.is_terminal:
             raise Exception("Environment: Trying to act in a terminal state.")
         if not self.s_a_compatibility[s, a]:
             raise Exception(f"_apply_action state {state} incompatible with action {action}")
-        response: Response = self.dynamics.draw_response(state, action)
-        return response
+        return self.dynamics.draw_response(state, action)
 
+    # @profile
     def from_s_perform_a(self, s: int, a: int) -> tuple[float, int, bool]:
+        # if a == -1:
+        #     raise Exception("Environment: a == -1, trying to perform None Action")
         state = self.states[s]
         action = self.actions[a]
-        if state.is_terminal:
-            raise Exception("Environment: Trying to act in a terminal state.")
-        if not self.s_a_compatibility[s, a]:
-            raise Exception(f"_apply_action state {state} incompatible with action {action}")
-        response: Response = self.dynamics.draw_response(state, action)
-        state = response.state
-        new_s = self.state_index[state]
-        return response.reward, new_s, state.is_terminal
+        # if state.is_terminal:
+        #     raise Exception("Environment: Trying to act in a terminal state.")
+        # if not self.s_a_compatibility[s, a]:
+        #     raise Exception(f"_apply_action state {state} incompatible with action {action}")
+        reward, new_state = self.dynamics.draw_response(state, action)
+        new_s = self.state_index[new_state]
+        return reward, new_s, new_state.is_terminal
 
-    # def from_s_perform_a(self, s: int, a: int) -> tuple[float, int]:
+    # @profile
+    # def from_s_perform_a(self, s: int, a: int) -> tuple[float, int, bool]:
+    #     if a == -1:
+    #         raise Exception("Environment: a == -1, trying to perform None Action")
     #     state = self.states[s]
     #     action = self.actions[a]
     #     if state.is_terminal:
     #         raise Exception("Environment: Trying to act in a terminal state.")
     #     if not self.s_a_compatibility[s, a]:
     #         raise Exception(f"_apply_action state {state} incompatible with action {action}")
-    #     response = self.dynamics.draw_response(state, action)
-    #     new_s = self.state_index[self]
-    #     return response.reward, new_s
+    #     response: Response = self.dynamics.draw_response(state, action)
+    #     state = response.state
+    #     new_s = self.state_index[state]
+    #     return response.reward, new_s, state.is_terminal
 
     # TODO: move down hierarchy, too general for top level
     def _project_back_to_grid(self, requested_position: common.XY) -> common.XY:

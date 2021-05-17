@@ -19,9 +19,10 @@ class BlackjackControlES(Scenario):
                         first_visit=True,
                         exploring_starts=True,
                         verbose=True,
+                        theta=0.000001
                     ),
                     derive_v_from_q_as_final_step=True,
-                    training_episodes=5_000_000
+                    training_episodes=100_000_000
                 ),
             ],
             graph3d_values=self._graph3d_values,

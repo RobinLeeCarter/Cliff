@@ -12,7 +12,6 @@ from mdp.common import Distribution
 from mdp.model.environment import dynamics
 
 from mdp.scenarios.gambler.model.state import State
-from mdp.scenarios.gambler.model.response import Response
 from mdp.scenarios.gambler.model.enums import Toss, Result
 
 
@@ -65,7 +64,7 @@ class Dynamics(dynamics.Dynamics):
 
         return distribution
 
-    def draw_response(self, state: State, action: Action) -> Response:
+    def draw_response(self, state: State, action: Action) -> tuple[float, State]:
         """
         draw a single outcome for a single state and action
         standard call for episodic algorithms
@@ -93,4 +92,5 @@ class Dynamics(dynamics.Dynamics):
             print(f"result = {result}")
 
         is_terminal: bool = (result is not None)
-        return Response(reward=reward, state=State(is_terminal=is_terminal, capital=new_capital))
+        new_state = State(is_terminal=is_terminal, capital=new_capital)
+        return reward, new_state

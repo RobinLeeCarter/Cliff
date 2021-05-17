@@ -5,13 +5,13 @@ from abc import ABC, abstractmethod
 import numpy as np
 
 if TYPE_CHECKING:
-    # from mdp.model.policy.policy import Policy
     from mdp import common
     from mdp.common import Distribution
     from mdp.model.environment.state import State
     from mdp.model.environment.action import Action
-    from mdp.model.environment.response import Response
     from mdp.model.environment.environment import Environment
+
+Response = tuple[float, State]
 
 
 class Dynamics(ABC):

@@ -35,7 +35,7 @@ class OnPolicyMcControl(EpisodicMonteCarlo):
             a = self._episode[t].a
             target = self._episode.G[t]
             delta = target - self.Q[s, a]
-            self._N[s, a] += 1
+            self._N[s, a] += 1.0
             # Q(s,a) = Q(s,a) + (1/N(s,a)).(G(t) - Q(s,a))
             self.Q[s, a] += delta / self._N[s, a]
             self._agent.policy[s] = self.Q.argmax[s]

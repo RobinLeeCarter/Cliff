@@ -33,6 +33,7 @@ class Episode:
         self.cont: bool = True
 
         if self.record_first_visits:
+            # self.visited_s: np.ndarray = np.zeros(shape=len(self._environment.states), dtype=bool)
             self.is_first_visit: list[bool] = []
             self.visited_s: set[int] = set()
 
@@ -40,18 +41,18 @@ class Episode:
     def last_state(self) -> Optional[State]:
         if self.trajectory:
             last_s = self.trajectory[-1].s
-            if last_s is None:
-                return None
-            else:
-                return self._environment.states[last_s]
+            # if last_s is None:
+            #     return None
+            # else:
+            return self._environment.states[last_s]
         else:
             return None
 
     @property
     def last_action(self) -> Optional[Action]:
         if self.trajectory:
-            last_a: Optional[int] = self.trajectory[-1].a
-            if last_a is None:
+            last_a: int = self.trajectory[-1].a
+            if last_a == -1:
                 return None
             else:
                 return self._environment.actions[last_a]
@@ -62,10 +63,10 @@ class Episode:
     def prev_state(self) -> Optional[State]:
         if self.trajectory and len(self.trajectory) > 1:
             prev_s = self.trajectory[-2].s
-            if prev_s is None:
-                return None
-            else:
-                return self._environment.states[prev_s]
+            # if prev_s is None:
+            #     return None
+            # else:
+            return self._environment.states[prev_s]
         else:
             return None
 
@@ -73,7 +74,7 @@ class Episode:
     def prev_action(self) -> Optional[Action]:
         if self.trajectory and len(self.trajectory) > 1:
             prev_a = self.trajectory[-2].a
-            if prev_a is None:
+            if prev_a == -1:
                 return None
             else:
                 return self._environment.actions[prev_a]
@@ -82,9 +83,9 @@ class Episode:
 
     # @profile
     def add_rsa(self,
-                r: Optional[float],
+                r: float,
                 s: int,
-                a: Optional[int],
+                a: int,
                 is_terminal: bool):
         rsa_ = rsa.RSA(r, s, a)
         self.trajectory.append(rsa_)
@@ -133,9 +134,8 @@ class Episode:
         return state
 
     def get_action(self, t: int) -> Optional[Action]:
-        a: Optional[int] = self.trajectory[t].a
-        if a is None:
+        a: int = self.trajectory[t].a
+        if a == -1:
             return None
         else:
-            action: Action = self._environment.actions[a]
-            return action
+            return self._environment.actions[a]

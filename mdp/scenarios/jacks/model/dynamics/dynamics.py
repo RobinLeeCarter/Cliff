@@ -14,8 +14,9 @@ from mdp.common import Distribution
 from mdp.model.environment import dynamics
 
 from mdp.scenarios.jacks.model.state import State
-from mdp.scenarios.jacks.model.response import Response
 from mdp.scenarios.jacks.model.dynamics.location import Location
+
+Response = tuple[float, State]
 
 
 class Dynamics(dynamics.Dynamics):
@@ -196,8 +197,7 @@ class Dynamics(dynamics.Dynamics):
                 new_state = State(is_terminal=False, ending_cars_1=ending_cars1, ending_cars_2=ending_cars2)
                 probability = probability1 * probability2
                 reward = self._calc_reward(cars_rented)
-                response = Response(reward, new_state)
-                response_distribution[response] += probability
+                response_distribution[reward, new_state] += probability
         response_distribution.enable()
         return response_distribution
 
@@ -226,8 +226,7 @@ class Dynamics(dynamics.Dynamics):
                                   ending_cars_2=outcome2.ending_cars)
                 probability = probability1 * probability2
                 reward = self._calc_reward(cars_rented)
-                response = Response(reward, new_state)
-                response_distribution[response] += probability
+                response_distribution[reward, new_state] += probability
         response_distribution.enable()
         return response_distribution
 
@@ -245,7 +244,7 @@ class Dynamics(dynamics.Dynamics):
         new_state = State(is_terminal=False, ending_cars_1=outcome1.ending_cars, ending_cars_2=outcome2.ending_cars)
         cars_rented = outcome1.cars_rented + outcome2.cars_rented
         reward: float = self._calc_reward(cars_rented)
-        return Response(reward, new_state)
+        return reward, new_state
 
     def _calc_start_of_day(self, state: State, action: Action):
         self._total_costs: float = self._calc_cost_of_transfers(action.transfer_1_to_2)

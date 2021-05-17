@@ -11,7 +11,6 @@ from mdp import common
 from mdp.model.environment import dynamics
 
 from mdp.scenarios.racetrack.model.state import State
-from mdp.scenarios.racetrack.model.response import Response
 
 
 class Dynamics(dynamics.Dynamics):
@@ -28,7 +27,7 @@ class Dynamics(dynamics.Dynamics):
         position: common.XY = self._grid_world.get_a_start_position()
         return State(is_terminal=False, position=position, velocity=common.XY(x=0, y=0))
 
-    def draw_response(self, state: State, action: Action) -> Response:
+    def draw_response(self, state: State, action: Action) -> tuple[float, State]:
         """
         draw a single outcome for a single state and action
         standard call for episodic algorithms
@@ -67,4 +66,4 @@ class Dynamics(dynamics.Dynamics):
                 velocity=new_velocity,
                 is_terminal=False
             )
-        return Response(reward, next_state)
+        return reward, next_state

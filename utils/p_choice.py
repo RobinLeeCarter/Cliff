@@ -37,3 +37,9 @@ def cum_p_choice(cum_p: np.ndarray) -> int:
         else:
             lo = mid + 1
     return lo
+
+
+@njit(cache=True)
+def n_choice(n: int) -> int:
+    """Return a random int from 0 to n-1"""
+    return np.random.randint(n)

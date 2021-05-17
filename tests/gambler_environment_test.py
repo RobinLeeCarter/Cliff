@@ -6,7 +6,6 @@ from mdp import common
 from mdp.scenarios import scenario_factory
 from mdp.scenarios.gambler.model.state import State
 from mdp.scenarios.gambler.model.action import Action
-from mdp.scenarios.gambler.model.response import Response
 from mdp.scenarios.gambler.model.environment import Environment
 
 
@@ -116,8 +115,8 @@ def random_round(environment: Environment):
     stake = random.choice(range(1, max_stake+1))
     action = Action(stake=stake)
     print(state, action)
-    response: Response = environment.from_state_perform_action(state, action)
-    print(response)
+    reward, new_state = environment.from_state_perform_action(state, action)
+    print(reward, new_state)
     print()
 
 

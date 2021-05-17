@@ -6,7 +6,6 @@ import math
 if TYPE_CHECKING:
     from mdp.model.environment.state import State
     from mdp.model.environment.action import Action
-    from mdp.model.environment.response import Response
     from mdp.model.environment.environment import Environment
 from mdp import common
 # renamed to avoid name conflicts
@@ -37,17 +36,15 @@ class Agent:
         self.t: int = 0
 
         # always refers to values for time-step t
-        self.r: Optional[float] = None
-        self.s: Optional[int] = None
-        self.a: Optional[int] = None
+        self.r: float = 0.0
+        self.s: int = -1
+        self.a: int = -1
         self.is_terminal: bool = False  # stored for performance
 
         # always refers to values for time-step t-1
-        self.prev_r: Optional[float] = None
-        self.prev_s: Optional[int] = None
-        self.prev_a: Optional[int] = None
-
-        self._response: Optional[Response] = None
+        self.prev_r: float = 0.0
+        self.prev_s: int = -1
+        self.prev_a: int = -1
 
         # trainer callback
         self._step_callback: Optional[Callable[[], bool]] = None
@@ -108,10 +105,6 @@ class Agent:
     def set_behaviour_policy(self, policy: Policy):
         self._behaviour_policy = policy
 
-    # def initialize(self):
-    #     # initialize policies here? pass in settings too?
-    #     self._algorithm.initialize()
-
     def parameter_changes(self, iteration: int):
         # potentially change epsilon here
         self._algorithm.parameter_changes(iteration)
@@ -131,7 +124,11 @@ class Agent:
             self.choose_action()
             if self._verbose:
                 state: State = self._environment.states[self.s]
-                action: Action = self._environment.actions[self.a]
+                action: Optional[Action]
+                if self.a == -1:
+                    action = None
+                else:
+                    action = self._environment.actions[self.a]
                 print(f"t={self.t} \t state = {state} \t action = {action}")
             self.take_action()
 
@@ -153,15 +150,15 @@ class Agent:
         if exploring_starts:
             # completely random starting state and action and take the action, reward will be None
             # state, action = self._environment.get_random_state_action()
-            self.s, self.is_terminal, self.a = self._environment.get_random_state_action()
-            self.r = None
+            self.s, self.is_terminal, self.a = self._environment.get_random_s_a()
+            self.r = 0.0
             # action = self._environment.dynamics.get_random_action_for_state(self.state)
             self.choose_action(self.a)
             self.take_action()
         else:
             # get starting state, reward will be None
             self.s, self.is_terminal = self._environment.start_s()
-            self.r = None
+            self.r = 0.0
 
     def choose_action(self, a: Optional[int] = None):
         """
@@ -178,7 +175,11 @@ class Agent:
         self._episode.add_rsa(self.r, self.s, self.a, self.is_terminal)
         if self._verbose:
             state: State = self._environment.states[self.s]
-            action: Action = self._environment.actions[self.a]
+            action: Optional[Action]
+            if self.a == -1:
+                action = None
+            else:
+                action = self._environment.actions[self.a]
             print(f"state = {state} \t action = {action}")
 
     def take_action(self):
@@ -192,7 +193,7 @@ class Agent:
         # move time-step forward
         self.t += 1
         self.prev_r, self.prev_s, self.prev_a = self.r, self.s, self.a
-        self.r, self.s, self.a = new_r, new_s, None
+        self.r, self.s, self.a = new_r, new_s, -1
 
         if self.is_terminal:
             # add terminating step here as should not select another action
