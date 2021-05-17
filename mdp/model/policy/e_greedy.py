@@ -84,8 +84,9 @@ class EGreedy(Policy):
         policy_matrix = np.zeros(shape=(state_count, action_count), dtype=float)
 
         non_greedy_p: np.ndarray = self.epsilon * self._environment.one_over_possible_actions
-        # TODO: greedy_p to zero when non_greedy_p is zero
         greedy_p: np.ndarray = (1 - self.epsilon) + non_greedy_p
+        # greedy_p to zero when non_greedy_p is zero (when no actions are allowed)
+        greedy_p[non_greedy_p == 0.0] = 0.0
 
         # broadcast (|S|,) to (|S|,|A|)
         non_greedy_p_broadcast = np.broadcast_to(non_greedy_p[:, np.newaxis], shape=policy_matrix.shape)

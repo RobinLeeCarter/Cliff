@@ -1,15 +1,15 @@
-# from __future__ import annotations
-# from typing import TYPE_CHECKING
-# import random
-#
-# import numpy as np
-# from numba import njit
-#
-# from mdp import common
-# if TYPE_CHECKING:
-#     from mdp.model.environment.environment import Environment
-# from mdp.model.policy.policy import Policy
-# from mdp.model.policy.deterministic import Deterministic
+from __future__ import annotations
+from typing import TYPE_CHECKING
+import random
+
+import numpy as np
+from numba import njit
+
+from mdp import common
+if TYPE_CHECKING:
+    from mdp.model.environment.environment import Environment
+from mdp.model.policy.policy import Policy
+from mdp.model.policy.deterministic import Deterministic
 
 
 class EGreedy(Policy):
@@ -34,7 +34,7 @@ class EGreedy(Policy):
     def get_policy_vector(self) -> np.ndarray:
         return self.greedy_policy.policy_vector
 
-    @profile
+    # @profile
     def _get_a(self, s: int) -> int:
         if self._store_matrix:
             # numpy_direct_choice = common.rng.choice(
@@ -103,7 +103,6 @@ class EGreedy(Policy):
         policy_matrix = np.zeros(shape=(state_count, action_count), dtype=float)
 
         non_greedy_p: np.ndarray = self.epsilon * self._environment.one_over_possible_actions
-        # TODO: greedy_p to zero when non_greedy_p is zero
         greedy_p: np.ndarray = (1 - self.epsilon) + non_greedy_p
 
         # broadcast (|S|,) to (|S|,|A|)
