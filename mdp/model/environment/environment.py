@@ -162,46 +162,17 @@ class Environment(ABC):
 
     # @profile
     def from_s_perform_a(self, s: int, a: int) -> tuple[float, int, bool]:
-        # if a == -1:
-        #     raise Exception("Environment: a == -1, trying to perform None Action")
+        if a == -1:
+            raise Exception("Environment: a == -1, trying to perform None Action")
         state = self.states[s]
         action = self.actions[a]
-        # if state.is_terminal:
-        #     raise Exception("Environment: Trying to act in a terminal state.")
-        # if not self.s_a_compatibility[s, a]:
-        #     raise Exception(f"_apply_action state {state} incompatible with action {action}")
+        if state.is_terminal:
+            raise Exception("Environment: Trying to act in a terminal state.")
+        if not self.s_a_compatibility[s, a]:
+            raise Exception(f"_apply_action state {state} incompatible with action {action}")
         reward, new_state = self.dynamics.draw_response(state, action)
         new_s = self.state_index[new_state]
         return reward, new_s, new_state.is_terminal
-
-    # @profile
-    # def from_s_perform_a(self, s: int, a: int) -> tuple[float, int, bool]:
-    #     if a == -1:
-    #         raise Exception("Environment: a == -1, trying to perform None Action")
-    #     state = self.states[s]
-    #     action = self.actions[a]
-    #     if state.is_terminal:
-    #         raise Exception("Environment: Trying to act in a terminal state.")
-    #     if not self.s_a_compatibility[s, a]:
-    #         raise Exception(f"_apply_action state {state} incompatible with action {action}")
-    #     response: Response = self.dynamics.draw_response(state, action)
-    #     state = response.state
-    #     new_s = self.state_index[state]
-    #     return response.reward, new_s, state.is_terminal
-
-    # TODO: move down hierarchy, too general for top level
-    def _project_back_to_grid(self, requested_position: common.XY) -> common.XY:
-        x = requested_position.x
-        y = requested_position.y
-        if x < 0:
-            x = 0
-        if y < 0:
-            y = 0
-        if x > self.grid_world.max_x:
-            x = self.grid_world.max_x
-        if y > self.grid_world.max_y:
-            y = self.grid_world.max_y
-        return common.XY(x=x, y=y)
 
     def update_grid_value_functions(self,
                                     algorithm: Algorithm,

@@ -44,6 +44,7 @@ class Dynamics(dynamics.Dynamics):
         if square == common.Square.END:
             # success
             reward = 0.0
+            new_position = self._grid_world.project_back_to_grid(new_position)
             next_state = State(
                 position=new_position,
                 velocity=new_velocity,

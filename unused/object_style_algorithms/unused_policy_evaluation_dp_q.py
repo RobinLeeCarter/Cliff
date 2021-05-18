@@ -16,7 +16,7 @@ class PolicyEvaluationDpQ(DynamicProgrammingQ):
                  policy_parameters: common.PolicyParameters
                  ):
         super().__init__(environment_, agent_, algorithm_parameters, policy_parameters)
-        self._algorithm_type = common.AlgorithmType.POLICY_EVALUATION_DP_Q
+        self._algorithm_type = common.AlgorithmType.DP_POLICY_EVALUATION_Q
         self.name = common.algorithm_name[self._algorithm_type]
         self.title = f"{self.name} θ={self._theta}"
 

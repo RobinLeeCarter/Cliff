@@ -44,25 +44,25 @@ class RandomWalkEpisode(Scenario):
                 ),
                 common.Settings(
                     algorithm_parameters=common.AlgorithmParameters(
-                        algorithm_type=common.AlgorithmType.CONSTANT_ALPHA_MC,
+                        algorithm_type=common.AlgorithmType.MC_CONSTANT_ALPHA,
                         alpha=0.01,
                     )
                 ),
                 common.Settings(
                     algorithm_parameters=common.AlgorithmParameters(
-                        algorithm_type=common.AlgorithmType.CONSTANT_ALPHA_MC,
+                        algorithm_type=common.AlgorithmType.MC_CONSTANT_ALPHA,
                         alpha=0.02,
                     )
                 ),
                 common.Settings(
                     algorithm_parameters=common.AlgorithmParameters(
-                        algorithm_type=common.AlgorithmType.CONSTANT_ALPHA_MC,
+                        algorithm_type=common.AlgorithmType.MC_CONSTANT_ALPHA,
                         alpha=0.03,
                     )
                 ),
                 common.Settings(
                     algorithm_parameters=common.AlgorithmParameters(
-                        algorithm_type=common.AlgorithmType.CONSTANT_ALPHA_MC,
+                        algorithm_type=common.AlgorithmType.MC_CONSTANT_ALPHA,
                         alpha=0.04,
                     )
                 ),

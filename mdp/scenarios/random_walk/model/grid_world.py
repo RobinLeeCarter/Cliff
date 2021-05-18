@@ -25,7 +25,7 @@ class GridWorld(grid_world.GridWorld):
             y=current_position.y + move.y
         )
         # project back to grid if outside
-        new_position: common.XY = self._project_back_to_grid(requested_position)
+        new_position: common.XY = self.project_back_to_grid(requested_position)
         return new_position
 
     def _get_random_movement(self) -> common.XY:

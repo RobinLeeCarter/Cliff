@@ -47,7 +47,7 @@ class GridWorld:
         # noinspection PyArgumentList
         return common.Square(value)  # pycharm inspection bug
 
-    def _project_back_to_grid(self, requested_position: common.XY) -> common.XY:
+    def project_back_to_grid(self, requested_position: common.XY) -> common.XY:
         x = requested_position.x
         y = requested_position.y
         if x < 0:

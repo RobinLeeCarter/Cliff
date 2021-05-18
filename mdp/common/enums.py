@@ -14,18 +14,15 @@ class ComparisonType(enum.IntEnum):
     GAMBLER_VALUE_ITERATION_V = enum.auto()
 
     JACKS_POLICY_EVALUATION_V = enum.auto()
-    JACKS_POLICY_EVALUATION_V_NP = enum.auto()
     JACKS_POLICY_IMPROVEMENT_V = enum.auto()
-    JACKS_POLICY_IMPROVEMENT_V_NP = enum.auto()
     JACKS_POLICY_ITERATION_V = enum.auto()
-    JACKS_POLICY_ITERATION_V_NP = enum.auto()
     JACKS_VALUE_ITERATION_V = enum.auto()
-    JACKS_VALUE_ITERATION_V_NP = enum.auto()
     JACKS_POLICY_ITERATION_Q = enum.auto()
 
     RACETRACK_EPISODE = enum.auto()
 
     RANDOM_WALK_EPISODE = enum.auto()
+
     WINDY_TIMESTEP = enum.auto()
     WINDY_TIMESTEP_RANDOM = enum.auto()
 
@@ -51,27 +48,23 @@ class BreakdownType(enum.IntEnum):
 
 
 class AlgorithmType(enum.IntEnum):
-    POLICY_EVALUATION_DP_V = enum.auto()
-    POLICY_EVALUATION_DP_V_NP = enum.auto()
-    POLICY_IMPROVEMENT_DP_V = enum.auto()
-    POLICY_IMPROVEMENT_DP_V_NP = enum.auto()
-    POLICY_ITERATION_DP_V = enum.auto()
-    POLICY_ITERATION_DP_V_NP = enum.auto()
-    VALUE_ITERATION_DP_V = enum.auto()
-    VALUE_ITERATION_DP_V_NP = enum.auto()
+    DP_POLICY_EVALUATION_V = enum.auto()
+    DP_POLICY_IMPROVEMENT_V = enum.auto()
+    DP_POLICY_ITERATION_V = enum.auto()
+    DP_VALUE_ITERATION_V = enum.auto()
 
-    POLICY_EVALUATION_DP_Q = enum.auto()
-    POLICY_IMPROVEMENT_DP_Q = enum.auto()
-    POLICY_ITERATION_DP_Q = enum.auto()
+    DP_POLICY_EVALUATION_Q = enum.auto()
+    DP_POLICY_IMPROVEMENT_Q = enum.auto()
+    DP_POLICY_ITERATION_Q = enum.auto()
 
     MC_PREDICTION_V = enum.auto()
     MC_PREDICTION_Q = enum.auto()
-    ON_POLICY_MC_CONTROL = enum.auto()
+    MC_CONTROL_ON_POLICY = enum.auto()
 
-    CONSTANT_ALPHA_MC = enum.auto()
+    MC_CONSTANT_ALPHA = enum.auto()
+    MC_CONTROL_OFF_POLICY = enum.auto()
+
     TD_0 = enum.auto()
-    OFF_POLICY_MC_CONTROL = enum.auto()
-
     SARSA = enum.auto()
     Q_LEARNING = enum.auto()
     EXPECTED_SARSA = enum.auto()

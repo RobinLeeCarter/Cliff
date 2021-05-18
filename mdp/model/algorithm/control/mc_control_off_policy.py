@@ -9,7 +9,7 @@ from mdp.model.algorithm.abstract.episodic_monte_carlo import EpisodicMonteCarlo
 from mdp.model.algorithm.value_function.state_action_variable import StateActionVariable
 
 
-class OffPolicyMcControl(EpisodicMonteCarlo):
+class McControlOffPolicy(EpisodicMonteCarlo):
     def __init__(self,
                  environment_: Environment,
                  agent_: Agent,
@@ -17,7 +17,7 @@ class OffPolicyMcControl(EpisodicMonteCarlo):
                  policy_parameters: common.PolicyParameters
                  ):
         super().__init__(environment_, agent_, algorithm_parameters, policy_parameters)
-        self._algorithm_type = common.AlgorithmType.OFF_POLICY_MC_CONTROL
+        self._algorithm_type = common.AlgorithmType.MC_CONTROL_OFF_POLICY
         self.name = common.algorithm_name[self._algorithm_type]
         self.title = f"{self.name}"
         self._W: float = 1.0
@@ -26,18 +26,21 @@ class OffPolicyMcControl(EpisodicMonteCarlo):
 
     def initialize(self):
         super().initialize()
-        self._set_policy_greedy_wrt_q()
+        self._set_target_policy_greedy_wrt_q()
+        self._agent.behaviour_policy.refresh_policy_matrix()
+        # self._environment.initialize_policy(self._agent.policy, self._policy_parameters)
 
     def _pre_process_episode(self):
         self._episode.generate_returns()
         self._W = 1.0
 
     def _process_time_step(self, t: int):
-        s = self._episode[t].s
-        a = self._episode[t].a
+        # s = self._episode[t].s
+        # a = self._episode[t].a
+        s, a, target = self._episode.get_s_a_g(t)
 
         self._C[s, a] += self._W
-        target = self._episode.G[t]
+        # target = self._episode.G[t]
         delta = target - self.Q[s, a]
         step_size = self._W / self._C[s, a]
         self.Q[s, a] += step_size * delta

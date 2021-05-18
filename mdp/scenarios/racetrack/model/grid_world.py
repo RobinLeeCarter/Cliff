@@ -33,7 +33,8 @@ class GridWorld(grid_world.GridWorld):
 
     def change_request(self, position: common.XY, velocity: common.XY, acceleration: common.XY)\
             -> tuple[common.XY, common.XY]:
-        if common.rng.uniform() > self.skid_probability:   # not skidding
+        u: int = common.rng.uniform()
+        if u > self.skid_probability:   # not skidding
             new_velocity = common.XY(
                 x=velocity.x + acceleration.x,
                 y=velocity.y + acceleration.y

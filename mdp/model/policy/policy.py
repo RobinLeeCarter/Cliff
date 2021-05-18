@@ -49,6 +49,10 @@ class Policy(abc.ABC):
     def _get_a(self, s: int) -> int:
         pass
 
+    def refresh_policy_matrix(self):
+        if self._store_matrix:
+            self._policy_matrix = self._calc_policy_matrix()
+
     def get_probability(self, s: int, a: int) -> float:
         if self._store_matrix:
             return self._policy_matrix[s, a]

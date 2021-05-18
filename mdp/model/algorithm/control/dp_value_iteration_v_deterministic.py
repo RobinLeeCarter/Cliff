@@ -14,7 +14,7 @@ from mdp import common
 from mdp.model.algorithm.abstract.dynamic_programming_v import DynamicProgrammingV
 
 
-class ValueIterationDpVNp(DynamicProgrammingV):
+class DpValueIterationV(DynamicProgrammingV):
     def __init__(self,
                  environment_: Environment,
                  agent_: Agent,
@@ -22,7 +22,7 @@ class ValueIterationDpVNp(DynamicProgrammingV):
                  policy_parameters: common.PolicyParameters
                  ):
         super().__init__(environment_, agent_, algorithm_parameters, policy_parameters)
-        self._algorithm_type = common.AlgorithmType.POLICY_ITERATION_DP_V
+        self._algorithm_type = common.AlgorithmType.DP_POLICY_ITERATION_V
         self.name = common.algorithm_name[self._algorithm_type]
         self.title = f"{self.name} θ={self._theta}"
 

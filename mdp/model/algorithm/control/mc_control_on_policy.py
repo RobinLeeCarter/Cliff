@@ -9,7 +9,7 @@ from mdp.model.algorithm.abstract.episodic_monte_carlo import EpisodicMonteCarlo
 from mdp.model.algorithm.value_function.state_action_variable import StateActionVariable
 
 
-class OnPolicyMcControl(EpisodicMonteCarlo):
+class McControlOnPolicy(EpisodicMonteCarlo):
     def __init__(self,
                  environment_: Environment,
                  agent_: Agent,
@@ -17,7 +17,7 @@ class OnPolicyMcControl(EpisodicMonteCarlo):
                  policy_parameters: common.PolicyParameters
                  ):
         super().__init__(environment_, agent_, algorithm_parameters, policy_parameters)
-        self._algorithm_type = common.AlgorithmType.ON_POLICY_MC_CONTROL
+        self._algorithm_type = common.AlgorithmType.MC_CONTROL_ON_POLICY
         self.name = common.algorithm_name[self._algorithm_type]
         self.title = f"{self.name} first_visit={self.first_visit}"
         self._create_q()

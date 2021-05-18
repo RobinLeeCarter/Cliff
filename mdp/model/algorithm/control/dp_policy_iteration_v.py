@@ -5,11 +5,11 @@ if TYPE_CHECKING:
     from mdp.model.environment.environment import Environment
     from mdp.model.agent.agent import Agent
 from mdp import common
-from mdp.model.algorithm.policy_evaluation.policy_evaluation_dp_v_np_deterministic import PolicyEvaluationDpVNp
-from mdp.model.algorithm.policy_improvement.policy_improvement_dp_v_np_deterministic import PolicyImprovementDpVNp
+from mdp.model.algorithm.policy_evaluation.dp_policy_evaluation_v_deterministic import DpPolicyEvaluationV
+from mdp.model.algorithm.policy_improvement.dp_policy_improvement_v_deterministic import DpPolicyImprovementV
 
 
-class PolicyIterationDpVNp(PolicyEvaluationDpVNp, PolicyImprovementDpVNp):
+class DpPolicyIterationV(DpPolicyEvaluationV, DpPolicyImprovementV):
     def __init__(self,
                  environment_: Environment,
                  agent_: Agent,
@@ -17,7 +17,7 @@ class PolicyIterationDpVNp(PolicyEvaluationDpVNp, PolicyImprovementDpVNp):
                  policy_parameters: common.PolicyParameters
                  ):
         super().__init__(environment_, agent_, algorithm_parameters, policy_parameters)
-        self._algorithm_type = common.AlgorithmType.POLICY_ITERATION_DP_V
+        self._algorithm_type = common.AlgorithmType.DP_POLICY_ITERATION_V
         self.name = common.algorithm_name[self._algorithm_type]
         self.title = f"{self.name} θ={self._theta}"
 

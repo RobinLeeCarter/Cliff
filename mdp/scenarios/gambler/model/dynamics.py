@@ -6,7 +6,6 @@ if TYPE_CHECKING:
     from mdp.scenarios.gambler.model.environment import Environment
     from mdp.scenarios.gambler.model.environment_parameters import EnvironmentParameters
 
-import random
 import numpy as np
 
 from mdp.common import Distribution, UniformDistribution
