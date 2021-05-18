@@ -35,11 +35,29 @@ class OnPolicyMcControl(EpisodicMonteCarlo):
                 or not self.first_visit:
             s = self._episode[t].s
             a = self._episode[t].a
+            q = self.Q.matrix[s, a]
             target = self._episode.G[t]
-            delta = target - self.Q[s, a]
+            delta = target - q
             self._N[s, a] += 1.0
             # Q(s,a) = Q(s,a) + (1/N(s,a)).(G(t) - Q(s,a))
-            self.Q[s, a] += delta / self._N[s, a]
+            new_q = q + delta / self._N[s, a]
+            # self.Q[s, a] += delta / self._N[s, a]
+            self.Q.matrix[s, a] = new_q
             a: int = int(np.argmax(self.Q.matrix[s, :]))
             self._agent.policy[s] = a
             # self._agent.policy[s] = self.Q.argmax[s]
+
+    # def _process_time_step(self, t: int):
+    #     # only do updates on the time-steps that should be done
+    #     if (self.first_visit and self._episode.is_first_visit[t]) \
+    #             or not self.first_visit:
+    #         s = self._episode[t].s
+    #         a = self._episode[t].a
+    #         target = self._episode.G[t]
+    #         delta = target - self.Q[s, a]
+    #         self._N[s, a] += 1.0
+    #         # Q(s,a) = Q(s,a) + (1/N(s,a)).(G(t) - Q(s,a))
+    #         self.Q[s, a] += delta / self._N[s, a]
+    #         a: int = int(np.argmax(self.Q.matrix[s, :]))
+    #         self._agent.policy[s] = a
+    #         # self._agent.policy[s] = self.Q.argmax[s]
