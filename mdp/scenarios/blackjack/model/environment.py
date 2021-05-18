@@ -4,6 +4,7 @@ from typing import TYPE_CHECKING
 import numpy as np
 
 if TYPE_CHECKING:
+    from mdp.model.algorithm.abstract.algorithm import Algorithm
     from mdp.model.policy.policy import Policy
     from mdp.model.algorithm.value_function import state_function
 
@@ -125,7 +126,7 @@ class Environment(environment.Environment):
         g.y_series = common.Series(title=g.y_label, values=y_values)
         g.z_series = common.Series(title=g.z_label, values=z_values)
 
-    def update_grid_policy_ace(self, policy: Policy, usable_ace: bool):
+    def update_grid_policy_ace(self, policy: Policy, algorithm: Algorithm, usable_ace: bool):
         # policy_: policy.Deterministic
         for s, state in enumerate(self.states):
             if not state.is_terminal and state.usable_ace == usable_ace:
@@ -140,6 +141,23 @@ class Environment(environment.Environment):
                     position=position,
                     policy_value=policy_value,
                 )
+
+                policy_a: int = policy[s]
+                is_terminal: bool = self.is_terminal[s]
+                for a, action in enumerate(self.actions):
+                    if self.s_a_compatibility[s, a]:
+                        is_policy: bool = (not is_terminal and policy_a == a)
+                        if self.actions[a].hit:
+                            y = 1
+                        else:
+                            y = -1
+                        move: common.XY = common.XY(0, y)
+                        self.grid_world.set_move_q_value(
+                            position=position,
+                            move=move,
+                            q_value=algorithm.Q[s, a],
+                            is_policy=is_policy
+                        )
 
     def is_valued_state(self, state: State) -> bool:
         return not state.is_terminal
