@@ -1,5 +1,4 @@
 from __future__ import annotations
-# from typing import TYPE_CHECKING
 
 
 def set_none_to_default(obj: object, default: object):

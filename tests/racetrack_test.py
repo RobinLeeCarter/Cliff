@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import utils
 from mdp import common
 from mdp.scenarios.racetrack.model import action, grids, state
 from mdp.scenarios.racetrack.model.environment import Environment
@@ -10,7 +11,7 @@ def racetrack_test() -> bool:
     environment_parameters = EnvironmentParameters(
         grid=grids.TRACK_1
     )
-    common.set_none_to_default(environment_parameters, default)
+    utils.set_none_to_default(environment_parameters, default)
     environment = Environment(environment_parameters)
     environment.build()
 

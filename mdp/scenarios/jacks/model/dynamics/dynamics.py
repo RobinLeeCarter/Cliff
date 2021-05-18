@@ -64,7 +64,7 @@ class Dynamics(dynamics.Dynamics):
         self._build_expected_reward_summary()
         self._build_next_state_distribution_summary()
         self._build_state_transition_probabilities()
-        self._build_expected_reward_np()
+        self._build_expected_reward()
         super().build()
 
     def _build_expected_reward_summary(self):
@@ -91,7 +91,7 @@ class Dynamics(dynamics.Dynamics):
                     s1 = self._environment.state_index[next_state]
                     self.state_transition_probabilities[s0, a0, s1] = probability
 
-    def _build_expected_reward_np(self):
+    def _build_expected_reward(self):
         state_count = len(self._environment.states)
         action_count = len(self._environment.actions)
         # (state, action)

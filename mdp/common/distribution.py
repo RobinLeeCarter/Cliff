@@ -10,21 +10,24 @@ T = TypeVar('T')
 
 
 class Distribution(Generic[T]):
-    def __init__(self, initial_dict: Optional[dict] = None):
+    def __init__(self,
+                 initial_dict: Optional[dict] = None,
+                 initial_list: Optional[list] = None
+                 ):
         self._k: list[T] = []
         self._p: np.ndarray = np.array(0, dtype=float)
         self._cum_p: np.ndarray = np.array(0, dtype=float)
+        self._dict: dict
         if initial_dict:
             self._dict = initial_dict
+        elif initial_list:
+            p: float = 1.0 / len(initial_list)
+            self._dict = {k: p for k in initial_list}
         else:
-            self._dict: DictZero = DictZero()
+            self._dict = DictZero()
 
     def __setitem__(self, key: T, value: float):
         self._dict[key] = value
-
-    def set_dict(self, full_dict: dict):
-        self._dict = full_dict
-        self.enable()
 
     @property
     def dict(self) -> dict:

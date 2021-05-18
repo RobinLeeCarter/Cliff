@@ -3,7 +3,7 @@ from __future__ import annotations
 from dataclasses import dataclass, InitVar
 from typing import Optional
 
-from mdp.common import utils
+import utils
 
 
 @dataclass()

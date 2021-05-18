@@ -37,7 +37,7 @@ import time
 import numpy as np
 import utils
 
-n = 100
+n = 100_000
 
 my_list = [i for i in range(n)]
 
@@ -63,14 +63,15 @@ i = utils.n_choice(n)
 single_time = get_time_ns(cum_p_code)
 print(f"cum_p_code   : {single_time:.0f} ns")
 print(f"{10**9/single_time:.0f} per second")
+cum_p_code_time = single_time
 
-single_time = get_time_ns(numpy_randint)
-print(f"numpy_randint: {single_time:.0f} ns")
-print(f"{10**9/single_time:.0f} per second")
-numpy_randint_time = single_time
+# single_time = get_time_ns(numpy_randint)
+# print(f"numpy_randint: {single_time:.0f} ns")
+# print(f"{10**9/single_time:.0f} per second")
+# numpy_randint_time = single_time
 
 single_time = get_time_ns(n_choice_code)
 print(f"n_choice_code: {single_time:.0f} ns")
 print(f"{10**9/single_time:.0f} per second")
 
-print(f"n_choice_code better ratio : {numpy_randint_time/single_time:.1f}")
+print(f"n_choice_code better ratio : {cum_p_code_time/single_time:.1f}")

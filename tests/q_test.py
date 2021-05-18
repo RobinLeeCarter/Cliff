@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import utils
 from mdp import common
 from mdp.model.algorithm.value_function import state_action_function
 from mdp.scenarios.cliff.model.environment_parameters import default
@@ -14,7 +15,7 @@ def q_test() -> bool:
         environment_type=common.ScenarioType.CLIFF,
         actions_list=common.ActionsList.FOUR_MOVES
     )
-    common.set_none_to_default(environment_parameters, default)
+    utils.set_none_to_default(environment_parameters, default)
     environment = Environment(environment_parameters)
     environment.build()
     q = state_action_function.StateActionFunction(environment, initial_value=-7.0)

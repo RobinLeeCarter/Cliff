@@ -50,8 +50,8 @@ class PolicyEvaluationDpVNp(DynamicProgrammingV):
         policy: Deterministic = self._agent.policy
         policy_vector: np.ndarray = policy.get_policy_vector()
 
-        # state_transition_probabilities[s, a, s'] = p(s'|s,a)
-        state_transition_probabilities: np.ndarray = self._environment.dynamics.state_transition_probabilities
+        # state_transition_p[s, a, s'] = p(s'|s,a)
+        state_transition_p: np.ndarray = self._environment.dynamics.state_transition_probabilities
         # expected_reward_np[s,a] = E[r|s,a] = Σs',r p(s',r|s,a).r
         expected_reward: np.ndarray = self._environment.dynamics.expected_reward_np
         # V[s]
@@ -64,8 +64,8 @@ class PolicyEvaluationDpVNp(DynamicProgrammingV):
         # state_transition_probability_matrix
         # T[s, s'] = p(s'|s) = Σa π(a|s).p(s'|s,a)
         # noinspection PyPep8Naming
-        T: np.ndarray = state_transition_probabilities[i, policy_vector, :]
-        # T: np.ndarray = self._get_state_transition_probability_matrix(policy_vector, state_transition_probabilities)
+        T: np.ndarray = state_transition_p[i, policy_vector, :]
+        # T: np.ndarray = self._get_state_transition_probability_matrix(policy_vector, state_transition_p)
         # r[s] = E[r|s,a=π(a|s)] = Σa π(a|s) Σs',r p(s',r|s,a).r
         r: np.ndarray = expected_reward[i, policy_vector]
         # r: np.ndarray = self._get_reward_vector(policy_vector, expected_reward)

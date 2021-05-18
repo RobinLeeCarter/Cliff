@@ -27,6 +27,7 @@ class Dynamics(dynamics.Dynamics, ABC):
         self._square: Optional[common.Square] = None
 
     def get_a_start_state(self) -> State:
+        # TODO: get all start positions; make a list of starting states; use a UniformDistibution to draw_one
         position: common.XY = self._grid_world.get_a_start_position()
         return State(is_terminal=False, position=position)
 

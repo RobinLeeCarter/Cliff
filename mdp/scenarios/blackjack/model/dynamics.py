@@ -6,7 +6,7 @@ if TYPE_CHECKING:
     from mdp.scenarios.blackjack.model.environment import Environment
     from mdp.scenarios.blackjack.model.environment_parameters import EnvironmentParameters
 
-from mdp.common import Distribution
+from mdp.common import Distribution, UniformDistribution
 from mdp.model.environment import dynamics
 
 from mdp.scenarios.blackjack.model.state import State
@@ -24,15 +24,18 @@ class Dynamics(dynamics.Dynamics):
         self._start_distribution: Distribution[State] = Distribution()
 
     def build(self):
-        thirteenth: float = 1.0 / 13.0  # 13 cards in a suit
-        self._card_distribution = Distribution[int]({c: thirteenth for c in range(1, self._max_card)})
-        self._card_distribution[self._max_card] = 4.0 * thirteenth     # 10, J, Q or K
+        p: float = 1.0 / 13.0  # 13 cards in a suit
+        self._card_distribution = Distribution[int]({c: p for c in range(1, self._max_card)})
+        self._card_distribution[self._max_card] = 4.0 * p     # 10, J, Q or K
         self._card_distribution.enable()
 
-        start_states: list[State] = [state for state in self._environment.states if not state.is_terminal]
-        start_p: float = 1 / len(start_states)
-        self._start_distribution = Distribution[State]({state: start_p for state in start_states})
-        self._start_distribution.enable()
+        non_terminal_states = [state for state in self._environment.states if not state.is_terminal]
+        self._start_distribution = UniformDistribution[State](non_terminal_states)
+
+        # start_states: list[State] = [state for state in self._environment.states if not state.is_terminal]
+        # start_p: float = 1 / len(start_states)
+        # self._start_distribution = Distribution[State]({state: start_p for state in start_states})
+        # self._start_distribution.enable()
 
         super().build()
 

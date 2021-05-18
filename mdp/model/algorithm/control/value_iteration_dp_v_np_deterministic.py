@@ -1,4 +1,6 @@
 from __future__ import annotations
+
+import math
 from typing import TYPE_CHECKING
 
 import numpy as np
@@ -75,10 +77,12 @@ class ValueIterationDpVNp(DynamicProgrammingV):
 
         self.V.vector = v
 
-        policy_vector = np.argmax(
-            expected_reward + gamma * np.dot(state_transition_p, v),
-            axis=1
-        )
+        q = expected_reward + gamma * np.dot(state_transition_p, v)
+
+        theta_decimal_places: int = -math.ceil(math.log10(self._theta))
+        q = q.round(theta_decimal_places)
+
+        policy_vector = np.argmax(q, axis=1)
 
         # policy_vector = make_policy_greedy_wrt_v(v, expected_reward, state_transition_p, gamma, round_first=True)
         policy.set_policy_vector(policy_vector)
