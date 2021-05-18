@@ -119,11 +119,21 @@ class Episode:
 
     @property
     def total_return(self) -> float:
-        g: float = 0
-        for t, rsa_ in enumerate(self.trajectory):
-            if t > 0:
-                g = rsa_.r + self.gamma * g
-        return g
+        if self.G:
+            return self.G[0]
+        elif self.terminates:
+            g: float = 0.0
+            for t in range(self.T - 1, -1, -1):     # T-1, T-2, ... 1, 0
+                g = self.trajectory[t+1].r + self.gamma * g
+            return g
+        else:
+            raise Exception("Total return requested but episode not terminated")
+
+        # g: float = 0
+        # for t, rsa_ in enumerate(self.trajectory):
+        #     if t > 0:
+        #         g = rsa_.r + self.gamma * g
+        # return g
 
     def get_state(self, t: int) -> State:
         s: int = self.trajectory[t].s

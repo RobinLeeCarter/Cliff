@@ -44,8 +44,11 @@ class McControlOffPolicy(EpisodicMonteCarlo):
         delta = target - self.Q[s, a]
         step_size = self._W / self._C[s, a]
         self.Q[s, a] += step_size * delta
+        policy_a = self._agent.target_policy[s]
         best_a = self.Q.argmax[s]
-        self._agent.target_policy[s] = best_a
+        if best_a != policy_a:  # update policy only if different
+            # TODO: updating the behaviour policy is wrong-headed (but works) need to update target policy and propogate
+            self._agent.behaviour_policy[s] = best_a
         if a != best_a:
             self._exit_episode = True
         else:

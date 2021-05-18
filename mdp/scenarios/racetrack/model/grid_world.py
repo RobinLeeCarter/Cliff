@@ -19,7 +19,7 @@ class GridWorld(grid_world.GridWorld):
         x_inside = (0 <= position.x <= self.max_x)
         y_inside = (0 <= position.y <= self.max_y)
 
-        if y_inside and self._end_y[self.max_y - position.y] and position.x > self.max_x:
+        if y_inside and self._end_y[self.max_y - position.y] and position.x >= self.max_x:
             # 'over' finish line (to the right of it)
             return common.Square.END
         elif not x_inside or not y_inside:
@@ -33,6 +33,7 @@ class GridWorld(grid_world.GridWorld):
 
     def change_request(self, position: common.XY, velocity: common.XY, acceleration: common.XY)\
             -> tuple[common.XY, common.XY]:
+        # TODO: change for faster version?
         u: int = common.rng.uniform()
         if u > self.skid_probability:   # not skidding
             new_velocity = common.XY(

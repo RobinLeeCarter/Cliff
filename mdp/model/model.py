@@ -105,5 +105,7 @@ class Model(ABC):
                                                      policy=policy_for_display)
 
     def _display_step(self, episode_: Optional[Episode]):
-        self.update_grid_value_functions()
-        self._controller.display_step(episode_)
+        # TODO: remove if
+        if self.trainer.episode_counter >= 1900:
+            self.update_grid_value_functions()
+            self._controller.display_step(episode_)
