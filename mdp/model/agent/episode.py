@@ -22,7 +22,7 @@ class Episode:
         self._step_callback: Optional[Callable[[], bool]] = step_callback
         self.record_first_visits = record_first_visits
 
-        # S0, A0, R1, S1, A1, R2 ... S(T-1), A(T-1), R(T)
+        # R0=0, S0, A0, R1, S1, A1, R2 ... S(T-1), A(T-1), R(T), S(T), A(T)=-1
         self.trajectory: list[rsa.RSA] = []
         self.terminates: bool = False
         self.T: Optional[int] = None
@@ -127,7 +127,11 @@ class Episode:
                 g = self.trajectory[t+1].r + self.gamma * g
             return g
         else:
-            raise Exception("Total return requested but episode not terminated")
+            # not ideal but need to return something for some use-cases
+            g: float = 0.0
+            for t in range(len(self.trajectory) - 2, -1, -1):     # T-1, T-2, ... 1, 0
+                g = self.trajectory[t+1].r + self.gamma * g
+            return g
 
         # g: float = 0
         # for t, rsa_ in enumerate(self.trajectory):

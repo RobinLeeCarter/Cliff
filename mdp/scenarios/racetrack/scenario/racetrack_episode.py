@@ -11,13 +11,13 @@ class RacetrackEpisode(Scenario):
     def _create_comparison(self):
         return Comparison(
             environment_parameters=EnvironmentParameters(
-                grid=grids.TRACK_3,
+                grid=grids.TRACK_1,
                 extra_reward_for_failure=-100.0,  # 0.0 in problem statement
-                skid_probability=0.0,
+                skid_probability=0.1,
             ),
             comparison_settings=common.Settings(
                 runs=1,
-                training_episodes=10_000,
+                training_episodes=100_000,
                 episode_print_frequency=1000,
                 # display_every_step=True,
                 dual_policy_relationship=common.DualPolicyRelationship.LINKED_POLICIES
