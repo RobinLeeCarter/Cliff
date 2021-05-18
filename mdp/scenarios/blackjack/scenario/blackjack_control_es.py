@@ -22,7 +22,7 @@ class BlackjackControlES(Scenario):
                         theta=0.1
                     ),
                     derive_v_from_q_as_final_step=True,
-                    training_episodes=1_000_000
+                    training_episodes=100_000
                 ),
             ],
             graph3d_values=self._graph3d_values,

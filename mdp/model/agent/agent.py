@@ -167,10 +167,10 @@ class Agent:
         The reward being is response from the previous action (if there was one, or otherwise reward=None)
         Note that the action is NOT applied yet.
         """
-        if a:
-            self.a = a
-        else:
+        if a is None:
             self.a = self._behaviour_policy[self.s]
+        else:
+            self.a = a
         # is_terminal = self._environment.states[self.s].is_terminal
         self._episode.add_rsa(self.r, self.s, self.a, self.is_terminal)
         if self._verbose:

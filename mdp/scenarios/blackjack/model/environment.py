@@ -147,7 +147,7 @@ class Environment(environment.Environment):
                 for a, action in enumerate(self.actions):
                     if self.s_a_compatibility[s, a]:
                         is_policy: bool = (not is_terminal and policy_a == a)
-                        if self.actions[a].hit:
+                        if action.hit:
                             y = 1
                         else:
                             y = -1

@@ -86,6 +86,13 @@ class Environment(ABC):
                         self.compatible_s_a.append((s, a))
             self.actions_for_state[state] = actions_for_state
 
+        # print(self.s_a_compatibility)
+
+        # for s, a in self.compatible_s_a:
+        #     state = self.states[s]
+        #     action = self.actions[a]
+        #     print(state, action)
+
     def _is_action_compatible_with_state(self, state: State, action: Action):
         return True
 
