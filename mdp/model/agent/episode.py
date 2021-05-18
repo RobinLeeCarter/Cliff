@@ -1,8 +1,6 @@
 from __future__ import annotations
 from typing import Optional, Callable, TYPE_CHECKING
 
-import numpy as np
-
 if TYPE_CHECKING:
     from mdp.model.environment.action import Action
     from mdp.model.environment.state import State
@@ -28,7 +26,7 @@ class Episode:
         self.trajectory: list[rsa.RSA] = []
         self.terminates: bool = False
         self.T: Optional[int] = None
-        self.G: np.ndarray = np.array([], dtype=float)
+        self.G: list[float] = []
 
         self.cont: bool = True
 
@@ -99,8 +97,7 @@ class Episode:
 
     def generate_returns(self):
         if self.terminates:
-            self.G = np.zeros(shape=self.T+1, dtype=float)
-            self.G[self.T] = 0.0
+            self.G = [0.0 for _ in range(self.T+1)]
             for t in range(self.T - 1, -1, -1):     # T-1, T-2, ... 1, 0
                 self.G[t] = self[t+1].r + self.gamma * self.G[t + 1]
 
@@ -139,3 +136,7 @@ class Episode:
             return None
         else:
             return self._environment.actions[a]
+
+    def get_s_a_g(self, t: int) -> tuple[int, int, float]:
+        rsa_ = self.trajectory[t]
+        return rsa_.s, rsa_.a, self.G[t]
