@@ -162,14 +162,18 @@ class Environment(ABC):
 
     # @profile
     def from_s_perform_a(self, s: int, a: int) -> tuple[float, int, bool]:
-        if a == -1:
-            raise Exception("Environment: a == -1, trying to perform None Action")
+
         state = self.states[s]
-        action = self.actions[a]
         if state.is_terminal:
             raise Exception("Environment: Trying to act in a terminal state.")
-        if not self.s_a_compatibility[s, a]:
-            raise Exception(f"_apply_action state {state} incompatible with action {action}")
+
+        if a == -1:
+            action = None
+        else:
+            action = self.actions[a]
+            if not self.s_a_compatibility[s, a]:
+                raise Exception(f"_apply_action state {state} incompatible with action {action}")
+
         reward, new_state = self.dynamics.draw_response(state, action)
         new_s = self.state_index[new_state]
         return reward, new_s, new_state.is_terminal
