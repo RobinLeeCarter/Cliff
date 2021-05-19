@@ -35,20 +35,17 @@ class McControlOffPolicy(EpisodicMonteCarlo):
         self._W = 1.0
 
     def _process_time_step(self, t: int):
-        # s = self._episode[t].s
-        # a = self._episode[t].a
         s, a, target = self._episode.get_s_a_g(t)
 
         self._C[s, a] += self._W
-        # target = self._episode.G[t]
         delta = target - self.Q[s, a]
         step_size = self._W / self._C[s, a]
         self.Q[s, a] += step_size * delta
         policy_a = self._agent.target_policy[s]
         best_a = self.Q.argmax[s]
         if best_a != policy_a:  # update policy only if different
-            # TODO: updating the behaviour policy is wrong-headed (but works) need to update target policy and propogate
-            self._agent.behaviour_policy[s] = best_a
+            # get the agent to update the target policy since the behavioural policy might be linked and need to change
+            self._agent.update_target_policy(s, best_a)
         if a != best_a:
             self._exit_episode = True
         else:

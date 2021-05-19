@@ -26,6 +26,8 @@ class Agent:
 
         self._policy: Optional[Policy] = None
         self._behaviour_policy: Optional[Policy] = None     # if on-policy = self._policy
+        self._dual_policy_relationship: Optional[common.DualPolicyRelationship] = None
+
         self._algorithm: Optional[Algorithm] = None
         self._episode: Optional[Episode] = None
         self._record_first_visits: bool = False
@@ -74,15 +76,15 @@ class Agent:
     def apply_settings(self, settings: common.Settings):
         # sort out policies
         primary_policy = policy_factory.policy_factory(self._environment, settings.policy_parameters)
-        r: common.DualPolicyRelationship = settings.dual_policy_relationship
-        if r == common.DualPolicyRelationship.SINGLE_POLICY:
+        self._dual_policy_relationship = settings.dual_policy_relationship
+        if self._dual_policy_relationship == common.DualPolicyRelationship.SINGLE_POLICY:
             self._policy = primary_policy
             self._behaviour_policy = primary_policy
-        elif r == common.DualPolicyRelationship.INDEPENDENT_POLICIES:
+        elif self._dual_policy_relationship == common.DualPolicyRelationship.INDEPENDENT_POLICIES:
             self._policy = primary_policy
             self._behaviour_policy = policy_factory.policy_factory(self._environment,
                                                                    settings.behaviour_policy_parameters)
-        elif r == common.DualPolicyRelationship.LINKED_POLICIES:
+        elif self._dual_policy_relationship == common.DualPolicyRelationship.LINKED_POLICIES:
             self._policy = primary_policy.linked_policy     # typically the deterministic part we want to output
             self._behaviour_policy = primary_policy
         else:
@@ -203,6 +205,14 @@ class Agent:
         if self.is_terminal:
             # add terminating step here as should not select another action
             self._episode.add_rsa(self.r, self.s, self.a, self.is_terminal)
+
+    # @profile
+    def update_target_policy(self, s: int, a: int):
+        if self._dual_policy_relationship == common.DualPolicyRelationship.LINKED_POLICIES:
+            self._behaviour_policy[s] = a   # this will also update the target policy since linked
+        else:
+            # in either possible case here we want to update the target policy
+            self._policy[s] = a
 
     def print_statistics(self):
         self._algorithm.print_q_coverage_statistics()
