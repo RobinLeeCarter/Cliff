@@ -27,14 +27,10 @@ class Environment(ABC):
         # state and states
         self.states: list[State] = []
         self.state_index: dict[State: int] = {}
-        self.state_type: type = State     # required?
 
         # action and actions
         self.actions: list[Action] = []
         self.action_index: dict[Action: int] = {}
-        self.action_type: type = Action  # required?
-        # TODO: eliminate actions_for_state?
-        self.actions_for_state: dict[State, list[Action]] = {}
         self.is_terminal: list[bool] = []
 
         # almost all interactions with environment must be using state and action
@@ -84,14 +80,11 @@ class Environment(ABC):
         """materialise A(s)"""
         self.s_a_compatibility = np.zeros(shape=(len(self.states), len(self.actions)), dtype=bool)
         for s, state in enumerate(self.states):
-            actions_for_state: list[Action] = []
             if not state.is_terminal:
                 for a, action in enumerate(self.actions):
                     if self._is_action_compatible_with_state(state, action):
-                        actions_for_state.append(action)
                         self.s_a_compatibility[s, a] = True
                         self.compatible_s_a.append((s, a))
-            self.actions_for_state[state] = actions_for_state
 
     def _is_action_compatible_with_state(self, state: State, action: Action):
         return True

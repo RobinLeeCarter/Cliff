@@ -25,9 +25,6 @@ class Environment(environment.Environment, abc.ABC):
         # downcast states and actions so properties can be used freely
         self.states: list[State] = self.states
         self.actions: list[Action] = self.actions
-        self.actions_for_state: dict[State, list[Action]] = self.actions_for_state
-        # self._state: State = self._state
-        # self._action: Action = self._action
         self.grid_world: Optional[GridWorld] = None
         self.dynamics: Optional[Dynamics] = None
 
