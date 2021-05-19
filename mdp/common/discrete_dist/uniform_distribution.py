@@ -13,6 +13,9 @@ class UniformDistribution(Generic[T]):  # , AbstractDistribution[T]
                  ):
         self._values: list[T] = values
         self._n: int = len(self._values)
+        self._single_value: T
+        if self._n == 1:
+            self._single_value = values[0]
 
     def draw_one(self) -> T:
         return self._values[utils.n_choice(self._n)]

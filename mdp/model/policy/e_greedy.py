@@ -38,12 +38,13 @@ class EGreedy(Policy):
             return utils.p_choice(p=self._policy_matrix[s, :])
         else:
             # could also jit this if needed
-            if common.rng.uniform() > self.epsilon:
+            if utils.uniform() > self.epsilon:
                 return self.greedy_policy[s]
             else:
-                return common.rng.choice(
-                    np.flatnonzero(self._environment.s_a_compatibility[s, :])
-                )
+                # flat fairly slow at 9ms
+                flat = np.flatnonzero(self._environment.s_a_compatibility[s, :])
+                i = utils.n_choice(flat.shape[0])
+                return flat[i]
 
     def __setitem__(self, s: int, a: int):
         if self._store_matrix:

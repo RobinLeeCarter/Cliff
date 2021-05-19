@@ -11,6 +11,8 @@ if TYPE_CHECKING:
 from mdp.model.policy.policy import Policy
 from mdp.model.policy.deterministic import Deterministic
 
+rng: np.random.Generator = np.random.default_rng()
+
 
 class EGreedy(Policy):
     def __init__(self, environment_: Environment, policy_parameters: common.PolicyParameters):
@@ -57,10 +59,10 @@ class EGreedy(Policy):
 
             return numba_p_x_choice
         else:
-            if common.rng.uniform() > self.epsilon:
+            if rng.uniform() > self.epsilon:
                 return self.greedy_policy[s]
             else:
-                return common.rng.choice(
+                return rng.choice(
                     np.flatnonzero(self._environment.s_a_compatibility[s, :])
                 )
 
@@ -117,10 +119,10 @@ class EGreedy(Policy):
         return policy_matrix
 
     def _numpy_uniform_choice(self, s: int) -> int:
-        if common.rng.uniform() > self.epsilon:
+        if rng.uniform() > self.epsilon:
             return self.greedy_policy[s]
         else:
-            return common.rng.choice(
+            return rng.choice(
                 np.flatnonzero(self._environment.s_a_compatibility[s, :])
             )
 

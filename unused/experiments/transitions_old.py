@@ -3,7 +3,7 @@ from dataclasses import dataclass
 from typing import Optional, Generator
 
 import random
-# import numpy as np
+import numpy as np
 
 from mdp import common
 
@@ -150,6 +150,8 @@ goodbye_state = State(name="goodbye")
 response_1 = Response(hello_state, 100.0)
 response_2 = Response(goodbye_state, 1.0)
 
+rng: np.random.Generator = np.random.default_rng()
+
 
 class ResponseDistribution:
     """probability distribution p(s',r) of possible responses from Environment for one (s,a)
@@ -176,7 +178,7 @@ class ResponseDistribution:
     def choose_response(self) -> Response:
         responses = list(self._distribution.keys())
         probabilities = list(self._distribution.values())
-        response_: Response = common.rng.choice(responses, p=probabilities)
+        response_: Response = rng.choice(responses, p=probabilities)
         return response_
 
 

@@ -21,12 +21,9 @@ class Random(Policy):
         if self._store_matrix:
             return utils.p_choice(p=self._policy_matrix[s, :])
         else:
-            # could also jit this if needed
-            return common.rng.choice(
-                np.flatnonzero(
-                    self._environment.s_a_compatibility[s, :]
-                )
-            )
+            flat = np.flatnonzero(self._environment.s_a_compatibility[s, :])
+            i = utils.n_choice(flat.shape[0])
+            return flat[i]
 
     def _calc_probability(self, s: int, a: int) -> float:
         if self._environment.s_a_compatibility[s, a]:

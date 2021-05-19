@@ -141,23 +141,28 @@ class Agent:
 
     def start_episode(self, exploring_starts: bool = False):
         """Gets initial state and sets initial reward to None"""
+        env = self._environment
+
         if self._verbose:
             print("start episode...")
         self.t = 0
 
-        self._episode = Episode(self._environment, self.gamma, self._step_callback, self._record_first_visits)
+        self._episode = Episode(env, self.gamma, self._step_callback, self._record_first_visits)
 
         if exploring_starts:
             # completely random starting state and action and take the action, reward will be None
             # state, action = self._environment.get_random_state_action()
-            self.s, self.is_terminal, self.a = self._environment.get_random_s_a()
+            self.s, self.a = env.s_a_distribution.draw_one()
+            self.is_terminal = env.is_terminal[self.s]
             self.r = 0.0
             # action = self._environment.dynamics.get_random_action_for_state(self.state)
             self.choose_action(self.a)
             self.take_action()
         else:
             # get starting state, reward will be None
-            self.s, self.is_terminal = self._environment.start_s()
+            self.s = env.start_s_distribution.draw_one()
+            # self.s = env.start_s()
+            self.is_terminal = env.is_terminal[self.s]
             self.r = 0.0
 
     def choose_action(self, a: Optional[int] = None):

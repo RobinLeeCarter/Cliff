@@ -30,6 +30,10 @@ class Dynamics(ABC):
         """build bottom up"""
         self.is_built = True
 
+    @abstractmethod
+    def get_start_states(self) -> list[State]:
+        pass
+
     def get_expected_reward(self, state: State, action: Action) -> float:
         """
         r(s,a) = E[Rt | S(t-1)=s, A(t-1)=a] = Sum_over_s'_r( p(s',r|s,a).r )
@@ -86,10 +90,6 @@ class Dynamics(ABC):
         could be used for one state, action in theory
         but too many for all states and actions so potentially not useful in practice
         """
-        pass
-
-    @abstractmethod
-    def get_a_start_state(self) -> State:
         pass
 
     def draw_response(self, state: State, action: Action) -> Response:

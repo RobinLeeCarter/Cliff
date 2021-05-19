@@ -1,5 +1,5 @@
 from __future__ import annotations
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Optional
 
 if TYPE_CHECKING:
     from mdp.scenarios.racetrack.model.action import Action
@@ -23,15 +23,23 @@ class Dynamics(dynamics.Dynamics):
 
         self._extra_reward_for_failure: float = environment_parameters.extra_reward_for_failure
 
-    def get_a_start_state(self) -> State:
-        position: common.XY = self._grid_world.get_a_start_position()
-        return State(is_terminal=False, position=position, velocity=common.XY(x=0, y=0))
+    def get_start_states(self) -> list[State]:
+        start_positions: list[common.XY] = self._grid_world.get_start_positions()
+        start_velocity = common.XY(x=0, y=0)
+        start_states = [State(is_terminal=False, position=position, velocity=start_velocity)
+                        for position in start_positions]
+        return start_states
+
+    # def get_a_start_state(self) -> State:
+    #     position: common.XY = self._grid_world.get_a_start_position()
+    #     return State(is_terminal=False, position=position, velocity=common.XY(x=0, y=0))
 
     # @profile
-    def draw_response(self, state: State, action: Action) -> tuple[float, State]:
+    def draw_response(self, state: State, action: Action) -> tuple[float, Optional[State]]:
         """
         draw a single outcome for a single state and action
         standard call for episodic algorithms
+        :returns state = None if a new starting state required as this is more efficient if want s not state
         """
         new_position, new_velocity = self._grid_world.change_request(
             position=state.position,
@@ -41,7 +49,7 @@ class Dynamics(dynamics.Dynamics):
         square: int = self._grid_world.get_square(new_position)
 
         reward: float
-        next_state: State
+        next_state: Optional[State]
         if square == common.Square.END:
             # success
             reward = 0.0
@@ -57,7 +65,9 @@ class Dynamics(dynamics.Dynamics):
             # failure, move back to start line
             # self.pre_reset_state = State(x, y, vx, vy, is_reset=True)
             reward: float = -1.0 + self._extra_reward_for_failure
-            next_state: State = self.get_a_start_state()
+            next_state = None
+            # s: int = self._environment.start_s_distribution.draw_one()
+            # next_state: State = self._environment.states[s]
             if self._verbose:
                 print(f"Grass at {new_position}")
         else:

@@ -23,6 +23,7 @@ class Dynamics(dynamics.Dynamics):
         self._environment: Environment = self._environment
         self._environment_parameters: EnvironmentParameters = self._environment_parameters
         self._probability_heads: float = self._environment_parameters.probability_heads
+        # TODO: switch Toss and Result from enum to class
         self._toss_distribution: Distribution[Toss] = Distribution()
         self._start_distribution: Optional[UniformDistribution[State]] = None
 
@@ -31,13 +32,13 @@ class Dynamics(dynamics.Dynamics):
         self._toss_distribution[Toss.TAILS] = 1.0 - self._probability_heads
         self._toss_distribution.enable()
 
-        non_terminal_states = [state for state in self._environment.states if not state.is_terminal]
-        self._start_distribution = UniformDistribution[State](non_terminal_states)
-
         self._build_state_transition_probabilities()
         self._build_expected_reward()
 
         super().build()
+
+    def get_start_states(self) -> list[State]:
+        return [state for state in self._environment.states if not state.is_terminal]
 
     def _build_state_transition_probabilities(self):
         state_count = len(self._environment.states)
@@ -62,10 +63,6 @@ class Dynamics(dynamics.Dynamics):
             for action in self._environment.actions_for_state[state]:
                 a = self._environment.action_index[action]
                 self.expected_reward_np[s, a] = self.get_expected_reward(state, action)
-
-    def get_a_start_state(self) -> State:
-        return self._start_distribution.draw_one()
-        # return random.choice([state for state in self._environment.states if not state.is_terminal])
 
     def get_expected_reward(self, state: State, action: Action) -> float:
         """

@@ -22,7 +22,6 @@ class Algorithm(abc.ABC):
                  policy_parameters: common.PolicyParameters
                  ):
         self._environment: Environment = environment_
-        # TODO: rename agent_ to agent
         self._agent: Agent = agent_
         self._algorithm_parameters: common.AlgorithmParameters = algorithm_parameters
         self._policy_parameters: common.PolicyParameters = policy_parameters

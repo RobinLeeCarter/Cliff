@@ -21,7 +21,6 @@ class Dynamics(dynamics.Dynamics):
         self._environment: Environment = self._environment
         self._max_card: int = 10    # 10, J, Q or K combined
         self._card_distribution: Distribution[int] = Distribution()
-        self._start_distribution: Distribution[State] = Distribution()
 
     def build(self):
         p: float = 1.0 / 13.0  # 13 cards in a suit
@@ -29,18 +28,10 @@ class Dynamics(dynamics.Dynamics):
         self._card_distribution[self._max_card] = 4.0 * p     # 10, J, Q or K
         self._card_distribution.enable()
 
-        non_terminal_states = [state for state in self._environment.states if not state.is_terminal]
-        self._start_distribution = UniformDistribution[State](non_terminal_states)
-
-        # start_states: list[State] = [state for state in self._environment.states if not state.is_terminal]
-        # start_p: float = 1 / len(start_states)
-        # self._start_distribution = Distribution[State]({state: start_p for state in start_states})
-        # self._start_distribution.enable()
-
         super().build()
 
-    def get_a_start_state(self) -> State:
-        return self._start_distribution.draw_one()
+    def get_start_states(self) -> list[State]:
+        return [state for state in self._environment.states if not state.is_terminal]
 
     def draw_response(self, state: State, action: Action) -> tuple[float, State]:
         """

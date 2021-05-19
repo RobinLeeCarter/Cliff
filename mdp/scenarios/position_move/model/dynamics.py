@@ -26,10 +26,11 @@ class Dynamics(dynamics.Dynamics, ABC):
         self._next_state: Optional[State] = None
         self._square: Optional[int] = None
 
-    def get_a_start_state(self) -> State:
-        # TODO: get all start positions; make a list of starting states; use a UniformDistibution to draw_one
-        position: common.XY = self._grid_world.get_a_start_position()
-        return State(is_terminal=False, position=position)
+    def get_start_states(self) -> list[State]:
+        start_positions: list[common.XY] = self._grid_world.get_start_positions()
+        start_states = [State(is_terminal=False, position=position)
+                        for position in start_positions]
+        return start_states
 
     def _draw_next_state(self, state: State, action: Action):
         move: Optional[common.XY] = None

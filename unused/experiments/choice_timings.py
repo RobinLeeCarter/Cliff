@@ -22,7 +22,7 @@ for move, probability in zip(moves, probabilities):
 
 moves_np = np.array(moves, dtype=action.Action)
 probabilities_np = np.array(probabilities, dtype=float)
-rng = common.rng
+rng: np.random.Generator = np.random.default_rng()
 
 my_action = random.choices(moves, weights=probabilities)[0]
 print(my_action)

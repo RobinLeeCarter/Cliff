@@ -142,22 +142,23 @@ class Environment(environment.Environment):
                     policy_value=policy_value,
                 )
 
-                policy_a: int = policy[s]
-                is_terminal: bool = self.is_terminal[s]
-                for a, action in enumerate(self.actions):
-                    if self.s_a_compatibility[s, a]:
-                        is_policy: bool = (not is_terminal and policy_a == a)
-                        if action.hit:
-                            y = 1
-                        else:
-                            y = -1
-                        move: common.XY = common.XY(0, y)
-                        self.grid_world.set_move_q_value(
-                            position=position,
-                            move=move,
-                            q_value=algorithm.Q[s, a],
-                            is_policy=is_policy
-                        )
+                if algorithm.Q:
+                    policy_a: int = policy[s]
+                    is_terminal: bool = self.is_terminal[s]
+                    for a, action in enumerate(self.actions):
+                        if self.s_a_compatibility[s, a]:
+                            is_policy: bool = (not is_terminal and policy_a == a)
+                            if action.hit:
+                                y = 1
+                            else:
+                                y = -1
+                            move: common.XY = common.XY(0, y)
+                            self.grid_world.set_move_q_value(
+                                position=position,
+                                move=move,
+                                q_value=algorithm.Q[s, a],
+                                is_policy=is_policy
+                            )
 
     def is_valued_state(self, state: State) -> bool:
         return not state.is_terminal

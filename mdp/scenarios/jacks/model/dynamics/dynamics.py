@@ -7,7 +7,6 @@ if TYPE_CHECKING:
     from mdp.scenarios.jacks.model.environment_parameters import EnvironmentParameters
     from mdp.scenarios.jacks.model.dynamics.location_outcome import LocationOutcome
 
-import random
 import numpy as np
 
 from mdp.common import Distribution
@@ -230,8 +229,8 @@ class Dynamics(dynamics.Dynamics):
         response_distribution.enable()
         return response_distribution
 
-    def get_a_start_state(self) -> State:
-        return random.choice(self._environment.states)
+    def get_start_states(self) -> list[State]:
+        return self._environment.states
 
     def draw_response(self, state: State, action: Action) -> Response:
         """
