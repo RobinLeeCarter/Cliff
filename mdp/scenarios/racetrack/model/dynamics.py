@@ -27,6 +27,7 @@ class Dynamics(dynamics.Dynamics):
         position: common.XY = self._grid_world.get_a_start_position()
         return State(is_terminal=False, position=position, velocity=common.XY(x=0, y=0))
 
+    # @profile
     def draw_response(self, state: State, action: Action) -> tuple[float, State]:
         """
         draw a single outcome for a single state and action
@@ -37,7 +38,7 @@ class Dynamics(dynamics.Dynamics):
             velocity=state.velocity,
             acceleration=action.acceleration
             )
-        square: common.Square = self._grid_world.get_square(new_position)
+        square: int = self._grid_world.get_square(new_position)
 
         reward: float
         next_state: State

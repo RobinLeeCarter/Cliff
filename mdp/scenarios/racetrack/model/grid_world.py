@@ -13,11 +13,11 @@ class GridWorld(grid_world.GridWorld):
     """GridWorld doesn't know about states and actions it just deals in the rules of the grid"""
     def __init__(self, environment_parameters_: EnvironmentParameters):
         super().__init__(environment_parameters_)
-        self._end_y: np.ndarray = (self._grid[:, self.max_x] == common.enums.Square.END)
+        self._end_y: np.ndarray = (self._grid[:, self.max_x] == common.Square.END)
         self.skid_probability: float = environment_parameters_.skid_probability
 
-    @profile
-    def get_square(self, position: common.XY) -> common.Square:
+    # @profile
+    def get_square(self, position: common.XY) -> int:
         x_inside = (0 <= position.x <= self.max_x)
         y_inside = (0 <= position.y <= self.max_y)
 
@@ -28,11 +28,12 @@ class GridWorld(grid_world.GridWorld):
             # crash outside of track and not over finish line
             return common.Square.CLIFF
         else:
+            return self._grid[self.max_y - position.y, position.x]
             # just whatever the track value is
-            value: int = self._grid[self.max_y - position.y, position.x]
+            # value: int = self._grid[self.max_y - position.y, position.x]
             # noinspection PyArgumentList
-            square: common.Square = common.Square(value)
-            return square   # docs say this is fine
+            # square: common.Square = common.Square(value)
+            # return square   # docs say this is fine
 
     def change_request(self, position: common.XY, velocity: common.XY, acceleration: common.XY)\
             -> tuple[common.XY, common.XY]:

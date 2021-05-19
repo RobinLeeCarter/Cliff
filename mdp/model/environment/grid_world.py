@@ -42,12 +42,13 @@ class GridWorld:
         return 0 <= position.x <= self.max_x and \
                0 <= position.y <= self.max_y
 
-    @profile
-    def get_square(self, position: common.XY) -> common.Square:
-        value: int = self._grid[self.max_y - position.y, position.x]
+    # @profile
+    def get_square(self, position: common.XY) -> int:
+        return self._grid[self.max_y - position.y, position.x]
+        # value: int = self._grid[self.max_y - position.y, position.x]
         # noinspection PyArgumentList
-        square: common.Square = common.Square(value)
-        return square  # pycharm inspection bug
+        # square: common.Square = common.Square(value)
+        # return square  # pycharm inspection bug
 
     def project_back_to_grid(self, requested_position: common.XY) -> common.XY:
         x = requested_position.x

@@ -18,10 +18,10 @@ def grid_test() -> bool:
     environment = Environment(environment_parameters)
     grid_world_ = environment.grid_world
     shape = grid_world_.max_y + 1, grid_world_.max_x + 1
-    cartesian_grid = np.empty(shape=shape, dtype=common.Square)
+    cartesian_grid = np.empty(shape=shape, dtype=int)
     for y, x in np.ndindex(cartesian_grid.shape):
         position: common.XY = common.XY(x, y)
-        square: common.Square = grid_world_.get_square(position)
+        square: int = grid_world_.get_square(position)
         cartesian_grid[y, x] = square
 
     print(cartesian_grid)

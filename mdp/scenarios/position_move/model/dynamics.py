@@ -24,7 +24,7 @@ class Dynamics(dynamics.Dynamics, ABC):
 
         # current values
         self._next_state: Optional[State] = None
-        self._square: Optional[common.Square] = None
+        self._square: Optional[int] = None
 
     def get_a_start_state(self) -> State:
         # TODO: get all start positions; make a list of starting states; use a UniformDistibution to draw_one

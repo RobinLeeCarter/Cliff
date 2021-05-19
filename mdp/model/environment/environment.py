@@ -44,7 +44,7 @@ class Environment(ABC):
         self.one_over_possible_actions: np.ndarray = np.empty(0, dtype=float)
 
         # TODO: move this down as too specific
-        self._square: Optional[common.Square] = None
+        self._square: Optional[int] = None
 
         # None to ensure not used when not used/initialised
         self.dynamics: Optional[Dynamics] = None

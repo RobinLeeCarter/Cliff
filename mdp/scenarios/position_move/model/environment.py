@@ -73,9 +73,8 @@ class Environment(environment.Environment, abc.ABC):
                         )
 
     def is_valued_state(self, state: State) -> bool:
-        _square: common.Square = self.grid_world.get_square(state.position)
-        square_enum = common.enums.Square
-        if _square in (square_enum.END, square_enum.CLIFF):
+        _square: int = self.grid_world.get_square(state.position)
+        if _square in (common.Square.END, common.Square.CLIFF):
             return False
         else:
             return True

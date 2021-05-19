@@ -27,11 +27,11 @@ class ComparisonType(enum.IntEnum):
     WINDY_TIMESTEP_RANDOM = enum.auto()
 
 
-class Square(enum.IntEnum):
-    NORMAL = 0
-    CLIFF = 1   # or grass
-    START = 2
-    END = 3
+class Square:       # (enum.IntEnum) no longer an enum for 3x-30x speed improvement
+    NORMAL: int = 0
+    CLIFF: int = 1   # or grass
+    START: int = 2
+    END: int = 3
 
 
 class UserEvent(enum.IntEnum):
