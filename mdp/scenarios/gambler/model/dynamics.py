@@ -7,8 +7,9 @@ if TYPE_CHECKING:
     from mdp.scenarios.gambler.model.environment_parameters import EnvironmentParameters
 
 import numpy as np
+import utils
 
-from mdp.common import Distribution, UniformDistribution
+from mdp.common import Distribution
 from mdp.model.environment import dynamics
 
 from mdp.scenarios.gambler.model.state import State
@@ -23,9 +24,7 @@ class Dynamics(dynamics.Dynamics):
         self._environment: Environment = self._environment
         self._environment_parameters: EnvironmentParameters = self._environment_parameters
         self._probability_heads: float = self._environment_parameters.probability_heads
-        # TODO: switch Toss and Result from enum to class
-        self._toss_distribution: Distribution[Toss] = Distribution()
-        self._start_distribution: Optional[UniformDistribution[State]] = None
+        self._toss_distribution: Distribution[int] = Distribution[int]()
 
     def build(self):
         self._toss_distribution[Toss.HEADS] = self._probability_heads
@@ -99,28 +98,30 @@ class Dynamics(dynamics.Dynamics):
         draw a single outcome for a single state and action
         standard call for episodic algorithms
         """
-        toss: Toss = self._toss_distribution.draw_one()
+        toss: int = self._toss_distribution.draw_one()
         if toss == Toss.HEADS:
             new_capital = state.capital + action.stake
         else:
             new_capital = state.capital - action.stake
 
-        result: Optional[Result] = None
+        result: Optional[int] = None
         reward: float = 0.0
+        is_terminal: bool = False
 
         if new_capital == self._environment_parameters.max_capital:
             result = Result.WIN
             reward = 1.0
+            is_terminal = True
         elif new_capital == 0:
             result = Result.LOSE
+            is_terminal = True
 
         if self._verbose:
             print(f"starting_capital = {state.capital}")
             print(f"stake = {action.stake}")
-            print(f"toss = {toss}")
+            print(f"toss = {utils.get_enum_str(Toss, toss)}")
             print(f"new_capital = {new_capital}")
-            print(f"result = {result}")
+            print(f"result = {utils.get_enum_str(Result, result)}")
 
-        is_terminal: bool = (result is not None)
         new_state = State(is_terminal=is_terminal, capital=new_capital)
         return reward, new_state
