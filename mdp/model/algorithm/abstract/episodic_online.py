@@ -12,11 +12,11 @@ from mdp.model.algorithm.abstract.episodic import Episodic
 class EpisodicOnline(Episodic, abc.ABC):
     def __init__(self,
                  environment_: Environment,
-                 agent_: Agent,
+                 agent: Agent,
                  algorithm_parameters: common.AlgorithmParameters,
                  policy_parameters: common.PolicyParameters
                  ):
-        super().__init__(environment_, agent_, algorithm_parameters, policy_parameters)
+        super().__init__(environment_, agent, algorithm_parameters, policy_parameters)
 
     def do_episode(self, episode_length_timeout: int):
         self._agent.start_episode()

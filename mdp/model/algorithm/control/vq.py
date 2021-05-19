@@ -11,11 +11,11 @@ from mdp.model.algorithm.abstract.episodic_online_control import EpisodicOnlineC
 class VQ(EpisodicOnlineControl):
     def __init__(self,
                  environment_: Environment,
-                 agent_: Agent,
+                 agent: Agent,
                  algorithm_parameters: common.AlgorithmParameters,
                  policy_parameters: common.PolicyParameters
                  ):
-        super().__init__(environment_, agent_, algorithm_parameters, policy_parameters)
+        super().__init__(environment_, agent, algorithm_parameters, policy_parameters)
         self._alpha_variable: bool = self._algorithm_parameters.alpha_variable
         self._alpha: float = self._algorithm_parameters.alpha
         self._algorithm_type = common.AlgorithmType.VQ

@@ -12,11 +12,11 @@ from mdp.model.algorithm.abstract.dynamic_programming import DynamicProgramming
 class DynamicProgrammingV(DynamicProgramming, abc.ABC):
     def __init__(self,
                  environment_: Environment,
-                 agent_: Agent,
+                 agent: Agent,
                  algorithm_parameters: common.AlgorithmParameters,
                  policy_parameters: common.PolicyParameters
                  ):
-        super().__init__(environment_, agent_, algorithm_parameters, policy_parameters)
+        super().__init__(environment_, agent, algorithm_parameters, policy_parameters)
         self._create_v()
 
     # def _get_expected_return(self, state: State, action: Action) -> float:

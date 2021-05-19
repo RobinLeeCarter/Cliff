@@ -12,11 +12,11 @@ from mdp.model.algorithm.value_function.state_action_variable import StateAction
 class McControlOnPolicy(EpisodicMonteCarlo):
     def __init__(self,
                  environment_: Environment,
-                 agent_: Agent,
+                 agent: Agent,
                  algorithm_parameters: common.AlgorithmParameters,
                  policy_parameters: common.PolicyParameters
                  ):
-        super().__init__(environment_, agent_, algorithm_parameters, policy_parameters)
+        super().__init__(environment_, agent, algorithm_parameters, policy_parameters)
         self._algorithm_type = common.AlgorithmType.MC_CONTROL_ON_POLICY
         self.name = common.algorithm_name[self._algorithm_type]
         self.title = f"{self.name} first_visit={self.first_visit}"

@@ -17,12 +17,12 @@ from mdp.model.algorithm.value_function.state_action_function import StateAction
 class Algorithm(abc.ABC):
     def __init__(self,
                  environment_: Environment,
-                 agent_: Agent,
+                 agent: Agent,
                  algorithm_parameters: common.AlgorithmParameters,
                  policy_parameters: common.PolicyParameters
                  ):
         self._environment: Environment = environment_
-        self._agent: Agent = agent_
+        self._agent: Agent = agent
         self._algorithm_parameters: common.AlgorithmParameters = algorithm_parameters
         self._policy_parameters: common.PolicyParameters = policy_parameters
         self._verbose = self._algorithm_parameters.verbose

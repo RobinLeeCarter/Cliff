@@ -12,11 +12,11 @@ from mdp.model.algorithm.policy_improvement.dp_policy_improvement_v_deterministi
 class DpPolicyIterationV(DpPolicyEvaluationV, DpPolicyImprovementV):
     def __init__(self,
                  environment_: Environment,
-                 agent_: Agent,
+                 agent: Agent,
                  algorithm_parameters: common.AlgorithmParameters,
                  policy_parameters: common.PolicyParameters
                  ):
-        super().__init__(environment_, agent_, algorithm_parameters, policy_parameters)
+        super().__init__(environment_, agent, algorithm_parameters, policy_parameters)
         self._algorithm_type = common.AlgorithmType.DP_POLICY_ITERATION_V
         self.name = common.algorithm_name[self._algorithm_type]
         self.title = f"{self.name} θ={self._theta}"
