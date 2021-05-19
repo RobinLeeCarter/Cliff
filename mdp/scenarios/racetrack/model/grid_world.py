@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import numpy as np
 
+import utils
 from mdp import common
 from mdp.model.environment import grid_world
 
@@ -15,6 +16,7 @@ class GridWorld(grid_world.GridWorld):
         self._end_y: np.ndarray = (self._grid[:, self.max_x] == common.enums.Square.END)
         self.skid_probability: float = environment_parameters_.skid_probability
 
+    @profile
     def get_square(self, position: common.XY) -> common.Square:
         x_inside = (0 <= position.x <= self.max_x)
         y_inside = (0 <= position.y <= self.max_y)
@@ -29,12 +31,12 @@ class GridWorld(grid_world.GridWorld):
             # just whatever the track value is
             value: int = self._grid[self.max_y - position.y, position.x]
             # noinspection PyArgumentList
-            return common.Square(value=value)   # docs say this is fine
+            square: common.Square = common.Square(value)
+            return square   # docs say this is fine
 
     def change_request(self, position: common.XY, velocity: common.XY, acceleration: common.XY)\
             -> tuple[common.XY, common.XY]:
-        # TODO: change for faster version?
-        u: int = common.rng.uniform()
+        u: float = utils.uniform()
         if u > self.skid_probability:   # not skidding
             new_velocity = common.XY(
                 x=velocity.x + acceleration.x,

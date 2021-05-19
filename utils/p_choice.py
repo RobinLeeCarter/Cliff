@@ -43,3 +43,9 @@ def cum_p_choice(cum_p: np.ndarray) -> int:
 def n_choice(n: int) -> int:
     """Return a random int from 0 to n-1"""
     return np.random.randint(n)
+
+
+@njit(cache=True)
+def uniform() -> float:
+    """Return a random float uniformly from 0.0 to 1.0"""
+    return np.random.uniform(0.0, 1.0)
