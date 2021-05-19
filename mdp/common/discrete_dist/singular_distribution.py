@@ -1,7 +1,7 @@
 from __future__ import annotations
 from typing import TypeVar, Generic
 
-from mdp.common.uniform_distribution import UniformDistribution
+from mdp.common.discrete_dist.uniform_distribution import UniformDistribution
 
 T = TypeVar('T')
 

@@ -6,7 +6,7 @@ if TYPE_CHECKING:
     from mdp.scenarios.blackjack.model.environment import Environment
     from mdp.scenarios.blackjack.model.environment_parameters import EnvironmentParameters
 
-from mdp.common import Distribution, UniformDistribution
+from mdp.common import Distribution
 from mdp.model.environment import dynamics
 
 from mdp.scenarios.blackjack.model.state import State
