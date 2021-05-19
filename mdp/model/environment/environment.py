@@ -13,7 +13,6 @@ from mdp import common
 from mdp.model.environment.state import State
 from mdp.model.environment.action import Action
 from mdp.model.environment.dynamics import Dynamics
-from mdp.model.environment.grid_world import GridWorld
 
 S_A = tuple[int, int]
 
@@ -45,12 +44,8 @@ class Environment(ABC):
         self.s_a_distribution: Optional[common.UniformDistribution[S_A]] = None
         self.start_s_distribution: Optional[common.UniformDistribution[int]] = None
 
-        # TODO: move this down as too specific
-        self._square: Optional[int] = None
-
         # None to ensure not used when not used/initialised
         self.dynamics: Optional[Dynamics] = None
-        self.grid_world: Optional[GridWorld] = None
 
     def build(self):
         self._build_states()

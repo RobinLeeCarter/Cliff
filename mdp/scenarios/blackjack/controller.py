@@ -5,6 +5,7 @@ if TYPE_CHECKING:
     from mdp.scenarios.blackjack.model.model import Model
     from mdp.scenarios.blackjack.view.view import View
 
+from mdp import common
 from mdp import controller
 
 
@@ -13,6 +14,10 @@ class Controller(controller.Controller):
         super().__init__()
         self._model: Optional[Model] = self._model
         self._view: Optional[View] = self._view
+
+    def build(self, comparison: common.Comparison):
+        super().build(comparison)
+        self._view.grid_view.set_gridworld(self._model.environment.grid_world)
 
     def output(self):
         for usable_ace in [False, True]:

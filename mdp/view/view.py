@@ -8,7 +8,6 @@ import pygame.freetype
 if TYPE_CHECKING:
     from mdp import common
     from mdp.controller import Controller
-    from mdp.model.environment.grid_world import GridWorld
 
 from mdp.view.graph import Graph
 from mdp.view.graph3d import Graph3D
@@ -18,28 +17,27 @@ from mdp.view.grid_view import GridView
 class View(ABC):
     def __init__(self):
         self._controller: Optional[Controller] = None
+        self._comparison: Optional[common.Comparison] = None
 
         pygame_pass, pygame_fail = pygame.init()
         if pygame_fail > 0:
             raise Exception(f"{pygame_fail} pygame modules failed to load")
 
         self.graph: Optional[Graph] = None
-        self.graph3d = Graph3D()
+        self.graph3d: Optional[Graph3D] = None
         self.grid_view: Optional[GridView] = None
 
     def set_controller(self, controller_: Controller):
         self._controller: Controller = controller_
 
-    def build(self, grid_world_: Optional[GridWorld], comparison: common.Comparison):
+    def build(self, comparison: common.Comparison):
+        self._comparison = comparison
         self.graph: Graph = self._create_graph()
         self.graph3d: Graph3D = self._create_graph3d()
-        if grid_world_:
-            self.grid_view: GridView = self._create_grid_view(comparison.grid_view_parameters)
-            # self.grid_view = grid_view_factory.grid_view_factory(comparison.grid_view_parameters)
-            self.grid_view.set_gridworld(grid_world_)
+        self.grid_view: GridView = self._create_grid_view()
 
-    def _create_grid_view(self, grid_view_parameters: common.GridViewParameters) -> GridView:
-        # return GridView(grid_view_parameters)
+    def _create_grid_view(self) -> GridView:
+        # returns: specific GridView(grid_view_parameters)
         pass
 
     def _create_graph(self) -> Graph:

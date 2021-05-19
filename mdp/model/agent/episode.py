@@ -18,7 +18,6 @@ class Episode:
                  record_first_visits: bool = False):
         self._environment = environment
         self.gamma: float = gamma
-        # TODO: move step_callback up to agent or even to algorithm
         self._step_callback: Optional[Callable[[], bool]] = step_callback
         self.record_first_visits = record_first_visits
 

@@ -6,7 +6,9 @@ import numpy as np
 if TYPE_CHECKING:
     from mdp.scenarios.jacks.model.model import Model
     from mdp.scenarios.jacks.model.action import Action
+    from mdp.scenarios.jacks.view.view import View
 
+from mdp import common
 from mdp import controller
 
 
@@ -14,6 +16,11 @@ class Controller(controller.Controller):
     def __init__(self):
         super().__init__()
         self._model: Optional[Model] = self._model
+        self._view: Optional[View] = self._view
+
+    def build(self, comparison: common.Comparison):
+        super().build(comparison)
+        self._view.grid_view.set_gridworld(self._model.environment.grid_world)
 
     def output(self):
         if self._comparison.graph3d_values.show_graph:
