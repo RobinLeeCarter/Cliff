@@ -60,16 +60,6 @@ class StateActionFunction:
                 self.argmax[s] = new_argmax
                 self.max[s] = self.matrix[s, new_argmax]
 
-    def argmax_over_actions(self, s: int) -> int:
-        """argmax over a of Q breaking ties consistently"""
-        return self.argmax[s]
-        # return int(np.argmax(self.matrix[s, :]))
-
-    def max_over_actions(self, s: int) -> float:
-        """max_over_a Q[state, a]"""
-        return self.max[s]
-        # return np.max(self.matrix[s, :])
-
     def print_coverage_statistics(self):
         q_size = self.matrix.size
         q_non_zero = np.count_nonzero(self.matrix)

@@ -14,10 +14,11 @@ class ComparisonType(enum.IntEnum):
     GAMBLER_VALUE_ITERATION_V = enum.auto()
 
     JACKS_POLICY_EVALUATION_V = enum.auto()
+    JACKS_POLICY_EVALUATION_Q = enum.auto()
     JACKS_POLICY_IMPROVEMENT_V = enum.auto()
     JACKS_POLICY_ITERATION_V = enum.auto()
-    JACKS_VALUE_ITERATION_V = enum.auto()
     JACKS_POLICY_ITERATION_Q = enum.auto()
+    JACKS_VALUE_ITERATION_V = enum.auto()
 
     RACETRACK_EPISODE = enum.auto()
 
@@ -54,7 +55,8 @@ class AlgorithmType(enum.IntEnum):
     DP_POLICY_ITERATION_V = enum.auto()
     DP_VALUE_ITERATION_V = enum.auto()
 
-    DP_POLICY_EVALUATION_Q = enum.auto()
+    DP_POLICY_EVALUATION_Q_DETERMINISTIC = enum.auto()
+    DP_POLICY_EVALUATION_Q_STOCHASTIC = enum.auto()
     DP_POLICY_IMPROVEMENT_Q = enum.auto()
     DP_POLICY_ITERATION_Q = enum.auto()
 

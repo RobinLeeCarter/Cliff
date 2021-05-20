@@ -46,7 +46,7 @@ class DpPolicyImprovementV(DynamicProgrammingV):
         # state_transition_probabilities[s, a, s'] = p(s'|s,a)
         state_transition_probabilities: np.ndarray = self._environment.dynamics.state_transition_probabilities
         # expected_reward_np[s,a] = E[r|s,a] = Σs',r p(s',r|s,a).r
-        expected_reward: np.ndarray = self._environment.dynamics.expected_reward_np
+        expected_reward: np.ndarray = self._environment.dynamics.expected_reward
         # V[s]
         v: np.ndarray = self.V.vector
         gamma = self._agent.gamma

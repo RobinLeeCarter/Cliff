@@ -112,11 +112,11 @@ class Dynamics(dynamics.Dynamics):
         state_count = len(self._environment.states)
         action_count = len(self._environment.actions)
         # (state, action)
-        self.expected_reward_np = np.zeros(shape=(state_count, action_count), dtype=np.float)
+        self.expected_reward = np.zeros(shape=(state_count, action_count), dtype=np.float)
         for s, a in self._environment.compatible_s_a:
             state = self._environment.states[s]
             action = self._environment.actions[a]
-            self.expected_reward_np[s, a] = self._expected_reward[state, action]
+            self.expected_reward[s, a] = self._expected_reward[state, action]
         # for s, state in enumerate(self._environment.states):
         #     for action in self._environment.actions_for_state[state]:
         #         a = self._environment.action_index[action]

@@ -4,13 +4,13 @@ import math
 from typing import TYPE_CHECKING
 
 import numpy as np
-from numba import njit
 
 if TYPE_CHECKING:
     from mdp.model.environment.environment import Environment
     from mdp.model.agent.agent import Agent
     from mdp.model.policy.deterministic import Deterministic
 from mdp import common
+from mdp.model.algorithm import linear_algebra as la
 from mdp.model.algorithm.abstract.dynamic_programming_v import DynamicProgrammingV
 
 
@@ -47,7 +47,7 @@ class DpValueIterationV(DynamicProgrammingV):
         # state_transition_p[s, a, s'] = p(s'|s,a)
         state_transition_p: np.ndarray = self._environment.dynamics.state_transition_probabilities
         # expected_reward_np[s,a] = E[r|s,a] = Σs',r p(s',r|s,a).r
-        expected_reward: np.ndarray = self._environment.dynamics.expected_reward_np
+        expected_reward: np.ndarray = self._environment.dynamics.expected_reward
         # V[s]
         v: np.ndarray = self.V.vector
         gamma = self._agent.gamma
@@ -65,7 +65,7 @@ class DpValueIterationV(DynamicProgrammingV):
             # check for convergence
             # diff = abs(v - prev_v)
             # delta = np.linalg.norm(diff, ord=1)
-            above_theta = l1_norm_above(new_v, v, self._theta)
+            above_theta = la.l1_norm_above(new_v, v, self._theta)
             v = new_v
 
             if self._verbose:
@@ -123,13 +123,13 @@ class DpValueIterationV(DynamicProgrammingV):
     # return expected_return.argmax(axis=1)
 
 
-@njit(cache=True)
-def l1_norm_above(v1: np.ndarray, v2: np.ndarray, theta: float) -> bool:
-    l1_norm: float = 0.0
-    above_theta: bool = False
-    for i in range(len(v1)):
-        l1_norm += abs(v1[i] - v2[i])
-        if l1_norm > theta:
-            above_theta: bool = True
-            break
-    return above_theta
+# @njit(cache=True)
+# def l1_norm_above(v1: np.ndarray, v2: np.ndarray, theta: float) -> bool:
+#     l1_norm: float = 0.0
+#     above_theta: bool = False
+#     for i in range(len(v1)):
+#         l1_norm += abs(v1[i] - v2[i])
+#         if l1_norm > theta:
+#             above_theta: bool = True
+#             break
+#     return above_theta

@@ -9,10 +9,10 @@ if TYPE_CHECKING:
     from mdp.model.policy.deterministic import Deterministic
 from mdp import common
 from mdp.model.algorithm import linear_algebra as la
-from mdp.model.algorithm.abstract.dynamic_programming_v import DynamicProgrammingV
+from mdp.model.algorithm.abstract.dynamic_programming_q import DynamicProgrammingQ
 
 
-class DpPolicyEvaluationVDeterministic(DynamicProgrammingV):
+class DpPolicyEvaluationQDeterministic(DynamicProgrammingQ):
     def __init__(self,
                  environment_: Environment,
                  agent: Agent,
@@ -20,7 +20,7 @@ class DpPolicyEvaluationVDeterministic(DynamicProgrammingV):
                  policy_parameters: common.PolicyParameters
                  ):
         super().__init__(environment_, agent, algorithm_parameters, policy_parameters)
-        self._algorithm_type = common.AlgorithmType.DP_POLICY_EVALUATION_V_DETERMINISTIC
+        self._algorithm_type = common.AlgorithmType.DP_POLICY_EVALUATION_Q_DETERMINISTIC
         self.name = common.algorithm_name[self._algorithm_type]
         self.title = f"{self.name} θ={self._theta}"
 
@@ -53,11 +53,12 @@ class DpPolicyEvaluationVDeterministic(DynamicProgrammingV):
         # state_transition_p[s, a, s'] = p(s'|s,a)
         state_transition_p: np.ndarray = self._environment.dynamics.state_transition_probabilities
 
-        # expected_reward[s,a] = E[r|s,a] = Σs',r p(s',r|s,a).r
+        # expected_reward[s, a] = E[r|s,a] = Σs',r p(s',r|s,a).r
         expected_reward: np.ndarray = self._environment.dynamics.expected_reward
 
-        # V[s]
-        v: np.ndarray = self.V.vector
+        # Q[s, a]
+        q: np.ndarray = self.Q.matrix
+
         gamma = self._agent.gamma
 
         # identity
@@ -66,24 +67,22 @@ class DpPolicyEvaluationVDeterministic(DynamicProgrammingV):
         # state_transition_probability_matrix
         # T[s, s'] = p(s'|s) = Σa π(a|s).p(s'|s,a)
         # noinspection PyPep8Naming
-        T: np.ndarray = state_transition_p[i, policy_vector, :]
-        # T: np.ndarray = self._get_state_transition_probability_matrix(policy_vector, state_transition_p)
-        # r[s] = E[r|s,a=π(a|s)] = Σa π(a|s) Σs',r p(s',r|s,a).r
-        r: np.ndarray = expected_reward[i, policy_vector]
-        # r: np.ndarray = self._get_reward_vector(policy_vector, expected_reward)
+        # T: np.ndarray = state_transition_p[i, policy_vector, :]
 
         # v = converge_v(v, r, T, gamma, self._theta, self._iteration_timeout)
 
         while cont and above_theta and iteration < self._iteration_timeout:
-            # bellman operator v'[s] = Σa π(a|s) Σs',r p(s',r|s,a).(r + γ.v(s'))
-            # v = r + γTv
-            new_v = la.bellman_update_v(v, r, T, gamma)
-            # new_v = r + gamma*np.dot(T, v)
+            # q_policy[s] = q(s, π(s))
+            q_policy: np.ndarray = q[i, policy_vector]
+            # bellman_update_q_deterministic
+            # q(s,a) = Σs',r p(s',r|s,a).r  + γ.Σs' p(s'|s,a) . q(s',π(s'))
+            new_q = expected_reward + gamma * np.dot(state_transition_p, q_policy)
+
             # check for convergence
             # diff = abs(v - prev_v)
             # delta = np.linalg.norm(diff, ord=1)
-            above_theta = la.l1_norm_above(new_v, v, self._theta)
-            v = new_v
+            above_theta = la.l1_norm_above(new_q, q, self._theta)
+            q = new_q
 
             if self._verbose:
                 print(f"iteration = {iteration}")
@@ -100,7 +99,25 @@ class DpPolicyEvaluationVDeterministic(DynamicProgrammingV):
                 # print(f"Policy Evaluation completed. delta={delta:.2f}")
         # print(f"iterations: {iteration - 1}")
 
-        self.V.vector = v
+        self.Q.matrix = q
+
+    # def _bellman_update_q_deterministic(self,
+    #                       expected_reward: np.ndarray,
+    #                       state_transition_p: np.ndarray,
+    #                       q: np.ndarray,
+    #                       policy_vector: np.ndarray,
+    #                       gamma: float
+    #                       ) -> np.ndarray:
+    #     # expected_reward[s, a] = E[r|s,a] = Σs',r p(s',r|s,a).r
+    #     # state_transition_probabilities[s, a, s'] = p(s'|s,a)
+    #     # q[s, a] = Q(s,a)
+    #     # policy_vector[s] = π(s)
+    #
+    #     # q_policy[s] = q(s, π(s))
+    #     q_policy: np.ndarray = q[i, policy_vector]
+    #     new_q = expected_reward + gamma * np.dot(state_transition_p, q_policy)
+    #
+    #     return new_q
 
 
 # noinspection PyPep8Naming

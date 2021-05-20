@@ -10,6 +10,8 @@ from mdp.model.algorithm.abstract.algorithm import Algorithm as BaseAlgorithm
 # from unused.object_style_algorithms.unused_policy_evaluation_dp_q import PolicyEvaluationDpQ
 from mdp.model.algorithm.policy_evaluation.dp_policy_evaluation_v_deterministic import DpPolicyEvaluationVDeterministic
 from mdp.model.algorithm.policy_evaluation.dp_policy_evaluation_v_stochastic import DpPolicyEvaluationVStochastic
+from mdp.model.algorithm.policy_evaluation.dp_policy_evaluation_q_deterministic import DpPolicyEvaluationQDeterministic
+from mdp.model.algorithm.policy_evaluation.dp_policy_evaluation_q_stochastic import DpPolicyEvaluationQStochastic
 from mdp.model.algorithm.policy_evaluation.constant_alpha_mc import ConstantAlphaMC
 from mdp.model.algorithm.policy_evaluation.td_0 import TD0
 from mdp.model.algorithm.policy_evaluation.mc_prediction_q import MCPredictionQ
@@ -38,6 +40,8 @@ def algorithm_factory(environment_: Environment,
                       ) -> BaseAlgorithm:
     a = common.AlgorithmType
     algorithm_lookup: dict[a, Type[BaseAlgorithm]] = {
+        a.DP_POLICY_EVALUATION_Q_DETERMINISTIC: DpPolicyEvaluationQDeterministic,
+        a.DP_POLICY_EVALUATION_Q_STOCHASTIC: DpPolicyEvaluationQStochastic,
         a.DP_POLICY_EVALUATION_V_DETERMINISTIC: DpPolicyEvaluationVDeterministic,
         a.DP_POLICY_EVALUATION_V_STOCHASTIC: DpPolicyEvaluationVStochastic,
         a.DP_POLICY_IMPROVEMENT_V: DpPolicyImprovementV,

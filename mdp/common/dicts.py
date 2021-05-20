@@ -3,12 +3,14 @@ from __future__ import annotations
 from mdp.common.enums import AlgorithmType, PolicyType
 
 algorithm_name: dict[AlgorithmType, str] = {
-    AlgorithmType.DP_POLICY_EVALUATION_V_DETERMINISTIC: 'Policy Evaluation DP (V)',
+    AlgorithmType.DP_POLICY_EVALUATION_V_DETERMINISTIC: 'Policy Evaluation DP (V) Deterministic',
+    AlgorithmType.DP_POLICY_EVALUATION_V_STOCHASTIC: 'Policy Evaluation DP (V) Stochastic',
     AlgorithmType.DP_POLICY_IMPROVEMENT_V: 'Policy Improvement DP (V)',
     AlgorithmType.DP_POLICY_ITERATION_V: 'Policy Iteration DP (V)',
     AlgorithmType.DP_VALUE_ITERATION_V: 'Value Iteration DP (V)',
 
-    AlgorithmType.DP_POLICY_EVALUATION_Q: 'Policy Evaluation DP (Q)',
+    AlgorithmType.DP_POLICY_EVALUATION_Q_DETERMINISTIC: 'Policy Evaluation DP (Q) Deterministic',
+    AlgorithmType.DP_POLICY_EVALUATION_Q_STOCHASTIC: 'Policy Evaluation DP (Q) Stochastic',
     AlgorithmType.DP_POLICY_IMPROVEMENT_Q: 'Policy Improvement DP (Q)',
     AlgorithmType.DP_POLICY_ITERATION_Q: 'Policy Iteration DP (Q)',
 

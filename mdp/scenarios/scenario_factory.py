@@ -6,6 +6,7 @@ if TYPE_CHECKING:
 from mdp import common
 
 from mdp.scenarios.jacks.scenario.jacks_policy_evaluation_v import JacksPolicyEvaluationV
+from mdp.scenarios.jacks.scenario.jacks_policy_evaluation_q import JacksPolicyEvaluationQ
 from mdp.scenarios.jacks.scenario.jacks_policy_improvement_v import JacksPolicyImprovementV
 from mdp.scenarios.jacks.scenario.jacks_policy_iteration_v import JacksPolicyIterationV
 from mdp.scenarios.jacks.scenario.jacks_policy_iteration_q import JacksPolicyIterationQ
@@ -32,6 +33,8 @@ def scenario_factory(comparison_type: common.ComparisonType) -> BaseScenario:
     ct = common.ComparisonType
     if comparison_type == ct.JACKS_POLICY_EVALUATION_V:
         scenario = JacksPolicyEvaluationV()
+    elif comparison_type == ct.JACKS_POLICY_EVALUATION_Q:
+        scenario = JacksPolicyEvaluationQ()
     elif comparison_type == ct.JACKS_POLICY_IMPROVEMENT_V:
         scenario = JacksPolicyImprovementV()
     elif comparison_type == ct.JACKS_POLICY_ITERATION_V:

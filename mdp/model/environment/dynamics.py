@@ -24,7 +24,7 @@ class Dynamics(ABC):
         # state_transition_probabilities[s',s,a] = p(s'|s,a)
         self.state_transition_probabilities: np.ndarray = np.array([], dtype=np.float)
         # expected_reward_np[s,a] = E[r|s,a] = Σs',r p(s',r|s,a).r
-        self.expected_reward_np: np.ndarray = np.array([], dtype=np.float)
+        self.expected_reward: np.ndarray = np.array([], dtype=np.float)
 
     def build(self):
         """build bottom up"""
