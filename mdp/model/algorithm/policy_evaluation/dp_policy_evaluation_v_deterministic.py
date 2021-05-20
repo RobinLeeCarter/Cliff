@@ -12,7 +12,7 @@ from mdp import common
 from mdp.model.algorithm.abstract.dynamic_programming_v import DynamicProgrammingV
 
 
-class DpPolicyEvaluationV(DynamicProgrammingV):
+class DpPolicyEvaluationVDeterministic(DynamicProgrammingV):
     def __init__(self,
                  environment_: Environment,
                  agent: Agent,
@@ -20,7 +20,7 @@ class DpPolicyEvaluationV(DynamicProgrammingV):
                  policy_parameters: common.PolicyParameters
                  ):
         super().__init__(environment_, agent, algorithm_parameters, policy_parameters)
-        self._algorithm_type = common.AlgorithmType.DP_POLICY_EVALUATION_V
+        self._algorithm_type = common.AlgorithmType.DP_POLICY_EVALUATION_V_DETERMINISTIC
         self.name = common.algorithm_name[self._algorithm_type]
         self.title = f"{self.name} θ={self._theta}"
 

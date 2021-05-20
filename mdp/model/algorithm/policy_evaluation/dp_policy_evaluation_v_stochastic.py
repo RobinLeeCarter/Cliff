@@ -18,7 +18,7 @@ class DpPolicyEvaluationVStochastic(DynamicProgrammingV):
                  policy_parameters: common.PolicyParameters
                  ):
         super().__init__(environment_, agent, algorithm_parameters, policy_parameters)
-        self._algorithm_type = common.AlgorithmType.DP_POLICY_EVALUATION_V
+        self._algorithm_type = common.AlgorithmType.DP_POLICY_EVALUATION_V_DETERMINISTIC
         self.name = common.algorithm_name[self._algorithm_type]
         self.title = f"{self.name} θ={self._theta}"
 
@@ -100,8 +100,8 @@ class DpPolicyEvaluationVStochastic(DynamicProgrammingV):
                            policy_matrix: np.ndarray,
                            expected_reward: np.ndarray
                            ) -> np.ndarray:
-        # policy_matrix[s,a] = π(a|s)
-        # expected_reward[s,a] = Σs',r p(s',r|s,a).r
+        # policy_matrix[s, a] = π(a|s)
+        # expected_reward[s, a] = Σs',r p(s',r|s,a).r
         # reward_vector[s] = Σa π(a|s) . Σs',r p(s',r|s,a).r
         # so sum over axis 1 of policy_matrix and axis 1 of expected_reward
 
