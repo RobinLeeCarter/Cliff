@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import numpy as np
-from numba import njit
+from numba import njit, prange
 
 
 # noinspection PyPep8Naming
@@ -32,3 +32,16 @@ def l1_norm_above(a: np.ndarray, b: np.ndarray, theta: float) -> bool:
 #             above_theta: bool = True
 #             break
 #     return above_theta
+
+@njit(cache=True, parallel=True)
+def derive_v_from_q(policy_matrix: np.ndarray, q: np.ndarray) -> np.ndarray:
+    """
+    v[s] = Σa π(a|s) . q(s, a)
+    :returns np.einsum('ij,ij->i', policy_matrix, q_matrix) where policy_matrix is non-zero, to avoid q = -inf
+    """
+    out = np.zeros(shape=policy_matrix.shape[0], dtype=np.float64)
+    for i in prange(policy_matrix.shape[0]):
+        for j in range(policy_matrix.shape[1]):
+            if policy_matrix[i, j] != 0.0:  # also side-stepping q[i, j] = -inf
+                out[i] += policy_matrix[i, j] * q[i, j]
+    return out

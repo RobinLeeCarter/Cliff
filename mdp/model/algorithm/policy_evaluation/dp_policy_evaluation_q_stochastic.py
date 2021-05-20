@@ -37,39 +37,44 @@ class DpPolicyEvaluationQStochastic(DynamicProgrammingQ):
     def _policy_evaluation(self, do_call_back: bool = False):
         iteration: int = 1
         cont: bool = True
-        delta: float = float('inf')
+        # delta: float = float('inf')
+        above_theta: bool = True
 
         if self._verbose:
             print(f"Starting Policy Evaluation PolicyEvaluationDpVNp ...")
 
         # policy_matrix[s, a] = π(a|s)
         policy_matrix: np.ndarray = self._agent.policy.get_probability_matrix()
-        # state_transition_probabilities[s, a, s'] = p(s'|s,a)
-        state_transition_probabilities: np.ndarray = self._environment.dynamics.state_transition_probabilities
+
+        # state_transition_p[s, a, s'] = p(s'|s,a)
+        state_transition_p: np.ndarray = self._environment.dynamics.state_transition_probabilities
+
         # expected_reward[s, a] = E[r|s,a] = Σs',r p(s',r|s,a).r
         expected_reward: np.ndarray = self._environment.dynamics.expected_reward
-        # V[s]
-        v: np.ndarray = self.V.vector
+
+        # Q[s, a]
+        q: np.ndarray = self.Q.matrix
+
         gamma = self._agent.gamma
+        s_a_compatibility = self._environment.s_a_compatibility
 
-        # state_transition_probability_matrix
-        # T[s, s'] = p(s'|s) = Σa π(a|s).p(s'|s,a)
-        # noinspection PyPep8Naming
-        T: np.ndarray = self._get_state_transition_probability_matrix(policy_matrix, state_transition_probabilities)
-        # r[s] = E[r|s,a=π(a|s)] = Σa π(a|s) Σs',r p(s',r|s,a).r
-        r: np.ndarray = self._get_reward_vector(policy_matrix, expected_reward)
+        while cont and above_theta and iteration < self._iteration_timeout:
+            # # v[s'] = Σa' π(a'|s') . q(s', a')
+            v: np.ndarray = la.derive_v_from_q(policy_matrix, q)
+            # bellman_update_q_deterministic
+            # q(s,a) = Σs',r p(s',r|s,a).r  + γ.Σs' p(s'|s,a) Σa' π(a'|s').q(s',a')
+            # q(s,a) = Σs',r p(s',r|s,a).r  + γ.Σs' p(s'|s,a) v(s')
+            new_q = expected_reward + gamma * np.dot(state_transition_p, v)
 
-        while cont and delta >= self._theta and iteration < self._iteration_timeout:
-            prev_v = v.copy()
-            # bellman operator v'[s] = Σa π(a|s) Σs',r p(s',r|s,a).(r + γ.v(s'))
-            # v = r + γTv
-            v = r + gamma*np.dot(T, v)
             # check for convergence
-            diff = v - prev_v
-            delta = np.linalg.norm(diff, ord=1)
+            # diff = abs(v - prev_v)
+            # delta = np.linalg.norm(diff, ord=1)
+            above_theta = la.l1_norm_above(new_q, q, self._theta)
+            q = new_q
 
             if self._verbose:
-                print(f"iteration = {iteration}\tdelta={delta:.2f}")
+                print(f"iteration = {iteration}")
+                # print(f"iteration = {iteration}\tdelta={delta:.2f}")
             if do_call_back:
                 cont = self._step_callback()
             iteration += 1
@@ -78,40 +83,26 @@ class DpPolicyEvaluationQStochastic(DynamicProgrammingQ):
             print(f"Warning: Timed out at {iteration} iterations")
         else:
             if self._verbose:
-                print(f"Policy Evaluation completed. delta={delta:.2f}")
+                print(f"Policy Evaluation completed.")
 
-        self.V.vector = v
+        self.Q.matrix = q
 
-    def _get_state_transition_probability_matrix(self,
-                                                 policy_matrix: np.ndarray,
-                                                 state_transition_probabilities: np.ndarray
-                                                 ) -> np.ndarray:
-        # policy_matrix[s, a] = π(a|s)
-        # state_transition_probabilities[s, a, s'] = p(s'|s,a)
-        # state_transition_probability_matrix[s, s'] = p(s'|s) = Σa π(a|s) . p(s'|s,a)
-        # so sum over axis 1 of policy_matrix and axis 1 of self.state_transition_probabilities
-        state_transition_probability_matrix: np.ndarray = np.einsum(
-            'ij,ijk->ik',
-            policy_matrix,
-            state_transition_probabilities
-        )
-        return state_transition_probability_matrix
-
-    def _get_reward_vector(self,
-                           policy_matrix: np.ndarray,
-                           expected_reward: np.ndarray
-                           ) -> np.ndarray:
-        # policy_matrix[s, a] = π(a|s)
-        # expected_reward[s, a] = Σs',r p(s',r|s,a).r
-        # reward_vector[s] = Σa π(a|s) . Σs',r p(s',r|s,a).r
-        # so sum over axis 1 of policy_matrix and axis 1 of expected_reward
-
-        reward_vector: np.ndarray = np.einsum(
-            'ij,ij->i',
-            policy_matrix,
-            expected_reward
-        )
-        return reward_vector
+    # def _derive_v(self,
+    #               policy_matrix: np.ndarray,
+    #               q: np.ndarray,
+    #               s_a_compatibility: np.ndarray
+    #               ) -> np.ndarray:
+    #     # policy_matrix[s, a] = π(a|s)
+    #     # q[s, a] = q(s,a)
+    #     # v[s'] = Σa' π(a'|s') . q(s', a')
+    #     # so sum over axis 1 of policy_matrix and axis 1 of q
+    #
+    #     v: np.ndarray = np.einsum(
+    #         'ij,ij->i',
+    #         policy_matrix,
+    #         q
+    #     )
+    #     return v
 
     # def _get_reward_vector_looping(self,
     #                                policy_matrix: np.ndarray,
