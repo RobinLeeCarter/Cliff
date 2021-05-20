@@ -56,11 +56,11 @@ class DpPolicyEvaluationQStochastic(DynamicProgrammingQ):
         q: np.ndarray = self.Q.matrix
 
         gamma = self._agent.gamma
-        s_a_compatibility = self._environment.s_a_compatibility
 
         while cont and above_theta and iteration < self._iteration_timeout:
             # # v[s'] = Σa' π(a'|s') . q(s', a')
             v: np.ndarray = la.derive_v_from_q(policy_matrix, q)
+
             # bellman_update_q_deterministic
             # q(s,a) = Σs',r p(s',r|s,a).r  + γ.Σs' p(s'|s,a) Σa' π(a'|s').q(s',a')
             # q(s,a) = Σs',r p(s',r|s,a).r  + γ.Σs' p(s'|s,a) v(s')
@@ -85,7 +85,7 @@ class DpPolicyEvaluationQStochastic(DynamicProgrammingQ):
             if self._verbose:
                 print(f"Policy Evaluation completed.")
 
-        self.Q.matrix = q
+        self.Q.set_matrix(q)
 
     # def _derive_v(self,
     #               policy_matrix: np.ndarray,

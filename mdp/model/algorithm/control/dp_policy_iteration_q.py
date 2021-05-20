@@ -5,11 +5,11 @@ if TYPE_CHECKING:
     from mdp.model.environment.environment import Environment
     from mdp.model.agent.agent import Agent
 from mdp import common
-from mdp.model.algorithm.policy_evaluation.dp_policy_evaluation_v_deterministic import DpPolicyEvaluationVDeterministic
-from mdp.model.algorithm.policy_improvement.dp_policy_improvement_v import DpPolicyImprovementV
+from mdp.model.algorithm.policy_evaluation.dp_policy_evaluation_q_deterministic import DpPolicyEvaluationQDeterministic
+from mdp.model.algorithm.policy_improvement.dp_policy_improvement_q import DpPolicyImprovementQ
 
 
-class DpPolicyIterationV(DpPolicyEvaluationVDeterministic, DpPolicyImprovementV):
+class DpPolicyIterationQ(DpPolicyEvaluationQDeterministic, DpPolicyImprovementQ):
     def __init__(self,
                  environment_: Environment,
                  agent: Agent,
@@ -17,11 +17,10 @@ class DpPolicyIterationV(DpPolicyEvaluationVDeterministic, DpPolicyImprovementV)
                  policy_parameters: common.PolicyParameters
                  ):
         super().__init__(environment_, agent, algorithm_parameters, policy_parameters)
-        self._algorithm_type = common.AlgorithmType.DP_POLICY_ITERATION_V
+        self._algorithm_type = common.AlgorithmType.DP_POLICY_ITERATION_Q
         self.name = common.algorithm_name[self._algorithm_type]
         self.title = f"{self.name} θ={self._theta}"
 
-    # @profile
     def run(self):
         if self._verbose:
             print(f"Starting Policy Iteration ...")

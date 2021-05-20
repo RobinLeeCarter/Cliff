@@ -76,7 +76,7 @@ class DpPolicyEvaluationVStochastic(DynamicProgrammingV):
             v = new_v
 
             if self._verbose:
-                print(f"iteration = {iteration}\tdelta={delta:.2f}")
+                print(f"iteration = {iteration}")
             if do_call_back:
                 cont = self._step_callback()
             iteration += 1
@@ -85,7 +85,7 @@ class DpPolicyEvaluationVStochastic(DynamicProgrammingV):
             print(f"Warning: Timed out at {iteration} iterations")
         else:
             if self._verbose:
-                print(f"Policy Evaluation completed. delta={delta:.2f}")
+                print(f"Policy Evaluation completed.")
 
         self.V.vector = v
 

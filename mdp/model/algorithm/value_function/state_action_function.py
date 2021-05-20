@@ -60,6 +60,11 @@ class StateActionFunction:
                 self.argmax[s] = new_argmax
                 self.max[s] = self.matrix[s, new_argmax]
 
+    def set_matrix(self, new_matrix: np.ndarray):
+        self.matrix = new_matrix
+        self.argmax = self.matrix.argmax(axis=1)
+        self.max = np.max(self.matrix, axis=1)
+
     def print_coverage_statistics(self):
         q_size = self.matrix.size
         q_non_zero = np.count_nonzero(self.matrix)

@@ -6,7 +6,6 @@ import numpy as np
 if TYPE_CHECKING:
     from mdp.model.environment.environment import Environment
     from mdp.model.agent.agent import Agent
-    from mdp.model.policy.deterministic import Deterministic
 from mdp import common
 from mdp.model.algorithm.abstract.dynamic_programming_v import DynamicProgrammingV
 
@@ -37,10 +36,8 @@ class DpPolicyImprovementV(DynamicProgrammingV):
         if self._verbose:
             print(f"Starting Policy Improvement ...")
 
-        # policy_matrix[s, a] = π(a|s)
-        # noinspection PyTypeChecker
-        policy: Deterministic = self._agent.policy
-        policy_vector: np.ndarray = policy.get_policy_vector()
+        # policy_vector[s] = π(s)
+        policy_vector: np.ndarray = self._agent.policy.get_policy_vector()
 
         old_policy_vector: np.ndarray = policy_vector.copy()
         # state_transition_probabilities[s, a, s'] = p(s'|s,a)

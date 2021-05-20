@@ -16,6 +16,7 @@ class ComparisonType(enum.IntEnum):
     JACKS_POLICY_EVALUATION_V = enum.auto()
     JACKS_POLICY_EVALUATION_Q = enum.auto()
     JACKS_POLICY_IMPROVEMENT_V = enum.auto()
+    JACKS_POLICY_IMPROVEMENT_Q = enum.auto()
     JACKS_POLICY_ITERATION_V = enum.auto()
     JACKS_POLICY_ITERATION_Q = enum.auto()
     JACKS_VALUE_ITERATION_V = enum.auto()

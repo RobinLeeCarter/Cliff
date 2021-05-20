@@ -7,11 +7,18 @@ if TYPE_CHECKING:
 from mdp import common
 from mdp.model.algorithm.abstract.algorithm import Algorithm as BaseAlgorithm
 
-# from unused.object_style_algorithms.unused_policy_evaluation_dp_q import PolicyEvaluationDpQ
 from mdp.model.algorithm.policy_evaluation.dp_policy_evaluation_v_deterministic import DpPolicyEvaluationVDeterministic
 from mdp.model.algorithm.policy_evaluation.dp_policy_evaluation_v_stochastic import DpPolicyEvaluationVStochastic
 from mdp.model.algorithm.policy_evaluation.dp_policy_evaluation_q_deterministic import DpPolicyEvaluationQDeterministic
 from mdp.model.algorithm.policy_evaluation.dp_policy_evaluation_q_stochastic import DpPolicyEvaluationQStochastic
+
+from mdp.model.algorithm.policy_improvement.dp_policy_improvement_q import DpPolicyImprovementQ
+from mdp.model.algorithm.policy_improvement.dp_policy_improvement_v import DpPolicyImprovementV
+
+from mdp.model.algorithm.control.dp_policy_iteration_q import DpPolicyIterationQ
+from mdp.model.algorithm.control.dp_policy_iteration_v import DpPolicyIterationV
+from mdp.model.algorithm.control.dp_value_iteration_v_deterministic import DpValueIterationV
+
 from mdp.model.algorithm.policy_evaluation.constant_alpha_mc import ConstantAlphaMC
 from mdp.model.algorithm.policy_evaluation.td_0 import TD0
 from mdp.model.algorithm.policy_evaluation.mc_prediction_q import MCPredictionQ
@@ -25,14 +32,6 @@ from mdp.model.algorithm.control.sarsa import Sarsa
 from mdp.model.algorithm.control.q_learning import QLearning
 
 
-# from unused.object_style_algorithms.unused_policy_improvement_dp_q import PolicyImprovementDpQ
-from mdp.model.algorithm.policy_improvement.dp_policy_improvement_v import DpPolicyImprovementV
-
-# from unused.object_style_algorithms.unused_policy_iteration_dp_q import PolicyIterationDpQ
-from mdp.model.algorithm.control.dp_policy_iteration_v import DpPolicyIterationV
-from mdp.model.algorithm.control.dp_value_iteration_v_deterministic import DpValueIterationV
-
-
 def algorithm_factory(environment_: Environment,
                       agent_: Agent,
                       algorithm_parameters: common.Settings.algorithm_parameters,
@@ -44,13 +43,11 @@ def algorithm_factory(environment_: Environment,
         a.DP_POLICY_EVALUATION_Q_STOCHASTIC: DpPolicyEvaluationQStochastic,
         a.DP_POLICY_EVALUATION_V_DETERMINISTIC: DpPolicyEvaluationVDeterministic,
         a.DP_POLICY_EVALUATION_V_STOCHASTIC: DpPolicyEvaluationVStochastic,
+        a.DP_POLICY_IMPROVEMENT_Q: DpPolicyImprovementQ,
         a.DP_POLICY_IMPROVEMENT_V: DpPolicyImprovementV,
+        a.DP_POLICY_ITERATION_Q: DpPolicyIterationQ,
         a.DP_POLICY_ITERATION_V: DpPolicyIterationV,
         a.DP_VALUE_ITERATION_V: DpValueIterationV,
-
-        # a.POLICY_EVALUATION_DP_Q: PolicyEvaluationDpQ,
-        # a.POLICY_IMPROVEMENT_DP_Q: PolicyImprovementDpQ,
-        # a.POLICY_ITERATION_DP_Q: PolicyIterationDpQ,
 
         a.MC_PREDICTION_V: MCPredictionV,
         a.MC_PREDICTION_Q: MCPredictionQ,

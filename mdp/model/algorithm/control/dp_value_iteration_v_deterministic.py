@@ -8,7 +8,6 @@ import numpy as np
 if TYPE_CHECKING:
     from mdp.model.environment.environment import Environment
     from mdp.model.agent.agent import Agent
-    from mdp.model.policy.deterministic import Deterministic
 from mdp import common
 from mdp.model.algorithm import linear_algebra as la
 from mdp.model.algorithm.abstract.dynamic_programming_v import DynamicProgrammingV
@@ -40,9 +39,6 @@ class DpValueIterationV(DynamicProgrammingV):
 
         if self._verbose:
             print(f"Starting Value Iteration ...")
-
-        # noinspection PyTypeChecker
-        policy: Deterministic = self._agent.policy
 
         # state_transition_p[s, a, s'] = p(s'|s,a)
         state_transition_p: np.ndarray = self._environment.dynamics.state_transition_probabilities
@@ -85,7 +81,7 @@ class DpValueIterationV(DynamicProgrammingV):
         policy_vector = np.argmax(q, axis=1)
 
         # policy_vector = make_policy_greedy_wrt_v(v, expected_reward, state_transition_p, gamma, round_first=True)
-        policy.set_policy_vector(policy_vector)
+        self._agent.policy.set_policy_vector(policy_vector)
 
         if iteration == self._iteration_timeout:
             print(f"Warning: Timed out at {iteration} iterations")
