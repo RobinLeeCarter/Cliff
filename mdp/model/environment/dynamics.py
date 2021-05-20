@@ -2,17 +2,16 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 from abc import ABC, abstractmethod
-import random
 import numpy as np
 
 if TYPE_CHECKING:
-    # from mdp.model.policy.policy import Policy
     from mdp import common
     from mdp.common import Distribution
-    from mdp.model.environment.state import State
     from mdp.model.environment.action import Action
-    from mdp.model.environment.response import Response
     from mdp.model.environment.environment import Environment
+from mdp.model.environment.state import State
+
+Response = tuple[float, State]
 
 
 class Dynamics(ABC):
@@ -25,11 +24,15 @@ class Dynamics(ABC):
         # state_transition_probabilities[s',s,a] = p(s'|s,a)
         self.state_transition_probabilities: np.ndarray = np.array([], dtype=np.float)
         # expected_reward_np[s,a] = E[r|s,a] = Σs',r p(s',r|s,a).r
-        self.expected_reward_np: np.ndarray = np.array([], dtype=np.float)
+        self.expected_reward: np.ndarray = np.array([], dtype=np.float)
 
     def build(self):
         """build bottom up"""
         self.is_built = True
+
+    @abstractmethod
+    def get_start_states(self) -> list[State]:
+        pass
 
     def get_expected_reward(self, state: State, action: Action) -> float:
         """
@@ -88,15 +91,6 @@ class Dynamics(ABC):
         but too many for all states and actions so potentially not useful in practice
         """
         pass
-
-    @abstractmethod
-    def get_a_start_state(self) -> State:
-        pass
-
-    def get_random_state_action(self) -> tuple[State, Action]:
-        state = random.choice([state for state in self._environment.states if not state.is_terminal])
-        action = random.choice([action for action in self._environment.actions_for_state(state)])
-        return state, action
 
     def draw_response(self, state: State, action: Action) -> Response:
         """

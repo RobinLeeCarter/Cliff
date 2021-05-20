@@ -4,10 +4,9 @@ from typing import Optional, TYPE_CHECKING
 
 if TYPE_CHECKING:
     from mdp.scenarios.cliff.controller import Controller
-    # from mdp.model.agent.episode import Episode
     from mdp.scenarios.cliff.model.environment_parameters import EnvironmentParameters
 
-from mdp.model import model
+from mdp.scenarios.position_move.model import model
 from mdp.scenarios.cliff.model.environment import Environment
 
 

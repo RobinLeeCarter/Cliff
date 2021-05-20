@@ -6,7 +6,6 @@ import numpy as np
 
 if TYPE_CHECKING:
     from mdp import common
-    from mdp.model.environment.state import State
     from mdp.model.environment.action import Action
     from mdp.model.environment.environment import Environment
 
@@ -15,43 +14,88 @@ class Policy(abc.ABC):
     def __init__(self, environment_: Environment, policy_parameters: common.PolicyParameters):
         self._environment = environment_
         self._policy_parameters: common.PolicyParameters = policy_parameters
-        # TODO: maintain policy matrix
+        self._store_matrix: bool = self._policy_parameters.store_matrix
+        self._policy_matrix: Optional[np.ndarray] = None
 
-    # def reset(self):
-    #     pass
+    def zero_state_action(self):
+        if self._store_matrix:
+            state_count = len(self._environment.states)
+            action_count = len(self._environment.actions)
+            self._policy_matrix = np.zeros(shape=(state_count, action_count), dtype=float)
 
-    def __getitem__(self, state: State) -> Optional[Action]:
-        if state.is_terminal:
-            return None
+    def __getitem__(self, s: int) -> int:
+        if self._environment.is_terminal[s]:
+            return 0        # None
         else:
-            # this of course will go to the level in inheritance hierarchy set by self
-            return self._get_action(state)
+            return self._get_a(s)
 
-    def __setitem__(self, state: State, action: Action):
+    def __setitem__(self, s: int, a: int):
         raise NotImplementedError(f"__setitem__ not implemented for Policy: {type(self)}")
 
+    def get_action(self, s: int) -> Action:
+        return self._environment.actions[self._get_a(s)]
+
+    def set_action(self, s: int, action: Action):
+        a = self._environment.action_index[action]
+        # print(s, action, a)
+        self.__setitem__(s, a)
+
     @property
-    def linked_policy(self) -> Policy:  # determinstic part if exists else self
+    def linked_policy(self) -> Policy:
+        """Deterministic partner policy if exists else self"""
         return self
 
     @abc.abstractmethod
-    def _get_action(self, state: State) -> Optional[Action]:
+    def _get_a(self, s: int) -> int:
         pass
+
+    def refresh_policy_matrix(self):
+        if self._store_matrix:
+            self._policy_matrix = self._calc_policy_matrix()
+
+    def get_probability(self, s: int, a: int) -> float:
+        if self._store_matrix:
+            return self._policy_matrix[s, a]
+        else:
+            return self._calc_probability(s, a)
+
+    def get_probability_vector(self, s: int) -> np.ndarray:
+        if self._store_matrix:
+            return self._policy_matrix[s, :]
+        else:
+            return self._calc_probability_vector(s)
+
+    def get_probability_matrix(self) -> np.ndarray:
+        if self._store_matrix:
+            return self._policy_matrix
+        else:
+            return self._calc_policy_matrix()
 
     @abc.abstractmethod
-    def get_probability(self, state: State, action: Action) -> float:
+    def _calc_probability(self, s: int, a: int) -> float:
         pass
 
-    def get_policy_matrix(self) -> np.ndarray:
+    def _calc_probability_vector(self, s: int) -> np.ndarray:
+        action_count = len(self._environment.actions)
+        probability_vector = np.zeros(shape=action_count, dtype=float)
+        for a in range(action_count):
+            if self._environment.s_a_compatibility[s, a]:
+                probability_vector[s, a] = self._calc_probability(s, a)
+        return probability_vector
+
+    def _calc_policy_matrix(self) -> np.ndarray:
         state_count = len(self._environment.states)
         action_count = len(self._environment.actions)
         policy_matrix = np.zeros(shape=(state_count, action_count), dtype=float)
-        for s, state in enumerate(self._environment.states):
-            for action in self._environment.actions_for_state(state):
-                a = self._environment.action_index[action]
-                probability = self.get_probability(state, action)
-                policy_matrix[s, a] = probability
+        for s in range(state_count):
+            policy_matrix[s, :] = self.get_probability_vector(s)
+            # for a in range(action_count):
+            #     if self._environment.s_a_compatibility[s, a]:
+            #         policy_matrix[s, a] = self.get_probability(s, a)
         return policy_matrix
 
-    def set_policy_vector(self, policy_matrix: np.ndarray, update_dict: bool = True):
+    def get_policy_vector(self) -> np.ndarray:
+        pass
+
+    def set_policy_vector(self, policy_vector: np.ndarray):
         pass

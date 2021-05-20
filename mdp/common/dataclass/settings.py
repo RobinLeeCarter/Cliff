@@ -3,7 +3,8 @@ import dataclasses
 import copy
 from typing import Optional
 
-from mdp.common import utils, enums
+import utils
+from mdp.common import enums
 from mdp.common.dataclass import algorithm_parameters_, policy_parameters_
 
 

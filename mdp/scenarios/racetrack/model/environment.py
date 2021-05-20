@@ -18,8 +18,8 @@ class Environment(environment.Environment):
         # downcast states and actions so properties can be used freely
         self.states: list[State] = self.states
         self.actions: list[Action] = self.actions
-        self._state: State = self._state
-        self._action: Action = self._action
+        # self._state: State = self._state
+        # self._action: Action = self._action
         self.grid_world: GridWorld = GridWorld(environment_parameters)
         self.dynamics: Dynamics = Dynamics(environment_=self, environment_parameters=environment_parameters)
 
@@ -55,14 +55,21 @@ class Environment(environment.Environment):
                         self.states.append(new_state)
 
     def _build_actions(self):
+        # important this is the default for e-greedy else never terminates
+        new_action: Action = Action(
+            acceleration=common.XY(x=0, y=0)
+        )
+        self.actions.append(new_action)
+
         for ax in range(self._min_ax, self._max_ax + 1):
             for ay in range(self._min_ay, self._max_ay + 1):
-                new_action: Action = Action(
-                    acceleration=common.XY(x=ax, y=ay)
-                )
-                self.actions.append(new_action)
+                if ax != 0 and ay != 0:
+                    new_action: Action = Action(
+                        acceleration=common.XY(x=ax, y=ay)
+                    )
+                    self.actions.append(new_action)
 
-    def is_action_compatible_with_state(self, state: State, action: Action):
+    def _is_action_compatible_with_state(self, state: State, action: Action):
         new_vx = state.velocity.x + action.acceleration.x
         new_vy = state.velocity.y + action.acceleration.y
         if self._min_vx <= new_vx <= self._max_vx and \
@@ -74,6 +81,20 @@ class Environment(environment.Environment):
     # endregion
 
     # region Operation
+    # def initialize_policy(self, policy: Policy, policy_parameters: common.PolicyParameters):
+    #     initial_policy_vector = policy.linked_policy.get_policy_vector()
+    #     policy.set_policy_vector(initial_policy_vector)
+    #     # policy.zero_state_action()
+    #     # for s, state in enumerate(self.states):
+    #     #     # don't add an action to the policy for terminal states at all
+    #     #     if not state.is_terminal:
+    #     #         if state.player_sum >= 20:
+    #     #             hit = False
+    #     #         else:
+    #     #             hit = True
+    #     #         initial_action: Action = Action(hit)
+    #     #         policy.set_action(s, initial_action)
+
     def output_mode(self):
         self.grid_world.skid_probability = 0.0
     # endregion

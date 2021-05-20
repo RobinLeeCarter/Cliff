@@ -1,6 +1,5 @@
 from __future__ import annotations
 from typing import Optional
-import random
 
 import numpy as np
 
@@ -16,7 +15,9 @@ class GridWorld(grid_world.GridWorld):
         super().__init__(environment_parameters)
         self._v_optimal: np.ndarray = environment_parameters.v_optimal
         # noinspection PyTypeChecker
-        self._random_move_choices: list[int] = environment_parameters.random_move_choices
+        random_move_choices: list[int] = environment_parameters.random_move_choices
+        self._random_move_distribution: common.UniformDistribution[int] =\
+            common.UniformDistribution[int](random_move_choices)
 
     def change_request(self, current_position: common.XY, move: Optional[common.XY]) -> common.XY:
         move = self._get_random_movement()
@@ -25,12 +26,11 @@ class GridWorld(grid_world.GridWorld):
             y=current_position.y + move.y
         )
         # project back to grid if outside
-        new_position: common.XY = self._project_back_to_grid(requested_position)
+        new_position: common.XY = self.project_back_to_grid(requested_position)
         return new_position
 
     def _get_random_movement(self) -> common.XY:
-        x_random: int = random.choice(self._random_move_choices)
-        # x_random: int = common.rng.choice(self._random_move_choices)
+        x_random: int = self._random_move_distribution.draw_one()
         return common.XY(
             x=x_random,
             y=0

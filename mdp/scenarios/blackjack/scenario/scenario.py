@@ -40,6 +40,7 @@ class Scenario(scenario.Scenario, ABC):
             grid_view_type=common.GridViewType.BLACKJACK,
             show_result=True,
             show_policy=True,
+            show_q=True,
         )
 
     def _create_model(self) -> Model:

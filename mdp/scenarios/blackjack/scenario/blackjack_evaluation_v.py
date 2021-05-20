@@ -16,7 +16,8 @@ class BlackjackEvaluationV(Scenario):
                         algorithm_type=common.AlgorithmType.MC_PREDICTION_V,
                         first_visit=True,
                         verbose=True
-                    )
+                    ),
+                    training_episodes=50_000,
                 ),
             ],
             graph3d_values=self._graph3d_values,

@@ -1,7 +1,7 @@
 from __future__ import annotations
 import dataclasses
 
-from mdp.common import utils
+import utils
 from mdp.common.dataclass import comparison
 from mdp.scenarios.random_walk.model import environment_parameters
 

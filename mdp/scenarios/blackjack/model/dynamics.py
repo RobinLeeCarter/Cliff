@@ -6,13 +6,10 @@ if TYPE_CHECKING:
     from mdp.scenarios.blackjack.model.environment import Environment
     from mdp.scenarios.blackjack.model.environment_parameters import EnvironmentParameters
 
-import random
-
 from mdp.common import Distribution
 from mdp.model.environment import dynamics
 
 from mdp.scenarios.blackjack.model.state import State
-from mdp.scenarios.blackjack.model.response import Response
 from mdp.scenarios.blackjack.model.enums import Result
 
 
@@ -26,16 +23,17 @@ class Dynamics(dynamics.Dynamics):
         self._card_distribution: Distribution[int] = Distribution()
 
     def build(self):
-        thirteenth: float = 1.0 / 13.0  # 13 cards in a suit
-        self._card_distribution = Distribution({c: thirteenth for c in range(1, self._max_card)})
-        self._card_distribution[self._max_card] = 4.0 * thirteenth     # 10, J, Q or K
-        self._card_distribution.self_check()
+        p: float = 1.0 / 13.0  # 13 cards in a suit
+        self._card_distribution = Distribution[int]({c: p for c in range(1, self._max_card)})
+        self._card_distribution[self._max_card] = 4.0 * p     # 10, J, Q or K
+        self._card_distribution.enable()
+
         super().build()
 
-    def get_a_start_state(self) -> State:
-        return random.choice([state for state in self._environment.states if not state.is_terminal])
+    def get_start_states(self) -> list[State]:
+        return [state for state in self._environment.states if not state.is_terminal]
 
-    def draw_response(self, state: State, action: Action) -> Response:
+    def draw_response(self, state: State, action: Action) -> tuple[float, State]:
         """
         draw a single outcome for a single state and action
         standard call for episodic algorithms
@@ -44,6 +42,8 @@ class Dynamics(dynamics.Dynamics):
         usable_ace: bool = state.usable_ace
         result: Optional[Result] = None
         dealers_sum: int = state.dealers_card
+        reward: float
+        new_state: State
 
         if action.hit:
             card = self._card_distribution.draw_one()
@@ -68,25 +68,29 @@ class Dynamics(dynamics.Dynamics):
             print(f"player_sum = {player_sum}")
             print(f"dealers_sum = {dealers_sum}")
             print(f"result = {result}")
+
         if result is None:
             # continue players turn
-            return Response(
-                reward=0.0,
-                state=State(
-                    is_terminal=False,
-                    player_sum=player_sum,
-                    usable_ace=usable_ace,
-                    dealers_card=state.dealers_card
-                )
+            reward = 0.0
+            new_state = State(
+                is_terminal=False,
+                player_sum=player_sum,
+                usable_ace=usable_ace,
+                dealers_card=state.dealers_card
             )
-        if result == result.LOSE:
-            return Response(reward=-1.0, state=State(is_terminal=True, result=-1))
-        elif result == result.DRAW:
-            return Response(reward=0.0, state=State(is_terminal=True, result=0))
-        elif result == result.WIN:
-            return Response(reward=1.0, state=State(is_terminal=True, result=1))
+        elif result == Result.LOSE:
+            reward = -1.0
+            new_state = State(is_terminal=True, result=-1)
+        elif result == Result.DRAW:
+            reward = 0.0
+            new_state = State(is_terminal=True, result=0)
+        elif result == Result.WIN:
+            reward = 1.0
+            new_state = State(is_terminal=True, result=1)
         else:
             raise NotImplementedError
+
+        return reward, new_state
 
     def dealers_turn(self, starting_card: int) -> int:
         dealers_sum: int

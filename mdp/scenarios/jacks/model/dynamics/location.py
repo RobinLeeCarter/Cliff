@@ -53,12 +53,12 @@ class Location:
         self._demand_distribution = Distribution({c: self._poisson(self._rental_rate, c)
                                                   for c in range(self._max_cars + 1)})
         self._demand_distribution[self._max_cars] += 1.0 - sum(self._demand_distribution.values())
-        self._demand_distribution.self_check()
+        self._demand_distribution.enable()
 
         self._return_distribution = Distribution({c: self._poisson(self._return_rate, c)
                                                   for c in range(self._max_cars + 1)})
         self._return_distribution[self._max_cars] += 1.0 - sum(self._return_distribution.values())
-        self._return_distribution.self_check()
+        self._return_distribution.enable()
 
     def _poisson(self, lambda_: float, n: int) -> float:
         return stats.poisson.pmf(k=n, mu=lambda_)
@@ -80,7 +80,7 @@ class Location:
                 if probability > 0.0:
                     location_outcome = LocationOutcome(ending_cars, cars_rented)
                     outcome_distribution[location_outcome] += probability
-        outcome_distribution.self_check()
+        outcome_distribution.enable()
 
         self.outcome_distributions[starting_cars] = outcome_distribution
 
@@ -105,7 +105,7 @@ class Location:
                 expected_cars_rented += cars_rented_x_probability
                 ending_cars_distribution[outcome.ending_cars] += probability
                 cars_rented_x_probability_by_ending_cars[outcome.ending_cars] += cars_rented_x_probability
-            ending_cars_distribution.self_check()
+            ending_cars_distribution.enable()
 
             expected_cars_rented_by_ending_cars: DictZero[int, float] = DictZero()
             for ending_cars, ending_cars_probability in ending_cars_distribution.items():
@@ -122,7 +122,7 @@ class Location:
     def get_outcome_distribution(self, starting_cars: int) -> Distribution[LocationOutcome]:
         return self.outcome_distributions[starting_cars]
 
-    def get_ending_cars_distribution(self, starting_cars: int) -> dict[int, float]:
+    def get_ending_cars_distribution(self, starting_cars: int) -> Distribution[int]:
         return self.ending_cars_distribution[starting_cars]
 
     def get_transition_probability(self, starting_cars: int, ending_cars: int) -> float:

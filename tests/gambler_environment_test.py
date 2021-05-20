@@ -6,7 +6,6 @@ from mdp import common
 from mdp.scenarios import scenario_factory
 from mdp.scenarios.gambler.model.state import State
 from mdp.scenarios.gambler.model.action import Action
-from mdp.scenarios.gambler.model.response import Response
 from mdp.scenarios.gambler.model.environment import Environment
 
 
@@ -110,15 +109,15 @@ def gambler_test() -> bool:
 
 
 def random_round(environment: Environment):
-    response: Response = environment.start()
-    state: State = response.state
+    s: int = environment.start_s_distribution.draw_one()
+    state: State = environment.states[s]
     # noinspection PyProtectedMember
     max_stake = min(state.capital, environment._max_capital-state.capital)
     stake = random.choice(range(1, max_stake+1))
     action = Action(stake=stake)
     print(state, action)
-    response: Response = environment.from_state_perform_action(state, action)
-    print(response)
+    reward, new_state = environment.from_state_perform_action(state, action)
+    print(reward, new_state)
     print()
 
 

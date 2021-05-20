@@ -5,7 +5,7 @@ if TYPE_CHECKING:
     from mdp.scenarios.windy.model.model import Model
     from mdp.scenarios.windy.view.view import View
 
-from mdp import controller
+from mdp.scenarios.position_move import controller
 
 
 class Controller(controller.Controller):

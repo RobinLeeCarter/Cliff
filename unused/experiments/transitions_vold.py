@@ -3,10 +3,11 @@ from dataclasses import dataclass
 from typing import Optional, Generator
 
 import random
-# import numpy as np
+import numpy as np
 
 from mdp import common
 
+rng: np.random.Generator = np.random.default_rng()
 
 @dataclass(frozen=True)
 class State:
@@ -110,18 +111,11 @@ class StateDistribution:
         #     self[(state, action)] = response_distribution
         # reward_distribution: RewardDistribution
 
-
-
     def get_state_probability(self, new_state: State) -> float:
         return self._distribution[new_state].total_probability
 
     def get_state_expected_rewards(self, new_state: State) -> float:
         return self._distribution[new_state].expected_reward
-
-    def draw(self) -> Response:
-
-
-
 
 
 hello_state = State(name="hello")
@@ -157,7 +151,7 @@ class ResponseDistribution:
     def choose_response(self) -> Response:
         responses = list(self._distribution.keys())
         probabilities = list(self._distribution.values())
-        response_: Response = common.rng.choice(responses, p=probabilities)
+        response_: Response = rng.choice(responses, p=probabilities)
         return response_
 
 
@@ -196,9 +190,9 @@ left_action = Action(name="left")
 right_action = Action(name="right")
 goodbye_state = State(name="goodbye")
 response_1 = Response(goodbye_state, 1.0)
-my_dist[response_1] = 0.1
-print(my_dist)
-print(type(my_dist))
+# my_dist[response_1] = 0.1
+# print(my_dist)
+# print(type(my_dist))
 
 dynamics = Dynamics()
 

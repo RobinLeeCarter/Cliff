@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import numpy as np
 
+import utils
 from mdp import common
 from mdp.model.breakdown import recorder, breakdown
 
@@ -52,5 +53,5 @@ class ReturnByAlpha(breakdown.Breakdown):
             x_min=self.breakdown_parameters.alpha_min,
             x_max=self.breakdown_parameters.alpha_max,
         )
-        common.set_none_to_default(graph_values, self.comparison.graph_values)
+        utils.set_none_to_default(graph_values, self.comparison.graph_values)
         return graph_values

@@ -24,11 +24,13 @@ class Dynamics(dynamics.Dynamics, ABC):
 
         # current values
         self._next_state: Optional[State] = None
-        self._square: Optional[common.Square] = None
+        self._square: Optional[int] = None
 
-    def get_a_start_state(self) -> State:
-        position: common.XY = self._grid_world.get_a_start_position()
-        return State(is_terminal=False, position=position)
+    def get_start_states(self) -> list[State]:
+        start_positions: list[common.XY] = self._grid_world.get_start_positions()
+        start_states = [State(is_terminal=False, position=position)
+                        for position in start_positions]
+        return start_states
 
     def _draw_next_state(self, state: State, action: Action):
         move: Optional[common.XY] = None
