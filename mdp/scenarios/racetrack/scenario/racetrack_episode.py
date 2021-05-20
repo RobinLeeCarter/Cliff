@@ -9,6 +9,8 @@ from mdp.scenarios.racetrack.model import grids
 
 class RacetrackEpisode(Scenario):
     def _create_comparison(self):
+        # TODO: Problem with the first step not learning and crashing?
+        #  Try grids.TRACK_1 for example (3rd position crash)
         return Comparison(
             environment_parameters=EnvironmentParameters(
                 grid=grids.TRACK_3,
