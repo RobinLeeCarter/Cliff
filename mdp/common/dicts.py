@@ -13,6 +13,7 @@ algorithm_name: dict[AlgorithmType, str] = {
     AlgorithmType.DP_POLICY_EVALUATION_Q_STOCHASTIC: 'Policy Evaluation DP (Q) Stochastic',
     AlgorithmType.DP_POLICY_IMPROVEMENT_Q: 'Policy Improvement DP (Q)',
     AlgorithmType.DP_POLICY_ITERATION_Q: 'Policy Iteration DP (Q)',
+    AlgorithmType.DP_VALUE_ITERATION_Q: 'Value Iteration DP (Q)',
 
     AlgorithmType.MC_PREDICTION_V: 'MC Prediction (V)',
     AlgorithmType.MC_PREDICTION_Q: 'MC Prediction (Q)',

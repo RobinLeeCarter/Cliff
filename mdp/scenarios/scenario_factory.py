@@ -5,12 +5,13 @@ if TYPE_CHECKING:
     from mdp.scenario import Scenario as BaseScenario
 from mdp import common
 
-from mdp.scenarios.jacks.scenario.jacks_policy_evaluation_v import JacksPolicyEvaluationV
 from mdp.scenarios.jacks.scenario.jacks_policy_evaluation_q import JacksPolicyEvaluationQ
-from mdp.scenarios.jacks.scenario.jacks_policy_improvement_v import JacksPolicyImprovementV
+from mdp.scenarios.jacks.scenario.jacks_policy_evaluation_v import JacksPolicyEvaluationV
 from mdp.scenarios.jacks.scenario.jacks_policy_improvement_q import JacksPolicyImprovementQ
-from mdp.scenarios.jacks.scenario.jacks_policy_iteration_v import JacksPolicyIterationV
+from mdp.scenarios.jacks.scenario.jacks_policy_improvement_v import JacksPolicyImprovementV
 from mdp.scenarios.jacks.scenario.jacks_policy_iteration_q import JacksPolicyIterationQ
+from mdp.scenarios.jacks.scenario.jacks_policy_iteration_v import JacksPolicyIterationV
+from mdp.scenarios.jacks.scenario.jacks_value_iteration_q import JacksValueIterationQ
 from mdp.scenarios.jacks.scenario.jacks_value_iteration_v import JacksValueIterationV
 
 from mdp.scenarios.blackjack.scenario.blackjack_control_es import BlackjackControlES
@@ -32,18 +33,20 @@ from mdp.scenarios.windy.scenario.windy_timestep import WindyTimestep
 
 def scenario_factory(comparison_type: common.ComparisonType) -> BaseScenario:
     ct = common.ComparisonType
-    if comparison_type == ct.JACKS_POLICY_EVALUATION_V:
-        scenario = JacksPolicyEvaluationV()
-    elif comparison_type == ct.JACKS_POLICY_EVALUATION_Q:
+    if comparison_type == ct.JACKS_POLICY_EVALUATION_Q:
         scenario = JacksPolicyEvaluationQ()
-    elif comparison_type == ct.JACKS_POLICY_IMPROVEMENT_V:
-        scenario = JacksPolicyImprovementV()
+    elif comparison_type == ct.JACKS_POLICY_EVALUATION_V:
+        scenario = JacksPolicyEvaluationV()
     elif comparison_type == ct.JACKS_POLICY_IMPROVEMENT_Q:
         scenario = JacksPolicyImprovementQ()
-    elif comparison_type == ct.JACKS_POLICY_ITERATION_V:
-        scenario = JacksPolicyIterationV()
+    elif comparison_type == ct.JACKS_POLICY_IMPROVEMENT_V:
+        scenario = JacksPolicyImprovementV()
     elif comparison_type == ct.JACKS_POLICY_ITERATION_Q:
         scenario = JacksPolicyIterationQ()
+    elif comparison_type == ct.JACKS_POLICY_ITERATION_V:
+        scenario = JacksPolicyIterationV()
+    elif comparison_type == ct.JACKS_VALUE_ITERATION_Q:
+        scenario = JacksValueIterationQ()
     elif comparison_type == ct.JACKS_VALUE_ITERATION_V:
         scenario = JacksValueIterationV()
 

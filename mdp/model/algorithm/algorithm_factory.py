@@ -14,9 +14,9 @@ from mdp.model.algorithm.policy_evaluation.dp_policy_evaluation_q_stochastic imp
 
 from mdp.model.algorithm.policy_improvement.dp_policy_improvement_q import DpPolicyImprovementQ
 from mdp.model.algorithm.policy_improvement.dp_policy_improvement_v import DpPolicyImprovementV
-
 from mdp.model.algorithm.control.dp_policy_iteration_q import DpPolicyIterationQ
 from mdp.model.algorithm.control.dp_policy_iteration_v import DpPolicyIterationV
+from mdp.model.algorithm.control.dp_value_iteration_q_deterministic import DpValueIterationQ
 from mdp.model.algorithm.control.dp_value_iteration_v_deterministic import DpValueIterationV
 
 from mdp.model.algorithm.policy_evaluation.constant_alpha_mc import ConstantAlphaMC
@@ -47,6 +47,7 @@ def algorithm_factory(environment_: Environment,
         a.DP_POLICY_IMPROVEMENT_V: DpPolicyImprovementV,
         a.DP_POLICY_ITERATION_Q: DpPolicyIterationQ,
         a.DP_POLICY_ITERATION_V: DpPolicyIterationV,
+        a.DP_VALUE_ITERATION_Q: DpValueIterationQ,
         a.DP_VALUE_ITERATION_V: DpValueIterationV,
 
         a.MC_PREDICTION_V: MCPredictionV,
