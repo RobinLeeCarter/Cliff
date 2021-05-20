@@ -4,6 +4,7 @@ from typing import TYPE_CHECKING
 import numpy as np
 
 if TYPE_CHECKING:
+    from mdp.model.algorithm.abstract.algorithm import Algorithm
     from mdp.model.policy.policy import Policy
     from mdp.model.algorithm.value_function import state_function
 
@@ -27,8 +28,8 @@ class Environment(environment.Environment):
         # downcast states and actions so properties can be used freely
         self.states: list[State] = self.states
         self.actions: list[Action] = self.actions
-        self._state: State = self._state
-        self._action: Action = self._action
+        # self._state: State = self._state
+        # self._action: Action = self._action
 
         self._player_sum_min = 11
         self._player_sum_max = 21
@@ -72,7 +73,7 @@ class Environment(environment.Environment):
             )
             self.actions.append(new_action)
 
-    def is_action_compatible_with_state(self, state_: State, action_: Action):
+    def _is_action_compatible_with_state(self, state_: State, action_: Action):
         if state_.player_sum == 21 and action_.hit:
             return False
         else:
@@ -80,17 +81,19 @@ class Environment(environment.Environment):
     # endregion
 
     # region Operation
-    def initialize_policy(self, policy_: Policy, policy_parameters: common.PolicyParameters):
+    def initialize_policy(self, policy: Policy, policy_parameters: common.PolicyParameters):
         hit: bool
-        for state in self.states:
-            # don't add a policy for terminal states at all
+
+        policy.zero_state_action()
+        for s, state in enumerate(self.states):
+            # don't add an action to the policy for terminal states at all
             if not state.is_terminal:
                 if state.player_sum >= 20:
                     hit = False
                 else:
                     hit = True
-                initial_action = Action(hit)
-                policy_[state] = initial_action
+                initial_action: Action = Action(hit)
+                policy.set_action(s, initial_action)
 
     def insert_state_function_into_graph3d_ace(self,
                                                comparison: common.Comparison,
@@ -110,7 +113,8 @@ class Environment(environment.Environment):
                 )
                 x = player_sum - self._player_sum_min
                 y = dealers_card - self._dealers_card_min
-                z_values[y, x] = v[state]
+                s = self.state_index[state]
+                z_values[y, x] = v[s]
                 # print(player_sum, dealer_card, v[state])
 
         g = comparison.graph3d_values
@@ -122,21 +126,39 @@ class Environment(environment.Environment):
         g.y_series = common.Series(title=g.y_label, values=y_values)
         g.z_series = common.Series(title=g.z_label, values=z_values)
 
-    def update_grid_policy_ace(self, policy: Policy, usable_ace: bool):
+    def update_grid_policy_ace(self, policy: Policy, algorithm: Algorithm, usable_ace: bool):
         # policy_: policy.Deterministic
-        for state in self.states:
+        for s, state in enumerate(self.states):
             if not state.is_terminal and state.usable_ace == usable_ace:
                 # dealer_card is x, player_sum is y : following the table in the book
                 x = state.dealers_card - self._dealers_card_min
                 y = state.player_sum - self._player_sum_min
                 position: common.XY = common.XY(x, y)
-                action: Action = policy[state]
+                action: Action = policy.get_action(s)
                 policy_value: int = int(action.hit)
                 # print(position, transfer_1_to_2)
                 self.grid_world.set_policy_value(
                     position=position,
                     policy_value=policy_value,
                 )
+
+                if algorithm.Q:
+                    policy_a: int = policy[s]
+                    is_terminal: bool = self.is_terminal[s]
+                    for a, action in enumerate(self.actions):
+                        if self.s_a_compatibility[s, a]:
+                            is_policy: bool = (not is_terminal and policy_a == a)
+                            if action.hit:
+                                y = 1
+                            else:
+                                y = -1
+                            move: common.XY = common.XY(0, y)
+                            self.grid_world.set_move_q_value(
+                                position=position,
+                                move=move,
+                                q_value=algorithm.Q[s, a],
+                                is_policy=is_policy
+                            )
 
     def is_valued_state(self, state: State) -> bool:
         return not state.is_terminal

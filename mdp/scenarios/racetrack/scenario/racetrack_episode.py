@@ -9,10 +9,13 @@ from mdp.scenarios.racetrack.model import grids
 
 class RacetrackEpisode(Scenario):
     def _create_comparison(self):
+        # TODO: Problem with the first step not learning and crashing?
+        #  Try grids.TRACK_1 for example (3rd position crash)
         return Comparison(
             environment_parameters=EnvironmentParameters(
                 grid=grids.TRACK_3,
                 extra_reward_for_failure=-100.0,  # 0.0 in problem statement
+                skid_probability=0.1,
             ),
             comparison_settings=common.Settings(
                 runs=1,
@@ -38,7 +41,7 @@ class RacetrackEpisode(Scenario):
                 #     alpha=0.5
                 # )),
                 common.Settings(algorithm_parameters=common.AlgorithmParameters(
-                    algorithm_type=common.AlgorithmType.OFF_POLICY_MC_CONTROL,
+                    algorithm_type=common.AlgorithmType.MC_CONTROL_OFF_POLICY,
                     initial_q_value=-40.0,
                 )),
             ],

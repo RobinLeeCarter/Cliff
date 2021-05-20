@@ -6,8 +6,9 @@ import numpy as np
 if TYPE_CHECKING:
     from mdp.scenarios.jacks.model.model import Model
     from mdp.scenarios.jacks.model.action import Action
-    from mdp.model.algorithm.abstract.dynamic_programming_v import DynamicProgrammingV
+    from mdp.scenarios.jacks.view.view import View
 
+from mdp import common
 from mdp import controller
 
 
@@ -15,6 +16,11 @@ class Controller(controller.Controller):
     def __init__(self):
         super().__init__()
         self._model: Optional[Model] = self._model
+        self._view: Optional[View] = self._view
+
+    def build(self, comparison: common.Comparison):
+        super().build(comparison)
+        self._view.grid_view.set_gridworld(self._model.environment.grid_world)
 
     def output(self):
         if self._comparison.graph3d_values.show_graph:
@@ -30,9 +36,9 @@ class Controller(controller.Controller):
 
         policy = self._model.agent.policy
         total_transfers: int = 0
-        for state in self._model.environment.states:
+        for s, state in enumerate(self._model.environment.states):
             if not state.is_terminal:
-                action: Action = policy[state]
+                action: Action = policy.get_action(s)
                 total_transfers += action.transfer_1_to_2
         v: np.ndarray = self._model.agent.algorithm.V.vector
         total_v: float = v.sum()

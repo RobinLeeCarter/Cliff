@@ -6,7 +6,7 @@ if TYPE_CHECKING:
     from mdp.scenarios.random_walk.controller import Controller
     from mdp.scenarios.random_walk.model.environment_parameters import EnvironmentParameters
 
-from mdp.model import model
+from mdp.scenarios.position_move.model import model
 from mdp.scenarios.random_walk.model.environment import Environment
 
 

@@ -35,7 +35,7 @@ class GridView(abc.ABC):
 
         self._background_color: Optional[pygame.Color] = None
         self._policy_color: Optional[pygame.Color] = None
-        self._color_lookup: dict[common.Square, pygame.Color] = {}
+        self._color_lookup: dict[int, pygame.Color] = {}
         self._agent_color: Optional[pygame.Color] = None
         self._agent_move_color: Optional[pygame.Color] = None
         self._prev_color: Optional[pygame.Color] = None
@@ -323,7 +323,7 @@ class GridView(abc.ABC):
 
         if draw_background:
             if not position_color:
-                square: common.Square = self._grid_world.get_square(position)
+                square: int = self._grid_world.get_square(position)
                 position_color: pygame.Color = self._color_lookup[square]
             pygame.draw.rect(surface, position_color, rect)
 

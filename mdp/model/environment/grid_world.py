@@ -12,28 +12,35 @@ class GridWorld:
         self._grid: np.ndarray = environment_parameters.grid
         self.max_y: int = self._grid.shape[0] - 1
         self.max_x: int = self._grid.shape[1] - 1
-        starts: np.ndarray = (self._grid[:, :] == common.Square.START)
-        self._starts_flat: np.ndarray = np.flatnonzero(starts)
-        self._single_start: Optional[common.XY] = None
-        self._test_single_start()
+        # starts: np.ndarray = (self._grid[:, :] == common.Square.START)
+        # self._starts_flat: np.ndarray = np.flatnonzero(starts)
+        # self._single_start: Optional[common.XY] = None
+        # self._test_single_start()
 
         self.output_squares: np.ndarray = np.empty(shape=self._grid.shape, dtype=common.OutputSquare)
         # set_gridworld output_squares so don't have to test for existance.
         for index in np.ndindex(self.output_squares.shape):
             self.output_squares[index] = common.OutputSquare()
 
-    def _test_single_start(self):
-        if len(self._starts_flat) == 1:
-            iy, ix = np.unravel_index(self._starts_flat[0], shape=self._grid.shape)
-            self._single_start = self._position_flip(common.XY(ix, iy))
+    # def _test_single_start(self):
+    #     if len(self._starts_flat) == 1:
+    #         iy, ix = np.unravel_index(self._starts_flat[0], shape=self._grid.shape)
+    #         self._single_start = self._position_flip(common.XY(ix, iy))
 
-    def get_a_start_position(self) -> common.XY:
-        if self._single_start:
-            return self._single_start
-        else:
-            start_flat = common.rng.choice(self._starts_flat)
-            iy, ix = np.unravel_index(start_flat, shape=self._grid.shape)
-            return self._position_flip(common.XY(ix, iy))
+    # def get_a_start_position(self) -> common.XY:
+    #     if self._single_start:
+    #         return self._single_start
+    #     else:
+    #         start_flat = common.rng.choice(self._starts_flat)
+    #         iy, ix = np.unravel_index(start_flat, shape=self._grid.shape)
+    #         return self._position_flip(common.XY(ix, iy))
+
+    def get_start_positions(self) -> list[common.XY]:
+        starts: np.ndarray = (self._grid[:, :] == common.Square.START)
+        starts_flat: np.ndarray = np.flatnonzero(starts)
+        iy, ix = np.unravel_index(starts_flat, shape=self._grid.shape)
+        positions = [self._position_flip(common.XY(ix[i], iy[i])) for i in range(ix.shape[0])]
+        return positions
 
     def is_at_goal(self, position: common.XY) -> bool:
         return self.get_square(position) == common.Square.END
@@ -42,12 +49,15 @@ class GridWorld:
         return 0 <= position.x <= self.max_x and \
                0 <= position.y <= self.max_y
 
-    def get_square(self, position: common.XY) -> common.Square:
-        value: int = self._grid[self.max_y - position.y, position.x]
+    # @profile
+    def get_square(self, position: common.XY) -> int:
+        return self._grid[self.max_y - position.y, position.x]
+        # value: int = self._grid[self.max_y - position.y, position.x]
         # noinspection PyArgumentList
-        return common.Square(value)  # pycharm inspection bug
+        # square: common.Square = common.Square(value)
+        # return square  # pycharm inspection bug
 
-    def _project_back_to_grid(self, requested_position: common.XY) -> common.XY:
+    def project_back_to_grid(self, requested_position: common.XY) -> common.XY:
         x = requested_position.x
         y = requested_position.y
         if x < 0:

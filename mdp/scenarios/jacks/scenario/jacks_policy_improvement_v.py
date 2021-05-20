@@ -11,7 +11,7 @@ class JacksPolicyImprovementV(Scenario):
         comparison_settings.display_every_step = False
 
         graph3d_values = self._graph3d_values
-        graph3d_values.show_graph = False
+        graph3d_values.show_graph = True
 
         grid_view_parameters = self._grid_view_parameters
         grid_view_parameters.show_result = True
@@ -22,7 +22,7 @@ class JacksPolicyImprovementV(Scenario):
             settings_list=[
                 common.Settings(
                     algorithm_parameters=common.AlgorithmParameters(
-                        algorithm_type=common.AlgorithmType.POLICY_IMPROVEMENT_DP_V,
+                        algorithm_type=common.AlgorithmType.DP_POLICY_IMPROVEMENT_V,
                         verbose=True
                     )
                 ),

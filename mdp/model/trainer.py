@@ -7,8 +7,8 @@ if TYPE_CHECKING:
     from mdp.model.agent.episode import Episode
     from mdp.model.breakdown.breakdown import Breakdown
 
-from mdp.model.algorithm.abstract.algorithm_ import Algorithm
-from mdp.model.algorithm.abstract.episodic_ import Episodic
+from mdp.model.algorithm.abstract.algorithm import Algorithm
+from mdp.model.algorithm.abstract.episodic import Episodic
 from mdp.model.algorithm.abstract.dynamic_programming import DynamicProgramming
 
 

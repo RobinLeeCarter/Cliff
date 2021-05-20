@@ -11,7 +11,6 @@ if TYPE_CHECKING:
 from mdp import common
 
 from mdp.scenarios.position_move.model.state import State
-from mdp.scenarios.position_move.model.response import Response
 from mdp.scenarios.position_move.model import dynamics
 
 
@@ -23,7 +22,7 @@ class Dynamics(dynamics.Dynamics):
         self._environment: Environment = self._environment
         self._grid_world: GridWorld = self._environment.grid_world
 
-    def draw_response(self, state: State, action: Action) -> Response:
+    def draw_response(self, state: State, action: Action) -> tuple[float, State]:
         """
         draw a single outcome for a single state and action
         standard call for episodic algorithms
@@ -35,4 +34,4 @@ class Dynamics(dynamics.Dynamics):
         else:
             reward = 0.0
 
-        return Response(reward=reward, state=self._next_state)
+        return reward, self._next_state

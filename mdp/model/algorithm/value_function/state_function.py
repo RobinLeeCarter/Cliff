@@ -4,58 +4,42 @@ from typing import TYPE_CHECKING
 import numpy as np
 
 if TYPE_CHECKING:
-    from mdp.model.environment.state import State
     from mdp.model.environment.environment import Environment
 
 
 class StateFunction:
     def __init__(self,
                  environment_: Environment,
-                 initial_v_value: float
+                 initial_value: float
                  ):
         self._environment: Environment = environment_
-        self._initial_v_value: float = initial_v_value
+        self._initial_value: float = initial_value
 
-        self._values: np.ndarray = np.empty(
+        self.vector: np.ndarray = np.empty(
             shape=len(self._environment.states),
             dtype=float)
 
         self.initialize_values()
 
     def initialize_values(self):
-        for state_ in self._environment.states:
-            state_index = self._environment.state_index[state_]
-            if state_.is_terminal:
-                self._values[state_index] = 0.0
+        for s in range(len(self._environment.states)):
+            if self._environment.is_terminal[s]:
+                self.vector[s] = 0.0
             else:
-                self._values[state_index] = self._initial_v_value
+                self.vector[s] = self._initial_value
 
-    # @profile
-    def __getitem__(self, state: State) -> float:
-        if state.is_terminal:
-            return 0.0
-        else:
-            state_index = self._environment.state_index[state]
-            return self._values[state_index]
+    def __getitem__(self, s: int) -> float:
+        return self.vector[s]
 
-    def __setitem__(self, state: State, value: float):
-        state_index = self._environment.state_index[state]
-        self._values[state_index] = value
-
-    @property
-    def vector(self) -> np.ndarray:
-        return self._values
-
-    @vector.setter
-    def vector(self, v: np.ndarray):
-        self._values = v
+    def __setitem__(self, s: int, value: float):
+        self.vector[s] = value
 
     def print_all_values(self):
-        print("V._values ...")
-        print(self._values)
+        print("V.vector ...")
+        print(self.vector)
 
     def print_coverage_statistics(self):
-        v_size = self._values.size
-        v_non_zero = np.count_nonzero(self._values)
+        v_size = self.vector.size
+        v_non_zero = np.count_nonzero(self.vector)
         percent_non_zero = 100.0 * v_non_zero / v_size
         print(f"v_size: {v_size}\tv_non_zero: {v_non_zero}\tpercent_non_zero: {percent_non_zero:.2f}")

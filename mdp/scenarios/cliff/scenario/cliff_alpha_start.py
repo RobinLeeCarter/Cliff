@@ -14,15 +14,16 @@ class CliffAlphaStart(Scenario):
             comparison_settings=common.Settings(
                 runs=10,
                 training_episodes=100,
+                # display_every_step=True,
             ),
             breakdown_parameters=common.BreakdownAlgorithmByAlpha(
                 breakdown_type=common.BreakdownType.RETURN_BY_ALPHA,
                 alpha_min=0.1,
                 alpha_max=1.0,
-                alpha_step=0.05,
+                alpha_step=0.1,
                 algorithm_type_list=[
                     common.AlgorithmType.EXPECTED_SARSA,
-                    # common.AlgorithmType.VQ,
+                    common.AlgorithmType.VQ,
                     common.AlgorithmType.Q_LEARNING,
                     common.AlgorithmType.SARSA
                 ],
@@ -34,4 +35,8 @@ class CliffAlphaStart(Scenario):
                 y_min=-140,
                 y_max=0,
             ),
+            grid_view_parameters=common.GridViewParameters(
+                show_policy=True,
+                show_q=True
+            )
         )

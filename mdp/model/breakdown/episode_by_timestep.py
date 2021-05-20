@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import numpy as np
 
+import utils
 from mdp import common
 from mdp.model.breakdown import recorder, breakdown
 
@@ -56,5 +57,5 @@ class EpisodeByTimestep(breakdown.Breakdown):
             y_min=0,
             y_max=self.comparison.comparison_settings.training_episodes
         )
-        common.set_none_to_default(graph_values, self.comparison.graph_values)
+        utils.set_none_to_default(graph_values, self.comparison.graph_values)
         return graph_values

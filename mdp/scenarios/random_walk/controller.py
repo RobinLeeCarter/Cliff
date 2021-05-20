@@ -5,7 +5,7 @@ if TYPE_CHECKING:
     from mdp.scenarios.random_walk.model.model import Model
     from mdp.scenarios.random_walk.view.view import View
 
-from mdp import controller
+from mdp.scenarios.position_move import controller
 
 
 class Controller(controller.Controller):

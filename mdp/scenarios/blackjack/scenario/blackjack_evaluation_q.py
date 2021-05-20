@@ -17,6 +17,7 @@ class BlackjackEvaluationQ(Scenario):
                         first_visit=True,
                         verbose=True
                     ),
+                    training_episodes=100_000,
                     derive_v_from_q_as_final_step=True
                 ),
             ],

@@ -11,11 +11,11 @@ from mdp.model.algorithm.abstract.episodic_online import EpisodicOnline
 class TD0(EpisodicOnline):
     def __init__(self,
                  environment_: Environment,
-                 agent_: Agent,
+                 agent: Agent,
                  algorithm_parameters: common.AlgorithmParameters,
                  policy_parameters: common.PolicyParameters
                  ):
-        super().__init__(environment_, agent_, algorithm_parameters, policy_parameters)
+        super().__init__(environment_, agent, algorithm_parameters, policy_parameters)
         self._alpha = self._algorithm_parameters.alpha
         self._algorithm_type = common.AlgorithmType.TD_0
         self.name = common.algorithm_name[self._algorithm_type]
@@ -23,13 +23,10 @@ class TD0(EpisodicOnline):
         self._create_v()
 
     def _do_training_step(self):
-        self._agent.choose_action()
-        self._agent.take_action()
+        ag = self._agent
+        ag.choose_action()
+        ag.take_action()
 
-        prev_state = self._agent.prev_state
-        reward = self._agent.reward
-        state = self._agent.state
-
-        target = reward + self._gamma * self.V[state]
-        delta = target - self.V[prev_state]
-        self.V[prev_state] += self._alpha * delta
+        target = ag.r + self._gamma * self.V[ag.s]
+        delta = target - self.V[ag.prev_s]
+        self.V[ag.prev_s] += self._alpha * delta

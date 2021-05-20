@@ -27,8 +27,8 @@ class Environment(environment.Environment):
         # downcast states and actions so properties can be used freely
         self.states: list[State] = self.states
         self.actions: list[Action] = self.actions
-        self._state: State = self._state
-        self._action: Action = self._action
+        # self._state: State = self._state
+        # self._action: Action = self._action
         self._environment_parameters: EnvironmentParameters = self._environment_parameters
 
         self._max_capital: int = environment_parameters.max_capital
@@ -51,39 +51,44 @@ class Environment(environment.Environment):
             self.states.append(new_state)
 
     def _build_actions(self):
-        for stake in range(1, self._max_capital):
+        for stake in range(0, self._max_capital):       # 0 stake is for graphs for terminal state
             new_action: Action = Action(
                 stake=stake
             )
             self.actions.append(new_action)
 
-    def is_action_compatible_with_state(self, state: State, action: Action):
-        if action.stake <= state.capital and \
-                state.capital + action.stake <= self._max_capital:
-            return True
+    def _is_action_compatible_with_state(self, state: State, action: Action):
+        if state.is_terminal:
+            return action.stake == 0
         else:
-            return False
+            if 0 < action.stake <= state.capital and \
+                    state.capital + action.stake <= self._max_capital:
+                return True
+            else:
+                return False
     # endregion
 
     # region Operation
-    def initialize_policy(self, policy_: Policy, policy_parameters: common.PolicyParameters):
+    def initialize_policy(self, policy: Policy, policy_parameters: common.PolicyParameters):
         hit: bool
-        for state in self.states:
+
+        policy.zero_state_action()
+        for s, state in enumerate(self.states):
             if state.is_terminal:
                 initial_action = Action(stake=0)    # for graphs
             else:
                 initial_action = Action(stake=1)
-            policy_[state] = initial_action
+            policy.set_action(s, initial_action)
 
     def insert_state_function_into_graph2d(self,
                                            comparison: common.Comparison,
                                            v: state_function.StateFunction):
         x_list: list[int] = []
         y_list: list[float] = []
-        for state in self.states:
+        for s, state in enumerate(self.states):
             if not state.is_terminal:
                 x_list.append(state.capital)
-                y_list.append(v[state])
+                y_list.append(v[s])
                 # print(state.capital, v[state])
         x_values = np.array(x_list, dtype=int)
         y_values = np.array(y_list, dtype=float)
@@ -104,15 +109,15 @@ class Environment(environment.Environment):
 
     def insert_policy_into_graph2d(self,
                                    comparison: common.Comparison,
-                                   policy_: Policy):
-        policy_: Deterministic
+                                   policy: Policy):
+        policy: Deterministic
 
         x_list: list[int] = []
         y_list: list[float] = []
-        for state in self.states:
+        for s, state in enumerate(self.states):
             if not state.is_terminal:
                 x_list.append(state.capital)
-                action: Action = policy_[state]
+                action: Action = policy.get_action(s)
                 y_list.append(float(action.stake))
                 # print(state.capital, v[state])
         x_values = np.array(x_list, dtype=int)

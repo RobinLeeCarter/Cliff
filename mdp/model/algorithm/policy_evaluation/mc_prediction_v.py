@@ -12,11 +12,11 @@ from mdp.model.algorithm.value_function.state_variable import StateVariable
 class MCPredictionV(EpisodicMonteCarlo):
     def __init__(self,
                  environment_: Environment,
-                 agent_: Agent,
+                 agent: Agent,
                  algorithm_parameters: common.AlgorithmParameters,
                  policy_parameters: common.PolicyParameters
                  ):
-        super().__init__(environment_, agent_, algorithm_parameters, policy_parameters)
+        super().__init__(environment_, agent, algorithm_parameters, policy_parameters)
         self._algorithm_type = common.AlgorithmType.MC_PREDICTION_V
         self.name = common.algorithm_name[self._algorithm_type]
         self.title = f"{self.name} first_visit={self.first_visit}"
@@ -31,9 +31,9 @@ class MCPredictionV(EpisodicMonteCarlo):
         # only do updates on the time-steps that should be done
         if (self.first_visit and self._episode.is_first_visit[t]) \
                 or not self.first_visit:
-            state = self._episode[t].state
+            s = self._episode[t].s
             target = self._episode.G[t]
-            delta = target - self.V[state]
-            self._N[state] += 1
+            delta = target - self.V[s]
+            self._N[s] += 1
             # V(s) = V(s) + (1/N(s)).(G(t) - V(s))
-            self.V[state] += delta / self._N[state]
+            self.V[s] += delta / self._N[s]

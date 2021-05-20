@@ -7,6 +7,7 @@ from mdp.scenarios.cliff.scenario.comparison import Comparison
 
 class CliffAlphaEnd(Scenario):
     def _create_comparison(self) -> Comparison:
+        # TODO: Make work, once multiprocessing
         return Comparison(
             # environment_parameters=environment_parameters.EnvironmentParameters(
             #     actions_list=common.ActionsList.FOUR_MOVES,
