@@ -44,15 +44,15 @@ class Trainer:
         # process settings
         self.settings = settings
         self._agent.apply_settings(self.settings)
-        algorithm_: Algorithm = self._agent.algorithm
-        if isinstance(algorithm_, Episodic):
-            self._train_episodic(settings, algorithm_)
-        elif isinstance(algorithm_, DynamicProgramming):
-            self._train_dynamic_programming(settings, algorithm_)
+        algorithm: Algorithm = self._agent.algorithm
+        if isinstance(algorithm, Episodic):
+            self._train_episodic(settings, algorithm)
+        elif isinstance(algorithm, DynamicProgramming):
+            self._train_dynamic_programming(settings, algorithm)
         else:
             raise NotImplementedError
-        if settings.derive_v_from_q_as_final_step:
-            algorithm_.derive_v_from_q()
+        if settings.algorithm_parameters.derive_v_from_q_as_final_step:
+            algorithm.derive_v_from_q()
 
     def _train_episodic(self, settings: common.Settings, algorithm_: Episodic):
         # process settings

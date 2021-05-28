@@ -19,6 +19,8 @@ class AlgorithmParameters:
     first_visit: Optional[bool] = None
     exploring_starts: Optional[bool] = None
 
+    derive_v_from_q_as_final_step: Optional[bool] = None
+
     verbose: Optional[bool] = None
 
 
@@ -29,6 +31,7 @@ default: AlgorithmParameters = AlgorithmParameters(
     iteration_timeout=1000,
     first_visit=False,
     exploring_starts=False,
+    derive_v_from_q_as_final_step=False,
     verbose=False,
 )
 
