@@ -78,6 +78,7 @@ class Trainer:
         print(f"{settings.algorithm_title}: {settings.runs} runs")
 
         self.max_timestep = 0
+        # TODO: run this in parallel as an option (separate recorders again that get combined?)
         for self.run_counter in range(1, settings.runs + 1):
             if self._verbose or self.run_counter % settings.run_print_frequency == 0:
                 print(f"run_counter = {self.run_counter}: {settings.training_episodes} episodes")

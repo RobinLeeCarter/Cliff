@@ -33,14 +33,14 @@ class Recorder(Generic[T]):
         else:
             self.tallies[key] = common.Tally(count=1, average=value)
 
-    def add_tally(self, key: T, tally: common.Tally):
-        if key in self.tallies:
-            existing_tally = self.tallies[key]
-            new_count = existing_tally.count + tally.count
-            new_total = existing_tally.count * existing_tally.average + tally.count * tally.average
-            new_average = new_total / new_count
-            existing_tally.count = new_count
-            existing_tally.average = new_average
-        else:
-            self.tallies[key] = copy.copy(tally)
-
+    def add_recorder(self, recorder: Recorder[T]):
+        for key, tally in recorder.tallies.items():
+            if key in self.tallies:
+                existing_tally = self.tallies[key]
+                new_count = existing_tally.count + tally.count
+                new_total = existing_tally.count * existing_tally.average + tally.count * tally.average
+                new_average = new_total / new_count
+                existing_tally.count = new_count
+                existing_tally.average = new_average
+            else:
+                self.tallies[key] = copy.copy(tally)
