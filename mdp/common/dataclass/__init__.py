@@ -1,3 +1,4 @@
+from mdp.common.dataclass.tally import Tally
 from mdp.common.dataclass.xy import XY
 from mdp.common.dataclass.rgba import RGBA
 from mdp.common.dataclass.series import Series

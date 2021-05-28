@@ -6,6 +6,7 @@ if TYPE_CHECKING:
     from mdp.model.agent.agent import Agent
     from mdp.model.agent.episode import Episode
     from mdp.model.breakdown.breakdown import Breakdown
+    from mdp.model.breakdown.recorder import Recorder
 
 from mdp.model.algorithm.abstract.algorithm import Algorithm
 from mdp.model.algorithm.abstract.episodic import Episodic
@@ -33,6 +34,10 @@ class Trainer:
         self.max_timestep: int = 0  # max timestep across all runs
 
     @property
+    def breakdown(self) -> Breakdown:
+        return self._breakdown
+
+    @property
     def episode(self) -> Episode:
         return self._agent.episode
 
@@ -40,7 +45,10 @@ class Trainer:
     def agent(self) -> Agent:
         return self._agent
 
-    def train(self, settings: common.Settings):
+    def disable_step_callback(self):
+        self._model_step_callback = None
+
+    def train(self, settings: common.Settings) -> Recorder:
         # process settings
         self.settings = settings
         self._agent.apply_settings(self.settings)
@@ -53,6 +61,7 @@ class Trainer:
             raise NotImplementedError
         if settings.algorithm_parameters.derive_v_from_q_as_final_step:
             algorithm.derive_v_from_q()
+        return self._breakdown.recorder
 
     def _train_episodic(self, settings: common.Settings, algorithm_: Episodic):
         # process settings

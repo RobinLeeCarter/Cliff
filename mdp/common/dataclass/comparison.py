@@ -17,6 +17,7 @@ class Comparison(abc.ABC):
     # training session settings
     comparison_settings: settings.Settings = dataclasses.field(default_factory=settings.default_factory)
     settings_list: list[settings.Settings] = dataclasses.field(default_factory=list)
+    multi_process_settings_list: bool = True
 
     # breakdown
     breakdown_parameters: breakdown_parameters_.BreakdownParameters = \

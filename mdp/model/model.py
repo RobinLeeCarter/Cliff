@@ -13,7 +13,8 @@ from mdp import common
 # from mdp.scenarios.factory import environment_factory
 from mdp.model.agent.agent import Agent
 from mdp.model.breakdown import breakdown_factory
-from mdp.model.trainer import Trainer
+from mdp.model.trainer.trainer import Trainer
+from mdp.model.trainer.parallel_trainer import ParallelTrainer
 
 
 class Model(ABC):
@@ -25,6 +26,7 @@ class Model(ABC):
         self.agent: Optional[Agent] = None
         self.breakdown: Optional[Breakdown] = None
         self.trainer: Optional[Trainer] = None
+        self.parallel_trainer: Optional[ParallelTrainer] = None
 
         self._cont: bool = True
 
@@ -52,45 +54,27 @@ class Model(ABC):
         )
         if self.breakdown:
             self.breakdown.set_trainer(self.trainer)
-
-        # self.target_policy: policy.DeterministicPolicy = policy.DeterministicPolicy(self.environment)
-        # self.behaviour_policy: policy.EGreedyPolicy = policy.EGreedyPolicy(self.environment,
-        #                                                                    greedy_policy=self.target_policy)
-        # self.behaviour_policy: policy.RandomPolicy = policy.RandomPolicy(self.environment)
-        # self.target_agent = agent.Agent(self.environment, self.target_policy)
-        # self.behaviour_agent = agent.Agent(self.environment, self.behaviour_policy)
+        if self._comparison.multi_process_settings_list:
+            self.parallel_trainer = ParallelTrainer(self.trainer)
 
     @abstractmethod
     def _create_environment(self, environment_parameters: common.EnvironmentParameters) -> Environment:
         pass
 
     def run(self):
-        # must be disabled for multi-processor
-        self.trainer._model_step_callback = None
         timer: utils.Timer = utils.Timer()
         timer.start()
-        # TODO: Add multiprocessing fan-out here - may need separate objects: trainer, agent, environment?
-        # How to get recorder results out?
-        for settings in self._comparison.settings_list:
-            self.trainer.train(settings)
-            if not self._cont:
-                break
-
-        # for i in range(1000):
-        #     # if i > 0:
-        #     #     self.agent.algorithm.initialize()
-        #     #     self.environment.initialize_policy(self.agent.policy,
-        #     #                                        self._comparison.comparison_settings.policy_parameters)
-        #     for settings in self._comparison.settings_list:
-        #         self.trainer.train(settings)
-        #         if not self._cont:
-        #             break
-        #         # timer.lap(name=str(settings.algorithm_title), show=False)
+        if self._comparison.multi_process_settings_list:
+            self.parallel_trainer.train(self._comparison.settings_list)
+        else:
+            for settings in self._comparison.settings_list:
+                self.trainer.train(settings)
+                if not self._cont:
+                    break
         timer.stop()
 
         if self.breakdown:
             self.breakdown.compile()
-        # graph_values: common.GraphValues = self.breakdown.get_graph_values()
 
     # def prep_for_output(self):
     #     self.environment.output_mode()

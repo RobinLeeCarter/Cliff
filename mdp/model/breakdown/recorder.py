@@ -1,18 +1,23 @@
 from __future__ import annotations
 from typing import TypeVar, Generic
-from dataclasses import dataclass
+import copy
 
 import utils
+from mdp import common
 
 T = TypeVar('T')
 
 
 class Recorder(Generic[T]):
     def __init__(self):
-        self.tallies: dict[T, _Tally] = {}
+        self.tallies: dict[T, common.Tally] = {}
 
     def reset(self):
         self.tallies = {}
+
+    @property
+    def key_type(self) -> type:
+        return utils.get_generic_types(self)[0]
 
     def __getitem__(self, key: T) -> float:
         if key in self.tallies:
@@ -26,14 +31,16 @@ class Recorder(Generic[T]):
             tally.count += 1
             tally.average += (1.0 / tally.count) * (value - tally.average)
         else:
-            self.tallies[key] = _Tally(count=1, average=value)
+            self.tallies[key] = common.Tally(count=1, average=value)
 
-    @property
-    def key_type(self) -> type:
-        return utils.get_generic_types(self)[0]
+    def add_tally(self, key: T, tally: common.Tally):
+        if key in self.tallies:
+            existing_tally = self.tallies[key]
+            new_count = existing_tally.count + tally.count
+            new_total = existing_tally.count * existing_tally.average + tally.count * tally.average
+            new_average = new_total / new_count
+            existing_tally.count = new_count
+            existing_tally.average = new_average
+        else:
+            self.tallies[key] = copy.copy(tally)
 
-
-@dataclass
-class _Tally:
-    count: int
-    average: float
