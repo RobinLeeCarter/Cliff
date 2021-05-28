@@ -1,6 +1,7 @@
 from __future__ import annotations
 from typing import Optional, TYPE_CHECKING
 from abc import ABC, abstractmethod
+import pickle
 
 if TYPE_CHECKING:
     from mdp.controller import Controller
@@ -42,6 +43,7 @@ class Model(ABC):
         # create agent (and it will create the algorithm and the policy when it is given Settings)
         self.agent = Agent(self.environment)
 
+        # TODO: pass breakdown parameters not comparison
         self.breakdown: Optional[Breakdown] = breakdown_factory.breakdown_factory(self._comparison)
         self.trainer: Trainer = Trainer(
             agent_=self.agent,
@@ -64,10 +66,19 @@ class Model(ABC):
         pass
 
     def run(self):
+        # must be disabled for multi-processor
+        self.trainer._model_step_callback = None
         timer: utils.Timer = utils.Timer()
         timer.start()
         # TODO: Add multiprocessing fan-out here - may need separate objects: trainer, agent, environment?
         # How to get recorder results out?
+        for _ in range(10000):
+            a = pickle.dumps(self._comparison.settings_list)
+            b = pickle.dumps(self.trainer)
+        timer.stop()
+
+        exit()
+
         for settings in self._comparison.settings_list:
             self.trainer.train(settings)
             if not self._cont:
