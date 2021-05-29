@@ -214,6 +214,12 @@ class Agent:
             # in either possible case here we want to update the target policy
             self._policy[s] = a
 
+    def apply_result(self, settings: common.Settings, result: common.Result):
+        self.apply_settings(settings)
+        self._policy.set_policy_vector(result.policy_vector)
+        self._algorithm.V = result.V
+        self._algorithm.Q = result.Q
+
     def print_statistics(self):
         self._algorithm.print_q_coverage_statistics()
 

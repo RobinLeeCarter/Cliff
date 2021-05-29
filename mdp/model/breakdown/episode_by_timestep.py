@@ -34,15 +34,15 @@ class EpisodeByTimestep(breakdown.Breakdown):
         )
 
         # collate output from self.recorder
-        for settings_ in self.comparison.settings_list:
+        for settings in self.comparison.settings_list:
             values = np.array(
-                [self._recorder[settings_.algorithm_parameters.algorithm_type, timestep]
+                [self._recorder[settings.algorithm_parameters.algorithm_type, timestep]
                  for timestep in timestep_array],
                 dtype=float
             )
             series_ = common.Series(
-                title=settings_.algorithm_title,
-                identifiers={"algorithm_type": settings_.algorithm_parameters.algorithm_type},
+                title=settings.algorithm_title,
+                identifiers={"algorithm_type": settings.algorithm_parameters.algorithm_type},
                 values=values
             )
             self.series_list.append(series_)

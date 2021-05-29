@@ -2,12 +2,10 @@ from __future__ import annotations
 from typing import TYPE_CHECKING, Optional, Callable
 
 if TYPE_CHECKING:
-    from mdp import common
     from mdp.model.agent.agent import Agent
     from mdp.model.agent.episode import Episode
     from mdp.model.breakdown.breakdown import Breakdown
-    from mdp.model.breakdown.recorder import Recorder
-
+from mdp import common
 from mdp.model.algorithm.abstract.algorithm import Algorithm
 from mdp.model.algorithm.abstract.episodic import Episodic
 from mdp.model.algorithm.abstract.dynamic_programming import DynamicProgramming
@@ -33,6 +31,8 @@ class Trainer:
         self.timestep: int = 0  # cumulative across all episodes
         self.max_timestep: int = 0  # max timestep across all runs
 
+        self._result: Optional[common.Result] = None
+
     @property
     def breakdown(self) -> Breakdown:
         return self._breakdown
@@ -48,7 +48,7 @@ class Trainer:
     def disable_step_callback(self):
         self._model_step_callback = None
 
-    def train(self, settings: common.Settings) -> Recorder:
+    def train(self, settings: common.Settings) -> common.Result:
         # process settings
         self.settings = settings
         self._agent.apply_settings(self.settings)
@@ -59,9 +59,12 @@ class Trainer:
             self._train_dynamic_programming(settings, algorithm)
         else:
             raise NotImplementedError
+
         if settings.algorithm_parameters.derive_v_from_q_as_final_step:
             algorithm.derive_v_from_q()
-        return self._breakdown.recorder
+
+        self._build_result()
+        return self._result
 
     def _train_episodic(self, settings: common.Settings, algorithm_: Episodic):
         # process settings
@@ -127,3 +130,16 @@ class Trainer:
     def review_step(self):
         self.timestep += 1
         self._breakdown.review()
+
+    def _build_result(self):
+        self._result = common.Result(algorithm_title=self._agent.algorithm.title)
+
+        rp: common.ResultParameters = self.settings.result_parameters
+        if rp.return_recorder:
+            self._result.recorder = self._breakdown.recorder
+        if rp.return_policy_vector:
+            self._result.policy_vector = self._agent.target_policy.get_policy_vector()
+        if rp.return_v:
+            self._result.V = self._agent.algorithm.V
+        if rp.return_q:
+            self._result.Q = self._agent.algorithm.Q

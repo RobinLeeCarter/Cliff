@@ -5,7 +5,7 @@ from typing import Optional
 
 import utils
 from mdp.common import enums
-from mdp.common.dataclass import algorithm_parameters_, policy_parameters_
+from mdp.common.dataclass import algorithm_parameters_, policy_parameters_, result_parameters_
 
 
 @dataclasses.dataclass
@@ -34,6 +34,9 @@ class Settings:
     review_every_step: Optional[bool] = None
     display_every_step: Optional[bool] = None
 
+    result_parameters: result_parameters_.ResultParameters = \
+        dataclasses.field(default_factory=result_parameters_.none_factory)
+
     # algorithm title will be populated by Trainer later whether it's used or not
     algorithm_title: str = dataclasses.field(default="", init=False)
 
@@ -41,6 +44,7 @@ class Settings:
         utils.set_none_to_default(self, default_)
         utils.set_none_to_default(self.algorithm_parameters, default_.algorithm_parameters)
         utils.set_none_to_default(self.policy_parameters, default_.policy_parameters)
+        utils.set_none_to_default(self.result_parameters, default_.result_parameters)
 
 
 default = Settings(
@@ -57,6 +61,7 @@ default = Settings(
     episode_recording_frequency=1,
     review_every_step=False,
     display_every_step=False,
+    result_parameters=result_parameters_.default
 )
 
 
