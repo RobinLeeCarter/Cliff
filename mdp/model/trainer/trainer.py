@@ -62,8 +62,8 @@ class Trainer:
 
         if settings.algorithm_parameters.derive_v_from_q_as_final_step:
             algorithm.derive_v_from_q()
-
         self._build_result()
+        print("result ready")
         return self._result
 
     def _train_episodic(self, settings: common.Settings, algorithm_: Episodic):
@@ -135,7 +135,7 @@ class Trainer:
         self._result = common.Result(algorithm_title=self._agent.algorithm.title)
 
         rp: common.ResultParameters = self.settings.result_parameters
-        if rp.return_recorder:
+        if rp.return_recorder and self._breakdown:
             self._result.recorder = self._breakdown.recorder
         if rp.return_policy_vector:
             self._result.policy_vector = self._agent.target_policy.get_policy_vector()

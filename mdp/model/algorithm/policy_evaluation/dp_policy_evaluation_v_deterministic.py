@@ -98,6 +98,7 @@ class DpPolicyEvaluationVDeterministic(DynamicProgrammingV):
         # print(f"iterations: {iteration - 1}")
 
         self.V.vector = v
+        # print("V assigned")
 
 
 # noinspection PyPep8Naming
