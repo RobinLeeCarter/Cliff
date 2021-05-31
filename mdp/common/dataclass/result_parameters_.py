@@ -7,15 +7,15 @@ import dataclasses
 class ResultParameters:
     return_recorder: Optional[bool] = None
     return_policy_vector: Optional[bool] = None
-    return_v: Optional[bool] = None
-    return_q: Optional[bool] = None
+    return_v_vector: Optional[bool] = None
+    return_q_matrix: Optional[bool] = None
 
 
 default: ResultParameters = ResultParameters(
     return_recorder=True,
     return_policy_vector=False,
-    return_v=False,
-    return_q=False
+    return_v_vector=False,
+    return_q_matrix=False
 )
 
 

@@ -4,19 +4,23 @@ from typing import TYPE_CHECKING, Optional
 import multiprocessing as mp
 import itertools
 
+from mdp import common
+
 if TYPE_CHECKING:
-    from mdp import common
     from mdp.model.trainer.trainer import Trainer
     from mdp.model.breakdown.recorder import Recorder
 
-# _trainer: Trainer
+_trainer: Trainer
+
+# TODO: decide how to parameterise the different context selections including 'fork_without_pickle'
+#  And this is probably the method you would want to use most for 'interesting'/large problems
 
 
 class ParallelTrainer:
     def __init__(self, trainer: Trainer):
         self._trainer: Trainer = trainer
         self._settings_list: list[common.Settings] = []
-        self._ctx = mp.get_context('spawn')
+        self._ctx = mp.get_context('fork')
         self._results: list[common.Result] = []
         self._recorder: Optional[Recorder] = None
         if self._trainer.breakdown:
@@ -30,16 +34,14 @@ class ParallelTrainer:
         # have final settings return everything (if used in case of V and Q)
         self.alter_settings_to_return_everything(self._settings_list[-1])
 
-        # global _trainer
-        # _trainer = self._trainer
+        global _trainer
+        _trainer = self._trainer
 
-        args = zip(itertools.repeat(self._trainer), self._settings_list)
+        # args = zip(itertools.repeat(self._trainer), self._settings_list)
         with self._ctx.Pool() as pool:
-            # self._results = pool.map(_global_train_wrapper, self._settings_list)
-            # self._results = pool.starmap(_train_wrapper, args)
-            # TODO: locking problem on return of result. Result is ready on time then locks for 13s.
-            self._results = pool.map(_train_wrapper2, args)
-        print("results returned")
+            self._results = pool.map(_global_train_wrapper, self._settings_list)
+            # self._results = pool.starmap(_train_starmap_wrapper, args)
+            # self._results = pool.map(_train_map_wrapper, args)
 
         self._unpack_results()
 
@@ -49,13 +51,12 @@ class ParallelTrainer:
     def alter_settings_to_return_everything(self, settings: common.Settings):
         rp: common.ResultParameters = settings.result_parameters
         rp.return_policy_vector = True
-        rp.return_v = True
-        rp.return_q = True
+        rp.return_v_vector = True
+        rp.return_q_matrix = True
 
     def _unpack_results(self):
         # combine the recorders returned by the processes into a single recorder (self._recorder)
         # self._recorder is already attached to trainer via breakdown so is ready to be used for output
-
         if self._trainer.breakdown:
             unique_recorders = set(result.recorder for result in self._results)
             for recorder in unique_recorders:
@@ -65,14 +66,15 @@ class ParallelTrainer:
             settings.algorithm_title = result.algorithm_title
 
 
-# def _global_train_wrapper(settings: common.Settings) -> Recorder:
-#     return _trainer.train(settings)
+def _global_train_wrapper(settings: common.Settings) -> common.Result:
+    return _trainer.train(settings)
 
 
-def _train_wrapper(trainer: Trainer, settings: common.Settings) -> common.Result:
+def _train_starmap_wrapper(trainer: Trainer, settings: common.Settings) -> common.Result:
     return trainer.train(settings)
 
 
-def _train_wrapper2(train_tuple: tuple[Trainer, common.Settings]) -> common.Result:
+def _train_map_wrapper(train_tuple: tuple[Trainer, common.Settings]) -> common.Result:
+    # created so that chucksize can be set in map
     trainer, settings = train_tuple
     return trainer.train(settings)

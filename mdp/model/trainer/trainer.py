@@ -53,6 +53,7 @@ class Trainer:
         self.settings = settings
         self._agent.apply_settings(self.settings)
         algorithm: Algorithm = self._agent.algorithm
+
         if isinstance(algorithm, Episodic):
             self._train_episodic(settings, algorithm)
         elif isinstance(algorithm, DynamicProgramming):
@@ -62,8 +63,8 @@ class Trainer:
 
         if settings.algorithm_parameters.derive_v_from_q_as_final_step:
             algorithm.derive_v_from_q()
+
         self._build_result()
-        print("result ready")
         return self._result
 
     def _train_episodic(self, settings: common.Settings, algorithm_: Episodic):
@@ -139,7 +140,7 @@ class Trainer:
             self._result.recorder = self._breakdown.recorder
         if rp.return_policy_vector:
             self._result.policy_vector = self._agent.target_policy.get_policy_vector()
-        if rp.return_v:
-            self._result.V = self._agent.algorithm.V
-        if rp.return_q:
-            self._result.Q = self._agent.algorithm.Q
+        if rp.return_v_vector and self._agent.algorithm.V:
+            self._result.v_vector = self._agent.algorithm.V.vector
+        if rp.return_q_matrix and self._agent.algorithm.Q:
+            self._result.q_matrix = self._agent.algorithm.Q.matrix

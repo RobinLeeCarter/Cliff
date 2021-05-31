@@ -217,8 +217,10 @@ class Agent:
     def apply_result(self, settings: common.Settings, result: common.Result):
         self.apply_settings(settings)
         self._policy.set_policy_vector(result.policy_vector)
-        self._algorithm.V = result.V
-        self._algorithm.Q = result.Q
+        if self._algorithm.V:
+            self._algorithm.V.vector = result.v_vector
+        if self._algorithm.Q:
+            self._algorithm.Q.set_matrix(result.q_matrix)
 
     def print_statistics(self):
         self._algorithm.print_q_coverage_statistics()
