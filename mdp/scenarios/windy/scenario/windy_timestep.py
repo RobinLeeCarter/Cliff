@@ -31,6 +31,7 @@ class WindyTimestep(Scenario):
                     )
                 )
             ],
+            settings_list_multiprocessing=common.ParallelContextType.NONE,
             graph_values=common.GraphValues(
                 show_graph=True,
                 has_grid=True,

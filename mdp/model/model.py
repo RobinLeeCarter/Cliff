@@ -54,8 +54,8 @@ class Model(ABC):
         )
         if self.breakdown:
             self.breakdown.set_trainer(self.trainer)
-        if self._comparison.multi_process_settings_list:
-            self.parallel_trainer = ParallelTrainer(self.trainer)
+        if self._comparison.settings_list_multiprocessing != common.ParallelContextType.NONE:
+            self.parallel_trainer = ParallelTrainer(self.trainer, self._comparison.settings_list_multiprocessing)
 
     @abstractmethod
     def _create_environment(self, environment_parameters: common.EnvironmentParameters) -> Environment:
@@ -64,13 +64,15 @@ class Model(ABC):
     def run(self):
         timer: utils.Timer = utils.Timer()
         timer.start()
-        if self._comparison.multi_process_settings_list:
-            self.parallel_trainer.train(self._comparison.settings_list)
-        else:
+        if self._comparison.settings_list_multiprocessing == common.ParallelContextType.NONE:
+            # train in serial
             for settings in self._comparison.settings_list:
                 self.trainer.train(settings)
                 if not self._cont:
                     break
+        else:
+            # train in parallel
+            self.parallel_trainer.train(self._comparison.settings_list)
         timer.stop()
 
         if self.breakdown:

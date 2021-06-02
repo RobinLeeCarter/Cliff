@@ -2,13 +2,13 @@ from __future__ import annotations
 import dataclasses
 
 import utils
-from mdp.common.dataclass import comparison
+from mdp import common
 
 from mdp.scenarios.cliff.model import environment_parameters
 
 
 @dataclasses.dataclass
-class Comparison(comparison.Comparison):
+class Comparison(common.Comparison):
     # just what is different
     environment_parameters: environment_parameters.EnvironmentParameters = \
         dataclasses.field(default_factory=environment_parameters.default_factory)

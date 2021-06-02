@@ -67,6 +67,7 @@ class RandomWalkEpisode(Scenario):
                     )
                 ),
             ],
+            settings_list_multiprocessing=common.ParallelContextType.SPAWN,
             graph_values=common.GraphValues(
                 show_graph=True,
                 has_grid=True,
