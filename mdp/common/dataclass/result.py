@@ -10,8 +10,9 @@ if TYPE_CHECKING:
 
 @dataclasses.dataclass
 class Result:
-    algorithm_title: str
+    algorithm_title: Optional[str] = None
     recorder: Optional[Recorder] = None
     policy_vector: Optional[np.ndarray] = None
     v_vector: Optional[np.ndarray] = None
     q_matrix: Optional[np.ndarray] = None
+    cum_timestep: Optional[int] = None

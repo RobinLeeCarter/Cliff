@@ -13,14 +13,19 @@ if TYPE_CHECKING:
 _trainer: Trainer
 
 
-class ParallelTrainer:
-    def __init__(self, trainer: Trainer, parallel_context_type: common.ParallelContextType):
+class ParallelRunner:
+    def __init__(self, trainer: Trainer):
         self._trainer: Trainer = trainer
-        self._parallel_context_type = parallel_context_type
         # must be disabled for multi-processor
         self._trainer.disable_step_callback()
 
-        self._settings_list: list[common.Settings] = []
+        settings = self._trainer.settings
+        settings.result_parameters.return_cum_timestep = True
+        self._parallel_context_type = settings.runs_multiprocessing
+        self._runs = settings.runs
+        # build a settings list for each run so that the final run can return everything
+        self._settings_list: list[common.Settings] = list(itertools.repeat(settings, self._runs))
+
         self._results: list[common.Result] = []
         self._recorder: Optional[Recorder] = None
         if self._trainer.breakdown:
@@ -33,9 +38,7 @@ class ParallelTrainer:
             global _trainer
             _trainer = self._trainer
 
-    def train(self, settings_list: list[common.Settings]):
-        self._settings_list = settings_list
-
+    def do_runs(self):
         # have final settings return everything (if used in case of V and Q)
         self.alter_settings_to_return_everything(self._settings_list[-1])
 
@@ -43,7 +46,7 @@ class ParallelTrainer:
             if self._use_global_trainer:
                 self._results = pool.map(_global_train_wrapper, self._settings_list)
             else:
-                args = zip(itertools.repeat(self._trainer), self._settings_list)
+                args = zip(itertools.repeat(self._trainer), self._settings_list, range(1, self._runs + 1))
                 # self._results = pool.map(_train_map_wrapper, args)
                 self._results = pool.starmap(_train_starmap_wrapper, args)
 
@@ -70,12 +73,12 @@ class ParallelTrainer:
             settings.algorithm_title = result.algorithm_title
 
 
-def _global_train_wrapper(settings: common.Settings) -> common.Result:
-    return _trainer.train(settings)
+def _global_train_wrapper(settings: common.Settings, run_counter: int) -> common.Result:
+    return _trainer.do_run(settings, run_counter)
 
 
-def _train_starmap_wrapper(trainer: Trainer, settings: common.Settings) -> common.Result:
-    return trainer.train(settings)
+def _train_starmap_wrapper(trainer: Trainer, settings: common.Settings, run_counter: int) -> common.Result:
+    return trainer.do_run(settings, run_counter)
 
 
 # def _train_map_wrapper(train_tuple: tuple[Trainer, common.Settings]) -> common.Result:

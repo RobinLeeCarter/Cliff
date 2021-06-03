@@ -24,6 +24,7 @@ class Settings:
 
     runs: Optional[int] = None
     run_print_frequency: Optional[int] = None
+    runs_multiprocessing: Optional[enums.ParallelContextType] = None
 
     training_episodes: Optional[int] = None
     episode_length_timeout: Optional[int] = None
@@ -54,6 +55,7 @@ default = Settings(
     dual_policy_relationship=enums.DualPolicyRelationship.SINGLE_POLICY,
     runs=10,
     run_print_frequency=10,
+    runs_multiprocessing=enums.ParallelContextType.NONE,
     training_episodes=100,
     episode_length_timeout=10000,
     episode_print_frequency=1000,

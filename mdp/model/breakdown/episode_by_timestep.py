@@ -20,15 +20,15 @@ class EpisodeByTimestep(Breakdown):
     def record(self):
         trainer = self._trainer
         algorithm_type = trainer.settings.algorithm_parameters.algorithm_type
-        timestep = trainer.timestep
+        timestep = trainer.cum_timestep
         episode_counter = trainer.episode_counter
         self._recorder[algorithm_type, timestep] = episode_counter
 
     def compile(self):
         # return max_timestep or get from elsewhere
-        if self._trainer.max_timestep > 0:
+        if self._trainer.max_cum_timestep > 0:
             # serial case
-            self._max_timestep = self._trainer.max_timestep
+            self._max_timestep = self._trainer.max_cum_timestep
         else:
             # parallel case max_timestep not returned so deduce it from recoder
             self._max_timestep = max(t[1] for t in self._recorder.tallies.keys())
