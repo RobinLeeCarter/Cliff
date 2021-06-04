@@ -96,6 +96,7 @@ class Agent:
             agent_=self,
             algorithm_parameters=settings.algorithm_parameters,
             policy_parameters=settings.policy_parameters)
+        settings.algorithm_title = self._algorithm.title
         self._episode_length_timeout = settings.episode_length_timeout
         if isinstance(self._algorithm, Episodic):
             self._record_first_visits = self._algorithm.first_visit

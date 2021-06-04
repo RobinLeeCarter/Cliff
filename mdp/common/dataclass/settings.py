@@ -23,8 +23,8 @@ class Settings:
     dual_policy_relationship: Optional[enums.DualPolicyRelationship] = None
 
     runs: Optional[int] = None
-    run_print_frequency: Optional[int] = None
     runs_multiprocessing: Optional[enums.ParallelContextType] = None
+    run_print_frequency: Optional[int] = None
 
     training_episodes: Optional[int] = None
     episode_length_timeout: Optional[int] = None

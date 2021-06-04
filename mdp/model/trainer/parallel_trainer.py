@@ -71,11 +71,11 @@ class ParallelTrainer:
 
 
 def _global_train_wrapper(settings: common.Settings) -> common.Result:
-    return _trainer.train(settings)
+    return _trainer.train(settings, return_result=True)
 
 
 def _train_starmap_wrapper(trainer: Trainer, settings: common.Settings) -> common.Result:
-    return trainer.train(settings)
+    return trainer.train(settings, return_result=True)
 
 
 # def _train_map_wrapper(train_tuple: tuple[Trainer, common.Settings]) -> common.Result:
