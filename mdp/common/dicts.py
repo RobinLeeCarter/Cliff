@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from mdp.common.enums import AlgorithmType, PolicyType
+from mdp.common.enums import AlgorithmType, PolicyType, ParallelContextType
 
 algorithm_name: dict[AlgorithmType, str] = {
     AlgorithmType.DP_POLICY_EVALUATION_V_DETERMINISTIC: 'Policy Evaluation DP (V) Deterministic',
@@ -34,4 +34,11 @@ policy_name: dict[PolicyType, str] = {
     PolicyType.E_GREEDY: 'ε-greedy',
     PolicyType.NONE: 'No policy',
     PolicyType.RANDOM: 'Random'
+}
+
+parallel_context_str: dict[ParallelContextType, str] = {
+    ParallelContextType.FORK_GLOBAL: 'fork',
+    ParallelContextType.FORK_PICKLE: 'fork',
+    ParallelContextType.SPAWN: 'spawn',
+    ParallelContextType.FORK_SERVER: 'forkserver'
 }

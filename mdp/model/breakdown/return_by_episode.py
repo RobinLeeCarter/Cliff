@@ -39,18 +39,18 @@ class ReturnByEpisode(breakdown.Breakdown):
         )
 
         # collate output from self.recorder
-        for settings_ in self.comparison.settings_list:
+        for settings in self.comparison.settings_list:
             values = np.array(
-                [self._recorder[settings_.algorithm_parameters, episode_counter]
+                [self._recorder[settings.algorithm_parameters, episode_counter]
                  for episode_counter in episode_array],
                 dtype=float
             )
-            series_ = common.Series(
-                title=settings_.algorithm_title,
-                identifiers={"algorithm_type": settings_.algorithm_parameters.algorithm_type},
+            series = common.Series(
+                title=settings.algorithm_title,
+                identifiers={"algorithm_type": settings.algorithm_parameters.algorithm_type},
                 values=values
             )
-            self.series_list.append(series_)
+            self.series_list.append(series)
 
     def get_graph_values(self) -> common.GraphValues:
         graph_values: common.GraphValues = common.GraphValues(

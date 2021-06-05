@@ -18,7 +18,7 @@ class GamblerValueIterationV(Scenario):
                 algorithm_parameters=common.AlgorithmParameters(
                     theta=0.00001   # accuracy of policy_evaluation
                 ),
-                display_every_step=False
+                display_every_step=False,
             ),
             settings_list=[
                 common.Settings(

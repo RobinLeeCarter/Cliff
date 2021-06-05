@@ -32,9 +32,12 @@ class Algorithm(abc.ABC):
         self._gamma: float = self._agent.gamma
         self.V: Optional[StateFunction] = None
         self.Q: Optional[StateActionFunction] = None
+        if self._algorithm_parameters.derive_v_from_q_as_final_step:
+            self._create_v()
 
     def _create_v(self):
-        self.V = StateFunction(self._environment, self._algorithm_parameters.initial_v_value)
+        if not self.V:  # could have been already created in __init__
+            self.V = StateFunction(self._environment, self._algorithm_parameters.initial_v_value)
 
     def _create_q(self):
         self.Q = StateActionFunction(self._environment, self._algorithm_parameters.initial_q_value)
@@ -69,9 +72,6 @@ class Algorithm(abc.ABC):
     def derive_v_from_q(self, policy: Optional[Policy] = None):
         if not policy:
             policy = self._agent.policy
-
-        if not self.V:
-            self._create_v()
 
         # π(a|s)
         policy_matrix = policy.get_probability_matrix()
