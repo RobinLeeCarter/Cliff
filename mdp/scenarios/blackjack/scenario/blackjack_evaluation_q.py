@@ -15,10 +15,10 @@ class BlackjackEvaluationQ(Scenario):
                     algorithm_parameters=common.AlgorithmParameters(
                         algorithm_type=common.AlgorithmType.MC_PREDICTION_Q,
                         first_visit=True,
-                        verbose=True
+                        verbose=True,
+                        derive_v_from_q_as_final_step=True
                     ),
                     training_episodes=100_000,
-                    derive_v_from_q_as_final_step=True
                 ),
             ],
             graph3d_values=self._graph3d_values,

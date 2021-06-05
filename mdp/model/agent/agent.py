@@ -96,6 +96,7 @@ class Agent:
             agent_=self,
             algorithm_parameters=settings.algorithm_parameters,
             policy_parameters=settings.policy_parameters)
+        settings.algorithm_title = self._algorithm.title
         self._episode_length_timeout = settings.episode_length_timeout
         if isinstance(self._algorithm, Episodic):
             self._record_first_visits = self._algorithm.first_visit
@@ -213,6 +214,13 @@ class Agent:
         else:
             # in either possible case here we want to update the target policy
             self._policy[s] = a
+
+    def apply_result(self, result: common.Result):
+        self._policy.set_policy_vector(result.policy_vector)
+        if self._algorithm.V:
+            self._algorithm.V.vector = result.v_vector
+        if self._algorithm.Q:
+            self._algorithm.Q.set_matrix(result.q_matrix)
 
     def print_statistics(self):
         self._algorithm.print_q_coverage_statistics()

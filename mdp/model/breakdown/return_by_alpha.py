@@ -4,10 +4,11 @@ import numpy as np
 
 import utils
 from mdp import common
-from mdp.model.breakdown import recorder, breakdown
+from mdp.model.breakdown.recorder import Recorder
+from mdp.model.breakdown.breakdown import Breakdown
 
 
-class ReturnByAlpha(breakdown.Breakdown):
+class ReturnByAlpha(Breakdown):
     def __init__(self, comparison: common.Comparison):
         super().__init__(comparison)
         assert isinstance(self.comparison.breakdown_parameters, common.BreakdownAlgorithmByAlpha)
@@ -15,7 +16,7 @@ class ReturnByAlpha(breakdown.Breakdown):
 
         # AlgorithmType, alpha
         recorder_key_type = tuple[common.AlgorithmType, float]
-        self._recorder = recorder.Recorder[recorder_key_type]()
+        self._recorder = Recorder[recorder_key_type]()
         self._y_label = "Average Return"
 
     def record(self):

@@ -5,7 +5,7 @@ import dataclasses
 from mdp.common import enums
 
 
-@dataclasses.dataclass(eq=False)    # sacrifice so it can be hashed (using id is bad if eq is defined)
+@dataclasses.dataclass(unsafe_hash=True)    # needed for multiprocessing where results may differ, potentially pickle
 class AlgorithmParameters:
     algorithm_type: Optional[enums.AlgorithmType] = None
     alpha: Optional[float] = None
@@ -19,6 +19,8 @@ class AlgorithmParameters:
     first_visit: Optional[bool] = None
     exploring_starts: Optional[bool] = None
 
+    derive_v_from_q_as_final_step: Optional[bool] = None
+
     verbose: Optional[bool] = None
 
 
@@ -29,6 +31,7 @@ default: AlgorithmParameters = AlgorithmParameters(
     iteration_timeout=1000,
     first_visit=False,
     exploring_starts=False,
+    derive_v_from_q_as_final_step=False,
     verbose=False,
 )
 

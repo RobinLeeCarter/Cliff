@@ -12,6 +12,7 @@ class RandomWalkEpisode(Scenario):
             # environment_parameters=self._environment_parameters,
             comparison_settings=common.Settings(
                 runs=100,
+                # runs_multiprocessing=common.ParallelContextType.FORK_GLOBAL,
                 training_episodes=100,
                 policy_parameters=common.PolicyParameters(
                     policy_type=common.PolicyType.NONE
@@ -67,6 +68,7 @@ class RandomWalkEpisode(Scenario):
                     )
                 ),
             ],
+            settings_list_multiprocessing=common.ParallelContextType.FORK_GLOBAL,
             graph_values=common.GraphValues(
                 show_graph=True,
                 has_grid=True,

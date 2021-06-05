@@ -37,12 +37,6 @@ class Square:       # (enum.IntEnum) no longer an enum for 3x-30x speed improvem
     END: int = 3
 
 
-class UserEvent(enum.IntEnum):
-    NONE = enum.auto()
-    QUIT = enum.auto()
-    SPACE = enum.auto()
-
-
 class BreakdownType(enum.IntEnum):
     EPISODE_BY_TIMESTEP = enum.auto()
     RETURN_BY_EPISODE = enum.auto()
@@ -113,3 +107,17 @@ class GridViewType(enum.IntEnum):
     POSITION_MOVE = enum.auto()
     JACKS = enum.auto()
     BLACKJACK = enum.auto()
+
+
+class UserEvent(enum.IntEnum):
+    NONE = enum.auto()
+    QUIT = enum.auto()
+    SPACE = enum.auto()
+
+
+class ParallelContextType(enum.IntEnum):
+    NONE = enum.auto()
+    FORK_GLOBAL = enum.auto()
+    FORK_PICKLE = enum.auto()
+    SPAWN = enum.auto()
+    FORK_SERVER = enum.auto()

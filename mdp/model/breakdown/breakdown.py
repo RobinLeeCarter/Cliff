@@ -5,8 +5,8 @@ from typing import Optional, TYPE_CHECKING
 
 if TYPE_CHECKING:
     from mdp import common
-    from mdp.model.breakdown import recorder
-    from mdp.model import trainer
+    from mdp.model.breakdown.recorder import Recorder
+    from mdp.model.trainer.trainer import Trainer
 
 
 class Breakdown(ABC):
@@ -14,15 +14,19 @@ class Breakdown(ABC):
         self.comparison: common.Comparison = comparison
         self.verbose: bool = self.comparison.breakdown_parameters.verbose
 
-        self._trainer: Optional[trainer.Trainer] = None
-        self._recorder: Optional[recorder.Recorder] = None
+        self._trainer: Optional[Trainer] = None
+        self._recorder: Optional[Recorder] = None
         # self.settings_list: list[common.Settings] = []
         self.x_series: Optional[common.Series] = None
         self.series_list: list[common.Series] = []
         self._y_label: str = ""
 
-    def set_trainer(self, trainer_: trainer.Trainer):
-        self._trainer = trainer_
+    @property
+    def recorder(self) -> Optional[Recorder]:
+        return self._recorder
+
+    def set_trainer(self, trainer: Trainer):
+        self._trainer = trainer
 
     def review(self):
         episode_counter = self._trainer.episode_counter

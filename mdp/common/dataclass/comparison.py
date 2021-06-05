@@ -6,6 +6,7 @@ import utils
 from mdp.common.dataclass import environment_parameters_, settings
 from mdp.common.dataclass import graph_values_, graph3d_values_, grid_view_parameters_
 from mdp.common.dataclass.breakdown_parameters import breakdown_parameters_, breakdown_algorithm_by_alpha
+from mdp.common.enums import ParallelContextType
 
 
 @dataclasses.dataclass
@@ -17,6 +18,7 @@ class Comparison(abc.ABC):
     # training session settings
     comparison_settings: settings.Settings = dataclasses.field(default_factory=settings.default_factory)
     settings_list: list[settings.Settings] = dataclasses.field(default_factory=list)
+    settings_list_multiprocessing: ParallelContextType = ParallelContextType.NONE
 
     # breakdown
     breakdown_parameters: breakdown_parameters_.BreakdownParameters = \

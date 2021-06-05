@@ -13,6 +13,7 @@ class CliffAlphaStart(Scenario):
             # ),
             comparison_settings=common.Settings(
                 runs=10,
+                # runs_multiprocessing=common.ParallelContextType.FORK_GLOBAL,
                 training_episodes=100,
                 # display_every_step=True,
             ),
@@ -28,6 +29,7 @@ class CliffAlphaStart(Scenario):
                     common.AlgorithmType.SARSA
                 ],
             ),
+            settings_list_multiprocessing=common.ParallelContextType.FORK_GLOBAL,
             graph_values=common.GraphValues(
                 show_graph=True,
                 has_grid=True,
