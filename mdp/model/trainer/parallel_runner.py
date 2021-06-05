@@ -25,14 +25,6 @@ class ParallelRunner:
         self._parallel_context_type = self._settings.runs_multiprocessing
         self._runs = self._settings.runs
 
-        # build a settings list for each run so but all pointing to the same settings object
-        # self._settings_list: list[common.Settings] = list(itertools.repeat(settings, self._runs))
-        # have the final settings object be different
-        # self._settings_list[-1] = copy.deepcopy(settings)
-        # self._final_settings = self._settings_list[-1]
-        # have final settings return everything (or just if used in case of V and Q)
-        # self.alter_settings_to_return_everything(self._final_settings)
-
         self._results: list[common.Result] = []
         self._recorder: Optional[Recorder] = None
         if self._trainer.breakdown:

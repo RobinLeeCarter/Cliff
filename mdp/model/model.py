@@ -8,6 +8,7 @@ if TYPE_CHECKING:
     from mdp.model.agent.episode import Episode
     from mdp.model.breakdown.breakdown import Breakdown
 
+import multiprocessing
 import utils
 from mdp import common
 # from mdp.scenarios.factory import environment_factory
@@ -64,7 +65,8 @@ class Model(ABC):
     def run(self):
         timer: utils.Timer = utils.Timer()
         timer.start()
-        if self._comparison.settings_list_multiprocessing == common.ParallelContextType.NONE:
+        if self._comparison.settings_list_multiprocessing == common.ParallelContextType.NONE \
+                or multiprocessing.current_process().daemon:
             # train in serial
             for settings in self._comparison.settings_list:
                 self.trainer.train(settings)

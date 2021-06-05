@@ -1,5 +1,6 @@
 from __future__ import annotations
 from typing import TYPE_CHECKING, Optional, Callable
+import multiprocessing
 
 if TYPE_CHECKING:
     from mdp.model.agent.agent import Agent
@@ -74,7 +75,9 @@ class Trainer:
         print(f"{settings.algorithm_title}: {settings.runs} runs")
 
         self.max_cum_timestep = 0
-        if settings.runs_multiprocessing == common.ParallelContextType.NONE:
+        if settings.runs_multiprocessing == common.ParallelContextType.NONE \
+                or multiprocessing.current_process().daemon:
+            # train in serial
             for run_counter in range(1, settings.runs + 1):
                 self.do_run(run_counter)
                 self.max_cum_timestep = max(self.max_cum_timestep, self.cum_timestep)
