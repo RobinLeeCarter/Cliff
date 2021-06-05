@@ -17,7 +17,6 @@ class Scenario(scenario.Scenario, ABC):
         self._comparison_settings = common.Settings(
             gamma=1.0,
             runs=1,
-            runs_multiprocessing=common.ParallelContextType.FORK_GLOBAL,
             training_episodes=500_000,
             episode_print_frequency=10_000,
             policy_parameters=common.PolicyParameters(

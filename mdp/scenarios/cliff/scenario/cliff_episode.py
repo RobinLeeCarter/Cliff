@@ -13,6 +13,7 @@ class CliffEpisode(Scenario):
             # ),
             comparison_settings=common.Settings(
                 runs=50,
+                runs_multiprocessing=common.ParallelContextType.FORK_GLOBAL,
                 training_episodes=500,
                 # display_every_step=True,
             ),
@@ -37,7 +38,7 @@ class CliffEpisode(Scenario):
                     alpha=0.5
                 )),
             ],
-            settings_list_multiprocessing=common.ParallelContextType.SPAWN,
+            # settings_list_multiprocessing=common.ParallelContextType.SPAWN,
             graph_values=common.GraphValues(
                 show_graph=True,
                 has_grid=True,

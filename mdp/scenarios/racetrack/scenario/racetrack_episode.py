@@ -22,7 +22,7 @@ class RacetrackEpisode(Scenario):
                 training_episodes=10_000,
                 episode_print_frequency=1000,
                 # display_every_step=True,
-                dual_policy_relationship=common.DualPolicyRelationship.LINKED_POLICIES
+                dual_policy_relationship=common.DualPolicyRelationship.LINKED_POLICIES,
             ),
             breakdown_parameters=common.BreakdownParameters(
                 breakdown_type=common.BreakdownType.RETURN_BY_EPISODE
@@ -45,7 +45,7 @@ class RacetrackEpisode(Scenario):
                     initial_q_value=-40.0,
                 )),
             ],
-            settings_list_multiprocessing=common.ParallelContextType.NONE,
+            # settings_list_multiprocessing=common.ParallelContextType.SPAWN,
             graph_values=common.GraphValues(
                 show_graph=True,
                 has_grid=True,
