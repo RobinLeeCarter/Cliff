@@ -160,10 +160,10 @@ class Trainer:
         result: common.Result = common.Result()
 
         rp: common.ResultParameters = result_parameters
-        if rp.return_algorithm_title:
-            result.algorithm_title = self._agent.algorithm.title
         if rp.return_recorder and self._breakdown:
             result.recorder = self._breakdown.recorder
+        if rp.return_algorithm_title:
+            result.algorithm_title = self._agent.algorithm.title
         if rp.return_policy_vector:
             result.policy_vector = self._agent.target_policy.get_policy_vector()
         if rp.return_v_vector and self._agent.algorithm.V:

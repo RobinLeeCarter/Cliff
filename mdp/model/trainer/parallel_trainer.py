@@ -37,7 +37,7 @@ class ParallelTrainer:
         self._settings_list = settings_list
 
         # have final settings return everything (if used in case of V and Q)
-        self.alter_settings_to_return_everything(self._settings_list[-1])
+        self._set_result_parameters()
 
         with self._ctx.Pool() as pool:
             if self._use_global_trainer:
@@ -52,11 +52,18 @@ class ParallelTrainer:
         # set up agent using final setting and apply the final result
         self._trainer.agent.apply_result(settings=self._settings_list[-1], result=self._results[-1])
 
-    def alter_settings_to_return_everything(self, settings: common.Settings):
-        rp: common.ResultParameters = settings.result_parameters
-        rp.return_policy_vector = True
-        rp.return_v_vector = True
-        rp.return_q_matrix = True
+    def _set_result_parameters(self):
+        final_settings = self._settings_list[-1]
+        for settings in self._settings_list:
+            rp: common.ResultParameters = common.ResultParameters(
+                return_recorder=True,
+                return_algorithm_title=True
+            )
+            if settings == final_settings:
+                rp.return_policy_vector = True
+                rp.return_v_vector = True   # will return only if exists
+                rp.return_q_matrix = True   # will return only if exists
+            settings.result_parameters = rp
 
     def _unpack_results(self):
         # combine the recorders returned by the processes into a single recorder (self._recorder)

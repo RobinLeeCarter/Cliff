@@ -20,18 +20,18 @@ class ParallelRunner:
         # must be disabled for multi-processor
         self._trainer.disable_step_callback()
 
-        settings = self._trainer.settings
-        settings.result_parameters.return_cum_timestep = True
-        self._parallel_context_type = settings.runs_multiprocessing
-        self._runs = settings.runs
+        self._settings = self._trainer.settings
+        # settings.result_parameters.return_cum_timestep = True
+        self._parallel_context_type = self._settings.runs_multiprocessing
+        self._runs = self._settings.runs
 
         # build a settings list for each run so but all pointing to the same settings object
-        self._settings_list: list[common.Settings] = list(itertools.repeat(settings, self._runs))
+        # self._settings_list: list[common.Settings] = list(itertools.repeat(settings, self._runs))
         # have the final settings object be different
-        self._settings_list[-1] = copy.deepcopy(settings)
-        self._final_settings = self._settings_list[-1]
+        # self._settings_list[-1] = copy.deepcopy(settings)
+        # self._final_settings = self._settings_list[-1]
         # have final settings return everything (or just if used in case of V and Q)
-        self.alter_settings_to_return_everything(self._final_settings)
+        # self.alter_settings_to_return_everything(self._final_settings)
 
         self._results: list[common.Result] = []
         self._recorder: Optional[Recorder] = None
@@ -46,8 +46,7 @@ class ParallelRunner:
             _trainer = self._trainer
 
     def do_runs(self):
-        result_parameter_list: list[common.ResultParameters] = \
-            [settings.result_parameters for settings in self._settings_list]
+        result_parameter_list: list[common.ResultParameters] = self._get_result_parameter_list()
 
         with self._ctx.Pool() as pool:
             if self._use_global_trainer:
@@ -62,14 +61,26 @@ class ParallelRunner:
         self._unpack_results()
 
         # set up agent using final settings and apply the final result
-        self._trainer.agent.apply_result(settings=self._final_settings, result=self._results[-1])
+        self._trainer.agent.apply_result(settings=self._settings, result=self._results[-1])
 
-    def alter_settings_to_return_everything(self, settings: common.Settings):
-        rp: common.ResultParameters = settings.result_parameters
-        # rp.return_algorithm_title = True
-        rp.return_policy_vector = True
-        rp.return_v_vector = True
-        rp.return_q_matrix = True
+    def _get_result_parameter_list(self) -> list[common.ResultParameters]:
+        rp_norm: common.ResultParameters = common.ResultParameters(
+            return_recorder=True,
+            return_cum_timestep=True,
+        )
+        rp_final: common.ResultParameters = common.ResultParameters(
+            return_recorder=True,
+            return_cum_timestep=True,
+
+            return_algorithm_title=True,
+            return_policy_vector=True,
+            return_v_vector=True,
+            return_q_matrix=True
+        )
+
+        result_parameter_list: list[common.ResultParameters] = list(itertools.repeat(rp_norm, self._runs-1))
+        result_parameter_list.append(rp_final)
+        return result_parameter_list
 
     def _unpack_results(self):
         # combine the recorders returned by the processes into a single recorder (self._recorder)
