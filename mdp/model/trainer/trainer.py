@@ -103,7 +103,8 @@ class Trainer:
         self._agent.algorithm.initialize()
 
         self.cum_timestep = 0
-        # self.episode_counter is used in breakdown :(
+        # TODO: optionally generate and pre-process episodes in parallel e.g. for Blackjack
+        #  according to a behavioural policy which then might change so perhaps in batches
         for episode_counter in range(1, settings.training_episodes + 1):
             self._do_episode(episode_counter)
 

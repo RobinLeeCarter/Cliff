@@ -215,8 +215,7 @@ class Agent:
             # in either possible case here we want to update the target policy
             self._policy[s] = a
 
-    def apply_result(self, settings: common.Settings, result: common.Result):
-        self.apply_settings(settings)
+    def apply_result(self, result: common.Result):
         self._policy.set_policy_vector(result.policy_vector)
         if self._algorithm.V:
             self._algorithm.V.vector = result.v_vector

@@ -3,7 +3,6 @@ from typing import TYPE_CHECKING, Optional
 
 import multiprocessing as mp
 import itertools
-import copy
 
 from mdp import common
 
@@ -52,8 +51,8 @@ class ParallelRunner:
 
         self._unpack_results()
 
-        # set up agent using final settings and apply the final result
-        self._trainer.agent.apply_result(settings=self._settings, result=self._results[-1])
+        # the agent is already set up in trainer.trainer so just apply the final result to it
+        self._trainer.agent.apply_result(result=self._results[-1])
 
     def _get_result_parameter_list(self) -> list[common.ResultParameters]:
         rp_norm: common.ResultParameters = common.ResultParameters(

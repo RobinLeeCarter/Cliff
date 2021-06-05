@@ -20,6 +20,7 @@ class BlackjackEvaluationV(Scenario):
                     training_episodes=50_000,
                 ),
             ],
+            settings_list_multiprocessing=common.ParallelContextType.NONE,
             graph3d_values=self._graph3d_values,
             grid_view_parameters=self._grid_view_parameters,
         )

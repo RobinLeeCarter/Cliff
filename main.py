@@ -6,7 +6,7 @@ import mdp
 
 def main():
     os_environ_settings.dummy = None    # for pycharm code inspection only
-    mdp.Application(comparison_type=mdp.ComparisonType.RANDOM_WALK_EPISODE)
+    mdp.Application(comparison_type=mdp.ComparisonType.BLACKJACK_EVALUATION_Q)
 
 
 if __name__ == '__main__':
