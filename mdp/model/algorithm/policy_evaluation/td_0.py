@@ -4,6 +4,8 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from mdp.model.environment.environment import Environment
     from mdp.model.agent.agent import Agent
+    from mdp.model.agent.episode import Episode
+    from mdp.model.agent.rsa import RSA
 from mdp import common
 from mdp.model.algorithm.abstract.episodic_online import EpisodicOnline
 
@@ -30,3 +32,12 @@ class TD0(EpisodicOnline):
         target = ag.r + self._gamma * self.V[ag.s]
         delta = target - self.V[ag.prev_s]
         self.V[ag.prev_s] += self._alpha * delta
+
+    def _do_step_of_episode(self, episode: Episode, t: int):
+        # TODO: episode is set once rather than passed in
+        s: int = episode.trajectory[t].s
+        s_dash: int = episode.trajectory[t+1].s
+        r: float = episode.trajectory[t+1].r
+        target = r + self._gamma * self.V[s_dash]
+        delta = target - self.V[s]
+        self.V[s] += self._alpha * delta

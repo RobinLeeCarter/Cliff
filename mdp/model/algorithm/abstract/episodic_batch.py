@@ -10,7 +10,8 @@ if TYPE_CHECKING:
 from mdp.model.algorithm.abstract.episodic import Episodic
 
 
-class EpisodicMonteCarlo(Episodic, abc.ABC):
+# TODO: Is this a good idea
+class EpisodicBatch(Episodic, abc.ABC):
     def __init__(self,
                  environment_: Environment,
                  agent: Agent,
