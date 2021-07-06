@@ -19,6 +19,7 @@ class Episodic(Algorithm, abc.ABC):
         super().__init__(environment_, agent, algorithm_parameters, policy_parameters)
         self.first_visit = self._algorithm_parameters.first_visit
 
+    # TODO: should episode_length_timeout be passed in each time or be a property defaulted by algorithm_parameters
     @abc.abstractmethod
     def do_episode(self, episode_length_timeout: int):
         pass

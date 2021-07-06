@@ -115,6 +115,14 @@ class Agent:
     def set_step_callback(self, step_callback: Optional[Callable[[], bool]] = None):
         self._step_callback = step_callback
 
+    def generate_episodes(self,
+                          num_episodes: int,
+                          episode_length_timeout: Optional[int] = None,
+                          exploring_starts: bool = False,
+                          ) -> list[Episode]:
+        return [self.generate_episode(episode_length_timeout, exploring_starts)
+                for _ in range(num_episodes)]
+
     def generate_episode(self,
                          episode_length_timeout: Optional[int] = None,
                          exploring_starts: bool = False
@@ -126,17 +134,11 @@ class Agent:
         while not self.is_terminal and self.t < episode_length_timeout:
             self.choose_action()
             if self._verbose:
-                state: State = self._environment.states[self.s]
-                action: Optional[Action]
-                if self.a == -1:
-                    action = None
-                else:
-                    action = self._environment.actions[self.a]
-                print(f"t={self.t} \t state = {state} \t action = {action}")
+                self._print_step()
             self.take_action()
 
         if self.t == episode_length_timeout:
-            print("Failed to terminate")
+            print("Warning: Failed to terminate")
         if self._verbose:
             state: State = self._environment.states[self.s]
             print(f"t={self.t} \t state = {state} (terminal)")
@@ -221,6 +223,15 @@ class Agent:
             self._algorithm.V.vector = result.v_vector
         if self._algorithm.Q:
             self._algorithm.Q.set_matrix(result.q_matrix)
+
+    def _print_step(self):
+        state: State = self._environment.states[self.s]
+        action: Optional[Action]
+        if self.a == -1:
+            action = None
+        else:
+            action = self._environment.actions[self.a]
+        print(f"t={self.t} \t state = {state} \t action = {action}")
 
     def print_statistics(self):
         self._algorithm.print_q_coverage_statistics()
