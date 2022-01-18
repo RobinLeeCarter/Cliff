@@ -7,7 +7,7 @@ from mdp.scenarios.racetrack.model.environment import Environment
 from mdp.scenarios.racetrack.model.environment_parameters import EnvironmentParameters, default
 
 
-def racetrack_test() -> bool:
+def test_racetrack():
     environment_parameters = EnvironmentParameters(
         grid=grids.TRACK_1
     )
@@ -44,10 +44,3 @@ def racetrack_test() -> bool:
     response_ = environment.from_state_perform_action(state_, action_)
     print(state_, action_)
     print(response_)
-
-    return True
-
-
-if __name__ == '__main__':
-    if racetrack_test():
-        print("Passed")

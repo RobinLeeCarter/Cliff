@@ -6,7 +6,7 @@ from mdp.scenarios import scenario_factory
 # from mdp.view import view
 
 
-def view_test() -> bool:
+def test_view():
     scenario = scenario_factory.scenario_factory(common.ComparisonType.CLIFF_EPISODE)
     scenario.build()
     # noinspection PyProtectedMember
@@ -19,10 +19,3 @@ def view_test() -> bool:
     # my_view = view.View()
     # my_view.build(environment.grid_world, comparison)
     # my_view.grid_view.display_and_wait()
-
-    return True
-
-
-if __name__ == '__main__':
-    if view_test():
-        print("Passed")

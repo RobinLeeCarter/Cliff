@@ -7,7 +7,7 @@ from mdp.scenarios.random_walk.model.environment import Environment
 from mdp.scenarios.random_walk.model.environment_parameters import EnvironmentParameters, default
 
 
-def random_walk_test() -> bool:
+def test_random_walk():
     environment_parameters = EnvironmentParameters(
         environment_type=common.ScenarioType.RANDOM_WALK,
         actions_list=common.ActionsList.NO_ACTIONS
@@ -15,6 +15,8 @@ def random_walk_test() -> bool:
     utils.set_none_to_default(environment_parameters, default)
     environment = Environment(environment_parameters)
     environment.build()
+
+    print()
 
     for state_ in environment.states:
         state_index = environment.state_index[state_]
@@ -46,9 +48,3 @@ def random_walk_test() -> bool:
     print(state_, action_)
     print(observation_)
 
-    return True
-
-
-if __name__ == '__main__':
-    if random_walk_test():
-        print("Passed")

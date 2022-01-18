@@ -8,7 +8,7 @@ from mdp.scenarios.blackjack.model.action import Action
 from mdp.scenarios.blackjack.model.environment import Environment
 
 
-def blackjack_test() -> bool:
+def test_blackjack_environment():
     scenario = scenario_factory.scenario_factory(common.ComparisonType.BLACKJACK_EVALUATION_V)
     scenario.build()
     # noinspection PyProtectedMember
@@ -32,6 +32,7 @@ def blackjack_test() -> bool:
     # state = State(is_terminal=False, player_sum=15, usable_ace=True, dealers_card=10)
     # action = Action(hit=False)
 
+    print()
     random_round(environment)
     random_round(environment)
     random_round(environment)
@@ -69,7 +70,7 @@ def blackjack_test() -> bool:
     # print(state_, action_)
     # print(observation_)
 
-    return True
+    # assert True
 
 
 def random_round(environment: Environment):
@@ -84,8 +85,3 @@ def random_round(environment: Environment):
     reward, new_state = environment.from_state_perform_action(state, action)
     print(reward, new_state)
     print()
-
-
-if __name__ == '__main__':
-    if blackjack_test():
-        print("Passed")
