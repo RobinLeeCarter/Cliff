@@ -4,7 +4,7 @@ from mdp.model.breakdown import recorder
 
 
 def recorder_test() -> bool:
-    environment_ = scenarios.Environment()
+    environment_ = scenarios.EnvironmentTabular()
     greedy_policy: policy.Deterministic = policy.Deterministic(environment_)
     e_greedy_policy: policy.EGreedy = policy.EGreedy(environment_, greedy_policy=greedy_policy)
     agent_ = agent.Agent(environment_, e_greedy_policy)

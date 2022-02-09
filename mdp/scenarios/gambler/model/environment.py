@@ -9,7 +9,7 @@ if TYPE_CHECKING:
     from mdp.model.algorithm.value_function import state_function
 
 from mdp import common
-from mdp.model.environment import environment
+from mdp.model.environment.environment_tabular import EnvironmentTabular
 
 from mdp.scenarios.gambler.model.state import State
 from mdp.scenarios.gambler.model.action import Action
@@ -18,7 +18,7 @@ from mdp.scenarios.gambler.model.environment_parameters import EnvironmentParame
 from mdp.scenarios.gambler.model.dynamics import Dynamics
 
 
-class Environment(environment.Environment):
+class Environment(EnvironmentTabular):
     def __init__(self, environment_parameters: EnvironmentParameters):
         super().__init__(environment_parameters)
 

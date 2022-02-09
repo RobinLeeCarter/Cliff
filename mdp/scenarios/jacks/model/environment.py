@@ -8,7 +8,7 @@ if TYPE_CHECKING:
     from mdp.model.algorithm.value_function import state_function
 
 from mdp import common
-from mdp.model.environment import environment
+from mdp.model.environment.environment_tabular import EnvironmentTabular
 
 from mdp.scenarios.jacks.model.state import State
 from mdp.scenarios.jacks.model.action import Action
@@ -17,7 +17,7 @@ from mdp.scenarios.jacks.model.grid_world import GridWorld
 from mdp.scenarios.jacks.model.dynamics.dynamics import Dynamics
 
 
-class Environment(environment.Environment):
+class Environment(EnvironmentTabular):
     def __init__(self, environment_parameters: EnvironmentParameters):
 
         super().__init__(environment_parameters)

@@ -4,15 +4,15 @@ from typing import TYPE_CHECKING
 import numpy as np
 
 if TYPE_CHECKING:
-    from mdp.model.environment.environment import Environment
+    from mdp.model.environment.environment_tabular import EnvironmentTabular
 
 
 class StateFunction:
     def __init__(self,
-                 environment_: Environment,
+                 environment_: EnvironmentTabular,
                  initial_value: float
                  ):
-        self._environment: Environment = environment_
+        self._environment: EnvironmentTabular = environment_
         self._initial_value: float = initial_value
 
         self.vector: np.ndarray = np.empty(

@@ -4,7 +4,7 @@ from typing import Optional, Callable, TYPE_CHECKING
 if TYPE_CHECKING:
     from mdp.model.environment.action import Action
     from mdp.model.environment.state import State
-    from mdp.model.environment.environment import Environment
+    from mdp.model.environment.environment_tabular import EnvironmentTabular
 
 from mdp.model.agent import rsa
 
@@ -12,7 +12,7 @@ from mdp.model.agent import rsa
 class Episode:
     """Just makes a record laid out in the standard way with Reward, State, Action for each _t"""
     def __init__(self,
-                 environment: Environment,
+                 environment: EnvironmentTabular,
                  gamma: float,
                  step_callback: Optional[Callable[[], bool]] = None,
                  record_first_visits: bool = False):

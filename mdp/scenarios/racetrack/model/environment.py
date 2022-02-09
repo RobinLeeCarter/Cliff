@@ -2,7 +2,7 @@ from __future__ import annotations
 from typing import Optional
 
 from mdp import common
-from mdp.model.environment import environment
+from mdp.model.environment.environment_tabular import EnvironmentTabular
 
 from mdp.scenarios.racetrack.model.state import State
 from mdp.scenarios.racetrack.model.action import Action
@@ -11,7 +11,7 @@ from mdp.scenarios.racetrack.model.dynamics import Dynamics
 from mdp.scenarios.racetrack.model.environment_parameters import EnvironmentParameters
 
 
-class Environment(environment.Environment):
+class Environment(EnvironmentTabular):
     def __init__(self, environment_parameters: EnvironmentParameters):
         super().__init__(environment_parameters)
 

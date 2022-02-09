@@ -4,7 +4,7 @@ from typing import TYPE_CHECKING
 import numpy as np
 
 if TYPE_CHECKING:
-    from mdp.model.environment.environment import Environment
+    from mdp.model.environment.environment_tabular import EnvironmentTabular
     from mdp.model.agent.agent import Agent
 from mdp import common
 from mdp.model.algorithm import linear_algebra as la
@@ -13,7 +13,7 @@ from mdp.model.algorithm.abstract.dynamic_programming_q import DynamicProgrammin
 
 class DpPolicyEvaluationQStochastic(DynamicProgrammingQ):
     def __init__(self,
-                 environment_: Environment,
+                 environment_: EnvironmentTabular,
                  agent: Agent,
                  algorithm_parameters: common.AlgorithmParameters,
                  policy_parameters: common.PolicyParameters

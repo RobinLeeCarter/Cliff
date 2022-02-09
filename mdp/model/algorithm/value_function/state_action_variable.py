@@ -4,15 +4,15 @@ from typing import TYPE_CHECKING
 import numpy as np
 
 if TYPE_CHECKING:
-    from mdp.model.environment.environment import Environment
+    from mdp.model.environment.environment_tabular import EnvironmentTabular
 
 
 class StateActionVariable:
     def __init__(self,
-                 environment: Environment,
+                 environment: EnvironmentTabular,
                  initial_value: float
                  ):
-        self._environment: Environment = environment
+        self._environment: EnvironmentTabular = environment
         self._initial_value: float = initial_value
 
         self.matrix: np.ndarray = np.empty(

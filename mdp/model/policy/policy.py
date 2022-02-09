@@ -7,11 +7,11 @@ import numpy as np
 if TYPE_CHECKING:
     from mdp import common
     from mdp.model.environment.action import Action
-    from mdp.model.environment.environment import Environment
+    from mdp.model.environment.environment_tabular import EnvironmentTabular
 
 
 class Policy(abc.ABC):
-    def __init__(self, environment_: Environment, policy_parameters: common.PolicyParameters):
+    def __init__(self, environment_: EnvironmentTabular, policy_parameters: common.PolicyParameters):
         self._environment = environment_
         self._policy_parameters: common.PolicyParameters = policy_parameters
         self._store_matrix: bool = self._policy_parameters.store_matrix

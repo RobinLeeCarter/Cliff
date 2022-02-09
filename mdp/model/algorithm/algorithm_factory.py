@@ -2,7 +2,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING, Type
 
 if TYPE_CHECKING:
-    from mdp.model.environment.environment import Environment
+    from mdp.model.environment.environment_tabular import EnvironmentTabular
     from mdp.model.agent.agent import Agent
 from mdp import common
 from mdp.model.algorithm.abstract.algorithm import Algorithm as BaseAlgorithm
@@ -32,7 +32,7 @@ from mdp.model.algorithm.control.sarsa import Sarsa
 from mdp.model.algorithm.control.q_learning import QLearning
 
 
-def algorithm_factory(environment_: Environment,
+def algorithm_factory(environment_: EnvironmentTabular,
                       agent_: Agent,
                       algorithm_parameters: common.Settings.algorithm_parameters,
                       policy_parameters: common.PolicyParameters

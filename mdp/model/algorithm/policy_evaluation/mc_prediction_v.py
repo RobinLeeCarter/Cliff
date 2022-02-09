@@ -2,7 +2,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from mdp.model.environment.environment import Environment
+    from mdp.model.environment.environment_tabular import EnvironmentTabular
     from mdp.model.agent.agent import Agent
 from mdp import common
 from mdp.model.algorithm.abstract.episodic_monte_carlo import EpisodicMonteCarlo
@@ -11,7 +11,7 @@ from mdp.model.algorithm.value_function.state_variable import StateVariable
 
 class MCPredictionV(EpisodicMonteCarlo):
     def __init__(self,
-                 environment_: Environment,
+                 environment_: EnvironmentTabular,
                  agent: Agent,
                  algorithm_parameters: common.AlgorithmParameters,
                  policy_parameters: common.PolicyParameters

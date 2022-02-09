@@ -8,16 +8,16 @@ if TYPE_CHECKING:
     from mdp import common
     from mdp.common import Distribution
     from mdp.model.environment.action import Action
-    from mdp.model.environment.environment import Environment
+    from mdp.model.environment.environment_tabular import EnvironmentTabular
 from mdp.model.environment.state import State
 
 Response = tuple[float, State]
 
 
 class Dynamics(ABC):
-    def __init__(self, environment: Environment, environment_parameters: common.EnvironmentParameters):
+    def __init__(self, environment: EnvironmentTabular, environment_parameters: common.EnvironmentParameters):
         """init top down"""
-        self._environment: Environment = environment
+        self._environment: EnvironmentTabular = environment
         self._environment_parameters: common.EnvironmentParameters = environment_parameters
         self._verbose: bool = environment_parameters.verbose
         self.is_built: bool = False
