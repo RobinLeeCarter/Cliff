@@ -1,6 +1,6 @@
 from scipy import stats
 
-from mdp.common import DictZero, Distribution
+from mdp.common import DictZero, DiscreteDistribution
 from mdp.scenarios.jacks.model.dynamics.location_outcome import LocationOutcome
 
 
@@ -12,19 +12,19 @@ class Location:
         self._excess_parking_cost: float = excess_parking_cost
 
         self._car_count: list[int] = []
-        self._demand_distribution: Distribution[int] = Distribution()
-        self._return_distribution: Distribution[int] = Distribution()
+        self._demand_distribution: DiscreteDistribution[int] = DiscreteDistribution()
+        self._return_distribution: DiscreteDistribution[int] = DiscreteDistribution()
 
         # for each starting_cars find possible outcomes
         # dict[starting_cars, dict[LocationOutcome, probability]]
-        self.outcome_distributions: dict[int, Distribution[LocationOutcome]] = {}
+        self.outcome_distributions: dict[int, DiscreteDistribution[LocationOutcome]] = {}
         self._counter: int = 0
 
         # summaries
         # dict[starting_cars, cars_rented * probability]
         self.expected_cars_rented: dict[int, float] = {}
         # dict[starting_cars, dict[ending_cars, probability]]
-        self.ending_cars_distribution: dict[int, Distribution[int]] = {}
+        self.ending_cars_distribution: dict[int, DiscreteDistribution[int]] = {}
         # dict[starting_cars, dict[ending_cars, cars_rented_x_probability]]
         self.cars_rented_x_probability_by_ending_cars: dict[int, dict[int, float]] = {}
         # dict[starting_cars, dict[ending_cars, expected_cars_rented]]
@@ -50,13 +50,13 @@ class Location:
     def _build_rental_return_distributions(self):
         self._car_count = [c for c in range(self._max_cars + 1)]
 
-        self._demand_distribution = Distribution({c: self._poisson(self._rental_rate, c)
-                                                  for c in range(self._max_cars + 1)})
+        self._demand_distribution = DiscreteDistribution({c: self._poisson(self._rental_rate, c)
+                                                          for c in range(self._max_cars + 1)})
         self._demand_distribution[self._max_cars] += 1.0 - sum(self._demand_distribution.values())
         self._demand_distribution.enable()
 
-        self._return_distribution = Distribution({c: self._poisson(self._return_rate, c)
-                                                  for c in range(self._max_cars + 1)})
+        self._return_distribution = DiscreteDistribution({c: self._poisson(self._return_rate, c)
+                                                          for c in range(self._max_cars + 1)})
         self._return_distribution[self._max_cars] += 1.0 - sum(self._return_distribution.values())
         self._return_distribution.enable()
 
@@ -68,7 +68,7 @@ class Location:
             self._build_outcome_distribution(starting_cars)
 
     def _build_outcome_distribution(self, starting_cars: int):
-        outcome_distribution: Distribution[LocationOutcome, float] = Distribution()
+        outcome_distribution: DiscreteDistribution[LocationOutcome, float] = DiscreteDistribution()
         # cars_rented_x_probability: float = 0.0
 
         for car_demand, demand_probability in self._demand_distribution.items():
@@ -96,7 +96,7 @@ class Location:
     def _build_summaries(self):
         for starting_cars in self.outcome_distributions.keys():
             expected_cars_rented: float = 0.0
-            ending_cars_distribution: Distribution[int] = Distribution()
+            ending_cars_distribution: DiscreteDistribution[int] = DiscreteDistribution()
             cars_rented_x_probability_by_ending_cars: DictZero[int, float] = DictZero()
 
             for outcome, probability in self.outcome_distributions[starting_cars].items():
@@ -119,10 +119,10 @@ class Location:
             self.cars_rented_x_probability_by_ending_cars[starting_cars] = cars_rented_x_probability_by_ending_cars
             self.expected_cars_rented_by_ending_cars[starting_cars] = expected_cars_rented_by_ending_cars
 
-    def get_outcome_distribution(self, starting_cars: int) -> Distribution[LocationOutcome]:
+    def get_outcome_distribution(self, starting_cars: int) -> DiscreteDistribution[LocationOutcome]:
         return self.outcome_distributions[starting_cars]
 
-    def get_ending_cars_distribution(self, starting_cars: int) -> Distribution[int]:
+    def get_ending_cars_distribution(self, starting_cars: int) -> DiscreteDistribution[int]:
         return self.ending_cars_distribution[starting_cars]
 
     def get_transition_probability(self, starting_cars: int, ending_cars: int) -> float:

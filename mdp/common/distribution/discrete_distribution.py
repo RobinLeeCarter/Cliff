@@ -1,7 +1,10 @@
 from __future__ import annotations
 from typing import TypeVar, Generic, Optional
+
 import math
 import numpy as np
+
+from mdp.common.distribution.distribution_base import DistributionBase
 from mdp.common.dict_zero import DictZero
 import utils
 
@@ -9,7 +12,7 @@ import utils
 T = TypeVar('T')
 
 
-class Distribution(Generic[T]):
+class DiscreteDistribution(Generic[T], DistributionBase[T]):
     def __init__(self,
                  initial_dict: Optional[dict] = None,
                  initial_list: Optional[list] = None

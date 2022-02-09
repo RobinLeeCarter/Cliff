@@ -44,6 +44,7 @@ class EnvironmentTabular(Environment):
         self.one_over_possible_actions: np.ndarray = np.empty(0, dtype=float)
 
         # Distributions
+        # TODO: Should this be DistributionBase? Probably yes.
         self.s_a_distribution: Optional[common.UniformDistribution[S_A]] = None
         self.start_s_distribution: Optional[common.UniformDistribution[int]] = None
 

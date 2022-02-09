@@ -9,7 +9,7 @@ if TYPE_CHECKING:
 import numpy as np
 import utils
 
-from mdp.common import Distribution
+from mdp.common import DiscreteDistribution
 from mdp.model.environment import dynamics
 
 from mdp.scenarios.gambler.model.state import State
@@ -24,7 +24,7 @@ class Dynamics(dynamics.Dynamics):
         self._environment: Environment = self._environment
         self._environment_parameters: EnvironmentParameters = self._environment_parameters
         self._probability_heads: float = self._environment_parameters.probability_heads
-        self._toss_distribution: Distribution[int] = Distribution[int]()
+        self._toss_distribution: DiscreteDistribution[int] = DiscreteDistribution[int]()
 
     def build(self):
         self._toss_distribution[Toss.HEADS] = self._probability_heads
@@ -87,12 +87,12 @@ class Dynamics(dynamics.Dynamics):
             expected_reward = 0.0
         return expected_reward
 
-    def get_state_transition_distribution(self, state: State, action: Action) -> Distribution[State]:
+    def get_state_transition_distribution(self, state: State, action: Action) -> DiscreteDistribution[State]:
         """
         dict[ s', p(s'|s,a) ]
         distribution of next states for a (state, action)
         """
-        distribution: Distribution[State] = Distribution()
+        distribution: DiscreteDistribution[State] = DiscreteDistribution()
         for toss in [Toss.HEADS, Toss.TAILS]:
             probability = self._toss_distribution[toss]
             if toss == Toss.HEADS:

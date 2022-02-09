@@ -1,7 +1,7 @@
 from __future__ import annotations
 # from typing import TYPE_CHECKING
 
-from mdp.common import Distribution
+from mdp.common import DiscreteDistribution
 from mdp import common
 from mdp.scenarios import scenario_factory
 
@@ -28,8 +28,8 @@ dynamics: Dynamics = environment.dynamics
 state = State(is_terminal=False, ending_cars_1=10, ending_cars_2=8)
 action = Action(transfer_1_to_2=2)
 
-summary_outcomes: Distribution[Response] = dynamics.get_summary_outcomes(state, action)
-all_outcomes: Distribution[Response] = dynamics.get_all_outcomes(state, action)
+summary_outcomes: DiscreteDistribution[Response] = dynamics.get_summary_outcomes(state, action)
+all_outcomes: DiscreteDistribution[Response] = dynamics.get_all_outcomes(state, action)
 
 # compresses to 6,468 outcomes
 print(len(summary_outcomes.dict))
