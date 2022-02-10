@@ -5,15 +5,12 @@ from abc import ABC, abstractmethod
 import numpy as np
 
 if TYPE_CHECKING:
-    from mdp.model.algorithm.abstract.algorithm import Algorithm
-    from mdp.model.policy.policy import Policy
     from mdp.model.algorithm.value_function import state_function
 
 from mdp import common
 from mdp.model.environment.environment import Environment
 from mdp.model.environment.state import State
 from mdp.model.environment.action import Action
-# from mdp.model.environment.dynamics import Dynamics
 
 S_A = tuple[int, int]
 
@@ -178,9 +175,4 @@ class TabularEnvironment(Environment, ABC):
             is_terminal = self.is_terminal[new_s]
 
         return reward, new_s, is_terminal
-
-    def update_grid_value_functions(self,
-                                    algorithm: Algorithm,
-                                    policy: Policy):
-        pass
     # endregion

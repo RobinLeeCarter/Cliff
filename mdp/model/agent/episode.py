@@ -4,7 +4,7 @@ from typing import Optional, Callable, TYPE_CHECKING
 if TYPE_CHECKING:
     from mdp.model.environment.action import Action
     from mdp.model.environment.state import State
-    from mdp.model.environment.tabular_environment import TabularEnvironment
+    from mdp.model.environment.tabular.tabular_environment import TabularEnvironment
 
 from mdp.model.agent import rsa
 

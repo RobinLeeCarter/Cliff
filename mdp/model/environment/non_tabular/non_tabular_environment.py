@@ -3,16 +3,12 @@ from typing import Optional, TYPE_CHECKING
 from abc import ABC, abstractmethod
 
 if TYPE_CHECKING:
-    from mdp.model.algorithm.abstract.algorithm import Algorithm
-    from mdp.model.policy.policy import Policy
     from mdp.model.algorithm.value_function import state_function
 
 from mdp import common
 from mdp.model.environment.environment import Environment
 from mdp.model.environment.state import State
 from mdp.model.environment.action import Action
-
-S_A = tuple[int, int]
 
 
 class NonTabularEnvironment(Environment, ABC):
@@ -46,6 +42,7 @@ class NonTabularEnvironment(Environment, ABC):
     # endregion
 
     # region Operation
+    # TODO: should StateFunction be more general e.g. Tabular vs Function Approximation
     def insert_state_function_into_graph3d(self,
                                            comparison: common.Comparison,
                                            v: state_function.StateFunction,
@@ -79,9 +76,4 @@ class NonTabularEnvironment(Environment, ABC):
             new_state: State = self.start_state_distribution.draw_one()
 
         return reward, new_state
-
-    def update_grid_value_functions(self,
-                                    algorithm: Algorithm,
-                                    policy: Policy):
-        pass
     # endregion

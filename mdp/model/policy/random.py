@@ -6,7 +6,7 @@ import numpy as np
 import utils
 
 if TYPE_CHECKING:
-    from mdp.model.environment.tabular_environment import TabularEnvironment
+    from mdp.model.environment.tabular.tabular_environment import TabularEnvironment
 from mdp import common
 from mdp.model.policy.policy import Policy
 

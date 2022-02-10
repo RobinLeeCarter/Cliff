@@ -6,7 +6,7 @@ import math
 if TYPE_CHECKING:
     from mdp.model.environment.state import State
     from mdp.model.environment.action import Action
-    from mdp.model.environment.tabular_environment import TabularEnvironment
+    from mdp.model.environment.tabular.tabular_environment import TabularEnvironment
 from mdp import common
 # renamed to avoid name conflicts
 from mdp.model.algorithm.abstract.algorithm import Algorithm

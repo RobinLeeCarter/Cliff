@@ -5,7 +5,7 @@ from typing import Optional
 import numpy as np
 
 from mdp import common
-from mdp.model.environment import grid_world
+from mdp.model.environment.tabular import grid_world
 from mdp.scenarios.jacks.model.environment_parameters import EnvironmentParameters
 
 

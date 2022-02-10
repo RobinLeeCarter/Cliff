@@ -9,7 +9,7 @@ import pygame.freetype
 from matplotlib import cm, colors
 
 if TYPE_CHECKING:
-    from mdp.model.environment.grid_world import GridWorld
+    from mdp.model.environment.tabular.grid_world import GridWorld
     from mdp.model.agent.episode import Episode
 from mdp import common
 

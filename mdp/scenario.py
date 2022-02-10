@@ -1,7 +1,9 @@
 from __future__ import annotations
 from abc import ABC, abstractmethod
-from typing import Optional
+from typing import Optional, TYPE_CHECKING
 
+if TYPE_CHECKING:
+    from mdp.model.environment.environment import Environment
 from mdp import common
 from mdp.model.model import Model
 from mdp.view.view import View
@@ -38,6 +40,14 @@ class Scenario(ABC):
     @abstractmethod
     def _create_comparison(self) -> common.Comparison:
         pass
+
+    @property
+    def environment(self) -> Environment:
+        environment = self._model.environment
+        if environment is None:
+            raise Exception("Environment is None")
+        else:
+            return self._model.environment
 
     # @abstractmethod
     # def _get_comparison(self, comparison_type: common.ComparisonType) -> common.Comparison:

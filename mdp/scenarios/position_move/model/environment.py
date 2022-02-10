@@ -9,7 +9,7 @@ if TYPE_CHECKING:
     from mdp.model.policy.policy import Policy
 
 from mdp import common
-from mdp.model.environment.tabular_environment import TabularEnvironment
+from mdp.model.environment.tabular.tabular_environment import TabularEnvironment
 
 from mdp.scenarios.position_move.model.state import State
 from mdp.scenarios.position_move.model.action import Action

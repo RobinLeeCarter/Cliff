@@ -2,12 +2,9 @@ from __future__ import annotations
 from typing import Optional, TYPE_CHECKING
 from abc import ABC, abstractmethod
 
-import numpy as np
-
 if TYPE_CHECKING:
     from mdp.model.algorithm.abstract.algorithm import Algorithm
     from mdp.model.policy.policy import Policy
-    from mdp.model.algorithm.value_function import state_function
 
 from mdp import common
 from mdp.model.environment.state import State
@@ -51,6 +48,6 @@ class Environment(ABC):
         pass
 
     def is_valued_state(self, state: State) -> bool:
-        """Does the state have a value function V(s) e.g. unreachable states might not"""
+        """Does the state have a valid value function V(s) or Q(s,a) e.g. unreachable states might not"""
         return not state.is_terminal
     # endregion

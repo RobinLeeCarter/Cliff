@@ -3,7 +3,7 @@ from typing import TYPE_CHECKING, Optional
 import abc
 
 if TYPE_CHECKING:
-    from mdp.model.environment.tabular_environment import TabularEnvironment
+    from mdp.model.environment.tabular.tabular_environment import TabularEnvironment
     from mdp.model.agent.agent import Agent
     from mdp.model.policy.policy import Policy
     from mdp import common

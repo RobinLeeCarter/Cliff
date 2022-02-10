@@ -12,8 +12,8 @@ from mdp.scenarios.jacks.model.environment import Environment
 def jacks_test() -> bool:
     scenario = scenario_factory.scenario_factory(common.ComparisonType.JACKS_POLICY_ITERATION_V)
     scenario.build()
-    # noinspection PyProtectedMember
-    environment: Environment = scenario._model.environment
+
+    environment: Environment = scenario.environment
 
     print("States...")
     for state_ in environment.states:

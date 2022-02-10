@@ -12,8 +12,8 @@ from mdp.scenarios.gambler.model.environment import Environment
 def gambler_test() -> bool:
     scenario = scenario_factory.scenario_factory(common.ComparisonType.GAMBLER_VALUE_ITERATION_V)
     scenario.build()
-    # noinspection PyProtectedMember
-    environment: Environment = scenario._model.environment
+
+    environment: Environment = scenario.environment
 
     # comparison: common.Comparison = unused_comparisons.gambler_value_iteration_v()
     # environment = unused_environment_factory.environment_factory(comparison.environment_parameters)

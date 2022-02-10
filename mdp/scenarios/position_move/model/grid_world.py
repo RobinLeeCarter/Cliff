@@ -2,7 +2,7 @@ from __future__ import annotations
 from typing import Optional
 
 from mdp import common
-from mdp.model.environment import grid_world
+from mdp.model.environment.tabular import grid_world
 
 
 class GridWorld(grid_world.GridWorld):

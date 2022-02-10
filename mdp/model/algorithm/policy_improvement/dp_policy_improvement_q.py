@@ -4,7 +4,7 @@ from typing import TYPE_CHECKING
 import numpy as np
 
 if TYPE_CHECKING:
-    from mdp.model.environment.tabular_environment import TabularEnvironment
+    from mdp.model.environment.tabular.tabular_environment import TabularEnvironment
     from mdp.model.agent.agent import Agent
 from mdp import common
 from mdp.model.algorithm.abstract.dynamic_programming_q import DynamicProgrammingQ

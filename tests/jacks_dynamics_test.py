@@ -15,8 +15,8 @@ Response = tuple[float, State]
 
 scenario = scenario_factory.scenario_factory(common.ComparisonType.JACKS_POLICY_ITERATION_V)
 scenario.build()
-# noinspection PyProtectedMember
-environment: Environment = scenario._model.environment
+
+environment: Environment = scenario.environment
 
 # comparison = jacks_policy_iteration_v()
 # environment_ = unused_environment_factory.environment_factory(comparison.environment_parameters)
