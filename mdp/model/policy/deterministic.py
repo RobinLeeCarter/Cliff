@@ -6,10 +6,10 @@ import numpy as np
 if TYPE_CHECKING:
     from mdp import common
     from mdp.model.environment.tabular.tabular_environment import TabularEnvironment
-from mdp.model.policy import policy
+from mdp.model.policy.policy import Policy
 
 
-class Deterministic(policy.Policy):
+class Deterministic(Policy):
     def __init__(self, environment_: TabularEnvironment, policy_parameters: common.PolicyParameters):
         super().__init__(environment_, policy_parameters)
         state_count = len(self._environment.states)
