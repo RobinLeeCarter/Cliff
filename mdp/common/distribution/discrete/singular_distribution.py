@@ -1,12 +1,12 @@
 from __future__ import annotations
 from typing import TypeVar, Generic
 
-from mdp.common.distribution.uniform_distribution import UniformDistribution
+from mdp.common.distribution.discrete.uniform_multinoulli import UniformMultinoulli
 
 T = TypeVar('T')
 
 
-class SingularDistribution(Generic[T], UniformDistribution[T]):
+class SingularDistribution(Generic[T], UniformMultinoulli[T]):
     def __init__(self,
                  values: list[T]
                  ):

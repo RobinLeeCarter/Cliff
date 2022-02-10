@@ -6,7 +6,7 @@ from abc import ABC, abstractmethod
 T = TypeVar('T')
 
 
-class DistributionBase(Generic[T], ABC):
+class Distribution(Generic[T], ABC):
     @abstractmethod
     def draw_one(self) -> T:
         pass

@@ -4,7 +4,7 @@ from typing import TypeVar, Generic, Optional
 import math
 import numpy as np
 
-from mdp.common.distribution.distribution_base import DistributionBase
+from mdp.common.distribution.discrete.discrete_distribution import DiscreteDistribution
 from mdp.common.dict_zero import DictZero
 import utils
 
@@ -12,7 +12,7 @@ import utils
 T = TypeVar('T')
 
 
-class DiscreteDistribution(Generic[T], DistributionBase[T]):
+class Multinoulli(Generic[T], DiscreteDistribution[T]):
     def __init__(self,
                  initial_dict: Optional[dict] = None,
                  initial_list: Optional[list] = None

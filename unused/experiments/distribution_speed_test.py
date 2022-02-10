@@ -12,7 +12,7 @@ states: list[State] = [
 ]
 probabilities: list[float] = [0.1, 0.2, 0.3, 0.4]
 
-distribution: common.DiscreteDistribution[State] = common.DiscreteDistribution()
+distribution: common.Multinoulli[State] = common.Multinoulli()
 dictionary: dict[State, float] = {}
 
 for state, probability in zip(states, probabilities):

@@ -14,8 +14,8 @@ class GridWorld(grid_world.GridWorld):
         self.random_wind: bool = environment_parameters_.random_wind
         # noinspection PyTypeChecker
         random_wind_choices: list[int] = environment_parameters_.random_wind_choices.tolist()
-        self.random_wind_distribution: common.UniformDistribution[int] = \
-            common.UniformDistribution[int](random_wind_choices)
+        self.random_wind_distribution: common.UniformMultinoulli[int] = \
+            common.UniformMultinoulli[int](random_wind_choices)
 
     def change_request(self, current_position: common.XY, move: common.XY) -> common.XY:
         wind = self._get_wind(current_position)

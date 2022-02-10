@@ -4,7 +4,7 @@ from abc import ABC, abstractmethod
 
 if TYPE_CHECKING:
     from mdp.controller import Controller
-    from mdp.model.environment.environment_tabular import EnvironmentTabular
+    from mdp.model.environment.tabular_environment import TabularEnvironment
     from mdp.model.agent.episode import Episode
     from mdp.model.breakdown.breakdown import Breakdown
 
@@ -23,7 +23,7 @@ class Model(ABC):
         self.verbose: bool = verbose
         self._controller: Optional[Controller] = None
         self._comparison: Optional[common.Comparison] = None
-        self.environment: Optional[EnvironmentTabular] = None
+        self.environment: Optional[TabularEnvironment] = None
         self.agent: Optional[Agent] = None
         self.breakdown: Optional[Breakdown] = None
         self.trainer: Optional[Trainer] = None
@@ -38,7 +38,7 @@ class Model(ABC):
         self._comparison = comparison
 
         # different for each scenario and environment_parameters
-        self.environment: EnvironmentTabular = self._create_environment(self._comparison.environment_parameters)
+        self.environment: TabularEnvironment = self._create_environment(self._comparison.environment_parameters)
         self.environment.build()
         # self.environment = environment_factory.environment_factory(self._comparison.environment_parameters)
 
@@ -59,7 +59,7 @@ class Model(ABC):
             self.parallel_trainer = ParallelTrainer(self.trainer, self._comparison.settings_list_multiprocessing)
 
     @abstractmethod
-    def _create_environment(self, environment_parameters: common.EnvironmentParameters) -> EnvironmentTabular:
+    def _create_environment(self, environment_parameters: common.EnvironmentParameters) -> TabularEnvironment:
         pass
 
     def run(self):

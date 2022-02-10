@@ -5,12 +5,12 @@ import numpy as np
 
 if TYPE_CHECKING:
     from mdp import common
-    from mdp.model.environment.environment_tabular import EnvironmentTabular
+    from mdp.model.environment.tabular_environment import TabularEnvironment
 from mdp.model.policy import policy
 
 
 class Deterministic(policy.Policy):
-    def __init__(self, environment_: EnvironmentTabular, policy_parameters: common.PolicyParameters):
+    def __init__(self, environment_: TabularEnvironment, policy_parameters: common.PolicyParameters):
         super().__init__(environment_, policy_parameters)
         state_count = len(self._environment.states)
         self.policy_vector: np.ndarray = np.zeros(shape=state_count, dtype=int)

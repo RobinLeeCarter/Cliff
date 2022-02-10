@@ -9,7 +9,7 @@ if TYPE_CHECKING:
 
 import numpy as np
 
-from mdp.common import DiscreteDistribution
+from mdp.common import Multinoulli
 from mdp.model.environment import dynamics
 
 from mdp.scenarios.jacks.model.state import State
@@ -50,7 +50,7 @@ class Dynamics(dynamics.Dynamics):
 
         # summaries
         self._expected_reward: dict[tuple[State, Action], float] = {}
-        self._next_state_distribution: dict[tuple[State, Action], DiscreteDistribution[State]] = {}
+        self._next_state_distribution: dict[tuple[State, Action], Multinoulli[State]] = {}
 
     def build(self):
         """
@@ -172,7 +172,7 @@ class Dynamics(dynamics.Dynamics):
         probability = probability1 * probability2
         return probability
 
-    def _calc_next_state_distribution(self, state: State, action: Action) -> DiscreteDistribution[State]:
+    def _calc_next_state_distribution(self, state: State, action: Action) -> Multinoulli[State]:
         """
         dict[ s', p(s'|s,a) ]
         distribution of next states for a (state, action)
@@ -181,7 +181,7 @@ class Dynamics(dynamics.Dynamics):
         ending_cars_distribution1 = self._location_1.get_ending_cars_distribution(self._starting_cars_1)
         ending_cars_distribution2 = self._location_2.get_ending_cars_distribution(self._starting_cars_2)
 
-        next_state_distribution: DiscreteDistribution[State] = DiscreteDistribution()
+        next_state_distribution: Multinoulli[State] = Multinoulli()
         for ending_cars1, probability1 in ending_cars_distribution1.items():
             for ending_cars2, probability2 in ending_cars_distribution2.items():
                 next_state = State(is_terminal=False, ending_cars_1=ending_cars1, ending_cars_2=ending_cars2)
@@ -190,14 +190,14 @@ class Dynamics(dynamics.Dynamics):
         next_state_distribution.enable()
         return next_state_distribution
 
-    def get_state_transition_distribution(self, state: State, action: Action) -> DiscreteDistribution[State]:
+    def get_state_transition_distribution(self, state: State, action: Action) -> Multinoulli[State]:
         """
         dict[ s', p(s'|s,a) ]
         distribution of next states for a (state, action)
         """
         return self._next_state_distribution[(state, action)]
 
-    def get_summary_outcomes(self, state: State, action: Action) -> DiscreteDistribution[Response]:
+    def get_summary_outcomes(self, state: State, action: Action) -> Multinoulli[Response]:
         """
         dict of possible responses for a single state and action
         with the expected_reward given in place of reward
@@ -206,10 +206,10 @@ class Dynamics(dynamics.Dynamics):
         l1 = self._location_1
         l2 = self._location_2
 
-        ending_cars_dist1: DiscreteDistribution[int] = l1.get_ending_cars_distribution(self._starting_cars_1)
-        ending_cars_dist2: DiscreteDistribution[int] = l2.get_ending_cars_distribution(self._starting_cars_2)
+        ending_cars_dist1: Multinoulli[int] = l1.get_ending_cars_distribution(self._starting_cars_1)
+        ending_cars_dist2: Multinoulli[int] = l2.get_ending_cars_distribution(self._starting_cars_2)
 
-        response_distribution: DiscreteDistribution[Response] = DiscreteDistribution()
+        response_distribution: Multinoulli[Response] = Multinoulli()
         for ending_cars1, probability1 in ending_cars_dist1.items():
             cars_rented1 = l1.get_expected_cars_rented_given_ending_cars(self._starting_cars_1, ending_cars1)
             for ending_cars2, probability2 in ending_cars_dist2.items():
@@ -222,7 +222,7 @@ class Dynamics(dynamics.Dynamics):
         response_distribution.enable()
         return response_distribution
 
-    def get_all_outcomes(self, state: State, action: Action) -> DiscreteDistribution[Response]:
+    def get_all_outcomes(self, state: State, action: Action) -> Multinoulli[Response]:
         """
         dict of possible responses for a single state and action
         could be used for one state, action in theory
@@ -232,13 +232,13 @@ class Dynamics(dynamics.Dynamics):
         l1 = self._location_1
         l2 = self._location_2
 
-        outcomes1: DiscreteDistribution[LocationOutcome] = l1.get_outcome_distribution(self._starting_cars_1)
-        outcomes2: DiscreteDistribution[LocationOutcome] = l2.get_outcome_distribution(self._starting_cars_2)
+        outcomes1: Multinoulli[LocationOutcome] = l1.get_outcome_distribution(self._starting_cars_1)
+        outcomes2: Multinoulli[LocationOutcome] = l2.get_outcome_distribution(self._starting_cars_2)
 
         # collate (s', r)
         # outcome_dict: dict[(next_state, reward), probability]
         # outcome_dict: DictZero[tuple[State, float], float] = DictZero()
-        response_distribution: DiscreteDistribution[Response] = DiscreteDistribution()
+        response_distribution: Multinoulli[Response] = Multinoulli()
         for outcome1, probability1 in outcomes1.items():
             for outcome2, probability2 in outcomes2.items():
                 cars_rented = outcome1.cars_rented + outcome2.cars_rented

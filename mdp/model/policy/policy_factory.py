@@ -2,7 +2,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from mdp.model.environment.environment_tabular import EnvironmentTabular
+    from mdp.model.environment.tabular_environment import TabularEnvironment
     from mdp.model.policy.policy import Policy
 from mdp import common
 from mdp.model.policy.e_greedy import EGreedy
@@ -11,7 +11,7 @@ from mdp.model.policy.deterministic import Deterministic
 from mdp.model.policy.no_policy import NoPolicy
 
 
-def policy_factory(environment_: EnvironmentTabular, policy_parameters: common.PolicyParameters) -> Policy:
+def policy_factory(environment_: TabularEnvironment, policy_parameters: common.PolicyParameters) -> Policy:
     pt = common.PolicyType
     policy_type = policy_parameters.policy_type
     if policy_type == pt.DETERMINISTIC:

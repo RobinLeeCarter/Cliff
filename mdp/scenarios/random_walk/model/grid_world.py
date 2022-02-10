@@ -16,8 +16,8 @@ class GridWorld(grid_world.GridWorld):
         self._v_optimal: np.ndarray = environment_parameters.v_optimal
         # noinspection PyTypeChecker
         random_move_choices: list[int] = environment_parameters.random_move_choices
-        self._random_move_distribution: common.UniformDistribution[int] =\
-            common.UniformDistribution[int](random_move_choices)
+        self._random_move_distribution: common.UniformMultinoulli[int] =\
+            common.UniformMultinoulli[int](random_move_choices)
 
     def change_request(self, current_position: common.XY, move: Optional[common.XY]) -> common.XY:
         move = self._get_random_movement()

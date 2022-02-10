@@ -2,13 +2,13 @@ from __future__ import annotations
 from typing import TypeVar, Generic
 import utils
 
-from mdp.common.distribution.distribution_base import DistributionBase
+from mdp.common.distribution.discrete.discrete_distribution import DiscreteDistribution
 
 T = TypeVar('T')
 
 
-class UniformDistribution(Generic[T], DistributionBase[T]):  # , AbstractDistribution[T]
-    """Uniform Discrete Distribution, different from DiscreteDistribution for speed"""
+class UniformMultinoulli(Generic[T], DiscreteDistribution[T]):  # , AbstractDistribution[T]
+    """Uniform Discrete Distribution, different from Multinoulli for speed"""
     def __init__(self,
                  values: list[T]
                  ):

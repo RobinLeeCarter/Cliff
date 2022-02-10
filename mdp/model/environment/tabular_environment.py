@@ -13,12 +13,12 @@ from mdp import common
 from mdp.model.environment.environment import Environment
 from mdp.model.environment.state import State
 from mdp.model.environment.action import Action
-from mdp.model.environment.dynamics import Dynamics
+# from mdp.model.environment.dynamics import Dynamics
 
 S_A = tuple[int, int]
 
 
-class EnvironmentTabular(Environment):
+class TabularEnvironment(Environment, ABC):
     """An abstract Environment with discrete tabular states and actions"""
     def __init__(self, environment_parameters: common.EnvironmentParameters):
         """
@@ -44,9 +44,8 @@ class EnvironmentTabular(Environment):
         self.one_over_possible_actions: np.ndarray = np.empty(0, dtype=float)
 
         # Distributions
-        # TODO: Should this be DistributionBase? Probably yes.
-        self.s_a_distribution: Optional[common.UniformDistribution[S_A]] = None
-        self.start_s_distribution: Optional[common.UniformDistribution[int]] = None
+        self.s_a_distribution: Optional[common.DiscreteDistribution[S_A]] = None
+        self.start_s_distribution: Optional[common.DiscreteDistribution[int]] = None
 
     def build(self):
         self._build_states()
@@ -82,9 +81,6 @@ class EnvironmentTabular(Environment):
                         self.s_a_compatibility[s, a] = True
                         self.compatible_s_a.append((s, a))
 
-    def _is_action_compatible_with_state(self, state: State, action: Action):
-        return True
-
     def _build_helper_arrays(self):
         self.is_terminal = [state.is_terminal for state in self.states]
         # self.one_over_possible_actions = np.zeros(shape=(len(self.states)), dtype=float)
@@ -94,14 +90,14 @@ class EnvironmentTabular(Environment):
         np.reciprocal(self.possible_actions, out=self.one_over_possible_actions, where=non_zero)
 
     def _build_distributions(self):
-        self.s_a_distribution = common.UniformDistribution[S_A](self.compatible_s_a)
+        self.s_a_distribution = common.UniformMultinoulli[S_A](self.compatible_s_a)
 
         start_states = self.dynamics.get_start_states()
         start_s = [self.state_index[state] for state in start_states]
         if len(start_s) == 1:
             self.start_s_distribution = common.SingularDistribution[int](start_s)
         else:
-            self.start_s_distribution = common.UniformDistribution[int](start_s)
+            self.start_s_distribution = common.UniformMultinoulli[int](start_s)
 
     # endregion
 
@@ -187,7 +183,4 @@ class EnvironmentTabular(Environment):
                                     algorithm: Algorithm,
                                     policy: Policy):
         pass
-
-    def is_valued_state(self, state: State) -> bool:
-        return False
     # endregion

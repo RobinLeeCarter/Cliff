@@ -3,7 +3,7 @@ from typing import TYPE_CHECKING, Optional
 import abc
 
 if TYPE_CHECKING:
-    from mdp.model.environment.environment_tabular import EnvironmentTabular
+    from mdp.model.environment.tabular_environment import TabularEnvironment
     from mdp.model.agent.agent import Agent
     from mdp.model.policy.policy import Policy
     from mdp import common
@@ -14,12 +14,12 @@ from mdp.model.algorithm.value_function.state_action_function import StateAction
 
 class Algorithm(abc.ABC):
     def __init__(self,
-                 environment_: EnvironmentTabular,
+                 environment_: TabularEnvironment,
                  agent: Agent,
                  algorithm_parameters: common.AlgorithmParameters,
                  policy_parameters: common.PolicyParameters
                  ):
-        self._environment: EnvironmentTabular = environment_
+        self._environment: TabularEnvironment = environment_
         self._agent: Agent = agent
         self._algorithm_parameters: common.AlgorithmParameters = algorithm_parameters
         self._policy_parameters: common.PolicyParameters = policy_parameters

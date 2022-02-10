@@ -3,7 +3,7 @@ from typing import TYPE_CHECKING
 import abc
 
 if TYPE_CHECKING:
-    from mdp.model.environment.environment_tabular import EnvironmentTabular
+    from mdp.model.environment.tabular_environment import TabularEnvironment
     from mdp.model.agent.agent import Agent
     from mdp import common
 from mdp.model.algorithm.abstract.dynamic_programming import DynamicProgramming
@@ -11,7 +11,7 @@ from mdp.model.algorithm.abstract.dynamic_programming import DynamicProgramming
 
 class DynamicProgrammingV(DynamicProgramming, abc.ABC):
     def __init__(self,
-                 environment_: EnvironmentTabular,
+                 environment_: TabularEnvironment,
                  agent: Agent,
                  algorithm_parameters: common.AlgorithmParameters,
                  policy_parameters: common.PolicyParameters

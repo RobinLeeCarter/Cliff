@@ -6,7 +6,7 @@ import math
 if TYPE_CHECKING:
     from mdp.model.environment.state import State
     from mdp.model.environment.action import Action
-    from mdp.model.environment.environment_tabular import EnvironmentTabular
+    from mdp.model.environment.tabular_environment import TabularEnvironment
 from mdp import common
 # renamed to avoid name conflicts
 from mdp.model.algorithm.abstract.algorithm import Algorithm
@@ -19,9 +19,9 @@ from mdp.model.policy import policy_factory
 
 class Agent:
     def __init__(self,
-                 environment_: EnvironmentTabular,
+                 environment_: TabularEnvironment,
                  verbose: bool = False):
-        self._environment: EnvironmentTabular = environment_
+        self._environment: TabularEnvironment = environment_
         self._verbose: bool = verbose
 
         self._policy: Optional[Policy] = None

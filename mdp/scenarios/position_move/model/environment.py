@@ -9,7 +9,7 @@ if TYPE_CHECKING:
     from mdp.model.policy.policy import Policy
 
 from mdp import common
-from mdp.model.environment.environment_tabular import EnvironmentTabular
+from mdp.model.environment.tabular_environment import TabularEnvironment
 
 from mdp.scenarios.position_move.model.state import State
 from mdp.scenarios.position_move.model.action import Action
@@ -18,7 +18,7 @@ from mdp.scenarios.position_move.model.grid_world import GridWorld
 from mdp.scenarios.position_move.model.dynamics import Dynamics
 
 
-class Environment(EnvironmentTabular, abc.ABC):
+class Environment(TabularEnvironment, abc.ABC):
     def __init__(self, environment_parameters: common.EnvironmentParameters):
         super().__init__(environment_parameters)
 
@@ -68,11 +68,4 @@ class Environment(EnvironmentTabular, abc.ABC):
                             q_value=algorithm.Q[s, a],
                             is_policy=is_policy
                         )
-
-    def is_valued_state(self, state: State) -> bool:
-        _square: int = self.grid_world.get_square(state.position)
-        if _square in (common.Square.END, common.Square.CLIFF):
-            return False
-        else:
-            return True
     # endregion

@@ -2,8 +2,6 @@ from __future__ import annotations
 from typing import Optional, TYPE_CHECKING
 from abc import ABC, abstractmethod
 
-import numpy as np
-
 if TYPE_CHECKING:
     from mdp.model.algorithm.abstract.algorithm import Algorithm
     from mdp.model.policy.policy import Policy
@@ -13,12 +11,11 @@ from mdp import common
 from mdp.model.environment.environment import Environment
 from mdp.model.environment.state import State
 from mdp.model.environment.action import Action
-from mdp.model.environment.dynamics import Dynamics
 
 S_A = tuple[int, int]
 
 
-class EnvironmentContinuous(Environment):
+class NonTabularEnvironment(Environment, ABC):
     """An abstract Environment with continuous states but discrete actions"""
     def __init__(self, environment_parameters: common.EnvironmentParameters):
         """
@@ -30,6 +27,9 @@ class EnvironmentContinuous(Environment):
         self.actions: list[Action] = []
         self.action_index: dict[Action: int] = {}
 
+        # Distributions
+        self.start_state_distribution: Optional[common.Distribution[State]] = None
+
     def build(self):
         self._build_actions()
         self.action_index = {action: i for i, action in enumerate(self.actions)}
@@ -37,20 +37,12 @@ class EnvironmentContinuous(Environment):
         self._build_distributions()
 
     def _build_distributions(self):
-        # TODO: decide what to do here, if anything, if start state is a continous distribution
-        start_states: list[State] = self.dynamics.get_start_states()
-        if len(start_states) == 1:
-            self.start_state_distribution = common.SingularDistribution[State](start_states)
-        else:
-            self.start_state_distribution = common.UniformDistribution[State](start_states)
+        self.start_state_distribution = self.dynamics.get_start_distribution()
 
     # region Sets
     @abstractmethod
     def _build_actions(self):
         pass
-
-    def _is_action_compatible_with_state(self, state: State, action: Action):
-        return True
     # endregion
 
     # region Operation
@@ -92,7 +84,4 @@ class EnvironmentContinuous(Environment):
                                     algorithm: Algorithm,
                                     policy: Policy):
         pass
-
-    def is_valued_state(self, state: State) -> bool:
-        return False
     # endregion

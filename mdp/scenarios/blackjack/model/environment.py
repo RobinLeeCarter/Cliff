@@ -9,7 +9,7 @@ if TYPE_CHECKING:
     from mdp.model.algorithm.value_function import state_function
 
 from mdp import common
-from mdp.model.environment.environment_tabular import EnvironmentTabular
+from mdp.model.environment.tabular_environment import TabularEnvironment
 
 from mdp.scenarios.blackjack.model.state import State
 from mdp.scenarios.blackjack.model.action import Action
@@ -18,7 +18,7 @@ from mdp.scenarios.blackjack.model.grid_world import GridWorld
 from mdp.scenarios.blackjack.model.dynamics import Dynamics
 
 
-class Environment(EnvironmentTabular):
+class Environment(TabularEnvironment):
     def __init__(self, environment_parameters: EnvironmentParameters):
 
         super().__init__(environment_parameters)
@@ -159,7 +159,4 @@ class Environment(EnvironmentTabular):
                                 q_value=algorithm.Q[s, a],
                                 is_policy=is_policy
                             )
-
-    def is_valued_state(self, state: State) -> bool:
-        return not state.is_terminal
     # endregion

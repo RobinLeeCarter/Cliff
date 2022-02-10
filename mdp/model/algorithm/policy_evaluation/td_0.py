@@ -2,7 +2,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from mdp.model.environment.environment_tabular import EnvironmentTabular
+    from mdp.model.environment.tabular_environment import TabularEnvironment
     from mdp.model.agent.agent import Agent
     from mdp.model.agent.episode import Episode
     from mdp.model.agent.rsa import RSA
@@ -12,7 +12,7 @@ from mdp.model.algorithm.abstract.episodic_online import EpisodicOnline
 
 class TD0(EpisodicOnline):
     def __init__(self,
-                 environment_: EnvironmentTabular,
+                 environment_: TabularEnvironment,
                  agent: Agent,
                  algorithm_parameters: common.AlgorithmParameters,
                  policy_parameters: common.PolicyParameters

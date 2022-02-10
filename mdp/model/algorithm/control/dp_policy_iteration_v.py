@@ -2,7 +2,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from mdp.model.environment.environment_tabular import EnvironmentTabular
+    from mdp.model.environment.tabular_environment import TabularEnvironment
     from mdp.model.agent.agent import Agent
 from mdp import common
 from mdp.model.algorithm.policy_evaluation.dp_policy_evaluation_v_deterministic import DpPolicyEvaluationVDeterministic
@@ -11,7 +11,7 @@ from mdp.model.algorithm.policy_improvement.dp_policy_improvement_v import DpPol
 
 class DpPolicyIterationV(DpPolicyEvaluationVDeterministic, DpPolicyImprovementV):
     def __init__(self,
-                 environment_: EnvironmentTabular,
+                 environment_: TabularEnvironment,
                  agent: Agent,
                  algorithm_parameters: common.AlgorithmParameters,
                  policy_parameters: common.PolicyParameters

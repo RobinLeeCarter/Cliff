@@ -28,34 +28,20 @@ class Environment(ABC):
         # None to ensure not used when not used/initialised
         self.dynamics: Optional[Dynamics] = None
 
+    @abstractmethod
     def build(self):
         """should always perform self.dynamics.build()"""
         pass
 
     def _is_action_compatible_with_state(self, state: State, action: Action):
+        # by default all actions are compatible with all states
         return True
 
     # region Operation
     def initialize_policy(self, policy_: Policy, policy_parameters: common.PolicyParameters):
         pass
 
-    # def start_s(self) -> int:
-    #     state = self.dynamics.get_a_start_state()
-    #     return self.state_index[state]
-
-    # def start_s(self) -> int:
-    #     state = self._get_a_start_state()
-    #     s: int = self.state_index[state]
-    #     return s
-
-    # def from_state_perform_action(self, state: State, action: Action) -> Response:
-    #     if state.is_terminal:
-    #         raise Exception("Environment: Trying to act in a terminal state.")
-    #     if not self.is_action_compatible_with_state(state, action):
-    #         raise Exception(f"_apply_action state {state} incompatible with action {action}")
-    #     response: Response = self.dynamics.draw_response(state, action)
-    #     return response
-
+    @abstractmethod
     def from_state_perform_action(self, state: State, action: Action) -> tuple[float, State]:
         pass
 
@@ -63,4 +49,8 @@ class Environment(ABC):
                                     algorithm: Algorithm,
                                     policy: Policy):
         pass
+
+    def is_valued_state(self, state: State) -> bool:
+        """Does the state have a value function V(s) e.g. unreachable states might not"""
+        return not state.is_terminal
     # endregion
