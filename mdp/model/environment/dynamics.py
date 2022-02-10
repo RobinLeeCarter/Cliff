@@ -1,39 +1,33 @@
 from __future__ import annotations
 from typing import TYPE_CHECKING
 
-from abc import ABC, abstractmethod
-import numpy as np
+from abc import ABC
 
 if TYPE_CHECKING:
     from mdp import common
-    from mdp.common import Multinoulli
     from mdp.model.environment.action import Action
-    from mdp.model.environment.tabular.tabular_environment import TabularEnvironment
+    from mdp.model.environment.environment import Environment
 from mdp.model.environment.state import State
 
 Response = tuple[float, State]
 
 
 class Dynamics(ABC):
-    def __init__(self, environment: TabularEnvironment, environment_parameters: common.EnvironmentParameters):
+    def __init__(self, environment: Environment, environment_parameters: common.EnvironmentParameters):
         """init top down"""
-        self._environment: TabularEnvironment = environment
+        self._environment: Environment = environment
         self._environment_parameters: common.EnvironmentParameters = environment_parameters
         self._verbose: bool = environment_parameters.verbose
         self.is_built: bool = False
-        # state_transition_probabilities[s',s,a] = p(s'|s,a)
-        self.state_transition_probabilities: np.ndarray = np.array([], dtype=np.float)
-        # expected_reward_np[s,a] = E[r|s,a] = Σs',r p(s',r|s,a).r
-        self.expected_reward: np.ndarray = np.array([], dtype=np.float)
 
     def build(self):
         """build bottom up"""
         self.is_built = True
 
-    def get_start_distribution(self) -> common.Distribution[State]:
+    def get_start_state_distribution(self) -> common.Distribution[State]:
         """
         Starting state distribution
-        If want to use something different to a Uniform list of States override this method to return the distribution
+        If want to use something different to a Uniform list of States, override this method to return the distribution
         """
         start_states: list[State] = self.get_start_states()
         if start_states:
@@ -44,8 +38,14 @@ class Dynamics(ABC):
         else:
             raise Exception("Empty list of start states so nowhere to start!")
 
-    @abstractmethod
     def get_start_states(self) -> list[State]:
+        """If as simple as a list of start states then return it here and the distribution will be generated"""
+        pass
+
+    def draw_response(self, state: State, action: Action) -> Response:
+        """
+        draw a single outcome for a single state and action
+        """
         pass
 
     def get_expected_reward(self, state: State, action: Action) -> float:
@@ -78,37 +78,5 @@ class Dynamics(ABC):
         """
         p(s'|s,a) = Sum_over_r( p(s',r|s,a) )
         probability of a next state for a (state, action)
-        """
-        pass
-
-    def get_state_transition_distribution(self, state: State, action: Action) -> Multinoulli[State]:
-        """
-        dict[ s', p(s'|s,a) ]
-        distribution of next states for a (state, action)
-        """
-        pass
-
-    # def get_state_transition_probability_matrix(self, policy: Policy) -> np.ndarray:
-    #     pass
-
-    def get_summary_outcomes(self, state: State, action: Action) -> Multinoulli[Response]:
-        """
-        dict of possible responses for a single state and action
-        with the expected_reward given in place of reward
-        """
-        pass
-
-    def get_all_outcomes(self, state: State, action: Action) -> Multinoulli[Response]:
-        """
-        dict of possible responses for a single state and action
-        could be used for one state, action in theory
-        but too many for all states and actions so potentially not useful in practice
-        """
-        pass
-
-    def draw_response(self, state: State, action: Action) -> Response:
-        """
-        draw a single outcome for a single state and action
-        standard call for episodic algorithms
         """
         pass

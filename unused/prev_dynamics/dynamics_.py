@@ -4,7 +4,7 @@ from typing import Optional, Generator
 
 if TYPE_CHECKING:
     from mdp.model.environment import state, action
-from mdp.model.environment.dynamics import state_distribution
+from mdp.model.environment.tabular.tabular_dynamics import state_distribution
 
 
 class Dynamics:

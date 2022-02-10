@@ -9,12 +9,12 @@ if TYPE_CHECKING:
     from mdp.common import EnvironmentParameters
 
 from mdp import common
-from mdp.model.environment import dynamics
+from mdp.model.environment.tabular import tabular_dynamics
 
 from mdp.scenarios.position_move.model.state import State
 
 
-class Dynamics(dynamics.Dynamics, ABC):
+class Dynamics(tabular_dynamics.TabularDynamics, ABC):
     def __init__(self, environment_: Environment, environment_parameters: EnvironmentParameters):
         super().__init__(environment_, environment_parameters)
 

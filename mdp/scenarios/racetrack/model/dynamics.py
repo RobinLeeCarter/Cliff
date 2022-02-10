@@ -8,12 +8,12 @@ if TYPE_CHECKING:
     from mdp.scenarios.racetrack.model.grid_world import GridWorld
 
 from mdp import common
-from mdp.model.environment import dynamics
+from mdp.model.environment.tabular import tabular_dynamics
 
 from mdp.scenarios.racetrack.model.state import State
 
 
-class Dynamics(dynamics.Dynamics):
+class Dynamics(tabular_dynamics.TabularDynamics):
     def __init__(self, environment_: Environment, environment_parameters: EnvironmentParameters):
         super().__init__(environment_, environment_parameters)
 

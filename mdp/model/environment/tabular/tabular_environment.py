@@ -6,6 +6,7 @@ import numpy as np
 
 if TYPE_CHECKING:
     from mdp.model.algorithm.value_function import state_function
+    from mdp.model.environment.tabular.tabular_dynamics import TabularDynamics
 
 from mdp import common
 from mdp.model.environment.environment import Environment
@@ -22,6 +23,7 @@ class TabularEnvironment(Environment, ABC):
         :param environment_parameters: the parameters specific to the specific environment e.g. number_of_cars
         """
         super().__init__(environment_parameters)
+        self.dynamics: TabularDynamics = self.dynamics
 
         # state and states
         self.states: list[State] = []               # ordered list of full States

@@ -7,7 +7,7 @@ import random
 
 if TYPE_CHECKING:
     from mdp.model.environment import state
-from mdp.model.environment.dynamics import reward_distribution
+from mdp.model.environment.tabular.tabular_dynamics import reward_distribution
 
 
 class StateDistribution:

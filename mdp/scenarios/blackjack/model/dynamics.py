@@ -7,13 +7,13 @@ if TYPE_CHECKING:
     from mdp.scenarios.blackjack.model.environment_parameters import EnvironmentParameters
 
 from mdp.common import Multinoulli
-from mdp.model.environment import dynamics
+from mdp.model.environment.tabular import tabular_dynamics
 
 from mdp.scenarios.blackjack.model.state import State
 from mdp.scenarios.blackjack.model.enums import Result
 
 
-class Dynamics(dynamics.Dynamics):
+class Dynamics(tabular_dynamics.TabularDynamics):
     def __init__(self, environment_: Environment, environment_parameters: EnvironmentParameters):
         super().__init__(environment_, environment_parameters)
 

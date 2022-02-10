@@ -5,13 +5,11 @@ from abc import ABC, abstractmethod
 if TYPE_CHECKING:
     from mdp.model.algorithm.abstract.algorithm import Algorithm
     from mdp.model.policy.policy import Policy
+    from mdp.model.environment.dynamics import Dynamics
 
 from mdp import common
 from mdp.model.environment.state import State
 from mdp.model.environment.action import Action
-from mdp.model.environment.dynamics import Dynamics
-
-S_A = tuple[int, int]
 
 
 class Environment(ABC):

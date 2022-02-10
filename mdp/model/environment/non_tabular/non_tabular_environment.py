@@ -4,6 +4,7 @@ from abc import ABC, abstractmethod
 
 if TYPE_CHECKING:
     from mdp.model.algorithm.value_function import state_function
+    from mdp.model.environment.non_tabular.non_tabular_dynamics import NonTabularDynamics
 
 from mdp import common
 from mdp.model.environment.environment import Environment
@@ -18,6 +19,7 @@ class NonTabularEnvironment(Environment, ABC):
         :param environment_parameters: the parameters specific to the specific environment e.g. number_of_cars
         """
         super().__init__(environment_parameters)
+        self.dynamics: NonTabularDynamics = self.dynamics
 
         # action list and action lookup
         self.actions: list[Action] = []
@@ -33,7 +35,7 @@ class NonTabularEnvironment(Environment, ABC):
         self._build_distributions()
 
     def _build_distributions(self):
-        self.start_state_distribution = self.dynamics.get_start_distribution()
+        self.start_state_distribution = self.dynamics.get_start_state_distribution()
 
     # region Sets
     @abstractmethod
