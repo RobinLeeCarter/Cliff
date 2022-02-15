@@ -7,7 +7,7 @@ import numpy as np
 if TYPE_CHECKING:
     from mdp.model.environment.non_tabular.non_tabular_state import NonTabularState
     from mdp.model.environment.non_tabular.non_tabular_action import NonTabularAction
-from mdp.model.feature_construction.feature import Feature
+from mdp.model.feature.feature import Feature
 
 
 class SparseFeature(Feature, ABC):

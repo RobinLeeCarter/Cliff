@@ -26,8 +26,9 @@ class NonTabularEnvironment(Environment, ABC):
         self.action_index: dict[Action: int] = {}
 
         # dimensions
-        self.float_dimensions: list[FloatDimension] = []
-        self.category_dimensions: list[CategoryDimension] = []
+        self._state_float_dimensions: dict[str, FloatDimension] = {}
+        self._state_category_dimensions: dict[str, CategoryDimension] = {}
+        self._action_category_dimensions: dict[str, CategoryDimension] = {}
 
         # Distributions
         self._start_state_distribution: Optional[common.Distribution[State]] = None

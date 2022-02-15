@@ -8,7 +8,7 @@ if TYPE_CHECKING:
     from mdp.model.environment.action import Action
     from mdp.model.environment.non_tabular.non_tabular_state import NonTabularState
     from mdp.model.environment.non_tabular.non_tabular_environment import NonTabularEnvironment
-    from mdp.model.feature_construction.feature import Feature
+    from mdp.model.feature.feature import Feature
 from mdp.model.policy.non_tabular.non_tabular_policy import NonTabularPolicy
 
 
