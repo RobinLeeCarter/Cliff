@@ -7,7 +7,7 @@ from mdp.model.environment.action import Action
 
 @dataclass(frozen=True)
 class NonTabularAction(Action, ABC):
-    __discrete_tuple: tuple = field(init=False, hash=False, compare=False)
+    __discrete_tuple: tuple = field(init=False, repr=False, hash=False, compare=False)
 
     def __post_init__(self):
         # from: https://stackoverflow.com/q/53756788

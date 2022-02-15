@@ -4,7 +4,6 @@ from abc import ABC, abstractmethod
 
 if TYPE_CHECKING:
     from mdp.model.algorithm.value_function import state_function
-    from mdp.model.environment.non_tabular.non_tabular_dynamics import NonTabularDynamics
     from mdp.model.environment.non_tabular.dimension.float_dimension import FloatDimension
     from mdp.model.environment.non_tabular.dimension.category_dimension import CategoryDimension
 
@@ -21,7 +20,6 @@ class NonTabularEnvironment(Environment, ABC):
         :param environment_parameters: the parameters specific to the specific environment e.g. number_of_cars
         """
         super().__init__(environment_parameters)
-        self.dynamics: NonTabularDynamics = self.dynamics
 
         # action list and action lookup
         self.actions: list[Action] = []
@@ -32,19 +30,14 @@ class NonTabularEnvironment(Environment, ABC):
         self.category_dimensions: list[CategoryDimension] = []
 
         # Distributions
-        self.start_state_distribution: Optional[common.Distribution[State]] = None
+        self._start_state_distribution: Optional[common.Distribution[State]] = None
 
     def build(self):
         self._build_actions()
         self.action_index = {action: i for i, action in enumerate(self.actions)}
         self._build_dimensions()
-        self.dynamics.build()
-        self._build_distributions()
+        self._start_state_distribution = self._get_start_state_distribution()
 
-    def _build_distributions(self):
-        self.start_state_distribution = self.dynamics.get_start_state_distribution()
-
-    # region Sets
     @abstractmethod
     def _build_actions(self):
         pass
@@ -52,41 +45,36 @@ class NonTabularEnvironment(Environment, ABC):
     @abstractmethod
     def _build_dimensions(self):
         pass
-    # endregion
 
-    # region Operation
-    # TODO: should StateFunction be more general e.g. Tabular vs Function Approximation
-    def insert_state_function_into_graph3d(self,
-                                           comparison: common.Comparison,
-                                           v: state_function.StateFunction,
-                                           parameter: Optional[any] = None):
+    @abstractmethod
+    def _get_start_state_distribution(self) -> common.Distribution[State]:
         pass
 
-    # def start_s(self) -> int:
-    #     state = self.dynamics.get_a_start_state()
-    #     return self.state_index[state]
+    # region Operation
+    @abstractmethod
+    def _draw_response(self, state: State, action: Action) -> tuple[float, State]:
+        """
+        draw a single outcome for a single state and action
+        """
 
-    # def start_s(self) -> int:
-    #     state = self._get_a_start_state()
-    #     s: int = self.state_index[state]
-    #     return s
-
-    # def from_state_perform_action(self, state: State, action: Action) -> Response:
-    #     if state.is_terminal:
-    #         raise Exception("Environment: Trying to act in a terminal state.")
-    #     if not self.is_action_compatible_with_state(state, action):
-    #         raise Exception(f"_apply_action state {state} incompatible with action {action}")
-    #     response: Response = self.dynamics.draw_response(state, action)
-    #     return response
+    def draw_start_state(self) -> State:
+        return self._start_state_distribution.draw_one()
 
     def from_state_perform_action(self, state: State, action: Action) -> tuple[float, State]:
         if state.is_terminal:
             raise Exception("Environment: Trying to act in a terminal state.")
         if not self._is_action_compatible_with_state(state, action):
             raise Exception(f"_apply_action state {state} incompatible with action {action}")
-        reward, new_state = self.dynamics.draw_response(state, action)
-        if not new_state:
-            new_state: State = self.start_state_distribution.draw_one()
+        reward, new_state = self._draw_response(state, action)
+        # if not new_state:
+        #     new_state: State = self._start_state_distribution.draw_one()
 
         return reward, new_state
+
+    # TODO: should StateFunction be more general e.g. Tabular vs Function Approximation
+    def insert_state_function_into_graph3d(self,
+                                           comparison: common.Comparison,
+                                           v: state_function.StateFunction,
+                                           parameter: Optional[any] = None):
+        pass
     # endregion

@@ -1,16 +1,26 @@
+from mdp.scenarios.mountain_car.model.environment_parameters import EnvironmentParameters
+from mdp.scenarios.mountain_car.model.environment import Environment
 from mdp.scenarios.mountain_car.model.state import State
 from mdp.scenarios.mountain_car.model.action import Action
 
-s = State(is_terminal=False, position=0.1, velocity=0.3)
-a = Action(acceleration=0.0)
+environment_parameters: EnvironmentParameters = EnvironmentParameters()
+environment: Environment = Environment(environment_parameters)
+environment.build()
 
-print(s.values)
-print(a.values)
+state: State = environment.draw_start_state()
+# state = State(is_terminal=False, position=0.1, velocity=0.3)
+action = Action(acceleration=0.0)
 
-# for k, v in s.__dataclass_fields__.items():
-#     print(k, v)
+print(action)
 
-# for field in dataclasses.fields(s):
-#     print(field)
+print(state)
+for i in range(1000):
+    reward, state = environment.from_state_perform_action(state, action)
+    print(f"{i}: \tposition={state.position:.2f} \tvelocity={state.velocity:.2f}")
+    if state.is_terminal:
+        break
+
+# print(state.values)
+# print(action.values)
 
 

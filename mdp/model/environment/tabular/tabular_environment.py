@@ -23,7 +23,7 @@ class TabularEnvironment(Environment, ABC):
         :param environment_parameters: the parameters specific to the specific environment e.g. number_of_cars
         """
         super().__init__(environment_parameters)
-        self.dynamics: TabularDynamics = self.dynamics
+        self.dynamics: Optional[TabularDynamics] = None
 
         # state and states
         self.states: list[State] = []               # ordered list of full States

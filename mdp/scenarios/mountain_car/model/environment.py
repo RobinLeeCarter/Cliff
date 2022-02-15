@@ -1,4 +1,6 @@
 from __future__ import annotations
+
+import math
 from typing import TYPE_CHECKING
 
 # import numpy as np
@@ -13,26 +15,23 @@ from mdp.model.environment.non_tabular.non_tabular_environment import NonTabular
 from mdp.model.environment.non_tabular.dimension.float_dimension import FloatDimension
 from mdp.model.environment.non_tabular.dimension.category_dimension import CategoryDimension
 
-# from mdp.scenarios.mountain_car.model.state import State
+from mdp.scenarios.mountain_car.model.state import State
 from mdp.scenarios.mountain_car.model.action import Action
 from mdp.scenarios.mountain_car.model.environment_parameters import EnvironmentParameters
-from mdp.scenarios.mountain_car.model.dynamics import Dynamics
+from mdp.scenarios.mountain_car.model.start_state_distribution import StartStateDistribution
 
 
 class Environment(NonTabularEnvironment):
     def __init__(self, environment_parameters: EnvironmentParameters):
-
         super().__init__(environment_parameters)
 
         # downcast states and actions so properties can be used freely
         self.actions: list[Action] = self.actions
 
-        self.position_dimension = FloatDimension(min=-1.2, max=0.5)
-        self.velocity_dimension = FloatDimension(min=-0.07, max=0.07)
+        self._position_dimension = FloatDimension(min=-1.2, max=0.5)
+        self._velocity_dimension = FloatDimension(min=-0.07, max=0.07)
+        self._start_state_distribution: StartStateDistribution = self._start_state_distribution
 
-        self.dynamics: Dynamics = Dynamics(environment_=self, environment_parameters=environment_parameters)
-
-    # region Sets
     def _build_actions(self):
         self.actions = [
             Action(acceleration=-1.0),
@@ -41,10 +40,37 @@ class Environment(NonTabularEnvironment):
         ]
 
     def _build_dimensions(self):
-        self.float_dimensions = [self.position_dimension, self.velocity_dimension]
+        self.float_dimensions = [self._position_dimension, self._velocity_dimension]
         action_dimension = CategoryDimension(possible_values=len(self.actions))
         self.category_dimensions = [action_dimension]
-    # endregion
+
+    def _get_start_state_distribution(self) -> StartStateDistribution[State]:
+        return StartStateDistribution(self._position_dimension)
+
+    def _draw_response(self, state: State, action: Action) -> tuple[float, State]:
+        new_position: float
+        new_velocity: float
+        is_terminal: bool = False
+        reward: float = -1.0
+
+        # rules from Sutton and Barto RL 10.1 p245
+        projected_position = state.position + state.velocity
+        if projected_position < self._position_dimension.min:
+            new_position = self._position_dimension.min
+            new_velocity = 0.0
+        elif projected_position > self._position_dimension.max:
+            new_position = projected_position
+            new_velocity = 0.0
+            is_terminal = True
+            reward = 0.0
+        else:
+            new_position = projected_position
+            # ẋ(t) + 0.001*A(t) - 0.0025*cos( 3 * x(t) )
+            projected_velocity = state.velocity + 0.001 * action.acceleration - 0.0025 * math.cos(3.0 * state.position)
+            new_velocity = self._velocity_dimension.bound(projected_velocity)
+        new_state = State(is_terminal=is_terminal, position=new_position, velocity=new_velocity)
+
+        return reward, new_state
 
     # region Operation
     def initialize_policy(self, policy: Policy, policy_parameters: common.PolicyParameters):

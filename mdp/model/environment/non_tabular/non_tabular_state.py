@@ -9,8 +9,8 @@ from mdp.model.environment.state import State
 
 @dataclass(frozen=True)
 class NonTabularState(State, ABC):
-    __float_array: np.ndarray = field(init=False, hash=False, compare=False)
-    __discrete_tuple: tuple = field(init=False, hash=False, compare=False)
+    __float_array: np.ndarray = field(init=False, repr=False, hash=False, compare=False)
+    __discrete_tuple: tuple = field(init=False, repr=False, hash=False, compare=False)
 
     def __post_init__(self):
         # from: https://stackoverflow.com/q/53756788

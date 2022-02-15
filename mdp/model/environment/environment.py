@@ -21,7 +21,6 @@ class Environment(ABC):
         self._environment_parameters = environment_parameters
         self.verbose: bool = environment_parameters.verbose
         # None to ensure not used when not used/initialised
-        self.dynamics: Optional[Dynamics] = None
 
     @abstractmethod
     def build(self):
