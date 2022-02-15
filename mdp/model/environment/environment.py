@@ -1,11 +1,10 @@
 from __future__ import annotations
-from typing import Optional, TYPE_CHECKING
+from typing import TYPE_CHECKING
 from abc import ABC, abstractmethod
 
 if TYPE_CHECKING:
     from mdp.model.algorithm.abstract.algorithm import Algorithm
     from mdp.model.policy.policy import Policy
-    from mdp.model.environment.dynamics import Dynamics
 
 from mdp import common
 from mdp.model.environment.state import State
@@ -24,7 +23,7 @@ class Environment(ABC):
 
     @abstractmethod
     def build(self):
-        """should always perform self.dynamics.build()"""
+        """call after init and could be slow"""
         pass
 
     # region Operation
