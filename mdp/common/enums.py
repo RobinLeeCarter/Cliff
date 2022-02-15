@@ -92,6 +92,7 @@ class ScenarioType(enum.IntEnum):
     RACETRACK = enum.auto()
     RANDOM_WALK = enum.auto()
     WINDY = enum.auto()
+    MOUNTAIN_CAR = enum.auto()
 
 
 class ActionsList(enum.IntEnum):

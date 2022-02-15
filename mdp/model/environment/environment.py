@@ -28,11 +28,11 @@ class Environment(ABC):
         """should always perform self.dynamics.build()"""
         pass
 
+    # region Operation
     def _is_action_compatible_with_state(self, state: State, action: Action):
         # by default all actions are compatible with all states
         return True
 
-    # region Operation
     def initialize_policy(self, policy_: Policy, policy_parameters: common.PolicyParameters):
         pass
 

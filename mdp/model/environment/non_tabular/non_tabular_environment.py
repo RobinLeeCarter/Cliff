@@ -5,6 +5,8 @@ from abc import ABC, abstractmethod
 if TYPE_CHECKING:
     from mdp.model.algorithm.value_function import state_function
     from mdp.model.environment.non_tabular.non_tabular_dynamics import NonTabularDynamics
+    from mdp.model.environment.non_tabular.dimension.float_dimension import FloatDimension
+    from mdp.model.environment.non_tabular.dimension.category_dimension import CategoryDimension
 
 from mdp import common
 from mdp.model.environment.environment import Environment
@@ -25,12 +27,17 @@ class NonTabularEnvironment(Environment, ABC):
         self.actions: list[Action] = []
         self.action_index: dict[Action: int] = {}
 
+        # dimensions
+        self.float_dimensions: list[FloatDimension] = []
+        self.category_dimensions: list[CategoryDimension] = []
+
         # Distributions
         self.start_state_distribution: Optional[common.Distribution[State]] = None
 
     def build(self):
         self._build_actions()
         self.action_index = {action: i for i, action in enumerate(self.actions)}
+        self._build_dimensions()
         self.dynamics.build()
         self._build_distributions()
 
@@ -40,6 +47,10 @@ class NonTabularEnvironment(Environment, ABC):
     # region Sets
     @abstractmethod
     def _build_actions(self):
+        pass
+
+    @abstractmethod
+    def _build_dimensions(self):
         pass
     # endregion
 

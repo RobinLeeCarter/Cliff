@@ -1,7 +1,7 @@
 from __future__ import annotations
 from typing import TYPE_CHECKING
 
-from abc import ABC
+from abc import ABC, abstractmethod
 
 if TYPE_CHECKING:
     from mdp import common
@@ -42,8 +42,8 @@ class Dynamics(ABC):
         """If as simple as a list of start states then return it here and the distribution will be generated"""
         pass
 
+    @abstractmethod
     def draw_response(self, state: State, action: Action) -> Response:
         """
         draw a single outcome for a single state and action
         """
-        pass
