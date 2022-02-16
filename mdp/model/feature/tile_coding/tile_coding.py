@@ -4,6 +4,7 @@ from typing import Optional, Callable, TYPE_CHECKING
 
 import numpy as np
 if TYPE_CHECKING:
+    from mdp.model.environment.non_tabular.dimension_enum import DimensionEnum
     from mdp.model.environment.non_tabular.dimension.dimension import Dimension
     from mdp.model.environment.non_tabular.dimension.float_dimension import FloatDimension
     from mdp.model.environment.non_tabular.dimension.category_dimension import CategoryDimension
@@ -12,9 +13,9 @@ from mdp.model.feature.tile_coding.tiling_group import TilingGroup
 
 class TileCoding:
     def __init__(self,
-                 state_float_dimensions: dict[str, FloatDimension],
-                 state_category_dimensions: dict[str, CategoryDimension],
-                 action_category_dimensions: dict[str, CategoryDimension],
+                 state_float_dimensions: dict[DimensionEnum, FloatDimension],
+                 state_category_dimensions: dict[DimensionEnum, CategoryDimension],
+                 action_category_dimensions: dict[DimensionEnum, CategoryDimension],
                  max_size: Optional[int] = None,
                  use_dict: bool = True):
         """
@@ -22,9 +23,9 @@ class TileCoding:
         :param max_size: optional: maximum tile number, will reuse from start if using a dict and show a warning
         :param use_dict: pass False is wish to Hash % max_size and avoid using a dict
         """
-        self._state_float_dimensions: dict[str, FloatDimension] = state_float_dimensions
-        self._state_category_dimensions: dict[str, CategoryDimension] = state_category_dimensions
-        self._action_category_dimensions: dict[str, CategoryDimension] = action_category_dimensions
+        self._state_float_dimensions: dict[DimensionEnum, FloatDimension] = state_float_dimensions
+        self._state_category_dimensions: dict[DimensionEnum, CategoryDimension] = state_category_dimensions
+        self._action_category_dimensions: dict[DimensionEnum, CategoryDimension] = action_category_dimensions
         self._max_size: Optional[int] = max_size
         self._use_dict: bool = use_dict
 
@@ -39,7 +40,7 @@ class TileCoding:
         self._tile_index_counter: int = 0
 
     def add(self,
-            included_dimensions: list[str],
+            included_dimensions: list[DimensionEnum],
             included_dims: np.ndarray,
             tile_size_per_dim: Optional[np.ndarray] = None,
             tiles_per_dim: Optional[np.ndarray] = None,
@@ -59,11 +60,11 @@ class TileCoding:
         # convert to boolean arrays, note that dicts are safely ordered as of python 3.7
         # TODO: is this best done in tiling_group
         included_state_floats: np.ndarray = np.array(
-            [name in included_dimensions for name in self._state_float_dimensions.keys()])
+            [dimension in included_dimensions for dimension in self._state_float_dimensions.keys()])
         included_state_category: np.ndarray = np.array(
-            [name in included_dimensions for name in self._state_category_dimensions.keys()])
+            [dimension in included_dimensions for dimension in self._state_category_dimensions.keys()])
         included_action_category: np.ndarray = np.array(
-            [name in included_dimensions for name in self._action_category_dimensions.keys()])
+            [dimension in included_dimensions for dimension in self._action_category_dimensions.keys()])
 
         if tile_size_per_dim is not None and tiles_per_dim is not None:
             print("Warning: specify tile_size_per_dim or tiles_per_dim, not both.")

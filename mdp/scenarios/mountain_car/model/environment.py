@@ -17,6 +17,7 @@ from mdp.scenarios.mountain_car.model.state import State
 from mdp.scenarios.mountain_car.model.action import Action
 from mdp.scenarios.mountain_car.model.environment_parameters import EnvironmentParameters
 from mdp.scenarios.mountain_car.model.start_state_distribution import StartStateDistribution
+from mdp.scenarios.mountain_car.enums import StateFloatDim, ActionCategoryDim
 
 
 class Environment(NonTabularEnvironment):
@@ -36,9 +37,10 @@ class Environment(NonTabularEnvironment):
 
     def _build_dimensions(self):
         # insertion order is critical
-        self._state_float_dimensions["position"] = FloatDimension(min=-1.2, max=0.5)
-        self._state_float_dimensions["velocity"] = FloatDimension(min=-0.07, max=0.07)
-        self._action_category_dimensions["acceleration"] = CategoryDimension(possible_values=len(self.actions))
+        self._state_float_dimensions[StateFloatDim.POSITION] = FloatDimension(min=-1.2, max=0.5)
+        self._state_float_dimensions[StateFloatDim.VELOCITY] = FloatDimension(min=-0.07, max=0.07)
+        self._action_category_dimensions[ActionCategoryDim.ACCELERATION] = \
+            CategoryDimension(possible_values=len(self.actions))
 
         # self.float_dimensions = [self._position_dimension, self._velocity_dimension]
         # action_dimension = CategoryDimension(possible_values=len(self.actions))
