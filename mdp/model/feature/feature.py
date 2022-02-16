@@ -24,8 +24,9 @@ class Feature(ABC):
         self._action: Optional[NonTabularAction] = None
 
         # current values of item (state or state-action pair)
-        self._float_array: np.ndarray = np.array([], dtype=float)
-        self._discrete_tuple: tuple = tuple()
+        self._state_floats: np.ndarray = np.array([], dtype=float)
+        self._state_categories: np.ndarray = np.array([], dtype=object)
+        self._action_categories: np.ndarray = np.array([], dtype=object)
 
     @property
     def max_size(self) -> int:
@@ -40,26 +41,28 @@ class Feature(ABC):
 
     def __getitem__(self, item: Union[NonTabularState, tuple[NonTabularState, NonTabularAction]]) -> np.ndarray:
         """returns either the vector as normal or if a sparse feature just the indexes that 1"""
-        self.set_values(item)
+        self.unpack_values(item)
         return self._get_x()
 
     def get_x(self, item: Union[NonTabularState, tuple[NonTabularState, NonTabularAction]]) -> np.ndarray:
         """always returns the full feature vector regardless of is_sparse"""
-        self.set_values(item)
+        self.unpack_values(item)
         return self._get_x()
 
-    def set_values(self, item: Union[NonTabularState, tuple[NonTabularState, NonTabularAction]]):
+    def unpack_values(self, item: Union[NonTabularState, tuple[NonTabularState, NonTabularAction]]):
         if isinstance(item, NonTabularState):
             item: NonTabularState
             self._state = item
-            self._float_array, self._discrete_tuple = self._state.values
+            self._state_floats = self._state.floats
+            self._state_categories = self._state.categories
         else:
             item: tuple[NonTabularState, NonTabularAction]
             self._state, self._action = item
-            self._float_array, self._discrete_tuple = self._state.values
-            self._discrete_tuple += self._action.values
+            self._state_floats = self._state.floats
+            self._state_categories = self._state.categories
+            self._action_categories += self._action.categories
 
     @abstractmethod
     def _get_x(self) -> np.ndarray:
-        """return the full feature vector"""
+        """return the full feature vector using unpacked values"""
         pass

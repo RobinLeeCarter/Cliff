@@ -4,9 +4,7 @@ from abc import ABC, abstractmethod
 
 if TYPE_CHECKING:
     from mdp.model.algorithm.value_function import state_function
-    from mdp.model.environment.non_tabular.dimension_enum import DimensionEnum
-    from mdp.model.environment.non_tabular.dimension.float_dimension import FloatDimension
-    from mdp.model.environment.non_tabular.dimension.category_dimension import CategoryDimension
+    from mdp.model.environment.non_tabular.dims import Dims
 
 from mdp import common
 from mdp.model.environment.environment import Environment
@@ -27,9 +25,7 @@ class NonTabularEnvironment(Environment, ABC):
         self.action_index: dict[Action: int] = {}
 
         # dimensions
-        self._state_float_dimensions: dict[DimensionEnum, FloatDimension] = {}
-        self._state_category_dimensions: dict[DimensionEnum, CategoryDimension] = {}
-        self._action_category_dimensions: dict[DimensionEnum, CategoryDimension] = {}
+        self._dims: Dims = Dims()
 
         # Distributions
         self._start_state_distribution: Optional[common.Distribution[State]] = None

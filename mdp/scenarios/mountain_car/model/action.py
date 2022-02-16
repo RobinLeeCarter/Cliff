@@ -14,5 +14,5 @@ class Action(NonTabularAction):
     """
     acceleration: float
 
-    def _get_discrete_tuple(self) -> tuple:
-        return self.acceleration,
+    def _get_categories(self) -> list:
+        return [self.acceleration]

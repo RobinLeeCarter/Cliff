@@ -1,18 +1,9 @@
 import enum
-from mdp.model.environment.non_tabular.dimension_enum import DimensionEnum
+from mdp.model.environment.non_tabular.dim_enum import DimEnum
 
 
-@enum.unique
-class StateFloatDim(DimensionEnum):
+class Dim(DimEnum):
+    """enumeration of dimensions just to avoid using magic strings and to be consistent with other code"""
     POSITION = enum.auto()
     VELOCITY = enum.auto()
-
-
-# @enum.unique
-# class StateCategoryDim(DimensionEnum):
-#     pass
-
-
-@enum.unique
-class ActionCategoryDim(DimensionEnum):
     ACCELERATION = enum.auto()

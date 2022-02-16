@@ -17,7 +17,7 @@ from mdp.scenarios.mountain_car.model.state import State
 from mdp.scenarios.mountain_car.model.action import Action
 from mdp.scenarios.mountain_car.model.environment_parameters import EnvironmentParameters
 from mdp.scenarios.mountain_car.model.start_state_distribution import StartStateDistribution
-from mdp.scenarios.mountain_car.enums import StateFloatDim, ActionCategoryDim
+from mdp.scenarios.mountain_car.enums import Dim
 
 
 class Environment(NonTabularEnvironment):
@@ -37,32 +37,31 @@ class Environment(NonTabularEnvironment):
 
     def _build_dimensions(self):
         # insertion order is critical
-        self._state_float_dimensions[StateFloatDim.POSITION] = FloatDimension(min=-1.2, max=0.5)
-        self._state_float_dimensions[StateFloatDim.VELOCITY] = FloatDimension(min=-0.07, max=0.07)
-        self._action_category_dimensions[ActionCategoryDim.ACCELERATION] = \
-            CategoryDimension(possible_values=len(self.actions))
+        self._dims.state_float[Dim.POSITION] = FloatDimension(min=-1.2, max=0.5)
+        self._dims.state_float[Dim.VELOCITY] = FloatDimension(min=-0.07, max=0.07)
+        self._dims.action_category[Dim.ACCELERATION] = CategoryDimension(possible_values=len(self.actions))
 
         # self.float_dimensions = [self._position_dimension, self._velocity_dimension]
         # action_dimension = CategoryDimension(possible_values=len(self.actions))
         # self.category_dimensions = [action_dimension]
 
     def _get_start_state_distribution(self) -> StartStateDistribution[State]:
-        return StartStateDistribution(self._state_float_dimensions["position"])
+        return StartStateDistribution(self._dims)
 
     def _draw_response(self, state: State, action: Action) -> tuple[float, State]:
-        position_dimension = self._state_float_dimensions["position"]
-        velocity_dimension = self._state_float_dimensions["velocity"]
+        position_dim = self._dims.state_float[Dim.POSITION]
+        velocity_dim = self._dims.state_float[Dim.VELOCITY]
         new_position: float
         new_velocity: float
         is_terminal: bool = False
         reward: float = -1.0
 
-        # rules from Sutton and Barto RL 10.1 p245
+        # environment rules from Sutton and Barto RL 10.1 p245
         projected_position = state.position + state.velocity
-        if projected_position < position_dimension.min:
-            new_position = position_dimension.min
+        if projected_position < position_dim.min:
+            new_position = position_dim.min
             new_velocity = 0.0
-        elif projected_position > position_dimension.max:
+        elif projected_position > position_dim.max:
             new_position = projected_position
             new_velocity = 0.0
             is_terminal = True
@@ -71,7 +70,7 @@ class Environment(NonTabularEnvironment):
             new_position = projected_position
             # ẋ(t) + 0.001*A(t) - 0.0025*cos( 3 * x(t) )
             projected_velocity = state.velocity + 0.001 * action.acceleration - 0.0025 * math.cos(3.0 * state.position)
-            new_velocity = velocity_dimension.bound(projected_velocity)
+            new_velocity = velocity_dim.bound(projected_velocity)
         new_state = State(is_terminal=is_terminal, position=new_position, velocity=new_velocity)
 
         return reward, new_state

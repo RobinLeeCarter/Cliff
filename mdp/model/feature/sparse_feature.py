@@ -22,13 +22,12 @@ class SparseFeature(Feature, ABC):
 
     def __getitem__(self, item: Union[NonTabularState, tuple[NonTabularState, NonTabularAction]]) -> np.ndarray:
         """returns either the vector as normal or if a sparse feature just the indexes that 1"""
-        self.set_values(item)
+        self.unpack_values(item)
         return self._get_x_sparse()
 
-    def get_x(self, item: Union[NonTabularState, tuple[NonTabularState, NonTabularAction]]) -> np.ndarray:
+    def _get_x(self) -> np.ndarray:
         """return the full x vector"""
         if self._max_size:
-            self.set_values(item)
             x_sparse: np.ndarray = self._get_x_sparse()
             x = np.zeros(shape=self._max_size, dtype=np.int)
             x[x_sparse] = 1
@@ -38,5 +37,5 @@ class SparseFeature(Feature, ABC):
 
     @abstractmethod
     def _get_x_sparse(self) -> np.ndarray:
-        """return just the indexes of x which are 1 (rest are 0)"""
+        """return just the indexes of x which are 1 (rest are 0) using unpacked values"""
         pass

@@ -23,12 +23,3 @@ class FloatDimension(Dimension):
             return self.max
         else:
             return x
-
-    def calc_tile_size(self, tiles: int) -> float:
-        return self.range / tiles
-
-    def calc_tiles(self, tile_size: float) -> int:
-        if tile_size == 0.0:
-            return 0
-        else:
-            return math.ceil(self.range / tile_size)

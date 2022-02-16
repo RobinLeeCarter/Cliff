@@ -4,18 +4,17 @@ from typing import TYPE_CHECKING
 import numpy as np
 
 if TYPE_CHECKING:
-    from mdp.model.environment.non_tabular.dimension.float_dimension import FloatDimension
+    from mdp.model.environment.non_tabular.dims import Dims
 
 from mdp.common.distribution.continuous import ContinuousDistribution
+from mdp.scenarios.mountain_car.enums import Dim
 from mdp.scenarios.mountain_car.model.state import State
 
 
 class StartStateDistribution(ContinuousDistribution[State]):
-    def __init__(self,
-                 position_dimension: FloatDimension
-                 ):
-        self._position_min = position_dimension.min
-        self._position_max = position_dimension.max
+    def __init__(self, dims: Dims):
+        self._position_min = dims.state_float[Dim.POSITION].min
+        self._position_max = dims.state_float[Dim.POSITION].max
 
     def draw_one(self) -> State:
         # "Samples are uniformly distributed over the half-open interval [low, high)"
