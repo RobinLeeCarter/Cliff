@@ -51,6 +51,9 @@ class TilingGroup:
         self._included_action_category: np.ndarray = np.array(
             [dim in included_dims for dim in self._dims.action_category], dtype=bool)
 
+        if tiles_per_dim is None:
+            tiles_per_dim = dict()  # mutable
+
         # set a default for offset_per_dimension_fn if one is not passed
         if offset_per_dimension_fn is None:
             offset_per_dimension_fn = self._first_odd_integers
@@ -83,13 +86,14 @@ class TilingGroup:
         # e.g. array([8, 8])
 
         # convert tile_size_per_dim entries so can just use tiles_per_dim
-        for dim, tile_size in tile_size_per_dim.items():
-            if dim not in tiles_per_dim:
-                range_: float = self._dims.state_float[dim].range
-                tiles_per_dim[dim] = self.calc_tiles(range_, tile_size)
+        if tile_size_per_dim:
+            for dim, tile_size in tile_size_per_dim.items():
+                if dim not in tiles_per_dim:
+                    range_: float = self._dims.state_float[dim].range
+                    tiles_per_dim[dim] = self.calc_tiles(range_, tile_size)
         # put in correct order and use a default if neccesary
         requested_tiles: list[int] = \
-            [tiles_per_dim.get(key=dim, default=self._tilings) for dim, float_dimension in state_float]
+            [tiles_per_dim.get(dim, self._tilings) for dim, float_dimension in state_float.items()]
 
         # calibrate input, dividing by the range and multiplying by the number of tiles. So a tile maps to 1.0.
         # e.g. array([8, 8]) / array([6.28318531, 6.28318531]) = array([1.27323954, 1.27323954])
@@ -100,13 +104,15 @@ class TilingGroup:
 
         # wrapped dimensions boolean array
         self._float_wrapped_dim = np.array([dr.wrap_around for dr in state_float.values()], dtype=np.bool)
+        self._has_wrapped: bool = np.sum(self._float_wrapped_dim) > 0
+
         # actual tiles per dimension (+ 1 extra tile needed for offset providing a full partitioning if not wrapped)
         # e.g. array([9, 9])
         actual_tiles = np.array([
             tiles + int(not float_dimension.wrap_around)
             for tiles, float_dimension in zip(requested_tiles, state_float.values())
         ], dtype=np.int)
-        self._actual_tiles_for_wrapped = actual_tiles[self._float_wrapped_dim]
+        self._actual_tiles_for_wrapped: np.ndarray = actual_tiles[self._float_wrapped_dim]
 
         # Calculate offsets
 
@@ -209,7 +215,8 @@ class TilingGroup:
             (state_floats[self._included_floats] - self._float_dim_min) * self._float_norm_tiles
             + self._float_offsets                               # broadcast to all tilings with their offsets
         ).astype(np.int)
-        float_tile_coords[:, self._float_wrapped_dim] %= self._actual_tiles_for_wrapped
+        if self._has_wrapped:
+            float_tile_coords[:, self._float_wrapped_dim] %= self._actual_tiles_for_wrapped
         return float_tile_coords
 
     def filter_state_categories(self, state_categories: np.ndarray) -> np.ndarray:

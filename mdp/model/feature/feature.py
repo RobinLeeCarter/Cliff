@@ -50,17 +50,17 @@ class Feature(ABC):
         return self._get_x()
 
     def unpack_values(self, item: Union[NonTabularState, tuple[NonTabularState, NonTabularAction]]):
-        if isinstance(item, NonTabularState):
-            item: NonTabularState
-            self._state = item
-            self._state_floats = self._state.floats
-            self._state_categories = self._state.categories
-        else:
+        if isinstance(item, tuple):
             item: tuple[NonTabularState, NonTabularAction]
             self._state, self._action = item
             self._state_floats = self._state.floats
             self._state_categories = self._state.categories
             self._action_categories += self._action.categories
+        else:
+            item: NonTabularState
+            self._state = item
+            self._state_floats = self._state.floats
+            self._state_categories = self._state.categories
 
     @abstractmethod
     def _get_x(self) -> np.ndarray:
