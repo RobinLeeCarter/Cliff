@@ -7,6 +7,7 @@ import numpy as np
 if TYPE_CHECKING:
     from mdp.model.environment.non_tabular.non_tabular_state import NonTabularState
     from mdp.model.environment.non_tabular.non_tabular_action import NonTabularAction
+    from mdp.model.feature.compound_feature import CompoundFeature
 
 
 class Feature(ABC):
@@ -52,15 +53,30 @@ class Feature(ABC):
     def unpack_values(self, item: Union[NonTabularState, tuple[NonTabularState, NonTabularAction]]):
         if isinstance(item, tuple):
             item: tuple[NonTabularState, NonTabularAction]
-            self._state, self._action = item
-            self._state_floats = self._state.floats
-            self._state_categories = self._state.categories
-            self._action_categories += self._action.categories
+            state, action = item
+            self.set_unpacked_values(state, state.floats, state.categories, action, action.categories)
         else:
             item: NonTabularState
-            self._state = item
-            self._state_floats = self._state.floats
-            self._state_categories = self._state.categories
+            self.set_unpacked_values(item, item.floats, item.categories)
+
+    def set_unpacked_values(self,
+                            state: NonTabularState,
+                            state_floats: np.ndarray,
+                            state_categories: np.ndarray,
+                            action: Optional[NonTabularAction] = None,
+                            actions_categories: Optional[np.ndarray] = None):
+        self._state = state
+        self._state_floats = state_floats
+        self._state_categories = state_categories
+        if action:
+            self._action = action
+            self._action_categories = actions_categories
+
+    # def copy_and_get_x(self, compound_feature: CompoundFeature) -> np.ndarray:
+    #     """copy the unpacked values from the compound feature and then _get_x"""
+    #     self._state, self._action, self._state_floats, self._state_categories, self._action_categories = \
+    #         compound_feature.unpacked_values
+    #     return self._get_x()
 
     @abstractmethod
     def _get_x(self) -> np.ndarray:

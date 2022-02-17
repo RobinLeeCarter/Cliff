@@ -10,7 +10,7 @@ from mdp.model.environment.state import State
 @dataclass(frozen=True)
 class NonTabularState(State, ABC):
     floats: np.ndarray = field(init=False, repr=False, hash=False, compare=False)
-    categories: tuple = field(init=False, repr=False, hash=False, compare=False)
+    categories: np.ndarray = field(init=False, repr=False, hash=False, compare=False)
 
     def __post_init__(self):
         # from: https://stackoverflow.com/q/53756788

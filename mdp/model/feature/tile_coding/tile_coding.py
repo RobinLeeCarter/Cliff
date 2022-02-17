@@ -77,9 +77,9 @@ class TileCoding(SparseFeature):
             # array of: tilings x included dimensions
             float_tile_coords = tiling_group.get_float_tile_coords(self._state_floats)
             # array of included dimensions in each case
-            state_categories = tiling_group.filter_state_categories(self._state_categories)
-            action_categories = tiling_group.filter_action_categories(self._action_categories)
-            category_tuple = tuple(state_categories) + tuple(action_categories)
+            state_categories: np.ndarray = tiling_group.filter_state_categories(self._state_categories)
+            action_categories: np.ndarray = tiling_group.filter_action_categories(self._action_categories)
+            category_tuple: tuple = tuple(state_categories) + tuple(action_categories)
             for tiling, tile_coord in enumerate(float_tile_coords):
                 full_tuple: tuple = (tiling_group_index, tiling) + tuple(tile_coord) + category_tuple
                 tile_index: int = self._get_tile_index(full_tuple)

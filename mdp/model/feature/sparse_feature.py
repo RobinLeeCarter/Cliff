@@ -7,6 +7,7 @@ import numpy as np
 if TYPE_CHECKING:
     from mdp.model.environment.non_tabular.non_tabular_state import NonTabularState
     from mdp.model.environment.non_tabular.non_tabular_action import NonTabularAction
+    from mdp.model.feature.compound_feature import CompoundFeature
 from mdp.model.feature.feature import Feature
 
 
@@ -34,6 +35,12 @@ class SparseFeature(Feature, ABC):
             return x
         else:
             raise Exception("Size of x not specified")
+
+    # def copy_and_get_x_sparse(self, compound_feature: CompoundFeature) -> np.ndarray:
+    #     """copy the unpacked values from the compound feature and then _get_x"""
+    #     self._state, self._action, self._state_floats, self._state_categories, self._action_categories = \
+    #         compound_feature.unpacked_values
+    #     return self._get_x_sparse()
 
     @abstractmethod
     def _get_x_sparse(self) -> np.ndarray:

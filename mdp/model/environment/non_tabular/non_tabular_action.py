@@ -9,7 +9,7 @@ from mdp.model.environment.action import Action
 
 @dataclass(frozen=True)
 class NonTabularAction(Action, ABC):
-    categories: tuple = field(init=False, repr=False, hash=False, compare=False)
+    categories: np.ndarray = field(init=False, repr=False, hash=False, compare=False)
 
     def __post_init__(self):
         # from: https://stackoverflow.com/q/53756788
