@@ -9,7 +9,7 @@ environment.build()
 
 state: State = environment.draw_start_state()
 # state = State(is_terminal=False, position=0.1, velocity=0.3)
-action = Action(acceleration=0.0)
+action = Action(acceleration=1.0)
 
 print(action)
 

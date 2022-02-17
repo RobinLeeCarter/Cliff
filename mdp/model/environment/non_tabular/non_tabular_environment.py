@@ -4,12 +4,13 @@ from abc import ABC, abstractmethod
 
 if TYPE_CHECKING:
     from mdp.model.algorithm.value_function import state_function
-    from mdp.model.environment.non_tabular.dims import Dims
+
 
 from mdp import common
 from mdp.model.environment.environment import Environment
 from mdp.model.environment.state import State
 from mdp.model.environment.action import Action
+from mdp.model.environment.non_tabular.dims import Dims
 
 
 class NonTabularEnvironment(Environment, ABC):
