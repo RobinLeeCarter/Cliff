@@ -7,6 +7,8 @@ import numpy as np
 if TYPE_CHECKING:
     from mdp.model.environment.non_tabular.dim_enum import DimEnum
     from mdp.model.environment.non_tabular.dims import Dims
+    from mdp.model.environment.non_tabular.non_tabular_state import NonTabularState
+    from mdp.model.environment.non_tabular.non_tabular_action import NonTabularAction
 from mdp.model.feature.sparse_feature import SparseFeature
 from mdp.model.feature.tile_coding.tiling_group import TilingGroup
 
@@ -70,6 +72,37 @@ class TileCoding(SparseFeature):
             # if self._size != 0 and self._total_tiles > self._size:
             #     print(f"Warning: total_tiles: {self._total_tiles} exceeds size: {self._size}")
 
+    def _set_state(self, state: NonTabularState):
+        super()._set_state(state)
+        self._state_tuples: dict[[int, int], tuple] = {}
+        for tiling_group_index, tiling_group in enumerate(self._tiling_groups):
+            # array of: tilings x included dimensions
+            float_tile_coords = tiling_group.get_float_tile_coords(self._state.floats)
+            # array of included dimensions in each case
+            state_categories: np.ndarray = tiling_group.filter_state_categories(self._state.categories)
+            for tiling, tile_coord in enumerate(float_tile_coords):
+                state_tuple: tuple = tuple(tile_coord) + tuple(state_categories)
+                self._state_tuples[tiling_group_index, tiling] = state_tuple
+
+    def _set_action(self, action: NonTabularAction):
+        super()._set_action(action)
+        self._action_tuples: dict[int, tuple] = {}
+        for tiling_group_index, tiling_group in enumerate(self._tiling_groups):
+            action_categories: np.ndarray = tiling_group.filter_action_categories(self._action.categories)
+            self._action_tuples[tiling_group_index] = tuple(action_categories)
+
+    def _get_x_sparse_new(self) -> np.ndarray:
+        """return just the indexes of x which are 1 (rest are 0) (i.e. a list of tiles) using unpacked values"""
+        tile_indexes: list[int] = []
+        for tiling_group_index, tiling_group in enumerate(self._tiling_groups):
+            for tiling in range(tiling_group.tilings):
+                full_tuple = (tiling_group_index, tiling)\
+                             + self._state_tuples[tiling_group_index, tiling]\
+                             + self._action_tuples[tiling_group_index]
+                tile_index: int = self._get_tile_index(full_tuple)
+                tile_indexes.append(tile_index)
+        return np.array(tile_indexes, dtype=np.int)
+
     def _get_x_sparse(self) -> np.ndarray:
         """return just the indexes of x which are 1 (rest are 0) (i.e. a list of tiles) using unpacked values"""
         tile_indexes: list[int] = []
@@ -79,9 +112,9 @@ class TileCoding(SparseFeature):
             # array of included dimensions in each case
             state_categories: np.ndarray = tiling_group.filter_state_categories(self._state_categories)
             action_categories: np.ndarray = tiling_group.filter_action_categories(self._action_categories)
-            category_tuple: tuple = tuple(state_categories) + tuple(action_categories)
             for tiling, tile_coord in enumerate(float_tile_coords):
-                full_tuple: tuple = (tiling_group_index, tiling) + tuple(tile_coord) + category_tuple
+                state_tuple = (tiling_group_index, tiling) + tuple(tile_coord) + tuple(state_categories)
+                full_tuple: tuple = state_tuple + tuple(action_categories)
                 tile_index: int = self._get_tile_index(full_tuple)
                 tile_indexes.append(tile_index)
         return np.array(tile_indexes, dtype=np.int)

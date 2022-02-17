@@ -7,7 +7,6 @@ import numpy as np
 if TYPE_CHECKING:
     from mdp.model.environment.non_tabular.non_tabular_state import NonTabularState
     from mdp.model.environment.non_tabular.non_tabular_action import NonTabularAction
-    from mdp.model.feature.compound_feature import CompoundFeature
 
 
 class Feature(ABC):
@@ -24,10 +23,11 @@ class Feature(ABC):
         self._state: Optional[NonTabularState] = None
         self._action: Optional[NonTabularAction] = None
 
+        # TODO: Remove these from everywhere
         # current values of item (state or state-action pair)
-        self._state_floats: np.ndarray = np.array([], dtype=float)
-        self._state_categories: np.ndarray = np.array([], dtype=object)
-        self._action_categories: np.ndarray = np.array([], dtype=object)
+        # self._state_floats: np.ndarray = np.array([], dtype=float)
+        # self._state_categories: np.ndarray = np.array([], dtype=object)
+        # self._action_categories: np.ndarray = np.array([], dtype=object)
 
     @property
     def max_size(self) -> int:
@@ -71,6 +71,14 @@ class Feature(ABC):
         if action:
             self._action = action
             self._action_categories = actions_categories
+
+    def _set_state(self, state: NonTabularState):
+        # call top-down
+        self._state = state
+
+    def _set_action(self, action: NonTabularAction):
+        # call top-down
+        self._action = action
 
     # def copy_and_get_x(self, compound_feature: CompoundFeature) -> np.ndarray:
     #     """copy the unpacked values from the compound feature and then _get_x"""
