@@ -25,12 +25,25 @@ class LinearStateActionFunction(StateActionFunction):
         self.size: int = self.feature.max_size
         # weights
         self.w: np.ndarray = np.full(shape=self.size, fill_value=initial_value, dtype=float)
-        self.is_sparse: bool = self.feature.is_sparse
 
     def __getitem__(self, state: NonTabularState, action: NonTabularAction) -> float:
         x = self.feature[state, action]
-        if self.is_sparse:
-            result: float = self.w[x]
+        return self._w_dot_product(x)
+
+    def set_state(self, state: NonTabularState):
+        self.feature.state = state
+
+    def get_action_values(self, actions: list[NonTabularAction]) -> np.ndarray:
+        values: list[float] = []
+        for action in actions:
+            self.feature.action = action
+            x = self.feature.x
+            value = self._w_dot_product(x)
+            values.append(value)
+        return np.array(values)
+
+    def _w_dot_product(self, x: np.ndarray) -> float:
+        if self.feature.is_sparse:
+            return self.w[x]
         else:
-            result: float = float(np.dot(self.w, x))
-        return result
+            return float(np.dot(self.w, x))

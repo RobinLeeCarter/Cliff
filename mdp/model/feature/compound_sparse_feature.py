@@ -17,12 +17,12 @@ class CompoundSparseFeature(SparseFeature):
         self._features = features
         self._max_size: Optional[int] = sum(feature.max_size for feature in self._features)
 
-    def _get_x_sparse(self) -> np.ndarray:
+    def _get_sparse_x(self) -> np.ndarray:
         """return the full feature vector using unpacked values"""
-        # push all values down to each feature to avoid each one unpacking them again
         for feature in self._features:
-            feature.set_unpacked_values(self._state, self._state_floats, self._state_categories,
-                                        self._action, self._action_categories)
-        results: list[np.ndarray] = [feature._get_x_sparse() for feature in self._features]
+            feature.state = self._state
+            if self._action:
+                feature.action = self._action
+        results: list[np.ndarray] = [feature.x for feature in self._features]
         concat_results: np.ndarray = np.concatenate(results)
         return concat_results

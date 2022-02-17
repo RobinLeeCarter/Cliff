@@ -28,8 +28,11 @@ class LinearStateFunction(StateFunction):
 
     def __getitem__(self, state: NonTabularState) -> float:
         x = self.feature[state]
-        if self.is_sparse:
-            result: float = self.w[x]
+        return self._w_dot_product(x)
+
+    # TODO: DRY: function is repeated in state_action function
+    def _w_dot_product(self, x: np.ndarray) -> float:
+        if self.feature.is_sparse:
+            return self.w[x]
         else:
-            result: float = float(np.dot(self.w, x))
-        return result
+            return float(np.dot(self.w, x))

@@ -23,26 +23,24 @@ class SparseFeature(Feature, ABC):
 
     def __getitem__(self, item: Union[NonTabularState, tuple[NonTabularState, NonTabularAction]]) -> np.ndarray:
         """returns either the vector as normal or if a sparse feature just the indexes that 1"""
-        self.unpack_values(item)
-        return self._get_x_sparse()
+        self.unpack_item(item)
+        return self._get_sparse_x()
 
-    def _get_x(self) -> np.ndarray:
+    def _get_full_x(self) -> np.ndarray:
         """return the full x vector"""
         if self._max_size:
-            x_sparse: np.ndarray = self._get_x_sparse()
+            sparse_x: np.ndarray = self._get_sparse_x()
             x = np.zeros(shape=self._max_size, dtype=np.int)
-            x[x_sparse] = 1
+            x[sparse_x] = 1
             return x
         else:
             raise Exception("Size of x not specified")
 
-    # def copy_and_get_x_sparse(self, compound_feature: CompoundFeature) -> np.ndarray:
-    #     """copy the unpacked values from the compound feature and then _get_x"""
-    #     self._state, self._action, self._state_floats, self._state_categories, self._action_categories = \
-    #         compound_feature.unpacked_values
-    #     return self._get_x_sparse()
+    @property
+    def x(self) -> np.ndarray:
+        return self._get_sparse_x()
 
     @abstractmethod
-    def _get_x_sparse(self) -> np.ndarray:
+    def _get_sparse_x(self) -> np.ndarray:
         """return just the indexes of x which are 1 (rest are 0) using unpacked values"""
         pass

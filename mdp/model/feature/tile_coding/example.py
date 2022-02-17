@@ -76,8 +76,9 @@ def example():
             y = dim_y.min + np.random.rand() * dim_y.range
             z = np.random.randint(5, 10 + 1)
             target = target_ftn(x, y, z)
-            state = State(is_terminal=False, x=x, y=y, z=z)
-            tiles = tile_coding[state]
+            # state = State(is_terminal=False, x=x, y=y, z=z)
+            tile_coding.state = State(is_terminal=False, x=x, y=y, z=z)
+            tiles = tile_coding.x
             w[tiles] += alpha * (target - w[tiles].sum())
             mse += (target - w[tiles].sum()) ** 2
         mse /= batch_size
@@ -92,8 +93,8 @@ def example():
     z = np.zeros([len(x), len(y)])
     for i, xi in enumerate(x):
         for j, yj in enumerate(y):
-            state = State(is_terminal=False, x=xi, y=yj, z=5)
-            tiles = tile_coding[state]
+            tile_coding.state = State(is_terminal=False, x=xi, y=yj, z=5)
+            tiles = tile_coding.x
             z[i, j] = w[tiles].sum()
 
     # plot
