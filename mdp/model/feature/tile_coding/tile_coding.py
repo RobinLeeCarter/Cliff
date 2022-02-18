@@ -90,7 +90,7 @@ class TileCoding(SparseFeature):
             action_categories: np.ndarray = tiling_group.filter_action_categories(self._action.categories)
             self._action_tuples[tiling_group_index] = tuple(action_categories)
 
-    def _get_sparse_x(self) -> np.ndarray:
+    def _get_sparse_vector(self) -> np.ndarray:
         """return just the indexes of x which are 1 (rest are 0) (i.e. a list of tiles) using unpacked values"""
         tile_indexes: list[int] = []
         for tiling_group_index, tiling_group in enumerate(self._tiling_groups):

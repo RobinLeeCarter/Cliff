@@ -27,23 +27,17 @@ class LinearStateActionFunction(StateActionFunction):
         self.w: np.ndarray = np.full(shape=self.size, fill_value=initial_value, dtype=float)
 
     def __getitem__(self, state: NonTabularState, action: NonTabularAction) -> float:
-        x = self.feature[state, action]
-        return self._w_dot_product(x)
-
-    def set_state(self, state: NonTabularState):
         self.feature.state = state
+        self.feature.action = action
+        return self.feature.dot_product_full_vector(self.w)
 
-    def get_action_values(self, actions: list[NonTabularAction]) -> np.ndarray:
+    def get_action_values(self, state: NonTabularState, actions: list[NonTabularAction]) -> np.ndarray:
         values: list[float] = []
+        # set state just once
+        self.feature.state = state
         for action in actions:
             self.feature.action = action
-            x = self.feature.x
-            value = self._w_dot_product(x)
+            # will calculate vector and then use it
+            value = self.feature.dot_product_full_vector(self.w)
             values.append(value)
         return np.array(values)
-
-    def _w_dot_product(self, x: np.ndarray) -> float:
-        if self.feature.is_sparse:
-            return self.w[x]
-        else:
-            return float(np.dot(self.w, x))

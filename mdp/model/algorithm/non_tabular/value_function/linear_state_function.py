@@ -27,12 +27,6 @@ class LinearStateFunction(StateFunction):
         self.is_sparse: bool = self.feature.is_sparse
 
     def __getitem__(self, state: NonTabularState) -> float:
-        x = self.feature[state]
-        return self._w_dot_product(x)
+        self.feature.state = state
+        return self.feature.dot_product_full_vector(self.w)
 
-    # TODO: DRY: function is repeated in state_action function
-    def _w_dot_product(self, x: np.ndarray) -> float:
-        if self.feature.is_sparse:
-            return self.w[x]
-        else:
-            return float(np.dot(self.w, x))

@@ -1,6 +1,5 @@
 from __future__ import annotations
 import dataclasses
-import math
 
 from mdp.model.environment.non_tabular.dimension.dimension import Dimension
 

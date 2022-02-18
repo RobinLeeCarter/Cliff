@@ -23,6 +23,9 @@ class Feature(ABC):
         self._state: Optional[NonTabularState] = None
         self._action: Optional[NonTabularAction] = None
 
+        # cached value of feature vector, set to None if not up-to-date
+        self._vector: Optional[np.ndarray] = None
+
     @property
     def max_size(self) -> int:
         if self._max_size is None:
@@ -37,12 +40,12 @@ class Feature(ABC):
     def __getitem__(self, item: Union[NonTabularState, tuple[NonTabularState, NonTabularAction]]) -> np.ndarray:
         """returns either the vector as normal or if a sparse feature just the indexes that 1"""
         self.unpack_item(item)
-        return self._get_full_x()
+        return self._get_full_vector()
 
     def get_full_x(self, item: Union[NonTabularState, tuple[NonTabularState, NonTabularAction]]) -> np.ndarray:
         """always returns the full feature vector regardless of is_sparse"""
         self.unpack_item(item)
-        return self._get_full_x()
+        return self._get_full_vector()
 
     def unpack_item(self, item: Union[NonTabularState, tuple[NonTabularState, NonTabularAction]]):
         if isinstance(item, tuple):
@@ -59,6 +62,7 @@ class Feature(ABC):
     @state.setter
     def state(self, state: NonTabularState):
         self._state = state
+        self._vector = None
         self._do_state_computation()
 
     def _do_state_computation(self):
@@ -71,16 +75,22 @@ class Feature(ABC):
     @action.setter
     def action(self, action: NonTabularAction):
         self._action = action
+        self._vector = None
         self._do_action_computation()
 
     def _do_action_computation(self):
         pass
 
     @property
-    def x(self) -> np.ndarray:
-        return self._get_full_x()
+    def vector(self) -> np.ndarray:
+        if not self._vector:
+            self._vector = self._get_full_vector()
+        return self._vector
+
+    def dot_product_full_vector(self, weight: np.ndarray) -> float:
+        return float(np.dot(weight, self.vector))
 
     @abstractmethod
-    def _get_full_x(self) -> np.ndarray:
+    def _get_full_vector(self) -> np.ndarray:
         """return the full feature vector using state and action values"""
         pass

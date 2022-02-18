@@ -78,9 +78,9 @@ def example():
             target = target_ftn(x, y, z)
             # state = State(is_terminal=False, x=x, y=y, z=z)
             tile_coding.state = State(is_terminal=False, x=x, y=y, z=z)
-            tiles = tile_coding.x
-            w[tiles] += alpha * (target - w[tiles].sum())
-            mse += (target - w[tiles].sum()) ** 2
+            vector = tile_coding.vector
+            w[vector] += alpha * (target - w[vector].sum())
+            mse += (target - w[vector].sum()) ** 2
         mse /= batch_size
         # print('samples:', (batches + 1) * batch_size, 'batch_mse:', mse)
     print('elapsed time:', time.time() - timer)
@@ -93,9 +93,8 @@ def example():
     z = np.zeros([len(x), len(y)])
     for i, xi in enumerate(x):
         for j, yj in enumerate(y):
-            tile_coding.state = State(is_terminal=False, x=xi, y=yj, z=5)
-            tiles = tile_coding.x
-            z[i, j] = w[tiles].sum()
+            tile_coding.state = State(is_terminal=False, x=xi, y=yj, z=7)
+            z[i, j] = tile_coding.dot_product_full_vector(w)
 
     # plot
     fig = plt.figure()

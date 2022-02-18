@@ -7,7 +7,6 @@ import numpy as np
 if TYPE_CHECKING:
     from mdp.model.environment.non_tabular.non_tabular_state import NonTabularState
     from mdp.model.environment.non_tabular.non_tabular_action import NonTabularAction
-    from mdp.model.feature.compound_feature import CompoundFeature
 from mdp.model.feature.feature import Feature
 
 
@@ -24,23 +23,29 @@ class SparseFeature(Feature, ABC):
     def __getitem__(self, item: Union[NonTabularState, tuple[NonTabularState, NonTabularAction]]) -> np.ndarray:
         """returns either the vector as normal or if a sparse feature just the indexes that 1"""
         self.unpack_item(item)
-        return self._get_sparse_x()
+        return self._get_sparse_vector()
 
-    def _get_full_x(self) -> np.ndarray:
+    def _get_full_vector(self) -> np.ndarray:
         """return the full x vector"""
         if self._max_size:
-            sparse_x: np.ndarray = self._get_sparse_x()
-            x = np.zeros(shape=self._max_size, dtype=np.int)
-            x[sparse_x] = 1
-            return x
+            sparse_vector = self.vector
+            full_vector = np.zeros(shape=self._max_size, dtype=np.int)
+            full_vector[sparse_vector] = 1
+            return full_vector
         else:
             raise Exception("Size of x not specified")
 
     @property
-    def x(self) -> np.ndarray:
-        return self._get_sparse_x()
+    def vector(self) -> np.ndarray:
+        if not self._vector:
+            # can't use cached version so calculate
+            self._vector = self._get_sparse_vector()
+        return self._vector
+
+    def dot_product_full_vector(self, weight: np.ndarray) -> float:
+        return float(np.sum(weight[self.vector]))
 
     @abstractmethod
-    def _get_sparse_x(self) -> np.ndarray:
+    def _get_sparse_vector(self) -> np.ndarray:
         """return just the indexes of x which are 1 (rest are 0) using unpacked values"""
         pass

@@ -225,48 +225,6 @@ class TilingGroup:
     def filter_action_categories(self, action_categories: np.ndarray) -> np.ndarray:
         return action_categories[self._included_action_category]
 
-    # perhaps should only return co-ords
-    # def __getitem__(self, state_floats: np.ndarray, state_categories: np.ndarray, action_categories: np.ndarray)\
-    #         -> tuple[np.ndarray, np.ndarray]:
-    #     """
-    #     :param state: full state values (floats and ints) as np.ndarray
-    #     :return: tuple of array of float coords for each tiling + the int values played back for dimensions being tiled
-    #     """
-    #     float_tile_coords = np.floor(
-    #         # state normalised so states from zero and tile width is 1.0
-    #         (state_floats[self._included_floats] - self._float_dim_min) * self._float_norm_tiles
-    #         + self._float_offsets                               # broadcast to all tilings with their offsets
-    #     ).astype(np.int)                                         # as floored ints
-    #     """
-    #     e.g. for (0.0, 0.0)
-    #     array([[0, 0],
-    #            [0, 0],
-    #            [0, 0],
-    #            [0, 1],
-    #            [0, 1],
-    #            [0, 1],
-    #            [0, 2],
-    #            [0, 2]])
-    #     """
-    #
-    #     # wrap around if required
-    #     float_tile_coords[:, self._float_wrapped_dim] %= self._actual_tiles_for_wrapped
-    #
-    #     state_category_values = state_categories[self._included_state_category]
-    #     action_category_values = action_categories[self._included_action_category]
-    #     category_values = np.concatenate
-    #
-    #     return float_tile_coords, state_category_values, action_category_values
-
-        # int_tile_coords = np.repeat(int_values[np.newaxis, :], 8, axis=0)
-        #
-        # # concatenate included ints, no need to deduce min
-        # coords = np.concatenate((float_tile_coords, int_tile_coords), axis=1)
-        # return coords
-
-        # find tile index values from off_coords
-        # return self._tile_base_index + np.dot(tile_coords, self._coords_flattening_vector)
-
     @staticmethod
     def _first_odd_integers(number_of_dimensions: int) -> np.ndarray:  # e.g. 2 -> array([1, 3])
         return 2 * np.arange(number_of_dimensions) + 1

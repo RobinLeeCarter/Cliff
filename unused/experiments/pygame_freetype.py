@@ -244,7 +244,7 @@ class GridView:
     def _draw_agent_at_state(self, state: environment.State):
         # row, col = self._grid_world.get_index(state.x, state.y)
         # print(f"_t={self._t} x={state.x} y={state.y} row={row} col={col}")
-        rect: pygame.Rect = self._draw_square(x=state.position.x, y=state.position.y,
+        rect: pygame.Rect = self._draw_square(x=state.position.vector, y=state.position.y,
                                               square=common.Square.AGENT, surface=self._background)
         self._screen.blit(source=self._background, dest=rect, area=rect)
         pygame.display.update(rect)

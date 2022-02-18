@@ -17,12 +17,12 @@ class CompoundFeature(Feature):
         self._features = features
         self._max_size: Optional[int] = sum(feature.max_size for feature in self._features)
 
-    def _get_full_x(self) -> np.ndarray:
+    def _get_full_vector(self) -> np.ndarray:
         """return the full feature vector using unpacked values"""
         for feature in self._features:
             feature.state = self._state
             if self._action:
                 feature.action = self._action
-        results: list[np.ndarray] = [feature.x for feature in self._features]
+        results: list[np.ndarray] = [feature.vector for feature in self._features]
         concat_results: np.ndarray = np.concatenate(results)
         return concat_results
