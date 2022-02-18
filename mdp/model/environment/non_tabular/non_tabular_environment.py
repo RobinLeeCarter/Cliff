@@ -8,8 +8,8 @@ if TYPE_CHECKING:
 
 from mdp import common
 from mdp.model.environment.environment import Environment
-from mdp.model.environment.state import State
-from mdp.model.environment.action import Action
+from mdp.model.environment.non_tabular.non_tabular_state import NonTabularState
+from mdp.model.environment.non_tabular.non_tabular_action import NonTabularAction
 from mdp.model.environment.non_tabular.dims import Dims
 
 
@@ -22,14 +22,14 @@ class NonTabularEnvironment(Environment, ABC):
         super().__init__(environment_parameters)
 
         # action list and action lookup
-        self.actions: list[Action] = []
-        self.action_index: dict[Action: int] = {}
+        self.actions: list[NonTabularAction] = []
+        self.action_index: dict[NonTabularAction: int] = {}
 
         # dimensions
         self._dims: Dims = Dims()
 
         # Distributions
-        self._start_state_distribution: Optional[common.Distribution[State]] = None
+        self._start_state_distribution: Optional[common.Distribution[NonTabularState]] = None
 
     def build(self):
         self._build_actions()
@@ -46,20 +46,25 @@ class NonTabularEnvironment(Environment, ABC):
         pass
 
     @abstractmethod
-    def _get_start_state_distribution(self) -> common.Distribution[State]:
+    def _get_start_state_distribution(self) -> common.Distribution[NonTabularState]:
         pass
 
     # region Operation
+    def get_possible_actions(self, state: NonTabularState) -> list[NonTabularAction]:
+        # by default all actions are compatible with all states
+        return self.actions
+
     @abstractmethod
-    def _draw_response(self, state: State, action: Action) -> tuple[float, State]:
+    def _draw_response(self, state: NonTabularState, action: NonTabularAction) -> tuple[float, NonTabularState]:
         """
         draw a single outcome for a single state and action
         """
 
-    def draw_start_state(self) -> State:
+    def draw_start_state(self) -> NonTabularState:
         return self._start_state_distribution.draw_one()
 
-    def from_state_perform_action(self, state: State, action: Action) -> tuple[float, State]:
+    def from_state_perform_action(self, state: NonTabularState, action: NonTabularAction) -> \
+            tuple[float, NonTabularState]:
         if state.is_terminal:
             raise Exception("Environment: Trying to act in a terminal state.")
         if not self._is_action_compatible_with_state(state, action):
