@@ -48,6 +48,10 @@ class Environment(NonTabularEnvironment):
     def _get_start_state_distribution(self) -> StartStateDistribution[State]:
         return StartStateDistribution(self._dims)
 
+    # region Operation
+    # def draw_start_state(self) -> State:
+    #     return self._start_state_distribution.draw_one()
+
     def _draw_response(self, state: State, action: Action) -> tuple[float, State]:
         position_dim = self._dims.state_float[Dim.POSITION]
         velocity_dim = self._dims.state_float[Dim.VELOCITY]
@@ -75,7 +79,6 @@ class Environment(NonTabularEnvironment):
 
         return reward, new_state
 
-    # region Operation
     def initialize_policy(self, policy: Policy, policy_parameters: common.PolicyParameters):
         pass
         # hit: bool

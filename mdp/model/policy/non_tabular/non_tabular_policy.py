@@ -17,6 +17,11 @@ class NonTabularPolicy(abc.ABC):
         self._environment: NonTabularEnvironment = environment
         self._policy_parameters: common.PolicyParameters = policy_parameters
 
+        # possible actions for a particular state
+        self._possible_actions: list[NonTabularAction] = []
+        self._all_action_count: int = len(self._environment.actions)
+        self._probabilities: np.ndarray = np.zeros(shape=self._all_action_count, dtype=float)
+
     def __getitem__(self, state: NonTabularState) -> Optional[Action]:
         if state.is_terminal:
             return None
@@ -52,3 +57,4 @@ class NonTabularPolicy(abc.ABC):
         :return: probability distribution of all actions across list of standard actions for environment
         """
         pass
+

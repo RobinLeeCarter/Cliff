@@ -87,8 +87,8 @@ class Feature(ABC):
             self._vector = self._get_full_vector()
         return self._vector
 
-    def dot_product_full_vector(self, weight: np.ndarray) -> float:
-        return float(np.dot(weight, self.vector))
+    def dot_product_full_vector(self, full_vector: np.ndarray) -> float:
+        return float(np.dot(full_vector, self.vector))
 
     @abstractmethod
     def _get_full_vector(self) -> np.ndarray:

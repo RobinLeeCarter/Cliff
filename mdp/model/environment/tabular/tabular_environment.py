@@ -37,9 +37,14 @@ class TabularEnvironment(Environment, ABC):
         # almost all interactions with environment must be using state and action
         # exception boolean array of whether a in A(s) for a given [s, a]
         # possibly should be part of agent to enforce API but should be able to have mutliple agents for one evironment
+
+        # bool of whether (s, a) combination is valid (action can be taken in state)
         self.s_a_compatibility: np.ndarray = np.empty(0, dtype=bool)
+        # list of compatible (s, a) combinations to loop over efficiently
         self.compatible_s_a: list[S_A] = []                 # for rapid access
+        # number of possible actions for each state
         self.possible_actions: np.ndarray = np.empty(0, dtype=int)
+        # 1 / self.possible_actions for each state
         self.one_over_possible_actions: np.ndarray = np.empty(0, dtype=float)
 
         # Distributions
@@ -72,6 +77,7 @@ class TabularEnvironment(Environment, ABC):
 
     def _build_state_actions(self):
         """materialise A(s)"""
+        # TODO: Faster if invert this (assume normally compatible)
         self.s_a_compatibility = np.zeros(shape=(len(self.states), len(self.actions)), dtype=bool)
         for s, state in enumerate(self.states):
             if not state.is_terminal:
@@ -84,8 +90,8 @@ class TabularEnvironment(Environment, ABC):
         self.is_terminal = [state.is_terminal for state in self.states]
         # self.one_over_possible_actions = np.zeros(shape=(len(self.states)), dtype=float)
         self.possible_actions = np.count_nonzero(self.s_a_compatibility, axis=1).astype(dtype=float)
+        non_zero: np.ndarray = (self.possible_actions != 0.0)
         self.one_over_possible_actions = np.zeros_like(self.possible_actions)
-        non_zero = (self.possible_actions != 0.0)
         np.reciprocal(self.possible_actions, out=self.one_over_possible_actions, where=non_zero)
 
     def _build_distributions(self):

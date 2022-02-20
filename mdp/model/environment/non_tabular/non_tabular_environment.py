@@ -2,6 +2,8 @@ from __future__ import annotations
 from typing import Optional, TYPE_CHECKING
 from abc import ABC, abstractmethod
 
+import numpy as np
+
 if TYPE_CHECKING:
     from mdp.model.algorithm.value_function import state_function
 
@@ -23,7 +25,15 @@ class NonTabularEnvironment(Environment, ABC):
 
         # action list and action lookup
         self.actions: list[NonTabularAction] = []
+        self.actions_array: np.ndarray = np.empty(0, dtype=object)
         self.action_index: dict[NonTabularAction: int] = {}
+        self._actions_always_compatible: bool = True
+        # TODO: can't do this here
+        # self._action_1s = np.ones(shape=(len(self.actions)), dtype=bool)
+
+        self._last_state: Optional[NonTabularState] = None
+        self._possible_actions_list: list[NonTabularAction] = []
+        self._possible_actions_array: Optional[np.ndarray] = None
 
         # dimensions
         self._dims: Dims = Dims()
@@ -33,9 +43,15 @@ class NonTabularEnvironment(Environment, ABC):
 
     def build(self):
         self._build_actions()
-        self.action_index = {action: i for i, action in enumerate(self.actions)}
+        self.action_index: dict[NonTabularAction, int] = {action: i for i, action in enumerate(self.actions)}
+        self.actions_array: np.ndarray = np.ndarray(self.actions)
+
+        # defaults, and always used is
+        self._possible_actions_list: list[NonTabularAction] = self.actions
+        self._possible_actions_array: np.ndarray = np.ones(shape=(len(self.actions)), dtype=bool)
+
         self._build_dimensions()
-        self._start_state_distribution = self._get_start_state_distribution()
+        self._start_state_distribution: common.Distribution[NonTabularState] = self._get_start_state_distribution()
 
     @abstractmethod
     def _build_actions(self):
@@ -50,9 +66,36 @@ class NonTabularEnvironment(Environment, ABC):
         pass
 
     # region Operation
-    def get_possible_actions(self, state: NonTabularState) -> list[NonTabularAction]:
-        # by default all actions are compatible with all states
-        return self.actions
+    def build_possible_actions(self, state: NonTabularState, build_array: bool = True):
+        if not self._actions_always_compatible:
+            if state == self._last_state:   # this list at least is cached, maybe array too
+                if build_array and self._possible_actions_array is None:    # needs array and array is not cached
+                    self._possible_actions_array = np.array([self._is_action_compatible_with_state(state, action)
+                                                             for action in self.actions], dtype=bool)
+            else:
+                if build_array:
+                    self._possible_actions_array = np.array([self._is_action_compatible_with_state(state, action)
+                                                             for action in self.actions], dtype=bool)
+                    self._possible_actions_list = self.actions_array[self.possible_actions_array].tolist()
+                else:
+                    self._possible_actions_array = None
+                    self._possible_actions_list = \
+                        [action for action in self.actions if self._is_action_compatible_with_state(state, action)]
+            self._last_state = state
+
+    @property
+    def actions_always_compatible(self) -> bool:
+        return self._actions_always_compatible
+
+    @property
+    def possible_actions_list(self) -> list[NonTabularAction]:
+        """list of just the possible actions"""
+        return self._possible_actions_list
+
+    @property
+    def possible_actions_array(self) -> np.ndarray:
+        """boolean array of the indexes of actions possible from the current state"""
+        return self._possible_actions_array
 
     @abstractmethod
     def _draw_response(self, state: NonTabularState, action: NonTabularAction) -> tuple[float, NonTabularState]:

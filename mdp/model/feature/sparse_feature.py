@@ -42,8 +42,8 @@ class SparseFeature(Feature, ABC):
             self._vector = self._get_sparse_vector()
         return self._vector
 
-    def dot_product_full_vector(self, weight: np.ndarray) -> float:
-        return float(np.sum(weight[self.vector]))
+    def dot_product_full_vector(self, full_vector: np.ndarray) -> float:
+        return float(np.sum(full_vector[self.vector]))
 
     @abstractmethod
     def _get_sparse_vector(self) -> np.ndarray:
