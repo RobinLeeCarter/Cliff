@@ -1,5 +1,5 @@
 from __future__ import annotations
-from typing import Optional, TYPE_CHECKING
+from typing import Optional, TYPE_CHECKING  # , Generic, TypeVar
 from abc import ABC, abstractmethod
 
 import numpy as np
@@ -14,8 +14,11 @@ from mdp.model.environment.non_tabular.non_tabular_state import NonTabularState
 from mdp.model.environment.non_tabular.non_tabular_action import NonTabularAction
 from mdp.model.environment.non_tabular.dims import Dims
 
+# State = TypeVar('State', bound=NonTabularState)
+# Action = TypeVar('Action', bound=NonTabularAction)
 
-class NonTabularEnvironment(Environment, ABC):
+
+class NonTabularEnvironment(Environment, ABC):      # , Generic[State, Action]
     """An abstract Environment with continuous states but discrete actions"""
     def __init__(self, environment_parameters: common.EnvironmentParameters):
         """
@@ -28,8 +31,6 @@ class NonTabularEnvironment(Environment, ABC):
         self.actions_array: np.ndarray = np.empty(0, dtype=object)
         self.action_index: dict[NonTabularAction: int] = {}
         self._actions_always_compatible: bool = True
-        # TODO: can't do this here
-        # self._action_1s = np.ones(shape=(len(self.actions)), dtype=bool)
 
         self._last_state: Optional[NonTabularState] = None
         self._possible_actions_list: list[NonTabularAction] = []
@@ -44,7 +45,7 @@ class NonTabularEnvironment(Environment, ABC):
     def build(self):
         self._build_actions()
         self.action_index: dict[NonTabularAction, int] = {action: i for i, action in enumerate(self.actions)}
-        self.actions_array: np.ndarray = np.ndarray(self.actions)
+        self.actions_array: np.ndarray = np.array(self.actions)
 
         # defaults, and always used is
         self._possible_actions_list: list[NonTabularAction] = self.actions
@@ -97,12 +98,6 @@ class NonTabularEnvironment(Environment, ABC):
         """boolean array of the indexes of actions possible from the current state"""
         return self._possible_actions_array
 
-    @abstractmethod
-    def _draw_response(self, state: NonTabularState, action: NonTabularAction) -> tuple[float, NonTabularState]:
-        """
-        draw a single outcome for a single state and action
-        """
-
     def draw_start_state(self) -> NonTabularState:
         return self._start_state_distribution.draw_one()
 
@@ -117,6 +112,12 @@ class NonTabularEnvironment(Environment, ABC):
         #     new_state: State = self._start_state_distribution.draw_one()
 
         return reward, new_state
+
+    @abstractmethod
+    def _draw_response(self, state: NonTabularState, action: NonTabularAction) -> tuple[float, NonTabularState]:
+        """
+        draw a single outcome for a single state and action
+        """
 
     # TODO: should StateFunction be more general e.g. Tabular vs Function Approximation
     def insert_state_function_into_graph3d(self,

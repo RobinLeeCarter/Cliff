@@ -7,6 +7,7 @@ if TYPE_CHECKING:
     # from mdp.model.algorithm.abstract.algorithm import Algorithm
     from mdp.model.policy.policy import Policy
     from mdp.model.algorithm.value_function import state_function
+    # from mdp.model.environment.non_tabular.non_tabular_state import NonTabularState
 
 from mdp import common
 from mdp.model.environment.non_tabular.non_tabular_environment import NonTabularEnvironment
@@ -20,7 +21,7 @@ from mdp.scenarios.mountain_car.model.start_state_distribution import StartState
 from mdp.scenarios.mountain_car.enums import Dim
 
 
-class Environment(NonTabularEnvironment):
+class Environment(NonTabularEnvironment):   # [State, Action]
     def __init__(self, environment_parameters: EnvironmentParameters):
         super().__init__(environment_parameters)
 
@@ -50,7 +51,15 @@ class Environment(NonTabularEnvironment):
 
     # region Operation
     # def draw_start_state(self) -> State:
-    #     return self._start_state_distribution.draw_one()
+    #     return super().draw_start_state()   # type: ignore
+
+        # state: NonTabularState = super().draw_start_state()
+        # state: State
+        # return state
+
+        # state = super().draw_start_state()
+        # if isinstance(state, State):
+        #     return state
 
     def _draw_response(self, state: State, action: Action) -> tuple[float, State]:
         position_dim = self._dims.state_float[Dim.POSITION]
