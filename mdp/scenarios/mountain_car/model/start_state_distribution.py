@@ -4,7 +4,7 @@ from typing import TYPE_CHECKING
 import numpy as np
 
 if TYPE_CHECKING:
-    from mdp.model.environment.non_tabular.dims import Dims
+    from mdp.model.environment.non_tabular.dimension.dims import Dims
 
 from mdp.common.distribution.continuous import ContinuousDistribution
 from mdp.scenarios.mountain_car.enums import Dim

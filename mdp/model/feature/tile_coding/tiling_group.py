@@ -5,8 +5,8 @@ from typing import Optional, Callable, TYPE_CHECKING
 import numpy as np
 
 if TYPE_CHECKING:
-    from mdp.model.environment.non_tabular.dim_enum import DimEnum
-    from mdp.model.environment.non_tabular.dims import Dims
+    from mdp.model.environment.non_tabular.dimension.dim_enum import DimEnum
+    from mdp.model.environment.non_tabular.dimension.dims import Dims
     from mdp.model.environment.non_tabular.dimension.float_dimension import FloatDimension
 
 

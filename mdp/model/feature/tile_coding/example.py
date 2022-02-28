@@ -5,11 +5,10 @@ import enum
 from dataclasses import dataclass
 
 from mdp.model.feature.tile_coding.tile_coding import TileCoding
-# from mdp.model.environment.non_tabular.dimension.dimension import Dimension
 from mdp.model.environment.non_tabular.dimension.float_dimension import FloatDimension
 from mdp.model.environment.non_tabular.dimension.category_dimension import CategoryDimension
-from mdp.model.environment.non_tabular.dim_enum import DimEnum
-from mdp.model.environment.non_tabular.dims import Dims
+from mdp.model.environment.non_tabular.dimension.dim_enum import DimEnum
+from mdp.model.environment.non_tabular.dimension.dims import Dims
 from mdp.model.environment.non_tabular.non_tabular_state import NonTabularState
 
 
@@ -32,7 +31,7 @@ class State(NonTabularState):
         return [self.z]
 
 
-def example():
+def main():
     # tile coder dimensions, limits, tilings
     dims: Dims = Dims()
     dims.state_float[Dim.X] = FloatDimension(min=0.0, max=2.0 * np.pi, wrap_around=False)
@@ -112,4 +111,4 @@ def target_ftn(x: float, y: float, z: int) -> float:
 
 
 if __name__ == '__main__':
-    example()
+    main()

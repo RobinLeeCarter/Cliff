@@ -8,4 +8,4 @@ class XY:
     y: int
 
     def as_tuple(self) -> tuple[int, int]:
-        return dataclasses.astuple(self)
+        return self.x, self.y

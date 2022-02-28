@@ -4,7 +4,7 @@ from typing import TYPE_CHECKING
 from dataclasses import dataclass, field
 
 if TYPE_CHECKING:
-    from mdp.model.environment.non_tabular.dim_enum import DimEnum
+    from mdp.model.environment.non_tabular.dimension.dim_enum import DimEnum
     from mdp.model.environment.non_tabular.dimension.float_dimension import FloatDimension
     from mdp.model.environment.non_tabular.dimension.category_dimension import CategoryDimension
 

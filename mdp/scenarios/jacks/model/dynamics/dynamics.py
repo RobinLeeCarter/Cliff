@@ -23,7 +23,7 @@ class Dynamics(tabular_dynamics.TabularDynamics):
         super().__init__(environment_, environment_parameters)
 
         # downcast
-        self._environment: Environment = self._environment
+        self._environment: Environment = self._environment  # type: ignore
 
         self._max_cars: int = environment_parameters.max_cars
         self._rental_revenue: float = environment_parameters.rental_revenue

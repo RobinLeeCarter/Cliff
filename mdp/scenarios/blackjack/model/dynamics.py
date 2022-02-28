@@ -18,7 +18,7 @@ class Dynamics(tabular_dynamics.TabularDynamics):
         super().__init__(environment_, environment_parameters)
 
         # downcast
-        self._environment: Environment = self._environment
+        self._environment: Environment = self._environment  # type: ignore
         self._max_card: int = 10    # 10, J, Q or K combined
         self._card_distribution: Multinoulli[int] = Multinoulli()
 

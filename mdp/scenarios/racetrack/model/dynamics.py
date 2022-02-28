@@ -18,7 +18,7 @@ class Dynamics(tabular_dynamics.TabularDynamics):
         super().__init__(environment_, environment_parameters)
 
         # downcast
-        self._environment: Environment = self._environment
+        self._environment: Environment = self._environment  # type: ignore
         self._grid_world: GridWorld = self._environment.grid_world
 
         self._extra_reward_for_failure: float = environment_parameters.extra_reward_for_failure

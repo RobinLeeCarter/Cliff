@@ -27,12 +27,12 @@ class TabularEnvironment(Environment, ABC):
 
         # state and states
         self.states: list[State] = []               # ordered list of full States
-        self.state_index: dict[State: int] = {}     # lookup from full State to state_index (s)
+        self.state_index: dict[State, int] = {}     # lookup from full State to state_index (s)
         self.is_terminal: list[bool] = []           # bool: is a given state_index (s) a terminal state?
 
         # action and actions
         self.actions: list[Action] = []
-        self.action_index: dict[Action: int] = {}
+        self.action_index: dict[Action, int] = {}
 
         # almost all interactions with environment must be using state and action
         # exception boolean array of whether a in A(s) for a given [s, a]

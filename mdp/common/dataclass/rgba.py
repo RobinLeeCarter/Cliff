@@ -10,4 +10,4 @@ class RGBA:
     a: int
 
     def as_tuple(self) -> tuple[int, int, int, int]:
-        return dataclasses.astuple(self)
+        return self.r, self.g, self.b, self.a

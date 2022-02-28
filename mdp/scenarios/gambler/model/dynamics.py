@@ -21,7 +21,7 @@ class Dynamics(tabular_dynamics.TabularDynamics):
         super().__init__(environment_, environment_parameters)
 
         # downcast
-        self._environment: Environment = self._environment
+        self._environment: Environment = self._environment  # type: ignore
         self._environment_parameters: EnvironmentParameters = self._environment_parameters
         self._probability_heads: float = self._environment_parameters.probability_heads
         self._toss_distribution: Multinoulli[int] = Multinoulli[int]()

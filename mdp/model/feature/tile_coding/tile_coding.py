@@ -5,8 +5,8 @@ from typing import Optional, Callable, TYPE_CHECKING
 import numpy as np
 
 if TYPE_CHECKING:
-    from mdp.model.environment.non_tabular.dim_enum import DimEnum
-    from mdp.model.environment.non_tabular.dims import Dims
+    from mdp.model.environment.non_tabular.dimension.dim_enum import DimEnum
+    from mdp.model.environment.non_tabular.dimension.dims import Dims
 from mdp.model.feature.sparse_feature import SparseFeature
 from mdp.model.feature.tile_coding.tiling_group import TilingGroup
 
