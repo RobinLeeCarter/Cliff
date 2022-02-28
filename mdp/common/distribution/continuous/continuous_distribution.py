@@ -1,11 +1,11 @@
 from __future__ import annotations
-from typing import TypeVar, Generic
+from typing import TypeVar
 from abc import ABC
 
 from mdp.common.distribution.distribution import Distribution
 
-T = TypeVar('T')
+T_co = TypeVar('T_co', covariant=True)
 
 
-class ContinuousDistribution(Generic[T], Distribution[T], ABC):
+class ContinuousDistribution(Distribution[T_co], ABC):
     pass

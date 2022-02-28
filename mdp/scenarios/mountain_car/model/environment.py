@@ -8,6 +8,7 @@ if TYPE_CHECKING:
     from mdp.model.policy.policy import Policy
     from mdp.model.algorithm.value_function import state_function
     # from mdp.model.environment.non_tabular.non_tabular_state import NonTabularState
+    # from mdp.model.environment.non_tabular.non_tabular_action import NonTabularAction
 
 from mdp import common
 from mdp.model.environment.non_tabular.non_tabular_environment import NonTabularEnvironment
@@ -21,13 +22,14 @@ from mdp.scenarios.mountain_car.model.start_state_distribution import StartState
 from mdp.scenarios.mountain_car.enums import Dim
 
 
-class Environment(NonTabularEnvironment):   # [State, Action]
+class Environment(NonTabularEnvironment[State, Action, StartStateDistribution]):
     def __init__(self, environment_parameters: EnvironmentParameters):
-        super().__init__(environment_parameters)
+        super().__init__(environment_parameters, actions_always_compatible=True)
+
+        print(type(self._start_state_distribution))
 
         # downcast states and actions so properties can be used freely
-        self.actions: list[Action] = self.actions
-        self._start_state_distribution: StartStateDistribution = self._start_state_distribution
+        # self._start_state_distribution: StartStateDistribution = self._start_state_distribution
 
     def _build_actions(self):
         self.actions = [
@@ -46,8 +48,11 @@ class Environment(NonTabularEnvironment):   # [State, Action]
         # action_dimension = CategoryDimension(possible_values=len(self.actions))
         # self.category_dimensions = [action_dimension]
 
-    def _get_start_state_distribution(self) -> StartStateDistribution[State]:
+    def _get_start_state_distribution(self) -> StartStateDistribution:
         return StartStateDistribution(self._dims)
+
+    # def _set_start_state_distribution(self):
+    #     self._start_state_distribution: StartStateDistribution = StartStateDistribution(self._dims)
 
     # region Operation
     # def draw_start_state(self) -> State:
@@ -89,6 +94,7 @@ class Environment(NonTabularEnvironment):   # [State, Action]
         return reward, new_state
 
     def initialize_policy(self, policy: Policy, policy_parameters: common.PolicyParameters):
+        self._start_state_distribution.print_hello()
         pass
         # hit: bool
         #
