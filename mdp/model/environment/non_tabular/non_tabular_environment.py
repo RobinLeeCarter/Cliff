@@ -7,7 +7,6 @@ import numpy as np
 
 if TYPE_CHECKING:
     from mdp.model.algorithm.value_function import state_function
-    from mdp.model.environment.non_tabular.non_tabular_dynamics import NonTabularDynamics
     from mdp import common
 
 from mdp.model.environment.non_tabular.non_tabular_state import NonTabularState
@@ -43,7 +42,6 @@ class NonTabularEnvironment(GeneralEnvironment[State, Action], ABC):
 
         # Distributions
         self._start_state_distribution: Optional[common.Distribution[State]] = None
-        self._dynamics: Optional[NonTabularDynamics[State, Action]] = None
 
     def build(self):
         self._build_actions()
@@ -57,7 +55,6 @@ class NonTabularEnvironment(GeneralEnvironment[State, Action], ABC):
         self._build_dimensions()
 
         self._build_start_state_distribution()
-        self._build_dynamics()
 
     @abstractmethod
     def _build_actions(self):
@@ -69,10 +66,6 @@ class NonTabularEnvironment(GeneralEnvironment[State, Action], ABC):
 
     @abstractmethod
     def _build_start_state_distribution(self):
-        pass
-
-    @abstractmethod
-    def _build_dynamics(self):
         pass
 
     def build_possible_actions(self, state: State, build_array: bool = True):

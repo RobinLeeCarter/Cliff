@@ -17,7 +17,6 @@ from mdp.model.environment.non_tabular.dimension.category_dimension import Categ
 
 from mdp.scenarios.mountain_car.model.state import State
 from mdp.scenarios.mountain_car.model.action import Action
-from mdp.scenarios.mountain_car.model.dynamics import Dynamics
 from mdp.scenarios.mountain_car.model.environment_parameters import EnvironmentParameters
 from mdp.scenarios.mountain_car.model.start_state_distribution import StartStateDistribution
 from mdp.scenarios.mountain_car.enums import Dim
@@ -27,7 +26,6 @@ class Environment(NonTabularEnvironment[State, Action]):
     def __init__(self, environment_parameters: EnvironmentParameters):
         super().__init__(environment_parameters)
         self._start_state_distribution: Optional[StartStateDistribution] = None
-        self._dynamics: Optional[Dynamics] = None
 
     def _build_actions(self):
         self.actions = [
@@ -44,9 +42,6 @@ class Environment(NonTabularEnvironment[State, Action]):
 
     def _build_start_state_distribution(self):
         self._start_state_distribution = StartStateDistribution(self._dims)
-
-    def _build_dynamics(self):
-        self._dynamics = Dynamics(self, self._environment_parameters)
 
     def _draw_response(self, state: State, action: Action) -> tuple[float, State]:
         position_dim = self._dims.state_float[Dim.POSITION]
