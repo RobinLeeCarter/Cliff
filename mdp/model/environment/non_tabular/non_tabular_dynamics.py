@@ -22,6 +22,7 @@ class NonTabularDynamics(Dynamics, Generic[State, Action], ABC):
         super().__init__(environment, environment_parameters)
         self._environment: NonTabularEnvironment = environment
         print("NonTabularDynamics init")
+        print(type(self._environment))
 
         # state_transition_probabilities[s',s,a] = p(s'|s,a)
         self.state_transition_probabilities: np.ndarray = np.array([], dtype=np.float)

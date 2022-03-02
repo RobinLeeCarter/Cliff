@@ -17,9 +17,12 @@ from mdp.model.environment.non_tabular.non_tabular_dynamics import NonTabularDyn
 State = TypeVar('State', bound=NonTabularState)
 Action = TypeVar('Action', bound=NonTabularAction)
 Start_State_Distribution = TypeVar('Start_State_Distribution', bound=common.Distribution[NonTabularState])
+Dynamics = TypeVar('Dynamics', bound=NonTabularDynamics)
 
 
-class NonTabularEnvironment(Environment, Generic[State, Action, Start_State_Distribution], ABC):
+class NonTabularEnvironment(Environment,
+                            Generic[State, Action, Start_State_Distribution, Dynamics],
+                            ABC):
     """An abstract Environment with continuous states but discrete actions"""
     def __init__(self,
                  environment_parameters: common.EnvironmentParameters,
@@ -44,7 +47,7 @@ class NonTabularEnvironment(Environment, Generic[State, Action, Start_State_Dist
 
         # Distributions
         self._start_state_distribution: Optional[Start_State_Distribution] = None
-        self._dynamics: Optional[NonTabularDynamics[State, Action]] = None
+        self._dynamics: Optional[Dynamics] = None
 
     def build(self):
         self._build_actions()
@@ -56,8 +59,9 @@ class NonTabularEnvironment(Environment, Generic[State, Action, Start_State_Dist
         self._possible_actions_array = np.ones(shape=(len(self.actions)), dtype=bool)
 
         self._build_dimensions()
-        # self._set_start_state_distribution()
-        self._start_state_distribution = self._get_start_state_distribution()
+
+        self._start_state_distribution = self._build_start_state_distribution()
+        self._dynamics = self._build_dynamics()
 
     @abstractmethod
     def _build_actions(self):
@@ -68,8 +72,12 @@ class NonTabularEnvironment(Environment, Generic[State, Action, Start_State_Dist
         pass
 
     @abstractmethod
-    def _get_start_state_distribution(self) -> Start_State_Distribution:
-        pass
+    def _build_start_state_distribution(self) -> Start_State_Distribution:
+        ...
+
+    @abstractmethod
+    def _build_dynamics(self) -> Dynamics:
+        ...
 
     # region Operation
     def build_possible_actions(self, state: State, build_array: bool = True):

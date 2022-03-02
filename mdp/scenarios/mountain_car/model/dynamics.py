@@ -31,6 +31,7 @@ class Dynamics(NonTabularDynamics[State, Action]):
         super().__init__(environment, environment_parameters)
         self._environment: Environment = environment
         print("Dynamics init")
+        print(type(self._environment))
 
     def draw_response(self, state: State, action: Action) -> Response:
         self._environment.mountain()
