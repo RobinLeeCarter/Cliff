@@ -13,6 +13,7 @@ class EnvironmentParameters(abc.ABC):
     environment_type: Optional[enums.ScenarioType] = None
     grid: Optional[np.ndarray] = None
     actions_list: Optional[enums.ActionsList] = None
+    actions_always_compatible: Optional[bool] = None
     verbose: Optional[bool] = None
 
 

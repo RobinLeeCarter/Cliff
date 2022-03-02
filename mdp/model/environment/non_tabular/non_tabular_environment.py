@@ -1,32 +1,28 @@
 from __future__ import annotations
-from typing import Optional, TYPE_CHECKING, Generic, TypeVar
+from typing import Optional, TYPE_CHECKING, TypeVar
 from abc import ABC, abstractmethod
 
 import numpy as np
 
+
 if TYPE_CHECKING:
     from mdp.model.algorithm.value_function import state_function
+    from mdp.model.environment.non_tabular.non_tabular_dynamics import NonTabularDynamics
+    from mdp import common
 
-from mdp import common
-from mdp.model.environment.environment import Environment
 from mdp.model.environment.non_tabular.non_tabular_state import NonTabularState
 from mdp.model.environment.non_tabular.non_tabular_action import NonTabularAction
 from mdp.model.environment.non_tabular.dimension.dims import Dims
-from mdp.model.environment.non_tabular.non_tabular_dynamics import NonTabularDynamics
+
+from mdp.model.environment.general.general_environment import GeneralEnvironment
 
 State = TypeVar('State', bound=NonTabularState)
 Action = TypeVar('Action', bound=NonTabularAction)
-Start_State_Distribution = TypeVar('Start_State_Distribution', bound=common.Distribution[NonTabularState])
-Dynamics = TypeVar('Dynamics', bound=NonTabularDynamics)
 
 
-class NonTabularEnvironment(Environment,
-                            Generic[State, Action, Start_State_Distribution, Dynamics],
-                            ABC):
+class NonTabularEnvironment(GeneralEnvironment[State, Action], ABC):
     """An abstract Environment with continuous states but discrete actions"""
-    def __init__(self,
-                 environment_parameters: common.EnvironmentParameters,
-                 actions_always_compatible: bool = True):
+    def __init__(self, environment_parameters: common.EnvironmentParameters):
         """
         :param environment_parameters: the parameters specific to the specific environment e.g. number_of_cars
         """
@@ -36,7 +32,7 @@ class NonTabularEnvironment(Environment,
         self.actions: list[Action] = []
         self.actions_array: np.ndarray = np.empty(0, dtype=object)
         self.action_index: dict[Action, int] = {}
-        self._actions_always_compatible: bool = actions_always_compatible
+        # actions_always_compatible should be part of EnvironmentParameters
 
         self._last_state: Optional[State] = None
         self._possible_actions_list: list[Action] = []
@@ -46,8 +42,8 @@ class NonTabularEnvironment(Environment,
         self._dims: Dims = Dims()
 
         # Distributions
-        self._start_state_distribution: Optional[Start_State_Distribution] = None
-        self._dynamics: Optional[Dynamics] = None
+        self._start_state_distribution: Optional[common.Distribution[State]] = None
+        self._dynamics: Optional[NonTabularDynamics[State, Action]] = None
 
     def build(self):
         self._build_actions()
@@ -60,8 +56,8 @@ class NonTabularEnvironment(Environment,
 
         self._build_dimensions()
 
-        self._start_state_distribution = self._build_start_state_distribution()
-        self._dynamics = self._build_dynamics()
+        self._build_start_state_distribution()
+        self._build_dynamics()
 
     @abstractmethod
     def _build_actions(self):
@@ -72,16 +68,15 @@ class NonTabularEnvironment(Environment,
         pass
 
     @abstractmethod
-    def _build_start_state_distribution(self) -> Start_State_Distribution:
-        ...
+    def _build_start_state_distribution(self):
+        pass
 
     @abstractmethod
-    def _build_dynamics(self) -> Dynamics:
-        ...
+    def _build_dynamics(self):
+        pass
 
-    # region Operation
     def build_possible_actions(self, state: State, build_array: bool = True):
-        if not self._actions_always_compatible:
+        if not self.actions_always_compatible:
             if state == self._last_state:   # this list at least is cached, maybe array too
                 if build_array and self._possible_actions_array is None:    # needs array and array is not cached
                     self._possible_actions_array = np.array([self._is_action_compatible_with_state(state, action)
@@ -99,7 +94,7 @@ class NonTabularEnvironment(Environment,
 
     @property
     def actions_always_compatible(self) -> bool:
-        return self._actions_always_compatible
+        return self._environment_parameters.actions_always_compatible
 
     @property
     def possible_actions_list(self) -> list[Action]:
@@ -114,8 +109,7 @@ class NonTabularEnvironment(Environment,
     def draw_start_state(self) -> State:
         return self._start_state_distribution.draw_one()
 
-    def from_state_perform_action(self, state: State, action: Action) -> \
-            tuple[float, State]:
+    def from_state_perform_action(self, state: State, action: Action) -> tuple[float, State]:
         if state.is_terminal:
             raise Exception("Environment: Trying to act in a terminal state.")
         if not self._is_action_compatible_with_state(state, action):
@@ -138,4 +132,3 @@ class NonTabularEnvironment(Environment,
                                            v: state_function.StateFunction,
                                            parameter: Optional[any] = None):
         pass
-    # endregion

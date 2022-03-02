@@ -5,11 +5,11 @@ from functools import cache
 
 import numpy as np
 
-from mdp.model.environment.action import Action
+from mdp.model.environment.general.general_action import GeneralAction
 
 
 @dataclass(frozen=True)
-class NonTabularAction(Action, ABC):
+class NonTabularAction(GeneralAction, ABC):
     @property
     @cache
     def categories(self) -> np.ndarray:

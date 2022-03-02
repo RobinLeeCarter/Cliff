@@ -16,11 +16,11 @@ def main():
     print(state)
     print(action)
 
-    # for i in range(1000):
-    #     reward, state = environment.from_state_perform_action(state, action)
-    #     print(f"{i}: \tposition={state.position:.2f} \tvelocity={state.velocity:.2f}")
-    #     if state.is_terminal:
-    #         break
+    for i in range(1000):
+        reward, state = environment.from_state_perform_action(state, action)
+        print(f"{i}: \tposition={state.position:.2f} \tvelocity={state.velocity:.2f}")
+        if state.is_terminal:
+            break
 
     # print(state.values)
     # print(action.values)

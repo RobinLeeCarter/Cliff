@@ -3,8 +3,6 @@ from __future__ import annotations
 # import math
 from typing import TYPE_CHECKING
 
-from mdp.model.environment.dynamics import Response
-
 if TYPE_CHECKING:
     # from mdp.model.algorithm.abstract.algorithm import Algorithm
     # from mdp.model.policy.policy import Policy
@@ -15,7 +13,7 @@ if TYPE_CHECKING:
     from mdp.scenarios.mountain_car.model.environment_parameters import EnvironmentParameters
 
 # from mdp import common
-from mdp.model.environment.non_tabular.non_tabular_environment import NonTabularDynamics
+from mdp.model.environment.non_tabular.non_tabular_dynamics import NonTabularDynamics
 # from mdp.model.environment.non_tabular.non_tabular_environment import NonTabularEnvironment
 # from mdp.model.environment.non_tabular.dimension.float_dimension import FloatDimension
 # from mdp.model.environment.non_tabular.dimension.category_dimension import CategoryDimension
@@ -30,9 +28,6 @@ class Dynamics(NonTabularDynamics[State, Action]):
     def __init__(self, environment: Environment, environment_parameters: EnvironmentParameters):
         super().__init__(environment, environment_parameters)
         self._environment: Environment = environment
-        print("Dynamics init")
-        print(type(self._environment))
 
-    def draw_response(self, state: State, action: Action) -> Response:
-        self._environment.mountain()
+    def draw_response(self, state: State, action: Action) -> tuple[float, State]:
         return 0.0, state

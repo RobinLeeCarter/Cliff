@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import math
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Optional
 
 if TYPE_CHECKING:
     # from mdp.model.algorithm.abstract.algorithm import Algorithm
@@ -23,13 +23,11 @@ from mdp.scenarios.mountain_car.model.start_state_distribution import StartState
 from mdp.scenarios.mountain_car.enums import Dim
 
 
-class Environment(NonTabularEnvironment[State, Action, StartStateDistribution, Dynamics]):
+class Environment(NonTabularEnvironment[State, Action]):
     def __init__(self, environment_parameters: EnvironmentParameters):
-        super().__init__(environment_parameters, actions_always_compatible=True)
-
-        # self._dynamics = Dynamics(self, environment_parameters)
-        print(type(self._start_state_distribution))
-        print(type(self._dynamics))
+        super().__init__(environment_parameters)
+        self._start_state_distribution: Optional[StartStateDistribution] = None
+        self._dynamics: Optional[Dynamics] = None
 
     def _build_actions(self):
         self.actions = [
@@ -44,33 +42,11 @@ class Environment(NonTabularEnvironment[State, Action, StartStateDistribution, D
         self._dims.state_float[Dim.VELOCITY] = FloatDimension(min=-0.07, max=0.07)
         self._dims.action_category[Dim.ACCELERATION] = CategoryDimension(possible_values=len(self.actions))
 
-        # self.float_dimensions = [self._position_dimension, self._velocity_dimension]
-        # action_dimension = CategoryDimension(possible_values=len(self.actions))
-        # self.category_dimensions = [action_dimension]
+    def _build_start_state_distribution(self):
+        self._start_state_distribution = StartStateDistribution(self._dims)
 
-    def _build_start_state_distribution(self) -> StartStateDistribution:
-        return StartStateDistribution(self._dims)
-
-    def _build_dynamics(self) -> Dynamics:
-        return Dynamics(self, self._environment_parameters)
-
-    def mountain(self):
-        print("^")
-
-    # def _set_start_state_distribution(self):
-    #     self._start_state_distribution: StartStateDistribution = StartStateDistribution(self._dims)
-
-    # region Operation
-    # def draw_start_state(self) -> State:
-    #     return super().draw_start_state()   # type: ignore
-
-        # state: NonTabularState = super().draw_start_state()
-        # state: State
-        # return state
-
-        # state = super().draw_start_state()
-        # if isinstance(state, State):
-        #     return state
+    def _build_dynamics(self):
+        self._dynamics = Dynamics(self, self._environment_parameters)
 
     def _draw_response(self, state: State, action: Action) -> tuple[float, State]:
         position_dim = self._dims.state_float[Dim.POSITION]
@@ -89,7 +65,7 @@ class Environment(NonTabularEnvironment[State, Action, StartStateDistribution, D
             new_position = projected_position
             new_velocity = 0.0
             is_terminal = True
-            reward = 0.0
+            # reward = 0.0
         else:
             new_position = projected_position
             # ẋ(t) + 0.001*A(t) - 0.0025*cos( 3 * x(t) )
@@ -100,8 +76,7 @@ class Environment(NonTabularEnvironment[State, Action, StartStateDistribution, D
         return reward, new_state
 
     def initialize_policy(self, policy: Policy, policy_parameters: common.PolicyParameters):
-        self._start_state_distribution.print_hello()
-        pass
+        ...
         # hit: bool
         #
         # policy.zero_state_action()
@@ -119,7 +94,7 @@ class Environment(NonTabularEnvironment[State, Action, StartStateDistribution, D
                                                comparison: common.Comparison,
                                                v: state_function.StateFunction,
                                                usable_ace: bool):
-        pass
+        ...
         # x_values = np.array(self._player_sums, dtype=int)
         # y_values = np.array(self._dealers_cards, dtype=int)
         # z_values = np.empty(shape=y_values.shape + x_values.shape, dtype=float)
@@ -146,4 +121,3 @@ class Environment(NonTabularEnvironment[State, Action, StartStateDistribution, D
         # g.x_series = common.Series(title=g.x_label, values=x_values)
         # g.y_series = common.Series(title=g.y_label, values=y_values)
         # g.z_series = common.Series(title=g.z_label, values=z_values)
-    # endregion

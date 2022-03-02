@@ -13,6 +13,7 @@ class EnvironmentParameters(common.EnvironmentParameters):
 
 default: EnvironmentParameters = EnvironmentParameters(
     environment_type=common.ScenarioType.MOUNTAIN_CAR,
+    actions_always_compatible=True,
     verbose=False,
 )
 

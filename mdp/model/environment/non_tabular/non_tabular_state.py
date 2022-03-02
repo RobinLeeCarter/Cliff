@@ -5,11 +5,11 @@ from functools import cache
 
 import numpy as np
 
-from mdp.model.environment.state import State
+from mdp.model.environment.general.general_state import GeneralState
 
 
 @dataclass(frozen=True)
-class NonTabularState(State, ABC):
+class NonTabularState(GeneralState, ABC):
     @property
     @cache
     def floats(self) -> np.ndarray:

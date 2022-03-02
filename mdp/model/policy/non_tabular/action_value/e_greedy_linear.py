@@ -6,7 +6,7 @@ import numpy as np
 import utils
 if TYPE_CHECKING:
     from mdp import common
-    from mdp.model.environment.action import Action
+    from mdp.model.environment.general.general_action import GeneralAction
     from mdp.model.environment.non_tabular.non_tabular_state import NonTabularState
     from mdp.model.environment.non_tabular.non_tabular_action import NonTabularAction
     from mdp.model.environment.non_tabular.non_tabular_environment import NonTabularEnvironment
@@ -25,7 +25,7 @@ class EGreedyLinear(ActionValuePolicy):
         self.epsilon: float = epsilon
         self.is_deterministic: bool = (epsilon == 0.0)
 
-    def _draw_action(self, state: NonTabularState) -> Action:
+    def _draw_action(self, state: NonTabularState) -> GeneralAction:
         """"
         :param state: starting state
         :return: action drawn from probability distribution pi(state, action; theta)
