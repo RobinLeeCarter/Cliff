@@ -4,8 +4,8 @@ from typing import TYPE_CHECKING
 import numpy as np
 
 if TYPE_CHECKING:
-    from mdp.model.policy.policy import Policy
-    from mdp.model.policy.deterministic import Deterministic
+    from mdp.model.policy.tabular.tabular_policy import TabularPolicy
+    from mdp.model.policy.tabular.deterministic import Deterministic
     from mdp.model.algorithm.value_function import state_function
 
 from mdp import common
@@ -69,7 +69,7 @@ class Environment(TabularEnvironment):
     # endregion
 
     # region Operation
-    def initialize_policy(self, policy: Policy, policy_parameters: common.PolicyParameters):
+    def initialize_policy(self, policy: TabularPolicy, policy_parameters: common.PolicyParameters):
         hit: bool
 
         policy.zero_state_action()
@@ -109,7 +109,7 @@ class Environment(TabularEnvironment):
 
     def insert_policy_into_graph2d(self,
                                    comparison: common.Comparison,
-                                   policy: Policy):
+                                   policy: TabularPolicy):
         policy: Deterministic
 
         x_list: list[int] = []

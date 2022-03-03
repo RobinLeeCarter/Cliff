@@ -2,7 +2,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Optional
 
-from mdp.model.environment.state import State
+from mdp.model.environment.general.state import State
 
 
 @dataclass(frozen=True)

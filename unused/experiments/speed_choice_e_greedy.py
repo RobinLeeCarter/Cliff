@@ -8,13 +8,13 @@ from numba import njit
 from mdp import common
 if TYPE_CHECKING:
     from mdp.model.environment.tabular.tabular_environment import TabularEnvironment
-from mdp.model.policy.policy import Policy
-from mdp.model.policy.deterministic import Deterministic
+from mdp.model.policy.tabular.tabular_policy import TabularPolicy
+from mdp.model.policy.tabular.deterministic import Deterministic
 
 rng: np.random.Generator = np.random.default_rng()
 
 
-class EGreedy(Policy):
+class EGreedy(TabularPolicy):
     def __init__(self, environment_: TabularEnvironment, policy_parameters: common.PolicyParameters):
         super().__init__(environment_, policy_parameters)
         self.epsilon: float = self._policy_parameters.epsilon

@@ -1,5 +1,5 @@
 from __future__ import annotations
-from abc import ABC
+from abc import ABC, abstractmethod
 from typing import Optional, TYPE_CHECKING
 
 import numpy as np
@@ -10,7 +10,7 @@ if TYPE_CHECKING:
     from mdp.model.environment.tabular.tabular_environment import TabularEnvironment
 
 
-class Policy(ABC):
+class TabularPolicy(ABC):
     def __init__(self, environment_: TabularEnvironment, policy_parameters: common.PolicyParameters):
         self._environment = environment_
         self._policy_parameters: common.PolicyParameters = policy_parameters
@@ -41,11 +41,11 @@ class Policy(ABC):
         self.__setitem__(s, a)
 
     @property
-    def linked_policy(self) -> Policy:
+    def linked_policy(self) -> TabularPolicy:
         """Deterministic partner policy if exists else self"""
         return self
 
-    @abc.abstractmethod
+    @abstractmethod
     def _get_a(self, s: int) -> int:
         pass
 
@@ -71,7 +71,7 @@ class Policy(ABC):
         else:
             return self._calc_policy_matrix()
 
-    @abc.abstractmethod
+    @abstractmethod
     def _calc_probability(self, s: int, a: int) -> float:
         pass
 

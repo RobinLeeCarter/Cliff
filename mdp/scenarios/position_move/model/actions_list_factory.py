@@ -2,7 +2,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from mdp.model.environment.action import Action
+    from mdp.model.environment.general.action import Action
 
 from mdp import common
 from mdp.scenarios.position_move.model import action as pm

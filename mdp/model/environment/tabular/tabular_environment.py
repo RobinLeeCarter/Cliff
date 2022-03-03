@@ -9,9 +9,9 @@ if TYPE_CHECKING:
     from mdp.model.environment.tabular.tabular_dynamics import TabularDynamics
 
 from mdp import common
-from mdp.model.environment.environment import Environment
-from mdp.model.environment.state import State
-from mdp.model.environment.action import Action
+from mdp.model.environment.general.environment import Environment
+from mdp.model.environment.general.state import State
+from mdp.model.environment.general.action import Action
 
 S_A = tuple[int, int]
 

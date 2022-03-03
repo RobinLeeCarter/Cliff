@@ -4,11 +4,11 @@ from abc import ABC, abstractmethod
 
 if TYPE_CHECKING:
     from mdp.model.algorithm.abstract.algorithm import Algorithm
-    from mdp.model.policy.policy import Policy
+    from mdp.model.policy.tabular.tabular_policy import TabularPolicy
 
 from mdp import common
-from mdp.model.environment.state import State
-from mdp.model.environment.action import Action
+from mdp.model.environment.general.state import State
+from mdp.model.environment.general.action import Action
 
 
 class Environment(ABC):
@@ -31,7 +31,7 @@ class Environment(ABC):
         # by default all actions are compatible with all states
         return True
 
-    def initialize_policy(self, policy_: Policy, policy_parameters: common.PolicyParameters):
+    def initialize_policy(self, policy_: TabularPolicy, policy_parameters: common.PolicyParameters):
         pass
 
     @abstractmethod
@@ -40,7 +40,7 @@ class Environment(ABC):
 
     def update_grid_value_functions(self,
                                     algorithm: Algorithm,
-                                    policy: Policy):
+                                    policy: TabularPolicy):
         pass
 
     def is_valued_state(self, state: State) -> bool:

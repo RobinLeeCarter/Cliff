@@ -5,9 +5,9 @@ from abc import ABC, abstractmethod
 
 if TYPE_CHECKING:
     from mdp import common
-    from mdp.model.environment.action import Action
-    from mdp.model.environment.environment import Environment
-from mdp.model.environment.state import State
+    from mdp.model.environment.general.action import Action
+    from mdp.model.environment.general.environment import Environment
+from mdp.model.environment.general.state import State
 
 Response = tuple[float, State]
 

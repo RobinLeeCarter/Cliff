@@ -4,15 +4,15 @@ from typing import Optional, TYPE_CHECKING, Callable
 import math
 
 if TYPE_CHECKING:
-    from mdp.model.environment.state import State
-    from mdp.model.environment.action import Action
+    from mdp.model.environment.general.state import State
+    from mdp.model.environment.general.action import Action
     from mdp.model.environment.tabular.tabular_environment import TabularEnvironment
 from mdp import common
 # renamed to avoid name conflicts
 from mdp.model.algorithm.abstract.algorithm import Algorithm
 from mdp.model.algorithm.abstract.episodic import Episodic
 from mdp.model.agent.episode import Episode
-from mdp.model.policy.policy import Policy
+from mdp.model.policy.tabular.tabular_policy import TabularPolicy
 from mdp.model.algorithm import algorithm_factory
 from mdp.model.policy import policy_factory
 
@@ -24,8 +24,8 @@ class Agent:
         self._environment: TabularEnvironment = environment_
         self._verbose: bool = verbose
 
-        self._policy: Optional[Policy] = None
-        self._behaviour_policy: Optional[Policy] = None     # if on-policy = self._policy
+        self._policy: Optional[TabularPolicy] = None
+        self._behaviour_policy: Optional[TabularPolicy] = None     # if on-policy = self._policy
         self._dual_policy_relationship: Optional[common.DualPolicyRelationship] = None
 
         self._algorithm: Optional[Algorithm] = None
@@ -53,16 +53,16 @@ class Agent:
 
     # use for on-policy algorithms
     @property
-    def policy(self) -> Policy:
+    def policy(self) -> TabularPolicy:
         return self._policy
 
     # use these two for off-policy algorithms
     @property
-    def target_policy(self) -> Policy:
+    def target_policy(self) -> TabularPolicy:
         return self._policy
 
     @property
-    def behaviour_policy(self) -> Policy:
+    def behaviour_policy(self) -> TabularPolicy:
         return self._behaviour_policy
 
     @property
@@ -105,7 +105,7 @@ class Agent:
 
         self.gamma = settings.gamma
 
-    def set_behaviour_policy(self, policy: Policy):
+    def set_behaviour_policy(self, policy: TabularPolicy):
         self._behaviour_policy = policy
 
     def parameter_changes(self, iteration: int):

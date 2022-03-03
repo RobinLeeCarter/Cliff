@@ -3,7 +3,7 @@ from abc import ABC, abstractmethod
 from typing import Optional, TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from mdp.model.environment.environment import Environment
+    from mdp.model.environment.general.environment import Environment
 from mdp import common
 from mdp.model.model import Model
 from mdp.view.view import View

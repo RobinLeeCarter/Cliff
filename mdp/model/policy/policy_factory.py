@@ -3,15 +3,15 @@ from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from mdp.model.environment.tabular.tabular_environment import TabularEnvironment
-    from mdp.model.policy.policy import Policy
+    from mdp.model.policy.tabular.tabular_policy import TabularPolicy
 from mdp import common
-from mdp.model.policy.e_greedy import EGreedy
-from mdp.model.policy.random import Random
-from mdp.model.policy.deterministic import Deterministic
-from mdp.model.policy.no_policy import NoPolicy
+from mdp.model.policy.tabular.e_greedy import EGreedy
+from mdp.model.policy.tabular.random import Random
+from mdp.model.policy.tabular.deterministic import Deterministic
+from mdp.model.policy.tabular.no_policy import NoPolicy
 
 
-def policy_factory(environment_: TabularEnvironment, policy_parameters: common.PolicyParameters) -> Policy:
+def policy_factory(environment_: TabularEnvironment, policy_parameters: common.PolicyParameters) -> TabularPolicy:
     pt = common.PolicyType
     policy_type = policy_parameters.policy_type
     if policy_type == pt.DETERMINISTIC:

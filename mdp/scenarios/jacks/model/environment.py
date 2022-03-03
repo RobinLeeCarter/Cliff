@@ -4,7 +4,7 @@ from typing import TYPE_CHECKING, Optional
 import numpy as np
 
 if TYPE_CHECKING:
-    from mdp.model.policy.policy import Policy
+    from mdp.model.policy.tabular.tabular_policy import TabularPolicy
     from mdp.model.algorithm.value_function import state_function
 
 from mdp import common
@@ -66,7 +66,7 @@ class Environment(TabularEnvironment):
     # endregion
 
     # region Operation
-    def initialize_policy(self, policy: Policy, policy_parameters: common.PolicyParameters):
+    def initialize_policy(self, policy: TabularPolicy, policy_parameters: common.PolicyParameters):
         policy.zero_state_action()
 
         initial_action: Action = Action(transfer_1_to_2=0)
@@ -102,7 +102,7 @@ class Environment(TabularEnvironment):
         g.y_series = common.Series(title=g.y_label, values=y_values)
         g.z_series = common.Series(title=g.z_label, values=z_values)
 
-    def update_grid_policy(self, policy: Policy):
+    def update_grid_policy(self, policy: TabularPolicy):
         # policy_: policy.Deterministic
         for s, state in enumerate(self.states):
             position: common.XY = common.XY(x=state.ending_cars_2, y=state.ending_cars_1)     # reversed like in book

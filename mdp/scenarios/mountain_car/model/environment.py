@@ -5,7 +5,7 @@ from typing import TYPE_CHECKING, Optional
 
 if TYPE_CHECKING:
     # from mdp.model.algorithm.abstract.algorithm import Algorithm
-    from mdp.model.policy.policy import Policy
+    from mdp.model.policy.tabular.tabular_policy import TabularPolicy
     from mdp.model.algorithm.value_function import state_function
     # from mdp.model.environment.non_tabular.non_tabular_state import NonTabularState
     # from mdp.model.environment.non_tabular.non_tabular_action import NonTabularAction
@@ -70,7 +70,7 @@ class Environment(NonTabularEnvironment[State, Action]):
 
         return reward, new_state
 
-    def initialize_policy(self, policy: Policy, policy_parameters: common.PolicyParameters):
+    def initialize_policy(self, policy: TabularPolicy, policy_parameters: common.PolicyParameters):
         ...
         # hit: bool
         #

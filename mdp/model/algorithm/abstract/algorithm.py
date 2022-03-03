@@ -5,7 +5,7 @@ import abc
 if TYPE_CHECKING:
     from mdp.model.environment.tabular.tabular_environment import TabularEnvironment
     from mdp.model.agent.agent import Agent
-    from mdp.model.policy.policy import Policy
+    from mdp.model.policy.tabular.tabular_policy import TabularPolicy
     from mdp import common
 from mdp.model.algorithm import linear_algebra as la
 from mdp.model.algorithm.value_function.state_function import StateFunction
@@ -69,7 +69,7 @@ class Algorithm(abc.ABC):
     def __repr__(self):
         return f"{self.title}"
 
-    def derive_v_from_q(self, policy: Optional[Policy] = None):
+    def derive_v_from_q(self, policy: Optional[TabularPolicy] = None):
         if not policy:
             policy = self._agent.policy
 

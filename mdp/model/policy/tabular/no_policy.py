@@ -1,9 +1,9 @@
 from __future__ import annotations
 
-from mdp.model.policy.policy import Policy
+from mdp.model.policy.tabular.tabular_policy import TabularPolicy
 
 
-class NoPolicy(Policy):
+class NoPolicy(TabularPolicy):
     def _get_a(self, s: int) -> int:
         return -1        # None
 

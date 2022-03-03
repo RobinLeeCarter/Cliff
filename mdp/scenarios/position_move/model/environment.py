@@ -6,7 +6,7 @@ from typing import Optional, TYPE_CHECKING
 
 if TYPE_CHECKING:
     from mdp.model.algorithm.abstract.algorithm import Algorithm
-    from mdp.model.policy.policy import Policy
+    from mdp.model.policy.tabular.tabular_policy import TabularPolicy
 
 from mdp import common
 from mdp.model.environment.tabular.tabular_environment import TabularEnvironment
@@ -47,7 +47,7 @@ class Environment(TabularEnvironment, abc.ABC):
     # region Operation
     def update_grid_value_functions(self,
                                     algorithm: Algorithm,
-                                    policy: Policy
+                                    policy: TabularPolicy
                                     ):
         for s, state in enumerate(self.states):
             if algorithm.V:

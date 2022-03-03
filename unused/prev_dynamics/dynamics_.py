@@ -3,7 +3,7 @@ from typing import TYPE_CHECKING
 from typing import Optional, Generator
 
 if TYPE_CHECKING:
-    from mdp.model.environment import state, action
+    from mdp.model.environment.general import action, state
 from mdp.model.environment.tabular.tabular_dynamics import state_distribution
 
 
