@@ -1,18 +1,18 @@
 from __future__ import annotations
-import abc
+from abc import ABC, abstractmethod
 from typing import Optional, TYPE_CHECKING
 
 import numpy as np
 
 if TYPE_CHECKING:
     from mdp import common
-    from mdp.model.environment.action import Action
     from mdp.model.environment.non_tabular.non_tabular_state import NonTabularState
     from mdp.model.environment.non_tabular.non_tabular_action import NonTabularAction
     from mdp.model.environment.non_tabular.non_tabular_environment import NonTabularEnvironment
 
 
-class NonTabularPolicy(abc.ABC):
+# specifically non-generic because policies can act in terms of non-specific actions and states
+class NonTabularPolicy(ABC):
     def __init__(self, environment: NonTabularEnvironment, policy_parameters: common.PolicyParameters):
         self._environment: NonTabularEnvironment = environment
         self._policy_parameters: common.PolicyParameters = policy_parameters
@@ -22,14 +22,14 @@ class NonTabularPolicy(abc.ABC):
         self._all_action_count: int = len(self._environment.actions)
         self._probabilities: np.ndarray = np.zeros(shape=self._all_action_count, dtype=float)
 
-    def __getitem__(self, state: NonTabularState) -> Optional[Action]:
+    def __getitem__(self, state: NonTabularState) -> Optional[NonTabularAction]:
         if state.is_terminal:
             return None
         else:
             return self._draw_action(state)
 
-    @abc.abstractmethod
-    def _draw_action(self, state: NonTabularState) -> Action:
+    @abstractmethod
+    def _draw_action(self, state: NonTabularState) -> NonTabularAction:
         """"
         :param state: starting state
         :return: action drawn from probability distribution pi(state, action; theta)
@@ -41,7 +41,7 @@ class NonTabularPolicy(abc.ABC):
         """Deterministic partner policy if exists else self"""
         return self
 
-    @abc.abstractmethod
+    @abstractmethod
     def get_probability(self, state: NonTabularState, action: NonTabularAction) -> float:
         """
         :param state: State
@@ -50,7 +50,7 @@ class NonTabularPolicy(abc.ABC):
         """
         pass
 
-    @abc.abstractmethod
+    @abstractmethod
     def get_action_probabilities(self, state: NonTabularState) -> np.ndarray:
         """
         :param state: State

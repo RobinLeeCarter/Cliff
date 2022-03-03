@@ -7,7 +7,6 @@ from scipy import special
 import utils
 if TYPE_CHECKING:
     from mdp import common
-    from mdp.model.environment.action import Action
     from mdp.model.environment.non_tabular.non_tabular_state import NonTabularState
     from mdp.model.environment.non_tabular.non_tabular_action import NonTabularAction
     from mdp.model.environment.non_tabular.non_tabular_environment import NonTabularEnvironment
@@ -27,7 +26,7 @@ class SoftmaxLinear(VectorParameterized):
         self._tau: float = tau
         self._uses_tau: bool = (tau != 1.0)
 
-    def _draw_action(self, state: NonTabularState) -> Action:
+    def _draw_action(self, state: NonTabularState) -> NonTabularAction:
         """"
         :param state: starting state
         :return: action drawn from probability distribution pi(state, action; theta)
