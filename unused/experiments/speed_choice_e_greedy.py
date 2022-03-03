@@ -15,8 +15,8 @@ rng: np.random.Generator = np.random.default_rng()
 
 
 class EGreedy(TabularPolicy):
-    def __init__(self, environment_: TabularEnvironment, policy_parameters: common.PolicyParameters):
-        super().__init__(environment_, policy_parameters)
+    def __init__(self, environment: TabularEnvironment, policy_parameters: common.PolicyParameters):
+        super().__init__(environment, policy_parameters)
         self.epsilon: float = self._policy_parameters.epsilon
         greedy_policy_parameters = common.PolicyParameters(
             policy_type=common.PolicyType.DETERMINISTIC,

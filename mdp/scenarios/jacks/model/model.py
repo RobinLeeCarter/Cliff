@@ -4,7 +4,7 @@ from typing import Optional, TYPE_CHECKING
 
 if TYPE_CHECKING:
     from mdp.scenarios.jacks.controller import Controller
-    from mdp.model.agent.episode import Episode
+    from mdp.model.agent.tabular.episode import Episode
     from mdp.scenarios.jacks.model.environment_parameters import EnvironmentParameters
 
 from mdp.model import model

@@ -7,13 +7,13 @@ import utils
 from mdp import common
 if TYPE_CHECKING:
     from mdp.model.environment.tabular.tabular_environment import TabularEnvironment
-from mdp.model.policy.tabular.tabular_policy import TabularPolicy
 from mdp.model.policy.tabular.deterministic import Deterministic
+from mdp.model.policy.tabular.tabular_policy import TabularPolicy
 
 
 class EGreedy(TabularPolicy):
-    def __init__(self, environment_: TabularEnvironment, policy_parameters: common.PolicyParameters):
-        super().__init__(environment_, policy_parameters)
+    def __init__(self, environment: TabularEnvironment, policy_parameters: common.PolicyParameters):
+        super().__init__(environment, policy_parameters)
         self.epsilon: float = self._policy_parameters.epsilon
         greedy_policy_parameters = common.PolicyParameters(
             policy_type=common.PolicyType.DETERMINISTIC,

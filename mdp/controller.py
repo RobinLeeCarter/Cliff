@@ -2,7 +2,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING, Optional
 
 if TYPE_CHECKING:
-    from mdp.model.agent.episode import Episode
+    from mdp.model.agent.tabular.episode import Episode
     from mdp.model.model import Model
     from mdp.view.view import View
     from mdp import common

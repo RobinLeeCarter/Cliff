@@ -3,7 +3,7 @@ from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from mdp.model.environment.tabular.tabular_environment import TabularEnvironment
-    from mdp.model.agent.agent import Agent
+    from mdp.model.agent.tabular.agent import Agent
 from mdp import common
 from mdp.model.algorithm.abstract.episodic_monte_carlo import EpisodicMonteCarlo
 

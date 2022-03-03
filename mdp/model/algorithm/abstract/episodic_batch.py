@@ -4,8 +4,8 @@ import abc
 
 if TYPE_CHECKING:
     from mdp.model.environment.tabular.tabular_environment import TabularEnvironment
-    from mdp.model.agent.agent import Agent
-    from mdp.model.agent.episode import Episode
+    from mdp.model.agent.tabular.agent import Agent
+    from mdp.model.agent.tabular.episode import Episode
     from mdp import common
 from mdp.model.algorithm.abstract.episodic import Episodic
 

@@ -8,12 +8,15 @@ if TYPE_CHECKING:
     from mdp import common
     from mdp.model.environment.tabular.tabular_action import TabularAction
     from mdp.model.environment.tabular.tabular_environment import TabularEnvironment
+from mdp.model.policy.general_policy import GeneralPolicy
 
 
-class TabularPolicy(ABC):
-    def __init__(self, environment_: TabularEnvironment, policy_parameters: common.PolicyParameters):
-        self._environment = environment_
+class TabularPolicy(GeneralPolicy, ABC):
+    def __init__(self, environment: TabularEnvironment, policy_parameters: common.PolicyParameters):
+        super().__init__(environment, policy_parameters)
+        self._environment: TabularEnvironment = environment
         self._policy_parameters: common.PolicyParameters = policy_parameters
+
         self._store_matrix: bool = self._policy_parameters.store_matrix
         self._policy_matrix: Optional[np.ndarray] = None
 

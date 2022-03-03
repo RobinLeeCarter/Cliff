@@ -6,14 +6,14 @@ import numpy as np
 import utils
 
 if TYPE_CHECKING:
+    from mdp import common
     from mdp.model.environment.tabular.tabular_environment import TabularEnvironment
-from mdp import common
 from mdp.model.policy.tabular.tabular_policy import TabularPolicy
 
 
 class Random(TabularPolicy):
-    def __init__(self, environment_: TabularEnvironment, policy_parameters: common.PolicyParameters):
-        super().__init__(environment_, policy_parameters)
+    def __init__(self, environment: TabularEnvironment, policy_parameters: common.PolicyParameters):
+        super().__init__(environment, policy_parameters)
         if self._store_matrix:
             self._policy_matrix = self._calc_policy_matrix()
 

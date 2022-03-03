@@ -2,27 +2,27 @@ from __future__ import annotations
 from typing import Optional, Callable, TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from mdp.model.environment.general.general_action import GeneralAction
-    from mdp.model.environment.general.general_state import GeneralState
-    from mdp.model.environment.tabular.tabular_environment import TabularEnvironment
+    from mdp.model.environment.non_tabular.non_tabular_action import NonTabularAction
+    from mdp.model.environment.non_tabular.non_tabular_state import NonTabularState
+    from mdp.model.environment.non_tabular.non_tabular_environment import NonTabularEnvironment
 
-from mdp.model.agent import rsa
+from mdp.model.agent.non_tabular.rsa import RSA
 
 
 class Episode:
     """Just makes a record laid out in the standard way with Reward, State, Action for each _t"""
     def __init__(self,
-                 environment: TabularEnvironment,
+                 environment: NonTabularEnvironment,
                  gamma: float,
                  step_callback: Optional[Callable[[], bool]] = None,
                  record_first_visits: bool = False):
-        self._environment = environment
+        self._environment: NonTabularEnvironment = environment
         self.gamma: float = gamma
         self._step_callback: Optional[Callable[[], bool]] = step_callback
         self.record_first_visits = record_first_visits
 
         # R0=0, S0, A0, R1, S1, A1, R2 ... S(T-1), A(T-1), R(T), S(T), A(T)=-1
-        self.trajectory: list[rsa.RSA] = []
+        self.trajectory: list[RSA] = []
         self.terminates: bool = False
         self.T: Optional[int] = None
         self.G: list[float] = []
@@ -32,65 +32,48 @@ class Episode:
         if self.record_first_visits:
             # self.visited_s: np.ndarray = np.zeros(shape=len(self._environment.states), dtype=bool)
             self.is_first_visit: list[bool] = []
-            self.visited_s: set[int] = set()
+            self.visited_states: set[NonTabularState] = set()
 
     @property
-    def last_state(self) -> Optional[GeneralState]:
+    def last_state(self) -> Optional[NonTabularState]:
         if self.trajectory:
-            last_s = self.trajectory[-1].s
-            # if last_s is None:
-            #     return None
-            # else:
-            return self._environment.states[last_s]
+            return self.trajectory[-1].state
         else:
             return None
 
     @property
-    def last_action(self) -> Optional[GeneralAction]:
+    def last_action(self) -> Optional[NonTabularAction]:
         if self.trajectory:
-            last_a: int = self.trajectory[-1].a
-            if last_a == -1:
-                return None
-            else:
-                return self._environment.actions[last_a]
+            return self.trajectory[-1].action
         else:
             return None
 
     @property
-    def prev_state(self) -> Optional[GeneralState]:
+    def prev_state(self) -> Optional[NonTabularState]:
         if self.trajectory and len(self.trajectory) > 1:
-            prev_s = self.trajectory[-2].s
-            # if prev_s is None:
-            #     return None
-            # else:
-            return self._environment.states[prev_s]
+            return self.trajectory[-2].state
         else:
             return None
 
     @property
-    def prev_action(self) -> Optional[GeneralAction]:
+    def prev_action(self) -> Optional[NonTabularAction]:
         if self.trajectory and len(self.trajectory) > 1:
-            prev_a = self.trajectory[-2].a
-            if prev_a == -1:
-                return None
-            else:
-                return self._environment.actions[prev_a]
+            return self.trajectory[-2].action
         else:
             return None
 
     # @profile
     def add_rsa(self,
-                r: float,
-                s: int,
-                a: int,
-                is_terminal: bool):
-        rsa_ = rsa.RSA(r, s, a)
-        self.trajectory.append(rsa_)
-        if is_terminal:
+                reward: float,
+                state: NonTabularState,
+                action: Optional[NonTabularAction]):
+        rsa = RSA(reward, state, action)
+        self.trajectory.append(rsa)
+        if state.is_terminal:
             self.terminates = True
             self.T = len(self.trajectory) - 1
         if self.record_first_visits:
-            self._first_visit_check(s)
+            self._first_visit_check(state)
         if self._step_callback:
             self.cont = self._step_callback()
 
@@ -100,13 +83,13 @@ class Episode:
             for t in range(self.T - 1, -1, -1):     # T-1, T-2, ... 1, 0
                 self.G[t] = self[t+1].r + self.gamma * self.G[t + 1]
 
-    def _first_visit_check(self, s: int):
-        is_first_visit = (s not in self.visited_s)
+    def _first_visit_check(self, state: NonTabularState):
+        is_first_visit = (state not in self.visited_states)
         self.is_first_visit.append(is_first_visit)
         if is_first_visit:
-            self.visited_s.add(s)
+            self.visited_states.add(state)
 
-    def __getitem__(self, t: int) -> rsa.RSA:
+    def __getitem__(self, t: int) -> RSA:
         return self.trajectory[t]
 
     @property
@@ -138,18 +121,12 @@ class Episode:
         #         g = rsa_.r + self.gamma * g
         # return g
 
-    def get_state(self, t: int) -> GeneralState:
-        s: int = self.trajectory[t].s
-        state: GeneralState = self._environment.states[s]
-        return state
+    def get_state(self, t: int) -> NonTabularState:
+        return self.trajectory[t].state
 
-    def get_action(self, t: int) -> Optional[GeneralAction]:
-        a: int = self.trajectory[t].a
-        if a == -1:
-            return None
-        else:
-            return self._environment.actions[a]
+    def get_action(self, t: int) -> Optional[NonTabularAction]:
+        return self.trajectory[t].action
 
-    def get_s_a_g(self, t: int) -> tuple[int, int, float]:
-        rsa_ = self.trajectory[t]
-        return rsa_.s, rsa_.a, self.G[t]
+    def get_s_a_g(self, t: int) -> tuple[NonTabularState, NonTabularAction, float]:
+        rsa = self.trajectory[t]
+        return rsa.state, rsa.action, self.G[t]

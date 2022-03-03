@@ -1,31 +1,31 @@
 from __future__ import annotations
 from typing import Optional, TYPE_CHECKING, Callable
 
-import math
+# import math
 
 if TYPE_CHECKING:
-    from mdp.model.environment.general.general_state import GeneralState
-    from mdp.model.environment.general.general_action import GeneralAction
-    from mdp.model.environment.tabular.tabular_environment import TabularEnvironment
+    from mdp.model.environment.non_tabular.non_tabular_state import NonTabularState
+    from mdp.model.environment.non_tabular.non_tabular_action import NonTabularAction
+    from mdp.model.environment.non_tabular.non_tabular_environment import NonTabularEnvironment
 from mdp import common
 # renamed to avoid name conflicts
 from mdp.model.algorithm.abstract.algorithm import Algorithm
 from mdp.model.algorithm.abstract.episodic import Episodic
-from mdp.model.agent.episode import Episode
-from mdp.model.policy.tabular.tabular_policy import TabularPolicy
+from mdp.model.agent.non_tabular.episode import Episode
+from mdp.model.policy.non_tabular.non_tabular_policy import NonTabularPolicy
 from mdp.model.algorithm import algorithm_factory
 from mdp.model.policy import policy_factory
 
 
 class Agent:
     def __init__(self,
-                 environment_: TabularEnvironment,
+                 environment: NonTabularEnvironment,
                  verbose: bool = False):
-        self._environment: TabularEnvironment = environment_
+        self._environment: NonTabularEnvironment = environment
         self._verbose: bool = verbose
 
-        self._policy: Optional[TabularPolicy] = None
-        self._behaviour_policy: Optional[TabularPolicy] = None     # if on-policy = self._policy
+        self._policy: Optional[NonTabularPolicy] = None
+        self._behaviour_policy: Optional[NonTabularPolicy] = None     # if on-policy = self._policy
         self._dual_policy_relationship: Optional[common.DualPolicyRelationship] = None
 
         self._algorithm: Optional[Algorithm] = None
@@ -38,31 +38,32 @@ class Agent:
         self.t: int = 0
 
         # always refers to values for time-step t
+        self.state: Optional[NonTabularState] = None
+        self.action: Optional[NonTabularAction] = None
+
         self.r: float = 0.0
-        self.s: int = -1
-        self.a: int = -1
-        self.is_terminal: bool = False  # stored for performance
+        # self.is_terminal: bool = False  # stored for performance
 
         # always refers to values for time-step t-1
         self.prev_r: float = 0.0
-        self.prev_s: int = -1
-        self.prev_a: int = -1
+        self.prev_state: Optional[NonTabularState] = None
+        self.prev_action: Optional[NonTabularAction] = None
 
         # trainer callback
         self._step_callback: Optional[Callable[[], bool]] = None
 
     # use for on-policy algorithms
     @property
-    def policy(self) -> TabularPolicy:
+    def policy(self) -> NonTabularPolicy:
         return self._policy
 
     # use these two for off-policy algorithms
     @property
-    def target_policy(self) -> TabularPolicy:
+    def target_policy(self) -> NonTabularPolicy:
         return self._policy
 
     @property
-    def behaviour_policy(self) -> TabularPolicy:
+    def behaviour_policy(self) -> NonTabularPolicy:
         return self._behaviour_policy
 
     @property
@@ -92,8 +93,8 @@ class Agent:
 
         # set policy based on policy_parameters
         self._algorithm = algorithm_factory.algorithm_factory(
-            environment_=self._environment,
-            agent_=self,
+            environment=self._environment,
+            agent=self,
             algorithm_parameters=settings.algorithm_parameters,
             policy_parameters=settings.policy_parameters)
         settings.algorithm_title = self._algorithm.title
@@ -105,7 +106,7 @@ class Agent:
 
         self.gamma = settings.gamma
 
-    def set_behaviour_policy(self, policy: TabularPolicy):
+    def set_behaviour_policy(self, policy: NonTabularPolicy):
         self._behaviour_policy = policy
 
     def parameter_changes(self, iteration: int):
@@ -117,21 +118,19 @@ class Agent:
 
     def generate_episodes(self,
                           num_episodes: int,
-                          episode_length_timeout: Optional[int] = None,
-                          exploring_starts: bool = False,
+                          episode_length_timeout: Optional[int] = None
                           ) -> list[Episode]:
-        return [self.generate_episode(episode_length_timeout, exploring_starts)
+        return [self.generate_episode(episode_length_timeout)
                 for _ in range(num_episodes)]
 
     def generate_episode(self,
                          episode_length_timeout: Optional[int] = None,
-                         exploring_starts: bool = False
                          ) -> Episode:
         if not episode_length_timeout:
             episode_length_timeout = self._episode_length_timeout
 
-        self.start_episode(exploring_starts)
-        while not self.is_terminal and self.t < episode_length_timeout:
+        self.start_episode()
+        while not self.state.is_terminal and self.t < episode_length_timeout:
             self.choose_action()
             if self._verbose:
                 self._print_step()
@@ -140,11 +139,10 @@ class Agent:
         if self.t == episode_length_timeout:
             print("Warning: Failed to terminate")
         if self._verbose:
-            state: GeneralState = self._environment.states[self.s]
-            print(f"t={self.t} \t state = {state} (terminal)")
+            print(f"t={self.t} \t state = {self.state} (terminal)")
         return self._episode
 
-    def start_episode(self, exploring_starts: bool = False):
+    def start_episode(self):
         """Gets initial state and sets initial reward to None"""
         env = self._environment
 
@@ -154,43 +152,28 @@ class Agent:
 
         self._episode = Episode(env, self.gamma, self._step_callback, self._record_first_visits)
 
-        if exploring_starts:
-            # completely random starting state and action and take the action, reward will be None
-            # state, action = self._environment.get_random_state_action()
-            self.s, self.a = env.s_a_distribution.draw_one()
-            self.is_terminal = env.is_terminal[self.s]
-            self.r = 0.0
-            # action = self._environment.dynamics.get_random_action_for_state(self.state)
-            self.choose_action(self.a)
-            self.take_action()
-        else:
-            # get starting state, reward will be None
-            self.s = env.start_s_distribution.draw_one()
-            # self.s = env.start_s()
-            self.is_terminal = env.is_terminal[self.s]
-            self.r = 0.0
+        # get starting state, reward will be None
+        self.state = self._environment.draw_start_state()
+        self.action = None
+        # self.s = env.start_s()
+        # self.is_terminal = self.state.is_terminal
+        self.r = 0.0
 
-    def choose_action(self, a: Optional[int] = None):
+    def choose_action(self, forced_action: Optional[NonTabularAction] = None):
         """
         Have the policy choose an action
         We then have a complete r, s, a to add to episode
         The reward being is response from the previous action (if there was one, or otherwise reward=None)
         Note that the action is NOT applied yet.
         """
-        if a is None:
-            self.a = self._behaviour_policy[self.s]
+        if forced_action:
+            self.action = forced_action
         else:
-            self.a = a
-        # is_terminal = self._environment.states[self.s].is_terminal
-        self._episode.add_rsa(self.r, self.s, self.a, self.is_terminal)
+            self.action = self._behaviour_policy[self.state]
+
+        self._episode.add_rsa(self.r, self.state, self.action)
         if self._verbose:
-            state: GeneralState = self._environment.states[self.s]
-            action: Optional[GeneralAction]
-            if self.a == -1:
-                action = None
-            else:
-                action = self._environment.actions[self.a]
-            print(f"state = {state} \t action = {action}")
+            print(f"state = {self.state} \t action = {self.action}")
 
     def take_action(self):
         """With state and action are already set,
@@ -198,57 +181,39 @@ class Agent:
         Get new reward and state in response.
         Start a new time step with the new reward and state
         """
-        new_r, new_s, self.is_terminal = self._environment.from_s_perform_a(self.s, self.a)
+        new_r: float
+        new_state: NonTabularState
+        new_r, new_state = self._environment.from_state_perform_action(self.state, self.action)
 
         # move time-step forward
         self.t += 1
-        self.prev_r, self.prev_s, self.prev_a = self.r, self.s, self.a
-        self.r, self.s, self.a = new_r, new_s, -1
+        self.prev_r, self.prev_state, self.prev_action = self.r, self.state, self.action
+        self.r, self.state, self.action = new_r, new_state, None
 
-        if self.is_terminal:
+        if self.state.is_terminal:
             # add terminating step here as should not select another action
-            self._episode.add_rsa(self.r, self.s, self.a, self.is_terminal)
-
-    # @profile
-    def update_target_policy(self, s: int, a: int):
-        if self._dual_policy_relationship == common.DualPolicyRelationship.LINKED_POLICIES:
-            self._behaviour_policy[s] = a   # this will also update the target policy since linked
-        else:
-            # in either possible case here we want to update the target policy
-            self._policy[s] = a
-
-    def apply_result(self, result: common.Result):
-        self._policy.set_policy_vector(result.policy_vector)
-        if self._algorithm.V:
-            self._algorithm.V.vector = result.v_vector
-        if self._algorithm.Q:
-            self._algorithm.Q.set_matrix(result.q_matrix)
+            self._episode.add_rsa(self.r, self.state, self.action)
 
     def _print_step(self):
-        state: GeneralState = self._environment.states[self.s]
-        action: Optional[GeneralAction]
-        if self.a == -1:
-            action = None
-        else:
-            action = self._environment.actions[self.a]
-        print(f"t={self.t} \t state = {state} \t action = {action}")
+        print(f"t={self.t} \t state = {self.state} \t action = {self.action}")
 
     def print_statistics(self):
         self._algorithm.print_q_coverage_statistics()
 
     def rms_error(self) -> float:
-        # better that it just fail if you use something with no V or an environment without get_optimum
-        # if not self._algorithm.V or not hasattr(self._environment, 'get_optimum'):
-        #     return None
-
-        squared_error: float = 0.0
-        count: int = 0
-        for s, state in enumerate(self._environment.states):
-            if self._environment.is_valued_state(state):
-                value: float = self._algorithm.V[s]
-                # noinspection PyUnresolvedReferences
-                optimum: float = self._environment.get_optimum(state)
-                squared_error += (value - optimum)**2
-                count += 1
-        rms_error = math.sqrt(squared_error / count)
-        return rms_error
+        raise NotImplementedError
+    #     # better that it just fail if you use something with no V or an environment without get_optimum
+    #     # if not self._algorithm.V or not hasattr(self._environment, 'get_optimum'):
+    #     #     return None
+    #
+    #     squared_error: float = 0.0
+    #     count: int = 0
+    #     for s, state in enumerate(self._environment.states):
+    #         if self._environment.is_valued_state(state):
+    #             value: float = self._algorithm.V[s]
+    #             # noinspection PyUnresolvedReferences
+    #             optimum: float = self._environment.get_optimum(state)
+    #             squared_error += (value - optimum)**2
+    #             count += 1
+    #     rms_error = math.sqrt(squared_error / count)
+    #     return rms_error

@@ -4,7 +4,7 @@ from abc import ABC, abstractmethod
 
 if TYPE_CHECKING:
     from mdp.model.algorithm.abstract.algorithm import Algorithm
-    from mdp.model.policy.policy import Policy
+    from mdp.model.policy.general_policy import GeneralPolicy
 
 from mdp import common
 from mdp.model.environment.general.general_state import GeneralState
@@ -34,7 +34,7 @@ class GeneralEnvironment(Generic[State, Action], ABC):
         return True
 
     # TODO: is this in the right place?
-    def initialize_policy(self, policy_: Policy, policy_parameters: common.PolicyParameters):
+    def initialize_policy(self, policy_: GeneralPolicy, policy_parameters: common.PolicyParameters):
         pass
 
     @abstractmethod
@@ -44,7 +44,7 @@ class GeneralEnvironment(Generic[State, Action], ABC):
     # TODO: does this belong here?
     def update_grid_value_functions(self,
                                     algorithm: Algorithm,
-                                    policy: Policy):
+                                    policy: GeneralPolicy):
         pass
 
     # TODO: does this belong here or in the value_function?

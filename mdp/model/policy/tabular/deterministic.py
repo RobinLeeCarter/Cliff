@@ -10,8 +10,8 @@ from mdp.model.policy.tabular.tabular_policy import TabularPolicy
 
 
 class Deterministic(TabularPolicy):
-    def __init__(self, environment_: TabularEnvironment, policy_parameters: common.PolicyParameters):
-        super().__init__(environment_, policy_parameters)
+    def __init__(self, environment: TabularEnvironment, policy_parameters: common.PolicyParameters):
+        super().__init__(environment, policy_parameters)
         state_count = len(self._environment.states)
         self.policy_vector: np.ndarray = np.zeros(shape=state_count, dtype=int)
 

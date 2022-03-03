@@ -3,8 +3,8 @@ from typing import TYPE_CHECKING, Optional, Callable
 import multiprocessing
 
 if TYPE_CHECKING:
-    from mdp.model.agent.agent import Agent
-    from mdp.model.agent.episode import Episode
+    from mdp.model.agent.tabular.agent import Agent
+    from mdp.model.agent.tabular.episode import Episode
     from mdp.model.breakdown.breakdown import Breakdown
 from mdp import common
 from mdp.model.algorithm.abstract.algorithm import Algorithm

@@ -5,14 +5,14 @@ from abc import ABC, abstractmethod
 if TYPE_CHECKING:
     from mdp.controller import Controller
     from mdp.model.environment.tabular.tabular_environment import TabularEnvironment
-    from mdp.model.agent.episode import Episode
+    from mdp.model.agent.tabular.episode import Episode
     from mdp.model.breakdown.breakdown import Breakdown
 
 import multiprocessing
 import utils
 from mdp import common
 # from mdp.scenarios.factory import environment_factory
-from mdp.model.agent.agent import Agent
+from mdp.model.agent.tabular.agent import Agent
 from mdp.model.breakdown import breakdown_factory
 from mdp.model.trainer.trainer import Trainer
 from mdp.model.trainer.parallel_trainer import ParallelTrainer

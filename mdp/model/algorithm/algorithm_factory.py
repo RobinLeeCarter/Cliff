@@ -3,7 +3,7 @@ from typing import TYPE_CHECKING, Type
 
 if TYPE_CHECKING:
     from mdp.model.environment.tabular.tabular_environment import TabularEnvironment
-    from mdp.model.agent.agent import Agent
+    from mdp.model.agent.tabular.agent import Agent
 from mdp import common
 from mdp.model.algorithm.abstract.algorithm import Algorithm as BaseAlgorithm
 
@@ -32,8 +32,8 @@ from mdp.model.algorithm.control.sarsa import Sarsa
 from mdp.model.algorithm.control.q_learning import QLearning
 
 
-def algorithm_factory(environment_: TabularEnvironment,
-                      agent_: Agent,
+def algorithm_factory(environment: TabularEnvironment,
+                      agent: Agent,
                       algorithm_parameters: common.Settings.algorithm_parameters,
                       policy_parameters: common.PolicyParameters
                       ) -> BaseAlgorithm:
@@ -63,5 +63,5 @@ def algorithm_factory(environment_: TabularEnvironment,
         a.VQ: VQ,
     }
     type_for_algorithm = algorithm_lookup[algorithm_parameters.algorithm_type]
-    algorithm_ = type_for_algorithm(environment_, agent_, algorithm_parameters, policy_parameters)
+    algorithm_ = type_for_algorithm(environment, agent, algorithm_parameters, policy_parameters)
     return algorithm_
