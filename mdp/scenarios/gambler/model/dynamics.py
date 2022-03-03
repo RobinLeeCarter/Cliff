@@ -1,28 +1,27 @@
 from __future__ import annotations
 from typing import TYPE_CHECKING, Optional
 
+import numpy as np
+
 if TYPE_CHECKING:
-    from mdp.scenarios.gambler.model.action import Action
     from mdp.scenarios.gambler.model.environment import Environment
     from mdp.scenarios.gambler.model.environment_parameters import EnvironmentParameters
 
-import numpy as np
 import utils
-
 from mdp.common import Multinoulli
-from mdp.model.environment.tabular import tabular_dynamics
-
 from mdp.scenarios.gambler.model.state import State
+from mdp.scenarios.gambler.model.action import Action
 from mdp.scenarios.gambler.model.enums import Toss, Result
 
+from mdp.model.environment.tabular.tabular_dynamics import TabularDynamics
 
-class Dynamics(tabular_dynamics.TabularDynamics):
-    def __init__(self, environment_: Environment, environment_parameters: EnvironmentParameters):
-        super().__init__(environment_, environment_parameters)
 
-        # downcast
-        self._environment: Environment = self._environment  # type: ignore
-        self._environment_parameters: EnvironmentParameters = self._environment_parameters
+class Dynamics(TabularDynamics[State, Action]):
+    def __init__(self, environment: Environment, environment_parameters: EnvironmentParameters):
+        super().__init__(environment, environment_parameters)
+        self._environment: Environment = environment
+        self._environment_parameters: EnvironmentParameters = environment_parameters
+
         self._probability_heads: float = self._environment_parameters.probability_heads
         self._toss_distribution: Multinoulli[int] = Multinoulli[int]()
 

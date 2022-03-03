@@ -2,23 +2,23 @@ from __future__ import annotations
 from typing import TYPE_CHECKING, Optional
 
 if TYPE_CHECKING:
-    from mdp.scenarios.blackjack.model.action import Action
     from mdp.scenarios.blackjack.model.environment import Environment
     from mdp.scenarios.blackjack.model.environment_parameters import EnvironmentParameters
 
 from mdp.common import Multinoulli
-from mdp.model.environment.tabular import tabular_dynamics
-
 from mdp.scenarios.blackjack.model.state import State
+from mdp.scenarios.blackjack.model.action import Action
 from mdp.scenarios.blackjack.model.enums import Result
 
+from mdp.model.environment.tabular.tabular_dynamics import TabularDynamics
 
-class Dynamics(tabular_dynamics.TabularDynamics):
-    def __init__(self, environment_: Environment, environment_parameters: EnvironmentParameters):
-        super().__init__(environment_, environment_parameters)
 
-        # downcast
-        self._environment: Environment = self._environment  # type: ignore
+class Dynamics(TabularDynamics[State, Action]):
+    def __init__(self, environment: Environment, environment_parameters: EnvironmentParameters):
+        super().__init__(environment, environment_parameters)
+        self._environment: Environment = environment
+        self._environment_parameters: EnvironmentParameters = environment_parameters
+
         self._max_card: int = 10    # 10, J, Q or K combined
         self._card_distribution: Multinoulli[int] = Multinoulli()
 

@@ -13,7 +13,8 @@ def jacks_test() -> bool:
     scenario = scenario_factory.scenario_factory(common.ComparisonType.JACKS_POLICY_ITERATION_V)
     scenario.build()
 
-    environment: Environment = scenario.environment
+    environment: Environment = scenario.environment     # type: ignore
+    assert isinstance(environment, Environment)
 
     print("States...")
     for state_ in environment.states:

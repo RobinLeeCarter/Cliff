@@ -2,24 +2,23 @@ from __future__ import annotations
 from typing import TYPE_CHECKING, Optional
 
 if TYPE_CHECKING:
-    from mdp.scenarios.racetrack.model.action import Action
     from mdp.scenarios.racetrack.model.environment import Environment
     from mdp.scenarios.racetrack.model.environment_parameters import EnvironmentParameters
     from mdp.scenarios.racetrack.model.grid_world import GridWorld
 
 from mdp import common
-from mdp.model.environment.tabular import tabular_dynamics
-
 from mdp.scenarios.racetrack.model.state import State
+from mdp.scenarios.racetrack.model.action import Action
+
+from mdp.model.environment.tabular.tabular_dynamics import TabularDynamics
 
 
-class Dynamics(tabular_dynamics.TabularDynamics):
-    def __init__(self, environment_: Environment, environment_parameters: EnvironmentParameters):
-        super().__init__(environment_, environment_parameters)
-
-        # downcast
-        self._environment: Environment = self._environment  # type: ignore
-        self._grid_world: GridWorld = self._environment.grid_world
+class Dynamics(TabularDynamics[State, Action]):
+    def __init__(self, environment: Environment, environment_parameters: EnvironmentParameters):
+        super().__init__(environment, environment_parameters)
+        self._environment: Environment = environment
+        self._environment_parameters: EnvironmentParameters = environment_parameters
+        self._grid_world: GridWorld = self._environment.grid_world  # downcast
 
         self._extra_reward_for_failure: float = environment_parameters.extra_reward_for_failure
 
@@ -29,10 +28,6 @@ class Dynamics(tabular_dynamics.TabularDynamics):
         start_states = [State(is_terminal=False, position=position, velocity=start_velocity)
                         for position in start_positions]
         return start_states
-
-    # def get_a_start_state(self) -> State:
-    #     position: common.XY = self._grid_world.get_a_start_position()
-    #     return State(is_terminal=False, position=position, velocity=common.XY(x=0, y=0))
 
     # @profile
     def draw_response(self, state: State, action: Action) -> tuple[float, Optional[State]]:

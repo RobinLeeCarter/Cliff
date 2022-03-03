@@ -4,9 +4,9 @@ from typing import Optional, TYPE_CHECKING
 if TYPE_CHECKING:
     from mdp.model.agent.episode import Episode
     from mdp.scenarios.position_move.model.action import Action
-    from mdp.scenarios.position_move.model.state import State
     from mdp.scenarios.position_move.model.grid_world import GridWorld
 
+from mdp.scenarios.position_move.model.state import State
 from mdp import common
 from mdp.view import grid_view
 
@@ -38,7 +38,7 @@ class GridView(grid_view.GridView):
         self._draw_frame_on_background(agent_position, agent_move, prev_position, prev_move)
 
     def _frame_on_background_for_t(self, episode: Episode, t: int):
-        state: Optional[State] = episode.get_state(t)
+        state: State = episode.get_state(t)  # type: ignore    # Optional[State] before?
         agent_position: common.XY = state.position
         agent_move: Optional[common.XY] = None
         prev_position: Optional[common.XY] = None
@@ -49,7 +49,7 @@ class GridView(grid_view.GridView):
             agent_move = last_action.move
 
         if t >= 1 and not self.grid_view_parameters.show_trail:
-            prev_state: Optional[State] = episode.get_state(t - 1)
+            prev_state: State = episode.get_state(t - 1)     # type: ignore
             prev_position = prev_state.position
             prev_action: Optional[Action] = episode.get_action(t - 1)
             if prev_action:

@@ -1,18 +1,18 @@
 from __future__ import annotations
-from abc import ABC
+from abc import ABC, abstractmethod
 from typing import Optional, TYPE_CHECKING
 
 import numpy as np
 
 if TYPE_CHECKING:
     from mdp import common
-    from mdp.model.environment.general.action import Action
+    from mdp.model.environment.general.general_action import GeneralAction
     from mdp.model.environment.tabular.tabular_environment import TabularEnvironment
 
 
 class Policy(ABC):
     def __init__(self, environment_: TabularEnvironment, policy_parameters: common.PolicyParameters):
-        self._environment = environment_
+        self._environment: TabularEnvironment = environment_
         self._policy_parameters: common.PolicyParameters = policy_parameters
         self._store_matrix: bool = self._policy_parameters.store_matrix
         self._policy_matrix: Optional[np.ndarray] = None
@@ -32,10 +32,10 @@ class Policy(ABC):
     def __setitem__(self, s: int, a: int):
         raise NotImplementedError(f"__setitem__ not implemented for Policy: {type(self)}")
 
-    def get_action(self, s: int) -> Action:
+    def get_action(self, s: int) -> GeneralAction:
         return self._environment.actions[self._get_a(s)]
 
-    def set_action(self, s: int, action: Action):
+    def set_action(self, s: int, action: GeneralAction):
         a = self._environment.action_index[action]
         # print(s, action, a)
         self.__setitem__(s, a)
@@ -45,7 +45,7 @@ class Policy(ABC):
         """Deterministic partner policy if exists else self"""
         return self
 
-    @abc.abstractmethod
+    @abstractmethod
     def _get_a(self, s: int) -> int:
         pass
 
@@ -71,7 +71,7 @@ class Policy(ABC):
         else:
             return self._calc_policy_matrix()
 
-    @abc.abstractmethod
+    @abstractmethod
     def _calc_probability(self, s: int, a: int) -> float:
         pass
 

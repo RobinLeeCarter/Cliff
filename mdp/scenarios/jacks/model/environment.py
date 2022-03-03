@@ -8,35 +8,26 @@ if TYPE_CHECKING:
     from mdp.model.algorithm.value_function import state_function
 
 from mdp import common
-from mdp.model.environment.tabular.tabular_environment import TabularEnvironment
-
 from mdp.scenarios.jacks.model.state import State
 from mdp.scenarios.jacks.model.action import Action
 from mdp.scenarios.jacks.model.environment_parameters import EnvironmentParameters
 from mdp.scenarios.jacks.model.grid_world import GridWorld
 from mdp.scenarios.jacks.model.dynamics.dynamics import Dynamics
 
+from mdp.model.environment.tabular.tabular_environment import TabularEnvironment
 
-class Environment(TabularEnvironment):
+
+class Environment(TabularEnvironment[State, Action]):
     def __init__(self, environment_parameters: EnvironmentParameters):
-
         super().__init__(environment_parameters)
-
-        # super().__init__(environment_parameters_, grid_world_)
-
-        # downcast states and actions so properties can be used freely
-        self.states: list[State] = self.states
-        self.actions: list[Action] = self.actions
-        # self._state: State = self._state
-        # self._action: Action = self._action
+        self._environment_parameters: EnvironmentParameters = environment_parameters
 
         self.grid_world: GridWorld = GridWorld(environment_parameters)
-        self.dynamics: Dynamics = Dynamics(environment_=self, environment_parameters=environment_parameters)
+        self.dynamics: Dynamics = Dynamics(environment=self, environment_parameters=environment_parameters)
 
         self._max_cars: int = environment_parameters.max_cars
         self._max_transfers: int = environment_parameters.max_transfers
 
-    # region Sets
     def _build_states(self):
         """set S"""
         for cars1 in range(self._max_cars+1):
@@ -63,9 +54,7 @@ class Environment(TabularEnvironment):
             return True
         else:
             return False
-    # endregion
 
-    # region Operation
     def initialize_policy(self, policy: TabularPolicy, policy_parameters: common.PolicyParameters):
         policy.zero_state_action()
 
@@ -106,11 +95,10 @@ class Environment(TabularEnvironment):
         # policy_: policy.Deterministic
         for s, state in enumerate(self.states):
             position: common.XY = common.XY(x=state.ending_cars_2, y=state.ending_cars_1)     # reversed like in book
-            action: Action = policy.get_action(s)
+            action: Action = policy.get_action(s)   # type: ignore
             transfer_1_to_2: int = action.transfer_1_to_2
             # print(position, transfer_1_to_2)
             self.grid_world.set_policy_value(
                 position=position,
                 policy_value=transfer_1_to_2,
             )
-    # endregion

@@ -2,7 +2,6 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from mdp.scenarios.jacks.model.action import Action
     from mdp.scenarios.jacks.model.environment import Environment
     from mdp.scenarios.jacks.model.environment_parameters import EnvironmentParameters
     from mdp.scenarios.jacks.model.dynamics.location_outcome import LocationOutcome
@@ -10,20 +9,20 @@ if TYPE_CHECKING:
 import numpy as np
 
 from mdp.common import Multinoulli
-from mdp.model.environment.tabular import tabular_dynamics
-
 from mdp.scenarios.jacks.model.state import State
+from mdp.scenarios.jacks.model.action import Action
 from mdp.scenarios.jacks.model.dynamics.location import Location
+
+from mdp.model.environment.tabular.tabular_dynamics import TabularDynamics
 
 Response = tuple[float, State]
 
 
-class Dynamics(tabular_dynamics.TabularDynamics):
-    def __init__(self, environment_: Environment, environment_parameters: EnvironmentParameters):
-        super().__init__(environment_, environment_parameters)
-
-        # downcast
-        self._environment: Environment = self._environment  # type: ignore
+class Dynamics(TabularDynamics[State, Action]):
+    def __init__(self, environment: Environment, environment_parameters: EnvironmentParameters):
+        super().__init__(environment, environment_parameters)
+        self._environment: Environment = environment
+        self._environment_parameters: EnvironmentParameters = environment_parameters
 
         self._max_cars: int = environment_parameters.max_cars
         self._rental_revenue: float = environment_parameters.rental_revenue

@@ -1,11 +1,10 @@
 from __future__ import annotations
-from typing import TYPE_CHECKING, TypeVar, Generic, Optional
+from typing import TYPE_CHECKING, TypeVar, Generic
 from abc import ABC, abstractmethod
 
 if TYPE_CHECKING:
     from mdp.model.algorithm.abstract.algorithm import Algorithm
     from mdp.model.policy.policy import Policy
-    from mdp.model.environment.general.general_dynamics import GeneralDynamics
 
 from mdp import common
 from mdp.model.environment.general.general_state import GeneralState
@@ -23,20 +22,14 @@ class GeneralEnvironment(Generic[State, Action], ABC):
         """
         self._environment_parameters: common.EnvironmentParameters = environment_parameters
         self.verbose: bool = environment_parameters.verbose
-        # None to ensure not used when not used/initialised
-
-        # Distributions
-        self._start_state_distribution: Optional[common.Distribution[State]] = None
-        self._dynamics: Optional[GeneralDynamics[State, Action]] = None
 
     @abstractmethod
     def build(self):
         """call after init and could be slow"""
-        pass
 
     # region Operation
     # noinspection PyUnusedLocal
-    def _is_action_compatible_with_state(self, state: State, action: Action):
+    def _is_action_compatible_with_state(self, state: State, action: Action) -> bool:
         # by default all actions are compatible with all states, override if neccesary
         return True
 
@@ -45,7 +38,7 @@ class GeneralEnvironment(Generic[State, Action], ABC):
         pass
 
     @abstractmethod
-    def from_state_perform_action(self, state: State, action: Action) -> tuple[float, State]:
+    def from_state_perform_action(self, state: State, action: GeneralAction) -> tuple[float, GeneralState]:
         pass
 
     # TODO: does this belong here?
@@ -55,7 +48,7 @@ class GeneralEnvironment(Generic[State, Action], ABC):
         pass
 
     # TODO: does this belong here or in the value_function?
-    def is_valued_state(self, state: State) -> bool:
+    def is_valued_state(self, state: GeneralState) -> bool:
         """Does the state have a valid value function V(s) or Q(s,a) e.g. unreachable states might not"""
         return not state.is_terminal
     # endregion

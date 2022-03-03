@@ -15,20 +15,16 @@ Action = TypeVar('Action', bound=GeneralAction)
 
 
 class GeneralDynamics(Generic[State, Action], ABC):
-    def __init__(self, environment: GeneralEnvironment[State, Action],
+    def __init__(self, environment: GeneralEnvironment[GeneralState, GeneralAction],
                  environment_parameters: common.EnvironmentParameters):
         """init top down"""
-        self._environment: GeneralEnvironment[State, Action] = environment
+        self._environment: GeneralEnvironment[GeneralState, GeneralAction] = environment
         self._environment_parameters: common.EnvironmentParameters = environment_parameters
         self._verbose: bool = environment_parameters.verbose
         self.is_built: bool = False
 
-    def build(self):
-        """build bottom up"""
-        self.is_built = True
-
     @abstractmethod
-    def draw_response(self, state: State, action: Action) -> tuple[float, State]:
+    def draw_response(self, state: GeneralState, action: GeneralAction) -> tuple[float, GeneralState]:
         """
         draw a single outcome for a single state and action
         """

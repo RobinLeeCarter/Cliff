@@ -3,7 +3,7 @@ from abc import ABC, abstractmethod
 from typing import Optional, TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from mdp.model.environment.general.environment import Environment
+    from mdp.model.environment.general.general_environment import GeneralEnvironment
 from mdp import common
 from mdp.model.model import Model
 from mdp.view.view import View
@@ -42,7 +42,7 @@ class Scenario(ABC):
         pass
 
     @property
-    def environment(self) -> Environment:
+    def environment(self) -> GeneralEnvironment:
         environment = self._model.environment
         if environment is None:
             raise Exception("Environment is None")

@@ -32,6 +32,12 @@ from mdp.scenarios.windy.scenario.windy_timestep import WindyTimestep
 
 
 def scenario_factory(comparison_type: common.ComparisonType) -> BaseScenario:
+    # TODO: consider changing to some clever dict that also stores args
+    # could also consider that this is not encapsulated in scenario
+    # dict could be built by scenario code perhaps
+    # or sceanario could be specified and passed on and then sub-scenario selected
+    # scenario_lookup: dict[common.ComparisonType, BaseScenario]
+    # args_lookup: dict[common.ComparisonType, tuple?, dict?]
     ct = common.ComparisonType
     if comparison_type == ct.JACKS_POLICY_EVALUATION_Q:
         scenario = JacksPolicyEvaluationQ()

@@ -6,7 +6,7 @@ import numpy as np
 
 if TYPE_CHECKING:
     from mdp import common
-    from mdp.model.environment.general.action import Action
+    from mdp.model.environment.tabular.tabular_action import TabularAction
     from mdp.model.environment.tabular.tabular_environment import TabularEnvironment
 
 
@@ -32,10 +32,10 @@ class TabularPolicy(ABC):
     def __setitem__(self, s: int, a: int):
         raise NotImplementedError(f"__setitem__ not implemented for Policy: {type(self)}")
 
-    def get_action(self, s: int) -> Action:
+    def get_action(self, s: int) -> TabularAction:
         return self._environment.actions[self._get_a(s)]
 
-    def set_action(self, s: int, action: Action):
+    def set_action(self, s: int, action: TabularAction):
         a = self._environment.action_index[action]
         # print(s, action, a)
         self.__setitem__(s, a)

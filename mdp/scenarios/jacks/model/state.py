@@ -1,10 +1,10 @@
 from __future__ import annotations
 from dataclasses import dataclass
 
-from mdp.model.environment.general import state
+from mdp.model.environment.tabular.tabular_state import TabularState
 
 
 @dataclass(frozen=True)
-class State(state.State):
+class State(TabularState):
     ending_cars_1: int
     ending_cars_2: int

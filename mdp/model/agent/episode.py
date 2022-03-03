@@ -2,8 +2,8 @@ from __future__ import annotations
 from typing import Optional, Callable, TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from mdp.model.environment.general.action import Action
-    from mdp.model.environment.general.state import State
+    from mdp.model.environment.general.general_action import GeneralAction
+    from mdp.model.environment.general.general_state import GeneralState
     from mdp.model.environment.tabular.tabular_environment import TabularEnvironment
 
 from mdp.model.agent import rsa
@@ -35,7 +35,7 @@ class Episode:
             self.visited_s: set[int] = set()
 
     @property
-    def last_state(self) -> Optional[State]:
+    def last_state(self) -> Optional[GeneralState]:
         if self.trajectory:
             last_s = self.trajectory[-1].s
             # if last_s is None:
@@ -46,7 +46,7 @@ class Episode:
             return None
 
     @property
-    def last_action(self) -> Optional[Action]:
+    def last_action(self) -> Optional[GeneralAction]:
         if self.trajectory:
             last_a: int = self.trajectory[-1].a
             if last_a == -1:
@@ -57,7 +57,7 @@ class Episode:
             return None
 
     @property
-    def prev_state(self) -> Optional[State]:
+    def prev_state(self) -> Optional[GeneralState]:
         if self.trajectory and len(self.trajectory) > 1:
             prev_s = self.trajectory[-2].s
             # if prev_s is None:
@@ -68,7 +68,7 @@ class Episode:
             return None
 
     @property
-    def prev_action(self) -> Optional[Action]:
+    def prev_action(self) -> Optional[GeneralAction]:
         if self.trajectory and len(self.trajectory) > 1:
             prev_a = self.trajectory[-2].a
             if prev_a == -1:
@@ -138,12 +138,12 @@ class Episode:
         #         g = rsa_.r + self.gamma * g
         # return g
 
-    def get_state(self, t: int) -> State:
+    def get_state(self, t: int) -> GeneralState:
         s: int = self.trajectory[t].s
-        state: State = self._environment.states[s]
+        state: GeneralState = self._environment.states[s]
         return state
 
-    def get_action(self, t: int) -> Optional[Action]:
+    def get_action(self, t: int) -> Optional[GeneralAction]:
         a: int = self.trajectory[t].a
         if a == -1:
             return None

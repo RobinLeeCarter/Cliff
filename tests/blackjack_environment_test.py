@@ -11,7 +11,8 @@ def blackjack_test() -> bool:
     scenario = scenario_factory.scenario_factory(common.ComparisonType.BLACKJACK_EVALUATION_V)
     scenario.build()
 
-    environment: Environment = scenario.environment
+    environment: Environment = scenario.environment     # type: ignore
+    assert isinstance(environment, Environment)
 
     # print("States...")
     # for state in environment.states:

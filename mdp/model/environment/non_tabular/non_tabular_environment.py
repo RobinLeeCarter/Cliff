@@ -1,5 +1,5 @@
 from __future__ import annotations
-from typing import Optional, TYPE_CHECKING, TypeVar
+from typing import Optional, TYPE_CHECKING, TypeVar, final
 from abc import ABC, abstractmethod
 
 import numpy as np
@@ -43,6 +43,7 @@ class NonTabularEnvironment(GeneralEnvironment[State, Action], ABC):
         # Distributions
         self._start_state_distribution: Optional[common.Distribution[State]] = None
 
+    @final
     def build(self):
         self._build_actions()
         self.action_index = {action: i for i, action in enumerate(self.actions)}
@@ -99,19 +100,17 @@ class NonTabularEnvironment(GeneralEnvironment[State, Action], ABC):
         """boolean array of the indexes of actions possible from the current state"""
         return self._possible_actions_array
 
+    @final
     def draw_start_state(self) -> State:
         return self._start_state_distribution.draw_one()
 
+    @final
     def from_state_perform_action(self, state: State, action: Action) -> tuple[float, State]:
         if state.is_terminal:
             raise Exception("Environment: Trying to act in a terminal state.")
         if not self._is_action_compatible_with_state(state, action):
             raise Exception(f"_apply_action state {state} incompatible with action {action}")
-        reward, new_state = self._draw_response(state, action)
-        # if not new_state:
-        #     new_state: State = self._start_state_distribution.draw_one()
-
-        return reward, new_state
+        return self._draw_response(state, action)
 
     @abstractmethod
     def _draw_response(self, state: State, action: Action) -> tuple[float, State]:

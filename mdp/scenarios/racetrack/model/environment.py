@@ -2,7 +2,6 @@ from __future__ import annotations
 from typing import Optional
 
 from mdp import common
-from mdp.model.environment.tabular.tabular_environment import TabularEnvironment
 
 from mdp.scenarios.racetrack.model.state import State
 from mdp.scenarios.racetrack.model.action import Action
@@ -10,18 +9,15 @@ from mdp.scenarios.racetrack.model.grid_world import GridWorld
 from mdp.scenarios.racetrack.model.dynamics import Dynamics
 from mdp.scenarios.racetrack.model.environment_parameters import EnvironmentParameters
 
+from mdp.model.environment.tabular.tabular_environment import TabularEnvironment
 
-class Environment(TabularEnvironment):
+
+class Environment(TabularEnvironment[State, Action]):
     def __init__(self, environment_parameters: EnvironmentParameters):
         super().__init__(environment_parameters)
-
-        # downcast states and actions so properties can be used freely
-        self.states: list[State] = self.states
-        self.actions: list[Action] = self.actions
-        # self._state: State = self._state
-        # self._action: Action = self._action
+        self._environment_parameters: EnvironmentParameters = environment_parameters
         self.grid_world: GridWorld = GridWorld(environment_parameters)
-        self.dynamics: Dynamics = Dynamics(environment_=self, environment_parameters=environment_parameters)
+        self.dynamics: Dynamics = Dynamics(environment=self, environment_parameters=environment_parameters)
 
         self._reward: float = 0.0
         self._next_state: Optional[State] = None
@@ -38,7 +34,6 @@ class Environment(TabularEnvironment):
         self._min_ay: int = environment_parameters.min_acceleration
         self._max_ay: int = environment_parameters.max_acceleration
 
-    # region Sets
     def _build_states(self):
         """set S"""
         for x in range(self.grid_world.max_x+1):
@@ -78,9 +73,7 @@ class Environment(TabularEnvironment):
             return True
         else:
             return False
-    # endregion
 
-    # region Operation
     # def initialize_policy(self, policy: Policy, policy_parameters: common.PolicyParameters):
     #     initial_policy_vector = policy.linked_policy.get_policy_vector()
     #     policy.set_policy_vector(initial_policy_vector)
@@ -97,4 +90,3 @@ class Environment(TabularEnvironment):
 
     def output_mode(self):
         self.grid_world.skid_probability = 0.0
-    # endregion

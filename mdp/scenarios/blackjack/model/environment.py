@@ -9,27 +9,19 @@ if TYPE_CHECKING:
     from mdp.model.algorithm.value_function import state_function
 
 from mdp import common
-from mdp.model.environment.tabular.tabular_environment import TabularEnvironment
-
 from mdp.scenarios.blackjack.model.state import State
 from mdp.scenarios.blackjack.model.action import Action
 from mdp.scenarios.blackjack.model.environment_parameters import EnvironmentParameters
 from mdp.scenarios.blackjack.model.grid_world import GridWorld
 from mdp.scenarios.blackjack.model.dynamics import Dynamics
 
+from mdp.model.environment.tabular.tabular_environment import TabularEnvironment
 
-class Environment(TabularEnvironment):
+
+class Environment(TabularEnvironment[State, Action]):
     def __init__(self, environment_parameters: EnvironmentParameters):
-
         super().__init__(environment_parameters)
-
-        # super().__init__(environment_parameters_, grid_world_)
-
-        # downcast states and actions so properties can be used freely
-        self.states: list[State] = self.states
-        self.actions: list[Action] = self.actions
-        # self._state: State = self._state
-        # self._action: Action = self._action
+        self._environment_parameters: EnvironmentParameters = environment_parameters
 
         self._player_sum_min = 11
         self._player_sum_max = 21
@@ -41,9 +33,8 @@ class Environment(TabularEnvironment):
         # dealer_card is x, player_sum is y : following the table in the book
         grid_shape = (len(self._player_sums), len(self._dealers_cards))
         self.grid_world: GridWorld = GridWorld(environment_parameters=environment_parameters, grid_shape=grid_shape)
-        self.dynamics: Dynamics = Dynamics(environment_=self, environment_parameters=environment_parameters)
+        self.dynamics: Dynamics = Dynamics(environment=self, environment_parameters=environment_parameters)
 
-    # region Sets
     def _build_states(self):
         """set S"""
         # non-terminal states
@@ -78,9 +69,7 @@ class Environment(TabularEnvironment):
             return False
         else:
             return True
-    # endregion
 
-    # region Operation
     def initialize_policy(self, policy: TabularPolicy, policy_parameters: common.PolicyParameters):
         hit: bool
 
@@ -134,7 +123,7 @@ class Environment(TabularEnvironment):
                 x = state.dealers_card - self._dealers_card_min
                 y = state.player_sum - self._player_sum_min
                 position: common.XY = common.XY(x, y)
-                action: Action = policy.get_action(s)
+                action: Action = policy.get_action(s)   # type: ignore
                 policy_value: int = int(action.hit)
                 # print(position, transfer_1_to_2)
                 self.grid_world.set_policy_value(
@@ -159,4 +148,3 @@ class Environment(TabularEnvironment):
                                 q_value=algorithm.Q[s, a],
                                 is_policy=is_policy
                             )
-    # endregion

@@ -38,7 +38,7 @@ class Controller(controller.Controller):
         total_transfers: int = 0
         for s, state in enumerate(self._model.environment.states):
             if not state.is_terminal:
-                action: Action = policy.get_action(s)
+                action: Action = policy.get_action(s)   # type: ignore
                 total_transfers += action.transfer_1_to_2
         v: np.ndarray = self._model.agent.algorithm.V.vector
         total_v: float = v.sum()

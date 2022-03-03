@@ -4,9 +4,9 @@ from typing import Optional, TYPE_CHECKING, Callable
 import math
 
 if TYPE_CHECKING:
-    from mdp.model.environment.general.general_state import GeneralState
-    from mdp.model.environment.general.general_action import GeneralAction
-    from mdp.model.environment.tabular.tabular_environment import TabularEnvironment
+    from mdp.model.environment.non_tabular.non_tabular_state import NonTabularState
+    from mdp.model.environment.non_tabular.non_tabular_action import NonTabularAction
+    from mdp.model.environment.non_tabular.non_tabular_environment import NonTabularEnvironment
 from mdp import common
 # renamed to avoid name conflicts
 from mdp.model.algorithm.abstract.algorithm import Algorithm
@@ -17,11 +17,11 @@ from mdp.model.algorithm import algorithm_factory
 from mdp.model.policy import policy_factory
 
 
-class Agent:
+class NonTabularAgent:
     def __init__(self,
-                 environment_: TabularEnvironment,
+                 environment_: NonTabularEnvironment,
                  verbose: bool = False):
-        self._environment: TabularEnvironment = environment_
+        self._environment: NonTabularEnvironment = environment_
         self._verbose: bool = verbose
 
         self._policy: Optional[TabularPolicy] = None
@@ -38,6 +38,9 @@ class Agent:
         self.t: int = 0
 
         # always refers to values for time-step t
+        self.state: Optional[NonTabularState] = None
+        self.action: Optional[NonTabularAction] = None
+
         self.r: float = 0.0
         self.s: int = -1
         self.a: int = -1
@@ -198,6 +201,10 @@ class Agent:
         Get new reward and state in response.
         Start a new time step with the new reward and state
         """
+        new_r: float
+        new_state: NonTabularState
+        new_r, new_state = self._environment.from_state_perform_action(self.state, self.action)
+
         new_r, new_s, self.is_terminal = self._environment.from_s_perform_a(self.s, self.a)
 
         # move time-step forward

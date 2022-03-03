@@ -14,8 +14,8 @@ from mdp.scenarios.position_move.model import dynamics
 
 
 class Dynamics(dynamics.Dynamics):
-    def __init__(self, environment_: Environment, environment_parameters: EnvironmentParameters):
-        super().__init__(environment_, environment_parameters)
+    def __init__(self, environment: Environment, environment_parameters: EnvironmentParameters):
+        super().__init__(environment, environment_parameters)
 
         # downcast
         self._environment: Environment = self._environment

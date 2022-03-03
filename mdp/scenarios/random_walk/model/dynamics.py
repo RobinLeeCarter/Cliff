@@ -15,11 +15,9 @@ from mdp.scenarios.position_move.model import dynamics
 
 
 class Dynamics(dynamics.Dynamics):
-    def __init__(self, environment_: Environment, environment_parameters: EnvironmentParameters):
-        super().__init__(environment_, environment_parameters)
-
-        # downcast
-        self._environment: Environment = self._environment
+    def __init__(self, environment: Environment, environment_parameters: EnvironmentParameters):
+        super().__init__(environment, environment_parameters)
+        self._environment: Environment = environment
         self._grid_world: GridWorld = self._environment.grid_world
 
     def draw_response(self, state: State, action: Action) -> tuple[float, State]:

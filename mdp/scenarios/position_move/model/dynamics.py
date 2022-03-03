@@ -3,23 +3,22 @@ from typing import TYPE_CHECKING, Optional
 from abc import ABC
 
 if TYPE_CHECKING:
-    from mdp.scenarios.position_move.model.action import Action
     from mdp.scenarios.position_move.model.environment import Environment
     from mdp.scenarios.position_move.model.grid_world import GridWorld
     from mdp.common import EnvironmentParameters
 
 from mdp import common
-from mdp.model.environment.tabular import tabular_dynamics
-
 from mdp.scenarios.position_move.model.state import State
+from mdp.scenarios.position_move.model.action import Action
+
+from mdp.model.environment.tabular.tabular_dynamics import TabularDynamics
 
 
-class Dynamics(tabular_dynamics.TabularDynamics, ABC):
-    def __init__(self, environment_: Environment, environment_parameters: EnvironmentParameters):
-        super().__init__(environment_, environment_parameters)
-
-        # downcast
-        self._environment: Environment = self._environment  # type: ignore
+class Dynamics(TabularDynamics[State, Action], ABC):
+    def __init__(self, environment: Environment, environment_parameters: EnvironmentParameters):
+        super().__init__(environment, environment_parameters)
+        self._environment: Environment = environment
+        self._environment_parameters: EnvironmentParameters = environment_parameters
         self._grid_world: GridWorld = self._environment.grid_world
 
         # current values

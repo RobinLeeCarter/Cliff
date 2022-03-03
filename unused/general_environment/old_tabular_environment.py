@@ -1,5 +1,5 @@
 from __future__ import annotations
-from typing import Optional, TYPE_CHECKING, TypeVar
+from typing import Optional, TYPE_CHECKING
 from abc import ABC, abstractmethod
 
 import numpy as np
@@ -9,39 +9,34 @@ if TYPE_CHECKING:
     from mdp.model.environment.tabular.tabular_dynamics import TabularDynamics
 
 from mdp import common
-from mdp.model.environment.tabular.tabular_state import TabularState
-from mdp.model.environment.tabular.tabular_action import TabularAction
-
-from mdp.model.environment.general.general_environment import GeneralEnvironment
+from mdp.model.environment.general.environment import Environment
+from mdp.model.environment.general.general_state import GeneralState
+from mdp.model.environment.general.general_action import GeneralAction
 
 S_A = tuple[int, int]
 
-State = TypeVar('State', bound=TabularState)
-Action = TypeVar('Action', bound=TabularAction)
 
-
-class TabularEnvironment(GeneralEnvironment[State, Action], ABC):
+class TabularEnvironment(Environment, ABC):
     """An abstract Environment with discrete tabular states and actions"""
     def __init__(self, environment_parameters: common.EnvironmentParameters):
         """
         :param environment_parameters: the parameters specific to the specific environment e.g. number_of_cars
         """
         super().__init__(environment_parameters)
+        self.dynamics: Optional[TabularDynamics] = None
 
         # state and states
-        self.states: list[State] = []               # ordered list of full States
-        self.state_index: dict[State, int] = {}     # lookup from full State to state_index (s)
+        self.states: list[GeneralState] = []               # ordered list of full States
+        self.state_index: dict[GeneralState, int] = {}     # lookup from full State to state_index (s)
         self.is_terminal: list[bool] = []           # bool: is a given state_index (s) a terminal state?
 
         # action and actions
-        self.actions: list[Action] = []
-        self.action_index: dict[Action, int] = {}
+        self.actions: list[GeneralAction] = []
+        self.action_index: dict[GeneralAction, int] = {}
 
         # almost all interactions with environment must be using state and action
         # exception boolean array of whether a in A(s) for a given [s, a]
         # possibly should be part of agent to enforce API but should be able to have mutliple agents for one evironment
-
-        self.dynamics: Optional[TabularDynamics] = None
 
         # bool of whether (s, a) combination is valid (action can be taken in state)
         self.s_a_compatibility: np.ndarray = np.empty(0, dtype=bool)
@@ -66,7 +61,7 @@ class TabularEnvironment(GeneralEnvironment[State, Action], ABC):
         self.dynamics.build()
         self._build_distributions()
 
-    def state_action_index(self, state: State, action: Action) -> S_A:
+    def state_action_index(self, state: GeneralState, action: GeneralAction) -> S_A:
         state_index = self.state_index[state]
         action_index = self.action_index[action]
         return state_index, action_index
@@ -151,7 +146,7 @@ class TabularEnvironment(GeneralEnvironment[State, Action], ABC):
     #     response: Response = self.dynamics.draw_response(state, action)
     #     return response
 
-    def from_state_perform_action(self, state: State, action: Action) -> tuple[float, State]:
+    def from_state_perform_action(self, state: GeneralState, action: GeneralAction) -> tuple[float, GeneralState]:
         s = self.state_index[state]
         a = self.action_index[action]
         if state.is_terminal:
@@ -161,7 +156,7 @@ class TabularEnvironment(GeneralEnvironment[State, Action], ABC):
         reward, new_state = self.dynamics.draw_response(state, action)
         if not new_state:
             new_s = self.start_s_distribution.draw_one()
-            new_state: State = self.states[new_s]
+            new_state: GeneralState = self.states[new_s]
 
         return reward, new_state
 

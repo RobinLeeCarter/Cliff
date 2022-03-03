@@ -7,8 +7,8 @@ if TYPE_CHECKING:
     from mdp.model.policy.tabular.tabular_policy import TabularPolicy
 
 from mdp import common
-from mdp.model.environment.general.state import State
-from mdp.model.environment.general.action import Action
+from mdp.model.environment.general.general_state import GeneralState
+from mdp.model.environment.general.general_action import GeneralAction
 
 
 class Environment(ABC):
@@ -27,7 +27,7 @@ class Environment(ABC):
         pass
 
     # region Operation
-    def _is_action_compatible_with_state(self, state: State, action: Action):
+    def _is_action_compatible_with_state(self, state: GeneralState, action: GeneralAction):
         # by default all actions are compatible with all states
         return True
 
@@ -35,7 +35,7 @@ class Environment(ABC):
         pass
 
     @abstractmethod
-    def from_state_perform_action(self, state: State, action: Action) -> tuple[float, State]:
+    def from_state_perform_action(self, state: GeneralState, action: GeneralAction) -> tuple[float, GeneralState]:
         pass
 
     def update_grid_value_functions(self,
@@ -43,7 +43,7 @@ class Environment(ABC):
                                     policy: TabularPolicy):
         pass
 
-    def is_valued_state(self, state: State) -> bool:
+    def is_valued_state(self, state: GeneralState) -> bool:
         """Does the state have a valid value function V(s) or Q(s,a) e.g. unreachable states might not"""
         return not state.is_terminal
     # endregion

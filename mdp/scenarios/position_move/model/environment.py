@@ -1,30 +1,24 @@
 from __future__ import annotations
-import abc
+from abc import ABC
 from typing import Optional, TYPE_CHECKING
-
-# import numpy as np
 
 if TYPE_CHECKING:
     from mdp.model.algorithm.abstract.algorithm import Algorithm
     from mdp.model.policy.tabular.tabular_policy import TabularPolicy
 
 from mdp import common
-from mdp.model.environment.tabular.tabular_environment import TabularEnvironment
-
 from mdp.scenarios.position_move.model.state import State
 from mdp.scenarios.position_move.model.action import Action
 from mdp.scenarios.position_move.model import actions_list_factory
 from mdp.scenarios.position_move.model.grid_world import GridWorld
 from mdp.scenarios.position_move.model.dynamics import Dynamics
 
+from mdp.model.environment.tabular.tabular_environment import TabularEnvironment
 
-class Environment(TabularEnvironment, abc.ABC):
+
+class Environment(TabularEnvironment[State, Action], ABC):
     def __init__(self, environment_parameters: common.EnvironmentParameters):
         super().__init__(environment_parameters)
-
-        # downcast states and actions so properties can be used freely
-        self.states: list[State] = self.states
-        self.actions: list[Action] = self.actions
         self.grid_world: Optional[GridWorld] = None
         self.dynamics: Optional[Dynamics] = None
 
@@ -42,9 +36,9 @@ class Environment(TabularEnvironment, abc.ABC):
                 self.states.append(new_state)
 
     def _build_actions(self):
-        self.actions = actions_list_factory.actions_list_factory(actions_list=self._environment_parameters.actions_list)
+        actions_list = self._environment_parameters.actions_list
+        self.actions: list[Action] = actions_list_factory.actions_list_factory(actions_list)
 
-    # region Operation
     def update_grid_value_functions(self,
                                     algorithm: Algorithm,
                                     policy: TabularPolicy
@@ -68,4 +62,3 @@ class Environment(TabularEnvironment, abc.ABC):
                             q_value=algorithm.Q[s, a],
                             is_policy=is_policy
                         )
-    # endregion

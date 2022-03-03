@@ -1,11 +1,7 @@
 from __future__ import annotations
-from typing import TYPE_CHECKING
-
-if TYPE_CHECKING:
-    from mdp.model.environment.general.action import Action
 
 from mdp import common
-from mdp.scenarios.position_move.model import action as pm
+from mdp.scenarios.position_move.model.action import Action
 
 
 def actions_list_factory(actions_list: common.ActionsList) -> list[Action]:
@@ -29,39 +25,39 @@ def _no_actions() -> list[Action]:
     return []
 
 
-def _four_moves() -> list[pm.Action]:
+def _four_moves() -> list[Action]:
     return [
         # left
-        pm.Action(move=common.XY(-1, 0)),
+        Action(move=common.XY(-1, 0)),
         # right
-        pm.Action(move=common.XY(+1, 0)),
+        Action(move=common.XY(+1, 0)),
         # up
-        pm.Action(move=common.XY(0, +1)),
+        Action(move=common.XY(0, +1)),
         # down
-        pm.Action(move=common.XY(0, -1))
+        Action(move=common.XY(0, -1))
     ]
 
 
-def _four_cliff_friendly_moves() -> list[pm.Action]:
+def _four_cliff_friendly_moves() -> list[Action]:
     return [
         # right
-        pm.Action(move=common.XY(+1, 0)),
+        Action(move=common.XY(+1, 0)),
         # up
-        pm.Action(move=common.XY(0, +1)),
+        Action(move=common.XY(0, +1)),
         # left
-        pm.Action(move=common.XY(-1, 0)),
+        Action(move=common.XY(-1, 0)),
         # down
-        pm.Action(move=common.XY(0, -1))
+        Action(move=common.XY(0, -1))
     ]
 
 
-def _kings_moves(include_center: bool = False) -> list[pm.Action]:
-    action_list: list[pm.Action] = []
+def _kings_moves(include_center: bool = False) -> list[Action]:
+    action_list: list[Action] = []
     for x in (-1, 0, 1):
         for y in (-1, 0, 1):
             include: bool = True
             if x == 0 and y == 0:
                 include = include_center
             if include:
-                action_list.append(pm.Action(move=common.XY(x, y)))
+                action_list.append(Action(move=common.XY(x, y)))
     return action_list

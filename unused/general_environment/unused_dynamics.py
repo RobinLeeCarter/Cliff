@@ -5,11 +5,11 @@ from abc import ABC, abstractmethod
 
 if TYPE_CHECKING:
     from mdp import common
-    from mdp.model.environment.general.action import Action
+    from mdp.model.environment.general.general_action import GeneralAction
     from mdp.model.environment.general.environment import Environment
-from mdp.model.environment.general.state import State
+from mdp.model.environment.general.general_state import GeneralState
 
-Response = tuple[float, State]
+Response = tuple[float, GeneralState]
 
 
 class Dynamics(ABC):
@@ -24,26 +24,26 @@ class Dynamics(ABC):
         """build bottom up"""
         self.is_built = True
 
-    def get_start_state_distribution(self) -> common.Distribution[State]:
+    def get_start_state_distribution(self) -> common.Distribution[GeneralState]:
         """
         Starting state distribution
         If want to use something different to a Uniform list of States, override this method to return the distribution
         """
-        start_states: list[State] = self.get_start_states()
+        start_states: list[GeneralState] = self.get_start_states()
         if start_states:
             if len(start_states) == 1:
-                return common.SingularDistribution[State](start_states)
+                return common.SingularDistribution[GeneralState](start_states)
             else:
-                return common.UniformMultinoulli[State](start_states)
+                return common.UniformMultinoulli[GeneralState](start_states)
         else:
             raise Exception("Empty list of start states so nowhere to start!")
 
-    def get_start_states(self) -> list[State]:
+    def get_start_states(self) -> list[GeneralState]:
         """If as simple as a list of start states then return it here and the distribution will be generated"""
         pass
 
     @abstractmethod
-    def draw_response(self, state: State, action: Action) -> Response:
+    def draw_response(self, state: GeneralState, action: GeneralAction) -> Response:
         """
         draw a single outcome for a single state and action
         """
