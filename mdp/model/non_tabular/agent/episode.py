@@ -1,18 +1,22 @@
 from __future__ import annotations
-from typing import Optional, Callable, TYPE_CHECKING
+from typing import Optional, Callable, TYPE_CHECKING, TypeVar, Generic
 
 if TYPE_CHECKING:
-    from mdp.model.non_tabular.environment.non_tabular_action import NonTabularAction
-    from mdp.model.non_tabular.environment.non_tabular_state import NonTabularState
     from mdp.model.non_tabular.environment.non_tabular_environment import NonTabularEnvironment
 
 from mdp.model.non_tabular.agent.rsa import RSA
 
+from mdp.model.non_tabular.environment.non_tabular_state import NonTabularState
+from mdp.model.non_tabular.environment.non_tabular_action import NonTabularAction
 
-class Episode:
+State = TypeVar('State', bound=NonTabularState)
+Action = TypeVar('Action', bound=NonTabularAction)
+
+
+class Episode(Generic[State, Action]):
     """Just makes a record laid out in the standard way with Reward, State, Action for each _t"""
     def __init__(self,
-                 environment: NonTabularEnvironment,
+                 environment: NonTabularEnvironment[State, Action],
                  gamma: float,
                  step_callback: Optional[Callable[[], bool]] = None,
                  record_first_visits: bool = False):
@@ -35,28 +39,28 @@ class Episode:
             self.visited_states: set[NonTabularState] = set()
 
     @property
-    def last_state(self) -> Optional[NonTabularState]:
+    def last_state(self) -> Optional[State]:
         if self.trajectory:
             return self.trajectory[-1].state
         else:
             return None
 
     @property
-    def last_action(self) -> Optional[NonTabularAction]:
+    def last_action(self) -> Optional[Action]:
         if self.trajectory:
             return self.trajectory[-1].action
         else:
             return None
 
     @property
-    def prev_state(self) -> Optional[NonTabularState]:
+    def prev_state(self) -> Optional[State]:
         if self.trajectory and len(self.trajectory) > 1:
             return self.trajectory[-2].state
         else:
             return None
 
     @property
-    def prev_action(self) -> Optional[NonTabularAction]:
+    def prev_action(self) -> Optional[Action]:
         if self.trajectory and len(self.trajectory) > 1:
             return self.trajectory[-2].action
         else:
@@ -65,8 +69,8 @@ class Episode:
     # @profile
     def add_rsa(self,
                 reward: float,
-                state: NonTabularState,
-                action: Optional[NonTabularAction]):
+                state: State,
+                action: Optional[Action]):
         rsa = RSA(reward, state, action)
         self.trajectory.append(rsa)
         if state.is_terminal:
@@ -83,7 +87,7 @@ class Episode:
             for t in range(self.T - 1, -1, -1):     # T-1, T-2, ... 1, 0
                 self.G[t] = self[t+1].r + self.gamma * self.G[t + 1]
 
-    def _first_visit_check(self, state: NonTabularState):
+    def _first_visit_check(self, state: State):
         is_first_visit = (state not in self.visited_states)
         self.is_first_visit.append(is_first_visit)
         if is_first_visit:
@@ -121,12 +125,12 @@ class Episode:
         #         g = rsa_.r + self.gamma * g
         # return g
 
-    def get_state(self, t: int) -> NonTabularState:
+    def get_state(self, t: int) -> State:
         return self.trajectory[t].state
 
-    def get_action(self, t: int) -> Optional[NonTabularAction]:
+    def get_action(self, t: int) -> Optional[Action]:
         return self.trajectory[t].action
 
-    def get_s_a_g(self, t: int) -> tuple[NonTabularState, NonTabularAction, float]:
+    def get_s_a_g(self, t: int) -> tuple[State, Action, float]:
         rsa = self.trajectory[t]
         return rsa.state, rsa.action, self.G[t]

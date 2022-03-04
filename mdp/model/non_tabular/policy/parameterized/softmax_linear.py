@@ -1,5 +1,5 @@
 from __future__ import annotations
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, TypeVar
 
 import numpy as np
 from scipy import special
@@ -7,16 +7,19 @@ from scipy import special
 import utils
 if TYPE_CHECKING:
     from mdp import common
-    from mdp.model.non_tabular.environment.non_tabular_state import NonTabularState
-    from mdp.model.non_tabular.environment.non_tabular_action import NonTabularAction
     from mdp.model.non_tabular.environment.non_tabular_environment import NonTabularEnvironment
     from mdp.model.non_tabular.feature.feature import Feature
 from mdp.model.non_tabular.policy.parameterized.vector_parameterized import VectorParameterized
+from mdp.model.non_tabular.environment.non_tabular_state import NonTabularState
+from mdp.model.non_tabular.environment.non_tabular_action import NonTabularAction
+
+State = TypeVar('State', bound=NonTabularState)
+Action = TypeVar('Action', bound=NonTabularAction)
 
 
-class SoftmaxLinear(VectorParameterized):
+class SoftmaxLinear(VectorParameterized[State, Action]):
     def __init__(self,
-                 environment: NonTabularEnvironment,
+                 environment: NonTabularEnvironment[State, Action],
                  policy_parameters: common.PolicyParameters,
                  feature: Feature,
                  initial_theta: float = 0.0,
@@ -26,7 +29,7 @@ class SoftmaxLinear(VectorParameterized):
         self._tau: float = tau
         self._uses_tau: bool = (tau != 1.0)
 
-    def _draw_action(self, state: NonTabularState) -> NonTabularAction:
+    def _draw_action(self, state: State) -> Action:
         """"
         :param state: starting state
         :return: action drawn from probability distribution pi(state, action; theta)
@@ -35,7 +38,7 @@ class SoftmaxLinear(VectorParameterized):
         choice: int = utils.p_choice(probabilities)
         return self._environment.actions[choice]
 
-    def get_probability(self, state: NonTabularState, action: NonTabularAction) -> float:
+    def get_probability(self, state: State, action: Action) -> float:
         """
         :param state: State
         :param action: Action
@@ -45,7 +48,7 @@ class SoftmaxLinear(VectorParameterized):
         index: int = self._environment.action_index[action]
         return probabilities[index]
 
-    def get_action_probabilities(self, state: NonTabularState) -> np.ndarray:
+    def get_action_probabilities(self, state: State) -> np.ndarray:
         """
         :param state: State
         :return: probability distribution of all actions across list of standard actions for environment

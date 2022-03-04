@@ -1,21 +1,24 @@
 from __future__ import annotations
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, TypeVar
 
 import numpy as np
 
 import utils
 if TYPE_CHECKING:
     from mdp import common
-    from mdp.model.non_tabular.environment.non_tabular_state import NonTabularState
-    from mdp.model.non_tabular.environment.non_tabular_action import NonTabularAction
     from mdp.model.non_tabular.environment.non_tabular_environment import NonTabularEnvironment
     from mdp.model.non_tabular.algorithm.value_function.state_action_function import StateActionFunction
 from mdp.model.non_tabular.policy.action_value.action_value_policy import ActionValuePolicy
+from mdp.model.non_tabular.environment.non_tabular_state import NonTabularState
+from mdp.model.non_tabular.environment.non_tabular_action import NonTabularAction
+
+State = TypeVar('State', bound=NonTabularState)
+Action = TypeVar('Action', bound=NonTabularAction)
 
 
-class EGreedyLinear(ActionValuePolicy):
+class EGreedyLinear(ActionValuePolicy[State, Action]):
     def __init__(self,
-                 environment: NonTabularEnvironment,
+                 environment: NonTabularEnvironment[State, Action],
                  policy_parameters: common.PolicyParameters,
                  state_action_function: StateActionFunction,
                  epsilon: float = 0.0
@@ -24,13 +27,13 @@ class EGreedyLinear(ActionValuePolicy):
         self.epsilon: float = epsilon
         self.is_deterministic: bool = (epsilon == 0.0)
 
-    def _draw_action(self, state: NonTabularState) -> NonTabularAction:
+    def _draw_action(self, state: State) -> Action:
         """"
         :param state: starting state
         :return: action drawn from probability distribution pi(state, action; theta)
         """
         self._environment.build_possible_actions(state, build_array=False)
-        possible_actions: list[NonTabularAction] = self._environment.possible_actions_list
+        possible_actions: list[Action] = self._environment.possible_actions_list
         action_values: np.ndarray = self._state_action_function.get_action_values(state, possible_actions)
         # could also jit this if needed
         if utils.uniform() > self.epsilon:
@@ -40,7 +43,7 @@ class EGreedyLinear(ActionValuePolicy):
             i = utils.n_choice(len(possible_actions))
             return possible_actions[i]
 
-    def get_probability(self, state: NonTabularState, action: NonTabularAction) -> float:
+    def get_probability(self, state: State, action: Action) -> float:
         """
         :param state: State
         :param action: Action
@@ -49,7 +52,7 @@ class EGreedyLinear(ActionValuePolicy):
         action_index: int = self._environment.action_index[action]
 
         self._environment.build_possible_actions(state, build_array=False)
-        possible_action_list: list[NonTabularAction] = self._environment.possible_actions_list
+        possible_action_list: list[Action] = self._environment.possible_actions_list
 
         action_values: np.ndarray = self._state_action_function.get_action_values(state, possible_action_list)
         max_index: int = int(np.argmax(action_values))
@@ -61,7 +64,7 @@ class EGreedyLinear(ActionValuePolicy):
         else:
             return non_greedy_p
 
-    def get_action_probabilities(self, state: NonTabularState) -> np.ndarray:
+    def get_action_probabilities(self, state: State) -> np.ndarray:
         """
         :param state: State
         :return: probability distribution of all actions across list of standard actions for environment
@@ -70,7 +73,7 @@ class EGreedyLinear(ActionValuePolicy):
 
         build_array: bool = not self.is_deterministic   # if determinstic then don't need array
         self._environment.build_possible_actions(state, build_array)
-        possible_action_list: list[NonTabularAction] = self._environment.possible_actions_list
+        possible_action_list: list[Action] = self._environment.possible_actions_list
 
         action_values: np.ndarray = self._state_action_function.get_action_values(state, possible_action_list)
         max_index: int = int(np.argmax(action_values))

@@ -1,31 +1,36 @@
 from __future__ import annotations
-from typing import Optional, TYPE_CHECKING, Callable
+from typing import Optional, TYPE_CHECKING, Callable, TypeVar
 
 # import math
 
 if TYPE_CHECKING:
-    from mdp.model.non_tabular.environment.non_tabular_state import NonTabularState
-    from mdp.model.non_tabular.environment.non_tabular_action import NonTabularAction
     from mdp.model.non_tabular.environment.non_tabular_environment import NonTabularEnvironment
+from mdp.model.non_tabular.environment.non_tabular_state import NonTabularState
+from mdp.model.non_tabular.environment.non_tabular_action import NonTabularAction
+
 from mdp import common
 # renamed to avoid name conflicts
 from mdp.model.tabular.algorithm.abstract.algorithm import Algorithm
 from mdp.model.tabular.algorithm.abstract.episodic import Episodic
 from mdp.model.non_tabular.agent.episode import Episode
 from mdp.model.non_tabular.policy.non_tabular_policy import NonTabularPolicy
+
 from mdp.model.general.algorithm import algorithm_factory
 from mdp.model.general.policy import policy_factory
+
+State = TypeVar('State', bound=NonTabularState)
+Action = TypeVar('Action', bound=NonTabularAction)
 
 
 class Agent:
     def __init__(self,
-                 environment: NonTabularEnvironment,
+                 environment: NonTabularEnvironment[State, Action],
                  verbose: bool = False):
-        self._environment: NonTabularEnvironment = environment
+        self._environment: NonTabularEnvironment[State, Action] = environment
         self._verbose: bool = verbose
 
-        self._policy: Optional[NonTabularPolicy] = None
-        self._behaviour_policy: Optional[NonTabularPolicy] = None     # if on-policy = self._policy
+        self._policy: Optional[NonTabularPolicy[State, Action]] = None
+        self._behaviour_policy: Optional[NonTabularPolicy[State, Action]] = None     # if on-policy = self._policy
         self._dual_policy_relationship: Optional[common.DualPolicyRelationship] = None
 
         self._algorithm: Optional[Algorithm] = None
@@ -38,32 +43,32 @@ class Agent:
         self.t: int = 0
 
         # always refers to values for time-step t
-        self.state: Optional[NonTabularState] = None
-        self.action: Optional[NonTabularAction] = None
+        self.state: Optional[State] = None
+        self.action: Optional[Action] = None
 
         self.r: float = 0.0
         # self.is_terminal: bool = False  # stored for performance
 
         # always refers to values for time-step t-1
         self.prev_r: float = 0.0
-        self.prev_state: Optional[NonTabularState] = None
-        self.prev_action: Optional[NonTabularAction] = None
+        self.prev_state: Optional[State] = None
+        self.prev_action: Optional[Action] = None
 
         # trainer callback
         self._step_callback: Optional[Callable[[], bool]] = None
 
     # use for on-policy algorithms
     @property
-    def policy(self) -> NonTabularPolicy:
+    def policy(self) -> NonTabularPolicy[State, Action]:
         return self._policy
 
     # use these two for off-policy algorithms
     @property
-    def target_policy(self) -> NonTabularPolicy:
+    def target_policy(self) -> NonTabularPolicy[State, Action]:
         return self._policy
 
     @property
-    def behaviour_policy(self) -> NonTabularPolicy:
+    def behaviour_policy(self) -> NonTabularPolicy[State, Action]:
         return self._behaviour_policy
 
     @property
@@ -106,7 +111,7 @@ class Agent:
 
         self.gamma = settings.gamma
 
-    def set_behaviour_policy(self, policy: NonTabularPolicy):
+    def set_behaviour_policy(self, policy: NonTabularPolicy[State, Action]):
         self._behaviour_policy = policy
 
     def parameter_changes(self, iteration: int):
@@ -159,7 +164,7 @@ class Agent:
         # self.is_terminal = self.state.is_terminal
         self.r = 0.0
 
-    def choose_action(self, forced_action: Optional[NonTabularAction] = None):
+    def choose_action(self, forced_action: Optional[Action] = None):
         """
         Have the policy choose an action
         We then have a complete r, s, a to add to episode
@@ -182,7 +187,7 @@ class Agent:
         Start a new time step with the new reward and state
         """
         new_r: float
-        new_state: NonTabularState
+        new_state: State
         new_r, new_state = self._environment.from_state_perform_action(self.state, self.action)
 
         # move time-step forward

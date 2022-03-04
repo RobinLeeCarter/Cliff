@@ -1,35 +1,41 @@
 from __future__ import annotations
 from abc import ABC, abstractmethod
-from typing import Optional, TYPE_CHECKING
+from typing import Optional, TYPE_CHECKING, TypeVar, Generic
 
 import numpy as np
 
 if TYPE_CHECKING:
     from mdp import common
-    from mdp.model.non_tabular.environment.non_tabular_state import NonTabularState
-    from mdp.model.non_tabular.environment.non_tabular_action import NonTabularAction
     from mdp.model.non_tabular.environment.non_tabular_environment import NonTabularEnvironment
+
+from mdp.model.non_tabular.environment.non_tabular_state import NonTabularState
+from mdp.model.non_tabular.environment.non_tabular_action import NonTabularAction
+
+State = TypeVar('State', bound=NonTabularState)
+Action = TypeVar('Action', bound=NonTabularAction)
 
 
 # specifically non-generic because policies can act in terms of non-specific actions and states
-class NonTabularPolicy(ABC):
-    def __init__(self, environment: NonTabularEnvironment, policy_parameters: common.PolicyParameters):
-        self._environment: NonTabularEnvironment = environment
+class NonTabularPolicy(Generic[State, Action], ABC):
+    def __init__(self,
+                 environment: NonTabularEnvironment[State, Action],
+                 policy_parameters: common.PolicyParameters):
+        self._environment: NonTabularEnvironment[State, Action] = environment
         self._policy_parameters: common.PolicyParameters = policy_parameters
 
         # possible actions for a particular state
-        self._possible_actions: list[NonTabularAction] = []
+        self._possible_actions: list[Action] = []
         self._all_action_count: int = len(self._environment.actions)
         self._probabilities: np.ndarray = np.zeros(shape=self._all_action_count, dtype=float)
 
-    def __getitem__(self, state: NonTabularState) -> Optional[NonTabularAction]:
+    def __getitem__(self, state: State) -> Optional[Action]:
         if state.is_terminal:
             return None
         else:
             return self._draw_action(state)
 
     @abstractmethod
-    def _draw_action(self, state: NonTabularState) -> NonTabularAction:
+    def _draw_action(self, state: State) -> Action:
         """"
         :param state: starting state
         :return: action drawn from probability distribution pi(state, action; theta)
@@ -37,12 +43,12 @@ class NonTabularPolicy(ABC):
         pass
 
     @property
-    def linked_policy(self) -> NonTabularPolicy:
+    def linked_policy(self) -> NonTabularPolicy[State, Action]:
         """Deterministic partner policy if exists else self"""
         return self
 
     @abstractmethod
-    def get_probability(self, state: NonTabularState, action: NonTabularAction) -> float:
+    def get_probability(self, state: State, action: Action) -> float:
         """
         :param state: State
         :param action: Action
@@ -51,7 +57,7 @@ class NonTabularPolicy(ABC):
         pass
 
     @abstractmethod
-    def get_action_probabilities(self, state: NonTabularState) -> np.ndarray:
+    def get_action_probabilities(self, state: State) -> np.ndarray:
         """
         :param state: State
         :return: probability distribution of all actions across list of standard actions for environment
