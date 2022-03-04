@@ -1,16 +1,19 @@
 from __future__ import annotations
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, TypeVar
 
 import numpy as np
 
 if TYPE_CHECKING:
-    from mdp.model.non_tabular.environment.non_tabular_state import NonTabularState
-    from mdp.model.non_tabular.environment.non_tabular_action import NonTabularAction
     from mdp.model.non_tabular.feature.feature import Feature
-from mdp.model.non_tabular.algorithm.value_function.state_action_function import StateActionFunction
+from mdp.model.non_tabular.value_function.state_action_function import StateActionFunction
+from mdp.model.non_tabular.environment.non_tabular_state import NonTabularState
+from mdp.model.non_tabular.environment.non_tabular_action import NonTabularAction
+
+State = TypeVar('State', bound=NonTabularState)
+Action = TypeVar('Action', bound=NonTabularAction)
 
 
-class LinearStateActionFunction(StateActionFunction):
+class LinearStateActionFunction(StateActionFunction[State, Action]):
     def __init__(self,
                  feature: Feature,
                  initial_value: float
@@ -26,12 +29,12 @@ class LinearStateActionFunction(StateActionFunction):
         # weights
         self.w: np.ndarray = np.full(shape=self.size, fill_value=initial_value, dtype=float)
 
-    def __getitem__(self, state: NonTabularState, action: NonTabularAction) -> float:
+    def __getitem__(self, state: State, action: Action) -> float:
         self.feature.state = state
         self.feature.action = action
         return self.feature.dot_product_full_vector(self.w)
 
-    def get_action_values(self, state: NonTabularState, actions: list[NonTabularAction]) -> np.ndarray:
+    def get_action_values(self, state: State, actions: list[Action]) -> np.ndarray:
         values: list[float] = []
         # set state just once
         self.feature.state = state

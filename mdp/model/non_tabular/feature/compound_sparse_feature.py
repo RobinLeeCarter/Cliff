@@ -1,14 +1,19 @@
 from __future__ import annotations
-from typing import Optional
+from typing import Optional, TypeVar
 
 import numpy as np
 
 from mdp.model.non_tabular.feature.sparse_feature import SparseFeature
+from mdp.model.non_tabular.environment.non_tabular_state import NonTabularState
+from mdp.model.non_tabular.environment.non_tabular_action import NonTabularAction
+
+State = TypeVar('State', bound=NonTabularState)
+Action = TypeVar('Action', bound=NonTabularAction)
 
 
-class CompoundSparseFeature(SparseFeature):
+class CompoundSparseFeature(SparseFeature[State, Action]):
     """untested"""
-    def __init__(self, features: list[SparseFeature]):
+    def __init__(self, features: list[SparseFeature[State, Action]]):
         """
         A list of features (with max_size already set) itself forming a feature with results concatenated
         :param features: list of

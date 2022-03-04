@@ -1,17 +1,22 @@
 from __future__ import annotations
 
-from typing import Optional, Callable, TYPE_CHECKING
+from typing import Optional, Callable, TYPE_CHECKING, TypeVar
 
 import numpy as np
 
 if TYPE_CHECKING:
     from mdp.model.non_tabular.environment.dimension.dim_enum import DimEnum
     from mdp.model.non_tabular.environment.dimension.dims import Dims
-from mdp.model.non_tabular.feature.sparse_feature import SparseFeature
 from mdp.model.non_tabular.feature.tile_coding.tiling_group import TilingGroup
+from mdp.model.non_tabular.feature.sparse_feature import SparseFeature
+from mdp.model.non_tabular.environment.non_tabular_state import NonTabularState
+from mdp.model.non_tabular.environment.non_tabular_action import NonTabularAction
+
+State = TypeVar('State', bound=NonTabularState)
+Action = TypeVar('Action', bound=NonTabularAction)
 
 
-class TileCoding(SparseFeature):
+class TileCoding(SparseFeature[State, Action]):
     def __init__(self,
                  dims: Dims,
                  max_size: Optional[int] = None,
@@ -78,16 +83,16 @@ class TileCoding(SparseFeature):
     def _do_state_computation(self):
         for tiling_group_index, tiling_group in enumerate(self._tiling_groups):
             # array of: tilings x included dimensions
-            float_tile_coords = tiling_group.get_float_tile_coords(self._state.floats)
+            float_tile_coords = tiling_group.get_float_tile_coords(self._state.floats())
             # array of included dimensions in each case
-            state_categories: np.ndarray = tiling_group.filter_state_categories(self._state.categories)
+            state_categories: np.ndarray = tiling_group.filter_state_categories(self._state.categories())
             for tiling, tile_coord in enumerate(float_tile_coords):
                 state_tuple: tuple = tuple(tile_coord) + tuple(state_categories)
                 self._state_tuples[tiling_group_index, tiling] = state_tuple
 
     def _do_action_computation(self):
         for tiling_group_index, tiling_group in enumerate(self._tiling_groups):
-            action_categories: np.ndarray = tiling_group.filter_action_categories(self._action.categories)
+            action_categories: np.ndarray = tiling_group.filter_action_categories(self._action.categories())
             self._action_tuples[tiling_group_index] = tuple(action_categories)
 
     def _get_sparse_vector(self) -> np.ndarray:

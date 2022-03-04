@@ -9,5 +9,5 @@ class RSA:
     a: int
 
     @property
-    def tuple(self) -> tuple:
+    def tuple(self) -> tuple[float, int, int]:
         return self.r, self.s, self.a

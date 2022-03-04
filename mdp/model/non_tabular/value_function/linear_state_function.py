@@ -1,15 +1,17 @@
 from __future__ import annotations
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, TypeVar
 
 import numpy as np
 
 if TYPE_CHECKING:
-    from mdp.model.non_tabular.environment.non_tabular_state import NonTabularState
     from mdp.model.non_tabular.feature.feature import Feature
-from mdp.model.non_tabular.algorithm.value_function.state_function import StateFunction
+from mdp.model.non_tabular.value_function.state_function import StateFunction
+from mdp.model.non_tabular.environment.non_tabular_state import NonTabularState
+
+State = TypeVar('State', bound=NonTabularState)
 
 
-class LinearStateFunction(StateFunction):
+class LinearStateFunction(StateFunction[State]):
     def __init__(self,
                  feature: Feature,
                  initial_value: float
@@ -26,7 +28,7 @@ class LinearStateFunction(StateFunction):
         self.w: np.ndarray = np.full(shape=self.size, fill_value=initial_value, dtype=float)
         self.is_sparse: bool = self.feature.is_sparse
 
-    def __getitem__(self, state: NonTabularState) -> float:
+    def __getitem__(self, state: State) -> float:
         self.feature.state = state
         return self.feature.dot_product_full_vector(self.w)
 

@@ -7,7 +7,7 @@ import utils
 if TYPE_CHECKING:
     from mdp import common
     from mdp.model.non_tabular.environment.non_tabular_environment import NonTabularEnvironment
-    from mdp.model.non_tabular.algorithm.value_function.state_action_function import StateActionFunction
+    from mdp.model.non_tabular.value_function.state_action_function import StateActionFunction
 from mdp.model.non_tabular.policy.action_value.action_value_policy import ActionValuePolicy
 from mdp.model.non_tabular.environment.non_tabular_state import NonTabularState
 from mdp.model.non_tabular.environment.non_tabular_action import NonTabularAction
@@ -20,7 +20,7 @@ class EGreedyLinear(ActionValuePolicy[State, Action]):
     def __init__(self,
                  environment: NonTabularEnvironment[State, Action],
                  policy_parameters: common.PolicyParameters,
-                 state_action_function: StateActionFunction,
+                 state_action_function: StateActionFunction[State, Action],
                  epsilon: float = 0.0
                  ):
         super().__init__(environment, policy_parameters, state_action_function)

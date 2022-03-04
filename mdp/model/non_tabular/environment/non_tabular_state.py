@@ -10,12 +10,14 @@ from mdp.model.general.environment.general_state import GeneralState
 
 @dataclass(frozen=True)
 class NonTabularState(GeneralState, ABC):
-    @property
+    # Restore as property once Pycharm issue is fixed?: https://youtrack.jetbrains.com/issue/PY-48338
+    # @property
     @cache
     def floats(self) -> np.ndarray:
         return np.array(self._get_floats(), dtype=float)
 
-    @property
+    # Restore as property once Pycharm issue is fixed?: https://youtrack.jetbrains.com/issue/PY-48338
+    # @property
     @cache
     def categories(self) -> np.ndarray:
         return np.array(self._get_categories(), dtype=object)
