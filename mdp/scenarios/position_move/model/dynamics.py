@@ -11,7 +11,7 @@ from mdp import common
 from mdp.scenarios.position_move.model.state import State
 from mdp.scenarios.position_move.model.action import Action
 
-from mdp.model.environment.tabular.tabular_dynamics import TabularDynamics
+from mdp.model.tabular.environment.tabular_dynamics import TabularDynamics
 
 
 class Dynamics(TabularDynamics[State, Action], ABC):

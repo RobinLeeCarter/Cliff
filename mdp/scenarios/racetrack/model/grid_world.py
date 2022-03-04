@@ -4,7 +4,7 @@ import numpy as np
 
 import utils
 from mdp import common
-from mdp.model.environment.tabular import grid_world
+from mdp.model.tabular.environment import grid_world
 
 from mdp.scenarios.racetrack.model.environment_parameters import EnvironmentParameters
 

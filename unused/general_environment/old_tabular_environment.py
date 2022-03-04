@@ -5,13 +5,13 @@ from abc import ABC, abstractmethod
 import numpy as np
 
 if TYPE_CHECKING:
-    from mdp.model.algorithm.value_function import state_function
-    from mdp.model.environment.tabular.tabular_dynamics import TabularDynamics
+    from mdp.model.tabular.algorithm.value_function import state_function
+    from mdp.model.tabular.environment.tabular_dynamics import TabularDynamics
 
 from mdp import common
 from mdp.model.environment.general.environment import Environment
-from mdp.model.environment.general.general_state import GeneralState
-from mdp.model.environment.general.general_action import GeneralAction
+from mdp.model.general.environment.general_state import GeneralState
+from mdp.model.general.environment.general_action import GeneralAction
 
 S_A = tuple[int, int]
 

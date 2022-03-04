@@ -4,7 +4,7 @@ from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from mdp import common
-from mdp.model.environment.tabular.tabular_state import TabularState
+from mdp.model.tabular.environment.tabular_state import TabularState
 
 
 @dataclass(frozen=True)

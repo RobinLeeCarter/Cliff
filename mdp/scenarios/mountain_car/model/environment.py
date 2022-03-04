@@ -5,15 +5,15 @@ from typing import TYPE_CHECKING, Optional
 
 if TYPE_CHECKING:
     # from mdp.model.algorithm.abstract.algorithm import Algorithm
-    from mdp.model.policy.tabular.tabular_policy import TabularPolicy
-    from mdp.model.algorithm.value_function import state_function
+    from mdp.model.tabular.policy.tabular_policy import TabularPolicy
+    from mdp.model.tabular.algorithm.value_function import state_function
     # from mdp.model.environment.non_tabular.non_tabular_state import NonTabularState
     # from mdp.model.environment.non_tabular.non_tabular_action import NonTabularAction
 
 from mdp import common
-from mdp.model.environment.non_tabular.non_tabular_environment import NonTabularEnvironment
-from mdp.model.environment.non_tabular.dimension.float_dimension import FloatDimension
-from mdp.model.environment.non_tabular.dimension.category_dimension import CategoryDimension
+from mdp.model.non_tabular.environment.non_tabular_environment import NonTabularEnvironment
+from mdp.model.non_tabular.environment.dimension.float_dimension import FloatDimension
+from mdp.model.non_tabular.environment.dimension.category_dimension import CategoryDimension
 
 from mdp.scenarios.mountain_car.model.state import State
 from mdp.scenarios.mountain_car.model.action import Action

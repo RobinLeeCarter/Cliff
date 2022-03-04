@@ -4,9 +4,9 @@ from typing import TYPE_CHECKING
 import numpy as np
 
 if TYPE_CHECKING:
-    from mdp.model.policy.tabular.tabular_policy import TabularPolicy
-    from mdp.model.policy.tabular.deterministic import Deterministic
-    from mdp.model.algorithm.value_function import state_function
+    from mdp.model.tabular.policy.tabular_policy import TabularPolicy
+    from mdp.model.tabular.policy.deterministic import Deterministic
+    from mdp.model.tabular.algorithm.value_function import state_function
 
 from mdp import common
 from mdp.scenarios.gambler.model.state import State
@@ -15,7 +15,7 @@ from mdp.scenarios.gambler.model.environment_parameters import EnvironmentParame
 # from mdp.scenarios.gambler.grid_world import GridWorld
 from mdp.scenarios.gambler.model.dynamics import Dynamics
 
-from mdp.model.environment.tabular.tabular_environment import TabularEnvironment
+from mdp.model.tabular.environment.tabular_environment import TabularEnvironment
 
 
 class Environment(TabularEnvironment[State, Action]):
@@ -105,7 +105,7 @@ class Environment(TabularEnvironment[State, Action]):
         for s, state in enumerate(self.states):
             if not state.is_terminal:
                 x_list.append(state.capital)
-                action: Action = Action, policy.get_action(s)   # type: ignore
+                action: Action = policy.get_action(s)   # type: ignore
                 y_list.append(float(action.stake))
                 # print(state.capital, v[state])
         x_values = np.array(x_list, dtype=int)

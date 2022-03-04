@@ -3,8 +3,8 @@ from abc import ABC
 from typing import Optional, TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from mdp.model.algorithm.abstract.algorithm import Algorithm
-    from mdp.model.policy.tabular.tabular_policy import TabularPolicy
+    from mdp.model.tabular.algorithm.abstract.algorithm import Algorithm
+    from mdp.model.tabular.policy.tabular_policy import TabularPolicy
 
 from mdp import common
 from mdp.scenarios.position_move.model.state import State
@@ -13,7 +13,7 @@ from mdp.scenarios.position_move.model import actions_list_factory
 from mdp.scenarios.position_move.model.grid_world import GridWorld
 from mdp.scenarios.position_move.model.dynamics import Dynamics
 
-from mdp.model.environment.tabular.tabular_environment import TabularEnvironment
+from mdp.model.tabular.environment.tabular_environment import TabularEnvironment
 
 
 class Environment(TabularEnvironment[State, Action], ABC):

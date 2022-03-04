@@ -3,12 +3,12 @@ from typing import TYPE_CHECKING
 from abc import ABC, abstractmethod
 
 if TYPE_CHECKING:
-    from mdp.model.algorithm.abstract.algorithm import Algorithm
-    from mdp.model.policy.tabular.tabular_policy import TabularPolicy
+    from mdp.model.tabular.algorithm.abstract.algorithm import Algorithm
+    from mdp.model.tabular.policy.tabular_policy import TabularPolicy
 
 from mdp import common
-from mdp.model.environment.general.general_state import GeneralState
-from mdp.model.environment.general.general_action import GeneralAction
+from mdp.model.general.environment.general_state import GeneralState
+from mdp.model.general.environment.general_action import GeneralAction
 
 
 class Environment(ABC):

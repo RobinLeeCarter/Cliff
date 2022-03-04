@@ -4,7 +4,7 @@ from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from mdp import common
-from mdp.model.environment.tabular.tabular_action import TabularAction
+from mdp.model.tabular.environment.tabular_action import TabularAction
 
 
 @dataclass(frozen=True)

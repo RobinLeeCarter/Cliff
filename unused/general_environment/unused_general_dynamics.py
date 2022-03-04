@@ -5,10 +5,10 @@ from abc import ABC, abstractmethod
 
 if TYPE_CHECKING:
     from mdp import common
-    from mdp.model.environment.general.general_environment import GeneralEnvironment
+    from mdp.model.general.environment.general_environment import GeneralEnvironment
 
-from mdp.model.environment.general.general_state import GeneralState
-from mdp.model.environment.general.general_action import GeneralAction
+from mdp.model.general.environment.general_state import GeneralState
+from mdp.model.general.environment.general_action import GeneralAction
 
 State = TypeVar('State', bound=GeneralState)
 Action = TypeVar('Action', bound=GeneralAction)

@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import utils
 from mdp import common
-from mdp.model.algorithm.value_function import state_action_function
+from mdp.model.tabular.algorithm.value_function import state_action_function
 from mdp.scenarios.cliff.model.environment_parameters import default
 from mdp.scenarios.cliff.model.environment_parameters import EnvironmentParameters
 from mdp.scenarios.cliff.model.environment import Environment

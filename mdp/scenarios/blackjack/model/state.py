@@ -2,7 +2,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Optional
 
-from mdp.model.environment.tabular.tabular_state import TabularState
+from mdp.model.tabular.environment.tabular_state import TabularState
 
 
 @dataclass(frozen=True)

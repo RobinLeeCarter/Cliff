@@ -3,8 +3,8 @@ from typing import TYPE_CHECKING
 from typing import Optional, Generator
 
 if TYPE_CHECKING:
-    from mdp.model.environment.general import general_action, general_state
-from mdp.model.environment.tabular.tabular_dynamics import state_distribution
+    pass
+from mdp.model.tabular.environment.tabular_dynamics import state_distribution
 
 
 class Dynamics:

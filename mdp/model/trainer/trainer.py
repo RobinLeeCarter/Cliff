@@ -3,13 +3,13 @@ from typing import TYPE_CHECKING, Optional, Callable
 import multiprocessing
 
 if TYPE_CHECKING:
-    from mdp.model.agent.tabular.agent import Agent
-    from mdp.model.agent.tabular.episode import Episode
+    from mdp.model.tabular.agent.agent import Agent
+    from mdp.model.tabular.agent.episode import Episode
     from mdp.model.breakdown.breakdown import Breakdown
 from mdp import common
-from mdp.model.algorithm.abstract.algorithm import Algorithm
-from mdp.model.algorithm.abstract.episodic import Episodic
-from mdp.model.algorithm.abstract.dynamic_programming import DynamicProgramming
+from mdp.model.tabular.algorithm.abstract.algorithm import Algorithm
+from mdp.model.tabular.algorithm.abstract.episodic import Episodic
+from mdp.model.tabular.algorithm.abstract.dynamic_programming import DynamicProgramming
 from mdp.model.trainer.parallel_runner import ParallelRunner
 
 

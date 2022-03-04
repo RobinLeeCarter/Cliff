@@ -1,7 +1,7 @@
 from __future__ import annotations
 from dataclasses import dataclass
 
-from mdp.model.environment.non_tabular.non_tabular_action import NonTabularAction
+from mdp.model.non_tabular.environment.non_tabular_action import NonTabularAction
 
 
 @dataclass(frozen=True)

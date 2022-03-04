@@ -6,8 +6,8 @@ from typing import Generator
 import random
 
 if TYPE_CHECKING:
-    from mdp.model.environment.general import general_state
-from mdp.model.environment.tabular.tabular_dynamics import reward_distribution
+    pass
+from mdp.model.tabular.environment.tabular_dynamics import reward_distribution
 
 
 class StateDistribution:

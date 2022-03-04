@@ -13,7 +13,7 @@ from mdp.scenarios.gambler.model.state import State
 from mdp.scenarios.gambler.model.action import Action
 from mdp.scenarios.gambler.model.enums import Toss, Result
 
-from mdp.model.environment.tabular.tabular_dynamics import TabularDynamics
+from mdp.model.tabular.environment.tabular_dynamics import TabularDynamics
 
 
 class Dynamics(TabularDynamics[State, Action]):

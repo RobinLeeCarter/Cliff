@@ -7,9 +7,9 @@ from numba import njit
 
 from mdp import common
 if TYPE_CHECKING:
-    from mdp.model.environment.tabular.tabular_environment import TabularEnvironment
-from mdp.model.policy.tabular.tabular_policy import TabularPolicy
-from mdp.model.policy.tabular.deterministic import Deterministic
+    from mdp.model.tabular.environment.tabular_environment import TabularEnvironment
+from mdp.model.tabular.policy.tabular_policy import TabularPolicy
+from mdp.model.tabular.policy.deterministic import Deterministic
 
 rng: np.random.Generator = np.random.default_rng()
 

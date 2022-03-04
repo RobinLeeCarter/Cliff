@@ -1,5 +1,5 @@
 import enum
-from mdp.model.environment.non_tabular.dimension.dim_enum import DimEnum
+from mdp.model.non_tabular.environment.dimension.dim_enum import DimEnum
 
 
 class Dim(DimEnum):

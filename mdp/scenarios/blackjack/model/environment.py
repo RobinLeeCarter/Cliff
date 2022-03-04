@@ -4,9 +4,9 @@ from typing import TYPE_CHECKING
 import numpy as np
 
 if TYPE_CHECKING:
-    from mdp.model.algorithm.abstract.algorithm import Algorithm
-    from mdp.model.policy.tabular.tabular_policy import TabularPolicy
-    from mdp.model.algorithm.value_function import state_function
+    from mdp.model.tabular.algorithm.abstract.algorithm import Algorithm
+    from mdp.model.tabular.policy.tabular_policy import TabularPolicy
+    from mdp.model.tabular.algorithm.value_function import state_function
 
 from mdp import common
 from mdp.scenarios.blackjack.model.state import State
@@ -15,7 +15,7 @@ from mdp.scenarios.blackjack.model.environment_parameters import EnvironmentPara
 from mdp.scenarios.blackjack.model.grid_world import GridWorld
 from mdp.scenarios.blackjack.model.dynamics import Dynamics
 
-from mdp.model.environment.tabular.tabular_environment import TabularEnvironment
+from mdp.model.tabular.environment.tabular_environment import TabularEnvironment
 
 
 class Environment(TabularEnvironment[State, Action]):

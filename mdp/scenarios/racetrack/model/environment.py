@@ -9,7 +9,7 @@ from mdp.scenarios.racetrack.model.grid_world import GridWorld
 from mdp.scenarios.racetrack.model.dynamics import Dynamics
 from mdp.scenarios.racetrack.model.environment_parameters import EnvironmentParameters
 
-from mdp.model.environment.tabular.tabular_environment import TabularEnvironment
+from mdp.model.tabular.environment.tabular_environment import TabularEnvironment
 
 
 class Environment(TabularEnvironment[State, Action]):

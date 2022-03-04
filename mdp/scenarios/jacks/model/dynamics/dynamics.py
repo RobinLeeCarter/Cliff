@@ -13,7 +13,7 @@ from mdp.scenarios.jacks.model.state import State
 from mdp.scenarios.jacks.model.action import Action
 from mdp.scenarios.jacks.model.dynamics.location import Location
 
-from mdp.model.environment.tabular.tabular_dynamics import TabularDynamics
+from mdp.model.tabular.environment.tabular_dynamics import TabularDynamics
 
 Response = tuple[float, State]
 

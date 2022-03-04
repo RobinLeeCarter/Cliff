@@ -10,7 +10,7 @@ from mdp.scenarios.blackjack.model.state import State
 from mdp.scenarios.blackjack.model.action import Action
 from mdp.scenarios.blackjack.model.enums import Result
 
-from mdp.model.environment.tabular.tabular_dynamics import TabularDynamics
+from mdp.model.tabular.environment.tabular_dynamics import TabularDynamics
 
 
 class Dynamics(TabularDynamics[State, Action]):

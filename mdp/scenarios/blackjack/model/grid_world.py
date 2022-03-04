@@ -8,7 +8,7 @@ if TYPE_CHECKING:
 import numpy as np
 
 from mdp import common
-from mdp.model.environment.tabular import grid_world
+from mdp.model.tabular.environment import grid_world
 
 
 class GridWorld(grid_world.GridWorld):
