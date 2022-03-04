@@ -22,10 +22,10 @@ class VectorActorCritic(NonTabularPolicy[State, Action], ABC):
                  environment: NonTabularEnvironment[State, Action],
                  policy_parameters: common.PolicyParameters,
                  state_action_function: StateActionFunction[State, Action],
-                 feature: Feature,
+                 feature: Feature[State, Action],
                  initial_theta: float = 0.0,
                  ):
         super().__init__(environment, policy_parameters)
         self._state_action_function: StateActionFunction[State, Action] = state_action_function
-        self._feature: Feature = feature
+        self._feature: Feature[State, Action] = feature
         self._theta: np.ndarray = np.full(shape=feature.max_size, fill_value=initial_theta, dtype=float)

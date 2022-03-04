@@ -28,5 +28,3 @@ class NonTabularState(GeneralState, ABC):
 
     def _get_categories(self) -> list:
         return []
-
-

@@ -20,9 +20,9 @@ class VectorParameterized(NonTabularPolicy[State, Action], ABC):
     def __init__(self,
                  environment: NonTabularEnvironment,
                  policy_parameters: common.PolicyParameters,
-                 feature: Feature,
+                 feature: Feature[State, Action],
                  initial_theta: float = 0.0,
                  ):
         super().__init__(environment, policy_parameters)
-        self._feature: Feature = feature
+        self._feature: Feature[State, Action] = feature
         self._theta: np.ndarray = np.full(shape=feature.max_size, fill_value=initial_theta, dtype=float)

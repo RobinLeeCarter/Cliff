@@ -30,22 +30,21 @@ class SparseFeature(Feature[State, Action], ABC):
     def _get_full_vector(self) -> np.ndarray:
         """return the full x vector"""
         if self._max_size:
-            sparse_vector = self.vector
+            sparse_vector = self.get_vector
             full_vector = np.zeros(shape=self._max_size, dtype=np.int)
             full_vector[sparse_vector] = 1
             return full_vector
         else:
             raise Exception("Size of x not specified")
 
-    @property
-    def vector(self) -> np.ndarray:
+    def get_vector(self) -> np.ndarray:
         if not self._vector:
             # can't use cached version so calculate
             self._vector = self._get_sparse_vector()
         return self._vector
 
     def dot_product_full_vector(self, full_vector: np.ndarray) -> float:
-        return float(np.sum(full_vector[self.vector]))
+        return float(np.sum(full_vector[self.get_vector()]))
 
     @abstractmethod
     def _get_sparse_vector(self) -> np.ndarray:

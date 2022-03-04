@@ -51,46 +51,40 @@ class Feature(Generic[State, Action], ABC):
 
     def unpack_item(self, item: Union[State, tuple[State, Action]]):
         if isinstance(item, tuple):
-            item: tuple[State, Action]
-            self.state, self.action = item
+            self.set_state_action(*item)
         else:
-            item: State
-            self.state = item
+            self.set_state(item)
 
-    @property
-    def state(self) -> State:
-        return self._state
+    def set_state_action(self, state: State, action: Action):
+        self.set_state(state)
+        self.set_action(action)
 
-    @state.setter
-    def state(self, state: State):
-        self._state = state
-        self._vector = None
-        self._do_state_computation()
+    def set_state(self, state: State):
+        if state != self._state:
+            self._state = state
+            self._vector = None
+            self._do_state_computation()
 
     def _do_state_computation(self):
         pass
 
-    @property
-    def action(self) -> Action:
-        return self._action
-
-    @action.setter
-    def action(self, action: Action):
-        self._action = action
-        self._vector = None
-        self._do_action_computation()
+    def set_action(self, action: Action):
+        if action != self._action:
+            self._action = action
+            self._vector = None
+            self._do_action_computation()
 
     def _do_action_computation(self):
         pass
 
-    @property
-    def vector(self) -> np.ndarray:
+    def get_vector(self) -> np.ndarray:
         if not self._vector:
+            # can't use cached version so calculate
             self._vector = self._get_full_vector()
         return self._vector
 
     def dot_product_full_vector(self, full_vector: np.ndarray) -> float:
-        return float(np.dot(full_vector, self.vector))
+        return float(np.dot(full_vector, self.get_vector()))
 
     @abstractmethod
     def _get_full_vector(self) -> np.ndarray:

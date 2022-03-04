@@ -10,6 +10,7 @@ from mdp.model.non_tabular.environment.dimension.category_dimension import Categ
 from mdp.model.non_tabular.environment.dimension.dim_enum import DimEnum
 from mdp.model.non_tabular.environment.dimension.dims import Dims
 from mdp.model.non_tabular.environment.non_tabular_state import NonTabularState
+from mdp.model.non_tabular.environment.placeholder_action import PlaceholderAction
 
 
 class Dim(DimEnum):
@@ -43,7 +44,7 @@ def main():
     dim_y = dims.state_float[Dim.Y]
     # dim_z = dims.state_category[Dim.Z]
 
-    tile_coding = TileCoding(dims=dims)
+    tile_coding: TileCoding[State, PlaceholderAction] = TileCoding[State, PlaceholderAction](dims=dims)
     # tile_coding = TileCoding(dimension_ranges=dimensions_ranges, max_size=800, use_dict=False)
 
     # tile_size_per_dim = [dr for dr, tiles in dimensions_ranges, [8,8,0] ]
@@ -75,9 +76,9 @@ def main():
             y = dim_y.min + np.random.rand() * dim_y.range
             z = np.random.randint(5, 10 + 1)
             target = target_ftn(x, y, z)
-            # state = State(is_terminal=False, x=x, y=y, z=z)
-            tile_coding.state = State(is_terminal=False, x=x, y=y, z=z)
-            vector = tile_coding.vector
+            state = State(is_terminal=False, x=x, y=y, z=z)
+            tile_coding.set_state(state)
+            vector = tile_coding.get_vector()
             w[vector] += alpha * (target - w[vector].sum())
             mse += (target - w[vector].sum()) ** 2
         mse /= batch_size
@@ -92,7 +93,8 @@ def main():
     z = np.zeros([len(x), len(y)])
     for i, xi in enumerate(x):
         for j, yj in enumerate(y):
-            tile_coding.state = State(is_terminal=False, x=xi, y=yj, z=7)
+            state = State(is_terminal=False, x=xi, y=yj, z=7)
+            tile_coding.set_state(state)
             z[i, j] = tile_coding.dot_product_full_vector(w)
 
     # plot

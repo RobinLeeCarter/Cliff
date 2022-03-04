@@ -21,7 +21,7 @@ class SoftmaxLinear(VectorParameterized[State, Action]):
     def __init__(self,
                  environment: NonTabularEnvironment[State, Action],
                  policy_parameters: common.PolicyParameters,
-                 feature: Feature,
+                 feature: Feature[State, Action],
                  initial_theta: float = 0.0,
                  tau: float = 1.0  # temperature parameter
                  ):
@@ -55,9 +55,9 @@ class SoftmaxLinear(VectorParameterized[State, Action]):
         """
         preferences: list[float] = []
         probabilities: np.ndarray
-        self._feature.state = state
+        self._feature.set_state(state)
         for action in self._environment.actions:
-            self._feature.action = action
+            self._feature.set_action(action)
             preference: float = self._feature.dot_product_full_vector(self._theta)
             preferences.append(preference)
         preferences_array = np.array(preferences)

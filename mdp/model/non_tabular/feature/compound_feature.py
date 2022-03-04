@@ -25,9 +25,9 @@ class CompoundFeature(Feature[State, Action]):
     def _get_full_vector(self) -> np.ndarray:
         """return the full feature vector using unpacked values"""
         for feature in self._features:
-            feature.state = self._state
+            feature.set_state(self._state)
             if self._action:
-                feature.action = self._action
-        results: list[np.ndarray] = [feature.vector for feature in self._features]
+                feature.set_action(self._action)
+        results: list[np.ndarray] = [feature.get_vector() for feature in self._features]
         concat_results: np.ndarray = np.concatenate(results)
         return concat_results
