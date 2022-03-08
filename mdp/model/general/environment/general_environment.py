@@ -34,7 +34,7 @@ class GeneralEnvironment(Generic[State, Action], ABC):
         return True
 
     # TODO: is this in the right place?
-    def initialize_policy(self, policy_: GeneralPolicy, policy_parameters: common.PolicyParameters):
+    def initialize_policy(self, policy: GeneralPolicy):
         pass
 
     @abstractmethod

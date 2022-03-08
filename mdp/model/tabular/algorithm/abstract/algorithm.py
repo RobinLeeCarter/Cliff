@@ -16,13 +16,11 @@ class Algorithm(abc.ABC):
     def __init__(self,
                  environment_: TabularEnvironment,
                  agent: Agent,
-                 algorithm_parameters: common.AlgorithmParameters,
-                 policy_parameters: common.PolicyParameters
+                 algorithm_parameters: common.AlgorithmParameters
                  ):
         self._environment: TabularEnvironment = environment_
         self._agent: Agent = agent
         self._algorithm_parameters: common.AlgorithmParameters = algorithm_parameters
-        self._policy_parameters: common.PolicyParameters = policy_parameters
         self._verbose = self._algorithm_parameters.verbose
 
         self._algorithm_type: Optional[common.AlgorithmType] = None

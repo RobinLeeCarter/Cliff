@@ -70,7 +70,7 @@ class Environment(TabularEnvironment[State, Action]):
         else:
             return True
 
-    def initialize_policy(self, policy: TabularPolicy, policy_parameters: common.PolicyParameters):
+    def initialize_policy(self, policy: TabularPolicy):
         hit: bool
 
         policy.zero_state_action()

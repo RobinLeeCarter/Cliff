@@ -13,10 +13,9 @@ class Episodic(Algorithm, abc.ABC):
     def __init__(self,
                  environment_: TabularEnvironment,
                  agent: Agent,
-                 algorithm_parameters: common.AlgorithmParameters,
-                 policy_parameters: common.PolicyParameters
+                 algorithm_parameters: common.AlgorithmParameters
                  ):
-        super().__init__(environment_, agent, algorithm_parameters, policy_parameters)
+        super().__init__(environment_, agent, algorithm_parameters)
         self.first_visit = self._algorithm_parameters.first_visit
 
     # TODO: should episode_length_timeout be passed in each time or be a property defaulted by algorithm_parameters

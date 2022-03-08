@@ -100,8 +100,7 @@ class Agent:
         self._algorithm = algorithm_factory.algorithm_factory(
             environment=self._environment,
             agent=self,
-            algorithm_parameters=settings.algorithm_parameters,
-            policy_parameters=settings.policy_parameters)
+            algorithm_parameters=settings.algorithm_parameters)
         settings.algorithm_title = self._algorithm.title
         self._episode_length_timeout = settings.episode_length_timeout
         if isinstance(self._algorithm, Episodic):

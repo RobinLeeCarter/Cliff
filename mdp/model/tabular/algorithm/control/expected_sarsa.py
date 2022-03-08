@@ -14,10 +14,9 @@ class ExpectedSarsa(EpisodicOnlineControl):
     def __init__(self,
                  environment_: TabularEnvironment,
                  agent: Agent,
-                 algorithm_parameters: common.AlgorithmParameters,
-                 policy_parameters: common.PolicyParameters
+                 algorithm_parameters: common.AlgorithmParameters
                  ):
-        super().__init__(environment_, agent, algorithm_parameters, policy_parameters)
+        super().__init__(environment_, agent, algorithm_parameters)
         self._alpha = self._algorithm_parameters.alpha
         self._algorithm_type = common.AlgorithmType.EXPECTED_SARSA
         self.name = common.algorithm_name[self._algorithm_type]

@@ -13,10 +13,9 @@ class DynamicProgramming(Algorithm, abc.ABC):
     def __init__(self,
                  environment_: TabularEnvironment,
                  agent: Agent,
-                 algorithm_parameters: common.AlgorithmParameters,
-                 policy_parameters: common.PolicyParameters
+                 algorithm_parameters: common.AlgorithmParameters
                  ):
-        super().__init__(environment_, agent, algorithm_parameters, policy_parameters)
+        super().__init__(environment_, agent, algorithm_parameters)
         self._theta = self._algorithm_parameters.theta
         self._iteration_timeout = self._algorithm_parameters.iteration_timeout
 
@@ -28,7 +27,7 @@ class DynamicProgramming(Algorithm, abc.ABC):
 
     def initialize(self):
         super().initialize()
-        self._environment.initialize_policy(self._agent.policy, self._policy_parameters)
+        self._environment.initialize_policy(self._agent.policy)
 
     @abc.abstractmethod
     def run(self):

@@ -15,10 +15,9 @@ class EpisodicBatch(Episodic, abc.ABC):
     def __init__(self,
                  environment_: TabularEnvironment,
                  agent: Agent,
-                 algorithm_parameters: common.AlgorithmParameters,
-                 policy_parameters: common.PolicyParameters
+                 algorithm_parameters: common.AlgorithmParameters
                  ):
-        super().__init__(environment_, agent, algorithm_parameters, policy_parameters)
+        super().__init__(environment_, agent, algorithm_parameters)
         self._episode: Optional[Episode] = None
         self._exit_episode: bool = False
         self._exploring_starts: bool = algorithm_parameters.exploring_starts

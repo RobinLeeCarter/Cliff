@@ -70,7 +70,7 @@ class Environment(NonTabularEnvironment[State, Action]):
 
         return reward, new_state
 
-    def initialize_policy(self, policy: TabularPolicy, policy_parameters: common.PolicyParameters):
+    def initialize_policy(self, policy: TabularPolicy):
         ...
         # hit: bool
         #

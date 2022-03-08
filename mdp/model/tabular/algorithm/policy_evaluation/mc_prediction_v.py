@@ -13,10 +13,9 @@ class MCPredictionV(EpisodicMonteCarlo):
     def __init__(self,
                  environment_: TabularEnvironment,
                  agent: Agent,
-                 algorithm_parameters: common.AlgorithmParameters,
-                 policy_parameters: common.PolicyParameters
+                 algorithm_parameters: common.AlgorithmParameters
                  ):
-        super().__init__(environment_, agent, algorithm_parameters, policy_parameters)
+        super().__init__(environment_, agent, algorithm_parameters)
         self._algorithm_type = common.AlgorithmType.MC_PREDICTION_V
         self.name = common.algorithm_name[self._algorithm_type]
         self.title = f"{self.name} first_visit={self.first_visit}"
@@ -25,7 +24,7 @@ class MCPredictionV(EpisodicMonteCarlo):
 
     def initialize(self):
         super().initialize()
-        self._environment.initialize_policy(self._agent.policy, self._policy_parameters)
+        self._environment.initialize_policy(self._agent.policy)
 
     def _process_time_step(self, t: int):
         # only do updates on the time-steps that should be done

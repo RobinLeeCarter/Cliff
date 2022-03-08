@@ -55,7 +55,7 @@ class Environment(TabularEnvironment[State, Action]):
         else:
             return False
 
-    def initialize_policy(self, policy: TabularPolicy, policy_parameters: common.PolicyParameters):
+    def initialize_policy(self, policy: TabularPolicy):
         policy.zero_state_action()
 
         initial_action: Action = Action(transfer_1_to_2=0)

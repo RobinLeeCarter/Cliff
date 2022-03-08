@@ -5,7 +5,7 @@ if TYPE_CHECKING:
     from mdp.model.tabular.environment.tabular_environment import TabularEnvironment
     from mdp.model.tabular.agent.agent import Agent
 from mdp import common
-from mdp.model.tabular.algorithm.abstract.algorithm import Algorithm as BaseAlgorithm
+from mdp.model.tabular.algorithm.abstract.algorithm import Algorithm
 
 from mdp.model.tabular.algorithm.policy_evaluation.dp_policy_evaluation_v_deterministic\
     import DpPolicyEvaluationVDeterministic
@@ -39,10 +39,9 @@ from mdp.model.tabular.algorithm.control.q_learning import QLearning
 def algorithm_factory(environment: TabularEnvironment,
                       agent: Agent,
                       algorithm_parameters: common.Settings.algorithm_parameters,
-                      policy_parameters: common.PolicyParameters
-                      ) -> BaseAlgorithm:
+                      ) -> Algorithm:
     a = common.AlgorithmType
-    algorithm_lookup: dict[a, Type[BaseAlgorithm]] = {
+    algorithm_lookup: dict[a, Type[Algorithm]] = {
         a.DP_POLICY_EVALUATION_Q_DETERMINISTIC: DpPolicyEvaluationQDeterministic,
         a.DP_POLICY_EVALUATION_Q_STOCHASTIC: DpPolicyEvaluationQStochastic,
         a.DP_POLICY_EVALUATION_V_DETERMINISTIC: DpPolicyEvaluationVDeterministic,
@@ -66,6 +65,6 @@ def algorithm_factory(environment: TabularEnvironment,
         a.SARSA: Sarsa,
         a.VQ: VQ,
     }
-    type_for_algorithm = algorithm_lookup[algorithm_parameters.algorithm_type]
-    algorithm_ = type_for_algorithm(environment, agent, algorithm_parameters, policy_parameters)
-    return algorithm_
+    type_for_algorithm: Type[Algorithm] = algorithm_lookup[algorithm_parameters.algorithm_type]
+    algorithm: Algorithm = type_for_algorithm(environment, agent, algorithm_parameters)
+    return algorithm
