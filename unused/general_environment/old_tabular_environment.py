@@ -5,7 +5,7 @@ from abc import ABC, abstractmethod
 import numpy as np
 
 if TYPE_CHECKING:
-    from mdp.model.tabular.algorithm.value_function import state_function
+    from mdp.model.tabular.value_function import state_function
     from mdp.model.tabular.environment.tabular_dynamics import TabularDynamics
 
 from mdp import common

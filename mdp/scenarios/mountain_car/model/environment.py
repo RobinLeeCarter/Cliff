@@ -6,7 +6,7 @@ from typing import TYPE_CHECKING, Optional
 if TYPE_CHECKING:
     # from mdp.model.algorithm.abstract.algorithm import Algorithm
     from mdp.model.tabular.policy.tabular_policy import TabularPolicy
-    from mdp.model.tabular.algorithm.value_function import state_function
+    from mdp.model.tabular.value_function import state_function
     # from mdp.model.environment.non_tabular.non_tabular_state import NonTabularState
     # from mdp.model.environment.non_tabular.non_tabular_action import NonTabularAction
 

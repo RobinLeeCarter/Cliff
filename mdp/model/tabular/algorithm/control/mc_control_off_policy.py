@@ -6,7 +6,7 @@ if TYPE_CHECKING:
     from mdp.model.tabular.agent.agent import Agent
 from mdp import common
 from mdp.model.tabular.algorithm.abstract.episodic_monte_carlo import EpisodicMonteCarlo
-from mdp.model.tabular.algorithm.value_function.state_action_variable import StateActionVariable
+from mdp.model.tabular.value_function.state_action_variable import StateActionVariable
 
 
 class McControlOffPolicy(EpisodicMonteCarlo):

@@ -6,7 +6,7 @@ import numpy as np
 if TYPE_CHECKING:
     from mdp.model.tabular.algorithm.abstract.algorithm import Algorithm
     from mdp.model.tabular.policy.tabular_policy import TabularPolicy
-    from mdp.model.tabular.algorithm.value_function import state_function
+    from mdp.model.tabular.value_function import state_function
 
 from mdp import common
 from mdp.scenarios.blackjack.model.state import State

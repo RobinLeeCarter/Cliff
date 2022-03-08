@@ -8,8 +8,8 @@ if TYPE_CHECKING:
     from mdp.model.tabular.policy.tabular_policy import TabularPolicy
     from mdp import common
 from mdp.model.tabular.algorithm import linear_algebra as la
-from mdp.model.tabular.algorithm.value_function.state_function import StateFunction
-from mdp.model.tabular.algorithm.value_function.state_action_function import StateActionFunction
+from mdp.model.tabular.value_function.state_function import StateFunction
+from mdp.model.tabular.value_function.state_action_function import StateActionFunction
 
 
 class Algorithm(abc.ABC):

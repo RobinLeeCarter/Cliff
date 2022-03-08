@@ -6,7 +6,7 @@ import numpy as np
 
 
 if TYPE_CHECKING:
-    from mdp.model.tabular.algorithm.value_function import state_function
+    from mdp.model.tabular.value_function import state_function
     from mdp import common
 
 from mdp.model.non_tabular.environment.non_tabular_state import NonTabularState
