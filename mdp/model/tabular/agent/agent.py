@@ -13,7 +13,7 @@ from mdp.model.tabular.algorithm.abstract.algorithm import Algorithm
 from mdp.model.tabular.algorithm.abstract.episodic import Episodic
 from mdp.model.tabular.agent.episode import Episode
 from mdp.model.tabular.policy.tabular_policy import TabularPolicy
-from mdp.model.general.algorithm import algorithm_factory
+from mdp.model.tabular.algorithm.algorithm_factory import AlgorithmFactory
 from mdp.model.general.policy import policy_factory
 
 
@@ -28,6 +28,7 @@ class Agent:
         self._behaviour_policy: Optional[TabularPolicy] = None     # if on-policy = self._policy
         self._dual_policy_relationship: Optional[common.DualPolicyRelationship] = None
 
+        self._algorithm_factory: AlgorithmFactory = AlgorithmFactory(environment=self._environment, agent=self)
         self._algorithm: Optional[Algorithm] = None
         self._episode: Optional[Episode] = None
         self._record_first_visits: bool = False
@@ -75,6 +76,7 @@ class Agent:
 
     def apply_settings(self, settings: common.Settings):
         # sort out policies
+        # select and set policy based on policy_parameters
         primary_policy = policy_factory.policy_factory(self._environment, settings.policy_parameters)
         self._dual_policy_relationship = settings.dual_policy_relationship
         if self._dual_policy_relationship == common.DualPolicyRelationship.SINGLE_POLICY:
@@ -90,11 +92,8 @@ class Agent:
         else:
             raise NotImplementedError
 
-        # set policy based on policy_parameters
-        self._algorithm = algorithm_factory.algorithm_factory(
-            environment=self._environment,
-            agent=self,
-            algorithm_parameters=settings.algorithm_parameters)
+        # select and set algorithm based on algorithm_parameters
+        self._algorithm = self._algorithm_factory.create_algorithm(settings.algorithm_parameters)
         settings.algorithm_title = self._algorithm.title
         self._episode_length_timeout = settings.episode_length_timeout
         if isinstance(self._algorithm, Episodic):

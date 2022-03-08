@@ -9,6 +9,9 @@ from mdp.model.tabular.algorithm.abstract.episodic_online_control import Episodi
 
 
 class Sarsa(EpisodicOnlineControl):
+    algorithm_type: common.AlgorithmType = common.AlgorithmType.SARSA
+    name: str = common.algorithm_name[algorithm_type]
+
     def __init__(self,
                  environment: TabularEnvironment,
                  agent: Agent,
@@ -16,9 +19,7 @@ class Sarsa(EpisodicOnlineControl):
                  ):
         super().__init__(environment, agent, algorithm_parameters)
         self._alpha = self._algorithm_parameters.alpha
-        self._algorithm_type = common.AlgorithmType.SARSA
-        self.name = common.algorithm_name[self._algorithm_type]
-        self.title = f"{self.name} α={self._alpha}"
+        self.title = f"{Sarsa.name} α={self._alpha}"
         self._create_q()
 
     def _start_episode(self):

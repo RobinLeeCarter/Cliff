@@ -13,6 +13,9 @@ from mdp.model.tabular.value_function.state_action_function import StateActionFu
 
 
 class Algorithm(abc.ABC):
+    algorithm_type: common.AlgorithmType
+    name: str
+
     def __init__(self,
                  environment: TabularEnvironment,
                  agent: Agent,
