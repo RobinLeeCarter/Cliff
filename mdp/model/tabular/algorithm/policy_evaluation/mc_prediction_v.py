@@ -11,11 +11,11 @@ from mdp.model.tabular.algorithm.value_function.state_variable import StateVaria
 
 class MCPredictionV(EpisodicMonteCarlo):
     def __init__(self,
-                 environment_: TabularEnvironment,
+                 environment: TabularEnvironment,
                  agent: Agent,
                  algorithm_parameters: common.AlgorithmParameters
                  ):
-        super().__init__(environment_, agent, algorithm_parameters)
+        super().__init__(environment, agent, algorithm_parameters)
         self._algorithm_type = common.AlgorithmType.MC_PREDICTION_V
         self.name = common.algorithm_name[self._algorithm_type]
         self.title = f"{self.name} first_visit={self.first_visit}"

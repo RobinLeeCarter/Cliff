@@ -15,11 +15,11 @@ from mdp.model.tabular.algorithm.abstract.dynamic_programming_q import DynamicPr
 
 class DpValueIterationQ(DynamicProgrammingQ):
     def __init__(self,
-                 environment_: TabularEnvironment,
+                 environment: TabularEnvironment,
                  agent: Agent,
                  algorithm_parameters: common.AlgorithmParameters
                  ):
-        super().__init__(environment_, agent, algorithm_parameters)
+        super().__init__(environment, agent, algorithm_parameters)
         self._algorithm_type = common.AlgorithmType.DP_POLICY_ITERATION_Q
         self.name = common.algorithm_name[self._algorithm_type]
         self.title = f"{self.name} θ={self._theta}"

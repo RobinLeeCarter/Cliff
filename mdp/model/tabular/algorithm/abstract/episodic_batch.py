@@ -13,11 +13,11 @@ from mdp.model.tabular.algorithm.abstract.episodic import Episodic
 # TODO: Is this a good idea
 class EpisodicBatch(Episodic, abc.ABC):
     def __init__(self,
-                 environment_: TabularEnvironment,
+                 environment: TabularEnvironment,
                  agent: Agent,
                  algorithm_parameters: common.AlgorithmParameters
                  ):
-        super().__init__(environment_, agent, algorithm_parameters)
+        super().__init__(environment, agent, algorithm_parameters)
         self._episode: Optional[Episode] = None
         self._exit_episode: bool = False
         self._exploring_starts: bool = algorithm_parameters.exploring_starts

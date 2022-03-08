@@ -11,11 +11,11 @@ from mdp.model.tabular.algorithm.abstract.algorithm import Algorithm
 
 class DynamicProgramming(Algorithm, abc.ABC):
     def __init__(self,
-                 environment_: TabularEnvironment,
+                 environment: TabularEnvironment,
                  agent: Agent,
                  algorithm_parameters: common.AlgorithmParameters
                  ):
-        super().__init__(environment_, agent, algorithm_parameters)
+        super().__init__(environment, agent, algorithm_parameters)
         self._theta = self._algorithm_parameters.theta
         self._iteration_timeout = self._algorithm_parameters.iteration_timeout
 

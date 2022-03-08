@@ -11,11 +11,11 @@ from mdp.model.tabular.algorithm.abstract.dynamic_programming import DynamicProg
 
 class DynamicProgrammingV(DynamicProgramming, abc.ABC):
     def __init__(self,
-                 environment_: TabularEnvironment,
+                 environment: TabularEnvironment,
                  agent: Agent,
                  algorithm_parameters: common.AlgorithmParameters,
                  ):
-        super().__init__(environment_, agent, algorithm_parameters)
+        super().__init__(environment, agent, algorithm_parameters)
         self._create_v()
 
     # def _get_expected_return(self, state: State, action: Action) -> float:

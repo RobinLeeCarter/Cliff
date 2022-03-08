@@ -14,11 +14,11 @@ from mdp.model.tabular.algorithm.value_function.state_action_function import Sta
 
 class Algorithm(abc.ABC):
     def __init__(self,
-                 environment_: TabularEnvironment,
+                 environment: TabularEnvironment,
                  agent: Agent,
                  algorithm_parameters: common.AlgorithmParameters
                  ):
-        self._environment: TabularEnvironment = environment_
+        self._environment: TabularEnvironment = environment
         self._agent: Agent = agent
         self._algorithm_parameters: common.AlgorithmParameters = algorithm_parameters
         self._verbose = self._algorithm_parameters.verbose
