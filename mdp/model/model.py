@@ -37,31 +37,11 @@ class Model(ABC):
         self._controller: Controller = controller_
 
     def build(self, comparison: common.Comparison):
-        self._comparison = comparison
-
-        # different for each scenario and environment_parameters
-        self.environment: TabularEnvironment = self._create_environment(self._comparison.environment_parameters)
-        self.environment.build()
-        # self.environment = environment_factory.environment_factory(self._comparison.environment_parameters)
-
-        # create agent (and it will create the algorithm and the policy when it is given Settings)
-        self.agent = Agent(self.environment)
-
-        # breakdowns themselves need comparison in current implementation so breakdown_parameters is not passed in
-        self.breakdown: Optional[Breakdown] = breakdown_factory.breakdown_factory(self._comparison)
-        self.trainer: Trainer = Trainer(
-            agent_=self.agent,
-            breakdown_=self.breakdown,
-            model_step_callback=self._display_step,
-            verbose=False
-        )
-        if self.breakdown:
-            self.breakdown.set_trainer(self.trainer)
-        if self._comparison.settings_list_multiprocessing != common.ParallelContextType.NONE:
-            self.parallel_trainer = ParallelTrainer(self.trainer, self._comparison.settings_list_multiprocessing)
+        self._comparison: common.Comparison = comparison
+        self._build()
 
     @abstractmethod
-    def _create_environment(self, environment_parameters: common.EnvironmentParameters) -> TabularEnvironment:
+    def _build(self):
         pass
 
     def run(self):
