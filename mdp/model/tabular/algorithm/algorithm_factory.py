@@ -83,5 +83,5 @@ class AlgorithmFactory(Generic[State, Action]):
 
     def create_algorithm(self, algorithm_parameters: common.Settings.algorithm_parameters) -> Algorithm:
         type_for_algorithm: Type[Algorithm] = self._algorithm_lookup[algorithm_parameters.algorithm_type]
-        algorithm: Algorithm = type_for_algorithm[State, Action](self._environment, self._agent, algorithm_parameters)
+        algorithm: Algorithm = type_for_algorithm(self._environment, self._agent, algorithm_parameters)
         return algorithm

@@ -1,8 +1,7 @@
 from __future__ import annotations
-from typing import TYPE_CHECKING, Type
+from typing import Type
 
-if TYPE_CHECKING:
-    from mdp.scenario import Scenario
+from mdp.scenario import Scenario
 from mdp import common
 
 from mdp.scenarios.jacks.scenario.jacks_policy_evaluation_q import JacksPolicyEvaluationQ
@@ -30,7 +29,7 @@ from mdp.scenarios.cliff.scenario.cliff_episode import CliffEpisode
 
 from mdp.scenarios.windy.scenario.windy_timestep import WindyTimestep
 
-ScenarioLookup = dict[common.ComparisonType, Type[Scenario] | tuple[Type[Scenario], dict[str, object]]]
+ScenarioLookup = dict[common.ComparisonType, Type[Scenario] | tuple[Type[Scenario], dict[str, any]]]
 
 
 class ScenarioFactory:
@@ -61,7 +60,7 @@ class ScenarioFactory:
     def create(self, comparison_type: common.ComparisonType) -> Scenario:
         # result: Type[Scenario] | tuple[Type[Scenario], dict[str, object]] = self._lookup[comparison_type]
         scenario_type: Type[Scenario]
-        kwargs: dict[str, object] = {}
+        kwargs: dict[str, any] = {}
 
         match self._lookup[comparison_type]:
             case type() as scenario_type:
@@ -73,21 +72,3 @@ class ScenarioFactory:
 
         scenario: Scenario = scenario_type(**kwargs)
         return scenario
-
-
-# def scenario_factory(comparison_type: common.ComparisonType) -> Scenario:
-#     # could also consider that this is not encapsulated in scenario
-#     # dict could be built by scenario code perhaps
-#     # or sceanario could be specified and passed on and then sub-scenario selected
-#     # scenario_lookup: dict[common.ComparisonType, BaseScenario]
-#     # args_lookup: dict[common.ComparisonType, tuple?, dict?]
-#     ct = common.ComparisonType
-#     scenario_type: Type[Scenario] = Scenario
-#
-#     kwargs: dict = {}
-#     if comparison_type == ct.WINDY_TIMESTEP_RANDOM:
-#         kwargs["random_wind"] = True
-#
-#     scenario: Scenario = scenario_type(**kwargs)
-#
-#     return scenario

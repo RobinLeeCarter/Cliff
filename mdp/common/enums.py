@@ -3,6 +3,17 @@ import enum
 from mdp.model.tabular.algorithm import algorithm_type
 
 
+class ScenarioType(enum.IntEnum):
+    BLACKJACK = enum.auto()
+    CLIFF = enum.auto()
+    GAMBLER = enum.auto()
+    JACKS = enum.auto()
+    RACETRACK = enum.auto()
+    RANDOM_WALK = enum.auto()
+    WINDY = enum.auto()
+    MOUNTAIN_CAR = enum.auto()
+
+
 class ComparisonType(enum.IntEnum):
     BLACKJACK_EVALUATION_V = enum.auto()
     BLACKJACK_EVALUATION_Q = enum.auto()
@@ -45,7 +56,7 @@ class BreakdownType(enum.IntEnum):
     RETURN_BY_ALPHA = enum.auto()
 
 
-AlgorithmType = algorithm_enum.AlgorithmType
+AlgorithmType = algorithm_type.AlgorithmType
 
 # TODO: Should this be in the algorithm folder and imported to here (possibly split between tabular and non-tabular)?
 # class AlgorithmType(enum.IntEnum):
@@ -86,17 +97,6 @@ class DualPolicyRelationship(enum.IntEnum):
     SINGLE_POLICY = enum.auto()
     LINKED_POLICIES = enum.auto()
     INDEPENDENT_POLICIES = enum.auto()
-
-
-class ScenarioType(enum.IntEnum):
-    BLACKJACK = enum.auto()
-    CLIFF = enum.auto()
-    GAMBLER = enum.auto()
-    JACKS = enum.auto()
-    RACETRACK = enum.auto()
-    RANDOM_WALK = enum.auto()
-    WINDY = enum.auto()
-    MOUNTAIN_CAR = enum.auto()
 
 
 class ActionsList(enum.IntEnum):

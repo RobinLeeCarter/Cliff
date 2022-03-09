@@ -4,7 +4,9 @@ from abc import ABC, abstractmethod
 
 if TYPE_CHECKING:
     from mdp.controller import Controller
+    # from mdp.model.general.environment.general_environment import GeneralEnvironment
     from mdp.model.tabular.environment.tabular_environment import TabularEnvironment
+
     from mdp.model.tabular.agent.episode import Episode
     from mdp.model.breakdown.breakdown import Breakdown
 
