@@ -1,5 +1,6 @@
 from __future__ import annotations
 from abc import ABC, abstractmethod
+from types import NoneType
 from typing import Optional, TYPE_CHECKING
 
 if TYPE_CHECKING:
@@ -11,7 +12,7 @@ from mdp.controller import Controller
 
 
 class Scenario(ABC):
-    def __init__(self):
+    def __init__(self, **_ignored):
         # self._comparison_type: common.ComparisonType = comparison_type
         self._model: Model = self._create_model()
         self._view: View = self._create_view()

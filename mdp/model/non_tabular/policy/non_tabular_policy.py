@@ -17,6 +17,8 @@ Action = TypeVar('Action', bound=NonTabularAction)
 
 # specifically non-generic because policies can act in terms of non-specific actions and states
 class NonTabularPolicy(Generic[State, Action], ABC):
+    policy_type: common.PolicyType
+
     def __init__(self,
                  environment: NonTabularEnvironment[State, Action],
                  policy_parameters: common.PolicyParameters):

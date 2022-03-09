@@ -9,6 +9,7 @@ from mdp.model.tabular.algorithm.abstract.episodic_online_control import Episodi
 
 
 class Sarsa(EpisodicOnlineControl):
+    # TODO: Will this work in all cases? Could you have enum different based on different parameters only (or disallow?)
     algorithm_type: common.AlgorithmType = common.AlgorithmType.SARSA
     name: str = common.algorithm_name[algorithm_type]
 

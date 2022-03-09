@@ -13,10 +13,11 @@ from mdp import common
 from mdp.model.tabular.algorithm.abstract.algorithm import Algorithm
 from mdp.model.tabular.algorithm.abstract.episodic import Episodic
 from mdp.model.non_tabular.agent.episode import Episode
+from mdp.model.non_tabular.policy.policy_factory import PolicyFactory
 from mdp.model.non_tabular.policy.non_tabular_policy import NonTabularPolicy
 
 from mdp.model.general.algorithm import algorithm_factory
-from mdp.model.general.policy import policy_factory
+# from mdp.model.general.policy import policy_factory
 
 State = TypeVar('State', bound=NonTabularState)
 Action = TypeVar('Action', bound=NonTabularAction)
@@ -29,6 +30,7 @@ class Agent:
         self._environment: NonTabularEnvironment[State, Action] = environment
         self._verbose: bool = verbose
 
+        self._policy_factory: PolicyFactory = PolicyFactory[State, Action](self._environment)
         self._policy: Optional[NonTabularPolicy[State, Action]] = None
         self._behaviour_policy: Optional[NonTabularPolicy[State, Action]] = None     # if on-policy = self._policy
         self._dual_policy_relationship: Optional[common.DualPolicyRelationship] = None
@@ -81,15 +83,14 @@ class Agent:
 
     def apply_settings(self, settings: common.Settings):
         # sort out policies
-        primary_policy = policy_factory.policy_factory(self._environment, settings.policy_parameters)
+        primary_policy = self._policy_factory.create(settings.policy_parameters)
         self._dual_policy_relationship = settings.dual_policy_relationship
         if self._dual_policy_relationship == common.DualPolicyRelationship.SINGLE_POLICY:
             self._policy = primary_policy
             self._behaviour_policy = primary_policy
         elif self._dual_policy_relationship == common.DualPolicyRelationship.INDEPENDENT_POLICIES:
             self._policy = primary_policy
-            self._behaviour_policy = policy_factory.policy_factory(self._environment,
-                                                                   settings.behaviour_policy_parameters)
+            self._behaviour_policy = self._policy_factory.create(settings.behaviour_policy_parameters)
         elif self._dual_policy_relationship == common.DualPolicyRelationship.LINKED_POLICIES:
             self._policy = primary_policy.linked_policy     # typically the deterministic part we want to output
             self._behaviour_policy = primary_policy

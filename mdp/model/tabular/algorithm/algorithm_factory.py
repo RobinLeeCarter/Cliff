@@ -1,11 +1,13 @@
 from __future__ import annotations
-from typing import TYPE_CHECKING, Type
+from typing import TYPE_CHECKING, Type, TypeVar, Generic
 
 if TYPE_CHECKING:
     from mdp.model.tabular.environment.tabular_environment import TabularEnvironment
     from mdp.model.tabular.agent.agent import Agent
 from mdp import common
 from mdp.model.tabular.algorithm.abstract.algorithm import Algorithm
+from mdp.model.tabular.environment.tabular_state import TabularState
+from mdp.model.tabular.environment.tabular_action import TabularAction
 
 from mdp.model.tabular.algorithm.policy_evaluation.dp_policy_evaluation_v_deterministic\
     import DpPolicyEvaluationVDeterministic
@@ -38,14 +40,19 @@ from mdp.model.tabular.algorithm.control.q_learning import QLearning
 from mdp.model.tabular.algorithm.control.__register import register_control_algorithms
 
 
-class AlgorithmFactory:
-    def __init__(self, environment: TabularEnvironment, agent: Agent):
-        self._environment: TabularEnvironment = environment
-        self._agent: Agent = agent
-        a = common.AlgorithmType
-        self._algorithm_lookup: dict[a, Type[Algorithm]] = {}
-        register_control_algorithms(self.register)
+State = TypeVar('State', bound=TabularState)
+Action = TypeVar('Action', bound=TabularAction)
 
+
+class AlgorithmFactory(Generic[State, Action]):
+    def __init__(self, environment: TabularEnvironment[State, Action], agent: Agent):
+        self._environment: TabularEnvironment[State, Action] = environment
+        self._agent: Agent = agent
+
+        self._algorithm_lookup: dict[common.AlgorithmType, Type[Algorithm]] = {}
+        # register_control_algorithms(self.register)
+
+        a = common.AlgorithmType
         self._algorithm_lookup: dict[a, Type[Algorithm]] = {
             a.DP_POLICY_EVALUATION_Q_DETERMINISTIC: DpPolicyEvaluationQDeterministic,
             a.DP_POLICY_EVALUATION_Q_STOCHASTIC: DpPolicyEvaluationQStochastic,
@@ -76,5 +83,5 @@ class AlgorithmFactory:
 
     def create_algorithm(self, algorithm_parameters: common.Settings.algorithm_parameters) -> Algorithm:
         type_for_algorithm: Type[Algorithm] = self._algorithm_lookup[algorithm_parameters.algorithm_type]
-        algorithm: Algorithm = type_for_algorithm(self._environment, self._agent, algorithm_parameters)
+        algorithm: Algorithm = type_for_algorithm[State, Action](self._environment, self._agent, algorithm_parameters)
         return algorithm

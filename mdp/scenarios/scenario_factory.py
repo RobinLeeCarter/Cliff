@@ -1,8 +1,8 @@
 from __future__ import annotations
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Type
 
 if TYPE_CHECKING:
-    from mdp.scenario import Scenario as BaseScenario
+    from mdp.scenario import Scenario
 from mdp import common
 
 from mdp.scenarios.jacks.scenario.jacks_policy_evaluation_q import JacksPolicyEvaluationQ
@@ -30,61 +30,64 @@ from mdp.scenarios.cliff.scenario.cliff_episode import CliffEpisode
 
 from mdp.scenarios.windy.scenario.windy_timestep import WindyTimestep
 
+ScenarioLookup = dict[common.ComparisonType, Type[Scenario] | tuple[Type[Scenario], dict[str, object]]]
 
-def scenario_factory(comparison_type: common.ComparisonType) -> BaseScenario:
-    # TODO: consider changing to some clever dict that also stores args
-    # could also consider that this is not encapsulated in scenario
-    # dict could be built by scenario code perhaps
-    # or sceanario could be specified and passed on and then sub-scenario selected
-    # scenario_lookup: dict[common.ComparisonType, BaseScenario]
-    # args_lookup: dict[common.ComparisonType, tuple?, dict?]
-    ct = common.ComparisonType
-    if comparison_type == ct.JACKS_POLICY_EVALUATION_Q:
-        scenario = JacksPolicyEvaluationQ()
-    elif comparison_type == ct.JACKS_POLICY_EVALUATION_V:
-        scenario = JacksPolicyEvaluationV()
-    elif comparison_type == ct.JACKS_POLICY_IMPROVEMENT_Q:
-        scenario = JacksPolicyImprovementQ()
-    elif comparison_type == ct.JACKS_POLICY_IMPROVEMENT_V:
-        scenario = JacksPolicyImprovementV()
-    elif comparison_type == ct.JACKS_POLICY_ITERATION_Q:
-        scenario = JacksPolicyIterationQ()
-    elif comparison_type == ct.JACKS_POLICY_ITERATION_V:
-        scenario = JacksPolicyIterationV()
-    elif comparison_type == ct.JACKS_VALUE_ITERATION_Q:
-        scenario = JacksValueIterationQ()
-    elif comparison_type == ct.JACKS_VALUE_ITERATION_V:
-        scenario = JacksValueIterationV()
 
-    elif comparison_type == ct.BLACKJACK_CONTROL_ES:
-        scenario = BlackjackControlES()
-    elif comparison_type == ct.BLACKJACK_EVALUATION_Q:
-        scenario = BlackjackEvaluationQ()
-    elif comparison_type == ct.BLACKJACK_EVALUATION_V:
-        scenario = BlackjackEvaluationV()
+class ScenarioFactory:
+    def __init__(self):
+        ct = common.ComparisonType
+        self._lookup: ScenarioLookup = {
+            ct.JACKS_POLICY_EVALUATION_Q: JacksPolicyEvaluationQ,
+            ct.JACKS_POLICY_EVALUATION_V: JacksPolicyEvaluationV,
+            ct.JACKS_POLICY_IMPROVEMENT_Q: JacksPolicyImprovementQ,
+            ct.JACKS_POLICY_IMPROVEMENT_V: JacksPolicyImprovementV,
+            ct.JACKS_POLICY_ITERATION_Q: JacksPolicyIterationQ,
+            ct.JACKS_POLICY_ITERATION_V: JacksPolicyIterationV,
+            ct.JACKS_VALUE_ITERATION_Q: JacksValueIterationQ,
+            ct.JACKS_VALUE_ITERATION_V: JacksValueIterationV,
+            ct.BLACKJACK_CONTROL_ES: BlackjackControlES,
+            ct.BLACKJACK_EVALUATION_Q: BlackjackEvaluationQ,
+            ct.BLACKJACK_EVALUATION_V: BlackjackEvaluationV,
+            ct.GAMBLER_VALUE_ITERATION_V: GamblerValueIterationV,
+            ct.RACETRACK_EPISODE: RacetrackEpisode,
+            ct.RANDOM_WALK_EPISODE: RandomWalkEpisode,
+            ct.CLIFF_ALPHA_END: CliffAlphaEnd,
+            ct.CLIFF_ALPHA_START: CliffAlphaStart,
+            ct.CLIFF_EPISODE: CliffEpisode,
+            ct.WINDY_TIMESTEP: WindyTimestep,
+            ct.WINDY_TIMESTEP_RANDOM: (WindyTimestep, {"random_wind": True})
+        }
 
-    elif comparison_type == ct.GAMBLER_VALUE_ITERATION_V:
-        scenario = GamblerValueIterationV()
+    def create(self, comparison_type: common.ComparisonType) -> Scenario:
+        # result: Type[Scenario] | tuple[Type[Scenario], dict[str, object]] = self._lookup[comparison_type]
+        scenario_type: Type[Scenario]
+        kwargs: dict[str, object] = {}
 
-    elif comparison_type == ct.RACETRACK_EPISODE:
-        scenario = RacetrackEpisode()
+        match self._lookup[comparison_type]:
+            case type() as scenario_type:
+                pass
+            case type() as scenario_type, dict() as kwargs:
+                pass
+            case _:
+                raise Exception("scenario type / args lookup failed")
 
-    elif comparison_type == ct.RANDOM_WALK_EPISODE:
-        scenario = RandomWalkEpisode()
+        scenario: Scenario = scenario_type(**kwargs)
+        return scenario
 
-    elif comparison_type == ct.CLIFF_ALPHA_END:
-        scenario = CliffAlphaEnd()
-    elif comparison_type == ct.CLIFF_ALPHA_START:
-        scenario = CliffAlphaStart()
-    elif comparison_type == ct.CLIFF_EPISODE:
-        scenario = CliffEpisode()
 
-    elif comparison_type == ct.WINDY_TIMESTEP:
-        scenario = WindyTimestep(random_wind=False)
-    elif comparison_type == ct.WINDY_TIMESTEP_RANDOM:
-        scenario = WindyTimestep(random_wind=True)
-
-    else:
-        raise ValueError(comparison_type)
-    # environment_.build()
-    return scenario
+# def scenario_factory(comparison_type: common.ComparisonType) -> Scenario:
+#     # could also consider that this is not encapsulated in scenario
+#     # dict could be built by scenario code perhaps
+#     # or sceanario could be specified and passed on and then sub-scenario selected
+#     # scenario_lookup: dict[common.ComparisonType, BaseScenario]
+#     # args_lookup: dict[common.ComparisonType, tuple?, dict?]
+#     ct = common.ComparisonType
+#     scenario_type: Type[Scenario] = Scenario
+#
+#     kwargs: dict = {}
+#     if comparison_type == ct.WINDY_TIMESTEP_RANDOM:
+#         kwargs["random_wind"] = True
+#
+#     scenario: Scenario = scenario_type(**kwargs)
+#
+#     return scenario

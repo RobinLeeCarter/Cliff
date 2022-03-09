@@ -1,11 +1,15 @@
 from __future__ import annotations
+from typing import TYPE_CHECKING
 
-from mdp import common
-from mdp.scenarios import scenario_factory
+if TYPE_CHECKING:
+    from mdp import common
+    from mdp.scenario import Scenario
+from mdp.scenarios.scenario_factory import ScenarioFactory
 
 
 class Application:
     def __init__(self, comparison_type: common.ComparisonType):
-        self._scenario = scenario_factory.scenario_factory(comparison_type)
+        self._scenario_factory: ScenarioFactory = ScenarioFactory()
+        self._scenario: Scenario = self._scenario_factory.create(comparison_type)
         self._scenario.build()
         self._scenario.run()
