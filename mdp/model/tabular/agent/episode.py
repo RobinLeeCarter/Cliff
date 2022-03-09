@@ -7,19 +7,21 @@ if TYPE_CHECKING:
     from mdp.model.tabular.environment.tabular_environment import TabularEnvironment
 
 from mdp.model.tabular.agent import rsa
+from mdp.model.general.agent.general_episode import GeneralEpisode
 
 
-class Episode:
+class Episode(GeneralEpisode):
     """Just makes a record laid out in the standard way with Reward, State, Action for each _t"""
     def __init__(self,
                  environment: TabularEnvironment,
                  gamma: float,
                  step_callback: Optional[Callable[[], bool]] = None,
                  record_first_visits: bool = False):
-        self._environment = environment
-        self.gamma: float = gamma
-        self._step_callback: Optional[Callable[[], bool]] = step_callback
-        self.record_first_visits = record_first_visits
+        super().__init__(environment, gamma, step_callback, record_first_visits)
+        self._environment: TabularEnvironment = environment
+        # self.gamma: float = gamma
+        # self._step_callback: Optional[Callable[[], bool]] = step_callback
+        # self.record_first_visits = record_first_visits
 
         # R0=0, S0, A0, R1, S1, A1, R2 ... S(T-1), A(T-1), R(T), S(T), A(T)=-1
         self.trajectory: list[rsa.RSA] = []

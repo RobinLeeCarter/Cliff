@@ -1,14 +1,12 @@
 from __future__ import annotations
-from typing import Optional, TYPE_CHECKING
-from abc import ABC, abstractmethod
+from typing import Optional, TYPE_CHECKING, TypeVar
+from abc import abstractmethod
 
 if TYPE_CHECKING:
     from mdp.model.tabular.environment.tabular_environment import TabularEnvironment
     # from mdp.model.tabular.agent.episode import Episode
     from mdp.model.breakdown.breakdown import Breakdown
 
-import multiprocessing
-import utils
 from mdp import common
 # from mdp.scenarios.factory import environment_factory
 from mdp.model.tabular.agent.agent import Agent
@@ -16,7 +14,12 @@ from mdp.model.breakdown import breakdown_factory
 from mdp.model.trainer.trainer import Trainer
 from mdp.model.trainer.parallel_trainer import ParallelTrainer
 
-from mdp.model.model import Model
+from mdp.model.general.model import Model
+from mdp.model.tabular.environment.tabular_state import TabularState
+from mdp.model.tabular.environment.tabular_action import TabularAction
+
+State = TypeVar('State', bound=TabularState)
+Action = TypeVar('Action', bound=TabularAction)
 
 
 class TabularModel(Model):
@@ -28,31 +31,12 @@ class TabularModel(Model):
         # self.trainer: Optional[Trainer] = None
         # self.parallel_trainer: Optional[ParallelTrainer] = None
 
-    def _build(self):
-        # different for each scenario and environment_parameters
-        self.environment: TabularEnvironment = self._create_environment(self._comparison.environment_parameters)
-        self.environment.build()
-        # self.environment = environment_factory.environment_factory(self._comparison.environment_parameters)
-
-        # create agent (and it will create the algorithm and the policy when it is given Settings)
-        self.agent = Agent(self.environment)
-
-        # breakdowns themselves need comparison in current implementation so breakdown_parameters is not passed in
-        self.breakdown: Optional[Breakdown] = breakdown_factory.breakdown_factory(self._comparison)
-        self.trainer: Trainer = Trainer(
-            agent_=self.agent,
-            breakdown_=self.breakdown,
-            model_step_callback=self._display_step,
-            verbose=False
-        )
-        if self.breakdown:
-            self.breakdown.set_trainer(self.trainer)
-        if self._comparison.settings_list_multiprocessing != common.ParallelContextType.NONE:
-            self.parallel_trainer = ParallelTrainer(self.trainer, self._comparison.settings_list_multiprocessing)
-
     @abstractmethod
-    def _create_environment(self, environment_parameters: common.EnvironmentParameters) -> TabularEnvironment:
+    def _create_environment(self, environment_parameters: common.EnvironmentParameters):
         pass
+
+    def _create_agent(self):
+        self.agent: Agent = Agent(self.environment)
 
     # def switch_to_target_policy(self):
     #     # if self.comparison.comparison_settings.dual_policy_relationship in \

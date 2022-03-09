@@ -37,7 +37,7 @@ from mdp.model.tabular.algorithm.control.expected_sarsa import ExpectedSarsa
 from mdp.model.tabular.algorithm.control.sarsa import Sarsa
 from mdp.model.tabular.algorithm.control.q_learning import QLearning
 
-from mdp.model.tabular.algorithm.control.__register import register_control_algorithms
+# from mdp.model.tabular.algorithm.control.__register import register_control_algorithms
 
 
 State = TypeVar('State', bound=TabularState)

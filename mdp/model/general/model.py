@@ -4,9 +4,8 @@ from abc import ABC, abstractmethod
 
 if TYPE_CHECKING:
     from mdp.controller import Controller
-    # from mdp.model.general.environment.general_environment import GeneralEnvironment
-    from mdp.model.tabular.environment.tabular_environment import TabularEnvironment
-
+    from mdp.model.general.environment.general_environment import GeneralEnvironment
+    from mdp.model.general.agent.general_agent import GeneralAgent
     from mdp.model.tabular.agent.episode import Episode
     from mdp.model.breakdown.breakdown import Breakdown
 
@@ -14,10 +13,16 @@ import multiprocessing
 import utils
 from mdp import common
 # from mdp.scenarios.factory import environment_factory
-from mdp.model.tabular.agent.agent import Agent
+# from mdp.model.tabular.agent.agent import Agent
 from mdp.model.breakdown import breakdown_factory
 from mdp.model.trainer.trainer import Trainer
 from mdp.model.trainer.parallel_trainer import ParallelTrainer
+
+# from mdp.model.general.environment.general_state import GeneralState
+# from mdp.model.general.environment.general_action import GeneralAction
+#
+# State = TypeVar('State', bound=GeneralState)
+# Action = TypeVar('Action', bound=GeneralAction)
 
 
 class Model(ABC):
@@ -25,8 +30,8 @@ class Model(ABC):
         self.verbose: bool = verbose
         self._controller: Optional[Controller] = None
         self._comparison: Optional[common.Comparison] = None
-        self.environment: Optional[TabularEnvironment] = None
-        self.agent: Optional[Agent] = None
+        self.environment: Optional[GeneralEnvironment] = None
+        self.agent: Optional[GeneralAgent] = None
         self.breakdown: Optional[Breakdown] = None
         self.trainer: Optional[Trainer] = None
         self.parallel_trainer: Optional[ParallelTrainer] = None
@@ -38,10 +43,35 @@ class Model(ABC):
 
     def build(self, comparison: common.Comparison):
         self._comparison: common.Comparison = comparison
-        self._build()
+
+        # different for each scenario and environment_parameters
+        self._create_environment(self._comparison.environment_parameters)
+        self.environment.build()
+        # self.environment = environment_factory.environment_factory(self._comparison.environment_parameters)
+
+        # create agent (and it will create the algorithm and the policy when it is given Settings)
+        self._create_agent()
+        # self.agent: Agent = Agent[State, Action](self.environment)
+
+        # breakdowns themselves need comparison in current implementation so breakdown_parameters is not passed in
+        self.breakdown: Optional[Breakdown] = breakdown_factory.breakdown_factory(self._comparison)
+        self.trainer: Trainer = Trainer(
+            agent_=self.agent,
+            breakdown_=self.breakdown,
+            model_step_callback=self._display_step,
+            verbose=False
+        )
+        if self.breakdown:
+            self.breakdown.set_trainer(self.trainer)
+        if self._comparison.settings_list_multiprocessing != common.ParallelContextType.NONE:
+            self.parallel_trainer = ParallelTrainer(self.trainer, self._comparison.settings_list_multiprocessing)
 
     @abstractmethod
-    def _build(self):
+    def _create_environment(self, environment_parameters: common.EnvironmentParameters):
+        pass
+
+    @abstractmethod
+    def _create_agent(self):
         pass
 
     def run(self):

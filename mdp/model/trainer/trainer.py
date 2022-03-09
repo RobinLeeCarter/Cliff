@@ -3,28 +3,31 @@ from typing import TYPE_CHECKING, Optional, Callable
 import multiprocessing
 
 if TYPE_CHECKING:
-    from mdp.model.tabular.agent.agent import Agent
-    from mdp.model.tabular.agent.episode import Episode
+    from mdp.model.general.agent.general_agent import GeneralAgent
+    from mdp.model.general.agent.general_episode import GeneralEpisode
     from mdp.model.breakdown.breakdown import Breakdown
 from mdp import common
+from mdp.model.tabular.policy.tabular_policy import TabularPolicy
+
 from mdp.model.tabular.algorithm.abstract.algorithm import Algorithm
 from mdp.model.tabular.algorithm.abstract.episodic import Episodic
 from mdp.model.tabular.algorithm.abstract.dynamic_programming import DynamicProgramming
+
 from mdp.model.trainer.parallel_runner import ParallelRunner
 
 
 class Trainer:
     def __init__(self,
-                 agent_: Agent,
+                 agent_: GeneralAgent,
                  breakdown_: Optional[Breakdown],
-                 model_step_callback: Optional[Callable[[Optional[Episode]], None]] = None,
+                 model_step_callback: Optional[Callable[[Optional[GeneralEpisode]], None]] = None,
                  verbose: bool = False
                  ):
-        self._agent: Agent = agent_
+        self._agent: GeneralAgent = agent_
         self._breakdown: Optional[Breakdown] = breakdown_
         self.settings: Optional[common.Settings] = None
 
-        self._model_step_callback: Optional[Callable[[Optional[Episode]], None]] = model_step_callback
+        self._model_step_callback: Optional[Callable[[Optional[GeneralEpisode]], None]] = model_step_callback
         self._verbose = verbose
         self._cont: bool = True
 
@@ -39,11 +42,11 @@ class Trainer:
         return self._breakdown
 
     @property
-    def episode(self) -> Episode:
+    def episode(self) -> GeneralEpisode:
         return self._agent.episode
 
     @property
-    def agent(self) -> Agent:
+    def agent(self) -> GeneralAgent:
         return self._agent
 
     def disable_step_callback(self):
@@ -55,12 +58,20 @@ class Trainer:
         self._agent.apply_settings(self.settings)
 
         algorithm: Algorithm = self._agent.algorithm
-        if isinstance(algorithm, Episodic):
-            self._train_episodic()
-        elif isinstance(algorithm, DynamicProgramming):
-            self._train_dynamic_programming()
-        else:
-            raise NotImplementedError
+        match algorithm:
+            case Episodic():
+                self._train_episodic()
+            case DynamicProgramming():
+                self._train_dynamic_programming()
+            case _:
+                raise NotImplementedError
+
+        # if isinstance(algorithm, Episodic):
+        #     self._train_episodic()
+        # elif isinstance(algorithm, DynamicProgramming):
+        #     self._train_dynamic_programming()
+        # else:
+        #     raise NotImplementedError
 
         if settings.algorithm_parameters.derive_v_from_q_as_final_step:
             algorithm.derive_v_from_q()
@@ -169,7 +180,9 @@ class Trainer:
         if rp.return_algorithm_title:
             result.algorithm_title = self._agent.algorithm.title
         if rp.return_policy_vector:
-            result.policy_vector = self._agent.target_policy.get_policy_vector()
+            policy = self._agent.target_policy
+            if isinstance(policy, TabularPolicy):
+                result.policy_vector = policy.get_policy_vector()
         if rp.return_v_vector and self._agent.algorithm.V:
             result.v_vector = self._agent.algorithm.V.vector
         if rp.return_q_matrix and self._agent.algorithm.Q:

@@ -1,5 +1,5 @@
 from __future__ import annotations
-from typing import Optional, TYPE_CHECKING, Callable, TypeVar
+from typing import Optional, TYPE_CHECKING, Callable, TypeVar, Generic
 
 # import math
 
@@ -19,37 +19,37 @@ from mdp.model.non_tabular.policy.non_tabular_policy import NonTabularPolicy
 from mdp.model.general.algorithm import algorithm_factory
 # from mdp.model.general.policy import policy_factory
 
+from mdp.model.general.agent.general_agent import GeneralAgent
+
 State = TypeVar('State', bound=NonTabularState)
 Action = TypeVar('Action', bound=NonTabularAction)
 
 
-class Agent:
+class Agent(Generic[State, Action], GeneralAgent):
     def __init__(self,
                  environment: NonTabularEnvironment[State, Action],
                  verbose: bool = False):
+        super().__init__(environment, verbose)
         self._environment: NonTabularEnvironment[State, Action] = environment
-        self._verbose: bool = verbose
 
         self._policy_factory: PolicyFactory = PolicyFactory[State, Action](self._environment)
         self._policy: Optional[NonTabularPolicy[State, Action]] = None
         self._behaviour_policy: Optional[NonTabularPolicy[State, Action]] = None     # if on-policy = self._policy
-        self._dual_policy_relationship: Optional[common.DualPolicyRelationship] = None
+        # self._dual_policy_relationship: Optional[common.DualPolicyRelationship] = None
 
         self._algorithm: Optional[Algorithm] = None
-        self._episode: Optional[Episode] = None
-        self._record_first_visits: bool = False
-        self._episode_length_timeout: Optional[int] = None
+        self._episode: Optional[Episode[State, Action]] = None
+        # self._record_first_visits: bool = False
+        # self._episode_length_timeout: Optional[int] = None
 
         # not None to avoid unboxing cost of Optional
-        self.gamma: float = 1.0
-        self.t: int = 0
+        # self.gamma: float = 1.0
+        # self.t: int = 0
 
         # always refers to values for time-step t
+        self.r: float = 0.0
         self.state: Optional[State] = None
         self.action: Optional[Action] = None
-
-        self.r: float = 0.0
-        # self.is_terminal: bool = False  # stored for performance
 
         # always refers to values for time-step t-1
         self.prev_r: float = 0.0
@@ -198,6 +198,9 @@ class Agent:
         if self.state.is_terminal:
             # add terminating step here as should not select another action
             self._episode.add_rsa(self.r, self.state, self.action)
+
+    def apply_result(self, result: common.Result):
+        pass
 
     def _print_step(self):
         print(f"t={self.t} \t state = {self.state} \t action = {self.action}")

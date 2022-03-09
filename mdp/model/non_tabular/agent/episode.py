@@ -8,22 +8,24 @@ from mdp.model.non_tabular.agent.rsa import RSA
 
 from mdp.model.non_tabular.environment.non_tabular_state import NonTabularState
 from mdp.model.non_tabular.environment.non_tabular_action import NonTabularAction
+from mdp.model.general.agent.general_episode import GeneralEpisode
 
 State = TypeVar('State', bound=NonTabularState)
 Action = TypeVar('Action', bound=NonTabularAction)
 
 
-class Episode(Generic[State, Action]):
+class Episode(Generic[State, Action], GeneralEpisode):
     """Just makes a record laid out in the standard way with Reward, State, Action for each _t"""
     def __init__(self,
                  environment: NonTabularEnvironment[State, Action],
                  gamma: float,
                  step_callback: Optional[Callable[[], bool]] = None,
                  record_first_visits: bool = False):
+        super().__init__(environment, gamma, step_callback, record_first_visits)
         self._environment: NonTabularEnvironment = environment
-        self.gamma: float = gamma
-        self._step_callback: Optional[Callable[[], bool]] = step_callback
-        self.record_first_visits = record_first_visits
+        # self.gamma: float = gamma
+        # self._step_callback: Optional[Callable[[], bool]] = step_callback
+        # self.record_first_visits = record_first_visits
 
         # R0=0, S0, A0, R1, S1, A1, R2 ... S(T-1), A(T-1), R(T), S(T), A(T)=-1
         self.trajectory: list[RSA] = []

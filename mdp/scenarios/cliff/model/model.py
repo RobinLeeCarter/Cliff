@@ -16,5 +16,5 @@ class Model(model.Model):
         self._controller: Optional[Controller] = self._controller
         self.environment: Optional[Environment] = self.environment
 
-    def _create_environment(self, environment_parameters: EnvironmentParameters) -> Environment:
-        return Environment(environment_parameters)
+    def _create_environment(self, environment_parameters: EnvironmentParameters):
+        self.environment: Environment = Environment(environment_parameters)

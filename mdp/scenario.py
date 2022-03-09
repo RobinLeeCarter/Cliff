@@ -1,12 +1,11 @@
 from __future__ import annotations
 from abc import ABC, abstractmethod
-from types import NoneType
 from typing import Optional, TYPE_CHECKING
 
 if TYPE_CHECKING:
     from mdp.model.general.environment.general_environment import GeneralEnvironment
 from mdp import common
-from mdp.model.model import Model
+from mdp.model.general.model import Model
 from mdp.view.view import View
 from mdp.controller import Controller
 
@@ -29,18 +28,21 @@ class Scenario(ABC):
         self._controller.run()
         self._controller.output()
 
+    @abstractmethod
     def _create_model(self) -> Model:
-        return Model()
+        ...
 
+    @abstractmethod
     def _create_view(self) -> View:
-        return View()
+        ...
 
+    @abstractmethod
     def _create_controller(self) -> Controller:
-        return Controller()
+        ...
 
     @abstractmethod
     def _create_comparison(self) -> common.Comparison:
-        pass
+        ...
 
     @property
     def environment(self) -> GeneralEnvironment:

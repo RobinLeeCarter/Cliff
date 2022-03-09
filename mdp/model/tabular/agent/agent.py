@@ -4,8 +4,8 @@ from typing import Optional, TYPE_CHECKING, Callable
 import math
 
 if TYPE_CHECKING:
-    from mdp.model.general.environment.general_state import GeneralState
-    from mdp.model.general.environment.general_action import GeneralAction
+    from mdp.model.tabular.environment.tabular_state import TabularState
+    from mdp.model.tabular.environment.tabular_action import TabularAction
     from mdp.model.tabular.environment.tabular_environment import TabularEnvironment
 from mdp import common
 # renamed to avoid name conflicts
@@ -16,27 +16,29 @@ from mdp.model.tabular.policy.tabular_policy import TabularPolicy
 from mdp.model.tabular.algorithm.algorithm_factory import AlgorithmFactory
 from mdp.model.general.policy import policy_factory
 
+from mdp.model.general.agent.general_agent import GeneralAgent
 
-class Agent:
+
+class Agent(GeneralAgent):
     def __init__(self,
-                 environment_: TabularEnvironment,
+                 environment: TabularEnvironment,
                  verbose: bool = False):
-        self._environment: TabularEnvironment = environment_
-        self._verbose: bool = verbose
+        super().__init__(environment, verbose)
+        self._environment: TabularEnvironment = environment
 
         self._policy: Optional[TabularPolicy] = None
         self._behaviour_policy: Optional[TabularPolicy] = None     # if on-policy = self._policy
-        self._dual_policy_relationship: Optional[common.DualPolicyRelationship] = None
+        # self._dual_policy_relationship: Optional[common.DualPolicyRelationship] = None
 
         self._algorithm_factory: AlgorithmFactory = AlgorithmFactory(environment=self._environment, agent=self)
         self._algorithm: Optional[Algorithm] = None
         self._episode: Optional[Episode] = None
-        self._record_first_visits: bool = False
-        self._episode_length_timeout: Optional[int] = None
+        # self._record_first_visits: bool = False
+        # self._episode_length_timeout: Optional[int] = None
 
         # not None to avoid unboxing cost of Optional
-        self.gamma: float = 1.0
-        self.t: int = 0
+        # self.gamma: float = 1.0
+        # self.t: int = 0
 
         # always refers to values for time-step t
         self.r: float = 0.0
@@ -138,7 +140,7 @@ class Agent:
         if self.t == episode_length_timeout:
             print("Warning: Failed to terminate")
         if self._verbose:
-            state: GeneralState = self._environment.states[self.s]
+            state: TabularState = self._environment.states[self.s]
             print(f"t={self.t} \t state = {state} (terminal)")
         return self._episode
 
@@ -182,8 +184,8 @@ class Agent:
         # is_terminal = self._environment.states[self.s].is_terminal
         self._episode.add_rsa(self.r, self.s, self.a, self.is_terminal)
         if self._verbose:
-            state: GeneralState = self._environment.states[self.s]
-            action: Optional[GeneralAction]
+            state: TabularState = self._environment.states[self.s]
+            action: Optional[TabularAction]
             if self.a == -1:
                 action = None
             else:
@@ -223,8 +225,8 @@ class Agent:
             self._algorithm.Q.set_matrix(result.q_matrix)
 
     def _print_step(self):
-        state: GeneralState = self._environment.states[self.s]
-        action: Optional[GeneralAction]
+        state: TabularState = self._environment.states[self.s]
+        action: Optional[TabularAction]
         if self.a == -1:
             action = None
         else:
