@@ -8,7 +8,7 @@ from mdp.scenario.random_walk.controller import Controller
 from mdp.scenario.random_walk.view.view import View
 
 
-class Scenario(GeneralScenario, ABC):
+class Scenario(GeneralScenario[Model, View, Controller], ABC):
     # def __init__(self):
     #     super().__init__()
     #     self._environment_parameters = EnvironmentParameters(

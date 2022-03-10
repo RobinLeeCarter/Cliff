@@ -9,7 +9,7 @@ from mdp.scenario.blackjack.model.model import Model
 from mdp.scenario.blackjack.view.view import View
 
 
-class Scenario(GeneralScenario, ABC):
+class Scenario(GeneralScenario[Model, View, Controller], ABC):
     def __init__(self):
         super().__init__()
         self._environment_parameters = EnvironmentParameters(

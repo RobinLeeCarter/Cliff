@@ -6,7 +6,7 @@ from mdp.scenario.blackjack.scenario.comparison import Comparison
 
 
 class BlackjackEvaluationV(Scenario):
-    def _create_comparison(self):
+    def _create_comparison(self) -> Comparison:
         return Comparison(
             environment_parameters=self._environment_parameters,
             comparison_settings=self._comparison_settings,

@@ -9,7 +9,7 @@ from mdp.scenario.jacks.model.model import Model
 from mdp.scenario.jacks.view.view import View
 
 
-class Scenario(GeneralScenario, ABC):
+class Scenario(GeneralScenario[Model, View, Controller], ABC):
     def __init__(self):
         super().__init__()
         self._max_cars: int = 20      # problem statement = 20

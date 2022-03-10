@@ -3,8 +3,9 @@ from __future__ import annotations
 
 from mdp.common import Multinoulli
 from mdp import common
-from mdp.scenario import scenario_factory
 
+from mdp.scenario.scenario_factory import ScenarioFactory
+from mdp.scenario.jacks.scenario.scenario import Scenario
 from mdp.scenario.jacks.model.state import State
 from mdp.scenario.jacks.model.action import Action
 from mdp.scenario.jacks.model.environment import Environment
@@ -13,10 +14,13 @@ from mdp.scenario.jacks.model.dynamics.dynamics import Dynamics
 Response = tuple[float, State]
 
 
-scenario = scenario_factory.scenario_factory(common.ComparisonType.JACKS_POLICY_ITERATION_V)
+scenario_factory = ScenarioFactory()
+scenario = scenario_factory.create(common.ComparisonType.JACKS_POLICY_ITERATION_V)
+assert isinstance(scenario, Scenario)
 scenario.build()
 
-environment: Environment = scenario.environment     # type: ignore
+# noinspection PyProtectedMember
+environment: Environment = scenario._model.environment
 assert isinstance(environment, Environment)
 
 # comparison = jacks_policy_iteration_v()

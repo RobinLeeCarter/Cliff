@@ -1,17 +1,21 @@
 from __future__ import annotations
 
 from mdp import common
-from mdp.scenario import scenario_factory
+from mdp.scenario.scenario_factory import ScenarioFactory
+from mdp.scenario.blackjack.scenario.scenario import Scenario
 from mdp.scenario.blackjack.model.state import State
 from mdp.scenario.blackjack.model.action import Action
 from mdp.scenario.blackjack.model.environment import Environment
 
 
 def blackjack_test() -> bool:
-    scenario = scenario_factory.scenario_factory(common.ComparisonType.BLACKJACK_EVALUATION_V)
+    scenario_factory = ScenarioFactory()
+    scenario = scenario_factory.create(common.ComparisonType.BLACKJACK_EVALUATION_V)
+    assert isinstance(scenario, Scenario)
     scenario.build()
 
-    environment: Environment = scenario.environment     # type: ignore
+    # noinspection PyProtectedMember
+    environment: Environment = scenario._model.environment
     assert isinstance(environment, Environment)
 
     # print("States...")

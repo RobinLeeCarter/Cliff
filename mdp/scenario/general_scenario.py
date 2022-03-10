@@ -1,9 +1,7 @@
 from __future__ import annotations
 from abc import ABC, abstractmethod
-from typing import Optional, TYPE_CHECKING, Generic, TypeVar
+from typing import Optional, Generic, TypeVar
 
-if TYPE_CHECKING:
-    from mdp.model.general.environment.general_environment import GeneralEnvironment
 from mdp import common
 from mdp.model.general.general_model import GeneralModel
 from mdp.view.general_view import GeneralView
@@ -13,7 +11,6 @@ from mdp.general_controller import GeneralController
 Model = TypeVar('Model', bound=GeneralModel)
 View = TypeVar('View', bound=GeneralView)
 Controller = TypeVar('Controller', bound=GeneralController)
-# Environment = TypeVar('Environment', bound=GeneralEnvironment)
 
 
 class GeneralScenario(Generic[Model, View, Controller], ABC):
@@ -50,15 +47,14 @@ class GeneralScenario(Generic[Model, View, Controller], ABC):
     def _create_comparison(self) -> common.Comparison:
         ...
 
-    @property
-    def environment(self) -> GeneralEnvironment:
-        environment = self._model.environment
-        if environment is None:
-            raise Exception("Environment is None")
-        else:
-            return self._model.environment
-
     # @abstractmethod
     # def _get_comparison(self, comparison_type: common.ComparisonType) -> common.Comparison:
     #     pass
 
+    # @property
+    # def environment(self) -> GeneralEnvironment:
+    #     environment = self._model.environment
+    #     if environment is None:
+    #         raise Exception("Environment is None")
+    #     else:
+    #         return self._model.environment

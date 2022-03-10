@@ -7,7 +7,7 @@ from mdp.scenario.windy.model.model import Model
 from mdp.scenario.windy.view.view import View
 
 
-class Scenario(GeneralScenario, ABC):
+class Scenario(GeneralScenario[Model, View, Controller], ABC):
     def __init__(self, random_wind: bool = False):
         super().__init__()
         self._random_wind: bool = random_wind

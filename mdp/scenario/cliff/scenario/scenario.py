@@ -7,7 +7,7 @@ from mdp.scenario.cliff.model.model import Model
 from mdp.scenario.cliff.view.view import View
 
 
-class Scenario(GeneralScenario, ABC):
+class Scenario(GeneralScenario[Model, View, Controller], ABC):
     def _create_model(self) -> Model:
         return Model()
 

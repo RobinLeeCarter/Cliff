@@ -8,7 +8,7 @@ from mdp.scenario.racetrack.controller import Controller
 from mdp.scenario.racetrack.view.view import View
 
 
-class Scenario(GeneralScenario, ABC):
+class Scenario(GeneralScenario[Model, View, Controller], ABC):
     def _create_model(self) -> Model:
         return Model()
 
