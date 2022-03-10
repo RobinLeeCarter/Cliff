@@ -1,5 +1,5 @@
 from __future__ import annotations
-from typing import Optional, TYPE_CHECKING, TypeVar
+from typing import Optional, TYPE_CHECKING  # , TypeVar
 from abc import abstractmethod
 
 if TYPE_CHECKING:
@@ -14,15 +14,15 @@ from mdp.model.breakdown import breakdown_factory
 from mdp.model.trainer.trainer import Trainer
 from mdp.model.trainer.parallel_trainer import ParallelTrainer
 
-from mdp.model.general.model import Model
-from mdp.model.tabular.environment.tabular_state import TabularState
-from mdp.model.tabular.environment.tabular_action import TabularAction
+from mdp.model.general.general_model import GeneralModel
+# from mdp.model.tabular.environment.tabular_state import TabularState
+# from mdp.model.tabular.environment.tabular_action import TabularAction
+#
+# State = TypeVar('State', bound=TabularState)
+# Action = TypeVar('Action', bound=TabularAction)
 
-State = TypeVar('State', bound=TabularState)
-Action = TypeVar('Action', bound=TabularAction)
 
-
-class TabularModel(Model):
+class TabularModel(GeneralModel):
     def __init__(self, verbose: bool = False):
         super().__init__(verbose)
         self.environment: Optional[TabularEnvironment] = None

@@ -1,11 +1,11 @@
 from __future__ import annotations
 from typing import Optional
 
-from mdp.view import view
+from mdp.view.general_view import GeneralView
 from mdp.scenario.position_move.view.grid_view import GridView
 
 
-class View(view.View):
+class View(GeneralView):
     def __init__(self):
         super().__init__()
         self.grid_view: Optional[GridView] = self.grid_view

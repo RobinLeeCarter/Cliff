@@ -7,10 +7,10 @@ if TYPE_CHECKING:
     from mdp.scenario.position_move.view.view import View
 
 from mdp import common
-from mdp import controller
+from mdp.general_controller import GeneralController
 
 
-class Controller(controller.Controller, ABC):
+class Controller(GeneralController, ABC):
     def __init__(self):
         super().__init__()
         self._model: Optional[Model] = self._model

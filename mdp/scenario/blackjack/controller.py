@@ -6,10 +6,10 @@ if TYPE_CHECKING:
     from mdp.scenario.blackjack.view.view import View
 
 from mdp import common
-from mdp import controller
+from mdp.general_controller import GeneralController
 
 
-class Controller(controller.Controller):
+class Controller(GeneralController):
     def __init__(self):
         super().__init__()
         self._model: Optional[Model] = self._model

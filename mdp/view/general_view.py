@@ -7,16 +7,16 @@ import pygame.freetype
 
 if TYPE_CHECKING:
     from mdp import common
-    from mdp.controller import Controller
+    from mdp.general_controller import GeneralController
 
 from mdp.view.graph import Graph
 from mdp.view.graph3d import Graph3D
 from mdp.view.grid_view import GridView
 
 
-class View(ABC):
+class GeneralView(ABC):
     def __init__(self):
-        self._controller: Optional[Controller] = None
+        self._controller: Optional[GeneralController] = None
         self._comparison: Optional[common.Comparison] = None
 
         pygame_pass, pygame_fail = pygame.init()
@@ -27,8 +27,8 @@ class View(ABC):
         self.graph3d: Optional[Graph3D] = None
         self.grid_view: Optional[GridView] = None
 
-    def set_controller(self, controller_: Controller):
-        self._controller: Controller = controller_
+    def set_controller(self, controller_: GeneralController):
+        self._controller: GeneralController = controller_
 
     def build(self, comparison: common.Comparison):
         self._comparison = comparison

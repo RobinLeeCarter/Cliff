@@ -4,11 +4,11 @@ from typing import TYPE_CHECKING, Optional
 if TYPE_CHECKING:
     from mdp.scenario.racetrack.controller import Controller
 
-from mdp.view import view
+from mdp.view.general_view import GeneralView
 from mdp.scenario.position.view.grid_view import GridView
 
 
-class View(view.View):
+class View(GeneralView):
     def __init__(self):
         super().__init__()
         self._controller: Optional[Controller] = self._controller

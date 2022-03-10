@@ -3,7 +3,7 @@ from typing import Optional, TYPE_CHECKING
 from abc import ABC, abstractmethod
 
 if TYPE_CHECKING:
-    from mdp.controller import Controller
+    from mdp.general_controller import GeneralController
     from mdp.model.general.environment.general_environment import GeneralEnvironment
     from mdp.model.general.agent.general_agent import GeneralAgent
     from mdp.model.tabular.agent.episode import Episode
@@ -25,10 +25,10 @@ from mdp.model.trainer.parallel_trainer import ParallelTrainer
 # Action = TypeVar('Action', bound=GeneralAction)
 
 
-class Model(ABC):
+class GeneralModel(ABC):
     def __init__(self, verbose: bool = False):
         self.verbose: bool = verbose
-        self._controller: Optional[Controller] = None
+        self._controller: Optional[GeneralController] = None
         self._comparison: Optional[common.Comparison] = None
         self.environment: Optional[GeneralEnvironment] = None
         self.agent: Optional[GeneralAgent] = None
@@ -38,8 +38,8 @@ class Model(ABC):
 
         self._cont: bool = True
 
-    def set_controller(self, controller_: Controller):
-        self._controller: Controller = controller_
+    def set_controller(self, controller_: GeneralController):
+        self._controller: GeneralController = controller_
 
     def build(self, comparison: common.Comparison):
         self._comparison: common.Comparison = comparison

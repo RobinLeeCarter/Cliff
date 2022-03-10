@@ -1,5 +1,5 @@
 from __future__ import annotations
-from typing import Optional, TYPE_CHECKING, TypeVar
+from typing import Optional, TYPE_CHECKING, TypeVar, Generic
 from abc import abstractmethod
 
 if TYPE_CHECKING:
@@ -14,7 +14,7 @@ from mdp.model.breakdown import breakdown_factory
 from mdp.model.trainer.trainer import Trainer
 from mdp.model.trainer.parallel_trainer import ParallelTrainer
 
-from mdp.model.general.model import Model
+from mdp.model.general.general_model import GeneralModel
 from mdp.model.non_tabular.environment.non_tabular_state import NonTabularState
 from mdp.model.non_tabular.environment.non_tabular_action import NonTabularAction
 
@@ -22,7 +22,7 @@ State = TypeVar('State', bound=NonTabularState)
 Action = TypeVar('Action', bound=NonTabularAction)
 
 
-class NonTabularModel(Model):
+class NonTabularModel(Generic[State, Action], GeneralModel):
     def __init__(self, verbose: bool = False):
         super().__init__(verbose)
         self.environment: Optional[NonTabularEnvironment] = None

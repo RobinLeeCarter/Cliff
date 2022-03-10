@@ -3,20 +3,20 @@ from typing import TYPE_CHECKING, Optional
 
 if TYPE_CHECKING:
     from mdp.model.general.agent.general_episode import GeneralEpisode
-    from mdp.model.general.model import Model
-    from mdp.view.view import View
+    from mdp.model.general.general_model import GeneralModel
+    from mdp.view.general_view import GeneralView
     from mdp import common
 
 
-class Controller:
+class GeneralController:
     def __init__(self):
-        self._model: Optional[Model] = None
-        self._view: Optional[View] = None
+        self._model: Optional[GeneralModel] = None
+        self._view: Optional[GeneralView] = None
         self._comparison: Optional[common.Comparison] = None
 
-    def link_mvc(self, model: Model, view: View):
-        self._model: Model = model
-        self._view: View = view
+    def link_mvc(self, model: GeneralModel, view: GeneralView):
+        self._model: GeneralModel = model
+        self._view: GeneralView = view
         self._model.set_controller(self)
         self._view.set_controller(self)
 

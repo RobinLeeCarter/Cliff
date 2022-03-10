@@ -1,16 +1,22 @@
 from __future__ import annotations
 from abc import ABC, abstractmethod
-from typing import Optional, TYPE_CHECKING
+from typing import Optional, TYPE_CHECKING, Generic, TypeVar
 
 if TYPE_CHECKING:
     from mdp.model.general.environment.general_environment import GeneralEnvironment
 from mdp import common
-from mdp.model.general.model import Model
-from mdp.view.view import View
-from mdp.controller import Controller
+from mdp.model.general.general_model import GeneralModel
+from mdp.view.general_view import GeneralView
+from mdp.general_controller import GeneralController
 
 
-class GeneralScenario(ABC):
+Model = TypeVar('Model', bound=GeneralModel)
+View = TypeVar('View', bound=GeneralView)
+Controller = TypeVar('Controller', bound=GeneralController)
+# Environment = TypeVar('Environment', bound=GeneralEnvironment)
+
+
+class GeneralScenario(Generic[Model, View, Controller], ABC):
     def __init__(self, **_ignored):
         # self._comparison_type: common.ComparisonType = comparison_type
         self._model: Model = self._create_model()
