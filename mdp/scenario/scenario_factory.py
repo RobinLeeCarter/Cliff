@@ -59,16 +59,16 @@ class ScenarioFactory:
 
     def create(self, scenario_type: common.ScenarioType) -> GeneralScenario:
         # result: Type[Scenario] | tuple[Type[Scenario], dict[str, object]] = self._lookup[scenario_type]
-        scenario_type: Type[GeneralScenario]
+        type_of_scenario: Type[GeneralScenario]
         kwargs: dict[str, any] = {}
 
         match self._lookup[scenario_type]:
-            case type() as scenario_type:
+            case type() as type_of_scenario:
                 pass
-            case type() as scenario_type, dict() as kwargs:
+            case type() as type_of_scenario, dict() as kwargs:
                 pass
             case _:
                 raise Exception("scenario type / args lookup failed")
 
-        scenario: GeneralScenario = scenario_type(**kwargs)
+        scenario: GeneralScenario = type_of_scenario(**kwargs)
         return scenario

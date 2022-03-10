@@ -9,18 +9,15 @@ from mdp.model.tabular.algorithm.abstract.episodic_online_control import Episodi
 
 
 class Sarsa(EpisodicOnlineControl):
-    # TODO: Will this work in all cases? Could you have enum different based on different parameters only (or disallow?)
-    algorithm_type: common.AlgorithmType = common.AlgorithmType.SARSA
-    name: str = common.algorithm_name[algorithm_type]
-
     def __init__(self,
                  environment: TabularEnvironment,
                  agent: Agent,
-                 algorithm_parameters: common.AlgorithmParameters
+                 algorithm_parameters: common.AlgorithmParameters,
+                 name: str
                  ):
-        super().__init__(environment, agent, algorithm_parameters)
+        super().__init__(environment, agent, algorithm_parameters, name)
         self._alpha = self._algorithm_parameters.alpha
-        self.title = f"{Sarsa.name} α={self._alpha}"
+        self.title = f"{self.name} α={self._alpha}"
         self._create_q()
 
     def _start_episode(self):

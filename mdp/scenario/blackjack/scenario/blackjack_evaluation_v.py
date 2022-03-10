@@ -13,7 +13,7 @@ class BlackjackEvaluationV(Scenario):
             settings_list=[
                 common.Settings(
                     algorithm_parameters=common.AlgorithmParameters(
-                        algorithm_type=common.AlgorithmType.MC_PREDICTION_V,
+                        algorithm_type=common.TabularAlgorithmType.MC_PREDICTION_V,
                         first_visit=True,
                         verbose=True
                     ),

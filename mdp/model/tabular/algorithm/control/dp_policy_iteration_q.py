@@ -14,11 +14,10 @@ class DpPolicyIterationQ(DpPolicyEvaluationQDeterministic, DpPolicyImprovementQ)
     def __init__(self,
                  environment: TabularEnvironment,
                  agent: Agent,
-                 algorithm_parameters: common.AlgorithmParameters
+                 algorithm_parameters: common.AlgorithmParameters,
+                 name: str
                  ):
-        super().__init__(environment, agent, algorithm_parameters)
-        self._algorithm_type = common.AlgorithmType.DP_POLICY_ITERATION_Q
-        self.name = common.algorithm_name[self._algorithm_type]
+        super().__init__(environment, agent, algorithm_parameters, name)
         self.title = f"{self.name} θ={self._theta}"
 
     def run(self):

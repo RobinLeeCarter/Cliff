@@ -22,7 +22,7 @@ class JacksPolicyImprovementV(Scenario):
             settings_list=[
                 common.Settings(
                     algorithm_parameters=common.AlgorithmParameters(
-                        algorithm_type=common.AlgorithmType.DP_POLICY_IMPROVEMENT_V,
+                        algorithm_type=common.TabularAlgorithmType.DP_POLICY_IMPROVEMENT_V,
                         verbose=True
                     )
                 ),

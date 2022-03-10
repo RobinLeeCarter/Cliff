@@ -29,19 +29,19 @@ class RacetrackEpisode(Scenario):
             ),
             settings_list=[
                 # common.Settings(algorithm_parameters=common.AlgorithmParameters(
-                #     algorithm_type=common.AlgorithmType.EXPECTED_SARSA,
+                #     algorithm_type=common.TabularAlgorithmType.EXPECTED_SARSA,
                 #     alpha=0.9
                 # )),
                 # common.Settings(algorithm_parameters=common.AlgorithmParameters(
-                #     algorithm_type=common.AlgorithmType.VQ,
+                #     algorithm_type=common.TabularAlgorithmType.VQ,
                 #     alpha=0.2
                 # )),
                 # common.Settings(algorithm_parameters=common.AlgorithmParameters(
-                #     algorithm_type=common.AlgorithmType.Q_LEARNING,
+                #     algorithm_type=common.TabularAlgorithmType.Q_LEARNING,
                 #     alpha=0.5
                 # )),
                 common.Settings(algorithm_parameters=common.AlgorithmParameters(
-                    algorithm_type=common.AlgorithmType.MC_CONTROL_OFF_POLICY,
+                    algorithm_type=common.TabularAlgorithmType.MC_CONTROL_OFF_POLICY,
                     initial_q_value=-40.0,
                 )),
             ],

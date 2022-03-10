@@ -14,12 +14,10 @@ class DpPolicyImprovementV(DynamicProgrammingV):
     def __init__(self,
                  environment: TabularEnvironment,
                  agent: Agent,
-                 algorithm_parameters: common.AlgorithmParameters
+                 algorithm_parameters: common.AlgorithmParameters,
+                 name: str
                  ):
-        super().__init__(environment, agent, algorithm_parameters)
-        self._algorithm_type = common.AlgorithmType.DP_POLICY_IMPROVEMENT_V
-        self.name = common.algorithm_name[self._algorithm_type]
-        self.title = f"{self.name}"
+        super().__init__(environment, agent, algorithm_parameters, name)
 
     def run(self):
         do_call_back: bool = bool(self._step_callback)

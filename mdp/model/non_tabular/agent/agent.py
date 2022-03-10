@@ -16,7 +16,7 @@ from mdp.model.non_tabular.agent.episode import Episode
 from mdp.model.non_tabular.policy.policy_factory import PolicyFactory
 from mdp.model.non_tabular.policy.non_tabular_policy import NonTabularPolicy
 
-from mdp.model.general.algorithm import algorithm_factory
+from mdp.model.non_tabular.algorithm.algorithm_factory import AlgorithmFactory
 # from mdp.model.general.policy import policy_factory
 
 from mdp.model.general.agent.general_agent import GeneralAgent

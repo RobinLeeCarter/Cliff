@@ -13,9 +13,10 @@ class EpisodicOnline(Episodic, abc.ABC):
     def __init__(self,
                  environment: TabularEnvironment,
                  agent: Agent,
-                 algorithm_parameters: common.AlgorithmParameters
+                 algorithm_parameters: common.AlgorithmParameters,
+                 name: str
                  ):
-        super().__init__(environment, agent, algorithm_parameters)
+        super().__init__(environment, agent, algorithm_parameters, name)
 
     def do_episode(self, episode_length_timeout: int):
         self._agent.start_episode()

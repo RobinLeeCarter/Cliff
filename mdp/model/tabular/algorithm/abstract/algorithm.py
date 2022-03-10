@@ -13,22 +13,19 @@ from mdp.model.tabular.value_function.state_action_function import StateActionFu
 
 
 class Algorithm(abc.ABC):
-    algorithm_type: common.AlgorithmType
-    name: str
-
     def __init__(self,
                  environment: TabularEnvironment,
                  agent: Agent,
-                 algorithm_parameters: common.AlgorithmParameters
+                 algorithm_parameters: common.AlgorithmParameters,
+                 name: str
                  ):
         self._environment: TabularEnvironment = environment
         self._agent: Agent = agent
         self._algorithm_parameters: common.AlgorithmParameters = algorithm_parameters
         self._verbose = self._algorithm_parameters.verbose
 
-        self._algorithm_type: Optional[common.AlgorithmType] = None
-        self.name: str = "Error: Untitled"
-        self.title: str = "Error: Untitled"
+        self.name: str = name
+        self.title: str = name
 
         self._gamma: float = self._agent.gamma
         self.V: Optional[StateFunction] = None

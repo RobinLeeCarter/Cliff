@@ -14,12 +14,11 @@ class ExpectedSarsa(EpisodicOnlineControl):
     def __init__(self,
                  environment: TabularEnvironment,
                  agent: Agent,
-                 algorithm_parameters: common.AlgorithmParameters
+                 algorithm_parameters: common.AlgorithmParameters,
+                 name: str
                  ):
-        super().__init__(environment, agent, algorithm_parameters)
+        super().__init__(environment, agent, algorithm_parameters, name)
         self._alpha = self._algorithm_parameters.alpha
-        self._algorithm_type = common.AlgorithmType.EXPECTED_SARSA
-        self.name = common.algorithm_name[self._algorithm_type]
         self.title = f"{self.name} α={self._alpha}"
         self._create_q()
 

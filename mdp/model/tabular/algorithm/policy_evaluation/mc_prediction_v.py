@@ -13,11 +13,10 @@ class MCPredictionV(EpisodicMonteCarlo):
     def __init__(self,
                  environment: TabularEnvironment,
                  agent: Agent,
-                 algorithm_parameters: common.AlgorithmParameters
+                 algorithm_parameters: common.AlgorithmParameters,
+                 name: str
                  ):
-        super().__init__(environment, agent, algorithm_parameters)
-        self._algorithm_type = common.AlgorithmType.MC_PREDICTION_V
-        self.name = common.algorithm_name[self._algorithm_type]
+        super().__init__(environment, agent, algorithm_parameters, name)
         self.title = f"{self.name} first_visit={self.first_visit}"
         self._create_v()
         self._N = StateVariable(self._environment, initial_value=0.0)

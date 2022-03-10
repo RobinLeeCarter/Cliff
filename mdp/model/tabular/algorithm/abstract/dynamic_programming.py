@@ -13,10 +13,12 @@ class DynamicProgramming(Algorithm, abc.ABC):
     def __init__(self,
                  environment: TabularEnvironment,
                  agent: Agent,
-                 algorithm_parameters: common.AlgorithmParameters
+                 algorithm_parameters: common.AlgorithmParameters,
+                 name: str
                  ):
-        super().__init__(environment, agent, algorithm_parameters)
+        super().__init__(environment, agent, algorithm_parameters, name)
         self._theta = self._algorithm_parameters.theta
+        self.title = f"{self.name} θ={self._theta}"
         self._iteration_timeout = self._algorithm_parameters.iteration_timeout
 
         # trainer callback

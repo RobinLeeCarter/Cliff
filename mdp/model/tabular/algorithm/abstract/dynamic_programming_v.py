@@ -14,8 +14,9 @@ class DynamicProgrammingV(DynamicProgramming, abc.ABC):
                  environment: TabularEnvironment,
                  agent: Agent,
                  algorithm_parameters: common.AlgorithmParameters,
+                 name: str
                  ):
-        super().__init__(environment, agent, algorithm_parameters)
+        super().__init__(environment, agent, algorithm_parameters, name)
         self._create_v()
 
     # def _get_expected_return(self, state: State, action: Action) -> float:

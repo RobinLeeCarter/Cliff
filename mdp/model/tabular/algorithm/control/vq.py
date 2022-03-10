@@ -12,13 +12,12 @@ class VQ(EpisodicOnlineControl):
     def __init__(self,
                  environment: TabularEnvironment,
                  agent: Agent,
-                 algorithm_parameters: common.AlgorithmParameters
+                 algorithm_parameters: common.AlgorithmParameters,
+                 name: str
                  ):
-        super().__init__(environment, agent, algorithm_parameters)
+        super().__init__(environment, agent, algorithm_parameters, name)
         self._alpha_variable: bool = self._algorithm_parameters.alpha_variable
         self._alpha: float = self._algorithm_parameters.alpha
-        self._algorithm_type = common.AlgorithmType.VQ
-        self.name = common.algorithm_name[self._algorithm_type]
         if self._alpha_variable:
             self.title = f"{self.name} α=0.5 then α=0.1"
         else:

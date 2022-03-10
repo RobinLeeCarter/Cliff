@@ -14,10 +14,9 @@ class McControlOffPolicy(EpisodicMonteCarlo):
                  environment: TabularEnvironment,
                  agent: Agent,
                  algorithm_parameters: common.AlgorithmParameters,
+                 name: str
                  ):
-        super().__init__(environment, agent, algorithm_parameters)
-        self._algorithm_type = common.AlgorithmType.MC_CONTROL_OFF_POLICY
-        self.name = common.algorithm_name[self._algorithm_type]
+        super().__init__(environment, agent, algorithm_parameters, name)
         self.title = f"{self.name}"
         self._W: float = 1.0
         self._create_q()

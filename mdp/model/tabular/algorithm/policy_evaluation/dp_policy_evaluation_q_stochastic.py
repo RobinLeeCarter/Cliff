@@ -16,12 +16,9 @@ class DpPolicyEvaluationQStochastic(DynamicProgrammingQ):
                  environment: TabularEnvironment,
                  agent: Agent,
                  algorithm_parameters: common.AlgorithmParameters,
+                 name: str
                  ):
-        super().__init__(environment, agent, algorithm_parameters)
-        self._algorithm_type = common.AlgorithmType.DP_POLICY_EVALUATION_Q_STOCHASTIC
-        self.name = common.algorithm_name[self._algorithm_type]
-        self.title = f"{self.name} θ={self._theta}"
-
+        super().__init__(environment, agent, algorithm_parameters, name)
         # # policy_matrix[s, a] = π(a|s)
         # self.policy_matrix: np.ndarray = np.array([], float)
         # # self.state_transition_probabilities[s, a, s'] = p(s'|s,a)

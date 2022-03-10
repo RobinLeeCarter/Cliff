@@ -14,6 +14,7 @@ class DynamicProgrammingQ(DynamicProgramming, abc.ABC):
                  environment: TabularEnvironment,
                  agent: Agent,
                  algorithm_parameters: common.AlgorithmParameters,
+                 name: str
                  ):
-        super().__init__(environment, agent, algorithm_parameters)
+        super().__init__(environment, agent, algorithm_parameters, name)
         self._create_q()
