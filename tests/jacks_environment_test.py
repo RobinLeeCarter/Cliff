@@ -1,12 +1,12 @@
 from __future__ import annotations
 
 from mdp import common
-from mdp.scenarios import scenario_factory
+from mdp.scenario import scenario_factory
 
 # from mdp.scenarios.jacks.model.state import State
 # from mdp.scenarios.jacks.model.action import Action
 # from mdp.scenarios.jacks.model.response import Response
-from mdp.scenarios.jacks.model.environment import Environment
+from mdp.scenario.jacks.model.environment import Environment
 
 
 def jacks_test() -> bool:

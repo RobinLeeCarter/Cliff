@@ -161,7 +161,7 @@ class Agent(GeneralAgent):
             self.is_terminal = env.is_terminal[self.s]
             self.r = 0.0
             # action = self._environment.dynamics.get_random_action_for_state(self.state)
-            self.choose_action(self.a)
+            self.assign_action(self.a)
             self.take_action()
         else:
             # get starting state, reward will be None
@@ -170,17 +170,21 @@ class Agent(GeneralAgent):
             self.is_terminal = env.is_terminal[self.s]
             self.r = 0.0
 
-    def choose_action(self, a: Optional[int] = None):
+    def choose_action(self):
         """
         Have the policy choose an action
         We then have a complete r, s, a to add to episode
         The reward being is response from the previous action (if there was one, or otherwise reward=None)
         Note that the action is NOT applied yet.
         """
-        if a is None:
-            self.a = self._behaviour_policy[self.s]
-        else:
-            self.a = a
+        self.a = self._behaviour_policy[self.s]
+        self._store_rsa()
+
+    def assign_action(self, a: int):
+        self.a = a
+        self._store_rsa()
+
+    def _store_rsa(self):
         # is_terminal = self._environment.states[self.s].is_terminal
         self._episode.add_rsa(self.r, self.s, self.a, self.is_terminal)
         if self._verbose:

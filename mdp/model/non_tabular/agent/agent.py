@@ -164,18 +164,21 @@ class Agent(Generic[State, Action], GeneralAgent):
         # self.is_terminal = self.state.is_terminal
         self.r = 0.0
 
-    def choose_action(self, forced_action: Optional[Action] = None):
+    def choose_action(self):
         """
         Have the policy choose an action
         We then have a complete r, s, a to add to episode
         The reward being is response from the previous action (if there was one, or otherwise reward=None)
         Note that the action is NOT applied yet.
         """
-        if forced_action:
-            self.action = forced_action
-        else:
-            self.action = self._behaviour_policy[self.state]
+        self.action = self._behaviour_policy[self.state]
+        self._store_rsa()
 
+    # def assign_action(self, action: Action):
+    #     self.action = action
+    #     self._store_rsa()
+
+    def _store_rsa(self):
         self._episode.add_rsa(self.r, self.state, self.action)
         if self._verbose:
             print(f"state = {self.state} \t action = {self.action}")

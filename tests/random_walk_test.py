@@ -2,9 +2,9 @@ from __future__ import annotations
 
 import utils
 from mdp import common
-from mdp.scenarios.position_move.model import action, state
-from mdp.scenarios.random_walk.model.environment import Environment
-from mdp.scenarios.random_walk.model.environment_parameters import EnvironmentParameters, default
+from mdp.scenario.position_move.model import action, state
+from mdp.scenario.random_walk.model.environment import Environment
+from mdp.scenario.random_walk.model.environment_parameters import EnvironmentParameters, default
 
 
 def random_walk_test() -> bool:

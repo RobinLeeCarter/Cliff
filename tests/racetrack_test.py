@@ -2,9 +2,9 @@ from __future__ import annotations
 
 import utils
 from mdp import common
-from mdp.scenarios.racetrack.model import action, grids, state
-from mdp.scenarios.racetrack.model.environment import Environment
-from mdp.scenarios.racetrack.model.environment_parameters import EnvironmentParameters, default
+from mdp.scenario.racetrack.model import action, grids, state
+from mdp.scenario.racetrack.model.environment import Environment
+from mdp.scenario.racetrack.model.environment_parameters import EnvironmentParameters, default
 
 
 def racetrack_test() -> bool:

@@ -5,7 +5,7 @@ if TYPE_CHECKING:
     from mdp import common
 
 from mdp.model import policy
-from mdp.scenarios.jacks.model import action, environment
+from mdp.scenario.jacks.model import action, environment
 
 
 def get_initial_policy(environment_: environment.Environment,

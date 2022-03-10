@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from mdp import common
-from mdp.scenarios import scenario_factory
+from mdp.scenario import scenario_factory
 # from mdp.scenarios.cliff.model.environment import Environment
 # from mdp.view import view
 

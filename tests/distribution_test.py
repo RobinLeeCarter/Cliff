@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from mdp.common import Multinoulli
-from mdp.scenarios.jacks.model.state import State
+from mdp.scenario.jacks.model.state import State
 
 
 x: Multinoulli[State] = Multinoulli()

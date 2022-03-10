@@ -136,7 +136,7 @@ class GeneralAgent(ABC):
         """Gets initial state and sets initial reward to None"""
 
     @abstractmethod
-    def choose_action(self, forced_action: Optional[GeneralAction] = None):
+    def choose_action(self):
         """
         Have the policy choose an action
         We then have a complete r, s, a to add to episode

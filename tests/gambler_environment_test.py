@@ -3,10 +3,10 @@ from __future__ import annotations
 import random
 
 from mdp import common
-from mdp.scenarios import scenario_factory
-from mdp.scenarios.gambler.model.state import State
-from mdp.scenarios.gambler.model.action import Action
-from mdp.scenarios.gambler.model.environment import Environment
+from mdp.scenario import scenario_factory
+from mdp.scenario.gambler.model.state import State
+from mdp.scenario.gambler.model.action import Action
+from mdp.scenario.gambler.model.environment import Environment
 
 
 def gambler_test() -> bool:

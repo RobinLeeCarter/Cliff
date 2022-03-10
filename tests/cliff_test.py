@@ -1,9 +1,9 @@
 from __future__ import annotations
 
 from mdp import common
-from mdp.scenarios.position_move.model import action, state
-from mdp.scenarios.cliff.model import environment_parameters
-from mdp.scenarios.cliff.model.environment import Environment
+from mdp.scenario.position_move.model import action, state
+from mdp.scenario.cliff.model import environment_parameters
+from mdp.scenario.cliff.model.environment import Environment
 
 
 def cliff_test() -> bool:

@@ -2,17 +2,17 @@ from __future__ import annotations
 
 import utils
 from mdp import common
-from mdp.scenarios.cliff.model.environment_parameters import EnvironmentParameters \
+from mdp.scenario.cliff.model.environment_parameters import EnvironmentParameters \
     as CliffEnvironmentParameters
-from mdp.scenarios.cliff.model.environment_parameters import default \
+from mdp.scenario.cliff.model.environment_parameters import default \
     as cliff_default
-from mdp.scenarios.cliff.model.environment import Environment \
+from mdp.scenario.cliff.model.environment import Environment \
     as CliffEnvironment
-from mdp.scenarios.random_walk.model.environment_parameters import EnvironmentParameters\
+from mdp.scenario.random_walk.model.environment_parameters import EnvironmentParameters\
     as RandomWalkEnvironmentParameters
-from mdp.scenarios.random_walk.model.environment_parameters import default \
+from mdp.scenario.random_walk.model.environment_parameters import default \
     as random_walk_default
-from mdp.scenarios.random_walk.model.environment import Environment \
+from mdp.scenario.random_walk.model.environment import Environment \
     as RandomWalkEnvironment
 
 

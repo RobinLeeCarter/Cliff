@@ -3,11 +3,11 @@ from __future__ import annotations
 import utils
 from mdp import common
 from mdp.model.tabular.value_function import state_action_function
-from mdp.scenarios.cliff.model.environment_parameters import default
-from mdp.scenarios.cliff.model.environment_parameters import EnvironmentParameters
-from mdp.scenarios.cliff.model.environment import Environment
-from mdp.scenarios.position_move.model.action import Action
-from mdp.scenarios.position_move.model.state import State
+from mdp.scenario.cliff.model.environment_parameters import default
+from mdp.scenario.cliff.model.environment_parameters import EnvironmentParameters
+from mdp.scenario.cliff.model.environment import Environment
+from mdp.scenario.position_move.model.action import Action
+from mdp.scenario.position_move.model.state import State
 
 
 def q_test() -> bool:

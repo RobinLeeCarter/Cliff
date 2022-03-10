@@ -4,9 +4,9 @@ import numpy as np
 
 import utils
 from mdp import common
-from mdp.scenarios.cliff.model.environment_parameters import default
-from mdp.scenarios.cliff.model.environment_parameters import EnvironmentParameters
-from mdp.scenarios.cliff.model.environment import Environment
+from mdp.scenario.cliff.model.environment_parameters import default
+from mdp.scenario.cliff.model.environment_parameters import EnvironmentParameters
+from mdp.scenario.cliff.model.environment import Environment
 
 
 def grid_test() -> bool:

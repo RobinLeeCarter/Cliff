@@ -1,10 +1,10 @@
 from __future__ import annotations
 
 from mdp import common
-from mdp.scenarios import scenario_factory
-from mdp.scenarios.blackjack.model.state import State
-from mdp.scenarios.blackjack.model.action import Action
-from mdp.scenarios.blackjack.model.environment import Environment
+from mdp.scenario import scenario_factory
+from mdp.scenario.blackjack.model.state import State
+from mdp.scenario.blackjack.model.action import Action
+from mdp.scenario.blackjack.model.environment import Environment
 
 
 def blackjack_test() -> bool:
