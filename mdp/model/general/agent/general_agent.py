@@ -7,7 +7,7 @@ from typing import Optional, TYPE_CHECKING, Callable    # , TypeVar, Generic
 if TYPE_CHECKING:
     from mdp.model.general.environment.general_environment import GeneralEnvironment
     # from mdp.model.general.environment.general_state import GeneralState
-    from mdp.model.general.environment.general_action import GeneralAction
+    # from mdp.model.general.environment.general_action import GeneralAction
 
 from mdp import common
 # renamed to avoid name conflicts
@@ -17,7 +17,7 @@ from mdp.model.general.agent.general_episode import GeneralEpisode
 # from mdp.model.non_tabular.policy.policy_factory import PolicyFactory
 from mdp.model.general.policy.general_policy import GeneralPolicy
 
-from mdp.model.general.algorithm import algorithm_factory
+# from mdp.model.general.algorithm import algorithm_factory
 # from mdp.model.general.policy import policy_factory
 
 # State = TypeVar('State', bound=GeneralState)
