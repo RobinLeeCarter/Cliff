@@ -9,7 +9,7 @@ from mdp.scenario.random_walk.model.environment_parameters import EnvironmentPar
 
 def random_walk_test() -> bool:
     environment_parameters = EnvironmentParameters(
-        environment_type=common.ScenarioType.RANDOM_WALK,
+        environment_type=common.EnvironmentType.RANDOM_WALK,
         actions_list=common.ActionsList.NO_ACTIONS
     )
     utils.set_none_to_default(environment_parameters, default)

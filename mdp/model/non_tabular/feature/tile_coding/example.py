@@ -99,7 +99,7 @@ def main():
 
     # plot
     fig = plt.figure()
-    ax = fig.gca(projection='3d')
+    ax = fig.add_subplot(projection='3d')
     mesh_x, mesh_y = np.meshgrid(x, y)
     ax.plot_surface(mesh_x, mesh_y, z, cmap=plt.get_cmap('hot'))
     fig.tight_layout(pad=0)

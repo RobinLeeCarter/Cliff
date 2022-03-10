@@ -11,7 +11,7 @@ from mdp.scenario.jacks.model.environment import Environment
 
 def jacks_test() -> bool:
     scenario_factory = ScenarioFactory()
-    scenario = scenario_factory.create(common.ComparisonType.JACKS_POLICY_ITERATION_V)
+    scenario = scenario_factory.create(common.ScenarioType.JACKS_POLICY_ITERATION_V)
     assert isinstance(scenario, Scenario)
     scenario.build()
 

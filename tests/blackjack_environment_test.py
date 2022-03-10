@@ -10,7 +10,7 @@ from mdp.scenario.blackjack.model.environment import Environment
 
 def blackjack_test() -> bool:
     scenario_factory = ScenarioFactory()
-    scenario = scenario_factory.create(common.ComparisonType.BLACKJACK_EVALUATION_V)
+    scenario = scenario_factory.create(common.ScenarioType.BLACKJACK_EVALUATION_V)
     assert isinstance(scenario, Scenario)
     scenario.build()
 

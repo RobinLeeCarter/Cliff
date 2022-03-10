@@ -29,12 +29,12 @@ from mdp.scenario.cliff.scenario.cliff_episode import CliffEpisode
 
 from mdp.scenario.windy.scenario.windy_timestep import WindyTimestep
 
-ScenarioLookup = dict[common.ComparisonType, Type[GeneralScenario] | tuple[Type[GeneralScenario], dict[str, any]]]
+ScenarioLookup = dict[common.ScenarioType, Type[GeneralScenario] | tuple[Type[GeneralScenario], dict[str, any]]]
 
 
 class ScenarioFactory:
     def __init__(self):
-        ct = common.ComparisonType
+        ct = common.ScenarioType
         self._lookup: ScenarioLookup = {
             ct.JACKS_POLICY_EVALUATION_Q: JacksPolicyEvaluationQ,
             ct.JACKS_POLICY_EVALUATION_V: JacksPolicyEvaluationV,
@@ -57,12 +57,12 @@ class ScenarioFactory:
             ct.WINDY_TIMESTEP_RANDOM: (WindyTimestep, {"random_wind": True})
         }
 
-    def create(self, comparison_type: common.ComparisonType) -> GeneralScenario:
-        # result: Type[Scenario] | tuple[Type[Scenario], dict[str, object]] = self._lookup[comparison_type]
+    def create(self, scenario_type: common.ScenarioType) -> GeneralScenario:
+        # result: Type[Scenario] | tuple[Type[Scenario], dict[str, object]] = self._lookup[scenario_type]
         scenario_type: Type[GeneralScenario]
         kwargs: dict[str, any] = {}
 
-        match self._lookup[comparison_type]:
+        match self._lookup[scenario_type]:
             case type() as scenario_type:
                 pass
             case type() as scenario_type, dict() as kwargs:

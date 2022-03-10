@@ -12,7 +12,7 @@ from mdp.scenario.position_move.model.state import State
 
 def q_test() -> bool:
     environment_parameters = EnvironmentParameters(
-        environment_type=common.ScenarioType.CLIFF,
+        environment_type=common.EnvironmentType.CLIFF,
         actions_list=common.ActionsList.FOUR_MOVES
     )
     utils.set_none_to_default(environment_parameters, default)

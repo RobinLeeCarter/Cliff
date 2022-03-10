@@ -3,7 +3,7 @@ import enum
 from mdp.model.tabular.algorithm import algorithm_type
 
 
-class ScenarioType(enum.IntEnum):
+class EnvironmentType(enum.IntEnum):
     BLACKJACK = enum.auto()
     CLIFF = enum.auto()
     GAMBLER = enum.auto()
@@ -14,7 +14,7 @@ class ScenarioType(enum.IntEnum):
     MOUNTAIN_CAR = enum.auto()
 
 
-class ComparisonType(enum.IntEnum):
+class ScenarioType(enum.IntEnum):
     BLACKJACK_EVALUATION_V = enum.auto()
     BLACKJACK_EVALUATION_Q = enum.auto()
     BLACKJACK_CONTROL_ES = enum.auto()

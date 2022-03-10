@@ -14,7 +14,7 @@ class Scenario(GeneralScenario[Model, View, Controller], ABC):
         super().__init__()
         self._max_cars: int = 20      # problem statement = 20
         self._environment_parameters = EnvironmentParameters(
-            environment_type=common.ScenarioType.JACKS,
+            environment_type=common.EnvironmentType.JACKS,
             max_cars=self._max_cars,
             extra_rules=True,  # change this for extra rules in book as per challenge
         )

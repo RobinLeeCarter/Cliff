@@ -8,8 +8,8 @@ from mdp.scenario.scenario_factory import ScenarioFactory
 
 
 class Application:
-    def __init__(self, comparison_type: common.ComparisonType):
+    def __init__(self, scenario_type: common.ScenarioType):
         self._scenario_factory: ScenarioFactory = ScenarioFactory()
-        self._scenario: GeneralScenario = self._scenario_factory.create(comparison_type)
+        self._scenario: GeneralScenario = self._scenario_factory.create(scenario_type)
         self._scenario.build()
         self._scenario.run()

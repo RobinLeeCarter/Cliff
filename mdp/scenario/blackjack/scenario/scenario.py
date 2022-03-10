@@ -13,7 +13,7 @@ class Scenario(GeneralScenario[Model, View, Controller], ABC):
     def __init__(self):
         super().__init__()
         self._environment_parameters = EnvironmentParameters(
-            environment_type=common.ScenarioType.BLACKJACK,
+            environment_type=common.EnvironmentType.BLACKJACK,
         )
         self._comparison_settings = common.Settings(
             gamma=1.0,

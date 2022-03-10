@@ -15,7 +15,7 @@ Controller = TypeVar('Controller', bound=GeneralController)
 
 class GeneralScenario(Generic[Model, View, Controller], ABC):
     def __init__(self, **_ignored):
-        # self._comparison_type: common.ComparisonType = comparison_type
+        # self._scenario_type: common.ScenarioType = scenario_type
         self._model: Model = self._create_model()
         self._view: View = self._create_view()
         self._controller: Controller = self._create_controller()
@@ -24,7 +24,7 @@ class GeneralScenario(Generic[Model, View, Controller], ABC):
 
     def build(self):
         self._comparison: common.Comparison = self._create_comparison()
-        # self._comparison = self._get_comparison(self._comparison_type)
+        # self._comparison = self._get_comparison(self._scenario_type)
         self._controller.build(self._comparison)
 
     def run(self):
@@ -46,10 +46,6 @@ class GeneralScenario(Generic[Model, View, Controller], ABC):
     @abstractmethod
     def _create_comparison(self) -> common.Comparison:
         ...
-
-    # @abstractmethod
-    # def _get_comparison(self, comparison_type: common.ComparisonType) -> common.Comparison:
-    #     pass
 
     # @property
     # def environment(self) -> GeneralEnvironment:

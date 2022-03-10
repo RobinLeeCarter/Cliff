@@ -11,7 +11,7 @@ from mdp.scenario.cliff.model.environment import Environment
 
 def grid_test() -> bool:
     environment_parameters = EnvironmentParameters(
-        environment_type=common.ScenarioType.CLIFF,
+        environment_type=common.EnvironmentType.CLIFF,
         actions_list=common.ActionsList.FOUR_MOVES
     )
     utils.set_none_to_default(environment_parameters, default)

@@ -8,7 +8,7 @@ from mdp.scenario.cliff.scenario.scenario import Scenario
 
 def view_test() -> bool:
     scenario_factory = ScenarioFactory()
-    scenario = scenario_factory.create(common.ComparisonType.CLIFF_EPISODE)
+    scenario = scenario_factory.create(common.ScenarioType.CLIFF_EPISODE)
     assert isinstance(scenario, Scenario)
     scenario.build()
 

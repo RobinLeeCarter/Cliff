@@ -263,7 +263,7 @@ def view_test() -> bool:
     # print(pygame.freetype.get_init())
 
     environment_parameters = common.EnvironmentParameters(
-        environment_type=common.ScenarioType.CLIFF,
+        environment_type=common.EnvironmentType.CLIFF,
         actions_list=common.ActionsList.FOUR_MOVES
     )
     cliff = scenarios.environment_factory(environment_parameters)
