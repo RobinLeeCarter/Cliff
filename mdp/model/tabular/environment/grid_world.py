@@ -19,6 +19,7 @@ class GridWorld:
 
         self.output_squares: np.ndarray = np.empty(shape=self._grid.shape, dtype=common.OutputSquare)
         # set_gridworld output_squares so don't have to test for existance.
+        # noinspection PyTypeChecker
         for index in np.ndindex(self.output_squares.shape):
             self.output_squares[index] = common.OutputSquare()
 

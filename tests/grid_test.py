@@ -19,6 +19,7 @@ def grid_test() -> bool:
     grid_world_ = environment.grid_world
     shape = grid_world_.max_y + 1, grid_world_.max_x + 1
     cartesian_grid = np.empty(shape=shape, dtype=int)
+    # noinspection PyTypeChecker
     for y, x in np.ndindex(cartesian_grid.shape):
         position: common.XY = common.XY(x, y)
         square: int = grid_world_.get_square(position)

@@ -14,6 +14,7 @@ def bellman_update_v(v: np.ndarray, r: np.ndarray, T: np.ndarray, gamma: float) 
 def l1_norm_above(a: np.ndarray, b: np.ndarray, theta: float) -> bool:
     l1_norm: float = 0.0
     above_theta: bool = False
+    # noinspection PyTypeChecker
     for idx in np.ndindex(a.shape):
         l1_norm += abs(a[idx] - b[idx])
         if l1_norm > theta:
