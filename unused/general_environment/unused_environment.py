@@ -3,7 +3,6 @@ from typing import TYPE_CHECKING
 from abc import ABC, abstractmethod
 
 if TYPE_CHECKING:
-    from mdp.model.tabular.algorithm.abstract.algorithm import Algorithm
     from mdp.model.tabular.policy.tabular_policy import TabularPolicy
 
 from mdp import common

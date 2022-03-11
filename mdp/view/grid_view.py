@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from typing import Optional, TYPE_CHECKING, Callable
-import abc
+from abc import ABC
 import sys
 
 import pygame
@@ -14,7 +14,7 @@ if TYPE_CHECKING:
 from mdp import common
 
 
-class GridView(abc.ABC):
+class GridView(ABC):
     def __init__(self, grid_view_parameters: common.GridViewParameters):
         self.grid_view_parameters: common.GridViewParameters = grid_view_parameters
         self._grid_world: Optional[GridWorld] = None

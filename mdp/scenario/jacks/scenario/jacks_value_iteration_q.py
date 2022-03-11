@@ -22,7 +22,7 @@ class JacksValueIterationQ(Scenario):
             settings_list=[
                 common.Settings(
                     algorithm_parameters=common.AlgorithmParameters(
-                        algorithm_type=common.TabularAlgorithmType.DP_VALUE_ITERATION_Q,
+                        algorithm_type=common.AlgorithmType.DP_VALUE_ITERATION_Q,
                         verbose=True,
                         derive_v_from_q_as_final_step=True,
                     ),

@@ -1,6 +1,6 @@
 from __future__ import annotations
 from typing import TYPE_CHECKING
-import abc
+from abc import ABC, abstractmethod
 
 if TYPE_CHECKING:
     from mdp.model.tabular.environment.tabular_environment import TabularEnvironment
@@ -9,7 +9,7 @@ if TYPE_CHECKING:
 from mdp.model.tabular.algorithm.abstract.episodic import Episodic
 
 
-class EpisodicOnline(Episodic, abc.ABC):
+class EpisodicOnline(Episodic, ABC):
     def __init__(self,
                  environment: TabularEnvironment,
                  agent: Agent,
@@ -29,7 +29,7 @@ class EpisodicOnline(Episodic, abc.ABC):
     def _start_episode(self):
         pass
 
-    @abc.abstractmethod
+    @abstractmethod
     def _do_training_step(self):
         pass
 

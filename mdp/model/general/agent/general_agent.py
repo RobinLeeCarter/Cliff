@@ -11,7 +11,7 @@ if TYPE_CHECKING:
 
 from mdp import common
 # renamed to avoid name conflicts
-from mdp.model.tabular.algorithm.abstract.algorithm import Algorithm
+from mdp.model.general.algorithm.general_algorithm import GeneralAlgorithm
 # from mdp.model.tabular.algorithm.abstract.episodic import Episodic
 from mdp.model.general.agent.general_episode import GeneralEpisode
 # from mdp.model.non_tabular.policy.policy_factory import PolicyFactory
@@ -37,7 +37,7 @@ class GeneralAgent(ABC):
         self._behaviour_policy: Optional[GeneralPolicy] = None     # if on-policy = self._policy
         self._dual_policy_relationship: Optional[common.DualPolicyRelationship] = None
 
-        self._algorithm: Optional[Algorithm] = None
+        self._algorithm: Optional[GeneralAlgorithm] = None
         self._episode: Optional[GeneralEpisode] = None
         self._record_first_visits: bool = False
         self._episode_length_timeout: Optional[int] = None
@@ -68,7 +68,7 @@ class GeneralAgent(ABC):
 
     @property
     @abstractmethod
-    def algorithm(self) -> Algorithm:
+    def algorithm(self) -> GeneralAlgorithm:
         return self._algorithm
 
     @property

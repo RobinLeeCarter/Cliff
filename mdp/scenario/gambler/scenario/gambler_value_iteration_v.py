@@ -23,7 +23,7 @@ class GamblerValueIterationV(Scenario):
             settings_list=[
                 common.Settings(
                     algorithm_parameters=common.AlgorithmParameters(
-                        algorithm_type=common.TabularAlgorithmType.DP_VALUE_ITERATION_V,
+                        algorithm_type=common.AlgorithmType.DP_VALUE_ITERATION_V,
                         verbose=True
                     )
                 ),

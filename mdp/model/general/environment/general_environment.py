@@ -3,7 +3,7 @@ from typing import TYPE_CHECKING, TypeVar, Generic
 from abc import ABC, abstractmethod
 
 if TYPE_CHECKING:
-    from mdp.model.tabular.algorithm.abstract.algorithm import Algorithm
+    from mdp.model.general.algorithm.general_algorithm import GeneralAlgorithm
     from mdp.model.general.policy.general_policy import GeneralPolicy
 
 from mdp import common
@@ -43,7 +43,7 @@ class GeneralEnvironment(Generic[State, Action], ABC):
 
     # TODO: does this belong here?
     def update_grid_value_functions(self,
-                                    algorithm: Algorithm,
+                                    algorithm: GeneralAlgorithm,
                                     policy: GeneralPolicy):
         pass
 

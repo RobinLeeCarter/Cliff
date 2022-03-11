@@ -1,6 +1,6 @@
 from __future__ import annotations
 from typing import TYPE_CHECKING, Optional
-import abc
+from abc import ABC
 
 if TYPE_CHECKING:
     from mdp.model.tabular.environment.tabular_environment import TabularEnvironment
@@ -11,23 +11,20 @@ from mdp.model.tabular.algorithm import linear_algebra as la
 from mdp.model.tabular.value_function.state_function import StateFunction
 from mdp.model.tabular.value_function.state_action_function import StateActionFunction
 
+from mdp.model.general.algorithm.general_algorithm import GeneralAlgorithm
 
-class Algorithm(abc.ABC):
+
+class TabularAlgorithm(GeneralAlgorithm, ABC):
     def __init__(self,
                  environment: TabularEnvironment,
                  agent: Agent,
                  algorithm_parameters: common.AlgorithmParameters,
                  name: str
                  ):
+        super().__init__(environment, agent, algorithm_parameters, name)
         self._environment: TabularEnvironment = environment
         self._agent: Agent = agent
-        self._algorithm_parameters: common.AlgorithmParameters = algorithm_parameters
-        self._verbose = self._algorithm_parameters.verbose
 
-        self.name: str = name
-        self.title: str = name
-
-        self._gamma: float = self._agent.gamma
         self.V: Optional[StateFunction] = None
         self.Q: Optional[StateActionFunction] = None
         if self._algorithm_parameters.derive_v_from_q_as_final_step:
@@ -46,9 +43,6 @@ class Algorithm(abc.ABC):
         if self.Q:
             self.Q.initialize_values()
 
-    def parameter_changes(self, iteration: int):
-        pass
-
     def _set_target_policy_greedy_wrt_q(self):
         self._agent.target_policy.set_policy_vector(self.Q.argmax.copy())
 
@@ -63,9 +57,6 @@ class Algorithm(abc.ABC):
 
     def print_q_coverage_statistics(self):
         self.Q.print_coverage_statistics()
-
-    def __repr__(self):
-        return f"{self.title}"
 
     def derive_v_from_q(self, policy: Optional[TabularPolicy] = None):
         if not policy:

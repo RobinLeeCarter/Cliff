@@ -15,7 +15,7 @@ class BlackjackControlES(Scenario):
             settings_list=[
                 common.Settings(
                     algorithm_parameters=common.AlgorithmParameters(
-                        algorithm_type=common.TabularAlgorithmType.MC_CONTROL_ON_POLICY,
+                        algorithm_type=common.AlgorithmType.MC_CONTROL_ON_POLICY,
                         first_visit=True,
                         exploring_starts=True,
                         derive_v_from_q_as_final_step=True,

@@ -1,15 +1,15 @@
 from __future__ import annotations
 from typing import TYPE_CHECKING, Optional, Callable
-import abc
+from abc import ABC, abstractmethod
 
 if TYPE_CHECKING:
     from mdp.model.tabular.environment.tabular_environment import TabularEnvironment
     from mdp.model.tabular.agent.agent import Agent
     from mdp import common
-from mdp.model.tabular.algorithm.abstract.algorithm import Algorithm
+from mdp.model.tabular.algorithm.tabular_algorithm import TabularAlgorithm
 
 
-class DynamicProgramming(Algorithm, abc.ABC):
+class DynamicProgramming(TabularAlgorithm, ABC):
     def __init__(self,
                  environment: TabularEnvironment,
                  agent: Agent,
@@ -31,6 +31,6 @@ class DynamicProgramming(Algorithm, abc.ABC):
         super().initialize()
         self._environment.initialize_policy(self._agent.policy)
 
-    @abc.abstractmethod
+    @abstractmethod
     def run(self):
         pass

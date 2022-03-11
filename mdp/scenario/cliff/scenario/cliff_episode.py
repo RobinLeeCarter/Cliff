@@ -22,19 +22,19 @@ class CliffEpisode(Scenario):
             ),
             settings_list=[
                 # common.Settings(algorithm_parameters=common.AlgorithmParameters(
-                #     algorithm_type=common.TabularAlgorithmType.EXPECTED_SARSA,
+                #     algorithm_type=common.AlgorithmType.EXPECTED_SARSA,
                 #     alpha=0.9
                 # )),
                 # common.Settings(algorithm_parameters=common.AlgorithmParameters(
-                #     algorithm_type=common.TabularAlgorithmType.VQ,
+                #     algorithm_type=common.AlgorithmType.VQ,
                 #     alpha=0.2
                 # )),
                 common.Settings(algorithm_parameters=common.AlgorithmParameters(
-                    algorithm_type=common.TabularAlgorithmType.Q_LEARNING,
+                    algorithm_type=common.AlgorithmType.Q_LEARNING,
                     alpha=0.5
                 )),
                 common.Settings(algorithm_parameters=common.AlgorithmParameters(
-                    algorithm_type=common.TabularAlgorithmType.SARSA,
+                    algorithm_type=common.AlgorithmType.SARSA,
                     alpha=0.5
                 )),
             ],

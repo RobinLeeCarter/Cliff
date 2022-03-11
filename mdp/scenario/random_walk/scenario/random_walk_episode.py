@@ -27,43 +27,43 @@ class RandomWalkEpisode(Scenario):
             settings_list=[
                 common.Settings(
                     algorithm_parameters=common.AlgorithmParameters(
-                        algorithm_type=common.TabularAlgorithmType.TD_0,
+                        algorithm_type=common.AlgorithmType.TD_0,
                         alpha=0.05,
                     )
                 ),
                 common.Settings(
                     algorithm_parameters=common.AlgorithmParameters(
-                        algorithm_type=common.TabularAlgorithmType.TD_0,
+                        algorithm_type=common.AlgorithmType.TD_0,
                         alpha=0.1,
                     )
                 ),
                 common.Settings(
                     algorithm_parameters=common.AlgorithmParameters(
-                        algorithm_type=common.TabularAlgorithmType.TD_0,
+                        algorithm_type=common.AlgorithmType.TD_0,
                         alpha=0.15,
                     )
                 ),
                 common.Settings(
                     algorithm_parameters=common.AlgorithmParameters(
-                        algorithm_type=common.TabularAlgorithmType.MC_CONSTANT_ALPHA,
+                        algorithm_type=common.AlgorithmType.MC_CONSTANT_ALPHA,
                         alpha=0.01,
                     )
                 ),
                 common.Settings(
                     algorithm_parameters=common.AlgorithmParameters(
-                        algorithm_type=common.TabularAlgorithmType.MC_CONSTANT_ALPHA,
+                        algorithm_type=common.AlgorithmType.MC_CONSTANT_ALPHA,
                         alpha=0.02,
                     )
                 ),
                 common.Settings(
                     algorithm_parameters=common.AlgorithmParameters(
-                        algorithm_type=common.TabularAlgorithmType.MC_CONSTANT_ALPHA,
+                        algorithm_type=common.AlgorithmType.MC_CONSTANT_ALPHA,
                         alpha=0.03,
                     )
                 ),
                 common.Settings(
                     algorithm_parameters=common.AlgorithmParameters(
-                        algorithm_type=common.TabularAlgorithmType.MC_CONSTANT_ALPHA,
+                        algorithm_type=common.AlgorithmType.MC_CONSTANT_ALPHA,
                         alpha=0.04,
                     )
                 ),

@@ -7,11 +7,11 @@ if TYPE_CHECKING:
     from mdp.model.general.agent.general_episode import GeneralEpisode
     from mdp.model.breakdown.breakdown import Breakdown
 from mdp import common
-from mdp.model.tabular.policy.tabular_policy import TabularPolicy
-
-from mdp.model.tabular.algorithm.abstract.algorithm import Algorithm
+from mdp.model.general.algorithm.general_algorithm import GeneralAlgorithm
+from mdp.model.tabular.algorithm.tabular_algorithm import TabularAlgorithm
 from mdp.model.tabular.algorithm.abstract.episodic import Episodic
 from mdp.model.tabular.algorithm.abstract.dynamic_programming import DynamicProgramming
+from mdp.model.tabular.agent.agent import Agent as TabularAgent
 
 from mdp.model.trainer.parallel_runner import ParallelRunner
 
@@ -57,7 +57,7 @@ class Trainer:
         self.settings = settings
         self._agent.apply_settings(self.settings)
 
-        algorithm: Algorithm = self._agent.algorithm
+        algorithm: GeneralAlgorithm = self._agent.algorithm
         match algorithm:
             case Episodic():
                 self._train_episodic()
@@ -74,6 +74,7 @@ class Trainer:
         #     raise NotImplementedError
 
         if settings.algorithm_parameters.derive_v_from_q_as_final_step:
+            assert isinstance(algorithm, TabularAlgorithm)
             algorithm.derive_v_from_q()
 
         if return_result:
@@ -135,8 +136,8 @@ class Trainer:
 
         self._agent.parameter_changes(episode_counter)
 
-        algorithm: Algorithm = self._agent.algorithm
-        algorithm: Episodic
+        algorithm: GeneralAlgorithm = self._agent.algorithm
+        assert isinstance(algorithm, Episodic)
         algorithm.do_episode(settings.episode_length_timeout)
         episode = self._agent.episode
 
@@ -152,7 +153,7 @@ class Trainer:
 
     def _train_dynamic_programming(self):
         settings = self.settings
-        algorithm: Algorithm = self._agent.algorithm
+        algorithm: GeneralAlgorithm = self._agent.algorithm
         assert isinstance(algorithm, DynamicProgramming)
 
         if settings.review_every_step or settings.display_every_step:
@@ -175,18 +176,24 @@ class Trainer:
         result: common.Result = common.Result()
 
         rp: common.ResultParameters = result_parameters
+
         if rp.return_recorder and self._breakdown:
             result.recorder = self._breakdown.recorder
+
         if rp.return_algorithm_title:
             result.algorithm_title = self._agent.algorithm.title
-        if rp.return_policy_vector:
-            policy = self._agent.target_policy
-            if isinstance(policy, TabularPolicy):
-                result.policy_vector = policy.get_policy_vector()
-        if rp.return_v_vector and self._agent.algorithm.V:
-            result.v_vector = self._agent.algorithm.V.vector
-        if rp.return_q_matrix and self._agent.algorithm.Q:
-            result.q_matrix = self._agent.algorithm.Q.matrix
+
+        if isinstance(self._agent, TabularAgent):
+            if rp.return_policy_vector:
+                result.policy_vector = self._agent.target_policy.get_policy_vector()
+
+            if rp.return_v_vector and self._agent.algorithm.V:
+                result.v_vector = self._agent.algorithm.V.vector
+
+            if rp.return_q_matrix and self._agent.algorithm.Q:
+                result.q_matrix = self._agent.algorithm.Q.matrix
+
         if rp.return_cum_timestep:
             result.cum_timestep = self.cum_timestep
+
         return result

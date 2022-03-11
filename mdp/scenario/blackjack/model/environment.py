@@ -4,7 +4,7 @@ from typing import TYPE_CHECKING
 import numpy as np
 
 if TYPE_CHECKING:
-    from mdp.model.tabular.algorithm.abstract.algorithm import Algorithm
+    from mdp.model.tabular.algorithm.tabular_algorithm import TabularAlgorithm
     from mdp.model.tabular.policy.tabular_policy import TabularPolicy
     from mdp.model.tabular.value_function import state_function
 
@@ -115,7 +115,7 @@ class Environment(TabularEnvironment[State, Action]):
         g.y_series = common.Series(title=g.y_label, values=y_values)
         g.z_series = common.Series(title=g.z_label, values=z_values)
 
-    def update_grid_policy_ace(self, policy: TabularPolicy, algorithm: Algorithm, usable_ace: bool):
+    def update_grid_policy_ace(self, policy: TabularPolicy, algorithm: TabularAlgorithm, usable_ace: bool):
         # policy_: policy.Deterministic
         for s, state in enumerate(self.states):
             if not state.is_terminal and state.usable_ace == usable_ace:

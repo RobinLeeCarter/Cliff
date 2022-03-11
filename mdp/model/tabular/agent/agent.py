@@ -6,10 +6,9 @@ import math
 if TYPE_CHECKING:
     from mdp.model.tabular.environment.tabular_state import TabularState
     from mdp.model.tabular.environment.tabular_action import TabularAction
-    from mdp.model.tabular.environment.tabular_environment import TabularEnvironment
 from mdp import common
-# renamed to avoid name conflicts
-from mdp.model.tabular.algorithm.abstract.algorithm import Algorithm
+from mdp.model.tabular.environment.tabular_environment import TabularEnvironment
+from mdp.model.tabular.algorithm.tabular_algorithm import TabularAlgorithm
 from mdp.model.tabular.algorithm.abstract.episodic import Episodic
 from mdp.model.tabular.agent.episode import Episode
 from mdp.model.tabular.policy.tabular_policy import TabularPolicy
@@ -32,7 +31,7 @@ class Agent(GeneralAgent):
 
         self._algorithm_factory: AlgorithmFactory[TabularEnvironment, Agent] = \
             AlgorithmFactory[TabularEnvironment, Agent](environment=self._environment, agent=self)
-        self._algorithm: Optional[Algorithm] = None
+        self._algorithm: Optional[TabularAlgorithm] = None
         self._episode: Optional[Episode] = None
         # self._record_first_visits: bool = False
         # self._episode_length_timeout: Optional[int] = None
@@ -70,7 +69,7 @@ class Agent(GeneralAgent):
         return self._behaviour_policy
 
     @property
-    def algorithm(self) -> Algorithm:
+    def algorithm(self) -> TabularAlgorithm:
         return self._algorithm
 
     @property

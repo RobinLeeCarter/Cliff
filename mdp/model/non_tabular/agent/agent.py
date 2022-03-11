@@ -10,12 +10,12 @@ from mdp.model.non_tabular.environment.non_tabular_action import NonTabularActio
 
 from mdp import common
 # renamed to avoid name conflicts
-from mdp.model.tabular.algorithm.abstract.algorithm import Algorithm
+from mdp.model.non_tabular.algorithm.non_tabular_algorithm import NonTabularAlgorithm
 from mdp.model.tabular.algorithm.abstract.episodic import Episodic
 from mdp.model.non_tabular.agent.episode import Episode
 from mdp.model.non_tabular.policy.policy_factory import PolicyFactory
 from mdp.model.non_tabular.policy.non_tabular_policy import NonTabularPolicy
-from mdp.model.non_tabular.algorithm.algorithm_factory import AlgorithmFactory
+from mdp.model.general.algorithm.algorithm_factory import AlgorithmFactory
 # from mdp.model.general.policy import policy_factory
 
 from mdp.model.general.agent.general_agent import GeneralAgent
@@ -36,8 +36,9 @@ class Agent(Generic[State, Action], GeneralAgent):
         self._behaviour_policy: Optional[NonTabularPolicy[State, Action]] = None     # if on-policy = self._policy
         # self._dual_policy_relationship: Optional[common.DualPolicyRelationship] = None
 
-        self._algorithm_factory: AlgorithmFactory = AlgorithmFactory(environment=self._environment, agent=self)
-        self._algorithm: Optional[Algorithm] = None
+        self._algorithm_factory: AlgorithmFactory[NonTabularEnvironment[State, Action], Agent]\
+            = AlgorithmFactory[NonTabularEnvironment[State, Action], Agent](environment=self._environment, agent=self)
+        self._algorithm: Optional[NonTabularAlgorithm] = None
         self._episode: Optional[Episode[State, Action]] = None
         # self._record_first_visits: bool = False
         # self._episode_length_timeout: Optional[int] = None
@@ -74,7 +75,7 @@ class Agent(Generic[State, Action], GeneralAgent):
         return self._behaviour_policy
 
     @property
-    def algorithm(self) -> Algorithm:
+    def algorithm(self) -> NonTabularAlgorithm:
         return self._algorithm
 
     @property
@@ -206,7 +207,8 @@ class Agent(Generic[State, Action], GeneralAgent):
         print(f"t={self.t} \t state = {self.state} \t action = {self.action}")
 
     def print_statistics(self):
-        self._algorithm.print_q_coverage_statistics()
+        pass
+        # self._algorithm.print_q_coverage_statistics()
 
     def rms_error(self) -> float:
         raise NotImplementedError
@@ -227,4 +229,4 @@ class Agent(Generic[State, Action], GeneralAgent):
     #     return rms_error
 
     def get_algorithm_name_fn(self):
-        return self._algorithm_factory.get_name
+        return self._algorithm_factory.lookup_algorithm_name

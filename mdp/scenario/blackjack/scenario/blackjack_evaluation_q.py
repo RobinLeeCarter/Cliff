@@ -13,7 +13,7 @@ class BlackjackEvaluationQ(Scenario):
             settings_list=[
                 common.Settings(
                     algorithm_parameters=common.AlgorithmParameters(
-                        algorithm_type=common.TabularAlgorithmType.MC_PREDICTION_Q,
+                        algorithm_type=common.AlgorithmType.MC_PREDICTION_Q,
                         first_visit=True,
                         verbose=True,
                         derive_v_from_q_as_final_step=True

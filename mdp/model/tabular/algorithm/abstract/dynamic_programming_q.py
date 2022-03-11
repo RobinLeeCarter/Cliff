@@ -1,6 +1,6 @@
 from __future__ import annotations
 from typing import TYPE_CHECKING
-import abc
+from abc import ABC
 
 if TYPE_CHECKING:
     from mdp.model.tabular.environment.tabular_environment import TabularEnvironment
@@ -9,7 +9,7 @@ if TYPE_CHECKING:
 from mdp.model.tabular.algorithm.abstract.dynamic_programming import DynamicProgramming
 
 
-class DynamicProgrammingQ(DynamicProgramming, abc.ABC):
+class DynamicProgrammingQ(DynamicProgramming, ABC):
     def __init__(self,
                  environment: TabularEnvironment,
                  agent: Agent,

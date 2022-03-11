@@ -1,6 +1,6 @@
 from __future__ import annotations
 from typing import Optional, TYPE_CHECKING
-import abc
+from abc import ABC, abstractmethod
 
 if TYPE_CHECKING:
     from mdp.model.tabular.environment.tabular_environment import TabularEnvironment
@@ -10,7 +10,7 @@ if TYPE_CHECKING:
 from mdp.model.tabular.algorithm.abstract.episodic import Episodic
 
 
-class EpisodicMonteCarlo(Episodic, abc.ABC):
+class EpisodicMonteCarlo(Episodic, ABC):
     def __init__(self,
                  environment: TabularEnvironment,
                  agent: Agent,
@@ -55,6 +55,6 @@ class EpisodicMonteCarlo(Episodic, abc.ABC):
     def _pre_process_episode(self):
         self._episode.generate_returns()
 
-    @abc.abstractmethod
+    @abstractmethod
     def _process_time_step(self, t):
         pass

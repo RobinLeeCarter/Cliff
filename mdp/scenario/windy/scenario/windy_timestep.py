@@ -25,7 +25,7 @@ class WindyTimestep(Scenario):
             settings_list=[
                 common.Settings(
                     algorithm_parameters=common.AlgorithmParameters(
-                        algorithm_type=common.TabularAlgorithmType.SARSA,
+                        algorithm_type=common.AlgorithmType.SARSA,
                         alpha=0.5,
                         initial_q_value=0.0,
                     )

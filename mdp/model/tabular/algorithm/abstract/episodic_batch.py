@@ -1,6 +1,6 @@
 from __future__ import annotations
 from typing import Optional, TYPE_CHECKING
-import abc
+from abc import ABC, abstractmethod
 
 if TYPE_CHECKING:
     from mdp.model.tabular.environment.tabular_environment import TabularEnvironment
@@ -11,7 +11,7 @@ from mdp.model.tabular.algorithm.abstract.episodic import Episodic
 
 
 # TODO: Is this a good idea
-class EpisodicBatch(Episodic, abc.ABC):
+class EpisodicBatch(Episodic, ABC):
     def __init__(self,
                  environment: TabularEnvironment,
                  agent: Agent,
@@ -56,6 +56,6 @@ class EpisodicBatch(Episodic, abc.ABC):
     def _pre_process_episode(self):
         self._episode.generate_returns()
 
-    @abc.abstractmethod
+    @abstractmethod
     def _process_time_step(self, t):
         pass

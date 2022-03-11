@@ -3,7 +3,7 @@ from abc import ABC
 from typing import Optional, TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from mdp.model.tabular.algorithm.abstract.algorithm import Algorithm
+    from mdp.model.tabular.algorithm.tabular_algorithm import TabularAlgorithm
     from mdp.model.tabular.policy.tabular_policy import TabularPolicy
 
 from mdp import common
@@ -40,7 +40,7 @@ class Environment(TabularEnvironment[State, Action], ABC):
         self.actions: list[Action] = actions_list_factory.actions_list_factory(actions_list)
 
     def update_grid_value_functions(self,
-                                    algorithm: Algorithm,
+                                    algorithm: TabularAlgorithm,
                                     policy: TabularPolicy
                                     ):
         for s, state in enumerate(self.states):

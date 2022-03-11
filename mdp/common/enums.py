@@ -56,10 +56,6 @@ class BreakdownType(enum.IntEnum):
 
 
 class AlgorithmType(enum.IntEnum):
-    """parent enum for TabularAlgorithmType and NonTabularAlgorithmType"""
-
-
-class TabularAlgorithmType(AlgorithmType):
     DP_POLICY_EVALUATION_V_DETERMINISTIC = enum.auto()
     DP_POLICY_EVALUATION_V_STOCHASTIC = enum.auto()
     DP_POLICY_IMPROVEMENT_V = enum.auto()
@@ -84,10 +80,6 @@ class TabularAlgorithmType(AlgorithmType):
     Q_LEARNING = enum.auto()
     EXPECTED_SARSA = enum.auto()
     VQ = enum.auto()
-
-
-class NonTabularAlgorithmType(AlgorithmType):
-    ...
 
 
 class PolicyType(enum.IntEnum):
