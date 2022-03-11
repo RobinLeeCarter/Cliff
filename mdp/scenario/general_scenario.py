@@ -46,11 +46,3 @@ class GeneralScenario(Generic[Model, View, Controller], ABC):
     @abstractmethod
     def _create_comparison(self) -> common.Comparison:
         ...
-
-    # @property
-    # def environment(self) -> GeneralEnvironment:
-    #     environment = self._model.environment
-    #     if environment is None:
-    #         raise Exception("Environment is None")
-    #     else:
-    #         return self._model.environment

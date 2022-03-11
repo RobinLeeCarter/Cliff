@@ -2,6 +2,8 @@ from __future__ import annotations
 from typing import Optional, TYPE_CHECKING
 from abc import ABC
 
+from mdp import common
+
 if TYPE_CHECKING:
     from mdp.general_controller import GeneralController
 
@@ -22,7 +24,8 @@ class TabularView(GeneralView, ABC):
     def set_controller(self, controller: GeneralController):
         self._controller: GeneralController = controller
 
-    def _build(self):
+    def build(self, comparison: common.Comparison):
+        super().build(comparison)
         self.grid_view: GridView = self._create_grid_view()
 
     def _create_grid_view(self) -> GridView:

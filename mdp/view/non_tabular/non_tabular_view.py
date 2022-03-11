@@ -10,6 +10,3 @@ from mdp.view.general.general_view import GeneralView
 class NonTabularView(GeneralView, ABC):
     def set_controller(self, controller: GeneralController):
         self._controller: GeneralController = controller
-
-    def _build(self):
-        pass

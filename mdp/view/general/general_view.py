@@ -21,14 +21,10 @@ class GeneralView(ABC):
         self._controller: GeneralController = controller
 
     def build(self, comparison: common.Comparison):
+        """build top-down"""
         self._comparison = comparison
         self.graph2d: Graph2D = self._create_graph()
         self.graph3d: Graph3D = self._create_graph3d()
-        self._build()
-
-    @abstractmethod
-    def _build(self):
-        pass
 
     def _create_graph(self) -> Graph2D:
         return Graph2D()
