@@ -3,7 +3,6 @@ from typing import Optional, TYPE_CHECKING
 from abc import ABC, abstractmethod
 
 if TYPE_CHECKING:
-    from mdp.model.tabular.environment.tabular_environment import TabularEnvironment
     from mdp.model.tabular.agent.agent import Agent
     from mdp.model.tabular.agent.episode import Episode
     from mdp import common
@@ -13,12 +12,11 @@ from mdp.model.tabular.algorithm.abstract.episodic import Episodic
 # TODO: Is this a good idea
 class EpisodicBatch(Episodic, ABC):
     def __init__(self,
-                 environment: TabularEnvironment,
                  agent: Agent,
                  algorithm_parameters: common.AlgorithmParameters,
                  name: str
                  ):
-        super().__init__(environment, agent, algorithm_parameters, name)
+        super().__init__(agent, algorithm_parameters, name)
         self._episode: Optional[Episode] = None
         self._exit_episode: bool = False
         self._exploring_starts: bool = algorithm_parameters.exploring_starts

@@ -4,7 +4,6 @@ from typing import TYPE_CHECKING
 import numpy as np
 
 if TYPE_CHECKING:
-    from mdp.model.tabular.environment.tabular_environment import TabularEnvironment
     from mdp.model.tabular.agent.agent import Agent
 from mdp import common
 from mdp.model.tabular.algorithm.abstract.dynamic_programming_q import DynamicProgrammingQ
@@ -12,12 +11,11 @@ from mdp.model.tabular.algorithm.abstract.dynamic_programming_q import DynamicPr
 
 class DpPolicyImprovementQ(DynamicProgrammingQ):
     def __init__(self,
-                 environment: TabularEnvironment,
                  agent: Agent,
                  algorithm_parameters: common.AlgorithmParameters,
                  name: str
                  ):
-        super().__init__(environment, agent, algorithm_parameters, name)
+        super().__init__(agent, algorithm_parameters, name)
 
     def run(self):
         do_call_back: bool = bool(self._step_callback)

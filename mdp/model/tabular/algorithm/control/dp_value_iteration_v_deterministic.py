@@ -6,7 +6,6 @@ from typing import TYPE_CHECKING
 import numpy as np
 
 if TYPE_CHECKING:
-    from mdp.model.tabular.environment.tabular_environment import TabularEnvironment
     from mdp.model.tabular.agent.agent import Agent
 from mdp import common
 from mdp.model.tabular.algorithm import linear_algebra as la
@@ -15,12 +14,11 @@ from mdp.model.tabular.algorithm.abstract.dynamic_programming_v import DynamicPr
 
 class DpValueIterationV(DynamicProgrammingV):
     def __init__(self,
-                 environment: TabularEnvironment,
                  agent: Agent,
                  algorithm_parameters: common.AlgorithmParameters,
                  name: str
                  ):
-        super().__init__(environment, agent, algorithm_parameters, name)
+        super().__init__(agent, algorithm_parameters, name)
         self.title = f"{self.name} θ={self._theta}"
 
     def run(self):

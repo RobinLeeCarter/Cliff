@@ -4,7 +4,6 @@ from typing import TYPE_CHECKING
 import numpy as np
 
 if TYPE_CHECKING:
-    from mdp.model.tabular.environment.tabular_environment import TabularEnvironment
     from mdp.model.tabular.agent.agent import Agent
 from mdp import common
 from mdp.model.tabular.algorithm.abstract.episodic_online_control import EpisodicOnlineControl
@@ -12,12 +11,11 @@ from mdp.model.tabular.algorithm.abstract.episodic_online_control import Episodi
 
 class ExpectedSarsa(EpisodicOnlineControl):
     def __init__(self,
-                 environment: TabularEnvironment,
                  agent: Agent,
                  algorithm_parameters: common.AlgorithmParameters,
                  name: str
                  ):
-        super().__init__(environment, agent, algorithm_parameters, name)
+        super().__init__(agent, algorithm_parameters, name)
         self._alpha = self._algorithm_parameters.alpha
         self.title = f"{self.name} α={self._alpha}"
         self._create_q()

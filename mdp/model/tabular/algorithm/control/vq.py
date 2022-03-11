@@ -2,7 +2,6 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from mdp.model.tabular.environment.tabular_environment import TabularEnvironment
     from mdp.model.tabular.agent.agent import Agent
 from mdp import common
 from mdp.model.tabular.algorithm.abstract.episodic_online_control import EpisodicOnlineControl
@@ -10,12 +9,11 @@ from mdp.model.tabular.algorithm.abstract.episodic_online_control import Episodi
 
 class VQ(EpisodicOnlineControl):
     def __init__(self,
-                 environment: TabularEnvironment,
                  agent: Agent,
                  algorithm_parameters: common.AlgorithmParameters,
                  name: str
                  ):
-        super().__init__(environment, agent, algorithm_parameters, name)
+        super().__init__(agent, algorithm_parameters, name)
         self._alpha_variable: bool = self._algorithm_parameters.alpha_variable
         self._alpha: float = self._algorithm_parameters.alpha
         if self._alpha_variable:

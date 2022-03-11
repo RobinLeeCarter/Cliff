@@ -2,7 +2,6 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from mdp.model.tabular.environment.tabular_environment import TabularEnvironment
     from mdp.model.tabular.agent.agent import Agent
 from mdp import common
 from mdp.model.tabular.algorithm.abstract.episodic_monte_carlo import EpisodicMonteCarlo
@@ -11,12 +10,11 @@ from mdp.model.tabular.value_function.state_variable import StateVariable
 
 class MCPredictionV(EpisodicMonteCarlo):
     def __init__(self,
-                 environment: TabularEnvironment,
                  agent: Agent,
                  algorithm_parameters: common.AlgorithmParameters,
                  name: str
                  ):
-        super().__init__(environment, agent, algorithm_parameters, name)
+        super().__init__(agent, algorithm_parameters, name)
         self.title = f"{self.name} first_visit={self.first_visit}"
         self._create_v()
         self._N = StateVariable(self._environment, initial_value=0.0)

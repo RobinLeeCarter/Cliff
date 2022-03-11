@@ -3,7 +3,6 @@ from typing import TYPE_CHECKING
 from abc import ABC, abstractmethod
 
 if TYPE_CHECKING:
-    from mdp.model.tabular.environment.tabular_environment import TabularEnvironment
     from mdp.model.tabular.agent.agent import Agent
     from mdp import common
 from mdp.model.tabular.algorithm.abstract.episodic import Episodic
@@ -11,12 +10,11 @@ from mdp.model.tabular.algorithm.abstract.episodic import Episodic
 
 class EpisodicOnline(Episodic, ABC):
     def __init__(self,
-                 environment: TabularEnvironment,
                  agent: Agent,
                  algorithm_parameters: common.AlgorithmParameters,
                  name: str
                  ):
-        super().__init__(environment, agent, algorithm_parameters, name)
+        super().__init__(agent, algorithm_parameters, name)
 
     def do_episode(self, episode_length_timeout: int):
         self._agent.start_episode()

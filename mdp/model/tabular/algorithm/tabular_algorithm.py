@@ -16,14 +16,13 @@ from mdp.model.general.algorithm.general_algorithm import GeneralAlgorithm
 
 class TabularAlgorithm(GeneralAlgorithm, ABC):
     def __init__(self,
-                 environment: TabularEnvironment,
                  agent: Agent,
                  algorithm_parameters: common.AlgorithmParameters,
                  name: str
                  ):
-        super().__init__(environment, agent, algorithm_parameters, name)
-        self._environment: TabularEnvironment = environment
+        super().__init__(agent, algorithm_parameters, name)
         self._agent: Agent = agent
+        self._environment: TabularEnvironment = self._agent.environment
 
         self.V: Optional[StateFunction] = None
         self.Q: Optional[StateActionFunction] = None

@@ -3,7 +3,7 @@ from typing import Type, TYPE_CHECKING
 
 from mdp import common
 if TYPE_CHECKING:
-    from mdp.model.general.environment.general_environment import GeneralEnvironment
+    # from mdp.model.general.environment.general_environment import GeneralEnvironment
     from mdp.model.general.agent.general_agent import GeneralAgent
 from mdp.model.general.algorithm.general_algorithm import GeneralAlgorithm
 from mdp.model.tabular.algorithm import tabular_algorithm_lookups
@@ -11,8 +11,7 @@ from mdp.model.non_tabular.algorithm import non_tabular_algorithm_lookups
 
 
 class AlgorithmFactory:
-    def __init__(self, environment: GeneralEnvironment, agent: GeneralAgent):
-        self._environment: GeneralEnvironment = environment
+    def __init__(self, agent: GeneralAgent):
         self._agent: GeneralAgent = agent
 
         self._algorithm_lookup: dict[common.AlgorithmType, Type[GeneralAlgorithm]] = {}
@@ -28,8 +27,7 @@ class AlgorithmFactory:
         type_of_algorithm: Type[GeneralAlgorithm] = self._algorithm_lookup[algorithm_type]
         algorithm_name: str = self._name_lookup[algorithm_type]
 
-        algorithm: GeneralAlgorithm = type_of_algorithm(self._environment,
-                                                        self._agent,
+        algorithm: GeneralAlgorithm = type_of_algorithm(self._agent,
                                                         algorithm_parameters,
                                                         algorithm_name)
         return algorithm

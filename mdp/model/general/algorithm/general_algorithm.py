@@ -3,7 +3,7 @@ from typing import TYPE_CHECKING    # , Optional
 from abc import ABC
 
 if TYPE_CHECKING:
-    from mdp.model.general.environment.general_environment import GeneralEnvironment
+    # from mdp.model.general.environment.general_environment import GeneralEnvironment
     from mdp.model.general.agent.general_agent import GeneralAgent
     # from mdp.model.non_tabular.policy.non_tabular_policy import NonTabularPolicy
     from mdp import common
@@ -14,13 +14,12 @@ if TYPE_CHECKING:
 
 class GeneralAlgorithm(ABC):
     def __init__(self,
-                 environment: GeneralEnvironment,
                  agent: GeneralAgent,
                  algorithm_parameters: common.AlgorithmParameters,
                  name: str
                  ):
-        self._environment: GeneralEnvironment = environment
         self._agent: GeneralAgent = agent
+        # self._environment: GeneralEnvironment = self._agent.environment
         self._algorithm_parameters: common.AlgorithmParameters = algorithm_parameters
         self._verbose = self._algorithm_parameters.verbose
 
