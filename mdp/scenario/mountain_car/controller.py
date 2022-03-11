@@ -1,15 +1,14 @@
 from __future__ import annotations
-from typing import Optional, TYPE_CHECKING
+from typing import Optional
 
-if TYPE_CHECKING:
-    from mdp.scenario.mountain_car.model.model import Model
-    from mdp.scenario.mountain_car.view.view import View
+from mdp.scenario.mountain_car.model.model import Model
+from mdp.scenario.mountain_car.view.view import View
 
 # from mdp import common
-from mdp.general_controller import GeneralController
+from mdp.controller.non_tabular_controller import NonTabularController
 
 
-class Controller(GeneralController):
+class Controller(NonTabularController[Model, View]):
     def __init__(self):
         super().__init__()
         self._model: Optional[Model] = self._model

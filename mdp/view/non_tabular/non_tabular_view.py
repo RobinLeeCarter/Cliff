@@ -3,10 +3,10 @@ from typing import TYPE_CHECKING
 from abc import ABC
 
 if TYPE_CHECKING:
-    from mdp.general_controller import GeneralController
+    from mdp.controller.tabular_controller import TabularController
 from mdp.view.general.general_view import GeneralView
 
 
 class NonTabularView(GeneralView, ABC):
-    def set_controller(self, controller: GeneralController):
-        self._controller: GeneralController = controller
+    def set_controller(self, controller: TabularController):
+        self._controller: TabularController = controller

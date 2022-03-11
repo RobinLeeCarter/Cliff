@@ -4,15 +4,15 @@ from typing import Optional, TYPE_CHECKING
 import numpy as np
 
 if TYPE_CHECKING:
-    from mdp.scenario.jacks.model.model import Model
     from mdp.scenario.jacks.model.action import Action
-    from mdp.scenario.jacks.view.view import View
+from mdp.scenario.jacks.model.model import Model
+from mdp.scenario.jacks.view.view import View
 
 from mdp import common
-from mdp.general_controller import GeneralController
+from mdp.controller.tabular_controller import TabularController
 
 
-class Controller(GeneralController):
+class Controller(TabularController[Model, View]):
     def __init__(self):
         super().__init__()
         self._model: Optional[Model] = self._model

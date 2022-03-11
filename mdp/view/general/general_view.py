@@ -1,10 +1,10 @@
 from __future__ import annotations
 from typing import Optional, TYPE_CHECKING
-from abc import ABC, abstractmethod
+from abc import ABC
 
 if TYPE_CHECKING:
     from mdp import common
-    from mdp.general_controller import GeneralController
+    from mdp.controller.general_controller import GeneralController
 
 from mdp.view.general.graph2d import Graph2D
 from mdp.view.general.graph3d import Graph3D

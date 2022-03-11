@@ -1,14 +1,13 @@
 from __future__ import annotations
-from typing import Optional, TYPE_CHECKING
+from typing import Optional
 
-if TYPE_CHECKING:
-    from mdp.scenario.cliff.model.model import Model
-    from mdp.scenario.cliff.view.view import View
+from mdp.scenario.cliff.model.model import Model
+from mdp.scenario.cliff.view.view import View
 
 from mdp.scenario.position_move import controller
 
 
-class Controller(controller.Controller):
+class Controller(controller.Controller[Model, View]):
     def __init__(self):
         super().__init__()
         self._model: Optional[Model] = self._model

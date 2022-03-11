@@ -5,7 +5,7 @@ from abc import ABC
 from mdp import common
 
 if TYPE_CHECKING:
-    from mdp.general_controller import GeneralController
+    from mdp.controller.tabular_controller import TabularController
 
 import pygame
 import pygame.freetype
@@ -16,13 +16,15 @@ from mdp.view.general.general_view import GeneralView
 class TabularView(GeneralView, ABC):
     def __init__(self):
         super().__init__()
+        self._controller: Optional[TabularController] = None
+        self.grid_view: Optional[GridView] = None
+
         pygame_pass, pygame_fail = pygame.init()
         if pygame_fail > 0:
             raise Exception(f"{pygame_fail} pygame modules failed to load")
-        self.grid_view: Optional[GridView] = None
 
-    def set_controller(self, controller: GeneralController):
-        self._controller: GeneralController = controller
+    def set_controller(self, controller: TabularController):
+        self._controller: TabularController = controller
 
     def build(self, comparison: common.Comparison):
         super().build(comparison)

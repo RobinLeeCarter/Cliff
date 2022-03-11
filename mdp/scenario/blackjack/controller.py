@@ -2,12 +2,12 @@ from __future__ import annotations
 from typing import Optional
 
 from mdp import common
-from mdp.general_controller import GeneralController
+from mdp.controller.tabular_controller import TabularController
 from mdp.scenario.blackjack.model.model import Model
 from mdp.scenario.blackjack.view.view import View
 
 
-class Controller(GeneralController[Model, View]):
+class Controller(TabularController[Model, View]):
     def __init__(self):
         super().__init__()
         self._model: Optional[Model] = self._model

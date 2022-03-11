@@ -1,22 +1,26 @@
 from __future__ import annotations
-from typing import TYPE_CHECKING, Optional
+from typing import TYPE_CHECKING, Optional, TypeVar, Generic
 
 if TYPE_CHECKING:
-    from mdp.model.general.agent.general_episode import GeneralEpisode
-    from mdp.model.general.general_model import GeneralModel
-    from mdp.view.tabular.tabular_view import TabularView
     from mdp import common
+    from mdp.model.general.agent.general_episode import GeneralEpisode
+
+from mdp.model.general.general_model import GeneralModel
+from mdp.view.general.general_view import GeneralView
+
+Model = TypeVar("Model", bound=GeneralModel)
+View = TypeVar("View", bound=GeneralView)
 
 
-class GeneralController2:
+class GeneralController(Generic[Model, View]):
     def __init__(self):
-        self._model: Optional[GeneralModel] = None
-        self._view: Optional[TabularView] = None
+        self._model: Optional[Model] = None
+        self._view: Optional[View] = None
         self._comparison: Optional[common.Comparison] = None
 
-    def link_mvc(self, model: GeneralModel, view: TabularView):
-        self._model: GeneralModel = model
-        self._view: TabularView = view
+    def link_mvc(self, model: Model, view: View):
+        self._model: Model = model
+        self._view: View = view
         self._model.set_controller(self)
         self._view.set_controller(self)
 
@@ -42,12 +46,11 @@ class GeneralController2:
     # def display_graph_2d(self, graph_values: common.GraphValues):
     #     self._view.graph.make_plot(graph_values)
 
-    def display_step(self, episode_: Optional[GeneralEpisode]):
-        # if self._comparison.grid_view_parameters.show_step:
-        self._view.grid_view.display_latest_step(episode_)
+    def display_step(self, episode: Optional[GeneralEpisode]):
+        raise Exception("display_step() Not Implemented")
     # endregion
 
     # region View requests
     def new_episode_request(self) -> GeneralEpisode:
-        return self._model.agent.generate_episode()
+        raise Exception("new_episode_request() Not Implemented")
     # endregion

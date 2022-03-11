@@ -3,7 +3,7 @@ from typing import Optional, TYPE_CHECKING, TypeVar, Generic
 from abc import ABC, abstractmethod
 
 if TYPE_CHECKING:
-    from mdp.general_controller import GeneralController
+    from mdp.controller.general_controller import GeneralController
     from mdp.model.general.environment.general_environment import GeneralEnvironment
     from mdp.model.tabular.agent.episode import Episode
     from mdp.model.breakdown.breakdown import Breakdown

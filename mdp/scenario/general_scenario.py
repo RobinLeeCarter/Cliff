@@ -5,12 +5,12 @@ from typing import Optional, Generic, TypeVar
 from mdp import common
 from mdp.model.general.general_model import GeneralModel
 from mdp.view.tabular.tabular_view import TabularView
-from mdp.general_controller import GeneralController
+from mdp.controller.tabular_controller import TabularController
 
 
 Model = TypeVar('Model', bound=GeneralModel)
 View = TypeVar('View', bound=TabularView)
-Controller = TypeVar('Controller', bound=GeneralController)
+Controller = TypeVar('Controller', bound=TabularController)
 
 
 class GeneralScenario(Generic[Model, View, Controller], ABC):
