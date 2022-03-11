@@ -6,7 +6,7 @@ if TYPE_CHECKING:
     from mdp.scenario.position.model.state import State
 
 from mdp import common
-from mdp.view import grid_view
+from mdp.view.tabular import grid_view
 
 
 class GridView(grid_view.GridView):

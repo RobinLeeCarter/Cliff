@@ -17,10 +17,10 @@ class Controller(GeneralController):
             self._comparison,
             self._model.agent.algorithm.V
         )
-        self._view.graph.make_plot(self._comparison.graph_values)
+        self._view.graph2d.make_plot(self._comparison.graph_values)
 
         self._model.environment.insert_policy_into_graph2d(
             self._comparison,
             self._model.agent.policy
         )
-        self._view.graph.make_plot(self._comparison.graph_values)
+        self._view.graph2d.make_plot(self._comparison.graph_values)

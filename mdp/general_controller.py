@@ -4,19 +4,19 @@ from typing import TYPE_CHECKING, Optional
 if TYPE_CHECKING:
     from mdp.model.general.agent.general_episode import GeneralEpisode
     from mdp.model.general.general_model import GeneralModel
-    from mdp.view.general_view import GeneralView
+    from mdp.view.tabular.tabular_view import TabularView
     from mdp import common
 
 
 class GeneralController:
     def __init__(self):
         self._model: Optional[GeneralModel] = None
-        self._view: Optional[GeneralView] = None
+        self._view: Optional[TabularView] = None
         self._comparison: Optional[common.Comparison] = None
 
-    def link_mvc(self, model: GeneralModel, view: GeneralView):
+    def link_mvc(self, model: GeneralModel, view: TabularView):
         self._model: GeneralModel = model
-        self._view: GeneralView = view
+        self._view: TabularView = view
         self._model.set_controller(self)
         self._view.set_controller(self)
 
@@ -36,7 +36,7 @@ class GeneralController:
 
     def _breakdown_graph(self):
         graph_values: common.GraphValues = self._model.breakdown.get_graph_values()
-        self._view.graph.make_plot(graph_values)
+        self._view.graph2d.make_plot(graph_values)
 
     # region Model requests
     # def display_graph_2d(self, graph_values: common.GraphValues):

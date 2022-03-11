@@ -9,7 +9,7 @@ if TYPE_CHECKING:
     from mdp import common
 
 
-class Graph:
+class Graph2D:
     def __init__(self):
         self.title = ""
         self.fig: Optional[figure.Figure] = None

@@ -8,7 +8,7 @@ import pygame
 from matplotlib import cm, colors
 
 from mdp import common
-from mdp.view import grid_view
+from mdp.view.tabular import grid_view
 
 
 class GridView(grid_view.GridView):

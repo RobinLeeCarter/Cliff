@@ -15,8 +15,8 @@ from mdp.scenario.gambler.model.action import Action
 class Model(TabularModel[State, Action, Environment]):
     def __init__(self, verbose: bool = False):
         super().__init__(verbose)
-        self._controller: Optional[Controller] = self._controller
-        self.environment: Optional[Environment] = self.environment
+        self._controller: Optional[Controller] = None
+        self.environment: Optional[Environment] = None
 
     def _create_environment(self, environment_parameters: EnvironmentParameters) -> Environment:
         return Environment(environment_parameters)

@@ -15,4 +15,4 @@ Environment = TypeVar('Environment', bound=environment.Environment)
 class Model(TabularModel[State, Action, Environment], ABC):
     def __init__(self, verbose: bool = False):
         super().__init__(verbose)
-        self._controller: Optional[Controller] = self._controller
+        self._controller: Optional[Controller] = None

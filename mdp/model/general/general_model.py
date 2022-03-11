@@ -42,8 +42,8 @@ class GeneralModel(Generic[Environment, Agent], ABC):
 
         self._cont: bool = True
 
-    def set_controller(self, controller_: GeneralController):
-        self._controller: GeneralController = controller_
+    def set_controller(self, controller: GeneralController):
+        self._controller: GeneralController = controller
 
     def build(self, comparison: common.Comparison):
         self._comparison: common.Comparison = comparison

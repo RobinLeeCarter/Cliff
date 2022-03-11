@@ -10,4 +10,4 @@ from mdp.scenario.position_move.view import view
 class View(view.View):
     def __init__(self):
         super().__init__()
-        self._controller: Optional[Controller] = self._controller
+        self._controller: Optional[Controller] = None
