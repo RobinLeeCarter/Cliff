@@ -86,6 +86,10 @@ class TabularAlgorithmType(AlgorithmType):
     VQ = enum.auto()
 
 
+class NonTabularAlgorithmType(AlgorithmType):
+    ...
+
+
 class PolicyType(enum.IntEnum):
     DETERMINISTIC = enum.auto()
     E_GREEDY = enum.auto()

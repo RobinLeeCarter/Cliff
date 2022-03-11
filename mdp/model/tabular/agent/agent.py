@@ -13,7 +13,7 @@ from mdp.model.tabular.algorithm.abstract.algorithm import Algorithm
 from mdp.model.tabular.algorithm.abstract.episodic import Episodic
 from mdp.model.tabular.agent.episode import Episode
 from mdp.model.tabular.policy.tabular_policy import TabularPolicy
-from mdp.model.tabular.algorithm.algorithm_factory import AlgorithmFactory
+from mdp.model.general.algorithm.algorithm_factory import AlgorithmFactory
 from mdp.model.general.policy import policy_factory
 
 from mdp.model.general.agent.general_agent import GeneralAgent
@@ -30,7 +30,8 @@ class Agent(GeneralAgent):
         self._behaviour_policy: Optional[TabularPolicy] = None     # if on-policy = self._policy
         # self._dual_policy_relationship: Optional[common.DualPolicyRelationship] = None
 
-        self._algorithm_factory: AlgorithmFactory = AlgorithmFactory(environment=self._environment, agent=self)
+        self._algorithm_factory: AlgorithmFactory[TabularEnvironment, Agent] = \
+            AlgorithmFactory[TabularEnvironment, Agent](environment=self._environment, agent=self)
         self._algorithm: Optional[Algorithm] = None
         self._episode: Optional[Episode] = None
         # self._record_first_visits: bool = False
@@ -71,6 +72,10 @@ class Agent(GeneralAgent):
     @property
     def algorithm(self) -> Algorithm:
         return self._algorithm
+
+    @property
+    def algorithm_name_fn(self) -> Callable[[common.AlgorithmType], str]:
+        return self._algorithm_factory.lookup_algorithm_name
 
     @property
     def episode(self) -> Episode:

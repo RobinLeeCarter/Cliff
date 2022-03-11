@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from typing import Callable
+
 import numpy as np
 
 import utils
@@ -9,10 +11,14 @@ from mdp.model.breakdown.breakdown import Breakdown
 
 
 class ReturnByAlpha(Breakdown):
-    def __init__(self, comparison: common.Comparison):
+    def __init__(self,
+                 comparison: common.Comparison,
+                 algorithm_name_fn: Callable[[common.AlgorithmType], str]
+                 ):
         super().__init__(comparison)
         assert isinstance(self.comparison.breakdown_parameters, common.BreakdownAlgorithmByAlpha)
         self.breakdown_parameters: common.BreakdownAlgorithmByAlpha = self.comparison.breakdown_parameters
+        self._algorithm_name_fn: Callable[[common.AlgorithmType], str] = algorithm_name_fn
 
         # AlgorithmType, alpha
         recorder_key_type = tuple[common.AlgorithmType, float]
@@ -38,7 +44,8 @@ class ReturnByAlpha(Breakdown):
                 [self._recorder[algorithm_type, alpha] for alpha in self.breakdown_parameters.alpha_list],
                 dtype=float
             )
-            title = common.algorithm_name[algorithm_type]
+            # TODO: Could be an issue, has been moved into the 2 Algorithm Factories
+            title = self._algorithm_name_fn(algorithm_type)
             series_ = common.Series(
                 title=title,
                 values=values,

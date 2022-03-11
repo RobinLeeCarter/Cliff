@@ -1,9 +1,9 @@
 from __future__ import annotations
-from typing import TYPE_CHECKING, Type  # , TypeVar, Generic
+from typing import TYPE_CHECKING, Type, TypeVar, Generic
 
 if TYPE_CHECKING:
-    from mdp.model.tabular.environment.tabular_environment import TabularEnvironment
-    from mdp.model.tabular.agent.agent import Agent
+    from mdp.model.general.environment.general_environment import GeneralEnvironment
+    from mdp.model.general.agent.general_agent import GeneralAgent
 from mdp.model.tabular.algorithm.abstract.algorithm import Algorithm
 from mdp import common
 # from mdp.model.tabular.environment.tabular_state import TabularState
@@ -38,20 +38,20 @@ from mdp.model.tabular.algorithm.control.sarsa import Sarsa
 from mdp.model.tabular.algorithm.control.q_learning import QLearning
 
 
-# State = TypeVar('State', bound=TabularState)
-# Action = TypeVar('Action', bound=TabularAction)
+Environment = TypeVar('Environment', bound=GeneralEnvironment)
+Agent = TypeVar('Agent', bound=GeneralAgent)
 
 
-class AlgorithmFactory:     # Generic[State, Action]
-    def __init__(self, environment: TabularEnvironment, agent: Agent):      # [State, Action]
-        self._environment: TabularEnvironment = environment                 # [State, Action]
+class AlgorithmFactory(Generic[Environment, Agent]):
+    def __init__(self, environment: Environment, agent: Agent):      # [State, Action]
+        self._environment: Environment = environment                 # [State, Action]
         self._agent: Agent = agent
 
-        self._algorithm_lookup: dict[common.TabularAlgorithmType, Type[Algorithm]] = self._get_algorithm_lookup()
-        self._name_lookup: dict[common.TabularAlgorithmType, str] = self._get_name_lookup()
+        self._algorithm_lookup: dict[common.AlgorithmType, Type[Algorithm]] = self._get_algorithm_lookup()
+        self._name_lookup: dict[common.AlgorithmType, str] = self._get_name_lookup()
 
-    def _get_algorithm_lookup(self) -> dict[common.TabularAlgorithmType, Type[Algorithm]]:
-        a = common.TabularAlgorithmType
+    def _get_algorithm_lookup(self) -> dict[common.AlgorithmType, Type[Algorithm]]:
+        a = common.AlgorithmType
         return {
             a.DP_POLICY_EVALUATION_Q_DETERMINISTIC: DpPolicyEvaluationQDeterministic,
             a.DP_POLICY_EVALUATION_Q_STOCHASTIC: DpPolicyEvaluationQStochastic,
@@ -77,8 +77,8 @@ class AlgorithmFactory:     # Generic[State, Action]
             a.VQ: VQ,
         }
 
-    def _get_name_lookup(self) -> dict[common.TabularAlgorithmType, str]:
-        a = common.TabularAlgorithmType
+    def _get_name_lookup(self) -> dict[common.AlgorithmType, str]:
+        a = common.AlgorithmType
         return {
             a.DP_POLICY_EVALUATION_V_DETERMINISTIC: 'Policy Evaluation DP (V) Deterministic',
             a.DP_POLICY_EVALUATION_V_STOCHASTIC: 'Policy Evaluation DP (V) Stochastic',
@@ -107,7 +107,7 @@ class AlgorithmFactory:     # Generic[State, Action]
         }
 
     def create(self, algorithm_parameters: common.Settings.algorithm_parameters) -> Algorithm:
-        algorithm_type: common.TabularAlgorithmType = algorithm_parameters.algorithm_type
+        algorithm_type: common.AlgorithmType = algorithm_parameters.algorithm_type
         type_of_algorithm: Type[Algorithm] = self._algorithm_lookup[algorithm_type]
         algorithm_name: str = self._name_lookup[algorithm_type]
 
@@ -118,5 +118,4 @@ class AlgorithmFactory:     # Generic[State, Action]
         return algorithm
 
     def lookup_algorithm_name(self, algorithm_type: common.AlgorithmType) -> str:
-        assert isinstance(algorithm_type, common.TabularAlgorithmType)
         return self._name_lookup[algorithm_type]
