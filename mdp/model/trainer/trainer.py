@@ -18,13 +18,13 @@ from mdp.model.trainer.parallel_runner import ParallelRunner
 
 class Trainer:
     def __init__(self,
-                 agent_: GeneralAgent,
-                 breakdown_: Optional[Breakdown],
+                 agent: GeneralAgent,
+                 breakdown: Optional[Breakdown],
                  model_step_callback: Optional[Callable[[Optional[GeneralEpisode]], None]] = None,
                  verbose: bool = False
                  ):
-        self._agent: GeneralAgent = agent_
-        self._breakdown: Optional[Breakdown] = breakdown_
+        self._agent: GeneralAgent = agent
+        self._breakdown: Optional[Breakdown] = breakdown
         self.settings: Optional[common.Settings] = None
 
         self._model_step_callback: Optional[Callable[[Optional[GeneralEpisode]], None]] = model_step_callback

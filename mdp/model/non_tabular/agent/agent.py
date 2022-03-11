@@ -36,8 +36,7 @@ class Agent(Generic[State, Action], GeneralAgent):
         self._behaviour_policy: Optional[NonTabularPolicy[State, Action]] = None     # if on-policy = self._policy
         # self._dual_policy_relationship: Optional[common.DualPolicyRelationship] = None
 
-        self._algorithm_factory: AlgorithmFactory[NonTabularEnvironment[State, Action], Agent]\
-            = AlgorithmFactory[NonTabularEnvironment[State, Action], Agent](environment=self._environment, agent=self)
+        self._algorithm_factory: AlgorithmFactory = AlgorithmFactory(environment=self._environment, agent=self)
         self._algorithm: Optional[NonTabularAlgorithm] = None
         self._episode: Optional[Episode[State, Action]] = None
         # self._record_first_visits: bool = False
@@ -227,6 +226,3 @@ class Agent(Generic[State, Action], GeneralAgent):
     #             count += 1
     #     rms_error = math.sqrt(squared_error / count)
     #     return rms_error
-
-    def get_algorithm_name_fn(self):
-        return self._algorithm_factory.lookup_algorithm_name

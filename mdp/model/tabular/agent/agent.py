@@ -29,8 +29,8 @@ class Agent(GeneralAgent):
         self._behaviour_policy: Optional[TabularPolicy] = None     # if on-policy = self._policy
         # self._dual_policy_relationship: Optional[common.DualPolicyRelationship] = None
 
-        self._algorithm_factory: AlgorithmFactory[TabularEnvironment, Agent] = \
-            AlgorithmFactory[TabularEnvironment, Agent](environment=self._environment, agent=self)
+        self._algorithm_factory: AlgorithmFactory = \
+            AlgorithmFactory(environment=self._environment, agent=self)
         self._algorithm: Optional[TabularAlgorithm] = None
         self._episode: Optional[Episode] = None
         # self._record_first_visits: bool = False
@@ -71,10 +71,6 @@ class Agent(GeneralAgent):
     @property
     def algorithm(self) -> TabularAlgorithm:
         return self._algorithm
-
-    @property
-    def algorithm_name_fn(self) -> Callable[[common.AlgorithmType], str]:
-        return self._algorithm_factory.lookup_algorithm_name
 
     @property
     def episode(self) -> Episode:

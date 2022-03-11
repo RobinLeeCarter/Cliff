@@ -1,22 +1,19 @@
 from __future__ import annotations
-from typing import Type, TypeVar, Generic
+from typing import Type, TYPE_CHECKING
 
 from mdp import common
-from mdp.model.general.environment.general_environment import GeneralEnvironment
-from mdp.model.general.agent.general_agent import GeneralAgent
+if TYPE_CHECKING:
+    from mdp.model.general.environment.general_environment import GeneralEnvironment
+    from mdp.model.general.agent.general_agent import GeneralAgent
 from mdp.model.general.algorithm.general_algorithm import GeneralAlgorithm
 from mdp.model.tabular.algorithm import tabular_algorithm_lookups
 from mdp.model.non_tabular.algorithm import non_tabular_algorithm_lookups
 
 
-Environment = TypeVar('Environment', bound=GeneralEnvironment)
-Agent = TypeVar('Agent', bound=GeneralAgent)
-
-
-class AlgorithmFactory(Generic[Environment, Agent]):
-    def __init__(self, environment: Environment, agent: Agent):
-        self._environment: Environment = environment
-        self._agent: Agent = agent
+class AlgorithmFactory:
+    def __init__(self, environment: GeneralEnvironment, agent: GeneralAgent):
+        self._environment: GeneralEnvironment = environment
+        self._agent: GeneralAgent = agent
 
         self._algorithm_lookup: dict[common.AlgorithmType, Type[GeneralAlgorithm]] = {}
         self._algorithm_lookup.update(tabular_algorithm_lookups.get_algorithm_lookup())

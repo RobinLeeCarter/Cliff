@@ -1,5 +1,5 @@
 from __future__ import annotations
-from typing import Optional, Callable
+from typing import Optional
 
 from mdp import common
 from mdp.model.breakdown.breakdown import Breakdown
@@ -9,9 +9,7 @@ from mdp.model.breakdown.return_by_episode import ReturnByEpisode
 from mdp.model.breakdown.episode_by_timestep import EpisodeByTimestep
 
 
-def breakdown_factory(comparison: common.Comparison,
-                      algorithm_name_fn: Optional[Callable[[common.AlgorithmType], str]] = None) \
-        -> Optional[Breakdown]:
+def breakdown_factory(comparison: common.Comparison) -> Optional[Breakdown]:
     c = common.BreakdownType
     breakdown_type = comparison.breakdown_parameters.breakdown_type
     breakdown: Optional[Breakdown]
@@ -22,7 +20,7 @@ def breakdown_factory(comparison: common.Comparison,
     elif breakdown_type == c.RMS_BY_EPISODE:
         breakdown = RmsByEpisode(comparison)
     elif breakdown_type == c.RETURN_BY_ALPHA:
-        breakdown = ReturnByAlpha(comparison, algorithm_name_fn)
+        breakdown = ReturnByAlpha(comparison)
     else:
         breakdown = None
 

@@ -60,8 +60,8 @@ class GeneralModel(Generic[Environment, Agent], ABC):
         # breakdowns themselves need comparison in current implementation so breakdown_parameters is not passed in
         self.breakdown: Optional[Breakdown] = breakdown_factory.breakdown_factory(self._comparison)
         self.trainer: Trainer = Trainer(
-            agent_=self.agent,
-            breakdown_=self.breakdown,
+            agent=self.agent,
+            breakdown=self.breakdown,
             model_step_callback=self._display_step,
             verbose=False
         )

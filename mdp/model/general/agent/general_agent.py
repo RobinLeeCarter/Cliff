@@ -1,28 +1,14 @@
 from __future__ import annotations
 from abc import ABC, abstractmethod
-from typing import Optional, TYPE_CHECKING, Callable    # , TypeVar, Generic
-
-# import math
+from typing import Optional, TYPE_CHECKING, Callable
 
 if TYPE_CHECKING:
     from mdp.model.general.environment.general_environment import GeneralEnvironment
-    # from mdp.model.general.environment.general_state import GeneralState
-    # from mdp.model.general.environment.general_action import GeneralAction
-
 from mdp import common
-# renamed to avoid name conflicts
+from mdp.model.general.algorithm.algorithm_factory import AlgorithmFactory
 from mdp.model.general.algorithm.general_algorithm import GeneralAlgorithm
-# from mdp.model.tabular.algorithm.abstract.episodic import Episodic
 from mdp.model.general.agent.general_episode import GeneralEpisode
-# from mdp.model.non_tabular.policy.policy_factory import PolicyFactory
 from mdp.model.general.policy.general_policy import GeneralPolicy
-
-# from mdp.model.general.algorithm import algorithm_factory
-# from mdp.model.general.policy import policy_factory
-
-# State = TypeVar('State', bound=GeneralState)
-# Action = TypeVar('Action', bound=GeneralAction)
-# Policy = TypeVar('Policy', bound=GeneralPolicy)
 
 
 class GeneralAgent(ABC):
@@ -37,6 +23,7 @@ class GeneralAgent(ABC):
         self._behaviour_policy: Optional[GeneralPolicy] = None     # if on-policy = self._policy
         self._dual_policy_relationship: Optional[common.DualPolicyRelationship] = None
 
+        self._algorithm_factory: Optional[AlgorithmFactory] = None
         self._algorithm: Optional[GeneralAlgorithm] = None
         self._episode: Optional[GeneralEpisode] = None
         self._record_first_visits: bool = False
@@ -65,6 +52,10 @@ class GeneralAgent(ABC):
     @abstractmethod
     def behaviour_policy(self) -> GeneralPolicy:
         return self._behaviour_policy
+
+    @property
+    def algorithm_factory(self) -> AlgorithmFactory:
+        return self._algorithm_factory
 
     @property
     @abstractmethod
