@@ -9,9 +9,11 @@ if TYPE_CHECKING:
 
 from mdp.model.tabular.tabular_model import TabularModel
 from mdp.scenario.jacks.model.environment import Environment
+from mdp.scenario.jacks.model.state import State
+from mdp.scenario.jacks.model.action import Action
 
 
-class Model(TabularModel[Environment]):
+class Model(TabularModel[State, Action, Environment]):
     def __init__(self, verbose: bool = False):
         super().__init__(verbose)
         self._controller: Optional[Controller] = self._controller

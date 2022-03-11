@@ -36,6 +36,10 @@ class GeneralAgent(ABC):
         # trainer callback
         self._step_callback: Optional[Callable[[], bool]] = None
 
+    @property
+    def environment(self) -> GeneralEnvironment:
+        return self._environment
+
     # use for on-policy algorithms
     @property
     @abstractmethod

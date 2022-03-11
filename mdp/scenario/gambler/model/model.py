@@ -8,9 +8,11 @@ if TYPE_CHECKING:
 
 from mdp.model.tabular.tabular_model import TabularModel
 from mdp.scenario.gambler.model.environment import Environment
+from mdp.scenario.gambler.model.state import State
+from mdp.scenario.gambler.model.action import Action
 
 
-class Model(TabularModel[Environment]):
+class Model(TabularModel[State, Action, Environment]):
     def __init__(self, verbose: bool = False):
         super().__init__(verbose)
         self._controller: Optional[Controller] = self._controller

@@ -59,6 +59,10 @@ class Agent(Generic[State, Action], GeneralAgent):
         # trainer callback
         self._step_callback: Optional[Callable[[], bool]] = None
 
+    @property
+    def environment(self) -> NonTabularEnvironment[State, Action]:
+        return self._environment
+
     # use for on-policy algorithms
     @property
     def policy(self) -> NonTabularPolicy[State, Action]:

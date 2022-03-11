@@ -1,11 +1,10 @@
 from __future__ import annotations
-from typing import Optional, TYPE_CHECKING, Callable
+from typing import Optional, Callable, TypeVar, Generic
 
 import math
 
-if TYPE_CHECKING:
-    from mdp.model.tabular.environment.tabular_state import TabularState
-    from mdp.model.tabular.environment.tabular_action import TabularAction
+from mdp.model.tabular.environment.tabular_state import TabularState
+from mdp.model.tabular.environment.tabular_action import TabularAction
 from mdp import common
 from mdp.model.tabular.environment.tabular_environment import TabularEnvironment
 from mdp.model.tabular.algorithm.tabular_algorithm import TabularAlgorithm
@@ -17,13 +16,16 @@ from mdp.model.general.policy import policy_factory
 
 from mdp.model.general.agent.general_agent import GeneralAgent
 
+State = TypeVar('State', bound=TabularState)
+Action = TypeVar('Action', bound=TabularAction)
 
-class Agent(GeneralAgent):
+
+class Agent(Generic[State, Action], GeneralAgent):
     def __init__(self,
-                 environment: TabularEnvironment,
+                 environment: TabularEnvironment[State, Action],
                  verbose: bool = False):
         super().__init__(environment, verbose)
-        self._environment: TabularEnvironment = environment
+        self._environment: TabularEnvironment[State, Action] = environment
 
         self._policy: Optional[TabularPolicy] = None
         self._behaviour_policy: Optional[TabularPolicy] = None     # if on-policy = self._policy
@@ -53,6 +55,10 @@ class Agent(GeneralAgent):
 
         # trainer callback
         self._step_callback: Optional[Callable[[], bool]] = None
+
+    @property
+    def environment(self) -> TabularEnvironment[State, Action]:
+        return self._environment
 
     # use for on-policy algorithms
     @property
