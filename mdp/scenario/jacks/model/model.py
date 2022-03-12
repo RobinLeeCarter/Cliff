@@ -4,7 +4,7 @@ from typing import Optional, TYPE_CHECKING
 
 if TYPE_CHECKING:
     from mdp.scenario.jacks.controller import Controller
-    from mdp.model.tabular.agent.episode import Episode
+    from mdp.model.tabular.agent.tabular_episode import TabularEpisode
     from mdp.scenario.jacks.model.environment_parameters import EnvironmentParameters
 
 from mdp.model.tabular.tabular_model import TabularModel
@@ -21,6 +21,6 @@ class Model(TabularModel[State, Action, Environment]):
     def _create_environment(self, environment_parameters: EnvironmentParameters) -> Environment:
         return Environment(environment_parameters)
 
-    def _display_step(self, episode_: Optional[Episode]):
+    def _display_step(self, episode: Optional[TabularEpisode]):
         self.environment.update_grid_policy(policy=self.agent.policy)
-        self._controller.display_step(episode_)
+        self._controller.display_step(episode)

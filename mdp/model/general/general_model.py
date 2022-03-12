@@ -5,7 +5,7 @@ from abc import ABC, abstractmethod
 if TYPE_CHECKING:
     from mdp.controller.general_controller import GeneralController
     from mdp.model.general.environment.general_environment import GeneralEnvironment
-    from mdp.model.tabular.agent.episode import Episode
+    from mdp.model.general.agent.general_episode import GeneralEpisode
     from mdp.model.breakdown.breakdown import Breakdown
 
 import multiprocessing
@@ -106,12 +106,7 @@ class GeneralModel(Generic[Environment, Agent], ABC):
         #     (common.DualPolicyRelationship.LINKED_POLICIES, common.DualPolicyRelationship.INDEPENDENT_POLICIES):
         self.agent.set_behaviour_policy(self.agent.target_policy)
 
-    def update_grid_value_functions(self):
-        policy_for_display = self.agent.policy.linked_policy
-        self.environment.update_grid_value_functions(algorithm=self.agent.algorithm,
-                                                     policy=policy_for_display)
-
-    def _display_step(self, episode_: Optional[Episode]):
-        # if self.trainer.episode_counter >= 9900:
-        self.update_grid_value_functions()
-        self._controller.display_step(episode_)
+    def _display_step(self, episode: Optional[GeneralEpisode]):
+        raise Exception("_display_step() not implemented")
+        # self.update_grid_value_functions()
+        # self._controller.display_step(episode)

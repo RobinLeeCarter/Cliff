@@ -1,15 +1,10 @@
 from __future__ import annotations
-from typing import TYPE_CHECKING    # , Optional
+from typing import TYPE_CHECKING
 from abc import ABC
 
 if TYPE_CHECKING:
-    # from mdp.model.general.environment.general_environment import GeneralEnvironment
     from mdp.model.general.agent.general_agent import GeneralAgent
-    # from mdp.model.non_tabular.policy.non_tabular_policy import NonTabularPolicy
     from mdp import common
-# from mdp.model.tabular.algorithm import linear_algebra as la
-# from mdp.model.non_tabular.value_function.state_function import StateFunction
-# from mdp.model.non_tabular.value_function.state_action_function import StateActionFunction
 
 
 class GeneralAlgorithm(ABC):

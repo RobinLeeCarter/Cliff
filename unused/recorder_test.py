@@ -7,7 +7,7 @@ def recorder_test() -> bool:
     environment_ = scenarios.TabularEnvironment()
     greedy_policy: policy.Deterministic = policy.Deterministic(environment_)
     e_greedy_policy: policy.EGreedy = policy.EGreedy(environment_, greedy_policy=greedy_policy)
-    agent_ = agent.Agent(environment_, e_greedy_policy)
+    agent_ = agent.TabularAgent(environment_, e_greedy_policy)
 
     factory_ = algorithm.Factory(environment_, agent_)
     algorithms: list[algorithm.Algorithm] = [factory_[settings_] for settings_ in data.return_by_episode_settings]

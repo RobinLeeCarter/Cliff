@@ -3,8 +3,8 @@ from typing import Optional, TYPE_CHECKING
 from abc import ABC, abstractmethod
 
 if TYPE_CHECKING:
-    from mdp.model.tabular.agent.agent import Agent
-    from mdp.model.tabular.agent.episode import Episode
+    from mdp.model.tabular.agent.tabular_agent import TabularAgent
+    from mdp.model.tabular.agent.tabular_episode import TabularEpisode
     from mdp import common
 from mdp.model.tabular.algorithm.abstract.episodic import Episodic
 
@@ -12,17 +12,17 @@ from mdp.model.tabular.algorithm.abstract.episodic import Episodic
 # TODO: Is this a good idea
 class EpisodicBatch(Episodic, ABC):
     def __init__(self,
-                 agent: Agent,
+                 agent: TabularAgent,
                  algorithm_parameters: common.AlgorithmParameters,
                  name: str
                  ):
         super().__init__(agent, algorithm_parameters, name)
-        self._episode: Optional[Episode] = None
+        self._episode: Optional[TabularEpisode] = None
         self._exit_episode: bool = False
         self._exploring_starts: bool = algorithm_parameters.exploring_starts
 
     @property
-    def episode(self) -> Optional[Episode]:
+    def episode(self) -> Optional[TabularEpisode]:
         return self._episode
 
     def do_episode(self, episode_length_timeout: int):
@@ -37,11 +37,11 @@ class EpisodicBatch(Episodic, ABC):
         #         if self._exit_episode:
         #             break
 
-    def process_episodes(self, episodes: list[Episode]):
+    def process_episodes(self, episodes: list[TabularEpisode]):
         for episode in episodes:
             self.process_episode(episode)
 
-    def process_episode(self, episode: Episode):
+    def process_episode(self, episode: TabularEpisode):
         self._episode = episode
         self._pre_process_episode()
         self._exit_episode = False

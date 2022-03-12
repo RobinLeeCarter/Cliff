@@ -10,7 +10,7 @@ from matplotlib import cm, colors
 
 if TYPE_CHECKING:
     from mdp.model.tabular.environment.grid_world import GridWorld
-    from mdp.model.tabular.agent.episode import Episode
+    from mdp.model.tabular.agent.tabular_episode import TabularEpisode
 from mdp import common
 
 
@@ -47,7 +47,7 @@ class GridView(ABC):
         self._user_event: common.UserEvent = common.UserEvent.NONE
 
         self._t: int = 0
-        self._episode: Optional[Episode] = None
+        self._episode: Optional[TabularEpisode] = None
 
         self._build_color_lookup()
         self._build_policy_color_map()
@@ -144,7 +144,7 @@ class GridView(ABC):
             self._wait_for_event_of_interest()
             # self._handle_event()
 
-    def display_latest_step(self, episode_: Optional[Episode] = None):
+    def display_latest_step(self, episode_: Optional[TabularEpisode] = None):
         self.open_window()  # if not already
         self._copy_grid_into_background()
         if episode_:
@@ -157,13 +157,13 @@ class GridView(ABC):
             self.close_window()
             sys.exit()
 
-    def demonstrate(self, new_episode_request: Callable[[], Episode]):
+    def demonstrate(self, new_episode_request: Callable[[], TabularEpisode]):
         self.open_window()
         running_average = 0
         count = 0
         while True:
             count += 1
-            episode: Episode = new_episode_request()
+            episode: TabularEpisode = new_episode_request()
             print(f"max_t: {episode.max_t} \t total_return: {episode.total_return:.0f}")
             running_average += (1/count) * (episode.total_return - running_average)
             print(f"count: {count} \t running_average: {running_average:.1f}")
@@ -172,7 +172,7 @@ class GridView(ABC):
                 break
         self.close_window()
 
-    def display_episode(self, episode_: Episode) -> common.UserEvent:
+    def display_episode(self, episode_: TabularEpisode) -> common.UserEvent:
         # print(episode_.trajectory)
         # print(f"len(self._episode.trajectory) = {len(episode_.trajectory)}")
         self._copy_grid_into_background()
@@ -194,11 +194,11 @@ class GridView(ABC):
             self._t += 1
         return self._user_event
 
-    def _frame_on_background_latest(self, episode_: Episode):
+    def _frame_on_background_latest(self, episode_: TabularEpisode):
         """draw frame onto background for the latest state, action (& previous) from in-progress episode"""
         pass
 
-    def _frame_on_background_for_t(self, episode_: Episode, t: int):
+    def _frame_on_background_for_t(self, episode_: TabularEpisode, t: int):
         """draw frame onto background for S(t), A(t) (& previous) from episode"""
         pass
 

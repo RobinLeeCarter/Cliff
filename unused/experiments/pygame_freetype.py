@@ -35,7 +35,7 @@ class GridView:
         self._user_event: common.UserEvent = common.UserEvent.NONE
 
         self._t: int = 0
-        self._episode: Optional[agent.Episode] = None
+        self._episode: Optional[agent.TabularEpisode] = None
 
         self._build_color_lookup()
 
@@ -72,7 +72,7 @@ class GridView:
             self._wait_for_event_of_interest()
             # self._handle_event()
 
-    def demonstrate(self, new_episode_request: Callable[[], agent.Episode]):
+    def demonstrate(self, new_episode_request: Callable[[], agent.TabularEpisode]):
         if self._display_v:
             self._load_gridworld()
         self.open_window()
@@ -80,7 +80,7 @@ class GridView:
         count = 0
         while True:
             count += 1
-            episode: agent.Episode = new_episode_request()
+            episode: agent.TabularEpisode = new_episode_request()
             print(f"max_t: {episode.max_t} \t total_return: {episode.total_return:.0f}")
             running_average += (1/count) * (episode.total_return - running_average)
             print(f"count: {count} \t running_average: {running_average:.1f}")
@@ -89,7 +89,7 @@ class GridView:
                 break
         self.close_window()
 
-    def display_episode(self, episode_: agent.Episode, show_trail: bool = True) -> common.UserEvent:
+    def display_episode(self, episode_: agent.TabularEpisode, show_trail: bool = True) -> common.UserEvent:
         # print(episode_.trajectory)
         # print(f"len(self._episode.trajectory) = {len(episode_.trajectory)}")
         self._copy_grid_into_background()

@@ -12,7 +12,7 @@ from mdp import common
 # renamed to avoid name conflicts
 from mdp.model.non_tabular.algorithm.non_tabular_algorithm import NonTabularAlgorithm
 from mdp.model.tabular.algorithm.abstract.episodic import Episodic
-from mdp.model.non_tabular.agent.episode import Episode
+from mdp.model.non_tabular.agent.non_tabular_episode import NonTabularEpisode
 from mdp.model.non_tabular.policy.policy_factory import PolicyFactory
 from mdp.model.non_tabular.policy.non_tabular_policy import NonTabularPolicy
 from mdp.model.general.algorithm.algorithm_factory import AlgorithmFactory
@@ -24,7 +24,7 @@ State = TypeVar('State', bound=NonTabularState)
 Action = TypeVar('Action', bound=NonTabularAction)
 
 
-class Agent(Generic[State, Action], GeneralAgent):
+class NonTabularAgent(Generic[State, Action], GeneralAgent):
     def __init__(self,
                  environment: NonTabularEnvironment[State, Action],
                  verbose: bool = False):
@@ -38,7 +38,7 @@ class Agent(Generic[State, Action], GeneralAgent):
 
         self._algorithm_factory: AlgorithmFactory = AlgorithmFactory(agent=self)
         self._algorithm: Optional[NonTabularAlgorithm] = None
-        self._episode: Optional[Episode[State, Action]] = None
+        self._episode: Optional[NonTabularEpisode[State, Action]] = None
         # self._record_first_visits: bool = False
         # self._episode_length_timeout: Optional[int] = None
 
@@ -82,7 +82,7 @@ class Agent(Generic[State, Action], GeneralAgent):
         return self._algorithm
 
     @property
-    def episode(self) -> Episode:
+    def episode(self) -> NonTabularEpisode:
         return self._episode
 
     def apply_settings(self, settings: common.Settings):
@@ -125,13 +125,13 @@ class Agent(Generic[State, Action], GeneralAgent):
     def generate_episodes(self,
                           num_episodes: int,
                           episode_length_timeout: Optional[int] = None
-                          ) -> list[Episode]:
+                          ) -> list[NonTabularEpisode]:
         return [self.generate_episode(episode_length_timeout)
                 for _ in range(num_episodes)]
 
     def generate_episode(self,
                          episode_length_timeout: Optional[int] = None,
-                         ) -> Episode:
+                         ) -> NonTabularEpisode:
         if not episode_length_timeout:
             episode_length_timeout = self._episode_length_timeout
 
@@ -156,7 +156,7 @@ class Agent(Generic[State, Action], GeneralAgent):
             print("start episode...")
         self.t = 0
 
-        self._episode = Episode(env, self.gamma, self._step_callback, self._record_first_visits)
+        self._episode = NonTabularEpisode(env, self.gamma, self._step_callback, self._record_first_visits)
 
         # get starting state, reward will be None
         self.state = self._environment.draw_start_state()

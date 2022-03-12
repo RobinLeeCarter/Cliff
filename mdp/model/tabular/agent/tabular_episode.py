@@ -10,7 +10,7 @@ from mdp.model.tabular.agent import rsa
 from mdp.model.general.agent.general_episode import GeneralEpisode
 
 
-class Episode(GeneralEpisode):
+class TabularEpisode(GeneralEpisode):
     """Just makes a record laid out in the standard way with Reward, State, Action for each _t"""
     def __init__(self,
                  environment: TabularEnvironment,

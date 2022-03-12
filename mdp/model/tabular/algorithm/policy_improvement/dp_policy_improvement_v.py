@@ -4,14 +4,14 @@ from typing import TYPE_CHECKING
 import numpy as np
 
 if TYPE_CHECKING:
-    from mdp.model.tabular.agent.agent import Agent
+    from mdp.model.tabular.agent.tabular_agent import TabularAgent
 from mdp import common
 from mdp.model.tabular.algorithm.abstract.dynamic_programming_v import DynamicProgrammingV
 
 
 class DpPolicyImprovementV(DynamicProgrammingV):
     def __init__(self,
-                 agent: Agent,
+                 agent: TabularAgent,
                  algorithm_parameters: common.AlgorithmParameters,
                  name: str
                  ):

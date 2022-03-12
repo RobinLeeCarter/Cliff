@@ -2,7 +2,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from mdp.model.tabular.agent.agent import Agent
+    from mdp.model.tabular.agent.tabular_agent import TabularAgent
 from mdp import common
 from mdp.model.tabular.algorithm.policy_evaluation.dp_policy_evaluation_q_deterministic \
     import DpPolicyEvaluationQDeterministic
@@ -11,7 +11,7 @@ from mdp.model.tabular.algorithm.policy_improvement.dp_policy_improvement_q impo
 
 class DpPolicyIterationQ(DpPolicyEvaluationQDeterministic, DpPolicyImprovementQ):
     def __init__(self,
-                 agent: Agent,
+                 agent: TabularAgent,
                  algorithm_parameters: common.AlgorithmParameters,
                  name: str
                  ):

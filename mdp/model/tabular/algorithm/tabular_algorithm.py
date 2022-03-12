@@ -4,7 +4,7 @@ from abc import ABC
 
 if TYPE_CHECKING:
     from mdp.model.tabular.environment.tabular_environment import TabularEnvironment
-    from mdp.model.tabular.agent.agent import Agent
+    from mdp.model.tabular.agent.tabular_agent import TabularAgent
     from mdp.model.tabular.policy.tabular_policy import TabularPolicy
     from mdp import common
 from mdp.model.tabular.algorithm import linear_algebra as la
@@ -16,12 +16,12 @@ from mdp.model.general.algorithm.general_algorithm import GeneralAlgorithm
 
 class TabularAlgorithm(GeneralAlgorithm, ABC):
     def __init__(self,
-                 agent: Agent,
+                 agent: TabularAgent,
                  algorithm_parameters: common.AlgorithmParameters,
                  name: str
                  ):
         super().__init__(agent, algorithm_parameters, name)
-        self._agent: Agent = agent
+        self._agent: TabularAgent = agent
         self._environment: TabularEnvironment = self._agent.environment
 
         self.V: Optional[StateFunction] = None

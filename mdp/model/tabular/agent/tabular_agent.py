@@ -9,7 +9,7 @@ from mdp import common
 from mdp.model.tabular.environment.tabular_environment import TabularEnvironment
 from mdp.model.tabular.algorithm.tabular_algorithm import TabularAlgorithm
 from mdp.model.tabular.algorithm.abstract.episodic import Episodic
-from mdp.model.tabular.agent.episode import Episode
+from mdp.model.tabular.agent.tabular_episode import TabularEpisode
 from mdp.model.tabular.policy.tabular_policy import TabularPolicy
 from mdp.model.general.algorithm.algorithm_factory import AlgorithmFactory
 from mdp.model.general.policy import policy_factory
@@ -20,7 +20,7 @@ State = TypeVar('State', bound=TabularState)
 Action = TypeVar('Action', bound=TabularAction)
 
 
-class Agent(Generic[State, Action], GeneralAgent):
+class TabularAgent(Generic[State, Action], GeneralAgent):
     def __init__(self,
                  environment: TabularEnvironment[State, Action],
                  verbose: bool = False):
@@ -33,7 +33,7 @@ class Agent(Generic[State, Action], GeneralAgent):
 
         self._algorithm_factory: AlgorithmFactory = AlgorithmFactory(agent=self)
         self._algorithm: Optional[TabularAlgorithm] = None
-        self._episode: Optional[Episode] = None
+        self._episode: Optional[TabularEpisode] = None
         # self._record_first_visits: bool = False
         # self._episode_length_timeout: Optional[int] = None
 
@@ -78,7 +78,7 @@ class Agent(Generic[State, Action], GeneralAgent):
         return self._algorithm
 
     @property
-    def episode(self) -> Episode:
+    def episode(self) -> TabularEpisode:
         return self._episode
 
     def apply_settings(self, settings: common.Settings):
@@ -124,14 +124,14 @@ class Agent(Generic[State, Action], GeneralAgent):
                           num_episodes: int,
                           episode_length_timeout: Optional[int] = None,
                           exploring_starts: bool = False,
-                          ) -> list[Episode]:
+                          ) -> list[TabularEpisode]:
         return [self.generate_episode(episode_length_timeout, exploring_starts)
                 for _ in range(num_episodes)]
 
     def generate_episode(self,
                          episode_length_timeout: Optional[int] = None,
                          exploring_starts: bool = False
-                         ) -> Episode:
+                         ) -> TabularEpisode:
         if not episode_length_timeout:
             episode_length_timeout = self._episode_length_timeout
 
@@ -157,7 +157,7 @@ class Agent(Generic[State, Action], GeneralAgent):
             print("start episode...")
         self.t = 0
 
-        self._episode = Episode(env, self.gamma, self._step_callback, self._record_first_visits)
+        self._episode = TabularEpisode(env, self.gamma, self._step_callback, self._record_first_visits)
 
         if exploring_starts:
             # completely random starting state and action and take the action, reward will be None

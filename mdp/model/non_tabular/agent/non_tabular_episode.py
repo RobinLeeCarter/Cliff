@@ -4,7 +4,7 @@ from typing import Optional, Callable, TYPE_CHECKING, TypeVar, Generic
 if TYPE_CHECKING:
     from mdp.model.non_tabular.environment.non_tabular_environment import NonTabularEnvironment
 
-from mdp.model.non_tabular.agent.rsa import RSA
+from mdp.model.non_tabular.agent.reward_state_action import RewardStateAction
 
 from mdp.model.non_tabular.environment.non_tabular_state import NonTabularState
 from mdp.model.non_tabular.environment.non_tabular_action import NonTabularAction
@@ -14,7 +14,7 @@ State = TypeVar('State', bound=NonTabularState)
 Action = TypeVar('Action', bound=NonTabularAction)
 
 
-class Episode(Generic[State, Action], GeneralEpisode):
+class NonTabularEpisode(Generic[State, Action], GeneralEpisode):
     """Just makes a record laid out in the standard way with Reward, State, Action for each _t"""
     def __init__(self,
                  environment: NonTabularEnvironment[State, Action],
@@ -28,7 +28,7 @@ class Episode(Generic[State, Action], GeneralEpisode):
         # self.record_first_visits = record_first_visits
 
         # R0=0, S0, A0, R1, S1, A1, R2 ... S(T-1), A(T-1), R(T), S(T), A(T)=-1
-        self.trajectory: list[RSA] = []
+        self.trajectory: list[RewardStateAction] = []
         self.terminates: bool = False
         self.T: Optional[int] = None
         self.G: list[float] = []
@@ -73,7 +73,7 @@ class Episode(Generic[State, Action], GeneralEpisode):
                 reward: float,
                 state: State,
                 action: Optional[Action]):
-        rsa = RSA(reward, state, action)
+        rsa = RewardStateAction(reward, state, action)
         self.trajectory.append(rsa)
         if state.is_terminal:
             self.terminates = True
@@ -95,7 +95,7 @@ class Episode(Generic[State, Action], GeneralEpisode):
         if is_first_visit:
             self.visited_states.add(state)
 
-    def __getitem__(self, t: int) -> RSA:
+    def __getitem__(self, t: int) -> RewardStateAction:
         return self.trajectory[t]
 
     @property

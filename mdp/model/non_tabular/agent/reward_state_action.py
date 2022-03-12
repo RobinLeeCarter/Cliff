@@ -10,7 +10,7 @@ Action = TypeVar('Action', bound=NonTabularAction)
 
 
 @dataclass
-class RSA(Generic[State, Action]):
+class RewardStateAction(Generic[State, Action]):
     r: float
     state: State
     action: Optional[Action]

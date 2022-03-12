@@ -11,7 +11,7 @@ from mdp.model.general.algorithm.general_algorithm import GeneralAlgorithm
 from mdp.model.tabular.algorithm.tabular_algorithm import TabularAlgorithm
 from mdp.model.tabular.algorithm.abstract.episodic import Episodic
 from mdp.model.tabular.algorithm.abstract.dynamic_programming import DynamicProgramming
-from mdp.model.tabular.agent.agent import Agent as TabularAgent
+from mdp.model.tabular.agent.tabular_agent import TabularAgent
 
 from mdp.model.trainer.parallel_runner import ParallelRunner
 

@@ -2,7 +2,7 @@ from __future__ import annotations
 from typing import Optional, TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from mdp.model.tabular.agent.episode import Episode
+    from mdp.model.tabular.agent.tabular_episode import TabularEpisode
     from mdp.scenario.position_move.model.action import Action
     from mdp.scenario.position_move.model.grid_world import GridWorld
 
@@ -16,7 +16,7 @@ class GridView(grid_view.GridView):
         super().__init__(grid_view_parameters)
         self._grid_world: Optional[GridWorld] = self._grid_world
 
-    def _frame_on_background_latest(self, episode: Episode):
+    def _frame_on_background_latest(self, episode: TabularEpisode):
         last_state: Optional[State] = episode.last_state
         agent_position: common.XY = last_state.position
         agent_move: Optional[common.XY] = None
@@ -37,7 +37,7 @@ class GridView(grid_view.GridView):
 
         self._draw_frame_on_background(agent_position, agent_move, prev_position, prev_move)
 
-    def _frame_on_background_for_t(self, episode: Episode, t: int):
+    def _frame_on_background_for_t(self, episode: TabularEpisode, t: int):
         state: State = episode.get_state(t)  # type: ignore    # Optional[State] before?
         agent_position: common.XY = state.position
         agent_move: Optional[common.XY] = None

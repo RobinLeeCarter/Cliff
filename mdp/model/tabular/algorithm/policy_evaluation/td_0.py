@@ -2,15 +2,15 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from mdp.model.tabular.agent.agent import Agent
-    from mdp.model.tabular.agent.episode import Episode
+    from mdp.model.tabular.agent.tabular_agent import TabularAgent
+    from mdp.model.tabular.agent.tabular_episode import TabularEpisode
 from mdp import common
 from mdp.model.tabular.algorithm.abstract.episodic_online import EpisodicOnline
 
 
 class TD0(EpisodicOnline):
     def __init__(self,
-                 agent: Agent,
+                 agent: TabularAgent,
                  algorithm_parameters: common.AlgorithmParameters,
                  name: str
                  ):
@@ -28,7 +28,7 @@ class TD0(EpisodicOnline):
         delta = target - self.V[ag.prev_s]
         self.V[ag.prev_s] += self._alpha * delta
 
-    def _do_step_of_episode(self, episode: Episode, t: int):
+    def _do_step_of_episode(self, episode: TabularEpisode, t: int):
         # TODO: episode is set once rather than passed in
         s: int = episode.trajectory[t].s
         s_dash: int = episode.trajectory[t+1].s

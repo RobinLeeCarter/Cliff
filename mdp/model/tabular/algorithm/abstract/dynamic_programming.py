@@ -3,14 +3,14 @@ from typing import TYPE_CHECKING, Optional, Callable
 from abc import ABC, abstractmethod
 
 if TYPE_CHECKING:
-    from mdp.model.tabular.agent.agent import Agent
+    from mdp.model.tabular.agent.tabular_agent import TabularAgent
     from mdp import common
 from mdp.model.tabular.algorithm.tabular_algorithm import TabularAlgorithm
 
 
 class DynamicProgramming(TabularAlgorithm, ABC):
     def __init__(self,
-                 agent: Agent,
+                 agent: TabularAgent,
                  algorithm_parameters: common.AlgorithmParameters,
                  name: str
                  ):
