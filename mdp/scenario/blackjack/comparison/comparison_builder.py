@@ -2,19 +2,14 @@ from __future__ import annotations
 from abc import ABC
 
 from mdp import common
-from mdp.scenario.general_scenario import GeneralScenario
+from mdp.scenario.general_comparison_builder import GeneralComparisonBuilder
 from mdp.scenario.blackjack.model.environment_parameters import EnvironmentParameters
-from mdp.scenario.blackjack.controller import Controller
-from mdp.scenario.blackjack.model.model import Model
-from mdp.scenario.blackjack.view.view import View
 
 
-class Scenario(GeneralScenario[Model, View, Controller], ABC):
+class ComparisonBuilder(GeneralComparisonBuilder, ABC):
     def __init__(self):
         super().__init__()
-        self._environment_parameters = EnvironmentParameters(
-            environment_type=common.EnvironmentType.BLACKJACK,
-        )
+        self._environment_parameters = EnvironmentParameters()
         self._comparison_settings = common.Settings(
             gamma=1.0,
             runs=1,
@@ -43,12 +38,3 @@ class Scenario(GeneralScenario[Model, View, Controller], ABC):
             show_policy=True,
             show_q=True,
         )
-
-    def _create_model(self) -> Model:
-        return Model()
-
-    def _create_view(self) -> View:
-        return View()
-
-    def _create_controller(self) -> Controller:
-        return Controller()

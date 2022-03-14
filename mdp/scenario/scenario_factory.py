@@ -1,35 +1,35 @@
 from __future__ import annotations
 from typing import Type
 
-from mdp.scenario.general_scenario import GeneralScenario
+from mdp.scenario.general_comparison_builder import GeneralComparisonBuilder
 from mdp import common
 
-from mdp.scenario.jacks.scenario.jacks_policy_evaluation_q import JacksPolicyEvaluationQ
-from mdp.scenario.jacks.scenario.jacks_policy_evaluation_v import JacksPolicyEvaluationV
-from mdp.scenario.jacks.scenario.jacks_policy_improvement_q import JacksPolicyImprovementQ
-from mdp.scenario.jacks.scenario.jacks_policy_improvement_v import JacksPolicyImprovementV
-from mdp.scenario.jacks.scenario.jacks_policy_iteration_q import JacksPolicyIterationQ
-from mdp.scenario.jacks.scenario.jacks_policy_iteration_v import JacksPolicyIterationV
-from mdp.scenario.jacks.scenario.jacks_value_iteration_q import JacksValueIterationQ
-from mdp.scenario.jacks.scenario.jacks_value_iteration_v import JacksValueIterationV
+from mdp.scenario.jacks.comparison.jacks_policy_evaluation_q import JacksPolicyEvaluationQ
+from mdp.scenario.jacks.comparison.jacks_policy_evaluation_v import JacksPolicyEvaluationV
+from mdp.scenario.jacks.comparison.jacks_policy_improvement_q import JacksPolicyImprovementQ
+from mdp.scenario.jacks.comparison.jacks_policy_improvement_v import JacksPolicyImprovementV
+from mdp.scenario.jacks.comparison.jacks_policy_iteration_q import JacksPolicyIterationQ
+from mdp.scenario.jacks.comparison.jacks_policy_iteration_v import JacksPolicyIterationV
+from mdp.scenario.jacks.comparison.jacks_value_iteration_q import JacksValueIterationQ
+from mdp.scenario.jacks.comparison.jacks_value_iteration_v import JacksValueIterationV
 
-from mdp.scenario.blackjack.scenario.blackjack_control_es import BlackjackControlES
-from mdp.scenario.blackjack.scenario.blackjack_evaluation_q import BlackjackEvaluationQ
-from mdp.scenario.blackjack.scenario.blackjack_evaluation_v import BlackjackEvaluationV
+from mdp.scenario.blackjack.comparison.blackjack_control_es import BlackjackControlES
+from mdp.scenario.blackjack.comparison.blackjack_evaluation_q import BlackjackEvaluationQ
+from mdp.scenario.blackjack.comparison.blackjack_evaluation_v import BlackjackEvaluationV
 
-from mdp.scenario.gambler.scenario.gambler_value_iteration_v import GamblerValueIterationV
+from mdp.scenario.gambler.comparison.gambler_value_iteration_v import GamblerValueIterationV
 
-from mdp.scenario.racetrack.scenario.racetrack_episode import RacetrackEpisode
+from mdp.scenario.racetrack.comparison.racetrack_episode import RacetrackEpisode
 
-from mdp.scenario.random_walk.scenario.random_walk_episode import RandomWalkEpisode
+from mdp.scenario.random_walk.comparison.random_walk_episode import RandomWalkEpisode
 
-from mdp.scenario.cliff.scenario.cliff_alpha_start import CliffAlphaStart
-from mdp.scenario.cliff.scenario.cliff_alpha_end import CliffAlphaEnd
-from mdp.scenario.cliff.scenario.cliff_episode import CliffEpisode
+from mdp.scenario.cliff.comparison.cliff_alpha_start import CliffAlphaStart
+from mdp.scenario.cliff.comparison.cliff_alpha_end import CliffAlphaEnd
+from mdp.scenario.cliff.comparison.cliff_episode import CliffEpisode
 
 from mdp.scenario.windy.scenario.windy_timestep import WindyTimestep
 
-ScenarioLookup = dict[common.ScenarioType, Type[GeneralScenario] | tuple[Type[GeneralScenario], dict[str, any]]]
+ScenarioLookup = dict[common.ScenarioType, Type[GeneralComparisonBuilder] | tuple[Type[GeneralComparisonBuilder], dict[str, any]]]
 
 
 class ScenarioFactory:
@@ -57,9 +57,9 @@ class ScenarioFactory:
             ct.WINDY_TIMESTEP_RANDOM: (WindyTimestep, {"random_wind": True})
         }
 
-    def create(self, scenario_type: common.ScenarioType) -> GeneralScenario:
+    def create(self, scenario_type: common.ScenarioType) -> GeneralComparisonBuilder:
         # result: Type[Scenario] | tuple[Type[Scenario], dict[str, object]] = self._lookup[scenario_type]
-        type_of_scenario: Type[GeneralScenario]
+        type_of_scenario: Type[GeneralComparisonBuilder]
         kwargs: dict[str, any] = {}
 
         match self._lookup[scenario_type]:
@@ -70,5 +70,5 @@ class ScenarioFactory:
             case _:
                 raise Exception("scenario type / args lookup failed")
 
-        scenario: GeneralScenario = type_of_scenario(**kwargs)
+        scenario: GeneralComparisonBuilder = type_of_scenario(**kwargs)
         return scenario

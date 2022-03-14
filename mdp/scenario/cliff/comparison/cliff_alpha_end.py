@@ -1,12 +1,12 @@
 from __future__ import annotations
 
 from mdp import common
-from mdp.scenario.cliff.scenario.scenario import Scenario
-from mdp.scenario.cliff.scenario.comparison import Comparison
+from mdp.scenario.cliff.comparison.comparison_builder import ComparisonBuilder
+from mdp.scenario.cliff.comparison.comparison import Comparison
 
 
-class CliffAlphaEnd(Scenario):
-    def _create_comparison(self) -> Comparison:
+class CliffAlphaEnd(ComparisonBuilder):
+    def create(self) -> Comparison:
         # TODO: Make work, once multiprocessing
         return Comparison(
             # environment_parameters=environment_parameters.EnvironmentParameters(

@@ -1,12 +1,12 @@
 from __future__ import annotations
 
 from mdp import common
-from mdp.scenario.jacks.scenario.scenario import Scenario
-from mdp.scenario.jacks.scenario.comparison import Comparison
+from mdp.scenario.jacks.comparison.comparison_builder import ComparisonBuilder
+from mdp.scenario.jacks.comparison.comparison import Comparison
 
 
-class JacksPolicyImprovementV(Scenario):
-    def _create_comparison(self) -> Comparison:
+class JacksPolicyImprovementQ(ComparisonBuilder):
+    def create(self) -> Comparison:
         comparison_settings = self._comparison_settings
         comparison_settings.display_every_step = False
 
@@ -22,9 +22,10 @@ class JacksPolicyImprovementV(Scenario):
             settings_list=[
                 common.Settings(
                     algorithm_parameters=common.AlgorithmParameters(
-                        algorithm_type=common.AlgorithmType.DP_POLICY_IMPROVEMENT_V,
-                        verbose=True
-                    )
+                        algorithm_type=common.AlgorithmType.DP_POLICY_IMPROVEMENT_Q,
+                        verbose=True,
+                        derive_v_from_q_as_final_step=True,
+                    ),
                 ),
             ],
             graph3d_values=graph3d_values,

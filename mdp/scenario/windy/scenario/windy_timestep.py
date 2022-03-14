@@ -1,13 +1,13 @@
 from __future__ import annotations
 
 from mdp import common
-from mdp.scenario.windy.scenario.scenario import Scenario
+from mdp.scenario.windy.scenario.comparison_builder import ComparisonBuilder
 from mdp.scenario.windy.scenario.comparison import Comparison
 from mdp.scenario.windy.model.environment_parameters import EnvironmentParameters
 
 
-class WindyTimestep(Scenario):
-    def _create_comparison(self) -> Comparison:
+class WindyTimestep(ComparisonBuilder):
+    def create(self) -> Comparison:
         return Comparison(
             environment_parameters=EnvironmentParameters(
                 # actions_list=common.ActionsList.FOUR_MOVES,

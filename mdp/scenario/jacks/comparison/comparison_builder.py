@@ -2,14 +2,11 @@ from __future__ import annotations
 from abc import ABC
 
 from mdp import common
-from mdp.scenario.general_scenario import GeneralScenario
+from mdp.scenario.general_comparison_builder import GeneralComparisonBuilder
 from mdp.scenario.jacks.model.environment_parameters import EnvironmentParameters
-from mdp.scenario.jacks.controller import Controller
-from mdp.scenario.jacks.model.model import Model
-from mdp.scenario.jacks.view.view import View
 
 
-class Scenario(GeneralScenario[Model, View, Controller], ABC):
+class ComparisonBuilder(GeneralComparisonBuilder, ABC):
     def __init__(self):
         super().__init__()
         self._max_cars: int = 20      # problem statement = 20
@@ -43,12 +40,3 @@ class Scenario(GeneralScenario[Model, View, Controller], ABC):
             show_result=True,
             show_policy=True,
         )
-
-    def _create_model(self) -> Model:
-        return Model()
-
-    def _create_view(self) -> View:
-        return View()
-
-    def _create_controller(self) -> Controller:
-        return Controller()

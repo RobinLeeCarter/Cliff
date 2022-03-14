@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from mdp import common
 from mdp.scenario.scenario_factory import ScenarioFactory
-from mdp.scenario.jacks.scenario.scenario import Scenario
+from mdp.scenario.jacks.comparison.comparison_builder import ComparisonBuilder
 # from mdp.scenarios.jacks.model.state import State
 # from mdp.scenarios.jacks.model.action import Action
 # from mdp.scenarios.jacks.model.response import Response
@@ -12,7 +12,7 @@ from mdp.scenario.jacks.model.environment import Environment
 def jacks_test() -> bool:
     scenario_factory = ScenarioFactory()
     scenario = scenario_factory.create(common.ScenarioType.JACKS_POLICY_ITERATION_V)
-    assert isinstance(scenario, Scenario)
+    assert isinstance(scenario, ComparisonBuilder)
     scenario.build()
 
     # noinspection PyProtectedMember

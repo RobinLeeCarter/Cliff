@@ -1,12 +1,12 @@
 from __future__ import annotations
 
 from mdp import common
-from mdp.scenario.jacks.scenario.scenario import Scenario
-from mdp.scenario.jacks.scenario.comparison import Comparison
+from mdp.scenario.jacks.comparison.comparison_builder import ComparisonBuilder
+from mdp.scenario.jacks.comparison.comparison import Comparison
 
 
-class JacksValueIterationV(Scenario):
-    def _create_comparison(self) -> Comparison:
+class JacksValueIterationV(ComparisonBuilder):
+    def create(self) -> Comparison:
         comparison_settings = self._comparison_settings
         comparison_settings.display_every_step = False
 

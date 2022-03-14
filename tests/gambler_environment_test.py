@@ -4,7 +4,7 @@ import random
 
 from mdp import common
 from mdp.scenario.scenario_factory import ScenarioFactory
-from mdp.scenario.gambler.scenario.scenario import Scenario
+from mdp.scenario.gambler.comparison.comparison_builder import ComparisonBuilder
 from mdp.scenario.gambler.model.state import State
 from mdp.scenario.gambler.model.action import Action
 from mdp.scenario.gambler.model.environment import Environment
@@ -13,7 +13,7 @@ from mdp.scenario.gambler.model.environment import Environment
 def gambler_test() -> bool:
     scenario_factory = ScenarioFactory()
     scenario = scenario_factory.create(common.ScenarioType.GAMBLER_VALUE_ITERATION_V)
-    assert isinstance(scenario, Scenario)
+    assert isinstance(scenario, ComparisonBuilder)
     scenario.build()
 
     # noinspection PyProtectedMember

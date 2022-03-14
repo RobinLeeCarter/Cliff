@@ -1,13 +1,13 @@
 from __future__ import annotations
 
 from mdp import common
-from mdp.scenario.random_walk.scenario.scenario import Scenario
-from mdp.scenario.random_walk.scenario.comparison import Comparison
+from mdp.scenario.random_walk.comparison.comparison_builder import ComparisonBuilder
+from mdp.scenario.random_walk.comparison.comparison import Comparison
 # from mdp.scenarios.random_walk.model.environment_parameters import EnvironmentParameters
 
 
-class RandomWalkEpisode(Scenario):
-    def _create_comparison(self):
+class RandomWalkEpisode(ComparisonBuilder):
+    def create(self):
         return Comparison(
             # environment_parameters=self._environment_parameters,
             comparison_settings=common.Settings(

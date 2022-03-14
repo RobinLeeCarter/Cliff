@@ -1,12 +1,12 @@
 from __future__ import annotations
 
 from mdp import common
-from mdp.scenario.blackjack.scenario.scenario import Scenario
-from mdp.scenario.blackjack.scenario.comparison import Comparison
+from mdp.scenario.blackjack.comparison.comparison_builder import ComparisonBuilder
+from mdp.scenario.blackjack.comparison.comparison import Comparison
 
 
-class BlackjackEvaluationV(Scenario):
-    def _create_comparison(self) -> Comparison:
+class BlackjackEvaluationV(ComparisonBuilder):
+    def create(self) -> Comparison:
         return Comparison(
             environment_parameters=self._environment_parameters,
             comparison_settings=self._comparison_settings,

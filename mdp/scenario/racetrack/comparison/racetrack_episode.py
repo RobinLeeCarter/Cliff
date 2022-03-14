@@ -1,14 +1,14 @@
 from __future__ import annotations
 
 from mdp import common
-from mdp.scenario.racetrack.scenario.scenario import Scenario
-from mdp.scenario.racetrack.scenario.comparison import Comparison
+from mdp.scenario.racetrack.comparison.comparison_builder import ComparisonBuilder
+from mdp.scenario.racetrack.comparison.comparison import Comparison
 from mdp.scenario.racetrack.model.environment_parameters import EnvironmentParameters
 from mdp.scenario.racetrack.model import grids
 
 
-class RacetrackEpisode(Scenario):
-    def _create_comparison(self):
+class RacetrackEpisode(ComparisonBuilder):
+    def create(self):
         # TODO: Problem with the first step not learning and crashing?
         #  Try grids.TRACK_1 for example (3rd position crash)
         return Comparison(

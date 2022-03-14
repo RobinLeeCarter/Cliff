@@ -5,7 +5,7 @@ from mdp.common import Multinoulli
 from mdp import common
 
 from mdp.scenario.scenario_factory import ScenarioFactory
-from mdp.scenario.jacks.scenario.scenario import Scenario
+from mdp.scenario.jacks.comparison.comparison_builder import ComparisonBuilder
 from mdp.scenario.jacks.model.state import State
 from mdp.scenario.jacks.model.action import Action
 from mdp.scenario.jacks.model.environment import Environment
@@ -16,7 +16,7 @@ Response = tuple[float, State]
 
 scenario_factory = ScenarioFactory()
 scenario = scenario_factory.create(common.ScenarioType.JACKS_POLICY_ITERATION_V)
-assert isinstance(scenario, Scenario)
+assert isinstance(scenario, ComparisonBuilder)
 scenario.build()
 
 # noinspection PyProtectedMember

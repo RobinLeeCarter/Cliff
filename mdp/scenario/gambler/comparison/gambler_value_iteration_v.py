@@ -1,13 +1,13 @@
 from __future__ import annotations
 
 from mdp import common
-from mdp.scenario.gambler.scenario.scenario import Scenario
-from mdp.scenario.gambler.scenario.comparison import Comparison
+from mdp.scenario.gambler.comparison.comparison_builder import ComparisonBuilder
+from mdp.scenario.gambler.comparison.comparison import Comparison
 # from mdp.scenarios.gambler.model.environment_parameters import EnvironmentParameters
 
 
-class GamblerValueIterationV(Scenario):
-    def _create_comparison(self):
+class GamblerValueIterationV(ComparisonBuilder):
+    def create(self):
         return Comparison(
             # environment_parameters=self._environment_parameters,
             comparison_settings=common.Settings(
