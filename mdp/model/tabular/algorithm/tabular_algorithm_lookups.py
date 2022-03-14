@@ -53,11 +53,11 @@ def get_algorithm_lookup() -> dict[common.AlgorithmType, Type[TabularAlgorithm]]
         a.MC_CONSTANT_ALPHA: ConstantAlphaMC,
         a.MC_CONTROL_OFF_POLICY: McControlOffPolicy,
 
-        a.TD_0: TD0,
-        a.EXPECTED_SARSA: ExpectedSarsa,
-        a.Q_LEARNING: QLearning,
-        a.SARSA: Sarsa,
-        a.VQ: VQ,
+        a.TABULAR_TD_0: TD0,
+        a.TABULAR_EXPECTED_SARSA: ExpectedSarsa,
+        a.TABULAR_Q_LEARNING: QLearning,
+        a.TABULAR_SARSA: Sarsa,
+        a.TABULAR_VQ: VQ,
     }
 
 
@@ -83,9 +83,9 @@ def get_name_lookup() -> dict[common.AlgorithmType, str]:
         a.MC_CONSTANT_ALPHA: 'Constant-α MC',
         a.MC_CONTROL_OFF_POLICY: 'Off-policy MC Control',
 
-        a.TD_0: 'TD(0)',
-        a.EXPECTED_SARSA: 'Expected Sarsa',
-        a.Q_LEARNING: 'Q-learning',
-        a.SARSA: 'Sarsa',
-        a.VQ: 'VQ',
+        a.TABULAR_TD_0: 'TD(0)',
+        a.TABULAR_EXPECTED_SARSA: 'Expected Sarsa',
+        a.TABULAR_Q_LEARNING: 'Q-learning',
+        a.TABULAR_SARSA: 'Sarsa',
+        a.TABULAR_VQ: 'VQ',
     }

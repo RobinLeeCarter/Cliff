@@ -15,7 +15,7 @@ class RandomWalkEpisode(Scenario):
                 # runs_multiprocessing=common.ParallelContextType.FORK_GLOBAL,
                 training_episodes=100,
                 policy_parameters=common.PolicyParameters(
-                    policy_type=common.PolicyType.NONE
+                    policy_type=common.PolicyType.TABULAR_NONE
                 ),
                 algorithm_parameters=common.AlgorithmParameters(
                     initial_v_value=0.5
@@ -27,19 +27,19 @@ class RandomWalkEpisode(Scenario):
             settings_list=[
                 common.Settings(
                     algorithm_parameters=common.AlgorithmParameters(
-                        algorithm_type=common.AlgorithmType.TD_0,
+                        algorithm_type=common.AlgorithmType.TABULAR_TD_0,
                         alpha=0.05,
                     )
                 ),
                 common.Settings(
                     algorithm_parameters=common.AlgorithmParameters(
-                        algorithm_type=common.AlgorithmType.TD_0,
+                        algorithm_type=common.AlgorithmType.TABULAR_TD_0,
                         alpha=0.1,
                     )
                 ),
                 common.Settings(
                     algorithm_parameters=common.AlgorithmParameters(
-                        algorithm_type=common.AlgorithmType.TD_0,
+                        algorithm_type=common.AlgorithmType.TABULAR_TD_0,
                         alpha=0.15,
                     )
                 ),

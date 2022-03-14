@@ -13,8 +13,9 @@ from mdp import common
 from mdp.model.non_tabular.algorithm.non_tabular_algorithm import NonTabularAlgorithm
 from mdp.model.tabular.algorithm.abstract.episodic import Episodic
 from mdp.model.non_tabular.agent.non_tabular_episode import NonTabularEpisode
-from mdp.model.non_tabular.policy.policy_factory import PolicyFactory
 from mdp.model.non_tabular.policy.non_tabular_policy import NonTabularPolicy
+
+from mdp.model.general.policy.policy_factory import PolicyFactory
 from mdp.model.general.algorithm.algorithm_factory import AlgorithmFactory
 # from mdp.model.general.policy import policy_factory
 
@@ -103,6 +104,7 @@ class NonTabularAgent(Generic[State, Action], GeneralAgent):
 
         # set policy based on policy_parameters
         self._algorithm = self._algorithm_factory.create(algorithm_parameters=settings.algorithm_parameters)
+        # assert isinstance(self._algorithm, NonTabularAlgorithm)
         settings.algorithm_title = self._algorithm.title
         self._episode_length_timeout = settings.episode_length_timeout
         if isinstance(self._algorithm, Episodic):

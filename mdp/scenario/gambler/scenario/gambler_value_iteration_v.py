@@ -13,7 +13,7 @@ class GamblerValueIterationV(Scenario):
             comparison_settings=common.Settings(
                 gamma=1.0,      # 0.99999
                 policy_parameters=common.PolicyParameters(
-                    policy_type=common.PolicyType.DETERMINISTIC,
+                    policy_type=common.PolicyType.TABULAR_DETERMINISTIC,
                 ),
                 algorithm_parameters=common.AlgorithmParameters(
                     theta=0.00001   # accuracy of policy_evaluation

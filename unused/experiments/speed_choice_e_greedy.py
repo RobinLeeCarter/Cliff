@@ -19,7 +19,7 @@ class EGreedy(TabularPolicy):
         super().__init__(environment, policy_parameters)
         self.epsilon: float = self._policy_parameters.epsilon
         greedy_policy_parameters = common.PolicyParameters(
-            policy_type=common.PolicyType.DETERMINISTIC,
+            policy_type=common.PolicyType.TABULAR_DETERMINISTIC,
             store_matrix=False,
         )
         self.greedy_policy: Deterministic = Deterministic(self._environment, greedy_policy_parameters)

@@ -13,6 +13,11 @@ View = TypeVar('View', bound=TabularView)
 Controller = TypeVar('Controller', bound=TabularController)
 
 
+# TODO: Make non-generic, just creates comparison and nothing more
+# have comparison created first in application.py
+# create MVCFactory and have it create MVC based on comparison.environment_type
+# application then has initialise, build (controller build) and run as methods of that and not Scenario
+# perhaps align names so go back to ComparisonType and make Scenario become ComparisonBuilder perhaps
 class GeneralScenario(Generic[Model, View, Controller], ABC):
     def __init__(self, **_ignored):
         # self._scenario_type: common.ScenarioType = scenario_type

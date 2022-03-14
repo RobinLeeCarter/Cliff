@@ -56,6 +56,7 @@ class BreakdownType(enum.IntEnum):
 
 
 class AlgorithmType(enum.IntEnum):
+    # Tabular
     DP_POLICY_EVALUATION_V_DETERMINISTIC = enum.auto()
     DP_POLICY_EVALUATION_V_STOCHASTIC = enum.auto()
     DP_POLICY_IMPROVEMENT_V = enum.auto()
@@ -75,18 +76,25 @@ class AlgorithmType(enum.IntEnum):
     MC_CONSTANT_ALPHA = enum.auto()
     MC_CONTROL_OFF_POLICY = enum.auto()
 
-    TD_0 = enum.auto()
-    SARSA = enum.auto()
-    Q_LEARNING = enum.auto()
-    EXPECTED_SARSA = enum.auto()
-    VQ = enum.auto()
+    TABULAR_TD_0 = enum.auto()
+    TABULAR_SARSA = enum.auto()
+    TABULAR_Q_LEARNING = enum.auto()
+    TABULAR_EXPECTED_SARSA = enum.auto()
+    TABULAR_VQ = enum.auto()
+
+    # Non-tabular
 
 
 class PolicyType(enum.IntEnum):
-    DETERMINISTIC = enum.auto()
-    E_GREEDY = enum.auto()
-    NONE = enum.auto()
-    RANDOM = enum.auto()
+    # Tabular
+    TABULAR_NONE = enum.auto()
+    TABULAR_DETERMINISTIC = enum.auto()
+    TABULAR_E_GREEDY = enum.auto()
+    TABULAR_RANDOM = enum.auto()
+
+    # Non-tabular
+    E_GREEDY_LINEAR = enum.auto()
+    SOFTMAX_LINEAR = enum.auto()
 
 
 class DualPolicyRelationship(enum.IntEnum):

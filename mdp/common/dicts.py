@@ -3,10 +3,10 @@ from __future__ import annotations
 from mdp.common.enums import PolicyType, ParallelContextType
 
 policy_name: dict[PolicyType, str] = {
-    PolicyType.DETERMINISTIC: 'Deterministic',
-    PolicyType.E_GREEDY: 'ε-greedy',
-    PolicyType.NONE: 'No policy',
-    PolicyType.RANDOM: 'Random'
+    PolicyType.TABULAR_DETERMINISTIC: 'Deterministic',
+    PolicyType.TABULAR_E_GREEDY: 'ε-greedy',
+    PolicyType.TABULAR_NONE: 'No policy',
+    PolicyType.TABULAR_RANDOM: 'Random'
 }
 
 parallel_context_str: dict[ParallelContextType, str] = {

@@ -15,7 +15,6 @@ class TabularPolicy(GeneralPolicy, ABC):
     def __init__(self, environment: TabularEnvironment, policy_parameters: common.PolicyParameters):
         super().__init__(environment, policy_parameters)
         self._environment: TabularEnvironment = environment
-        self._policy_parameters: common.PolicyParameters = policy_parameters
 
         self._store_matrix: bool = self._policy_parameters.store_matrix
         self._policy_matrix: Optional[np.ndarray] = None

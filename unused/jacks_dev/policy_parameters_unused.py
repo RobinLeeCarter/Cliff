@@ -13,7 +13,7 @@ class PolicyParameters(common.PolicyParameters):
 
 
 default: PolicyParameters = PolicyParameters(
-    policy_type=common.PolicyType.DETERMINISTIC,
+    policy_type=common.PolicyType.TABULAR_DETERMINISTIC,
 )
 
 

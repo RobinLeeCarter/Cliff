@@ -21,7 +21,7 @@ class Scenario(GeneralScenario[Model, View, Controller], ABC):
         self._comparison_settings = common.Settings(
             gamma=0.9,
             policy_parameters=common.PolicyParameters(
-                policy_type=common.PolicyType.DETERMINISTIC,
+                policy_type=common.PolicyType.TABULAR_DETERMINISTIC,
             ),
             algorithm_parameters=common.AlgorithmParameters(
                 theta=0.1  # accuracy of policy_evaluation

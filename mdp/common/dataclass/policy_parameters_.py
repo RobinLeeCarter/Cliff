@@ -14,7 +14,7 @@ class PolicyParameters:
 
 
 default: PolicyParameters = PolicyParameters(
-    policy_type=enums.PolicyType.E_GREEDY,
+    policy_type=enums.PolicyType.TABULAR_E_GREEDY,
     epsilon=0.1,
     store_matrix=True,
 )

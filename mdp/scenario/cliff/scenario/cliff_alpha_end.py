@@ -22,10 +22,10 @@ class CliffAlphaEnd(Scenario):
                 alpha_max=1.0,
                 alpha_step=0.05,
                 algorithm_type_list=[
-                    common.AlgorithmType.EXPECTED_SARSA,
+                    common.AlgorithmType.TABULAR_EXPECTED_SARSA,
                     # common.AlgorithmType.VQ,
-                    common.AlgorithmType.Q_LEARNING,
-                    common.AlgorithmType.SARSA
+                    common.AlgorithmType.TABULAR_Q_LEARNING,
+                    common.AlgorithmType.TABULAR_SARSA
                 ],
             ),
             settings_list_multiprocessing=common.ParallelContextType.SPAWN,

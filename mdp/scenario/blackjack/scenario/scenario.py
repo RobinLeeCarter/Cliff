@@ -21,7 +21,7 @@ class Scenario(GeneralScenario[Model, View, Controller], ABC):
             training_episodes=500_000,
             episode_print_frequency=10_000,
             policy_parameters=common.PolicyParameters(
-                policy_type=common.PolicyType.DETERMINISTIC,
+                policy_type=common.PolicyType.TABULAR_DETERMINISTIC,
             ),
         )
         self._graph3d_values = common.Graph3DValues(

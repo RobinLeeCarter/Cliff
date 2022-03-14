@@ -3,7 +3,6 @@ from typing import Type, TYPE_CHECKING
 
 from mdp import common
 if TYPE_CHECKING:
-    # from mdp.model.general.environment.general_environment import GeneralEnvironment
     from mdp.model.general.agent.general_agent import GeneralAgent
 from mdp.model.general.algorithm.general_algorithm import GeneralAlgorithm
 from mdp.model.tabular.algorithm import tabular_algorithm_lookups

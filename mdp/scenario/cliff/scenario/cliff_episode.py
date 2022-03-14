@@ -30,11 +30,11 @@ class CliffEpisode(Scenario):
                 #     alpha=0.2
                 # )),
                 common.Settings(algorithm_parameters=common.AlgorithmParameters(
-                    algorithm_type=common.AlgorithmType.Q_LEARNING,
+                    algorithm_type=common.AlgorithmType.TABULAR_Q_LEARNING,
                     alpha=0.5
                 )),
                 common.Settings(algorithm_parameters=common.AlgorithmParameters(
-                    algorithm_type=common.AlgorithmType.SARSA,
+                    algorithm_type=common.AlgorithmType.TABULAR_SARSA,
                     alpha=0.5
                 )),
             ],
