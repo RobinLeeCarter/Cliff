@@ -1,8 +1,8 @@
 from __future__ import annotations
 
 from mdp import common
-from mdp.scenario.windy.scenario.comparison_builder import ComparisonBuilder
-from mdp.scenario.windy.scenario.comparison import Comparison
+from mdp.scenario.windy.comparison.comparison_builder import ComparisonBuilder
+from mdp.scenario.windy.comparison.comparison import Comparison
 from mdp.scenario.windy.model.environment_parameters import EnvironmentParameters
 
 

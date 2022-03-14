@@ -13,7 +13,7 @@ class EnvironmentType(enum.IntEnum):
     MOUNTAIN_CAR = enum.auto()
 
 
-class ScenarioType(enum.IntEnum):
+class ComparisonType(enum.IntEnum):
     BLACKJACK_EVALUATION_V = enum.auto()
     BLACKJACK_EVALUATION_Q = enum.auto()
     BLACKJACK_CONTROL_ES = enum.auto()

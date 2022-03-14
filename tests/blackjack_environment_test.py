@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from mdp import common
-from mdp.scenario.scenario_factory import ScenarioFactory
+from mdp.scenario.comparison_factory import ComparisonFactory
 from mdp.scenario.blackjack.comparison.comparison_builder import ComparisonBuilder
 from mdp.scenario.blackjack.model.state import State
 from mdp.scenario.blackjack.model.action import Action
@@ -9,8 +9,8 @@ from mdp.scenario.blackjack.model.environment import Environment
 
 
 def blackjack_test() -> bool:
-    scenario_factory = ScenarioFactory()
-    scenario = scenario_factory.create(common.ScenarioType.BLACKJACK_EVALUATION_V)
+    scenario_factory = ComparisonFactory()
+    scenario = scenario_factory.create(common.ComparisonType.BLACKJACK_EVALUATION_V)
     assert isinstance(scenario, ComparisonBuilder)
     scenario.build()
 

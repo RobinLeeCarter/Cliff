@@ -3,11 +3,11 @@ import time
 from typing import Generator
 
 from mdp import common
-from mdp.scenario.scenario_factory import ScenarioFactory
+from mdp.scenario.comparison_factory import ComparisonFactory
 from mdp.scenario.jacks.model.state import State
 
-scenario_factory = ScenarioFactory()
-scenario = scenario_factory.create(common.ScenarioType.JACKS_POLICY_ITERATION_V)
+scenario_factory = ComparisonFactory()
+scenario = scenario_factory.create(common.ComparisonType.JACKS_POLICY_ITERATION_V)
 scenario.build()
 # noinspection PyProtectedMember
 environment = scenario._model.environment

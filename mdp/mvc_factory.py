@@ -56,8 +56,6 @@ class MVCFactory:
         }
 
     def create(self, environment_type: common.EnvironmentType) -> tuple[GeneralModel, GeneralView, GeneralController]:
-        # result: Type[Scenario] | tuple[Type[Scenario], dict[str, object]] = self._lookup[scenario_type]
-
         type_of_model: Type[GeneralModel]
         type_of_view: Type[GeneralView]
         type_of_controller: Type[GeneralController]

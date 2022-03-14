@@ -3,7 +3,7 @@ from __future__ import annotations
 import random
 
 from mdp import common
-from mdp.scenario.scenario_factory import ScenarioFactory
+from mdp.scenario.comparison_factory import ComparisonFactory
 from mdp.scenario.gambler.comparison.comparison_builder import ComparisonBuilder
 from mdp.scenario.gambler.model.state import State
 from mdp.scenario.gambler.model.action import Action
@@ -11,8 +11,8 @@ from mdp.scenario.gambler.model.environment import Environment
 
 
 def gambler_test() -> bool:
-    scenario_factory = ScenarioFactory()
-    scenario = scenario_factory.create(common.ScenarioType.GAMBLER_VALUE_ITERATION_V)
+    scenario_factory = ComparisonFactory()
+    scenario = scenario_factory.create(common.ComparisonType.GAMBLER_VALUE_ITERATION_V)
     assert isinstance(scenario, ComparisonBuilder)
     scenario.build()
 

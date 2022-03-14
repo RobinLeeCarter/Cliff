@@ -1,5 +1,5 @@
 from __future__ import annotations
-from typing import Type
+from typing import Type, Optional
 
 from mdp.scenario.general_comparison_builder import GeneralComparisonBuilder
 from mdp import common
@@ -27,15 +27,18 @@ from mdp.scenario.cliff.comparison.cliff_alpha_start import CliffAlphaStart
 from mdp.scenario.cliff.comparison.cliff_alpha_end import CliffAlphaEnd
 from mdp.scenario.cliff.comparison.cliff_episode import CliffEpisode
 
-from mdp.scenario.windy.scenario.windy_timestep import WindyTimestep
+from mdp.scenario.windy.comparison.windy_timestep import WindyTimestep
 
-ScenarioLookup = dict[common.ScenarioType, Type[GeneralComparisonBuilder] | tuple[Type[GeneralComparisonBuilder], dict[str, any]]]
+ComparisonBuilderLookup = dict[common.ComparisonType,
+                               Type[GeneralComparisonBuilder] |
+                               tuple[Type[GeneralComparisonBuilder], dict[str, any]]]
 
 
-class ScenarioFactory:
+class ComparisonFactory:
     def __init__(self):
-        ct = common.ScenarioType
-        self._lookup: ScenarioLookup = {
+        self._comparison_type: Optional[common.ComparisonType] = None
+        ct = common.ComparisonType
+        self._lookup: ComparisonBuilderLookup = {
             ct.JACKS_POLICY_EVALUATION_Q: JacksPolicyEvaluationQ,
             ct.JACKS_POLICY_EVALUATION_V: JacksPolicyEvaluationV,
             ct.JACKS_POLICY_IMPROVEMENT_Q: JacksPolicyImprovementQ,
@@ -57,12 +60,18 @@ class ScenarioFactory:
             ct.WINDY_TIMESTEP_RANDOM: (WindyTimestep, {"random_wind": True})
         }
 
-    def create(self, scenario_type: common.ScenarioType) -> GeneralComparisonBuilder:
+    def create(self, comparison_type: common.ComparisonType) -> common.Comparison:
+        self._comparison_type = comparison_type
+        comparison_builder: GeneralComparisonBuilder = self._create_comparison_builder()
+        comparison: common.Comparison = comparison_builder.create()
+        return comparison
+
+    def _create_comparison_builder(self) -> GeneralComparisonBuilder:
         # result: Type[Scenario] | tuple[Type[Scenario], dict[str, object]] = self._lookup[scenario_type]
         type_of_scenario: Type[GeneralComparisonBuilder]
         kwargs: dict[str, any] = {}
 
-        match self._lookup[scenario_type]:
+        match self._lookup[self._comparison_type]:
             case type() as type_of_scenario:
                 pass
             case type() as type_of_scenario, dict() as kwargs:
@@ -70,5 +79,5 @@ class ScenarioFactory:
             case _:
                 raise Exception("scenario type / args lookup failed")
 
-        scenario: GeneralComparisonBuilder = type_of_scenario(**kwargs)
-        return scenario
+        comparison_builder: GeneralComparisonBuilder = type_of_scenario(**kwargs)
+        return comparison_builder
