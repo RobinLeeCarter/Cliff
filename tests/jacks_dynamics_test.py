@@ -1,11 +1,8 @@
 from __future__ import annotations
-# from typing import TYPE_CHECKING
 
 from mdp.common import Multinoulli
 from mdp import common
-
-from mdp.scenario.comparison_factory import ComparisonFactory
-from mdp.scenario.jacks.comparison.comparison_builder import ComparisonBuilder
+from mdp.application import Application
 from mdp.scenario.jacks.model.state import State
 from mdp.scenario.jacks.model.action import Action
 from mdp.scenario.jacks.model.environment import Environment
@@ -13,14 +10,10 @@ from mdp.scenario.jacks.model.dynamics.dynamics import Dynamics
 
 Response = tuple[float, State]
 
-
-scenario_factory = ComparisonFactory()
-scenario = scenario_factory.create(common.ComparisonType.JACKS_POLICY_ITERATION_V)
-assert isinstance(scenario, ComparisonBuilder)
-scenario.build()
+application = Application(common.ComparisonType.JACKS_POLICY_ITERATION_V)
 
 # noinspection PyProtectedMember
-environment: Environment = scenario._model.environment
+environment: Environment = application.model.environment
 assert isinstance(environment, Environment)
 
 # comparison = jacks_policy_iteration_v()

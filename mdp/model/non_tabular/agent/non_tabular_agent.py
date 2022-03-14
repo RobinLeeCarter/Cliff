@@ -32,7 +32,7 @@ class NonTabularAgent(Generic[State, Action], GeneralAgent):
         super().__init__(environment, verbose)
         self._environment: NonTabularEnvironment[State, Action] = environment
 
-        self._policy_factory: PolicyFactory = PolicyFactory[State, Action](self._environment)
+        self._policy_factory: PolicyFactory = PolicyFactory(self._environment)
         self._policy: Optional[NonTabularPolicy[State, Action]] = None
         self._behaviour_policy: Optional[NonTabularPolicy[State, Action]] = None     # if on-policy = self._policy
         # self._dual_policy_relationship: Optional[common.DualPolicyRelationship] = None

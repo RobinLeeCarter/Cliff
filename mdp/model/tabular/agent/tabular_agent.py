@@ -13,7 +13,6 @@ from mdp.model.tabular.agent.tabular_episode import TabularEpisode
 from mdp.model.tabular.policy.tabular_policy import TabularPolicy
 from mdp.model.general.policy.policy_factory import PolicyFactory
 from mdp.model.general.algorithm.algorithm_factory import AlgorithmFactory
-from mdp.model.general.policy import policy_factory
 
 from mdp.model.general.agent.general_agent import GeneralAgent
 

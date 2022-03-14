@@ -1,5 +1,5 @@
 from __future__ import annotations
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Optional
 
 if TYPE_CHECKING:
     from mdp import common
@@ -11,19 +11,24 @@ from mdp.mvc_factory import MVCFactory
 
 
 class Application:
-    def __init__(self, comparison_type: common.ComparisonType):
+    def __init__(self, comparison_type: Optional[common.ComparisonType] = None):
         self._comparison_factory: ComparisonFactory = ComparisonFactory()
+        self._comparison: Optional[common.Comparison] = None
         self._mvc_factory: MVCFactory = MVCFactory()
+        self.model: Optional[GeneralModel] = None
+        self.view: Optional[GeneralView] = None
+        self.controller: Optional[GeneralController] = None
+        if comparison_type:
+            self._comparison: common.Comparison = self._comparison_factory.create(comparison_type)
+            self.build(self._comparison)
 
-        self._comparison: common.Comparison = self._comparison_factory.create(comparison_type)
+    def build(self, comparison: common.Comparison):
+        self._comparison = comparison
+        environment_type: common.EnvironmentType = comparison.environment_parameters.environment_type
+        self.model, self.view, self.controller = self._mvc_factory.create(environment_type)
+        self.controller.link_mvc(self.model, self.view)
+        self.controller.build(comparison)
 
-        self._model: GeneralModel
-        self._view: GeneralView
-        self._controller: GeneralController
-        environment_type: common.EnvironmentType = self._comparison.environment_parameters.environment_type
-        self._model, self._view, self._controller = self._mvc_factory.create(environment_type)
-        self._controller.link_mvc(self._model, self._view)
-
-        self._controller.build(self._comparison)
-        self._controller.run()
-        self._controller.output()
+    def run(self):
+        self.controller.run()
+        self.controller.output()

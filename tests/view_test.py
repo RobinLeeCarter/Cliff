@@ -1,19 +1,20 @@
 from __future__ import annotations
 
 from mdp import common
-from mdp.scenario.comparison_factory import ComparisonFactory
-from mdp.scenario.cliff.comparison.comparison_builder import ComparisonBuilder
-# from mdp.view import view
+from mdp.application import Application
+from mdp.scenario.cliff.view.view import View
 
 
 def view_test() -> bool:
-    scenario_factory = ComparisonFactory()
-    scenario = scenario_factory.create(common.ComparisonType.CLIFF_EPISODE)
-    assert isinstance(scenario, ComparisonBuilder)
-    scenario.build()
+    application = Application(common.ComparisonType.CLIFF_EPISODE)
+    # comparison_factory = ComparisonFactory()
+    # scenario = comparison_factory.create(common.ComparisonType.CLIFF_EPISODE)
+    # assert isinstance(scenario, ComparisonBuilder)
+    # scenario.build()
 
-    # noinspection PyProtectedMember
-    scenario._view.grid_view.display_and_wait()
+    view = application.view
+    assert isinstance(view, View)
+    view.grid_view.display_and_wait()
 
     # # noinspection PyProtectedMember
     # environment: Environment = scenario._model.environment
