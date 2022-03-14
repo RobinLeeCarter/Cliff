@@ -26,6 +26,7 @@ class PolicyFactory:
         type_of_policy: Type[GeneralPolicy] = self._policy_lookup[policy_type]
         # policy_name: str = self._name_lookup[policy_type]
 
+        # TODO: pass policy_name and have it stored to be consistent with algorithm factory
         policy: GeneralPolicy = type_of_policy(self._environment,
                                                policy_parameters)  # policy_name)
         return policy
