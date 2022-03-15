@@ -3,16 +3,11 @@ from abc import ABC
 
 from mdp import common
 from mdp.scenario.general_comparison_builder import GeneralComparisonBuilder
-from mdp.scenario.blackjack.model.environment_parameters import EnvironmentParameters
 
 
 class ComparisonBuilder(GeneralComparisonBuilder, ABC):
     def __init__(self):
         super().__init__()
-        self._environment_parameters = EnvironmentParameters(
-            environment_type=common.EnvironmentType.BLACKJACK,
-            verbose=False,
-        )
         self._comparison_settings = common.Settings(
             gamma=1.0,
             runs=1,

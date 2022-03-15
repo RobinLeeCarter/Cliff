@@ -2,7 +2,7 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 
 from mdp.common.dataclass import comparison
-from mdp.scenario.blackjack.model.environment_parameters import EnvironmentParameters
+from mdp.scenario.blackjack.comparison.environment_parameters import EnvironmentParameters
 
 
 @dataclass

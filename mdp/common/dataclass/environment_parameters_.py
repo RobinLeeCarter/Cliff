@@ -10,13 +10,10 @@ from mdp.common import enums
 
 @dataclass
 class EnvironmentParameters(ABC):
-    environment_type: Optional[enums.EnvironmentType] = None
+    environment_type: enums.EnvironmentType
+    verbose: bool = False
+    actions_always_compatible: bool = False
+
+    # TODO: Make only for some scenarios
     grid: Optional[np.ndarray] = None
     actions_list: Optional[enums.ActionsList] = None
-    actions_always_compatible: Optional[bool] = None
-    verbose: Optional[bool] = None
-
-
-# def none_factory() -> EnvironmentParameters:
-#     return EnvironmentParameters()
-

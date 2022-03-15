@@ -3,12 +3,13 @@ from __future__ import annotations
 from mdp import common
 from mdp.scenario.blackjack.comparison.comparison_builder import ComparisonBuilder
 from mdp.scenario.blackjack.comparison.comparison import Comparison
+from mdp.scenario.blackjack.comparison.environment_parameters import EnvironmentParameters
 
 
 class BlackjackEvaluationQ(ComparisonBuilder):
     def create(self) -> Comparison:
         return Comparison(
-            environment_parameters=self._environment_parameters,
+            environment_parameters=EnvironmentParameters(),
             comparison_settings=self._comparison_settings,
             settings_list=[
                 common.Settings(
