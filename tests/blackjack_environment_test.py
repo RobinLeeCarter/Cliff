@@ -8,7 +8,7 @@ from mdp.scenario.blackjack.model.environment import Environment
 
 
 def blackjack_test() -> bool:
-    application = Application(common.ComparisonType.BLACKJACK_EVALUATION_V)
+    application = Application(common.ComparisonType.BLACKJACK_EVALUATION_V, auto_run=False)
 
     environment: Environment = application.model.environment
     assert isinstance(environment, Environment)

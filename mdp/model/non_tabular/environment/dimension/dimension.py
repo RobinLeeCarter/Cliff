@@ -1,8 +1,8 @@
 from __future__ import annotations
-import dataclasses
+from dataclasses import dataclass
 from abc import ABC
 
 
-@dataclasses.dataclass
+@dataclass
 class Dimension(ABC):
     pass

@@ -6,7 +6,7 @@ from mdp.scenario.cliff.view.view import View
 
 
 def view_test() -> bool:
-    application = Application(common.ComparisonType.CLIFF_EPISODE)
+    application = Application(common.ComparisonType.CLIFF_EPISODE, auto_run=False)
     # comparison_factory = ComparisonFactory()
     # scenario = comparison_factory.create(common.ComparisonType.CLIFF_EPISODE)
     # assert isinstance(scenario, ComparisonBuilder)

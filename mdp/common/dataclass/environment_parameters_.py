@@ -1,6 +1,6 @@
 from __future__ import annotations
 from typing import Optional
-import dataclasses
+from dataclasses import dataclass
 from abc import ABC
 
 import numpy as np
@@ -8,7 +8,7 @@ import numpy as np
 from mdp.common import enums
 
 
-@dataclasses.dataclass
+@dataclass
 class EnvironmentParameters(ABC):
     environment_type: Optional[enums.EnvironmentType] = None
     grid: Optional[np.ndarray] = None

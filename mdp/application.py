@@ -11,16 +11,23 @@ from mdp.mvc_factory import MVCFactory
 
 
 class Application:
-    def __init__(self, comparison_type: Optional[common.ComparisonType] = None):
-        self._comparison_factory: ComparisonFactory = ComparisonFactory()
+    def __init__(self, comparison_type: Optional[common.ComparisonType] = None, auto_run: bool = True):
+        """
+        :param comparison_type: if comparison_type not passed then allow a build using a comparison argument
+        """
         self._comparison: Optional[common.Comparison] = None
-        self._mvc_factory: MVCFactory = MVCFactory()
         self.model: Optional[GeneralModel] = None
         self.view: Optional[GeneralView] = None
         self.controller: Optional[GeneralController] = None
+
+        self._comparison_factory: ComparisonFactory = ComparisonFactory()
+        self._mvc_factory: MVCFactory = MVCFactory()
+
         if comparison_type:
             self._comparison: common.Comparison = self._comparison_factory.create(comparison_type)
             self.build(self._comparison)
+            if auto_run:
+                self.run()
 
     def build(self, comparison: common.Comparison):
         self._comparison = comparison

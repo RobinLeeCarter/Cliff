@@ -1,11 +1,11 @@
 from __future__ import annotations
 from typing import Optional
-import dataclasses
+from dataclasses import dataclass
 
 from mdp.common import enums
 
 
-@dataclasses.dataclass(unsafe_hash=True)    # needed for multiprocessing where results may differ, potentially pickle
+@dataclass(unsafe_hash=True)    # needed for multiprocessing where results may differ, potentially pickle
 class AlgorithmParameters:
     algorithm_type: Optional[enums.AlgorithmType] = None
     alpha: Optional[float] = None

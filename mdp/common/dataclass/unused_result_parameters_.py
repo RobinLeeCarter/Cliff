@@ -1,9 +1,9 @@
 from __future__ import annotations
 from typing import Optional
-import dataclasses
+from dataclasses import dataclass
 
 
-@dataclasses.dataclass
+@dataclass
 class ResultParameters:
     return_recorder: Optional[bool] = None
     return_algorithm_title: Optional[bool] = None

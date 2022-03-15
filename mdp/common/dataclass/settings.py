@@ -1,5 +1,5 @@
 from __future__ import annotations
-import dataclasses
+from dataclasses import dataclass, field
 import copy
 from typing import Optional
 
@@ -8,18 +8,18 @@ from mdp.common import enums
 from mdp.common.dataclass import algorithm_parameters_, policy_parameters_, result_parameters_
 
 
-@dataclasses.dataclass
+@dataclass
 class Settings:
     gamma: Optional[float] = None
 
     # defaults are set in set_none_to_default
     algorithm_parameters: algorithm_parameters_.AlgorithmParameters = \
-        dataclasses.field(default_factory=algorithm_parameters_.none_factory)
+        field(default_factory=algorithm_parameters_.none_factory)
 
     policy_parameters: policy_parameters_.PolicyParameters = \
-        dataclasses.field(default_factory=policy_parameters_.none_factory)
+        field(default_factory=policy_parameters_.none_factory)
     behaviour_policy_parameters: policy_parameters_.PolicyParameters = \
-        dataclasses.field(default_factory=policy_parameters_.none_factory)
+        field(default_factory=policy_parameters_.none_factory)
     dual_policy_relationship: Optional[enums.DualPolicyRelationship] = None
 
     runs: Optional[int] = None
@@ -36,12 +36,12 @@ class Settings:
     display_every_step: Optional[bool] = None
 
     # algorithm title will be populated by Trainer later whether it's used or not
-    algorithm_title: str = dataclasses.field(default="", init=False)
+    algorithm_title: str = field(default="", init=False)
 
     # only used for parallel routines to determine what Trainer should return from the child process
     result_parameters: Optional[result_parameters_.ResultParameters] = None
     # result_parameters: result_parameters_.ResultParameters = \
-    #     dataclasses.field(default_factory=result_parameters_.none_factory)
+    #     field(default_factory=result_parameters_.none_factory)
 
     def set_none_to_default(self, default_: Settings):
         utils.set_none_to_default(self, default_)

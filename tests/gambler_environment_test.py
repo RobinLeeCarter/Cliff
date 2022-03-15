@@ -10,7 +10,7 @@ from mdp.scenario.gambler.model.environment import Environment
 
 
 def gambler_test() -> bool:
-    application = Application(common.ComparisonType.GAMBLER_VALUE_ITERATION_V)
+    application = Application(common.ComparisonType.GAMBLER_VALUE_ITERATION_V, auto_run=False)
     environment: Environment = application.model.environment
     assert isinstance(environment, Environment)
 

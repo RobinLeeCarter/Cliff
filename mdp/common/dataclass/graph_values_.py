@@ -1,15 +1,15 @@
 from __future__ import annotations
 from typing import Optional
-import dataclasses
+from dataclasses import dataclass, field
 import copy
 
 from mdp.common.dataclass import series
 
 
-@dataclasses.dataclass
+@dataclass
 class GraphValues:
     x_series: Optional[series.Series] = None
-    graph_series: list[series.Series] = dataclasses.field(default_factory=list)
+    graph_series: list[series.Series] = field(default_factory=list)
 
     show_graph: Optional[bool] = None
     title: Optional[str] = None

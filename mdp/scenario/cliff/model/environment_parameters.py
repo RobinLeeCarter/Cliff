@@ -1,12 +1,12 @@
 from __future__ import annotations
-import dataclasses
+from dataclasses import dataclass
 import copy
 
 from mdp import common
 from mdp.scenario.cliff.model import grids
 
 
-@dataclasses.dataclass
+@dataclass
 class EnvironmentParameters(common.EnvironmentParameters):
     pass
 

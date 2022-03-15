@@ -1,7 +1,7 @@
 from __future__ import annotations
 # from typing import TYPE_CHECKING
 from typing import Optional
-import dataclasses
+from dataclasses import dataclass, field
 
 import utils
 from mdp.common import enums
@@ -9,7 +9,7 @@ from mdp.common.dataclass import settings, algorithm_parameters_
 from mdp.common.dataclass.breakdown_parameters import breakdown_parameters_
 
 
-@dataclasses.dataclass
+@dataclass
 class BreakdownAlgorithmByAlpha(breakdown_parameters_.BreakdownParameters):
     # derived dataclasses effectively must have default values:
     # https://stackoverflow.com/questions/51575931/class-inheritance-in-python-3-7-dataclasses
@@ -17,11 +17,11 @@ class BreakdownAlgorithmByAlpha(breakdown_parameters_.BreakdownParameters):
     alpha_min: Optional[float] = None
     alpha_max: Optional[float] = None
     alpha_step: Optional[float] = None
-    alpha_list: list[float] = dataclasses.field(default_factory=list)
+    alpha_list: list[float] = field(default_factory=list)
 
-    algorithm_type_list: list[enums.AlgorithmType] = dataclasses.field(default_factory=list)
+    algorithm_type_list: list[enums.AlgorithmType] = field(default_factory=list)
 
-    settings_list: list[settings.Settings] = dataclasses.field(default_factory=list, init=False)
+    settings_list: list[settings.Settings] = field(default_factory=list, init=False)
 
     def __post_init__(self):
         if not self.alpha_list:

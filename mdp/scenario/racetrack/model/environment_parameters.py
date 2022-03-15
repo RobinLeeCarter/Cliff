@@ -1,6 +1,6 @@
 from __future__ import annotations
 from typing import Optional
-import dataclasses
+from dataclasses import dataclass
 import copy
 
 from mdp import common
@@ -8,7 +8,7 @@ from mdp import common
 from mdp.scenario.racetrack.model import grids
 
 
-@dataclasses.dataclass
+@dataclass
 class EnvironmentParameters(common.EnvironmentParameters):
     min_velocity: Optional[int] = None
     max_velocity: Optional[int] = None

@@ -1,9 +1,9 @@
 from __future__ import annotations
-import dataclasses
+from dataclasses import dataclass
 
 from mdp.model.non_tabular.environment.dimension.dimension import Dimension
 
 
-@dataclasses.dataclass
+@dataclass
 class CategoryDimension(Dimension):
     possible_values: int

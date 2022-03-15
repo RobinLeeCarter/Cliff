@@ -9,7 +9,7 @@ from mdp.scenario.jacks.model.environment import Environment
 
 
 def jacks_test() -> bool:
-    application = Application(common.ComparisonType.JACKS_POLICY_ITERATION_V)
+    application = Application(common.ComparisonType.JACKS_POLICY_ITERATION_V, auto_run=False)
 
     # noinspection PyProtectedMember
     environment: Environment = application.model.environment

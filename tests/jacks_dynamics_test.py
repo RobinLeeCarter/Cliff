@@ -10,7 +10,7 @@ from mdp.scenario.jacks.model.dynamics.dynamics import Dynamics
 
 Response = tuple[float, State]
 
-application = Application(common.ComparisonType.JACKS_POLICY_ITERATION_V)
+application = Application(common.ComparisonType.JACKS_POLICY_ITERATION_V, auto_run=False)
 
 # noinspection PyProtectedMember
 environment: Environment = application.model.environment

@@ -1,5 +1,5 @@
 from __future__ import annotations
-import dataclasses
+from dataclasses import dataclass, field
 
 import utils
 from mdp.common.dataclass import comparison
@@ -7,11 +7,11 @@ from mdp.common.dataclass import comparison
 from mdp.scenario.jacks.model import environment_parameters
 
 
-@dataclasses.dataclass
+@dataclass
 class Comparison(comparison.Comparison):
     # just what is different
     environment_parameters: environment_parameters.EnvironmentParameters = \
-        dataclasses.field(default_factory=environment_parameters.default_factory)
+        field(default_factory=environment_parameters.default_factory)
 
     def __post_init__(self):
         super().__post_init__()

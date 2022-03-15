@@ -1,12 +1,12 @@
 from __future__ import annotations
 from typing import Optional
-import dataclasses
+from dataclasses import dataclass, field
 import copy
 
 from mdp.common import enums
 
 
-@dataclasses.dataclass
+@dataclass
 class GridViewParameters:
     grid_view_type: Optional[enums.GridViewType] = None
     show_demo: Optional[bool] = None
@@ -21,7 +21,7 @@ class GridViewParameters:
     screen_width: Optional[int] = None
     screen_height: Optional[int] = None
 
-    multi_parameter: list = dataclasses.field(default_factory=list)
+    multi_parameter: list = field(default_factory=list)
 
 
 default: GridViewParameters = GridViewParameters(

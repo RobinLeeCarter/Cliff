@@ -1,8 +1,8 @@
 from __future__ import annotations
-import dataclasses
+from dataclasses import dataclass
 
 
-@dataclasses.dataclass
+@dataclass
 class ResultParameters:
     return_recorder: bool = False
     return_algorithm_title: bool = False

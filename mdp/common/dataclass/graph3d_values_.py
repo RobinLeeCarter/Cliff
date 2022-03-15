@@ -1,12 +1,12 @@
 from __future__ import annotations
 from typing import Optional
-import dataclasses
+from dataclasses import dataclass, field
 import copy
 
 from mdp.common.dataclass import series
 
 
-@dataclasses.dataclass
+@dataclass
 class Graph3DValues:
     x_series: Optional[series.Series] = None    # 1d
     y_series: Optional[series.Series] = None    # 1d
@@ -27,7 +27,7 @@ class Graph3DValues:
 
     has_grid: Optional[bool] = None
     has_legend: Optional[bool] = None
-    multi_parameter: list = dataclasses.field(default_factory=list)
+    multi_parameter: list = field(default_factory=list)
 
 
 default: Graph3DValues = Graph3DValues(

@@ -1,12 +1,12 @@
 from __future__ import annotations
 # from typing import Optional
-import dataclasses
+from dataclasses import dataclass
 import copy
 
 from mdp import common
 
 
-@dataclasses.dataclass
+@dataclass
 class EnvironmentParameters(common.EnvironmentParameters):
     pass
 

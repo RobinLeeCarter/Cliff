@@ -8,7 +8,6 @@ from mdp.scenario.blackjack.comparison.comparison import Comparison
 class BlackjackControlES(ComparisonBuilder):
     def create(self) -> Comparison:
         # self._comparison_settings.training_episodes = 100_000
-
         comparison = Comparison(
             environment_parameters=self._environment_parameters,
             comparison_settings=self._comparison_settings,
