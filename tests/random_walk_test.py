@@ -1,18 +1,15 @@
 from __future__ import annotations
 
-import utils
 from mdp import common
 from mdp.scenario.position_move.model import action, state
 from mdp.scenario.random_walk.model.environment import Environment
-from mdp.scenario.random_walk.model.environment_parameters import EnvironmentParameters, default
+from mdp.scenario.random_walk.comparison.environment_parameters import EnvironmentParameters
 
 
 def random_walk_test() -> bool:
     environment_parameters = EnvironmentParameters(
-        environment_type=common.EnvironmentType.RANDOM_WALK,
         actions_list=common.ActionsList.NO_ACTIONS
     )
-    utils.set_none_to_default(environment_parameters, default)
     environment = Environment(environment_parameters)
     environment.build()
 

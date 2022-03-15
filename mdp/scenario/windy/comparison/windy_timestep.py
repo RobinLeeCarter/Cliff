@@ -3,14 +3,13 @@ from __future__ import annotations
 from mdp import common
 from mdp.scenario.windy.comparison.comparison_builder import ComparisonBuilder
 from mdp.scenario.windy.comparison.comparison import Comparison
-from mdp.scenario.windy.model.environment_parameters import EnvironmentParameters
+from mdp.scenario.windy.comparison.environment_parameters import EnvironmentParameters
 
 
 class WindyTimestep(ComparisonBuilder):
     def create(self) -> Comparison:
         return Comparison(
             environment_parameters=EnvironmentParameters(
-                # actions_list=common.ActionsList.FOUR_MOVES,
                 random_wind=self._random_wind,
             ),
             comparison_settings=common.Settings(

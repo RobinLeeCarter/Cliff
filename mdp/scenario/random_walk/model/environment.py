@@ -4,7 +4,7 @@ from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from mdp.scenario.position_move.model.state import State
-    from mdp.scenario.random_walk.model.environment_parameters import EnvironmentParameters
+    from mdp.scenario.random_walk.comparison.environment_parameters import EnvironmentParameters
 from mdp.scenario.random_walk.model.dynamics import Dynamics
 from mdp.scenario.random_walk.model.grid_world import GridWorld
 

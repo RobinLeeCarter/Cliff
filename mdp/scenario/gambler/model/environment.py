@@ -11,7 +11,7 @@ if TYPE_CHECKING:
 from mdp import common
 from mdp.scenario.gambler.model.state import State
 from mdp.scenario.gambler.model.action import Action
-from mdp.scenario.gambler.model.environment_parameters import EnvironmentParameters
+from mdp.scenario.gambler.comparison.environment_parameters import EnvironmentParameters
 # from mdp.scenarios.gambler.grid_world import GridWorld
 from mdp.scenario.gambler.model.dynamics import Dynamics
 

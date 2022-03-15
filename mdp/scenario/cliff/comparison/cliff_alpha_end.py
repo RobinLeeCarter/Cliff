@@ -3,15 +3,14 @@ from __future__ import annotations
 from mdp import common
 from mdp.scenario.cliff.comparison.comparison_builder import ComparisonBuilder
 from mdp.scenario.cliff.comparison.comparison import Comparison
+from mdp.scenario.cliff.comparison.environment_parameters import EnvironmentParameters
 
 
 class CliffAlphaEnd(ComparisonBuilder):
     def create(self) -> Comparison:
         # TODO: Make work, once multiprocessing
         return Comparison(
-            # environment_parameters=environment_parameters.EnvironmentParameters(
-            #     actions_list=common.ActionsList.FOUR_MOVES,
-            # ),
+            environment_parameters=EnvironmentParameters(),
             comparison_settings=common.Settings(
                 runs=1,
                 training_episodes=100_000,

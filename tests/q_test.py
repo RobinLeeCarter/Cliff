@@ -1,10 +1,8 @@
 from __future__ import annotations
 
-import utils
 from mdp import common
 from mdp.model.tabular.value_function import state_action_function
-from mdp.scenario.cliff.model.environment_parameters import default
-from mdp.scenario.cliff.model.environment_parameters import EnvironmentParameters
+from mdp.scenario.cliff.comparison.environment_parameters import EnvironmentParameters
 from mdp.scenario.cliff.model.environment import Environment
 from mdp.scenario.position_move.model.action import Action
 from mdp.scenario.position_move.model.state import State
@@ -15,7 +13,6 @@ def q_test() -> bool:
         environment_type=common.EnvironmentType.CLIFF,
         actions_list=common.ActionsList.FOUR_MOVES
     )
-    utils.set_none_to_default(environment_parameters, default)
     environment = Environment(environment_parameters)
     environment.build()
     q = state_action_function.StateActionFunction(environment, initial_value=-7.0)

@@ -10,7 +10,7 @@ if TYPE_CHECKING:
 from mdp import common
 from mdp.scenario.jacks.model.state import State
 from mdp.scenario.jacks.model.action import Action
-from mdp.scenario.jacks.model.environment_parameters import EnvironmentParameters
+from mdp.scenario.jacks.comparison.environment_parameters import EnvironmentParameters
 from mdp.scenario.jacks.model.grid_world import GridWorld
 from mdp.scenario.jacks.model.dynamics.dynamics import Dynamics
 

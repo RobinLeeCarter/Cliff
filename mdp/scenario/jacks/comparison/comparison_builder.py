@@ -3,7 +3,7 @@ from abc import ABC
 
 from mdp import common
 from mdp.scenario.general_comparison_builder import GeneralComparisonBuilder
-from mdp.scenario.jacks.model.environment_parameters import EnvironmentParameters
+from mdp.scenario.jacks.comparison.environment_parameters import EnvironmentParameters
 
 
 class ComparisonBuilder(GeneralComparisonBuilder, ABC):
@@ -11,7 +11,6 @@ class ComparisonBuilder(GeneralComparisonBuilder, ABC):
         super().__init__()
         self._max_cars: int = 20      # problem statement = 20
         self._environment_parameters = EnvironmentParameters(
-            environment_type=common.EnvironmentType.JACKS,
             max_cars=self._max_cars,
             extra_rules=True,  # change this for extra rules in book as per challenge
         )

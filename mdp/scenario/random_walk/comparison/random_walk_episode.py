@@ -3,13 +3,13 @@ from __future__ import annotations
 from mdp import common
 from mdp.scenario.random_walk.comparison.comparison_builder import ComparisonBuilder
 from mdp.scenario.random_walk.comparison.comparison import Comparison
-# from mdp.scenarios.random_walk.model.environment_parameters import EnvironmentParameters
+from mdp.scenario.random_walk.comparison.environment_parameters import EnvironmentParameters
 
 
 class RandomWalkEpisode(ComparisonBuilder):
     def create(self):
         return Comparison(
-            # environment_parameters=self._environment_parameters,
+            environment_parameters=EnvironmentParameters(),
             comparison_settings=common.Settings(
                 runs=100,
                 # runs_multiprocessing=common.ParallelContextType.FORK_GLOBAL,

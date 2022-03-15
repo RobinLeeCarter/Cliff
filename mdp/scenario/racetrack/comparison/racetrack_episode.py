@@ -3,7 +3,7 @@ from __future__ import annotations
 from mdp import common
 from mdp.scenario.racetrack.comparison.comparison_builder import ComparisonBuilder
 from mdp.scenario.racetrack.comparison.comparison import Comparison
-from mdp.scenario.racetrack.model.environment_parameters import EnvironmentParameters
+from mdp.scenario.racetrack.comparison.environment_parameters import EnvironmentParameters
 from mdp.scenario.racetrack.model import grids
 
 

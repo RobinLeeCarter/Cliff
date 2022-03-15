@@ -4,7 +4,7 @@ from typing import Optional, TYPE_CHECKING
 
 if TYPE_CHECKING:
     from mdp.scenario.windy.controller import Controller
-    from mdp.scenario.windy.model.environment_parameters import EnvironmentParameters
+    from mdp.scenario.windy.comparison.environment_parameters import EnvironmentParameters
 
 from mdp.scenario.position_move.model import model
 from mdp.scenario.windy.model.environment import Environment

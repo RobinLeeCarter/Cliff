@@ -2,19 +2,15 @@ from __future__ import annotations
 
 import numpy as np
 
-import utils
 from mdp import common
-from mdp.scenario.cliff.model.environment_parameters import default
-from mdp.scenario.cliff.model.environment_parameters import EnvironmentParameters
+from mdp.scenario.cliff.comparison.environment_parameters import EnvironmentParameters
 from mdp.scenario.cliff.model.environment import Environment
 
 
 def grid_test() -> bool:
     environment_parameters = EnvironmentParameters(
-        environment_type=common.EnvironmentType.CLIFF,
         actions_list=common.ActionsList.FOUR_MOVES
     )
-    utils.set_none_to_default(environment_parameters, default)
     environment = Environment(environment_parameters)
     grid_world_ = environment.grid_world
     shape = grid_world_.max_y + 1, grid_world_.max_x + 1

@@ -2,13 +2,13 @@ from __future__ import annotations
 
 from mdp import common
 from mdp.scenario.position_move.model import action, state
-from mdp.scenario.cliff.model import environment_parameters
+from mdp.scenario.cliff.comparison.environment_parameters import EnvironmentParameters
 from mdp.scenario.cliff.model.environment import Environment
 
 
 def cliff_test() -> bool:
-    environment_parameters_ = environment_parameters.default
-    environment = Environment(environment_parameters_)
+    environment_parameters = EnvironmentParameters()
+    environment = Environment(environment_parameters)
     environment.build()
     print(type(environment))
 

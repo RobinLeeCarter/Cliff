@@ -3,13 +3,13 @@ from __future__ import annotations
 from mdp import common
 from mdp.scenario.gambler.comparison.comparison_builder import ComparisonBuilder
 from mdp.scenario.gambler.comparison.comparison import Comparison
-# from mdp.scenarios.gambler.model.environment_parameters import EnvironmentParameters
+from mdp.scenario.gambler.comparison.environment_parameters import EnvironmentParameters
 
 
 class GamblerValueIterationV(ComparisonBuilder):
     def create(self):
         return Comparison(
-            # environment_parameters=self._environment_parameters,
+            environment_parameters=EnvironmentParameters(),
             comparison_settings=common.Settings(
                 gamma=1.0,      # 0.99999
                 policy_parameters=common.PolicyParameters(

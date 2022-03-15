@@ -1,17 +1,15 @@
 from __future__ import annotations
 
-import utils
 from mdp import common
 from mdp.scenario.racetrack.model import action, grids, state
 from mdp.scenario.racetrack.model.environment import Environment
-from mdp.scenario.racetrack.model.environment_parameters import EnvironmentParameters, default
+from mdp.scenario.racetrack.comparison.environment_parameters import EnvironmentParameters
 
 
 def racetrack_test() -> bool:
     environment_parameters = EnvironmentParameters(
         grid=grids.TRACK_1
     )
-    utils.set_none_to_default(environment_parameters, default)
     environment = Environment(environment_parameters)
     environment.build()
 

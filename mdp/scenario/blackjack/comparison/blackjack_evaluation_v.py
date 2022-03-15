@@ -9,7 +9,7 @@ from mdp.scenario.blackjack.comparison.environment_parameters import Environment
 class BlackjackEvaluationV(ComparisonBuilder):
     def create(self) -> Comparison:
         return Comparison(
-            environment_parameters=EnvironmentParameters(verbose=True),
+            environment_parameters=EnvironmentParameters(),
             comparison_settings=self._comparison_settings,
             settings_list=[
                 common.Settings(
