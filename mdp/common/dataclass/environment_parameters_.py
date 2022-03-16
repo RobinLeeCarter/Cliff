@@ -5,15 +5,15 @@ from abc import ABC
 
 import numpy as np
 
-from mdp.common import enums
+from mdp.common.enums import EnvironmentType, ActionsList
 
 
 @dataclass
 class EnvironmentParameters(ABC):
-    environment_type: enums.EnvironmentType
+    environment_type: EnvironmentType
     verbose: bool = False
     actions_always_compatible: bool = False
 
     # TODO: Make only for some scenarios
     grid: Optional[np.ndarray] = None
-    actions_list: Optional[enums.ActionsList] = None
+    actions_list: Optional[ActionsList] = None

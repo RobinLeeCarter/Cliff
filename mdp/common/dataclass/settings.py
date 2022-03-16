@@ -5,7 +5,8 @@ from typing import Optional
 
 import utils
 from mdp.common import enums
-from mdp.common.dataclass import algorithm_parameters_, policy_parameters_, result_parameters_
+from mdp.common.dataclass import policy_parameters_, result_parameters_
+from mdp.common.dataclass.algorithm_parameters_ import AlgorithmParameters
 
 
 @dataclass
@@ -13,9 +14,7 @@ class Settings:
     gamma: Optional[float] = None
 
     # defaults are set in set_none_to_default
-    algorithm_parameters: algorithm_parameters_.AlgorithmParameters = \
-        field(default_factory=algorithm_parameters_.none_factory)
-
+    algorithm_parameters: Optional[AlgorithmParameters] = None
     policy_parameters: policy_parameters_.PolicyParameters = \
         field(default_factory=policy_parameters_.none_factory)
     behaviour_policy_parameters: policy_parameters_.PolicyParameters = \
@@ -42,14 +41,14 @@ class Settings:
 
     def set_none_to_default(self, default_: Settings):
         utils.set_none_to_default(self, default_)
-        utils.set_none_to_default(self.algorithm_parameters, default_.algorithm_parameters)
+        # utils.set_none_to_default(self.algorithm_parameters, default_.algorithm_parameters)
         utils.set_none_to_default(self.policy_parameters, default_.policy_parameters)
         # utils.set_none_to_default(self.result_parameters, default_.result_parameters)
 
 
 default = Settings(
     gamma=1.0,
-    algorithm_parameters=algorithm_parameters_.default,
+    algorithm_parameters=None,
     policy_parameters=policy_parameters_.default,
     dual_policy_relationship=enums.DualPolicyRelationship.SINGLE_POLICY,
     runs=10,
