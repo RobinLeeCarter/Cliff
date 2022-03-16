@@ -9,9 +9,7 @@ from mdp.scenario.random_walk.comparison.environment_parameters import Environme
 
 @dataclass(unsafe_hash=True)    # needed for multiprocessing where results may differ, potentially pickle
 class AlgorithmParameters(common.AlgorithmParameters):
-    algorithm_parameters: common.AlgorithmParameters = common.AlgorithmParameters(
-        initial_v_value=0.5
-    )
+    initial_v_value: float = 0.5
 
 
 @dataclass
