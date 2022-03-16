@@ -4,15 +4,16 @@ from mdp import common
 from mdp.scenario.blackjack.comparison.comparison_builder import ComparisonBuilder
 from mdp.scenario.blackjack.comparison.comparison import Comparison
 from mdp.scenario.blackjack.comparison.environment_parameters import EnvironmentParameters
+from mdp.scenario.blackjack.comparison.settings import Settings
 
 
 class BlackjackEvaluationQ(ComparisonBuilder):
     def create(self) -> Comparison:
         return Comparison(
             environment_parameters=EnvironmentParameters(),
-            comparison_settings=self._comparison_settings,
+            comparison_settings=Settings(),
             settings_list=[
-                common.Settings(
+                Settings(
                     algorithm_parameters=common.AlgorithmParameters(
                         algorithm_type=common.AlgorithmType.MC_PREDICTION_Q,
                         first_visit=True,

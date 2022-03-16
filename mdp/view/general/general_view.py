@@ -23,14 +23,8 @@ class GeneralView(ABC):
     def build(self, comparison: common.Comparison):
         """build top-down"""
         self._comparison = comparison
-        self.graph2d: Graph2D = self._create_graph()
-        self.graph3d: Graph3D = self._create_graph3d()
-
-    def _create_graph(self) -> Graph2D:
-        return Graph2D()
-
-    def _create_graph3d(self) -> Graph3D:
-        return Graph3D()
+        self.graph2d: Graph2D = Graph2D()
+        self.graph3d: Graph3D = Graph3D()
 
     def demonstrate(self):
         raise Exception("demonstrate() not implemented")

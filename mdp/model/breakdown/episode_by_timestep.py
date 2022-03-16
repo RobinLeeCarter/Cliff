@@ -1,4 +1,5 @@
 from __future__ import annotations
+import copy
 
 import numpy as np
 
@@ -55,15 +56,13 @@ class EpisodeByTimestep(Breakdown):
             )
             self.series_list.append(series_)
 
-    def get_graph_values(self) -> common.GraphValues:
-        graph_values: common.GraphValues = common.GraphValues(
-            x_series=self.x_series,
-            graph_series=self.series_list,
-            y_label=self._y_label,
-            x_min=0,
-            x_max=self._max_timestep,
-            y_min=0,
-            y_max=self.comparison.comparison_settings.training_episodes
-        )
-        utils.set_none_to_default(graph_values, self.comparison.graph_values)
+    def get_graph2d_values(self) -> common.Graph2DValues:
+        graph_values: common.Graph2DValues = copy.deepcopy(self.comparison.graph2d_values)
+        graph_values.x_series = self.x_series
+        graph_values.graph_series = self.series_list
+        graph_values.y_label = self._y_label
+        graph_values.x_min = 0
+        graph_values.x_max = self._max_timestep
+        graph_values.y_min = 0
+        graph_values.y_max = self.comparison.comparison_settings.training_episodes
         return graph_values

@@ -47,5 +47,5 @@ class Breakdown(ABC):
         pass
 
     @abstractmethod
-    def get_graph_values(self) -> common.GraphValues:
+    def get_graph2d_values(self) -> common.Graph2DValues:
         pass

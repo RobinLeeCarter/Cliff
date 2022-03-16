@@ -14,13 +14,13 @@ class Graph2D:
         self.title = ""
         self.fig: Optional[figure.Figure] = None
         self.ax: Optional[figure.Axes] = None
-        self.graph_values: Optional[common.GraphValues] = None
+        self.graph2d_values: Optional[common.Graph2DValues] = None
 
-    def make_plot(self, graph_values: common.GraphValues):
-        self.graph_values = graph_values
+    def make_plot(self, graph2d_values: common.Graph2DValues):
+        self.graph2d_values = graph2d_values
 
         # fill-in values where missing
-        gv = self.graph_values
+        gv = self.graph2d_values
         if gv.x_label is None:
             gv.x_label = gv.x_series.title
         if gv.title is None:
@@ -47,7 +47,7 @@ class Graph2D:
             self.ax.plot(x_series.values, series_.values, label=series_.title)
 
     def post_plot(self):
-        gv = self.graph_values
+        gv = self.graph2d_values
         self.ax.set_title(gv.title)
         self.ax.set_xlim(xmin=gv.x_min, xmax=gv.x_max)
         self.ax.set_xlabel(gv.x_label)

@@ -81,7 +81,7 @@ class Environment(TabularEnvironment[State, Action]):
         x_values = np.array(x_list, dtype=int)
         y_values = np.array(y_list, dtype=float)
 
-        g = comparison.graph_values
+        g = comparison.graph2d_values
         g.x_series = common.Series(title=g.x_label, values=x_values)
         g.graph_series = [common.Series(title=g.y_label, values=y_values)]
         g.show_graph = True
@@ -111,7 +111,7 @@ class Environment(TabularEnvironment[State, Action]):
         x_values = np.array(x_list, dtype=int)
         y_values = np.array(y_list, dtype=float)
 
-        g = comparison.graph_values
+        g = comparison.graph2d_values
         g.x_series = common.Series(title=g.x_label, values=x_values)
         g.graph_series = [common.Series(title=g.y_label, values=y_values)]
         g.show_graph = True

@@ -1,8 +1,9 @@
 from __future__ import annotations
 
+import copy
+
 import numpy as np
 
-import utils
 from mdp import common
 from mdp.model.breakdown.recorder import Recorder
 from mdp.model.breakdown.breakdown import Breakdown
@@ -46,13 +47,11 @@ class ReturnByAlpha(Breakdown):
             )
             self.series_list.append(series_)
 
-    def get_graph_values(self) -> common.GraphValues:
-        graph_values: common.GraphValues = common.GraphValues(
-            x_series=self.x_series,
-            graph_series=self.series_list,
-            y_label=self._y_label,
-            x_min=self.breakdown_parameters.alpha_min,
-            x_max=self.breakdown_parameters.alpha_max,
-        )
-        utils.set_none_to_default(graph_values, self.comparison.graph_values)
+    def get_graph2d_values(self) -> common.Graph2DValues:
+        graph_values: common.Graph2DValues = copy.deepcopy(self.comparison.graph2d_values)
+        graph_values.x_series = self.x_series
+        graph_values.graph_series = self.series_list
+        graph_values.y_label = self._y_label
+        graph_values.x_min = self.breakdown_parameters.alpha_min
+        graph_values.x_max = self.breakdown_parameters.alpha_max
         return graph_values

@@ -3,7 +3,9 @@ from dataclasses import dataclass, field
 from abc import ABC
 
 import utils
-from mdp.common.dataclass import graph_values_, graph3d_values_, grid_view_parameters_
+from mdp.common.dataclass.graph2d_values_ import Graph2DValues
+from mdp.common.dataclass.graph3d_values_ import Graph3DValues
+from mdp.common.dataclass.grid_view_parameters_ import GridViewParameters
 
 from mdp.common.dataclass.environment_parameters_ import EnvironmentParameters
 from mdp.common.dataclass.settings import Settings
@@ -28,16 +30,13 @@ class Comparison(ABC):
     breakdown_parameters: BreakdownParameters = field(default_factory=BreakdownParameters)
 
     # 2D graph output
-    graph_values: graph_values_.GraphValues = \
-        field(default_factory=graph_values_.default_factory)
+    graph2d_values: Graph2DValues = field(default_factory=Graph2DValues)
 
     # 3D graph output
-    graph3d_values: graph3d_values_.Graph3DValues = \
-        field(default_factory=graph3d_values_.default_factory)
+    graph3d_values: Graph3DValues = field(default_factory=Graph3DValues)
 
     # grid view output
-    grid_view_parameters: grid_view_parameters_.GridViewParameters = \
-        field(default_factory=grid_view_parameters_.default_factory)
+    grid_view_parameters: GridViewParameters = field(default_factory=GridViewParameters)
 
     def __post_init__(self):
         # Push comparison values or default values into most settings attributes if currently =None
@@ -54,5 +53,5 @@ class Comparison(ABC):
         #     settings_.set_none_to_default(default_=self.comparison_settings)
 
         # view
-        utils.set_none_to_default(self.graph_values, graph_values_.default)
-        utils.set_none_to_default(self.grid_view_parameters, grid_view_parameters_.default)
+        # utils.set_none_to_default(self.graph_values, graph_values_.default)
+        # utils.set_none_to_default(self.grid_view_parameters, grid_view_parameters_.default)

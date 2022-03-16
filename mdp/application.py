@@ -31,6 +31,7 @@ class Application:
 
     def build(self, comparison: common.Comparison):
         self._comparison = comparison
+        # print(f"{comparison=}")
         environment_type: common.EnvironmentType = comparison.environment_parameters.environment_type
         self.model, self.view, self.controller = self._mvc_factory.create(environment_type)
         self.controller.link_mvc(self.model, self.view)

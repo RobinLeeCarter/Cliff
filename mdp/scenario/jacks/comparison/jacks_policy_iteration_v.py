@@ -3,13 +3,11 @@ from __future__ import annotations
 from mdp import common
 from mdp.scenario.jacks.comparison.comparison_builder import ComparisonBuilder
 from mdp.scenario.jacks.comparison.comparison import Comparison
+from mdp.scenario.jacks.comparison.settings import Settings
 
 
 class JacksPolicyIterationV(ComparisonBuilder):
     def create(self) -> Comparison:
-        comparison_settings = self._comparison_settings
-        comparison_settings.display_every_step = False
-
         graph3d_values = self._graph3d_values
         graph3d_values.show_graph = True
 
@@ -18,12 +16,13 @@ class JacksPolicyIterationV(ComparisonBuilder):
 
         return Comparison(
             environment_parameters=self._environment_parameters,
-            comparison_settings=comparison_settings,
+            comparison_settings=Settings(),
             settings_list=[
-                common.Settings(
+                Settings(
                     algorithm_parameters=common.AlgorithmParameters(
                         algorithm_type=common.AlgorithmType.DP_POLICY_ITERATION_V,
-                        verbose=False
+                        verbose=False,
+                        theta=0.1  # accuracy of policy_evaluation
                     )
                 ),
             ],

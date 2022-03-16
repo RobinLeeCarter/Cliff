@@ -8,15 +8,6 @@ from mdp.scenario.general_comparison_builder import GeneralComparisonBuilder
 class ComparisonBuilder(GeneralComparisonBuilder, ABC):
     def __init__(self):
         super().__init__()
-        self._comparison_settings = common.Settings(
-            gamma=1.0,
-            runs=1,
-            training_episodes=500_000,
-            episode_print_frequency=10_000,
-            policy_parameters=common.PolicyParameters(
-                policy_type=common.PolicyType.TABULAR_DETERMINISTIC,
-            ),
-        )
         self._graph3d_values = common.Graph3DValues(
             show_graph=True,
             x_label="Player sum",

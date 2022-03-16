@@ -14,7 +14,7 @@ class Controller(controller.Controller[Model, View]):
         self._view: Optional[View] = self._view
 
     def output(self):
-        self._breakdown_graph()
+        self._breakdown_2dgraph()
 
         self._model.update_grid_value_functions()
         self._view.grid_view.display_latest_step()

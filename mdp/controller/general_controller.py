@@ -38,8 +38,8 @@ class GeneralController(Generic[Model, View]):
     def output(self):
         pass
 
-    def _breakdown_graph(self):
-        graph_values: common.GraphValues = self._model.breakdown.get_graph_values()
+    def _breakdown_2dgraph(self):
+        graph_values: common.Graph2DValues = self._model.breakdown.get_graph2d_values()
         self._view.graph2d.make_plot(graph_values)
 
     # region Model requests

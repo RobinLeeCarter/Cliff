@@ -19,7 +19,7 @@ class Controller(TabularController[Model, View]):
         self._view.grid_view.set_gridworld(self._model.environment.grid_world)
 
     def output(self):
-        self._breakdown_graph()
+        self._breakdown_2dgraph()
 
         # prep for output
         self._model.environment.grid_world.skid_probability = 0.0

@@ -1,42 +1,22 @@
 from __future__ import annotations
-from typing import Optional
 from dataclasses import dataclass, field
-import copy
 
 from mdp.common import enums
 
 
 @dataclass
 class GridViewParameters:
-    grid_view_type: Optional[enums.GridViewType] = None
-    show_demo: Optional[bool] = None
-    show_result: Optional[bool] = None
-    window_title: Optional[str] = None
-    show_trail: Optional[bool] = None
+    grid_view_type: enums.GridViewType = enums.GridViewType.POSITION_MOVE
+    show_demo: bool = False
+    show_result: bool = False
+    window_title: str = "Grid World"
+    show_trail: bool = False
     
-    show_v: Optional[bool] = None
-    show_q: Optional[bool] = None
-    show_policy: Optional[bool] = None
+    show_v: bool = False
+    show_q: bool = False
+    show_policy: bool = False
     
-    screen_width: Optional[int] = None
-    screen_height: Optional[int] = None
+    screen_width: int = 1500
+    screen_height: int = 1000
 
     multi_parameter: list = field(default_factory=list)
-
-
-default: GridViewParameters = GridViewParameters(
-    grid_view_type=enums.GridViewType.POSITION_MOVE,
-    show_demo=False,
-    show_result=False,
-    window_title="Grid World",
-    show_trail=False,
-    show_v=False,
-    show_q=False,
-    show_policy=False,
-    screen_width=1500,
-    screen_height=1000,
-)
-
-
-def default_factory() -> GridViewParameters:
-    return copy.deepcopy(default)
