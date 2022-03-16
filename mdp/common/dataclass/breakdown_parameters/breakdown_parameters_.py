@@ -1,21 +1,11 @@
 from __future__ import annotations
 from typing import Optional
 from dataclasses import dataclass
-import copy
 
-from mdp.common import enums
+from mdp.common.enums import BreakdownType
 
 
 @dataclass
 class BreakdownParameters:
-    breakdown_type: Optional[enums.BreakdownType] = None
-    verbose: Optional[bool] = None
-
-
-default: BreakdownParameters = BreakdownParameters(
-    verbose=False
-)
-
-
-def default_factory() -> BreakdownParameters:
-    return copy.deepcopy(default)
+    breakdown_type: Optional[BreakdownType] = None
+    verbose: bool = False
