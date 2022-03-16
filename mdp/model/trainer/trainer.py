@@ -84,7 +84,9 @@ class Trainer:
         settings = self.settings
         if (settings.review_every_step or settings.display_every_step) and self._agent.set_step_callback:
             self._agent.set_step_callback(self.step)
-        print(f"{settings.algorithm_title}: {settings.runs} runs")
+        algorithm_type: common.AlgorithmType = settings.algorithm_parameters.algorithm_type
+        title: str = self.agent.algorithm_factory.lookup_algorithm_name(algorithm_type)
+        print(f"{title}: {settings.runs} runs")
 
         self.max_cum_timestep = 0
         if settings.runs_multiprocessing == common.ParallelContextType.NONE \

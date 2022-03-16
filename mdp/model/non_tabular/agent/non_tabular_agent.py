@@ -105,7 +105,6 @@ class NonTabularAgent(Generic[State, Action], GeneralAgent):
         # set policy based on policy_parameters
         self._algorithm = self._algorithm_factory.create(algorithm_parameters=settings.algorithm_parameters)
         # assert isinstance(self._algorithm, NonTabularAlgorithm)
-        settings.algorithm_title = self._algorithm.title
         self._episode_length_timeout = settings.episode_length_timeout
         if isinstance(self._algorithm, Episodic):
             self._record_first_visits = self._algorithm.first_visit

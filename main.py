@@ -6,7 +6,7 @@ import mdp
 
 def main():
     os_environ_settings.dummy = None    # for pycharm code inspection only
-    mdp.Application(comparison_type=mdp.ComparisonType.WINDY_TIMESTEP)
+    mdp.Application(comparison_type=mdp.ComparisonType.CLIFF_ALPHA_START)
 
 
 if __name__ == '__main__':

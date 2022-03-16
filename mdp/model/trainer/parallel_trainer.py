@@ -74,9 +74,6 @@ class ParallelTrainer:
             for recorder in unique_recorders:
                 self._recorder.add_recorder(recorder)
 
-        for settings, result in zip(self._settings_list, self._results):
-            settings.algorithm_title = result.algorithm_title
-
 
 def _global_train_wrapper(settings: common.Settings) -> common.Result:
     return _trainer.train(settings, return_result=True)

@@ -35,9 +35,6 @@ class Settings:
     review_every_step: Optional[bool] = None
     display_every_step: Optional[bool] = None
 
-    # algorithm title will be populated by Trainer later whether it's used or not
-    algorithm_title: str = field(default="", init=False)
-
     # only used for parallel routines to determine what Trainer should return from the child process
     result_parameters: Optional[result_parameters_.ResultParameters] = None
     # result_parameters: result_parameters_.ResultParameters = \

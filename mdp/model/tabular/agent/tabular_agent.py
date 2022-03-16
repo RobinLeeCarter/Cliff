@@ -101,7 +101,6 @@ class TabularAgent(Generic[State, Action], GeneralAgent):
 
         # select and set algorithm based on algorithm_parameters
         self._algorithm = self._algorithm_factory.create(settings.algorithm_parameters)
-        settings.algorithm_title = self._algorithm.title
         self._episode_length_timeout = settings.episode_length_timeout
         if isinstance(self._algorithm, Episodic):
             self._record_first_visits = self._algorithm.first_visit
