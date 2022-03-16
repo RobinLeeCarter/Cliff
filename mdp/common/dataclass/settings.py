@@ -5,8 +5,9 @@ from typing import Optional
 
 import utils
 from mdp.common import enums
-from mdp.common.dataclass import policy_parameters_, result_parameters_
 from mdp.common.dataclass.algorithm_parameters_ import AlgorithmParameters
+from mdp.common.dataclass.policy_parameters_ import PolicyParameters
+from mdp.common.dataclass.result_parameters_ import ResultParameters
 
 
 @dataclass
@@ -15,10 +16,8 @@ class Settings:
 
     # defaults are set in set_none_to_default
     algorithm_parameters: Optional[AlgorithmParameters] = None
-    policy_parameters: policy_parameters_.PolicyParameters = \
-        field(default_factory=policy_parameters_.none_factory)
-    behaviour_policy_parameters: policy_parameters_.PolicyParameters = \
-        field(default_factory=policy_parameters_.none_factory)
+    policy_parameters: PolicyParameters = field(default_factory=PolicyParameters)
+    behaviour_policy_parameters: Optional[PolicyParameters] = None
     dual_policy_relationship: Optional[enums.DualPolicyRelationship] = None
 
     runs: Optional[int] = None
@@ -35,21 +34,21 @@ class Settings:
     display_every_step: Optional[bool] = None
 
     # only used for parallel routines to determine what Trainer should return from the child process
-    result_parameters: Optional[result_parameters_.ResultParameters] = None
+    result_parameters: Optional[ResultParameters] = None
     # result_parameters: result_parameters_.ResultParameters = \
     #     field(default_factory=result_parameters_.none_factory)
 
     def set_none_to_default(self, default_: Settings):
         utils.set_none_to_default(self, default_)
         # utils.set_none_to_default(self.algorithm_parameters, default_.algorithm_parameters)
-        utils.set_none_to_default(self.policy_parameters, default_.policy_parameters)
+        # utils.set_none_to_default(self.policy_parameters, default_.policy_parameters)
         # utils.set_none_to_default(self.result_parameters, default_.result_parameters)
 
 
 default = Settings(
     gamma=1.0,
     algorithm_parameters=None,
-    policy_parameters=policy_parameters_.default,
+    policy_parameters=PolicyParameters(),
     dual_policy_relationship=enums.DualPolicyRelationship.SINGLE_POLICY,
     runs=10,
     run_print_frequency=10,
