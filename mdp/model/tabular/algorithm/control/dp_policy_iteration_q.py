@@ -16,7 +16,6 @@ class DpPolicyIterationQ(DpPolicyEvaluationQDeterministic, DpPolicyImprovementQ)
                  name: str
                  ):
         super().__init__(agent, algorithm_parameters, name)
-        self.title = f"{self.name} θ={self._theta}"
 
     def run(self):
         if self._verbose:

@@ -31,5 +31,11 @@ class AlgorithmFactory:
                                                         algorithm_name)
         return algorithm
 
-    def lookup_algorithm_name(self, algorithm_type: common.AlgorithmType) -> str:
+    def get_algorithm_name(self, algorithm_type: common.AlgorithmType) -> str:
         return self._name_lookup[algorithm_type]
+
+    def get_algorithm_title(self, algorithm_parameters: common.AlgorithmParameters) -> str:
+        algorithm_type: common.AlgorithmType = algorithm_parameters.algorithm_type
+        type_of_algorithm: Type[GeneralAlgorithm] = self._algorithm_lookup[algorithm_type]
+        name: str = self._name_lookup[algorithm_type]
+        return type_of_algorithm.get_title(name, algorithm_parameters)

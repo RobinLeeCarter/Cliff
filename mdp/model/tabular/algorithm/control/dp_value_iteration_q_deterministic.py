@@ -19,7 +19,6 @@ class DpValueIterationQ(DynamicProgrammingQ):
                  name: str
                  ):
         super().__init__(agent, algorithm_parameters, name)
-        self.title = f"{self.name} θ={self._theta}"
 
     def run(self):
         do_call_back: bool = bool(self._step_callback)

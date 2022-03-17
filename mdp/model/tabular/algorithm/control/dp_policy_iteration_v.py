@@ -16,7 +16,6 @@ class DpPolicyIterationV(DpPolicyEvaluationVDeterministic, DpPolicyImprovementV)
                  name: str
                  ):
         super().__init__(agent, algorithm_parameters, name)
-        self.title = f"{self.name} θ={self._theta}"
 
     # @profile
     def run(self):

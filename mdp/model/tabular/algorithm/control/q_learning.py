@@ -15,7 +15,6 @@ class QLearning(EpisodicOnlineControl):
                  ):
         super().__init__(agent, algorithm_parameters, name)
         self._alpha = self._algorithm_parameters.alpha
-        self.title = f"{self.name} α={self._alpha}"
         self._create_q()
 
     def _do_training_step(self):

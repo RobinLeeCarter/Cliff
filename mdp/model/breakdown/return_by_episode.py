@@ -46,7 +46,7 @@ class ReturnByEpisode(breakdown.Breakdown):
                 dtype=float
             )
             algorithm_type: common.AlgorithmType = settings.algorithm_parameters.algorithm_type
-            title: str = self._trainer.agent.algorithm_factory.lookup_algorithm_name(algorithm_type)
+            title: str = self._trainer.agent.algorithm_factory.get_algorithm_title(settings.algorithm_parameters)
             series = common.Series(
                 title=title,
                 identifiers={"algorithm_type": algorithm_type},

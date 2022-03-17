@@ -19,7 +19,7 @@ class GeneralAlgorithm(ABC):
         self._verbose = self._algorithm_parameters.verbose
 
         self.name: str = name
-        self.title: str = name
+        self.title: str = self.get_title(name, algorithm_parameters)
 
         self._gamma: float = self._agent.gamma
 
@@ -31,3 +31,8 @@ class GeneralAlgorithm(ABC):
 
     def parameter_changes(self, iteration: int):
         pass
+
+    # noinspection PyUnusedLocal
+    @staticmethod
+    def get_title(name: str, algorithm_parameters: common.AlgorithmParameters) -> str:
+        return name

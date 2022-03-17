@@ -16,10 +16,6 @@ class VQ(EpisodicOnlineControl):
         super().__init__(agent, algorithm_parameters, name)
         self._alpha_variable: bool = self._algorithm_parameters.alpha_variable
         self._alpha: float = self._algorithm_parameters.alpha
-        if self._alpha_variable:
-            self.title = f"{self.name} α=0.5 then α=0.1"
-        else:
-            self.title = f"{self.name} α={self._alpha}"
         self._create_v()
         self._create_q()
 
@@ -50,3 +46,10 @@ class VQ(EpisodicOnlineControl):
 
         # update policy to be in-line with Q
         self._agent.policy[ag.prev_s] = self.Q.argmax[ag.prev_s]
+
+    @staticmethod
+    def get_title(name: str, algorithm_parameters: common.AlgorithmParameters) -> str:
+        if algorithm_parameters.alpha_variable:
+            return f"{name} α=0.5 then α=0.1"
+        else:
+            return f"{name} α={algorithm_parameters.alpha}"

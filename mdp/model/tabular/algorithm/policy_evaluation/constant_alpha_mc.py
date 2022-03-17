@@ -23,3 +23,7 @@ class ConstantAlphaMC(EpisodicMonteCarlo):
         target = self._episode.G[t]
         delta = target - self.V[s]
         self.V[s] += self._alpha * delta
+
+    @staticmethod
+    def get_title(name: str, algorithm_parameters: common.AlgorithmParameters) -> str:
+        return f"{name} α={algorithm_parameters.alpha}"

@@ -16,7 +16,6 @@ class DynamicProgramming(TabularAlgorithm, ABC):
                  ):
         super().__init__(agent, algorithm_parameters, name)
         self._theta = self._algorithm_parameters.theta
-        self.title = f"{self.name} θ={self._theta}"
         self._iteration_timeout = self._algorithm_parameters.iteration_timeout
 
         # trainer callback
@@ -32,3 +31,7 @@ class DynamicProgramming(TabularAlgorithm, ABC):
     @abstractmethod
     def run(self):
         pass
+
+    @staticmethod
+    def get_title(name: str, algorithm_parameters: common.AlgorithmParameters) -> str:
+        return f"{name} θ={algorithm_parameters.theta}"

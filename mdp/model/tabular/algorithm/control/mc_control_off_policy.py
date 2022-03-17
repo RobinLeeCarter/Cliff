@@ -15,7 +15,6 @@ class McControlOffPolicy(EpisodicMonteCarlo):
                  name: str
                  ):
         super().__init__(agent, algorithm_parameters, name)
-        self.title = f"{self.name}"
         self._W: float = 1.0
         self._create_q()
         self._C = StateActionVariable(self._environment, initial_value=0.0)

@@ -15,9 +15,12 @@ class MCPredictionQ(EpisodicMonteCarlo):
                  name: str
                  ):
         super().__init__(agent, algorithm_parameters, name)
-        self.title = f"{self.name} first_visit={self.first_visit}"
         self._create_q()
         self._N = StateActionVariable(self._environment, initial_value=0.0)
+
+    @staticmethod
+    def get_title(name: str, algorithm_parameters: common.AlgorithmParameters) -> str:
+        return f"{name} first_visit={algorithm_parameters.first_visit}"
 
     def initialize(self):
         super().initialize()

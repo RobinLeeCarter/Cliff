@@ -16,6 +16,10 @@ class EpisodicOnline(Episodic, ABC):
                  ):
         super().__init__(agent, algorithm_parameters, name)
 
+    @staticmethod
+    def get_title(name: str, algorithm_parameters: common.AlgorithmParameters) -> str:
+        return f"{name} α={algorithm_parameters.alpha}"
+
     def do_episode(self, episode_length_timeout: int):
         self._agent.start_episode()
         self._start_episode()

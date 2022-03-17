@@ -39,13 +39,23 @@ class ReturnByAlpha(Breakdown):
                 [self._recorder[algorithm_type, alpha] for alpha in self.breakdown_parameters.alpha_list],
                 dtype=float
             )
-            title = self._trainer.agent.algorithm_factory.lookup_algorithm_name(algorithm_type)
-            series_ = common.Series(
-                title=title,
+            name = self._trainer.agent.algorithm_factory.get_algorithm_name(algorithm_type)
+            series = common.Series(
+                title=name,
                 values=values,
                 identifiers={"algorithm_type": algorithm_type}
             )
-            self.series_list.append(series_)
+            self.series_list.append(series)
+
+        # title: str = self._trainer.agent.algorithm_factory.get_algorithm_title(settings.algorithm_parameters)
+        # for settings in self.comparison.settings_list:
+        #     algorithm_parameters: common.AlgorithmParameters = settings.algorithm_parameters
+        #     algorithm_type: common.AlgorithmType = algorithm_parameters.algorithm_type
+        #     alpha: float = algorithm_parameters.alpha
+        #     values = np.array(
+        #         [self._recorder[algorithm_type, alpha] for alpha in self.breakdown_parameters.alpha_list],
+        #         dtype=float
+        #     )
 
     def get_graph2d_values(self) -> common.Graph2DValues:
         graph_values: common.Graph2DValues = copy.deepcopy(self.comparison.graph2d_values)

@@ -41,13 +41,13 @@ class EpisodeByTimestep(Breakdown):
 
         # collate output from self.recorder
         for settings in self.comparison.settings_list:
+            algorithm_type: common.AlgorithmType = settings.algorithm_parameters.algorithm_type
             values = np.array(
-                [self._recorder[settings.algorithm_parameters.algorithm_type, timestep]
+                [self._recorder[algorithm_type, timestep]
                  for timestep in timestep_array],
                 dtype=float
             )
-            algorithm_type: common.AlgorithmType = settings.algorithm_parameters.algorithm_type
-            title: str = self._trainer.agent.algorithm_factory.lookup_algorithm_name(algorithm_type)
+            title: str = self._trainer.agent.algorithm_factory.get_algorithm_title(settings.algorithm_parameters)
             series_ = common.Series(
                 title=title,
                 identifiers={"algorithm_type": algorithm_type},
