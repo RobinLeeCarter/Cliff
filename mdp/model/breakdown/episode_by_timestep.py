@@ -3,7 +3,6 @@ import copy
 
 import numpy as np
 
-import utils
 from mdp import common
 from mdp.model.breakdown.recorder import Recorder
 from mdp.model.breakdown.breakdown import Breakdown
