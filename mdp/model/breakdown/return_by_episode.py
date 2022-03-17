@@ -4,16 +4,17 @@ import copy
 import numpy as np
 
 from mdp import common
-from mdp.model.breakdown import recorder, breakdown
+from mdp.model.breakdown.recorder import Recorder
+from mdp.model.breakdown.general_breakdown import GeneralBreakdown
 
 
-class ReturnByEpisode(breakdown.Breakdown):
+class ReturnByEpisode(GeneralBreakdown):
     def __init__(self, comparison: common.Comparison):
         super().__init__(comparison)
 
         # common.AlgorithmParameters, episode
         recorder_key_type = tuple[common.AlgorithmParameters, int]
-        self._recorder = recorder.Recorder[recorder_key_type]()
+        self._recorder = Recorder[recorder_key_type]()
         self._y_label = "Average Return"
 
     def record(self):

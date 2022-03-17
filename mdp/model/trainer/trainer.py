@@ -5,7 +5,7 @@ import multiprocessing
 if TYPE_CHECKING:
     from mdp.model.general.agent.general_agent import GeneralAgent
     from mdp.model.general.agent.general_episode import GeneralEpisode
-    from mdp.model.breakdown.breakdown import Breakdown
+    from mdp.model.breakdown.general_breakdown import GeneralBreakdown
 from mdp import common
 from mdp.model.general.algorithm.general_algorithm import GeneralAlgorithm
 from mdp.model.tabular.algorithm.tabular_algorithm import TabularAlgorithm
@@ -19,12 +19,12 @@ from mdp.model.trainer.parallel_runner import ParallelRunner
 class Trainer:
     def __init__(self,
                  agent: GeneralAgent,
-                 breakdown: Optional[Breakdown],
+                 breakdown: Optional[GeneralBreakdown],
                  model_step_callback: Optional[Callable[[Optional[GeneralEpisode]], None]] = None,
                  verbose: bool = False
                  ):
         self._agent: GeneralAgent = agent
-        self._breakdown: Optional[Breakdown] = breakdown
+        self._breakdown: Optional[GeneralBreakdown] = breakdown
         self.settings: Optional[common.Settings] = None
 
         self._model_step_callback: Optional[Callable[[Optional[GeneralEpisode]], None]] = model_step_callback
@@ -38,7 +38,7 @@ class Trainer:
         self.max_cum_timestep: int = 0  # max cumulative timestep across all runs
 
     @property
-    def breakdown(self) -> Breakdown:
+    def breakdown(self) -> GeneralBreakdown:
         return self._breakdown
 
     @property

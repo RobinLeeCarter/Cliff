@@ -9,7 +9,7 @@ if TYPE_CHECKING:
     from mdp.model.trainer.trainer import Trainer
 
 
-class Breakdown(ABC):
+class GeneralBreakdown(ABC):
     def __init__(self, comparison: common.Comparison):
         self.comparison: common.Comparison = comparison
         self.verbose: bool = self.comparison.breakdown_parameters.verbose

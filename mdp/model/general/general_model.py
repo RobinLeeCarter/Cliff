@@ -6,7 +6,7 @@ if TYPE_CHECKING:
     from mdp.controller.general_controller import GeneralController
     from mdp.model.general.environment.general_environment import GeneralEnvironment
     from mdp.model.general.agent.general_episode import GeneralEpisode
-    from mdp.model.breakdown.breakdown import Breakdown
+    from mdp.model.breakdown.general_breakdown import GeneralBreakdown
 
 import multiprocessing
 import utils
@@ -15,7 +15,7 @@ from mdp import common
 # from mdp.model.tabular.agent.agent import Agent
 from mdp.model.general.environment.general_environment import GeneralEnvironment
 from mdp.model.general.agent.general_agent import GeneralAgent
-from mdp.model.breakdown import breakdown_factory
+from mdp.model.breakdown.breakdown_factory import BreakdownFactory
 from mdp.model.trainer.trainer import Trainer
 from mdp.model.trainer.parallel_trainer import ParallelTrainer
 
@@ -36,7 +36,8 @@ class GeneralModel(Generic[Environment, Agent], ABC):
 
         self._controller: Optional[GeneralController] = None
         self._comparison: Optional[common.Comparison] = None
-        self.breakdown: Optional[Breakdown] = None
+        self._breakdown_factory: BreakdownFactory = BreakdownFactory()
+        self.breakdown: Optional[GeneralBreakdown] = None
         self.trainer: Optional[Trainer] = None
         self.parallel_trainer: Optional[ParallelTrainer] = None
 
@@ -58,7 +59,7 @@ class GeneralModel(Generic[Environment, Agent], ABC):
         # self.agent: Agent = Agent[State, Action](self.environment)
 
         # breakdowns themselves need comparison in current implementation so breakdown_parameters is not passed in
-        self.breakdown: Optional[Breakdown] = breakdown_factory.breakdown_factory(self._comparison)
+        self.breakdown: Optional[GeneralBreakdown] = self._breakdown_factory.create(self._comparison)
         self.trainer: Trainer = Trainer(
             agent=self.agent,
             breakdown=self.breakdown,

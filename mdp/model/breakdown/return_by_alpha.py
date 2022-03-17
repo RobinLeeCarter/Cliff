@@ -6,10 +6,10 @@ import numpy as np
 
 from mdp import common
 from mdp.model.breakdown.recorder import Recorder
-from mdp.model.breakdown.breakdown import Breakdown
+from mdp.model.breakdown.general_breakdown import GeneralBreakdown
 
 
-class ReturnByAlpha(Breakdown):
+class ReturnByAlpha(GeneralBreakdown):
     def __init__(self, comparison: common.Comparison):
         super().__init__(comparison)
         assert isinstance(self.comparison.breakdown_parameters, common.BreakdownAlgorithmByAlpha)
