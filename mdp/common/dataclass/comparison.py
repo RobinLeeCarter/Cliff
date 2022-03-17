@@ -2,13 +2,13 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from abc import ABC
 
-from mdp.common.dataclass.graph2d_values_ import Graph2DValues
-from mdp.common.dataclass.graph3d_values_ import Graph3DValues
-from mdp.common.dataclass.grid_view_parameters_ import GridViewParameters
+from mdp.common.dataclass.graph2d_values import Graph2DValues
+from mdp.common.dataclass.graph3d_values import Graph3DValues
+from mdp.common.dataclass.grid_view_parameters import GridViewParameters
 
-from mdp.common.dataclass.environment_parameters_ import EnvironmentParameters
+from mdp.common.dataclass.environment_parameters import EnvironmentParameters
 from mdp.common.dataclass.settings import Settings
-from mdp.common.dataclass.breakdown_parameters.breakdown_parameters_ import BreakdownParameters
+from mdp.common.dataclass.breakdown_parameters.breakdown_parameters import BreakdownParameters
 from mdp.common.dataclass.breakdown_parameters.breakdown_algorithm_by_alpha import BreakdownAlgorithmByAlpha
 from mdp.common.enums import ParallelContextType
 

@@ -1,18 +1,15 @@
 from __future__ import annotations
-# from typing import TYPE_CHECKING
 import copy
-# from typing import Optional
 from dataclasses import dataclass, field
 
 import utils
 from mdp.common.enums import AlgorithmType
 from mdp.common.dataclass.settings import Settings
-# from mdp.common.dataclass.algorithm_parameters_ import AlgorithmParameters
-from mdp.common.dataclass.breakdown_parameters import breakdown_parameters_
+from mdp.common.dataclass.breakdown_parameters.breakdown_parameters import BreakdownParameters
 
 
 @dataclass
-class BreakdownAlgorithmByAlpha(breakdown_parameters_.BreakdownParameters):
+class BreakdownAlgorithmByAlpha(BreakdownParameters):
     """can supply min, max and step or just supply a list"""
     alpha_min: float = 0.1
     alpha_max: float = 1.0
