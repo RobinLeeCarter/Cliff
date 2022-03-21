@@ -10,8 +10,8 @@ if TYPE_CHECKING:
 
 from mdp import common
 from mdp.model.environment.general.environment import Environment
-from mdp.model.general.environment.general_state import GeneralState
-from mdp.model.general.environment.general_action import GeneralAction
+from mdp.model.base.environment.base_state import BaseState
+from mdp.model.base.environment.base_action import BaseAction
 
 S_A = tuple[int, int]
 
@@ -26,13 +26,13 @@ class TabularEnvironment(Environment, ABC):
         self.dynamics: Optional[TabularDynamics] = None
 
         # state and states
-        self.states: list[GeneralState] = []               # ordered list of full States
-        self.state_index: dict[GeneralState, int] = {}     # lookup from full State to state_index (s)
+        self.states: list[BaseState] = []               # ordered list of full States
+        self.state_index: dict[BaseState, int] = {}     # lookup from full State to state_index (s)
         self.is_terminal: list[bool] = []           # bool: is a given state_index (s) a terminal state?
 
         # action and actions
-        self.actions: list[GeneralAction] = []
-        self.action_index: dict[GeneralAction, int] = {}
+        self.actions: list[BaseAction] = []
+        self.action_index: dict[BaseAction, int] = {}
 
         # almost all interactions with environment must be using state and action
         # exception boolean array of whether a in A(s) for a given [s, a]
@@ -61,7 +61,7 @@ class TabularEnvironment(Environment, ABC):
         self.dynamics.build()
         self._build_distributions()
 
-    def state_action_index(self, state: GeneralState, action: GeneralAction) -> S_A:
+    def state_action_index(self, state: BaseState, action: BaseAction) -> S_A:
         state_index = self.state_index[state]
         action_index = self.action_index[action]
         return state_index, action_index
@@ -146,7 +146,7 @@ class TabularEnvironment(Environment, ABC):
     #     response: Response = self.dynamics.draw_response(state, action)
     #     return response
 
-    def from_state_perform_action(self, state: GeneralState, action: GeneralAction) -> tuple[float, GeneralState]:
+    def from_state_perform_action(self, state: BaseState, action: BaseAction) -> tuple[float, BaseState]:
         s = self.state_index[state]
         a = self.action_index[action]
         if state.is_terminal:
@@ -156,7 +156,7 @@ class TabularEnvironment(Environment, ABC):
         reward, new_state = self.dynamics.draw_response(state, action)
         if not new_state:
             new_s = self.start_s_distribution.draw_one()
-            new_state: GeneralState = self.states[new_s]
+            new_state: BaseState = self.states[new_s]
 
         return reward, new_state
 

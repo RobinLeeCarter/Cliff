@@ -38,19 +38,7 @@ class Comparison(ABC):
     grid_view_parameters: GridViewParameters = field(default_factory=GridViewParameters)
 
     def __post_init__(self):
-        # Push comparison values or default values into most settings attributes if currently =None
-        # model
-        # this is now done in the derived classes using their defaults
-        # utils.set_none_to_default(self.environment_parameters, environment_parameters.default)
-
         if isinstance(self.breakdown_parameters, BreakdownAlgorithmByAlpha):
             self.settings_list = self.breakdown_parameters.build_settings_list(self.comparison_settings)
 
         assert self.settings_list
-        # self.comparison_settings.set_none_to_default(default_=settings.default)
-        # for settings_ in self.settings_list:
-        #     settings_.set_none_to_default(default_=self.comparison_settings)
-
-        # view
-        # utils.set_none_to_default(self.graph_values, graph_values_.default)
-        # utils.set_none_to_default(self.grid_view_parameters, grid_view_parameters_.default)

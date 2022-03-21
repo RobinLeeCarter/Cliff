@@ -3,7 +3,7 @@ from typing import Optional, TypeVar, TYPE_CHECKING
 
 if TYPE_CHECKING:
     from mdp.model.tabular.agent.tabular_episode import TabularEpisode
-from mdp.controller.general_controller import GeneralController
+from mdp.controller.base_controller import BaseController
 from mdp.model.tabular.tabular_model import TabularModel
 from mdp.view.tabular.tabular_view import TabularView
 
@@ -11,7 +11,7 @@ Model = TypeVar("Model", bound=TabularModel)
 View = TypeVar("View", bound=TabularView)
 
 
-class TabularController(GeneralController[Model, View]):
+class TabularController(BaseController[Model, View]):
     # region Model requests
     def display_step(self, episode: Optional[TabularEpisode]):
         # if self._comparison.grid_view_parameters.show_step:

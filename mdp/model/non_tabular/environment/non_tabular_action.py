@@ -5,11 +5,11 @@ from functools import cache
 
 import numpy as np
 
-from mdp.model.general.environment.general_action import GeneralAction
+from mdp.model.base.environment.base_action import BaseAction
 
 
 @dataclass(frozen=True)
-class NonTabularAction(GeneralAction, ABC):
+class NonTabularAction(BaseAction, ABC):
     # Restore as property once Pycharm issue is fixed?: https://youtrack.jetbrains.com/issue/PY-48338
     # @property
     @cache

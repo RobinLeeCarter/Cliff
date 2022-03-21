@@ -2,7 +2,7 @@ from __future__ import annotations
 from typing import TypeVar, Generic, Optional
 from abc import ABC
 
-from mdp.model.general.general_model import GeneralModel
+from mdp.model.base.base_model import BaseModel
 from mdp.model.tabular.environment.tabular_environment import TabularEnvironment
 from mdp.model.tabular.agent.tabular_agent import TabularAgent
 from mdp.model.tabular.agent.tabular_episode import TabularEpisode
@@ -15,7 +15,7 @@ Environment = TypeVar('Environment', bound=TabularEnvironment)
 
 
 class TabularModel(Generic[State, Action, Environment],
-                   GeneralModel[Environment, TabularAgent[State, Action]],
+                   BaseModel[Environment, TabularAgent[State, Action]],
                    ABC):
     def __init__(self, verbose: bool = False):
         super().__init__(verbose)

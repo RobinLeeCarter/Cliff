@@ -3,16 +3,16 @@ from typing import TYPE_CHECKING, Optional, TypeVar, Generic
 
 if TYPE_CHECKING:
     from mdp import common
-    from mdp.model.general.agent.general_episode import GeneralEpisode
+    from mdp.model.base.agent.base_episode import BaseEpisode
 
-from mdp.model.general.general_model import GeneralModel
-from mdp.view.general.general_view import GeneralView
+from mdp.model.base.base_model import BaseModel
+from mdp.view.base.base_view import BaseView
 
-Model = TypeVar("Model", bound=GeneralModel)
-View = TypeVar("View", bound=GeneralView)
+Model = TypeVar("Model", bound=BaseModel)
+View = TypeVar("View", bound=BaseView)
 
 
-class GeneralController(Generic[Model, View]):
+class BaseController(Generic[Model, View]):
     def __init__(self):
         self._model: Optional[Model] = None
         self._view: Optional[View] = None
@@ -46,11 +46,11 @@ class GeneralController(Generic[Model, View]):
     # def display_graph_2d(self, graph_values: common.GraphValues):
     #     self._view.graph.make_plot(graph_values)
 
-    def display_step(self, episode: Optional[GeneralEpisode]):
+    def display_step(self, episode: Optional[BaseEpisode]):
         raise Exception("display_step() Not Implemented")
     # endregion
 
     # region View requests
-    def new_episode_request(self) -> GeneralEpisode:
+    def new_episode_request(self) -> BaseEpisode:
         raise Exception("new_episode_request() Not Implemented")
     # endregion

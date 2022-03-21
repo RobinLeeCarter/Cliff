@@ -4,7 +4,7 @@ from abc import ABC, abstractmethod
 from typing import Optional, Callable, TYPE_CHECKING    # , TypeVar
 
 if TYPE_CHECKING:
-    from mdp.model.general.environment.general_environment import GeneralEnvironment
+    from mdp.model.base.environment.base_environment import BaseEnvironment
 
 # from mdp.model.non_tabular.environment.non_tabular_state import NonTabularState
 # from mdp.model.non_tabular.environment.non_tabular_action import NonTabularAction
@@ -13,14 +13,14 @@ if TYPE_CHECKING:
 # Action = TypeVar('Action', bound=NonTabularAction)
 
 
-class GeneralEpisode(ABC):
+class BaseEpisode(ABC):
     """Just makes a record laid out in the standard way with Reward, State, Action for each _t"""
     def __init__(self,
-                 environment: GeneralEnvironment,
+                 environment: BaseEnvironment,
                  gamma: float,
                  step_callback: Optional[Callable[[], bool]] = None,
                  record_first_visits: bool = False):
-        self._environment: GeneralEnvironment = environment
+        self._environment: BaseEnvironment = environment
         self.gamma: float = gamma
         self._step_callback: Optional[Callable[[], bool]] = step_callback
         self.record_first_visits = record_first_visits

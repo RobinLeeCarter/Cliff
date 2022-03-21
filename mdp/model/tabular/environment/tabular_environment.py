@@ -12,7 +12,7 @@ from mdp import common
 from mdp.model.tabular.environment.tabular_state import TabularState
 from mdp.model.tabular.environment.tabular_action import TabularAction
 
-from mdp.model.general.environment.general_environment import GeneralEnvironment
+from mdp.model.base.environment.base_environment import BaseEnvironment
 
 S_A = tuple[int, int]
 
@@ -20,7 +20,7 @@ State = TypeVar('State', bound=TabularState)
 Action = TypeVar('Action', bound=TabularAction)
 
 
-class TabularEnvironment(GeneralEnvironment[State, Action], ABC):
+class TabularEnvironment(BaseEnvironment[State, Action], ABC):
     """An abstract Environment with discrete tabular states and actions"""
     def __init__(self, environment_parameters: common.EnvironmentParameters):
         """

@@ -5,11 +5,11 @@ from functools import cache
 
 import numpy as np
 
-from mdp.model.general.environment.general_state import GeneralState
+from mdp.model.base.environment.base_state import BaseState
 
 
 @dataclass(frozen=True)
-class NonTabularState(GeneralState, ABC):
+class NonTabularState(BaseState, ABC):
     # Restore as property once Pycharm issue is fixed?: https://youtrack.jetbrains.com/issue/PY-48338
     # @property
     @cache

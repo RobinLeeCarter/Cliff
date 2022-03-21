@@ -5,10 +5,10 @@ import numpy as np
 
 from mdp import common
 from mdp.model.breakdown.recorder import Recorder
-from mdp.model.breakdown.general_breakdown import GeneralBreakdown
+from mdp.model.breakdown.base_breakdown import BaseBreakdown
 
 
-class EpisodeByTimestep(GeneralBreakdown):
+class EpisodeByTimestep(BaseBreakdown):
     def __init__(self, comparison: common.Comparison):
         super().__init__(comparison)
 

@@ -4,7 +4,7 @@ from abc import ABC, abstractmethod
 from mdp import common
 
 
-class GeneralComparisonBuilder(ABC):
+class BaseComparisonBuilder(ABC):
     def __init__(self, **_ignored):
         pass
 

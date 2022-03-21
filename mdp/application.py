@@ -3,9 +3,9 @@ from typing import TYPE_CHECKING, Optional
 
 if TYPE_CHECKING:
     from mdp import common
-    from mdp.model.general.general_model import GeneralModel
-    from mdp.view.general.general_view import GeneralView
-    from mdp.controller.general_controller import GeneralController
+    from mdp.model.base.base_model import BaseModel
+    from mdp.view.base.base_view import BaseView
+    from mdp.controller.base_controller import BaseController
 from mdp.scenario.comparison_factory import ComparisonFactory
 from mdp.mvc_factory import MVCFactory
 
@@ -16,9 +16,9 @@ class Application:
         :param comparison_type: if comparison_type not passed then allow a build using a comparison argument
         """
         self._comparison: Optional[common.Comparison] = None
-        self.model: Optional[GeneralModel] = None
-        self.view: Optional[GeneralView] = None
-        self.controller: Optional[GeneralController] = None
+        self.model: Optional[BaseModel] = None
+        self.view: Optional[BaseView] = None
+        self.controller: Optional[BaseController] = None
 
         self._comparison_factory: ComparisonFactory = ComparisonFactory()
         self._mvc_factory: MVCFactory = MVCFactory()

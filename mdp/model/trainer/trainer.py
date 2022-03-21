@@ -3,11 +3,11 @@ from typing import TYPE_CHECKING, Optional, Callable
 import multiprocessing
 
 if TYPE_CHECKING:
-    from mdp.model.general.agent.general_agent import GeneralAgent
-    from mdp.model.general.agent.general_episode import GeneralEpisode
-    from mdp.model.breakdown.general_breakdown import GeneralBreakdown
+    from mdp.model.base.agent.base_agent import BaseAgent
+    from mdp.model.base.agent.base_episode import BaseEpisode
+    from mdp.model.breakdown.base_breakdown import BaseBreakdown
 from mdp import common
-from mdp.model.general.algorithm.general_algorithm import GeneralAlgorithm
+from mdp.model.base.algorithm.base_algorithm import BaseAlgorithm
 from mdp.model.tabular.algorithm.tabular_algorithm import TabularAlgorithm
 from mdp.model.tabular.algorithm.abstract.episodic import Episodic
 from mdp.model.tabular.algorithm.abstract.dynamic_programming import DynamicProgramming
@@ -18,16 +18,16 @@ from mdp.model.trainer.parallel_runner import ParallelRunner
 
 class Trainer:
     def __init__(self,
-                 agent: GeneralAgent,
-                 breakdown: Optional[GeneralBreakdown],
-                 model_step_callback: Optional[Callable[[Optional[GeneralEpisode]], None]] = None,
+                 agent: BaseAgent,
+                 breakdown: Optional[BaseBreakdown],
+                 model_step_callback: Optional[Callable[[Optional[BaseEpisode]], None]] = None,
                  verbose: bool = False
                  ):
-        self._agent: GeneralAgent = agent
-        self._breakdown: Optional[GeneralBreakdown] = breakdown
+        self._agent: BaseAgent = agent
+        self._breakdown: Optional[BaseBreakdown] = breakdown
         self.settings: Optional[common.Settings] = None
 
-        self._model_step_callback: Optional[Callable[[Optional[GeneralEpisode]], None]] = model_step_callback
+        self._model_step_callback: Optional[Callable[[Optional[BaseEpisode]], None]] = model_step_callback
         self._verbose = verbose
         self._cont: bool = True
 
@@ -38,15 +38,15 @@ class Trainer:
         self.max_cum_timestep: int = 0  # max cumulative timestep across all runs
 
     @property
-    def breakdown(self) -> GeneralBreakdown:
+    def breakdown(self) -> BaseBreakdown:
         return self._breakdown
 
     @property
-    def episode(self) -> GeneralEpisode:
+    def episode(self) -> BaseEpisode:
         return self._agent.episode
 
     @property
-    def agent(self) -> GeneralAgent:
+    def agent(self) -> BaseAgent:
         return self._agent
 
     def disable_step_callback(self):
@@ -57,7 +57,7 @@ class Trainer:
         self.settings = settings
         self._agent.apply_settings(self.settings)
 
-        algorithm: GeneralAlgorithm = self._agent.algorithm
+        algorithm: BaseAlgorithm = self._agent.algorithm
         match algorithm:
             case Episodic():
                 self._train_episodic()
@@ -137,7 +137,7 @@ class Trainer:
 
         self._agent.parameter_changes(episode_counter)
 
-        algorithm: GeneralAlgorithm = self._agent.algorithm
+        algorithm: BaseAlgorithm = self._agent.algorithm
         assert isinstance(algorithm, Episodic)
         algorithm.do_episode(settings.episode_length_timeout)
         episode = self._agent.episode
@@ -154,7 +154,7 @@ class Trainer:
 
     def _train_dynamic_programming(self):
         settings = self.settings
-        algorithm: GeneralAlgorithm = self._agent.algorithm
+        algorithm: BaseAlgorithm = self._agent.algorithm
         assert isinstance(algorithm, DynamicProgramming)
 
         if settings.review_every_step or settings.display_every_step:

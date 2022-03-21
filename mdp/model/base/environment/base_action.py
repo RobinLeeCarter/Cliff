@@ -4,5 +4,5 @@ from abc import ABC
 
 
 @dataclass(frozen=True)
-class GeneralState(ABC):
-    is_terminal: bool
+class BaseAction(ABC):
+    pass

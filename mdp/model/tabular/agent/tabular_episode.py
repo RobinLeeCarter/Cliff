@@ -2,15 +2,15 @@ from __future__ import annotations
 from typing import Optional, Callable, TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from mdp.model.general.environment.general_action import GeneralAction
-    from mdp.model.general.environment.general_state import GeneralState
+    from mdp.model.base.environment.base_action import BaseAction
+    from mdp.model.base.environment.base_state import BaseState
     from mdp.model.tabular.environment.tabular_environment import TabularEnvironment
 
 from mdp.model.tabular.agent import rsa
-from mdp.model.general.agent.general_episode import GeneralEpisode
+from mdp.model.base.agent.base_episode import BaseEpisode
 
 
-class TabularEpisode(GeneralEpisode):
+class TabularEpisode(BaseEpisode):
     """Just makes a record laid out in the standard way with Reward, State, Action for each _t"""
     def __init__(self,
                  environment: TabularEnvironment,
@@ -37,7 +37,7 @@ class TabularEpisode(GeneralEpisode):
             self.visited_s: set[int] = set()
 
     @property
-    def last_state(self) -> Optional[GeneralState]:
+    def last_state(self) -> Optional[BaseState]:
         if self.trajectory:
             last_s = self.trajectory[-1].s
             # if last_s is None:
@@ -48,7 +48,7 @@ class TabularEpisode(GeneralEpisode):
             return None
 
     @property
-    def last_action(self) -> Optional[GeneralAction]:
+    def last_action(self) -> Optional[BaseAction]:
         if self.trajectory:
             last_a: int = self.trajectory[-1].a
             if last_a == -1:
@@ -59,7 +59,7 @@ class TabularEpisode(GeneralEpisode):
             return None
 
     @property
-    def prev_state(self) -> Optional[GeneralState]:
+    def prev_state(self) -> Optional[BaseState]:
         if self.trajectory and len(self.trajectory) > 1:
             prev_s = self.trajectory[-2].s
             # if prev_s is None:
@@ -70,7 +70,7 @@ class TabularEpisode(GeneralEpisode):
             return None
 
     @property
-    def prev_action(self) -> Optional[GeneralAction]:
+    def prev_action(self) -> Optional[BaseAction]:
         if self.trajectory and len(self.trajectory) > 1:
             prev_a = self.trajectory[-2].a
             if prev_a == -1:
@@ -140,12 +140,12 @@ class TabularEpisode(GeneralEpisode):
         #         g = rsa_.r + self.gamma * g
         # return g
 
-    def get_state(self, t: int) -> GeneralState:
+    def get_state(self, t: int) -> BaseState:
         s: int = self.trajectory[t].s
-        state: GeneralState = self._environment.states[s]
+        state: BaseState = self._environment.states[s]
         return state
 
-    def get_action(self, t: int) -> Optional[GeneralAction]:
+    def get_action(self, t: int) -> Optional[BaseAction]:
         a: int = self.trajectory[t].a
         if a == -1:
             return None

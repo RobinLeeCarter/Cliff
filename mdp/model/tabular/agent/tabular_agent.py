@@ -11,16 +11,16 @@ from mdp.model.tabular.algorithm.tabular_algorithm import TabularAlgorithm
 from mdp.model.tabular.algorithm.abstract.episodic import Episodic
 from mdp.model.tabular.agent.tabular_episode import TabularEpisode
 from mdp.model.tabular.policy.tabular_policy import TabularPolicy
-from mdp.model.general.policy.policy_factory import PolicyFactory
-from mdp.model.general.algorithm.algorithm_factory import AlgorithmFactory
+from mdp.model.base.policy.policy_factory import PolicyFactory
+from mdp.model.base.algorithm.algorithm_factory import AlgorithmFactory
 
-from mdp.model.general.agent.general_agent import GeneralAgent
+from mdp.model.base.agent.base_agent import BaseAgent
 
 State = TypeVar('State', bound=TabularState)
 Action = TypeVar('Action', bound=TabularAction)
 
 
-class TabularAgent(Generic[State, Action], GeneralAgent):
+class TabularAgent(Generic[State, Action], BaseAgent):
     def __init__(self,
                  environment: TabularEnvironment[State, Action],
                  verbose: bool = False):

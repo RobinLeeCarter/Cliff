@@ -7,10 +7,10 @@ if TYPE_CHECKING:
     from mdp.model.non_tabular.agent.non_tabular_agent import NonTabularAgent
     from mdp import common
 
-from mdp.model.general.algorithm.general_algorithm import GeneralAlgorithm
+from mdp.model.base.algorithm.base_algorithm import BaseAlgorithm
 
 
-class NonTabularAlgorithm(GeneralAlgorithm, ABC):
+class NonTabularAlgorithm(BaseAlgorithm, ABC):
     def __init__(self,
                  agent: NonTabularAgent,
                  algorithm_parameters: common.AlgorithmParameters,

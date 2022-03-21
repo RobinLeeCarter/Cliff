@@ -3,18 +3,18 @@ from typing import TYPE_CHECKING, TypeVar, Generic
 from abc import ABC, abstractmethod
 
 if TYPE_CHECKING:
-    from mdp.model.general.algorithm.general_algorithm import GeneralAlgorithm
-    from mdp.model.general.policy.general_policy import GeneralPolicy
+    from mdp.model.base.algorithm.base_algorithm import BaseAlgorithm
+    from mdp.model.base.policy.base_policy import BasePolicy
 
 from mdp import common
-from mdp.model.general.environment.general_state import GeneralState
-from mdp.model.general.environment.general_action import GeneralAction
+from mdp.model.base.environment.base_state import BaseState
+from mdp.model.base.environment.base_action import BaseAction
 
-State = TypeVar('State', bound=GeneralState)
-Action = TypeVar('Action', bound=GeneralAction)
+State = TypeVar('State', bound=BaseState)
+Action = TypeVar('Action', bound=BaseAction)
 
 
-class GeneralEnvironment(Generic[State, Action], ABC):
+class BaseEnvironment(Generic[State, Action], ABC):
     """An abstract Environment for tabular or continuous cases"""
     def __init__(self, environment_parameters: common.EnvironmentParameters):
         """
@@ -34,21 +34,21 @@ class GeneralEnvironment(Generic[State, Action], ABC):
         return True
 
     # TODO: is this in the right place?
-    def initialize_policy(self, policy: GeneralPolicy):
+    def initialize_policy(self, policy: BasePolicy):
         pass
 
     @abstractmethod
-    def from_state_perform_action(self, state: State, action: GeneralAction) -> tuple[float, GeneralState]:
+    def from_state_perform_action(self, state: State, action: BaseAction) -> tuple[float, BaseState]:
         pass
 
     # TODO: does this belong here?
     def update_grid_value_functions(self,
-                                    algorithm: GeneralAlgorithm,
-                                    policy: GeneralPolicy):
+                                    algorithm: BaseAlgorithm,
+                                    policy: BasePolicy):
         pass
 
     # TODO: does this belong here or in the value_function?
-    def is_valued_state(self, state: GeneralState) -> bool:
+    def is_valued_state(self, state: BaseState) -> bool:
         """Does the state have a valid value function V(s) or Q(s,a) e.g. unreachable states might not"""
         return not state.is_terminal
     # endregion

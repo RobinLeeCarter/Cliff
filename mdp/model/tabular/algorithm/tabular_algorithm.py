@@ -11,10 +11,10 @@ from mdp.model.tabular.algorithm import linear_algebra as la
 from mdp.model.tabular.value_function.state_function import StateFunction
 from mdp.model.tabular.value_function.state_action_function import StateActionFunction
 
-from mdp.model.general.algorithm.general_algorithm import GeneralAlgorithm
+from mdp.model.base.algorithm.base_algorithm import BaseAlgorithm
 
 
-class TabularAlgorithm(GeneralAlgorithm, ABC):
+class TabularAlgorithm(BaseAlgorithm, ABC):
     def __init__(self,
                  agent: TabularAgent,
                  algorithm_parameters: common.AlgorithmParameters,

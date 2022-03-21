@@ -3,29 +3,29 @@ from abc import ABC, abstractmethod
 from typing import Optional, TYPE_CHECKING, Callable
 
 if TYPE_CHECKING:
-    from mdp.model.general.environment.general_environment import GeneralEnvironment
+    from mdp.model.base.environment.base_environment import BaseEnvironment
 from mdp import common
-from mdp.model.general.algorithm.algorithm_factory import AlgorithmFactory
-from mdp.model.general.algorithm.general_algorithm import GeneralAlgorithm
-from mdp.model.general.agent.general_episode import GeneralEpisode
-from mdp.model.general.policy.general_policy import GeneralPolicy
+from mdp.model.base.algorithm.algorithm_factory import AlgorithmFactory
+from mdp.model.base.algorithm.base_algorithm import BaseAlgorithm
+from mdp.model.base.agent.base_episode import BaseEpisode
+from mdp.model.base.policy.base_policy import BasePolicy
 
 
-class GeneralAgent(ABC):
+class BaseAgent(ABC):
     def __init__(self,
-                 environment: GeneralEnvironment,
+                 environment: BaseEnvironment,
                  verbose: bool = False):
-        self._environment: GeneralEnvironment = environment
+        self._environment: BaseEnvironment = environment
         self._verbose: bool = verbose
 
         # self._policy_factory: PolicyFactory = PolicyFactory[State, Action](self._environment)
-        self._policy: Optional[GeneralPolicy] = None
-        self._behaviour_policy: Optional[GeneralPolicy] = None     # if on-policy = self._policy
+        self._policy: Optional[BasePolicy] = None
+        self._behaviour_policy: Optional[BasePolicy] = None     # if on-policy = self._policy
         self._dual_policy_relationship: Optional[common.DualPolicyRelationship] = None
 
         self._algorithm_factory: Optional[AlgorithmFactory] = None
-        self._algorithm: Optional[GeneralAlgorithm] = None
-        self._episode: Optional[GeneralEpisode] = None
+        self._algorithm: Optional[BaseAlgorithm] = None
+        self._episode: Optional[BaseEpisode] = None
         self._record_first_visits: bool = False
         self._episode_length_timeout: Optional[int] = None
 
@@ -37,24 +37,24 @@ class GeneralAgent(ABC):
         self._step_callback: Optional[Callable[[], bool]] = None
 
     @property
-    def environment(self) -> GeneralEnvironment:
+    def environment(self) -> BaseEnvironment:
         return self._environment
 
     # use for on-policy algorithms
     @property
     @abstractmethod
-    def policy(self) -> GeneralPolicy:
+    def policy(self) -> BasePolicy:
         return self._policy
 
     # use these two for off-policy algorithms
     @property
     @abstractmethod
-    def target_policy(self) -> GeneralPolicy:
+    def target_policy(self) -> BasePolicy:
         return self._policy
 
     @property
     @abstractmethod
-    def behaviour_policy(self) -> GeneralPolicy:
+    def behaviour_policy(self) -> BasePolicy:
         return self._behaviour_policy
 
     @property
@@ -63,12 +63,12 @@ class GeneralAgent(ABC):
 
     @property
     @abstractmethod
-    def algorithm(self) -> GeneralAlgorithm:
+    def algorithm(self) -> BaseAlgorithm:
         return self._algorithm
 
     @property
     @abstractmethod
-    def episode(self) -> GeneralEpisode:
+    def episode(self) -> BaseEpisode:
         return self._episode
 
     @abstractmethod
@@ -103,7 +103,7 @@ class GeneralAgent(ABC):
         #
         # self.gamma = settings.gamma
 
-    def set_behaviour_policy(self, policy: GeneralPolicy):
+    def set_behaviour_policy(self, policy: BasePolicy):
         self._behaviour_policy = policy
 
     def parameter_changes(self, iteration: int):
@@ -116,14 +116,14 @@ class GeneralAgent(ABC):
     def generate_episodes(self,
                           num_episodes: int,
                           episode_length_timeout: Optional[int] = None
-                          ) -> list[GeneralEpisode]:
+                          ) -> list[BaseEpisode]:
         return [self.generate_episode(episode_length_timeout)
                 for _ in range(num_episodes)]
 
     @abstractmethod
     def generate_episode(self,
                          episode_length_timeout: Optional[int] = None,
-                         ) -> GeneralEpisode:
+                         ) -> BaseEpisode:
         ...
 
     @abstractmethod

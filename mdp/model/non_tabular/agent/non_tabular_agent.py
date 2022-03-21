@@ -15,17 +15,17 @@ from mdp.model.tabular.algorithm.abstract.episodic import Episodic
 from mdp.model.non_tabular.agent.non_tabular_episode import NonTabularEpisode
 from mdp.model.non_tabular.policy.non_tabular_policy import NonTabularPolicy
 
-from mdp.model.general.policy.policy_factory import PolicyFactory
-from mdp.model.general.algorithm.algorithm_factory import AlgorithmFactory
+from mdp.model.base.policy.policy_factory import PolicyFactory
+from mdp.model.base.algorithm.algorithm_factory import AlgorithmFactory
 # from mdp.model.general.policy import policy_factory
 
-from mdp.model.general.agent.general_agent import GeneralAgent
+from mdp.model.base.agent.base_agent import BaseAgent
 
 State = TypeVar('State', bound=NonTabularState)
 Action = TypeVar('Action', bound=NonTabularAction)
 
 
-class NonTabularAgent(Generic[State, Action], GeneralAgent):
+class NonTabularAgent(Generic[State, Action], BaseAgent):
     def __init__(self,
                  environment: NonTabularEnvironment[State, Action],
                  verbose: bool = False):

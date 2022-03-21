@@ -8,13 +8,13 @@ from mdp.model.non_tabular.agent.reward_state_action import RewardStateAction
 
 from mdp.model.non_tabular.environment.non_tabular_state import NonTabularState
 from mdp.model.non_tabular.environment.non_tabular_action import NonTabularAction
-from mdp.model.general.agent.general_episode import GeneralEpisode
+from mdp.model.base.agent.base_episode import BaseEpisode
 
 State = TypeVar('State', bound=NonTabularState)
 Action = TypeVar('Action', bound=NonTabularAction)
 
 
-class NonTabularEpisode(Generic[State, Action], GeneralEpisode):
+class NonTabularEpisode(Generic[State, Action], BaseEpisode):
     """Just makes a record laid out in the standard way with Reward, State, Action for each _t"""
     def __init__(self,
                  environment: NonTabularEnvironment[State, Action],

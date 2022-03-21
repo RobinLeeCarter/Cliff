@@ -5,26 +5,26 @@ from abc import ABC, abstractmethod
 
 if TYPE_CHECKING:
     from mdp import common
-    from mdp.model.general.environment.general_environment import GeneralEnvironment
+    from mdp.model.base.environment.base_environment import BaseEnvironment
 
-from mdp.model.general.environment.general_state import GeneralState
-from mdp.model.general.environment.general_action import GeneralAction
+from mdp.model.base.environment.base_state import BaseState
+from mdp.model.base.environment.base_action import BaseAction
 
-State = TypeVar('State', bound=GeneralState)
-Action = TypeVar('Action', bound=GeneralAction)
+State = TypeVar('State', bound=BaseState)
+Action = TypeVar('Action', bound=BaseAction)
 
 
 class GeneralDynamics(Generic[State, Action], ABC):
-    def __init__(self, environment: GeneralEnvironment[GeneralState, GeneralAction],
+    def __init__(self, environment: BaseEnvironment[BaseState, BaseAction],
                  environment_parameters: common.EnvironmentParameters):
         """init top down"""
-        self._environment: GeneralEnvironment[GeneralState, GeneralAction] = environment
+        self._environment: BaseEnvironment[BaseState, BaseAction] = environment
         self._environment_parameters: common.EnvironmentParameters = environment_parameters
         self._verbose: bool = environment_parameters.verbose
         self.is_built: bool = False
 
     @abstractmethod
-    def draw_response(self, state: GeneralState, action: GeneralAction) -> tuple[float, GeneralState]:
+    def draw_response(self, state: BaseState, action: BaseAction) -> tuple[float, BaseState]:
         """
         draw a single outcome for a single state and action
         """

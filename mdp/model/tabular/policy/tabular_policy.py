@@ -8,10 +8,10 @@ if TYPE_CHECKING:
     from mdp import common
     from mdp.model.tabular.environment.tabular_action import TabularAction
     from mdp.model.tabular.environment.tabular_environment import TabularEnvironment
-from mdp.model.general.policy.general_policy import GeneralPolicy
+from mdp.model.base.policy.base_policy import BasePolicy
 
 
-class TabularPolicy(GeneralPolicy, ABC):
+class TabularPolicy(BasePolicy, ABC):
     def __init__(self, environment: TabularEnvironment, policy_parameters: common.PolicyParameters):
         super().__init__(environment, policy_parameters)
         self._environment: TabularEnvironment = environment

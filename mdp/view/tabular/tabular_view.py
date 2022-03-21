@@ -10,10 +10,10 @@ if TYPE_CHECKING:
 import pygame
 import pygame.freetype
 from mdp.view.tabular.grid_view import GridView
-from mdp.view.general.general_view import GeneralView
+from mdp.view.base.base_view import BaseView
 
 
-class TabularView(GeneralView, ABC):
+class TabularView(BaseView, ABC):
     def __init__(self):
         super().__init__()
         self._controller: Optional[TabularController] = None

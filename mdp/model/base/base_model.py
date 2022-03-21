@@ -1,50 +1,44 @@
 from __future__ import annotations
 from typing import Optional, TYPE_CHECKING, TypeVar, Generic
 from abc import ABC, abstractmethod
+import multiprocessing
 
 if TYPE_CHECKING:
-    from mdp.controller.general_controller import GeneralController
-    from mdp.model.general.environment.general_environment import GeneralEnvironment
-    from mdp.model.general.agent.general_episode import GeneralEpisode
-    from mdp.model.breakdown.general_breakdown import GeneralBreakdown
+    from mdp.controller.base_controller import BaseController
+    from mdp.model.base.environment.base_environment import BaseEnvironment
+    from mdp.model.base.agent.base_episode import BaseEpisode
+    from mdp.model.breakdown.base_breakdown import BaseBreakdown
 
-import multiprocessing
 import utils
 from mdp import common
-# from mdp.scenarios.factory import environment_factory
-# from mdp.model.tabular.agent.agent import Agent
-from mdp.model.general.environment.general_environment import GeneralEnvironment
-from mdp.model.general.agent.general_agent import GeneralAgent
+from mdp.model.base.environment.base_environment import BaseEnvironment
+from mdp.model.base.agent.base_agent import BaseAgent
 from mdp.model.breakdown.breakdown_factory import BreakdownFactory
 from mdp.model.trainer.trainer import Trainer
 from mdp.model.trainer.parallel_trainer import ParallelTrainer
 
-# from mdp.model.general.environment.general_state import GeneralState
-# from mdp.model.general.environment.general_action import GeneralAction
-#
-# State = TypeVar('State', bound=GeneralState)
-# Action = TypeVar('Action', bound=GeneralAction)
-Environment = TypeVar('Environment', bound=GeneralEnvironment)
-Agent = TypeVar('Agent', bound=GeneralAgent)
+
+Environment = TypeVar('Environment', bound=BaseEnvironment)
+Agent = TypeVar('Agent', bound=BaseAgent)
 
 
-class GeneralModel(Generic[Environment, Agent], ABC):
+class BaseModel(Generic[Environment, Agent], ABC):
     def __init__(self, verbose: bool = False):
         self.verbose: bool = verbose
         self.environment: Optional[Environment] = None
         self.agent: Optional[Agent] = None
 
-        self._controller: Optional[GeneralController] = None
+        self._controller: Optional[BaseController] = None
         self._comparison: Optional[common.Comparison] = None
         self._breakdown_factory: BreakdownFactory = BreakdownFactory()
-        self.breakdown: Optional[GeneralBreakdown] = None
+        self.breakdown: Optional[BaseBreakdown] = None
         self.trainer: Optional[Trainer] = None
         self.parallel_trainer: Optional[ParallelTrainer] = None
 
         self._cont: bool = True
 
-    def set_controller(self, controller: GeneralController):
-        self._controller: GeneralController = controller
+    def set_controller(self, controller: BaseController):
+        self._controller: BaseController = controller
 
     def build(self, comparison: common.Comparison):
         self._comparison: common.Comparison = comparison
@@ -59,7 +53,7 @@ class GeneralModel(Generic[Environment, Agent], ABC):
         # self.agent: Agent = Agent[State, Action](self.environment)
 
         # breakdowns themselves need comparison in current implementation so breakdown_parameters is not passed in
-        self.breakdown: Optional[GeneralBreakdown] = self._breakdown_factory.create(self._comparison)
+        self.breakdown: Optional[BaseBreakdown] = self._breakdown_factory.create(self._comparison)
         self.trainer: Trainer = Trainer(
             agent=self.agent,
             breakdown=self.breakdown,
@@ -107,7 +101,7 @@ class GeneralModel(Generic[Environment, Agent], ABC):
         #     (common.DualPolicyRelationship.LINKED_POLICIES, common.DualPolicyRelationship.INDEPENDENT_POLICIES):
         self.agent.set_behaviour_policy(self.agent.target_policy)
 
-    def _display_step(self, episode: Optional[GeneralEpisode]):
+    def _display_step(self, episode: Optional[BaseEpisode]):
         raise Exception("_display_step() not implemented")
         # self.update_grid_value_functions()
         # self._controller.display_step(episode)

@@ -13,13 +13,13 @@ from mdp.model.non_tabular.environment.non_tabular_state import NonTabularState
 from mdp.model.non_tabular.environment.non_tabular_action import NonTabularAction
 from mdp.model.non_tabular.environment.dimension.dims import Dims
 
-from mdp.model.general.environment.general_environment import GeneralEnvironment
+from mdp.model.base.environment.base_environment import BaseEnvironment
 
 State = TypeVar('State', bound=NonTabularState)
 Action = TypeVar('Action', bound=NonTabularAction)
 
 
-class NonTabularEnvironment(GeneralEnvironment[State, Action], ABC):
+class NonTabularEnvironment(BaseEnvironment[State, Action], ABC):
     """An abstract Environment with continuous states but discrete actions"""
     def __init__(self, environment_parameters: common.EnvironmentParameters):
         """

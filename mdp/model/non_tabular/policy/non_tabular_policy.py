@@ -8,7 +8,7 @@ if TYPE_CHECKING:
     from mdp import common
     from mdp.model.non_tabular.environment.non_tabular_environment import NonTabularEnvironment
 
-from mdp.model.general.policy.general_policy import GeneralPolicy
+from mdp.model.base.policy.base_policy import BasePolicy
 from mdp.model.non_tabular.environment.non_tabular_state import NonTabularState
 from mdp.model.non_tabular.environment.non_tabular_action import NonTabularAction
 
@@ -17,7 +17,7 @@ Action = TypeVar('Action', bound=NonTabularAction)
 
 
 # specifically non-generic because policies can act in terms of non-specific actions and states
-class NonTabularPolicy(Generic[State, Action], GeneralPolicy, ABC):
+class NonTabularPolicy(Generic[State, Action], BasePolicy, ABC):
     policy_type: common.PolicyType
 
     def __init__(self,

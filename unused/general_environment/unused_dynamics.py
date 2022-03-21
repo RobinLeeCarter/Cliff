@@ -5,11 +5,11 @@ from abc import ABC, abstractmethod
 
 if TYPE_CHECKING:
     from mdp import common
-    from mdp.model.general.environment.general_action import GeneralAction
+    from mdp.model.base.environment.base_action import BaseAction
     from mdp.model.environment.general.environment import Environment
-from mdp.model.general.environment.general_state import GeneralState
+from mdp.model.base.environment.base_state import BaseState
 
-Response = tuple[float, GeneralState]
+Response = tuple[float, BaseState]
 
 
 class Dynamics(ABC):
@@ -24,26 +24,26 @@ class Dynamics(ABC):
         """build bottom up"""
         self.is_built = True
 
-    def get_start_state_distribution(self) -> common.Distribution[GeneralState]:
+    def get_start_state_distribution(self) -> common.Distribution[BaseState]:
         """
         Starting state distribution
         If want to use something different to a Uniform list of States, override this method to return the distribution
         """
-        start_states: list[GeneralState] = self.get_start_states()
+        start_states: list[BaseState] = self.get_start_states()
         if start_states:
             if len(start_states) == 1:
-                return common.SingularDistribution[GeneralState](start_states)
+                return common.SingularDistribution[BaseState](start_states)
             else:
-                return common.UniformMultinoulli[GeneralState](start_states)
+                return common.UniformMultinoulli[BaseState](start_states)
         else:
             raise Exception("Empty list of start states so nowhere to start!")
 
-    def get_start_states(self) -> list[GeneralState]:
+    def get_start_states(self) -> list[BaseState]:
         """If as simple as a list of start states then return it here and the distribution will be generated"""
         pass
 
     @abstractmethod
-    def draw_response(self, state: GeneralState, action: GeneralAction) -> Response:
+    def draw_response(self, state: BaseState, action: BaseAction) -> Response:
         """
         draw a single outcome for a single state and action
         """

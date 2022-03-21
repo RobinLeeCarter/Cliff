@@ -3,17 +3,17 @@ from typing import TYPE_CHECKING
 from abc import ABC
 
 if TYPE_CHECKING:
-    from mdp.model.general.agent.general_agent import GeneralAgent
+    from mdp.model.base.agent.base_agent import BaseAgent
     from mdp import common
 
 
-class GeneralAlgorithm(ABC):
+class BaseAlgorithm(ABC):
     def __init__(self,
-                 agent: GeneralAgent,
+                 agent: BaseAgent,
                  algorithm_parameters: common.AlgorithmParameters,
                  name: str
                  ):
-        self._agent: GeneralAgent = agent
+        self._agent: BaseAgent = agent
         # self._environment: GeneralEnvironment = self._agent.environment
         self._algorithm_parameters: common.AlgorithmParameters = algorithm_parameters
         self._verbose = self._algorithm_parameters.verbose

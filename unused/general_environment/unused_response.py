@@ -2,10 +2,10 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Optional
 
-from mdp.model.general.environment.general_state import GeneralState
+from mdp.model.base.environment.base_state import BaseState
 
 
 @dataclass(frozen=True)
 class Response:
     reward: Optional[float]
-    state: GeneralState
+    state: BaseState

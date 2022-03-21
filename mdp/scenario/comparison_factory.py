@@ -1,7 +1,7 @@
 from __future__ import annotations
 from typing import Type, Optional
 
-from mdp.scenario.general_comparison_builder import GeneralComparisonBuilder
+from mdp.scenario.base_comparison_builder import BaseComparisonBuilder
 from mdp import common
 
 from mdp.scenario.jacks.comparison.jacks_policy_evaluation_q import JacksPolicyEvaluationQ
@@ -30,8 +30,8 @@ from mdp.scenario.cliff.comparison.cliff_episode import CliffEpisode
 from mdp.scenario.windy.comparison.windy_timestep import WindyTimestep
 
 ComparisonBuilderLookup = dict[common.ComparisonType,
-                               Type[GeneralComparisonBuilder] |
-                               tuple[Type[GeneralComparisonBuilder], dict[str, any]]]
+                               Type[BaseComparisonBuilder] |
+                               tuple[Type[BaseComparisonBuilder], dict[str, any]]]
 
 
 class ComparisonFactory:
@@ -62,13 +62,13 @@ class ComparisonFactory:
 
     def create(self, comparison_type: common.ComparisonType) -> common.Comparison:
         self._comparison_type = comparison_type
-        comparison_builder: GeneralComparisonBuilder = self._create_comparison_builder()
+        comparison_builder: BaseComparisonBuilder = self._create_comparison_builder()
         comparison: common.Comparison = comparison_builder.create()
         return comparison
 
-    def _create_comparison_builder(self) -> GeneralComparisonBuilder:
+    def _create_comparison_builder(self) -> BaseComparisonBuilder:
         # result: Type[Scenario] | tuple[Type[Scenario], dict[str, object]] = self._lookup[scenario_type]
-        type_of_scenario: Type[GeneralComparisonBuilder]
+        type_of_scenario: Type[BaseComparisonBuilder]
         kwargs: dict[str, any] = {}
 
         match self._lookup[self._comparison_type]:
@@ -79,5 +79,5 @@ class ComparisonFactory:
             case _:
                 raise Exception("scenario type / args lookup failed")
 
-        comparison_builder: GeneralComparisonBuilder = type_of_scenario(**kwargs)
+        comparison_builder: BaseComparisonBuilder = type_of_scenario(**kwargs)
         return comparison_builder
