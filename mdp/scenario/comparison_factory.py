@@ -67,17 +67,16 @@ class ComparisonFactory:
         return comparison
 
     def _create_comparison_builder(self) -> BaseComparisonBuilder:
-        # result: Type[Scenario] | tuple[Type[Scenario], dict[str, object]] = self._lookup[scenario_type]
-        type_of_scenario: Type[BaseComparisonBuilder]
+        type_of_comparison_builder: Type[BaseComparisonBuilder]
         kwargs: dict[str, any] = {}
 
         match self._lookup[self._comparison_type]:
-            case type() as type_of_scenario:
+            case type() as type_of_comparison_builder:
                 pass
-            case type() as type_of_scenario, dict() as kwargs:
+            case type() as type_of_comparison_builder, dict() as kwargs:
                 pass
             case _:
                 raise Exception("scenario type / args lookup failed")
 
-        comparison_builder: BaseComparisonBuilder = type_of_scenario(**kwargs)
+        comparison_builder: BaseComparisonBuilder = type_of_comparison_builder(**kwargs)
         return comparison_builder
