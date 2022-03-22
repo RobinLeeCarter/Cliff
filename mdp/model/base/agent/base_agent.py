@@ -40,12 +40,6 @@ class BaseAgent(ABC):
     def environment(self) -> BaseEnvironment:
         return self._environment
 
-    # use for on-policy algorithms
-    @property
-    @abstractmethod
-    def policy(self) -> BasePolicy:
-        return self._policy
-
     # use these two for off-policy algorithms
     @property
     @abstractmethod
@@ -153,12 +147,4 @@ class BaseAgent(ABC):
 
     @abstractmethod
     def _print_step(self):
-        ...
-
-    @abstractmethod
-    def print_statistics(self):
-        ...
-
-    @abstractmethod
-    def rms_error(self) -> float:
         ...

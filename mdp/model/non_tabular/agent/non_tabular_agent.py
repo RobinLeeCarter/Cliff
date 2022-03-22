@@ -64,11 +64,6 @@ class NonTabularAgent(Generic[State, Action], BaseAgent):
     def environment(self) -> NonTabularEnvironment[State, Action]:
         return self._environment
 
-    # use for on-policy algorithms
-    @property
-    def policy(self) -> NonTabularPolicy[State, Action]:
-        return self._policy
-
     # use these two for off-policy algorithms
     @property
     def target_policy(self) -> NonTabularPolicy[State, Action]:
@@ -209,25 +204,3 @@ class NonTabularAgent(Generic[State, Action], BaseAgent):
 
     def _print_step(self):
         print(f"t={self.t} \t state = {self.state} \t action = {self.action}")
-
-    def print_statistics(self):
-        pass
-        # self._algorithm.print_q_coverage_statistics()
-
-    def rms_error(self) -> float:
-        raise NotImplementedError
-    #     # better that it just fail if you use something with no V or an environment without get_optimum
-    #     # if not self._algorithm.V or not hasattr(self._environment, 'get_optimum'):
-    #     #     return None
-    #
-    #     squared_error: float = 0.0
-    #     count: int = 0
-    #     for s, state in enumerate(self._environment.states):
-    #         if self._environment.is_valued_state(state):
-    #             value: float = self._algorithm.V[s]
-    #             # noinspection PyUnresolvedReferences
-    #             optimum: float = self._environment.get_optimum(state)
-    #             squared_error += (value - optimum)**2
-    #             count += 1
-    #     rms_error = math.sqrt(squared_error / count)
-    #     return rms_error

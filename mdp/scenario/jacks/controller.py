@@ -31,14 +31,14 @@ class Controller(TabularController[Model, View]):
             self._view.graph3d.make_plot(self._comparison.graph3d_values)
 
         if self._comparison.grid_view_parameters.show_result:
-            self._model.environment.update_grid_policy(policy=self._model.agent.policy)
+            self._model.environment.update_grid_policy(policy=self._model.target_policy)
             self._view.grid_view.display_latest_step()
 
-        policy = self._model.agent.policy
+        policy = self._model.target_policy
         total_transfers: int = 0
         for s, state in enumerate(self._model.environment.states):
             if not state.is_terminal:
-                action: Action = policy.get_action(s)   # type: ignore
+                action: Action = policy.get_action(s)
                 total_transfers += action.transfer_1_to_2
         v: np.ndarray = self._model.agent.algorithm.V.vector
         total_v: float = v.sum()

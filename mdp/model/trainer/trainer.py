@@ -90,16 +90,19 @@ class Trainer:
         self.max_cum_timestep = 0
         if settings.runs_multiprocessing == common.ParallelContextType.NONE \
                 or multiprocessing.current_process().daemon:
-            # train in serial
+            # train in serial if not multiprocessing or if a child process (daemon)
             for run_counter in range(1, settings.runs + 1):
                 self.do_run(run_counter)
                 self.max_cum_timestep = max(self.max_cum_timestep, self.cum_timestep)
         else:
+            # train in parallel
             self.parallel_runner = ParallelRunner(self)
             self.parallel_runner.do_runs()
 
         if self._verbose:
-            self._agent.print_statistics()
+            algorithm = self._agent.algorithm
+            if isinstance(algorithm, TabularAlgorithm):
+                algorithm.print_q_coverage_statistics()
 
     def do_run(self,
                run_counter: int,
@@ -174,6 +177,7 @@ class Trainer:
         self._breakdown.review()
 
     def _get_result(self, result_parameters: common.ResultParameters):
+        """Build up Result object, deciding on what to include by referring to result_parameters"""
         result: common.Result = common.Result()
 
         rp: common.ResultParameters = result_parameters

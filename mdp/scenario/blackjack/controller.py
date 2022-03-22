@@ -19,7 +19,7 @@ class Controller(TabularController[Model, View]):
 
     def output(self):
         for usable_ace in [False, True]:
-            self._model.environment.update_grid_policy_ace(self._model.agent.policy,
+            self._model.environment.update_grid_policy_ace(self._model.target_policy,
                                                            self._model.agent.algorithm,
                                                            usable_ace)
             self._view.grid_view.set_title(usable_ace)

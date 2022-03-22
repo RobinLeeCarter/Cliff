@@ -2,6 +2,8 @@ from __future__ import annotations
 
 from typing import Optional, TYPE_CHECKING
 
+from mdp.model.tabular.policy.tabular_policy import TabularPolicy
+
 if TYPE_CHECKING:
     from mdp.scenario.jacks.controller import Controller
     from mdp.model.tabular.agent.tabular_episode import TabularEpisode
@@ -22,5 +24,7 @@ class Model(TabularModel[State, Action, Environment]):
         return Environment(environment_parameters)
 
     def _display_step(self, episode: Optional[TabularEpisode]):
-        self.environment.update_grid_policy(policy=self.agent.policy)
+        policy = self.target_policy
+        assert isinstance(policy, TabularPolicy)
+        self.environment.update_grid_policy(policy)
         self._controller.display_step(episode)
