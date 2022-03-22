@@ -40,7 +40,7 @@ class McControlOffPolicy(EpisodicMonteCarlo):
         best_a = self.Q.argmax[s]
         if best_a != policy_a:  # update policy only if different
             # get the agent to update the target policy since the behavioural policy might be linked and need to change
-            self._agent.update_target_policy(s, best_a)
+            self._update_target_policy(s, best_a)
         if a != best_a:
             self._exit_episode = True
         else:

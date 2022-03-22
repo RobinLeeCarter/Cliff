@@ -7,10 +7,15 @@ if TYPE_CHECKING:
     from mdp.model.base.agent.base_episode import BaseEpisode
     from mdp.model.breakdown.base_breakdown import BaseBreakdown
 from mdp import common
+
+from mdp.model.base.policy.policy_factory import PolicyFactory
+
+from mdp.model.base.algorithm.algorithm_factory import AlgorithmFactory
 from mdp.model.base.algorithm.base_algorithm import BaseAlgorithm
 from mdp.model.tabular.algorithm.tabular_algorithm import TabularAlgorithm
 from mdp.model.tabular.algorithm.abstract.episodic import Episodic
 from mdp.model.tabular.algorithm.abstract.dynamic_programming import DynamicProgramming
+
 from mdp.model.tabular.agent.tabular_agent import TabularAgent
 
 from mdp.model.trainer.parallel_runner import ParallelRunner
@@ -30,6 +35,10 @@ class Trainer:
         self._model_step_callback: Optional[Callable[[Optional[BaseEpisode]], None]] = model_step_callback
         self._verbose = verbose
         self._cont: bool = True
+
+        self._algorithm_factory: Optional[AlgorithmFactory] = AlgorithmFactory(self._agent)
+        self._algorithm: Optional[BaseAlgorithm] = None
+        self._policy_factory: PolicyFactory = PolicyFactory(self._agent.environment)
 
         self.run_counter: int = 0
         self.episode_counter: int = 0
@@ -54,8 +63,9 @@ class Trainer:
 
     def train(self, settings: common.Settings, return_result: bool = False) -> Optional[common.Result]:
         # process settings
-        self.settings = settings
-        self._agent.apply_settings(self.settings)
+
+        self._apply_settings(settings)
+
 
         algorithm: BaseAlgorithm = self._agent.algorithm
         match algorithm:
@@ -79,6 +89,12 @@ class Trainer:
 
         if return_result:
             return self._get_result(settings.result_parameters)
+
+    def _apply_settings(self, settings: common.Settings):
+        self.settings = settings
+        self._algorithm = self._algorithm_factory.create(settings.algorithm_parameters)
+        self._algorithm.create_policies(self._policy_factory, settings)
+        self._agent.apply_settings(self.settings)
 
     def _train_episodic(self):
         settings = self.settings
@@ -138,7 +154,7 @@ class Trainer:
         if not settings.review_every_step and self.cum_timestep != 0:
             self.cum_timestep += 1  # start next episode from the next timestep
 
-        self._agent.parameter_changes(episode_counter)
+        self._algorithm.parameter_changes(episode_counter)
 
         algorithm: BaseAlgorithm = self._agent.algorithm
         assert isinstance(algorithm, Episodic)

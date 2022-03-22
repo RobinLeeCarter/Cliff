@@ -23,6 +23,8 @@ class TabularAlgorithm(BaseAlgorithm, ABC):
         super().__init__(agent, algorithm_parameters, name)
         self._agent: TabularAgent = agent
         self._environment: TabularEnvironment = self._agent.environment
+        self._target_policy: Optional[TabularPolicy] = None
+        self._behaviour_policy: Optional[TabularPolicy] = None     # if on-policy = self._policy
 
         self.V: Optional[StateFunction] = None
         self.Q: Optional[StateActionFunction] = None
@@ -42,6 +44,14 @@ class TabularAlgorithm(BaseAlgorithm, ABC):
         if self.Q:
             self.Q.initialize_values()
 
+    # @profile
+    def _update_target_policy(self, s: int, a: int):
+        if self._dual_policy_relationship == common.DualPolicyRelationship.LINKED_POLICIES:
+            self._behaviour_policy[s] = a   # this will also update the target policy since linked
+        else:
+            # in either possible case here we want to update the target policy
+            self._target_policy[s] = a
+
     def _set_target_policy_greedy_wrt_q(self):
         self._agent.target_policy.set_policy_vector(self.Q.argmax.copy())
 
@@ -59,7 +69,7 @@ class TabularAlgorithm(BaseAlgorithm, ABC):
 
     def derive_v_from_q(self, policy: Optional[TabularPolicy] = None):
         if not policy:
-            policy = self._agent.policy
+            policy = self._target_policy
 
         # π(a|s)
         policy_matrix = policy.get_probability_matrix()

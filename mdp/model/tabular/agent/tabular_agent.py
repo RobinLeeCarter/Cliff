@@ -28,7 +28,7 @@ class TabularAgent(Generic[State, Action], BaseAgent):
         self._policy_factory: PolicyFactory = PolicyFactory(environment)
         self._policy: Optional[TabularPolicy] = None
         self._behaviour_policy: Optional[TabularPolicy] = None     # if on-policy = self._policy
-        # self._dual_policy_relationship: Optional[common.DualPolicyRelationship] = None
+        self._dual_policy_relationship: Optional[common.DualPolicyRelationship] = None
 
         self._algorithm_factory: AlgorithmFactory = AlgorithmFactory(agent=self)
         self._algorithm: Optional[TabularAlgorithm] = None
@@ -104,10 +104,6 @@ class TabularAgent(Generic[State, Action], BaseAgent):
 
     def set_behaviour_policy(self, policy: TabularPolicy):
         self._behaviour_policy = policy
-
-    def parameter_changes(self, iteration: int):
-        # potentially change epsilon here
-        self._algorithm.parameter_changes(iteration)
 
     def set_step_callback(self, step_callback: Optional[Callable[[], bool]] = None):
         self._step_callback = step_callback
@@ -209,14 +205,6 @@ class TabularAgent(Generic[State, Action], BaseAgent):
         if self.is_terminal:
             # add terminating step here as should not select another action
             self._episode.add_rsa(self.r, self.s, self.a, self.is_terminal)
-
-    # @profile
-    def update_target_policy(self, s: int, a: int):
-        if self._dual_policy_relationship == common.DualPolicyRelationship.LINKED_POLICIES:
-            self._behaviour_policy[s] = a   # this will also update the target policy since linked
-        else:
-            # in either possible case here we want to update the target policy
-            self._policy[s] = a
 
     def apply_result(self, result: common.Result):
         self._policy.set_policy_vector(result.policy_vector)

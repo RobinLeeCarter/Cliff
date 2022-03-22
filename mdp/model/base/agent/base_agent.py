@@ -100,10 +100,6 @@ class BaseAgent(ABC):
     def set_behaviour_policy(self, policy: BasePolicy):
         self._behaviour_policy = policy
 
-    def parameter_changes(self, iteration: int):
-        # potentially change epsilon here
-        self._algorithm.parameter_changes(iteration)
-
     def set_step_callback(self, step_callback: Optional[Callable[[], bool]] = None):
         self._step_callback = step_callback
 
