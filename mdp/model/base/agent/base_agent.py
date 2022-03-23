@@ -16,12 +16,9 @@ class BaseAgent(ABC):
         self._environment: BaseEnvironment = environment
         self._verbose: bool = verbose
 
-        # self._policy_factory: PolicyFactory = PolicyFactory[State, Action](self._environment)
-        self._behaviour_policy: Optional[BasePolicy] = None     # if on-policy = self._policy
-        self._dual_policy_relationship: Optional[common.DualPolicyRelationship] = None
+        self._behaviour_policy: Optional[BasePolicy] = None
 
         self._episode: Optional[BaseEpisode] = None
-        self._first_visit: bool = False
         self._episode_length_timeout: Optional[int] = None
 
         # not None to avoid unboxing cost of Optional
@@ -37,21 +34,16 @@ class BaseAgent(ABC):
 
     @property
     @abstractmethod
-    def behaviour_policy(self) -> BasePolicy:
-        return self._behaviour_policy
-
-    @property
-    @abstractmethod
     def episode(self) -> BaseEpisode:
         return self._episode
+
+    def set_behaviour_policy(self, policy: BasePolicy):
+        self._behaviour_policy = policy
 
     def apply_settings(self, settings: common.Settings):
         # top-down
         self._episode_length_timeout: int = settings.episode_length_timeout
         self.gamma: float = settings.gamma
-
-    def set_behaviour_policy(self, policy: BasePolicy):
-        self._behaviour_policy = policy
 
     def set_step_callback(self, step_callback: Optional[Callable[[], bool]] = None):
         self._step_callback = step_callback

@@ -20,16 +20,9 @@ class NonTabularAgent(Generic[State, Action], BaseAgent):
         super().__init__(environment, verbose)
         self._environment: NonTabularEnvironment[State, Action] = environment
 
-        self._behaviour_policy: Optional[NonTabularPolicy[State, Action]] = None     # if on-policy = self._policy
-        # self._dual_policy_relationship: Optional[common.DualPolicyRelationship] = None
+        self._behaviour_policy: Optional[NonTabularPolicy[State, Action]] = None
 
         self._episode: Optional[NonTabularEpisode[State, Action]] = None
-        # self._record_first_visits: bool = False
-        # self._episode_length_timeout: Optional[int] = None
-
-        # not None to avoid unboxing cost of Optional
-        # self.gamma: float = 1.0
-        # self.t: int = 0
 
         # always refers to values for time-step t
         self.r: float = 0.0
@@ -49,15 +42,11 @@ class NonTabularAgent(Generic[State, Action], BaseAgent):
         return self._environment
 
     @property
-    def behaviour_policy(self) -> NonTabularPolicy[State, Action]:
-        return self._behaviour_policy
+    def episode(self) -> NonTabularEpisode:
+        return self._episode
 
     def set_behaviour_policy(self, policy: NonTabularPolicy[State, Action]):
         self._behaviour_policy = policy
-
-    @property
-    def episode(self) -> NonTabularEpisode:
-        return self._episode
 
     def set_step_callback(self, step_callback: Optional[Callable[[], bool]] = None):
         self._step_callback = step_callback

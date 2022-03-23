@@ -54,6 +54,8 @@ class BaseAlgorithm(ABC):
         else:
             raise NotImplementedError
 
+        self._agent.set_behaviour_policy(self._behaviour_policy)
+
     def initialize(self):
         pass
 

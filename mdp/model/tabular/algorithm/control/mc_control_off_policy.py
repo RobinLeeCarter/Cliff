@@ -22,7 +22,7 @@ class McControlOffPolicy(EpisodicMonteCarlo):
     def initialize(self):
         super().initialize()
         self._set_target_policy_greedy_wrt_q()
-        self._agent.behaviour_policy.refresh_policy_matrix()
+        self._behaviour_policy.refresh_policy_matrix()
         # self._environment.initialize_policy(self._agent.policy, self._policy_parameters)
 
     def _pre_process_episode(self):
@@ -44,5 +44,5 @@ class McControlOffPolicy(EpisodicMonteCarlo):
         if a != best_a:
             self._exit_episode = True
         else:
-            behaviour_probability = self._agent.behaviour_policy.get_probability(s, a)
+            behaviour_probability = self._behaviour_policy.get_probability(s, a)
             self._W /= behaviour_probability

@@ -20,16 +20,10 @@ class TabularAgent(Generic[State, Action], BaseAgent):
         super().__init__(environment, verbose)
         self._environment: TabularEnvironment[State, Action] = environment
 
-        self._behaviour_policy: Optional[TabularPolicy] = None     # if on-policy = self._policy
-        self._dual_policy_relationship: Optional[common.DualPolicyRelationship] = None
+        self._behaviour_policy: Optional[TabularPolicy] = None
 
         self._episode: Optional[TabularEpisode] = None
-        # self._record_first_visits: bool = False
-        # self._episode_length_timeout: Optional[int] = None
-
-        # not None to avoid unboxing cost of Optional
-        # self.gamma: float = 1.0
-        # self.t: int = 0
+        self._first_visit: bool = False
 
         # always refers to values for time-step t
         self.r: float = 0.0
@@ -50,15 +44,11 @@ class TabularAgent(Generic[State, Action], BaseAgent):
         return self._environment
 
     @property
-    def behaviour_policy(self) -> TabularPolicy:
-        return self._behaviour_policy
+    def episode(self) -> TabularEpisode:
+        return self._episode
 
     def set_behaviour_policy(self, policy: TabularPolicy):
         self._behaviour_policy = policy
-
-    @property
-    def episode(self) -> TabularEpisode:
-        return self._episode
 
     def apply_settings(self, settings: common.Settings):
         super().apply_settings(settings)
