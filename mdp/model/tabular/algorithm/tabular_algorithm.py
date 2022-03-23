@@ -6,8 +6,8 @@ if TYPE_CHECKING:
     from mdp.model.tabular.environment.tabular_environment import TabularEnvironment
     from mdp.model.tabular.agent.tabular_agent import TabularAgent
     from mdp.model.tabular.policy.tabular_policy import TabularPolicy
-    from mdp import common
-from mdp.model.tabular.algorithm import linear_algebra as la
+from mdp import common
+from mdp.model.tabular.algorithm import linear_algebra
 from mdp.model.tabular.value_function.state_function import StateFunction
 from mdp.model.tabular.value_function.state_action_function import StateActionFunction
 
@@ -76,7 +76,7 @@ class TabularAlgorithm(BaseAlgorithm, ABC):
         # Q(s,a)
         q = self.Q.matrix
         # Sum_over_a( π(a|s).Q(s,a) )
-        self.V.vector = la.derive_v_from_q(policy_matrix, q)
+        self.V.vector = linear_algebra.derive_v_from_q(policy_matrix, q)
 
     @property
     def target_policy(self) -> Optional[TabularPolicy]:
@@ -87,9 +87,9 @@ class TabularAlgorithm(BaseAlgorithm, ABC):
         return self._behaviour_policy
 
     def apply_result(self, result: common.Result):
-        if result.policy_vector:
+        if result.policy_vector is not None:
             self._target_policy.set_policy_vector(result.policy_vector)
-        if result.v_vector and self.V:
+        if result.v_vector is not None:
             self.V.vector = result.v_vector
-        if result.q_matrix and self.Q:
+        if result.q_matrix is not None:
             self.Q.set_matrix(result.q_matrix)

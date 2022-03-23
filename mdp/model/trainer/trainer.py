@@ -65,7 +65,7 @@ class Trainer:
         self._model_step_callback = None
 
     def train(self, settings: common.Settings, return_result: bool = False) -> Optional[common.Result]:
-        self._apply_settings(settings)
+        self.apply_settings(settings)
 
         match self._algorithm:
             case Episodic():
@@ -82,7 +82,7 @@ class Trainer:
         if return_result:
             return self._get_result(settings.result_parameters)
 
-    def _apply_settings(self, settings: common.Settings):
+    def apply_settings(self, settings: common.Settings):
         self.settings = settings
         self._algorithm = self._algorithm_factory.create(settings.algorithm_parameters)
         self._algorithm.create_policies(self._policy_factory, settings)

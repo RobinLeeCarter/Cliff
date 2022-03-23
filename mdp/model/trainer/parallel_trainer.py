@@ -50,7 +50,7 @@ class ParallelTrainer:
         self._unpack_results()
 
         # set up agent using final setting and apply the final result
-        self._trainer.agent.apply_settings(settings=self._settings_list[-1])
+        self._trainer.apply_settings(settings=self._settings_list[-1])
         self._trainer.algorithm.apply_result(result=self._results[-1])
 
     def _set_result_parameters(self):

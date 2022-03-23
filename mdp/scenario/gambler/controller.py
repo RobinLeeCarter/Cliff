@@ -20,6 +20,6 @@ class Controller(TabularController[Model, View]):
 
         self._model.environment.insert_policy_into_graph2d(
             self._comparison,
-            self._model.target_policy
+            self._model.algorithm.target_policy
         )
         self._view.graph2d.make_plot(self._comparison.graph2d_values)

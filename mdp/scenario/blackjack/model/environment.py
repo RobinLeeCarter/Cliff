@@ -115,7 +115,8 @@ class Environment(TabularEnvironment[State, Action]):
         g.y_series = common.Series(title=g.y_label, values=y_values)
         g.z_series = common.Series(title=g.z_label, values=z_values)
 
-    def update_grid_policy_ace(self, policy: TabularPolicy, algorithm: TabularAlgorithm, usable_ace: bool):
+    def update_grid_policy_ace(self, algorithm: TabularAlgorithm, usable_ace: bool):
+        policy: TabularPolicy = algorithm.target_policy
         # policy_: policy.Deterministic
         for s, state in enumerate(self.states):
             if not state.is_terminal and state.usable_ace == usable_ace:

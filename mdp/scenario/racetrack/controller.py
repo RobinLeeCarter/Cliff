@@ -23,6 +23,6 @@ class Controller(TabularController[Model, View]):
 
         # prep for output
         self._model.environment.grid_world.skid_probability = 0.0
-        self._model.switch_to_target_policy()
+        self._model.switch_agent_to_target_policy()
         # output demo
         self._view.grid_view.demonstrate(self.new_episode_request)

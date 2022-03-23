@@ -31,10 +31,10 @@ class Controller(TabularController[Model, View]):
             self._view.graph3d.make_plot(self._comparison.graph3d_values)
 
         if self._comparison.grid_view_parameters.show_result:
-            self._model.environment.update_grid_policy(policy=self._model.target_policy)
+            self._model.environment.update_grid_policy(policy=self._model.algorithm.target_policy)
             self._view.grid_view.display_latest_step()
 
-        policy = self._model.target_policy
+        policy = self._model.algorithm.target_policy
         total_transfers: int = 0
         for s, state in enumerate(self._model.environment.states):
             if not state.is_terminal:

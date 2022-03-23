@@ -97,11 +97,8 @@ class BaseModel(Generic[Environment, Agent], ABC):
     #     self.switch_to_target_policy()
     #     self.update_grid_value_functions()
 
-    # def switch_to_target_policy(self):
-    #     # TODO: switch to using Trainer to do this / or get target_policy from algorithm. Not actually used. Hmmm...
-    #     # if self.comparison.comparison_settings.dual_policy_relationship in \
-    #     #     (common.DualPolicyRelationship.LINKED_POLICIES, common.DualPolicyRelationship.INDEPENDENT_POLICIES):
-    #     self.agent.set_behaviour_policy(self.agent.target_policy)
+    def switch_agent_to_target_policy(self):
+        self.agent.set_behaviour_policy(self.algorithm.target_policy)
 
     def _display_step(self, episode: Optional[BaseEpisode]):
         raise Exception("_display_step() not implemented")
