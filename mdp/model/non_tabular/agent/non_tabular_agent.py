@@ -31,7 +31,6 @@ class NonTabularAgent(Generic[State, Action], BaseAgent):
         self._behaviour_policy: Optional[NonTabularPolicy[State, Action]] = None     # if on-policy = self._policy
         # self._dual_policy_relationship: Optional[common.DualPolicyRelationship] = None
 
-        self._algorithm_factory: AlgorithmFactory = AlgorithmFactory(agent=self)
         self._episode: Optional[NonTabularEpisode[State, Action]] = None
         # self._record_first_visits: bool = False
         # self._episode_length_timeout: Optional[int] = None

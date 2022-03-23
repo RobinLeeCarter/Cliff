@@ -2,24 +2,17 @@ from __future__ import annotations
 from typing import TYPE_CHECKING, Optional, Callable
 import multiprocessing
 
-from mdp.model.tabular.policy.tabular_policy import TabularPolicy
-
 if TYPE_CHECKING:
     from mdp.model.base.agent.base_agent import BaseAgent
     from mdp.model.base.agent.base_episode import BaseEpisode
     from mdp.model.breakdown.base_breakdown import BaseBreakdown
 from mdp import common
-
 from mdp.model.base.policy.policy_factory import PolicyFactory
-
 from mdp.model.base.algorithm.algorithm_factory import AlgorithmFactory
 from mdp.model.base.algorithm.base_algorithm import BaseAlgorithm
 from mdp.model.tabular.algorithm.tabular_algorithm import TabularAlgorithm
 from mdp.model.tabular.algorithm.abstract.episodic import Episodic
 from mdp.model.tabular.algorithm.abstract.dynamic_programming import DynamicProgramming
-
-from mdp.model.tabular.agent.tabular_agent import TabularAgent
-
 from mdp.model.trainer.parallel_runner import ParallelRunner
 
 
@@ -51,6 +44,10 @@ class Trainer:
     @property
     def breakdown(self) -> BaseBreakdown:
         return self._breakdown
+
+    @property
+    def algorithm_factory(self) -> AlgorithmFactory:
+        return self._algorithm_factory
 
     @property
     def algorithm(self) -> BaseAlgorithm:
@@ -95,7 +92,7 @@ class Trainer:
         settings = self.settings
         if (settings.review_every_step or settings.display_every_step) and self._agent.set_step_callback:
             self._agent.set_step_callback(self.step)
-        title: str = self.agent.algorithm_factory.get_algorithm_title(settings.algorithm_parameters)
+        title: str = self._algorithm_factory.get_algorithm_title(settings.algorithm_parameters)
         print(f"{title}: {settings.runs} runs")
 
         self.max_cum_timestep = 0

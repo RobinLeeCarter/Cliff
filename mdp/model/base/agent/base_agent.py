@@ -23,7 +23,6 @@ class BaseAgent(ABC):
         self._behaviour_policy: Optional[BasePolicy] = None     # if on-policy = self._policy
         self._dual_policy_relationship: Optional[common.DualPolicyRelationship] = None
 
-        self._algorithm_factory: Optional[AlgorithmFactory] = None
         self._episode: Optional[BaseEpisode] = None
         self._first_visit: bool = False
         self._episode_length_timeout: Optional[int] = None
@@ -49,10 +48,6 @@ class BaseAgent(ABC):
     @abstractmethod
     def behaviour_policy(self) -> BasePolicy:
         return self._behaviour_policy
-
-    @property
-    def algorithm_factory(self) -> AlgorithmFactory:
-        return self._algorithm_factory
 
     @property
     @abstractmethod

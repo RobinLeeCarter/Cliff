@@ -47,7 +47,7 @@ class EpisodeByTimestep(BaseBreakdown):
                  for timestep in timestep_array],
                 dtype=float
             )
-            title: str = self._trainer.agent.algorithm_factory.get_algorithm_title(settings.algorithm_parameters)
+            title: str = self._trainer.algorithm_factory.get_algorithm_title(settings.algorithm_parameters)
             series_ = common.Series(
                 title=title,
                 identifiers={"algorithm_type": algorithm_type},

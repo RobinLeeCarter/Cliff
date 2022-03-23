@@ -39,7 +39,7 @@ class ReturnByAlpha(BaseBreakdown):
                 [self._recorder[algorithm_type, alpha] for alpha in self.breakdown_parameters.alpha_list],
                 dtype=float
             )
-            name = self._trainer.agent.algorithm_factory.get_algorithm_name(algorithm_type)
+            name = self._trainer.algorithm_factory.get_algorithm_name(algorithm_type)
             series = common.Series(
                 title=name,
                 values=values,

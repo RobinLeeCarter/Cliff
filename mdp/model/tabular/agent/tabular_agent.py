@@ -29,7 +29,6 @@ class TabularAgent(Generic[State, Action], BaseAgent):
         self._behaviour_policy: Optional[TabularPolicy] = None     # if on-policy = self._policy
         self._dual_policy_relationship: Optional[common.DualPolicyRelationship] = None
 
-        self._algorithm_factory: AlgorithmFactory = AlgorithmFactory(agent=self)
         self._episode: Optional[TabularEpisode] = None
         # self._record_first_visits: bool = False
         # self._episode_length_timeout: Optional[int] = None
