@@ -44,11 +44,11 @@ class ExpectedSarsa(EpisodicOnlineControl):
         # print(f"max:      {self.Q.max[ag.prev_s]}")
         # print(f"Q:        {self.Q[ag.prev_s, ag.prev_a]}")
         # update policy to be in-line with Q
-        self._agent.policy[ag.prev_s] = self.Q.argmax[ag.prev_s]
+        self._target_policy[ag.prev_s] = self.Q.argmax[ag.prev_s]
         # print()
 
     def _get_expectation_over_a(self, s: int) -> float:
-        probability_vector: np.ndarray = self._agent.policy.get_probability_vector(s)
+        probability_vector: np.ndarray = self._target_policy.get_probability_vector(s)
         q_slice: np.ndarray = self.Q.matrix[s, :]
         # print(probability_vector)
         # print(q_slice)
@@ -57,6 +57,6 @@ class ExpectedSarsa(EpisodicOnlineControl):
 
         # expectation: float = 0.0
         # for action in self._environment.actions:
-        #     probability = self._agent.policy.get_probability(state, action)
+        #     probability = self._target_policy.get_probability(state, action)
         #     expectation += probability * self.Q[state, action]
         # return expectation

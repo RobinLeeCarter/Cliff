@@ -23,7 +23,7 @@ class McControlOffPolicy(EpisodicMonteCarlo):
         super().initialize()
         self._set_target_policy_greedy_wrt_q()
         self._behaviour_policy.refresh_policy_matrix()
-        # self._environment.initialize_policy(self._agent.policy, self._policy_parameters)
+        # self._environment.initialize_policy(self._target_policy, self._policy_parameters)
 
     def _pre_process_episode(self):
         self._episode.generate_returns()

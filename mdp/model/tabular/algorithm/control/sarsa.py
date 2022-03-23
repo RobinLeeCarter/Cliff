@@ -33,7 +33,7 @@ class Sarsa(EpisodicOnlineControl):
         #       f"\tdelta: {delta}"
         #       f"\talpha: {self._alpha}")
         self.Q[ag.prev_s, ag.prev_a] += self._alpha * delta
-        ag.policy[ag.prev_s] = self.Q.argmax[ag.prev_s]
+        self._target_policy[ag.prev_s] = self.Q.argmax[ag.prev_s]
 
         # previous verison: update policy to be in-line with Q by recalculation every time
         # ag.policy[ag.prev_s] = self.Q.argmax_over_actions(ag.prev_s)

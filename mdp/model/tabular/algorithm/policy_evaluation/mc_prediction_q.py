@@ -24,7 +24,7 @@ class MCPredictionQ(EpisodicMonteCarlo):
 
     def initialize(self):
         super().initialize()
-        self._environment.initialize_policy(self._agent.policy)
+        self._environment.initialize_policy(self._target_policy)
 
     def _process_time_step(self, t: int):
         # only do updates on the time-steps that should be done

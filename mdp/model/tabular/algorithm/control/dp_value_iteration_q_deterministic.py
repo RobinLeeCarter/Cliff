@@ -79,12 +79,12 @@ class DpValueIterationQ(DynamicProgrammingQ):
         # π'(s) = argmax_over_a( q(s, a) )
         new_policy_vector: np.ndarray = self.Q.argmax.copy()
 
-        self._agent.policy.set_policy_vector(new_policy_vector)
+        self._target_policy.set_policy_vector(new_policy_vector)
 
         # policy_vector = np.argmax(q, axis=1)
         #
         # # policy_vector = make_policy_greedy_wrt_v(v, expected_reward, state_transition_p, gamma, round_first=True)
-        # self._agent.policy.set_policy_vector(policy_vector)
+        # self._target_policy.set_policy_vector(policy_vector)
 
         if iteration == self._iteration_timeout:
             print(f"Warning: Timed out at {iteration} iterations")

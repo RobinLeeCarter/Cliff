@@ -32,7 +32,7 @@ class DpPolicyImprovementV(DynamicProgrammingV):
             print(f"Starting Policy Improvement ...")
 
         # policy_vector[s] = π(s)
-        policy_vector: np.ndarray = self._agent.policy.get_policy_vector()
+        policy_vector: np.ndarray = self._target_policy.get_policy_vector()
 
         old_policy_vector: np.ndarray = policy_vector.copy()
         # state_transition_probabilities[s, a, s'] = p(s'|s,a)
@@ -50,7 +50,7 @@ class DpPolicyImprovementV(DynamicProgrammingV):
 
         # argmax(a) Σs',r p(s',r|s,a).(r + γ.v(s'))
         new_policy_vector: np.ndarray = expected_return.argmax(axis=1)
-        self._agent.policy.set_policy_vector(new_policy_vector)
+        self._target_policy.set_policy_vector(new_policy_vector)
 
         policy_stable: bool = np.array_equal(old_policy_vector, new_policy_vector)
 

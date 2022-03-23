@@ -38,8 +38,8 @@ class EpisodicOnline(Episodic, ABC):
     # def _change_q_and_update_policy(self, s: int, a: int, value: float):
     #     self.Q[s, a] = value
     #     # update policy to be in-line with Q if it needs to change
-    #     self._agent.policy[s] = self.Q.argmax[s]
+    #     self._target_policy[s] = self.Q.argmax[s]
 
         # if value > self.Q.max[s]:
         #     self._max_q[s] = value
-        #     self._agent.policy[s] = a
+        #     self._target_policy[s] = a

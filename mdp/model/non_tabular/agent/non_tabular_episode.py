@@ -72,8 +72,6 @@ class NonTabularEpisode(Generic[State, Action], BaseEpisode):
         if state.is_terminal:
             self.terminates = True
             self.T = len(self.trajectory) - 1
-        if self.record_first_visits:
-            self._first_visit_check(state)
         if self._step_callback:
             self.cont = self._step_callback()
 
@@ -82,12 +80,6 @@ class NonTabularEpisode(Generic[State, Action], BaseEpisode):
             self.G = [0.0 for _ in range(self.T+1)]
             for t in range(self.T - 1, -1, -1):     # T-1, T-2, ... 1, 0
                 self.G[t] = self[t+1].r + self.gamma * self.G[t + 1]
-
-    def _first_visit_check(self, state: State):
-        is_first_visit = (state not in self.visited_states)
-        self.is_first_visit.append(is_first_visit)
-        if is_first_visit:
-            self.visited_states.add(state)
 
     def __getitem__(self, t: int) -> RewardStateAction:
         return self.trajectory[t]

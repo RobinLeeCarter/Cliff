@@ -39,7 +39,7 @@ class DpPolicyEvaluationVDeterministic(DynamicProgrammingV):
             print(f"Starting Policy Evaluation PolicyEvaluationDpVNp ...")
 
         # policy_vector[s] = π(s)
-        policy_vector: np.ndarray = self._agent.policy.get_policy_vector()
+        policy_vector: np.ndarray = self._target_policy.get_policy_vector()
 
         # state_transition_p[s, a, s'] = p(s'|s,a)
         state_transition_p: np.ndarray = self._environment.dynamics.state_transition_probabilities

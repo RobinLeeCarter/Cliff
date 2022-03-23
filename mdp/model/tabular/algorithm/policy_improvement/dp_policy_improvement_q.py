@@ -28,14 +28,14 @@ class DpPolicyImprovementQ(DynamicProgrammingQ):
             print(f"Starting Policy Improvement ...")
 
         # policy_vector[s] = π(s)
-        policy_vector: np.ndarray = self._agent.policy.get_policy_vector()
+        policy_vector: np.ndarray = self._target_policy.get_policy_vector()
 
         # π'(s) = argmax_over_a( q(s, a) )
         new_policy_vector: np.ndarray = self.Q.argmax
 
         policy_stable: bool = np.array_equal(new_policy_vector, policy_vector)
 
-        self._agent.policy.set_policy_vector(new_policy_vector)
+        self._target_policy.set_policy_vector(new_policy_vector)
 
         if self._verbose:
             print(f"Policy Improvement completed. policy_stable = {policy_stable}")

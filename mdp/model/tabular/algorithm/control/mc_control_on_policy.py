@@ -20,7 +20,7 @@ class McControlOnPolicy(EpisodicMonteCarlo):
 
     def initialize(self):
         super().initialize()
-        self._environment.initialize_policy(self._agent.policy)
+        self._environment.initialize_policy(self._target_policy)
 
     def _process_time_step(self, t: int):
         # only do updates on the time-steps that should be done
@@ -31,4 +31,4 @@ class McControlOnPolicy(EpisodicMonteCarlo):
             self._N[s, a] += 1.0
             # Q(s,a) = Q(s,a) + (1/N(s,a)).(G(t) - Q(s,a))
             self.Q[s, a] += delta / self._N[s, a]
-            self._agent.policy[s] = self.Q.argmax[s]
+            self._target_policy[s] = self.Q.argmax[s]

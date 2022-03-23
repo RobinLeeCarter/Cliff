@@ -2,8 +2,6 @@ from __future__ import annotations
 from typing import TYPE_CHECKING, Optional
 from abc import ABC
 
-import numpy as np
-
 if TYPE_CHECKING:
     from mdp.model.tabular.environment.tabular_environment import TabularEnvironment
     from mdp.model.tabular.agent.tabular_agent import TabularAgent

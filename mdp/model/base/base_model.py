@@ -8,7 +8,6 @@ if TYPE_CHECKING:
     from mdp.controller.base_controller import BaseController
     from mdp.model.base.environment.base_environment import BaseEnvironment
     from mdp.model.base.agent.base_episode import BaseEpisode
-    from mdp.model.base.policy.base_policy import BasePolicy
     from mdp.model.breakdown.base_breakdown import BaseBreakdown
     from mdp.model.base.algorithm.base_algorithm import BaseAlgorithm
 import utils

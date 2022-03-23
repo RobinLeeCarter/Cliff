@@ -37,15 +37,15 @@ class DynamicProgrammingV(DynamicProgramming, ABC):
     #                 action_values[action] = value
     #             # argmax https://stackoverflow.com/questions/268272/getting-key-with-maximum-value-in-dictionary
     #             best_action = max(action_values, key=action_values.get)
-    #             self._agent.policy[state] = best_action
+    #             self._target_policy[state] = best_action
 
     # action_values: dict[environment.Action, float] = \
     #     {action: round(self._get_expected_return(state, action) / self._theta, 0)
     #      for action in self._environment.actions_for_state(state)}
     # if only_changes:
     #     max_value = max(action_values.values())
-    #     current_action: environment.Action = self._agent.policy[state]
+    #     current_action: environment.Action = self._target_policy[state]
     #     current_value: float = action_values[current_action]
     #     if not math.isclose(current_value, max_value):
-    #         self._agent.policy[state] = max(action_values, key=action_values.get)
+    #         self._target_policy[state] = max(action_values, key=action_values.get)
     # else:

@@ -45,7 +45,7 @@ class VQ(EpisodicOnlineControl):
         self.Q[ag.prev_s, ag.prev_a] += self._alpha * q_delta
 
         # update policy to be in-line with Q
-        self._agent.policy[ag.prev_s] = self.Q.argmax[ag.prev_s]
+        self._target_policy[ag.prev_s] = self.Q.argmax[ag.prev_s]
 
     @staticmethod
     def get_title(name: str, algorithm_parameters: common.AlgorithmParameters) -> str:

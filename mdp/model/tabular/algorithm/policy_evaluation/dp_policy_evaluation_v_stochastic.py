@@ -38,7 +38,7 @@ class DpPolicyEvaluationVStochastic(DynamicProgrammingV):
             print(f"Starting Policy Evaluation PolicyEvaluationDpVNp ...")
 
         # policy_matrix[s, a] = π(a|s)
-        policy_matrix: np.ndarray = self._agent.policy.get_probability_matrix()
+        policy_matrix: np.ndarray = self._target_policy.get_probability_matrix()
 
         # state_transition_probabilities[s, a, s'] = p(s'|s,a)
         state_transition_probabilities: np.ndarray = self._environment.dynamics.state_transition_probabilities

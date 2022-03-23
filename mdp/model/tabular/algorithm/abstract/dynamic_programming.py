@@ -26,7 +26,7 @@ class DynamicProgramming(TabularAlgorithm, ABC):
 
     def initialize(self):
         super().initialize()
-        self._environment.initialize_policy(self._agent.policy)
+        self._environment.initialize_policy(self._target_policy)
 
     @abstractmethod
     def run(self):
