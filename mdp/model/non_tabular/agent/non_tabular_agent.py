@@ -3,17 +3,11 @@ from typing import Optional, TYPE_CHECKING, Callable, TypeVar, Generic
 
 if TYPE_CHECKING:
     from mdp.model.non_tabular.environment.non_tabular_environment import NonTabularEnvironment
-from mdp.model.non_tabular.environment.non_tabular_state import NonTabularState
-from mdp.model.non_tabular.environment.non_tabular_action import NonTabularAction
-
-from mdp import common
 from mdp.model.non_tabular.agent.non_tabular_episode import NonTabularEpisode
 from mdp.model.non_tabular.policy.non_tabular_policy import NonTabularPolicy
-
-from mdp.model.base.policy.policy_factory import PolicyFactory
-from mdp.model.base.algorithm.algorithm_factory import AlgorithmFactory
-
 from mdp.model.base.agent.base_agent import BaseAgent
+from mdp.model.non_tabular.environment.non_tabular_state import NonTabularState
+from mdp.model.non_tabular.environment.non_tabular_action import NonTabularAction
 
 State = TypeVar('State', bound=NonTabularState)
 Action = TypeVar('Action', bound=NonTabularAction)
@@ -26,8 +20,6 @@ class NonTabularAgent(Generic[State, Action], BaseAgent):
         super().__init__(environment, verbose)
         self._environment: NonTabularEnvironment[State, Action] = environment
 
-        self._policy_factory: PolicyFactory = PolicyFactory(self._environment)
-        self._policy: Optional[NonTabularPolicy[State, Action]] = None
         self._behaviour_policy: Optional[NonTabularPolicy[State, Action]] = None     # if on-policy = self._policy
         # self._dual_policy_relationship: Optional[common.DualPolicyRelationship] = None
 
@@ -56,41 +48,16 @@ class NonTabularAgent(Generic[State, Action], BaseAgent):
     def environment(self) -> NonTabularEnvironment[State, Action]:
         return self._environment
 
-    # use these two for off-policy algorithms
-    @property
-    def target_policy(self) -> NonTabularPolicy[State, Action]:
-        return self._policy
-
     @property
     def behaviour_policy(self) -> NonTabularPolicy[State, Action]:
         return self._behaviour_policy
 
+    def set_behaviour_policy(self, policy: NonTabularPolicy[State, Action]):
+        self._behaviour_policy = policy
+
     @property
     def episode(self) -> NonTabularEpisode:
         return self._episode
-
-    def apply_settings(self, settings: common.Settings):
-        # sort out policies
-        primary_policy = self._policy_factory.create(settings.policy_parameters)
-        self._dual_policy_relationship = settings.dual_policy_relationship
-        if self._dual_policy_relationship == common.DualPolicyRelationship.SINGLE_POLICY:
-            self._policy = primary_policy
-            self._behaviour_policy = primary_policy
-        elif self._dual_policy_relationship == common.DualPolicyRelationship.INDEPENDENT_POLICIES:
-            self._policy = primary_policy
-            self._behaviour_policy = self._policy_factory.create(settings.behaviour_policy_parameters)
-        elif self._dual_policy_relationship == common.DualPolicyRelationship.LINKED_POLICIES:
-            self._policy = primary_policy.linked_policy     # typically the deterministic part we want to output
-            self._behaviour_policy = primary_policy
-        else:
-            raise NotImplementedError
-
-        self._episode_length_timeout: int = settings.episode_length_timeout
-        self._first_visit: bool = settings.algorithm_parameters.first_visit
-        self.gamma: float = settings.gamma
-
-    def set_behaviour_policy(self, policy: NonTabularPolicy[State, Action]):
-        self._behaviour_policy = policy
 
     def set_step_callback(self, step_callback: Optional[Callable[[], bool]] = None):
         self._step_callback = step_callback
@@ -129,7 +96,7 @@ class NonTabularAgent(Generic[State, Action], BaseAgent):
             print("start episode...")
         self.t = 0
 
-        self._episode = NonTabularEpisode(env, self.gamma, self._step_callback, self._first_visit)
+        self._episode = NonTabularEpisode(env, self.gamma, self._step_callback)
 
         # get starting state, reward will be None
         self.state = self._environment.draw_start_state()

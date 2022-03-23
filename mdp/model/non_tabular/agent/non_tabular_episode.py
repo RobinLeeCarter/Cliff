@@ -19,9 +19,8 @@ class NonTabularEpisode(Generic[State, Action], BaseEpisode):
     def __init__(self,
                  environment: NonTabularEnvironment[State, Action],
                  gamma: float,
-                 step_callback: Optional[Callable[[], bool]] = None,
-                 record_first_visits: bool = False):
-        super().__init__(environment, gamma, step_callback, record_first_visits)
+                 step_callback: Optional[Callable[[], bool]] = None):
+        super().__init__(environment, gamma, step_callback)
         self._environment: NonTabularEnvironment = environment
         # self.gamma: float = gamma
         # self._step_callback: Optional[Callable[[], bool]] = step_callback
@@ -34,11 +33,6 @@ class NonTabularEpisode(Generic[State, Action], BaseEpisode):
         self.G: list[float] = []
 
         self.cont: bool = True
-
-        if self.record_first_visits:
-            # self.visited_s: np.ndarray = np.zeros(shape=len(self._environment.states), dtype=bool)
-            self.is_first_visit: list[bool] = []
-            self.visited_states: set[NonTabularState] = set()
 
     @property
     def last_state(self) -> Optional[State]:
