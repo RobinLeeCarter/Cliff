@@ -20,14 +20,14 @@ class Controller(TabularController[Model, View]):
     def output(self):
         for usable_ace in [False, True]:
             self._model.environment.update_grid_policy_ace(self._model.target_policy,
-                                                           self._model.agent.algorithm,
+                                                           self._model.algorithm,
                                                            usable_ace)
             self._view.grid_view.set_title(usable_ace)
             self._view.grid_view.display_latest_step()
 
             self._model.environment.insert_state_function_into_graph3d_ace(
                 comparison=self._comparison,
-                v=self._model.agent.algorithm.V,
+                v=self._model.algorithm.V,
                 usable_ace=usable_ace
             )
             self._view.graph3d.make_plot(self._comparison.graph3d_values)

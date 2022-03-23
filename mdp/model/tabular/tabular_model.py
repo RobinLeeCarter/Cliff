@@ -3,8 +3,9 @@ from typing import TypeVar, Generic, Optional
 from abc import ABC
 
 from mdp.model.base.base_model import BaseModel
-from mdp.model.tabular.environment.tabular_environment import TabularEnvironment
+from mdp.model.tabular.algorithm.tabular_algorithm import TabularAlgorithm
 from mdp.model.tabular.agent.tabular_agent import TabularAgent
+from mdp.model.tabular.environment.tabular_environment import TabularEnvironment
 from mdp.model.tabular.agent.tabular_episode import TabularEpisode
 from mdp.model.tabular.environment.tabular_state import TabularState
 from mdp.model.tabular.environment.tabular_action import TabularAction
@@ -29,6 +30,10 @@ class TabularModel(Generic[State, Action, Environment],
         self._controller.display_step(episode)
 
     def update_grid_value_functions(self):
-        policy_for_display = self.target_policy.linked_policy
-        self.environment.update_grid_value_functions(algorithm=self.agent.algorithm,
-                                                     policy=policy_for_display)
+        self.environment.update_grid_value_functions(algorithm=self.algorithm)
+
+    @property
+    def algorithm(self) -> TabularAlgorithm:
+        algorithm = self.trainer.algorithm
+        assert isinstance(algorithm, TabularAlgorithm)
+        return algorithm

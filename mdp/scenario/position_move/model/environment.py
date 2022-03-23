@@ -40,9 +40,9 @@ class Environment(TabularEnvironment[State, Action], ABC):
         self.actions: list[Action] = actions_list_factory.actions_list_factory(actions_list)
 
     def update_grid_value_functions(self,
-                                    algorithm: TabularAlgorithm,
-                                    policy: TabularPolicy
+                                    algorithm: TabularAlgorithm
                                     ):
+        policy: TabularPolicy = algorithm.target_policy.linked_policy
         for s, state in enumerate(self.states):
             if algorithm.V:
                 self.grid_world.set_v_value(

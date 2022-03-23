@@ -26,7 +26,7 @@ class Controller(TabularController[Model, View]):
         if self._comparison.graph3d_values.show_graph:
             self._model.environment.insert_state_function_into_graph3d(
                 comparison=self._comparison,
-                v=self._model.agent.algorithm.V
+                v=self._model.algorithm.V
             )
             self._view.graph3d.make_plot(self._comparison.graph3d_values)
 
@@ -40,7 +40,7 @@ class Controller(TabularController[Model, View]):
             if not state.is_terminal:
                 action: Action = policy.get_action(s)
                 total_transfers += action.transfer_1_to_2
-        v: np.ndarray = self._model.agent.algorithm.V.vector
+        v: np.ndarray = self._model.algorithm.V.vector
         total_v: float = v.sum()
 
         print(f"total_transfers: {total_transfers}")

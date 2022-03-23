@@ -1,6 +1,6 @@
 from __future__ import annotations
 from typing import TYPE_CHECKING, Optional
-from abc import ABC
+from abc import ABC, abstractmethod
 
 if TYPE_CHECKING:
     from mdp.model.base.agent.base_agent import BaseAgent
@@ -31,6 +31,14 @@ class BaseAlgorithm(ABC):
     def __repr__(self):
         return f"{self.title}"
 
+    @property
+    def target_policy(self) -> Optional[BasePolicy]:
+        return self._target_policy
+
+    @property
+    def behaviour_policy(self) -> Optional[BasePolicy]:
+        return self._behaviour_policy
+
     def create_policies(self, policy_factory: PolicyFactory, settings: common.Settings):
         primary_policy = policy_factory.create(settings.policy_parameters)
         self._dual_policy_relationship = settings.dual_policy_relationship
@@ -56,3 +64,7 @@ class BaseAlgorithm(ABC):
     @staticmethod
     def get_title(name: str, algorithm_parameters: common.AlgorithmParameters) -> str:
         return name
+
+    @abstractmethod
+    def apply_result(self, result: common.Result):
+        pass

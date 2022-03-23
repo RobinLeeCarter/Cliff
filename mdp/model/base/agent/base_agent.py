@@ -24,9 +24,8 @@ class BaseAgent(ABC):
         self._dual_policy_relationship: Optional[common.DualPolicyRelationship] = None
 
         self._algorithm_factory: Optional[AlgorithmFactory] = None
-        self._algorithm: Optional[BaseAlgorithm] = None
         self._episode: Optional[BaseEpisode] = None
-        self._record_first_visits: bool = False
+        self._first_visit: bool = False
         self._episode_length_timeout: Optional[int] = None
 
         # not None to avoid unboxing cost of Optional
@@ -54,11 +53,6 @@ class BaseAgent(ABC):
     @property
     def algorithm_factory(self) -> AlgorithmFactory:
         return self._algorithm_factory
-
-    @property
-    @abstractmethod
-    def algorithm(self) -> BaseAlgorithm:
-        return self._algorithm
 
     @property
     @abstractmethod
@@ -136,10 +130,6 @@ class BaseAgent(ABC):
         Get new reward and state in response.
         Start a new time step with the new reward and state
         """
-
-    @abstractmethod
-    def apply_result(self, result: common.Result):
-        ...
 
     @abstractmethod
     def _print_step(self):

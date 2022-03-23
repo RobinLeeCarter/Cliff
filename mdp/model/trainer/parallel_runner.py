@@ -52,7 +52,7 @@ class ParallelRunner:
         self._unpack_results()
 
         # the agent is already set up in trainer.trainer so just apply the final result to it
-        self._trainer.agent.apply_result(result=self._results[-1])
+        self._trainer.algorithm.apply_result(result=self._results[-1])
 
     def _get_result_parameter_list(self) -> list[common.ResultParameters]:
         rp_norm: common.ResultParameters = common.ResultParameters(

@@ -3,13 +3,14 @@ from typing import Optional, TYPE_CHECKING, TypeVar, Generic
 from abc import ABC, abstractmethod
 import multiprocessing
 
+
 if TYPE_CHECKING:
     from mdp.controller.base_controller import BaseController
     from mdp.model.base.environment.base_environment import BaseEnvironment
     from mdp.model.base.agent.base_episode import BaseEpisode
     from mdp.model.base.policy.base_policy import BasePolicy
     from mdp.model.breakdown.base_breakdown import BaseBreakdown
-
+    from mdp.model.base.algorithm.base_algorithm import BaseAlgorithm
 import utils
 from mdp import common
 from mdp.model.base.environment.base_environment import BaseEnvironment
@@ -109,5 +110,5 @@ class BaseModel(Generic[Environment, Agent], ABC):
         # self._controller.display_step(episode)
 
     @property
-    def target_policy(self) -> BasePolicy:
-        return self.agent.target_policy
+    def algorithm(self) -> BaseAlgorithm:
+        return self.trainer.algorithm

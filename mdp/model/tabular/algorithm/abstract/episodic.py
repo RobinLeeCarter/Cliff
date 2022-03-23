@@ -15,9 +15,10 @@ class Episodic(TabularAlgorithm, ABC):
                  name: str
                  ):
         super().__init__(agent, algorithm_parameters, name)
-        self.first_visit = self._algorithm_parameters.first_visit
+        self.first_visit: bool = self._algorithm_parameters.first_visit
 
     # TODO: should episode_length_timeout be passed in each time or be a property defaulted by algorithm_parameters
+    # TODO: return episode?
     @abstractmethod
     def do_episode(self, episode_length_timeout: int):
         pass

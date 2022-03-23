@@ -22,7 +22,7 @@ class RmsByEpisode(ReturnByEpisode):
         # better that it just fail if you use something with no V or an environment without get_optimum
         # if not self._algorithm.V or not hasattr(self._environment, 'get_optimum'):
         #     return None
-        algorithm = self._trainer.agent.algorithm
+        algorithm = self._trainer.algorithm
         environment = self._trainer.agent.environment
 
         assert isinstance(algorithm, TabularAlgorithm)

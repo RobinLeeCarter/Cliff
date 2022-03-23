@@ -2,6 +2,8 @@ from __future__ import annotations
 from typing import TYPE_CHECKING, Optional
 from abc import ABC
 
+import numpy as np
+
 if TYPE_CHECKING:
     from mdp.model.tabular.environment.tabular_environment import TabularEnvironment
     from mdp.model.tabular.agent.tabular_agent import TabularAgent
@@ -77,3 +79,19 @@ class TabularAlgorithm(BaseAlgorithm, ABC):
         q = self.Q.matrix
         # Sum_over_a( π(a|s).Q(s,a) )
         self.V.vector = la.derive_v_from_q(policy_matrix, q)
+
+    @property
+    def target_policy(self) -> Optional[TabularPolicy]:
+        return self._target_policy
+
+    @property
+    def behaviour_policy(self) -> Optional[TabularPolicy]:
+        return self._behaviour_policy
+
+    def apply_result(self, result: common.Result):
+        if result.policy_vector:
+            self._target_policy.set_policy_vector(result.policy_vector)
+        if result.v_vector and self.V:
+            self.V.vector = result.v_vector
+        if result.q_matrix and self.Q:
+            self.Q.set_matrix(result.q_matrix)

@@ -1,23 +1,17 @@
 from __future__ import annotations
 from typing import Optional, TYPE_CHECKING, Callable, TypeVar, Generic
 
-# import math
-
 if TYPE_CHECKING:
     from mdp.model.non_tabular.environment.non_tabular_environment import NonTabularEnvironment
 from mdp.model.non_tabular.environment.non_tabular_state import NonTabularState
 from mdp.model.non_tabular.environment.non_tabular_action import NonTabularAction
 
 from mdp import common
-# renamed to avoid name conflicts
-from mdp.model.non_tabular.algorithm.non_tabular_algorithm import NonTabularAlgorithm
-from mdp.model.tabular.algorithm.abstract.episodic import Episodic
 from mdp.model.non_tabular.agent.non_tabular_episode import NonTabularEpisode
 from mdp.model.non_tabular.policy.non_tabular_policy import NonTabularPolicy
 
 from mdp.model.base.policy.policy_factory import PolicyFactory
 from mdp.model.base.algorithm.algorithm_factory import AlgorithmFactory
-# from mdp.model.general.policy import policy_factory
 
 from mdp.model.base.agent.base_agent import BaseAgent
 
@@ -38,7 +32,6 @@ class NonTabularAgent(Generic[State, Action], BaseAgent):
         # self._dual_policy_relationship: Optional[common.DualPolicyRelationship] = None
 
         self._algorithm_factory: AlgorithmFactory = AlgorithmFactory(agent=self)
-        self._algorithm: Optional[NonTabularAlgorithm] = None
         self._episode: Optional[NonTabularEpisode[State, Action]] = None
         # self._record_first_visits: bool = False
         # self._episode_length_timeout: Optional[int] = None
@@ -74,10 +67,6 @@ class NonTabularAgent(Generic[State, Action], BaseAgent):
         return self._behaviour_policy
 
     @property
-    def algorithm(self) -> NonTabularAlgorithm:
-        return self._algorithm
-
-    @property
     def episode(self) -> NonTabularEpisode:
         return self._episode
 
@@ -97,23 +86,12 @@ class NonTabularAgent(Generic[State, Action], BaseAgent):
         else:
             raise NotImplementedError
 
-        # set policy based on policy_parameters
-        self._algorithm = self._algorithm_factory.create(algorithm_parameters=settings.algorithm_parameters)
-        # assert isinstance(self._algorithm, NonTabularAlgorithm)
-        self._episode_length_timeout = settings.episode_length_timeout
-        if isinstance(self._algorithm, Episodic):
-            self._record_first_visits = self._algorithm.first_visit
-        else:
-            self._record_first_visits = False
-
-        self.gamma = settings.gamma
+        self._episode_length_timeout: int = settings.episode_length_timeout
+        self._first_visit: bool = settings.algorithm_parameters.first_visit
+        self.gamma: float = settings.gamma
 
     def set_behaviour_policy(self, policy: NonTabularPolicy[State, Action]):
         self._behaviour_policy = policy
-
-    def parameter_changes(self, iteration: int):
-        # potentially change epsilon here
-        self._algorithm.parameter_changes(iteration)
 
     def set_step_callback(self, step_callback: Optional[Callable[[], bool]] = None):
         self._step_callback = step_callback
@@ -152,7 +130,7 @@ class NonTabularAgent(Generic[State, Action], BaseAgent):
             print("start episode...")
         self.t = 0
 
-        self._episode = NonTabularEpisode(env, self.gamma, self._step_callback, self._record_first_visits)
+        self._episode = NonTabularEpisode(env, self.gamma, self._step_callback, self._first_visit)
 
         # get starting state, reward will be None
         self.state = self._environment.draw_start_state()
@@ -198,9 +176,6 @@ class NonTabularAgent(Generic[State, Action], BaseAgent):
         if self.state.is_terminal:
             # add terminating step here as should not select another action
             self._episode.add_rsa(self.r, self.state, self.action)
-
-    def apply_result(self, result: common.Result):
-        pass
 
     def _print_step(self):
         print(f"t={self.t} \t state = {self.state} \t action = {self.action}")

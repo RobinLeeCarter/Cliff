@@ -2,6 +2,8 @@ from __future__ import annotations
 from typing import TYPE_CHECKING, Optional, Callable
 import multiprocessing
 
+from mdp.model.tabular.policy.tabular_policy import TabularPolicy
+
 if TYPE_CHECKING:
     from mdp.model.base.agent.base_agent import BaseAgent
     from mdp.model.base.agent.base_episode import BaseEpisode
@@ -51,24 +53,24 @@ class Trainer:
         return self._breakdown
 
     @property
-    def episode(self) -> BaseEpisode:
-        return self._agent.episode
+    def algorithm(self) -> BaseAlgorithm:
+        return self._algorithm
 
     @property
     def agent(self) -> BaseAgent:
         return self._agent
 
+    @property
+    def episode(self) -> BaseEpisode:
+        return self._agent.episode
+
     def disable_step_callback(self):
         self._model_step_callback = None
 
     def train(self, settings: common.Settings, return_result: bool = False) -> Optional[common.Result]:
-        # process settings
-
         self._apply_settings(settings)
 
-
-        algorithm: BaseAlgorithm = self._agent.algorithm
-        match algorithm:
+        match self._algorithm:
             case Episodic():
                 self._train_episodic()
             case DynamicProgramming():
@@ -76,16 +78,9 @@ class Trainer:
             case _:
                 raise NotImplementedError
 
-        # if isinstance(algorithm, Episodic):
-        #     self._train_episodic()
-        # elif isinstance(algorithm, DynamicProgramming):
-        #     self._train_dynamic_programming()
-        # else:
-        #     raise NotImplementedError
-
         if settings.algorithm_parameters.derive_v_from_q_as_final_step:
-            assert isinstance(algorithm, TabularAlgorithm)
-            algorithm.derive_v_from_q()
+            assert isinstance(self._algorithm, TabularAlgorithm)
+            self._algorithm.derive_v_from_q()
 
         if return_result:
             return self._get_result(settings.result_parameters)
@@ -116,9 +111,8 @@ class Trainer:
             self.parallel_runner.do_runs()
 
         if self._verbose:
-            algorithm = self._agent.algorithm
-            if isinstance(algorithm, TabularAlgorithm):
-                algorithm.print_q_coverage_statistics()
+            if isinstance(self._algorithm, TabularAlgorithm):
+                self._algorithm.print_q_coverage_statistics()
 
     def do_run(self,
                run_counter: int,
@@ -132,7 +126,7 @@ class Trainer:
         if self._verbose or run_counter % settings.run_print_frequency == 0:
             print(f"run_counter = {run_counter}: {settings.training_episodes} episodes")
 
-        self._agent.algorithm.initialize()
+        self._algorithm.initialize()
 
         self.cum_timestep = 0
         # TODO: optionally generate and pre-process episodes in parallel e.g. for Blackjack
@@ -144,21 +138,18 @@ class Trainer:
             return self._get_result(result_parameters)
 
     def _do_episode(self, episode_counter: int):
+        assert isinstance(self._algorithm, Episodic)
+
         # for use by Breakdown
         self.episode_counter = episode_counter
-
-        settings = self.settings
-        if self._verbose or episode_counter % settings.episode_print_frequency == 0:
+        if self._verbose or episode_counter % self.settings.episode_print_frequency == 0:
             print(f"episode_counter = {episode_counter}")
 
-        if not settings.review_every_step and self.cum_timestep != 0:
+        if not self.settings.review_every_step and self.cum_timestep != 0:
             self.cum_timestep += 1  # start next episode from the next timestep
 
         self._algorithm.parameter_changes(episode_counter)
-
-        algorithm: BaseAlgorithm = self._agent.algorithm
-        assert isinstance(algorithm, Episodic)
-        algorithm.do_episode(settings.episode_length_timeout)
+        self._algorithm.do_episode(self.settings.episode_length_timeout)
         episode = self._agent.episode
 
         if self._verbose:
@@ -166,20 +157,17 @@ class Trainer:
             total_return = episode.total_return
             if self._verbose:
                 print(f"max_t = {max_t} \ttotal_return = {total_return:.2f}")
-        if not settings.review_every_step:
+        if not self.settings.review_every_step:
             self.cum_timestep += episode.max_t
             if self._breakdown:
                 self._breakdown.review()
 
     def _train_dynamic_programming(self):
-        settings = self.settings
-        algorithm: BaseAlgorithm = self._agent.algorithm
-        assert isinstance(algorithm, DynamicProgramming)
-
-        if settings.review_every_step or settings.display_every_step:
-            algorithm.set_step_callback(self.step)
-        algorithm.initialize()
-        algorithm.run()
+        assert isinstance(self._algorithm, DynamicProgramming)
+        if self.settings.review_every_step or self.settings.display_every_step:
+            self._algorithm.set_step_callback(self.step)
+        self._algorithm.initialize()
+        self._algorithm.run()
 
     def step(self) -> bool:
         if self.settings.review_every_step:
@@ -202,17 +190,15 @@ class Trainer:
             result.recorder = self._breakdown.recorder
 
         if rp.return_algorithm_title:
-            result.algorithm_title = self._agent.algorithm.title
+            result.algorithm_title = self._algorithm.title
 
-        if isinstance(self._agent, TabularAgent):
+        if isinstance(self._algorithm, TabularAlgorithm):
             if rp.return_policy_vector:
-                result.policy_vector = self._agent.target_policy.get_policy_vector()
-
-            if rp.return_v_vector and self._agent.algorithm.V:
-                result.v_vector = self._agent.algorithm.V.vector
-
-            if rp.return_q_matrix and self._agent.algorithm.Q:
-                result.q_matrix = self._agent.algorithm.Q.matrix
+                result.policy_vector = self._algorithm.target_policy.get_policy_vector()
+            if rp.return_v_vector and self._algorithm.V:
+                result.v_vector = self._algorithm.V.vector
+            if rp.return_q_matrix and self._algorithm.Q:
+                result.q_matrix = self._algorithm.Q.matrix
 
         if rp.return_cum_timestep:
             result.cum_timestep = self.cum_timestep

@@ -6,7 +6,6 @@ from mdp.model.tabular.environment.tabular_action import TabularAction
 from mdp import common
 from mdp.model.tabular.environment.tabular_environment import TabularEnvironment
 from mdp.model.tabular.algorithm.tabular_algorithm import TabularAlgorithm
-from mdp.model.tabular.algorithm.abstract.episodic import Episodic
 from mdp.model.tabular.agent.tabular_episode import TabularEpisode
 from mdp.model.tabular.policy.tabular_policy import TabularPolicy
 from mdp.model.base.policy.policy_factory import PolicyFactory
@@ -31,7 +30,6 @@ class TabularAgent(Generic[State, Action], BaseAgent):
         self._dual_policy_relationship: Optional[common.DualPolicyRelationship] = None
 
         self._algorithm_factory: AlgorithmFactory = AlgorithmFactory(agent=self)
-        self._algorithm: Optional[TabularAlgorithm] = None
         self._episode: Optional[TabularEpisode] = None
         # self._record_first_visits: bool = False
         # self._episode_length_timeout: Optional[int] = None
@@ -68,10 +66,6 @@ class TabularAgent(Generic[State, Action], BaseAgent):
         return self._behaviour_policy
 
     @property
-    def algorithm(self) -> TabularAlgorithm:
-        return self._algorithm
-
-    @property
     def episode(self) -> TabularEpisode:
         return self._episode
 
@@ -92,15 +86,9 @@ class TabularAgent(Generic[State, Action], BaseAgent):
         else:
             raise NotImplementedError
 
-        # select and set algorithm based on algorithm_parameters
-        self._algorithm = self._algorithm_factory.create(settings.algorithm_parameters)
-        self._episode_length_timeout = settings.episode_length_timeout
-        if isinstance(self._algorithm, Episodic):
-            self._record_first_visits = self._algorithm.first_visit
-        else:
-            self._record_first_visits = False
-
-        self.gamma = settings.gamma
+        self._episode_length_timeout: int = settings.episode_length_timeout
+        self._first_visit: bool = settings.algorithm_parameters.first_visit
+        self.gamma: float = settings.gamma
 
     def set_behaviour_policy(self, policy: TabularPolicy):
         self._behaviour_policy = policy
@@ -145,7 +133,7 @@ class TabularAgent(Generic[State, Action], BaseAgent):
             print("start episode...")
         self.t = 0
 
-        self._episode = TabularEpisode(env, self.gamma, self._step_callback, self._record_first_visits)
+        self._episode = TabularEpisode(env, self.gamma, self._step_callback, self._first_visit)
 
         if exploring_starts:
             # completely random starting state and action and take the action, reward will be None
@@ -205,13 +193,6 @@ class TabularAgent(Generic[State, Action], BaseAgent):
         if self.is_terminal:
             # add terminating step here as should not select another action
             self._episode.add_rsa(self.r, self.s, self.a, self.is_terminal)
-
-    def apply_result(self, result: common.Result):
-        self._policy.set_policy_vector(result.policy_vector)
-        if self._algorithm.V:
-            self._algorithm.V.vector = result.v_vector
-        if self._algorithm.Q:
-            self._algorithm.Q.set_matrix(result.q_matrix)
 
     def _print_step(self):
         state: TabularState = self._environment.states[self.s]

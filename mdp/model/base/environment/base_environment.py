@@ -43,8 +43,7 @@ class BaseEnvironment(Generic[State, Action], ABC):
 
     # TODO: does this belong here?
     def update_grid_value_functions(self,
-                                    algorithm: BaseAlgorithm,
-                                    policy: BasePolicy):
+                                    algorithm: BaseAlgorithm):
         pass
 
     # TODO: does this belong here or in the value_function?

@@ -14,7 +14,7 @@ class Controller(TabularController[Model, View]):
     def output(self):
         self._model.environment.insert_state_function_into_graph2d(
             self._comparison,
-            self._model.agent.algorithm.V
+            self._model.algorithm.V
         )
         self._view.graph2d.make_plot(self._comparison.graph2d_values)
 
