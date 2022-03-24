@@ -5,7 +5,6 @@ from abc import ABC, abstractmethod
 import numpy as np
 
 if TYPE_CHECKING:
-    from mdp.model.tabular.value_function import state_function
     from mdp.model.tabular.environment.tabular_dynamics import TabularDynamics
 
 from mdp import common
@@ -128,11 +127,11 @@ class TabularEnvironment(BaseEnvironment[State, Action], ABC):
         # s, a = self.compatible_s_a[choice]
         # return s, self.is_terminal[s], a
 
-    def insert_state_function_into_graph3d(self,
-                                           comparison: common.Comparison,
-                                           v: state_function.StateFunction,
-                                           parameter: Optional[any] = None):
-        pass
+    # def insert_state_function_into_graph3d(self,
+    #                                        comparison: common.Comparison,
+    #                                        v: state_function.StateFunction,
+    #                                        parameter: Optional[any] = None):
+    #     pass
 
     # def start_s(self) -> int:
     #     state = self.dynamics.get_a_start_state()

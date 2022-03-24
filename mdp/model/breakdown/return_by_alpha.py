@@ -58,10 +58,10 @@ class ReturnByAlpha(BaseBreakdown):
         #     )
 
     def get_graph2d_values(self) -> common.Graph2DValues:
-        graph_values: common.Graph2DValues = copy.deepcopy(self.comparison.graph2d_values)
-        graph_values.x_series = self.x_series
-        graph_values.graph_series = self.series_list
-        graph_values.y_label = self._y_label
-        graph_values.x_min = self.breakdown_parameters.alpha_min
-        graph_values.x_max = self.breakdown_parameters.alpha_max
-        return graph_values
+        g: common.Graph2DValues = copy.deepcopy(self.comparison.graph2d_values)
+        g.x_series = self.x_series
+        g.graph_series = self.series_list
+        g.y_label = self._y_label
+        g.x_min = self.breakdown_parameters.alpha_min
+        g.x_max = self.breakdown_parameters.alpha_max
+        return g

@@ -1,18 +1,11 @@
 from __future__ import annotations
 from typing import TYPE_CHECKING
 
-import numpy as np
-
 if TYPE_CHECKING:
     from mdp.model.tabular.policy.tabular_policy import TabularPolicy
-    from mdp.model.tabular.policy.deterministic import Deterministic
-    from mdp.model.tabular.value_function import state_function
-
-from mdp import common
 from mdp.scenario.gambler.model.state import State
 from mdp.scenario.gambler.model.action import Action
 from mdp.scenario.gambler.comparison.environment_parameters import EnvironmentParameters
-# from mdp.scenarios.gambler.grid_world import GridWorld
 from mdp.scenario.gambler.model.dynamics import Dynamics
 
 from mdp.model.tabular.environment.tabular_environment import TabularEnvironment
@@ -67,63 +60,6 @@ class Environment(TabularEnvironment[State, Action]):
             else:
                 initial_action = Action(stake=1)
             policy.set_action(s, initial_action)
-
-    def insert_state_function_into_graph2d(self,
-                                           comparison: common.Comparison,
-                                           v: state_function.StateFunction):
-        x_list: list[int] = []
-        y_list: list[float] = []
-        for s, state in enumerate(self.states):
-            if not state.is_terminal:
-                x_list.append(state.capital)
-                y_list.append(v[s])
-                # print(state.capital, v[state])
-        x_values = np.array(x_list, dtype=int)
-        y_values = np.array(y_list, dtype=float)
-
-        g = comparison.graph2d_values
-        g.x_series = common.Series(title=g.x_label, values=x_values)
-        g.graph_series = [common.Series(title=g.y_label, values=y_values)]
-        g.show_graph = True
-        g.title = "V(s)"
-        g.x_label = "Capital"
-        g.y_label = "V(s)"
-        g.x_min = 0.0
-        g.x_max = 100.0
-        g.y_min = 0.0
-        g.y_max = 1.0
-        g.has_grid = True
-        g.has_legend = False
-
-    def insert_policy_into_graph2d(self,
-                                   comparison: common.Comparison,
-                                   policy: TabularPolicy):
-        policy: Deterministic
-
-        x_list: list[int] = []
-        y_list: list[float] = []
-        for s, state in enumerate(self.states):
-            if not state.is_terminal:
-                x_list.append(state.capital)
-                action: Action = policy.get_action(s)   # type: ignore
-                y_list.append(float(action.stake))
-                # print(state.capital, v[state])
-        x_values = np.array(x_list, dtype=int)
-        y_values = np.array(y_list, dtype=float)
-
-        g = comparison.graph2d_values
-        g.x_series = common.Series(title=g.x_label, values=x_values)
-        g.graph_series = [common.Series(title=g.y_label, values=y_values)]
-        g.show_graph = True
-        g.title = "Policy"
-        g.x_label = "Capital"
-        g.y_label = "Stake"
-        g.x_min = 0.0
-        g.x_max = 100.0
-        g.y_min = 0.0
-        g.y_max = None
-        g.has_grid = True
-        g.has_legend = False
 
     # def insert_state_function_into_graph3d(self,
     #                                        comparison: common.Comparison,

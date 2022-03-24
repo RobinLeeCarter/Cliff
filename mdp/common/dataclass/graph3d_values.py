@@ -11,7 +11,6 @@ class Graph3DValues:
     y_series: Optional[Series] = None    # 1d
     z_series: Optional[Series] = None    # 2d z=f(x,y)
 
-    show_graph: bool = False
     title: Optional[str] = None
     x_label: Optional[str] = None
     y_label: Optional[str] = None

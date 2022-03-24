@@ -23,12 +23,9 @@ class Controller(TabularController[Model, View]):
         self._view.grid_view.set_gridworld(self._model.environment.grid_world)
 
     def output(self):
-        if self._comparison.graph3d_values.show_graph:
-            self._model.environment.insert_state_function_into_graph3d(
-                comparison=self._comparison,
-                v=self._model.algorithm.V
-            )
-            self._view.graph3d.make_plot(self._comparison.graph3d_values)
+        if self._comparison.graph3d_values:
+            graph3d_values: common.Graph3DValues = self._model.get_state_graph3d_values()
+            self._view.graph3d.make_plot(graph3d_values)
 
         if self._comparison.grid_view_parameters.show_result:
             self._model.environment.update_grid_policy(policy=self._model.algorithm.target_policy)

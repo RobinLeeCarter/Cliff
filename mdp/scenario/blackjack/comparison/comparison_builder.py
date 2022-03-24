@@ -9,7 +9,6 @@ class ComparisonBuilder(BaseComparisonBuilder, ABC):
     def __init__(self):
         super().__init__()
         self._graph3d_values = common.Graph3DValues(
-            show_graph=True,
             x_label="Player sum",
             y_label="Dealer showing",
             z_label="V(s)",

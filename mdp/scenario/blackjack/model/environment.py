@@ -1,12 +1,9 @@
 from __future__ import annotations
 from typing import TYPE_CHECKING
 
-import numpy as np
-
 if TYPE_CHECKING:
     from mdp.model.tabular.algorithm.tabular_algorithm import TabularAlgorithm
     from mdp.model.tabular.policy.tabular_policy import TabularPolicy
-    from mdp.model.tabular.value_function import state_function
 
 from mdp import common
 from mdp.scenario.blackjack.model.state import State
@@ -23,24 +20,24 @@ class Environment(TabularEnvironment[State, Action]):
         super().__init__(environment_parameters)
         self._environment_parameters: EnvironmentParameters = environment_parameters
 
-        self._player_sum_min = 11
-        self._player_sum_max = 21
-        self._dealers_card_min = 1
-        self._dealers_card_max = 10
-        self._player_sums = [x for x in range(self._player_sum_min, self._player_sum_max+1)]
-        self._dealers_cards = [x for x in range(self._dealers_card_min, self._dealers_card_max+1)]
+        self.player_sum_min = 11
+        self.player_sum_max = 21
+        self.dealers_card_min = 1
+        self.dealers_card_max = 10
+        self.player_sums = [x for x in range(self.player_sum_min, self.player_sum_max + 1)]
+        self.dealers_cards = [x for x in range(self.dealers_card_min, self.dealers_card_max + 1)]
 
         # dealer_card is x, player_sum is y : following the table in the book
-        grid_shape = (len(self._player_sums), len(self._dealers_cards))
+        grid_shape = (len(self.player_sums), len(self.dealers_cards))
         self.grid_world: GridWorld = GridWorld(environment_parameters=environment_parameters, grid_shape=grid_shape)
         self.dynamics: Dynamics = Dynamics(environment=self, environment_parameters=environment_parameters)
 
     def _build_states(self):
         """set S"""
         # non-terminal states
-        for player_sum in self._player_sums:
+        for player_sum in self.player_sums:
             for usable_ace in [False, True]:
-                for dealers_card in self._dealers_cards:
+                for dealers_card in self.dealers_cards:
                     new_state: State = State(
                         is_terminal=False,
                         player_sum=player_sum,
@@ -84,45 +81,14 @@ class Environment(TabularEnvironment[State, Action]):
                 initial_action: Action = Action(hit)
                 policy.set_action(s, initial_action)
 
-    def insert_state_function_into_graph3d_ace(self,
-                                               comparison: common.Comparison,
-                                               v: state_function.StateFunction,
-                                               usable_ace: bool):
-        x_values = np.array(self._player_sums, dtype=int)
-        y_values = np.array(self._dealers_cards, dtype=int)
-        z_values = np.empty(shape=y_values.shape + x_values.shape, dtype=float)
-
-        for player_sum in self._player_sums:
-            for dealers_card in self._dealers_cards:
-                state: State = State(
-                    is_terminal=False,
-                    player_sum=player_sum,
-                    usable_ace=usable_ace,
-                    dealers_card=dealers_card,
-                )
-                x = player_sum - self._player_sum_min
-                y = dealers_card - self._dealers_card_min
-                s = self.state_index[state]
-                z_values[y, x] = v[s]
-                # print(player_sum, dealer_card, v[state])
-
-        g = comparison.graph3d_values
-        if usable_ace:
-            g.title = "Usable Ace"
-        else:
-            g.title = "No usable Ace"
-        g.x_series = common.Series(title=g.x_label, values=x_values)
-        g.y_series = common.Series(title=g.y_label, values=y_values)
-        g.z_series = common.Series(title=g.z_label, values=z_values)
-
     def update_grid_policy_ace(self, algorithm: TabularAlgorithm, usable_ace: bool):
         policy: TabularPolicy = algorithm.target_policy
         # policy_: policy.Deterministic
         for s, state in enumerate(self.states):
             if not state.is_terminal and state.usable_ace == usable_ace:
                 # dealer_card is x, player_sum is y : following the table in the book
-                x = state.dealers_card - self._dealers_card_min
-                y = state.player_sum - self._player_sum_min
+                x = state.dealers_card - self.dealers_card_min
+                y = state.player_sum - self.player_sum_min
                 position: common.XY = common.XY(x, y)
                 action: Action = policy.get_action(s)   # type: ignore
                 policy_value: int = int(action.hit)

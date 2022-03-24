@@ -1,11 +1,8 @@
 from __future__ import annotations
-from typing import TYPE_CHECKING, Optional
-
-import numpy as np
+from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from mdp.model.tabular.policy.tabular_policy import TabularPolicy
-    from mdp.model.tabular.value_function import state_function
 
 from mdp import common
 from mdp.scenario.jacks.model.state import State
@@ -25,13 +22,13 @@ class Environment(TabularEnvironment[State, Action]):
         self.grid_world: GridWorld = GridWorld(environment_parameters)
         self.dynamics: Dynamics = Dynamics(environment=self, environment_parameters=environment_parameters)
 
-        self._max_cars: int = environment_parameters.max_cars
+        self.max_cars: int = environment_parameters.max_cars
         self._max_transfers: int = environment_parameters.max_transfers
 
     def _build_states(self):
         """set S"""
-        for cars1 in range(self._max_cars+1):
-            for cars2 in range(self._max_cars+1):
+        for cars1 in range(self.max_cars + 1):
+            for cars2 in range(self.max_cars + 1):
                 new_state: State = State(
                     ending_cars_1=cars1,
                     ending_cars_2=cars2,
@@ -49,8 +46,8 @@ class Environment(TabularEnvironment[State, Action]):
     def _is_action_compatible_with_state(self, state_: State, action_: Action):
         starting_cars_1 = state_.ending_cars_1 - action_.transfer_1_to_2
         starting_cars_2 = state_.ending_cars_2 + action_.transfer_1_to_2
-        if 0 <= starting_cars_1 <= self._max_cars and \
-                0 <= starting_cars_2 <= self._max_cars:
+        if 0 <= starting_cars_1 <= self.max_cars and \
+                0 <= starting_cars_2 <= self.max_cars:
             return True
         else:
             return False
@@ -67,29 +64,29 @@ class Environment(TabularEnvironment[State, Action]):
             policy[s] = initial_a
             # print(state, initial_action)
 
-    def insert_state_function_into_graph3d(self,
-                                           comparison: common.Comparison,
-                                           v: state_function.StateFunction,
-                                           parameter: Optional[any] = None):
-        x_values = np.arange(self._max_cars + 1, dtype=float)
-        y_values = np.arange(self._max_cars + 1, dtype=float)
-        z_values = np.empty(shape=(self._max_cars + 1, self._max_cars + 1), dtype=float)
-
-        for cars1 in range(self._max_cars+1):
-            for cars2 in range(self._max_cars+1):
-                state: State = State(
-                    ending_cars_1=cars1,
-                    ending_cars_2=cars2,
-                    is_terminal=False,
-                )
-                s: int = self.state_index[state]
-                z_values[cars2, cars1] = v[s]
-                # print(cars1, cars2, v[state])
-
-        g = comparison.graph3d_values
-        g.x_series = common.Series(title=g.x_label, values=x_values)
-        g.y_series = common.Series(title=g.y_label, values=y_values)
-        g.z_series = common.Series(title=g.z_label, values=z_values)
+    # def insert_state_function_into_graph3d(self,
+    #                                        comparison: common.Comparison,
+    #                                        v: state_function.StateFunction,
+    #                                        parameter: Optional[any] = None):
+    #     x_values = np.arange(self._max_cars + 1, dtype=float)
+    #     y_values = np.arange(self._max_cars + 1, dtype=float)
+    #     z_values = np.empty(shape=(self._max_cars + 1, self._max_cars + 1), dtype=float)
+    #
+    #     for cars1 in range(self._max_cars+1):
+    #         for cars2 in range(self._max_cars+1):
+    #             state: State = State(
+    #                 ending_cars_1=cars1,
+    #                 ending_cars_2=cars2,
+    #                 is_terminal=False,
+    #             )
+    #             s: int = self.state_index[state]
+    #             z_values[cars2, cars1] = v[s]
+    #             # print(cars1, cars2, v[state])
+    #
+    #     g = comparison.graph3d_values
+    #     g.x_series = common.Series(title=g.x_label, values=x_values)
+    #     g.y_series = common.Series(title=g.y_label, values=y_values)
+    #     g.z_series = common.Series(title=g.z_label, values=z_values)
 
     def update_grid_policy(self, policy: TabularPolicy):
         # policy_: policy.Deterministic

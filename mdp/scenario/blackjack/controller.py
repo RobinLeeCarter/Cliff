@@ -10,8 +10,8 @@ from mdp.scenario.blackjack.view.view import View
 class Controller(TabularController[Model, View]):
     def __init__(self):
         super().__init__()
-        self._model: Optional[Model] = self._model
-        self._view: Optional[View] = self._view
+        self._model: Optional[Model] = None
+        self._view: Optional[View] = None
 
     def build(self, comparison: common.Comparison):
         super().build(comparison)
@@ -23,9 +23,6 @@ class Controller(TabularController[Model, View]):
             self._view.grid_view.set_title(usable_ace)
             self._view.grid_view.display_latest_step()
 
-            self._model.environment.insert_state_function_into_graph3d_ace(
-                comparison=self._comparison,
-                v=self._model.algorithm.V,
-                usable_ace=usable_ace
-            )
-            self._view.graph3d.make_plot(self._comparison.graph3d_values)
+            if self._comparison.graph3d_values:
+                graph3d_values = self._model.get_state_function_graph(usable_ace)
+                self._view.graph3d.make_plot(graph3d_values)

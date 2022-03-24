@@ -30,11 +30,7 @@ class GamblerValueIterationV(ComparisonBuilder):
                     ),
                 ),
             ],
-            graph2d_values=common.Graph2DValues(
-                show_graph=True,
-                has_grid=True,
-                has_legend=False,
-            ),
+            graph2d_values=common.Graph2DValues(),
         )
 
 

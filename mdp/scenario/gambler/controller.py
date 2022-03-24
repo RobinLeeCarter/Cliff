@@ -1,4 +1,6 @@
 from __future__ import annotations
+
+
 from typing import Optional
 
 from mdp.scenario.gambler.model.model import Model
@@ -12,14 +14,9 @@ class Controller(TabularController[Model, View]):
         self._model: Optional[Model] = self._model
 
     def output(self):
-        self._model.environment.insert_state_function_into_graph2d(
-            self._comparison,
-            self._model.algorithm.V
-        )
-        self._view.graph2d.make_plot(self._comparison.graph2d_values)
+        if self._comparison.graph2d_values:
+            graph2d_values = self._model.get_state_graph_values()
+            self._view.graph2d.make_plot(graph2d_values)
 
-        self._model.environment.insert_policy_into_graph2d(
-            self._comparison,
-            self._model.algorithm.target_policy
-        )
-        self._view.graph2d.make_plot(self._comparison.graph2d_values)
+            graph2d_values = self._model.get_policy_graph_values()
+            self._view.graph2d.make_plot(graph2d_values)

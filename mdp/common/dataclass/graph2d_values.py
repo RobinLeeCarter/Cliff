@@ -10,7 +10,6 @@ class Graph2DValues:
     x_series: Optional[Series] = None
     graph_series: list[Series] = field(default_factory=list)    # 2d Yi=Fi(x)
 
-    show_graph: bool = False
     title: Optional[str] = None
     x_label: Optional[str] = None
     y_label: Optional[str] = None

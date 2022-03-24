@@ -30,7 +30,6 @@ class CliffAlphaStart(ComparisonBuilder):
             ),
             settings_list_multiprocessing=common.ParallelContextType.FORK_GLOBAL,
             graph2d_values=common.Graph2DValues(
-                show_graph=True,
                 has_grid=True,
                 has_legend=True,
                 y_min=-140,

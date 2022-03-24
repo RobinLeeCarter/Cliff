@@ -25,7 +25,6 @@ class ComparisonBuilder(BaseComparisonBuilder, ABC):
             display_every_step=True,
         )
         self._graph3d_values = common.Graph3DValues(
-            show_graph=True,
             x_label="Cars at 1st location",
             y_label="Cars at 2nd location",
             z_label="V(s)",

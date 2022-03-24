@@ -1,6 +1,7 @@
 from __future__ import annotations
 from dataclasses import dataclass, field
 from abc import ABC
+from typing import Optional
 
 from mdp.common.dataclass.graph2d_values import Graph2DValues
 from mdp.common.dataclass.graph3d_values import Graph3DValues
@@ -29,10 +30,10 @@ class Comparison(ABC):
     breakdown_parameters: BreakdownParameters = field(default_factory=BreakdownParameters)
 
     # 2D graph output
-    graph2d_values: Graph2DValues = field(default_factory=Graph2DValues)
+    graph2d_values: Optional[Graph2DValues] = None
 
     # 3D graph output
-    graph3d_values: Graph3DValues = field(default_factory=Graph3DValues)
+    graph3d_values: Optional[Graph3DValues] = None
 
     # grid view output
     grid_view_parameters: GridViewParameters = field(default_factory=GridViewParameters)
