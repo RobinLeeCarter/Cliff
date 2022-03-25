@@ -27,7 +27,8 @@ class Controller(TabularController[Model, View]):
             graph3d_values: common.Graph3DValues = self._model.get_state_graph3d_values()
             self._view.graph3d.make_plot(graph3d_values)
 
-        if self._comparison.grid_view_parameters.show_result:
+        grid_view_parameters = self._comparison.grid_view_parameters
+        if grid_view_parameters and grid_view_parameters.show_result:
             self._model.environment.update_grid_policy(policy=self._model.algorithm.target_policy)
             self._view.grid_view.display_latest_step()
 

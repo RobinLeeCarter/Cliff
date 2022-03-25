@@ -31,12 +31,10 @@ class Comparison(ABC):
 
     # 2D graph output
     graph2d_values: Optional[Graph2DValues] = None
-
     # 3D graph output
     graph3d_values: Optional[Graph3DValues] = None
-
     # grid view output
-    grid_view_parameters: GridViewParameters = field(default_factory=GridViewParameters)
+    grid_view_parameters: Optional[GridViewParameters] = None
 
     def __post_init__(self):
         if isinstance(self.breakdown_parameters, BreakdownAlgorithmByAlpha):

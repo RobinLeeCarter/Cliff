@@ -6,10 +6,10 @@ if TYPE_CHECKING:
 
 
 from mdp import common
-from mdp.view.tabular import grid_view
+from mdp.view.tabular.tabular_grid_view import TabularGridView
 
 
-class GridView(grid_view.GridView):
+class GridView(TabularGridView):
     def __init__(self, grid_view_parameters: common.GridViewParameters):
         super().__init__(grid_view_parameters)
-        self._grid_world: Optional[GridWorld] = self._grid_world
+        self._grid_world: Optional[GridWorld] = None

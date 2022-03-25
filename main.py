@@ -1,12 +1,17 @@
 from __future__ import annotations
+import os
 
-import os_environ_settings
-import mdp
+from mdp import Application
+from mdp import common
+
+os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = "hide"
+
+comparison_type: common.ComparisonType = common.ComparisonType.WINDY_TIMESTEP
 
 
 def main():
-    os_environ_settings.dummy = None    # for pycharm code inspection only
-    mdp.Application(comparison_type=mdp.ComparisonType.WINDY_TIMESTEP)
+    # os_environ_settings.dummy = None    # for pycharm code inspection only
+    Application(comparison_type)
 
 
 if __name__ == '__main__':

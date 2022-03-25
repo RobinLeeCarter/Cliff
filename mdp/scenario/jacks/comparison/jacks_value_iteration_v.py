@@ -11,7 +11,6 @@ class JacksValueIterationV(ComparisonBuilder):
         graph3d_values = self._graph3d_values
 
         grid_view_parameters = self._grid_view_parameters
-        grid_view_parameters.show_result = True
 
         return Comparison(
             environment_parameters=self._environment_parameters,

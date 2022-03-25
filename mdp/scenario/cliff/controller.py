@@ -15,6 +15,8 @@ class Controller(controller.Controller[Model, View]):
 
     def output(self):
         self._breakdown_2dgraph()
-        if self._comparison.grid_view_parameters.show_demo:
+
+        grid_view_parameters = self._comparison.grid_view_parameters
+        if grid_view_parameters and grid_view_parameters.show_demo:
             self._model.update_grid_value_functions()
             self._view.grid_view.demonstrate(self.new_episode_request)

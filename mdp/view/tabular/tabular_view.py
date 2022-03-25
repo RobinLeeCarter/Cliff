@@ -9,7 +9,7 @@ if TYPE_CHECKING:
 
 import pygame
 import pygame.freetype
-from mdp.view.tabular.grid_view import GridView
+from mdp.view.tabular.tabular_grid_view import TabularGridView
 from mdp.view.base.base_view import BaseView
 
 
@@ -17,7 +17,7 @@ class TabularView(BaseView, ABC):
     def __init__(self):
         super().__init__()
         self._controller: Optional[TabularController] = None
-        self.grid_view: Optional[GridView] = None
+        self.grid_view: Optional[TabularGridView] = None
 
         pygame_pass, pygame_fail = pygame.init()
         if pygame_fail > 0:
@@ -28,9 +28,10 @@ class TabularView(BaseView, ABC):
 
     def build(self, comparison: common.Comparison):
         super().build(comparison)
-        self.grid_view: GridView = self._create_grid_view()
+        if self._comparison.grid_view_parameters is not None:
+            self.grid_view: TabularGridView = self._create_grid_view()
 
-    def _create_grid_view(self) -> GridView:
+    def _create_grid_view(self) -> TabularGridView:
         """returns: specific GridView(grid_view_parameters)"""
         pass
 

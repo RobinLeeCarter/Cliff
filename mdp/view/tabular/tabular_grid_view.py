@@ -14,7 +14,7 @@ if TYPE_CHECKING:
 from mdp import common
 
 
-class GridView(ABC):
+class TabularGridView(ABC):
     def __init__(self, grid_view_parameters: common.GridViewParameters):
         self.grid_view_parameters: common.GridViewParameters = grid_view_parameters
         self._grid_world: Optional[GridWorld] = None

@@ -6,10 +6,10 @@ if TYPE_CHECKING:
     from mdp.scenario.position.model.state import State
 
 from mdp import common
-from mdp.view.tabular import grid_view
+from mdp.view.tabular.tabular_grid_view import TabularGridView
 
 
-class GridView(grid_view.GridView):
+class GridView(TabularGridView):
     def _frame_on_background_latest(self, episode_: TabularEpisode):
         last_state: Optional[State] = episode_.last_state
         agent_position: common.XY = last_state.position
