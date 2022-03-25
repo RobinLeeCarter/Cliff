@@ -19,7 +19,7 @@ class Settings:
     dual_policy_relationship: DualPolicyRelationship = DualPolicyRelationship.SINGLE_POLICY
 
     runs: int = 10
-    runs_multiprocessing: ParallelContextType = ParallelContextType.NONE
+    runs_multiprocessing: Optional[ParallelContextType] = None
     run_print_frequency: int = 10
 
     training_episodes: int = 100

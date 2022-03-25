@@ -24,7 +24,7 @@ class Comparison(ABC):
     # training session settings
     comparison_settings: Settings = field(default_factory=Settings)
     settings_list: list[Settings] = field(default_factory=list)
-    settings_list_multiprocessing: ParallelContextType = ParallelContextType.NONE
+    settings_list_multiprocessing: Optional[ParallelContextType] = None
 
     # breakdown
     breakdown_parameters: Optional[BreakdownParameters] = None

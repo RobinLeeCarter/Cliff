@@ -125,7 +125,6 @@ class UserEvent(enum.IntEnum):
 
 
 class ParallelContextType(enum.IntEnum):
-    NONE = enum.auto()
     FORK_GLOBAL = enum.auto()
     FORK_PICKLE = enum.auto()
     SPAWN = enum.auto()

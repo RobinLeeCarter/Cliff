@@ -16,7 +16,7 @@ _trainer: Trainer
 class ParallelTrainer:
     def __init__(self, trainer: Trainer, parallel_context_type: common.ParallelContextType):
         self._trainer: Trainer = trainer
-        self._parallel_context_type = parallel_context_type
+        self._parallel_context_type: common.ParallelContextType = parallel_context_type
         # must be disabled for multi-processor
         self._trainer.disable_step_callback()
 

@@ -96,8 +96,7 @@ class Trainer:
         print(f"{title}: {settings.runs} runs")
 
         self.max_cum_timestep = 0
-        if settings.runs_multiprocessing == common.ParallelContextType.NONE \
-                or multiprocessing.current_process().daemon:
+        if not settings.runs_multiprocessing or multiprocessing.current_process().daemon:
             # train in serial if not multiprocessing or if a child process (daemon)
             for run_counter in range(1, settings.runs + 1):
                 self.do_run(run_counter)

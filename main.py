@@ -6,7 +6,7 @@ from mdp import common
 
 os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = "hide"
 
-comparison_type: common.ComparisonType = common.ComparisonType.GAMBLER_VALUE_ITERATION_V
+comparison_type: common.ComparisonType = common.ComparisonType.CLIFF_ALPHA_START
 
 
 def main():
