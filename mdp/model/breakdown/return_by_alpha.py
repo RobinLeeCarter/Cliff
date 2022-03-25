@@ -1,14 +1,15 @@
 from __future__ import annotations
 
+import copy
+
 import numpy as np
 
-import utils
 from mdp import common
 from mdp.model.breakdown.recorder import Recorder
-from mdp.model.breakdown.breakdown import Breakdown
+from mdp.model.breakdown.base_breakdown import BaseBreakdown
 
 
-class ReturnByAlpha(Breakdown):
+class ReturnByAlpha(BaseBreakdown):
     def __init__(self, comparison: common.Comparison):
         super().__init__(comparison)
         assert isinstance(self.comparison.breakdown_parameters, common.BreakdownAlgorithmByAlpha)
@@ -20,11 +21,10 @@ class ReturnByAlpha(Breakdown):
         self._y_label = "Average Return"
 
     def record(self):
-        trainer = self._trainer
-        settings = trainer.settings
+        settings = self._trainer.settings
         algorithm_type = settings.algorithm_parameters.algorithm_type
         alpha = settings.algorithm_parameters.alpha
-        total_return = trainer.episode.total_return
+        total_return = self._trainer.episode.total_return
         self._recorder[algorithm_type, alpha] = total_return
 
     def compile(self):
@@ -38,21 +38,29 @@ class ReturnByAlpha(Breakdown):
                 [self._recorder[algorithm_type, alpha] for alpha in self.breakdown_parameters.alpha_list],
                 dtype=float
             )
-            title = common.algorithm_name[algorithm_type]
-            series_ = common.Series(
-                title=title,
+            name = self._trainer.algorithm_factory.get_algorithm_name(algorithm_type)
+            series = common.Series(
+                title=name,
                 values=values,
                 identifiers={"algorithm_type": algorithm_type}
             )
-            self.series_list.append(series_)
+            self.series_list.append(series)
 
-    def get_graph_values(self) -> common.GraphValues:
-        graph_values: common.GraphValues = common.GraphValues(
-            x_series=self.x_series,
-            graph_series=self.series_list,
-            y_label=self._y_label,
-            x_min=self.breakdown_parameters.alpha_min,
-            x_max=self.breakdown_parameters.alpha_max,
-        )
-        utils.set_none_to_default(graph_values, self.comparison.graph_values)
-        return graph_values
+        # title: str = self._trainer.agent.algorithm_factory.get_algorithm_title(settings.algorithm_parameters)
+        # for settings in self.comparison.settings_list:
+        #     algorithm_parameters: common.AlgorithmParameters = settings.algorithm_parameters
+        #     algorithm_type: common.AlgorithmType = algorithm_parameters.algorithm_type
+        #     alpha: float = algorithm_parameters.alpha
+        #     values = np.array(
+        #         [self._recorder[algorithm_type, alpha] for alpha in self.breakdown_parameters.alpha_list],
+        #         dtype=float
+        #     )
+
+    def get_graph2d_values(self) -> common.Graph2DValues:
+        g: common.Graph2DValues = copy.deepcopy(self.comparison.graph2d_values)
+        g.x_series = self.x_series
+        g.graph_series = self.series_list
+        g.y_label = self._y_label
+        g.x_min = self.breakdown_parameters.alpha_min
+        g.x_max = self.breakdown_parameters.alpha_max
+        return g

@@ -22,7 +22,7 @@ class Action:
 @dataclass(frozen=True)
 class Response:
     """(s',r) = (new_state, reward)"""
-    state: state.State
+    state: state.NonTabularState
     reward: Optional[float]
 
 

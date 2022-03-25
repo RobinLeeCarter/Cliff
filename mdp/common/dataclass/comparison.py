@@ -1,58 +1,43 @@
 from __future__ import annotations
-import dataclasses
-import abc
+from dataclasses import dataclass, field
+from abc import ABC
+from typing import Optional
 
-import utils
-from mdp.common.dataclass import environment_parameters_, settings
-from mdp.common.dataclass import graph_values_, graph3d_values_, grid_view_parameters_
-from mdp.common.dataclass.breakdown_parameters import breakdown_parameters_, breakdown_algorithm_by_alpha
+from mdp.common.dataclass.graph2d_values import Graph2DValues
+from mdp.common.dataclass.graph3d_values import Graph3DValues
+from mdp.common.dataclass.grid_view_parameters import GridViewParameters
+
+from mdp.common.dataclass.environment_parameters import EnvironmentParameters
+from mdp.common.dataclass.settings import Settings
+from mdp.common.dataclass.breakdown_parameters.breakdown_parameters import BreakdownParameters
+from mdp.common.dataclass.breakdown_parameters.breakdown_algorithm_by_alpha import BreakdownAlgorithmByAlpha
 from mdp.common.enums import ParallelContextType
 
 
-@dataclasses.dataclass
-class Comparison(abc.ABC):
-    # environment (abstract - must be derived, none_factory never called)
-    environment_parameters: environment_parameters_.EnvironmentParameters
-    # = dataclasses.field(default_factory=environment_parameters.none_factory())
+@dataclass
+class Comparison(ABC):
+    """
+    The parameters used by the Application during it's build() stage
+    """
+    environment_parameters: EnvironmentParameters = field(default_factory=EnvironmentParameters)
 
     # training session settings
-    comparison_settings: settings.Settings = dataclasses.field(default_factory=settings.default_factory)
-    settings_list: list[settings.Settings] = dataclasses.field(default_factory=list)
-    settings_list_multiprocessing: ParallelContextType = ParallelContextType.NONE
+    comparison_settings: Settings = field(default_factory=Settings)
+    settings_list: list[Settings] = field(default_factory=list)
+    settings_list_multiprocessing: Optional[ParallelContextType] = None
 
     # breakdown
-    breakdown_parameters: breakdown_parameters_.BreakdownParameters = \
-        dataclasses.field(default_factory=breakdown_parameters_.default_factory)
+    breakdown_parameters: Optional[BreakdownParameters] = None
 
     # 2D graph output
-    graph_values: graph_values_.GraphValues = \
-        dataclasses.field(default_factory=graph_values_.default_factory)
-
+    graph2d_values: Optional[Graph2DValues] = None
     # 3D graph output
-    graph3d_values: graph3d_values_.Graph3DValues = \
-        dataclasses.field(default_factory=graph3d_values_.default_factory)
-
+    graph3d_values: Optional[Graph3DValues] = None
     # grid view output
-    grid_view_parameters: grid_view_parameters_.GridViewParameters = \
-        dataclasses.field(default_factory=grid_view_parameters_.default_factory)
+    grid_view_parameters: Optional[GridViewParameters] = None
 
     def __post_init__(self):
-        # Push comparison values or default values into most settings attributes if currently =None
-        # model
-        # this is now done in the derived classes using their defaults
-        # utils.set_none_to_default(self.environment_parameters, environment_parameters.default)
-
-        if isinstance(self.breakdown_parameters, breakdown_algorithm_by_alpha.BreakdownAlgorithmByAlpha):
-            utils.set_none_to_default(self.breakdown_parameters, breakdown_algorithm_by_alpha.default)
-            self.settings_list = self.breakdown_parameters.settings_list
-        else:
-            utils.set_none_to_default(self.breakdown_parameters, breakdown_parameters_.default)
+        if isinstance(self.breakdown_parameters, BreakdownAlgorithmByAlpha):
+            self.settings_list = self.breakdown_parameters.build_settings_list(self.comparison_settings)
 
         assert self.settings_list
-        self.comparison_settings.set_none_to_default(default_=settings.default)
-        for settings_ in self.settings_list:
-            settings_.set_none_to_default(default_=self.comparison_settings)
-
-        # view
-        utils.set_none_to_default(self.graph_values, graph_values_.default)
-        utils.set_none_to_default(self.grid_view_parameters, grid_view_parameters_.default)

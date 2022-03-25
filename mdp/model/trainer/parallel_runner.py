@@ -21,7 +21,7 @@ class ParallelRunner:
 
         self._settings = self._trainer.settings
         # settings.result_parameters.return_cum_timestep = True
-        self._parallel_context_type = self._settings.runs_multiprocessing
+        self._parallel_context_type: Optional[common.ParallelContextType] = self._settings.runs_multiprocessing
         self._runs = self._settings.runs
 
         self._results: list[common.Result] = []
@@ -29,6 +29,7 @@ class ParallelRunner:
         if self._trainer.breakdown:
             self._recorder = self._trainer.breakdown.recorder
 
+        # if self._parallel_context_type is None it should fail here
         context_str = common.parallel_context_str[self._parallel_context_type]
         self._ctx: mp.context.BaseContext = mp.get_context(context_str)
         self._use_global_trainer: bool = (self._parallel_context_type == common.ParallelContextType.FORK_GLOBAL)
@@ -52,7 +53,7 @@ class ParallelRunner:
         self._unpack_results()
 
         # the agent is already set up in trainer.trainer so just apply the final result to it
-        self._trainer.agent.apply_result(result=self._results[-1])
+        self._trainer.algorithm.apply_result(result=self._results[-1])
 
     def _get_result_parameter_list(self) -> list[common.ResultParameters]:
         rp_norm: common.ResultParameters = common.ResultParameters(

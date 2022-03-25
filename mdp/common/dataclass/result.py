@@ -1,6 +1,6 @@
 from __future__ import annotations
 from typing import TYPE_CHECKING, Optional
-import dataclasses
+from dataclasses import dataclass
 
 import numpy as np
 
@@ -8,7 +8,7 @@ if TYPE_CHECKING:
     from mdp.model.breakdown.recorder import Recorder
 
 
-@dataclasses.dataclass
+@dataclass
 class Result:
     algorithm_title: Optional[str] = None
     recorder: Optional[Recorder] = None

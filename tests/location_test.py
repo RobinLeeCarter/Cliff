@@ -3,7 +3,7 @@ from __future__ import annotations
 
 from scipy import stats
 
-from mdp.common import Distribution
+from mdp.common import Multinoulli
 
 # _car_count: list[int] = []
 # _demand_distribution: Distribution[int] = Distribution()
@@ -17,7 +17,7 @@ def _poisson(lambda_: float, n: int) -> float:
 _car_count = [c for c in range(_max_cars + 1)]
 print(_car_count)
 
-_demand_distribution = Distribution({c: _poisson(4.0, c) for c in range(_max_cars + 1)})
+_demand_distribution = Multinoulli({c: _poisson(4.0, c) for c in range(_max_cars + 1)})
 print(_demand_distribution)
 
 _demand_distribution[_max_cars] += 1.0 - sum(_demand_distribution.dict.values())

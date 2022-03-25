@@ -1,11 +1,11 @@
 from __future__ import annotations
-import dataclasses
+from dataclasses import dataclass, field
 
 import numpy as np
 
 
-@dataclasses.dataclass
+@dataclass
 class Series:
     title: str
-    identifiers: dict = dataclasses.field(default_factory=dict)
+    identifiers: dict = field(default_factory=dict)
     values: np.ndarray = np.array([], dtype=float)

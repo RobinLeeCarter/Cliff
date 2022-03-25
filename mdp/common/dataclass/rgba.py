@@ -1,8 +1,8 @@
 from __future__ import annotations
-import dataclasses
+from dataclasses import dataclass
 
 
-@dataclasses.dataclass
+@dataclass
 class RGBA:
     r: int
     g: int
@@ -10,4 +10,4 @@ class RGBA:
     a: int
 
     def as_tuple(self) -> tuple[int, int, int, int]:
-        return dataclasses.astuple(self)
+        return self.r, self.g, self.b, self.a
