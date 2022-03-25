@@ -10,7 +10,7 @@ from mdp.model.tabular.policy.tabular_policy import TabularPolicy
 if TYPE_CHECKING:
     from mdp.scenario.jacks.controller import Controller
     from mdp.model.tabular.agent.tabular_episode import TabularEpisode
-    from mdp.scenario.jacks.comparison.environment_parameters import EnvironmentParameters
+    from mdp.scenario.jacks.model.environment_parameters import EnvironmentParameters
 
 from mdp.model.tabular.tabular_model import TabularModel
 from mdp.scenario.jacks.model.environment import Environment

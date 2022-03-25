@@ -3,7 +3,7 @@ from dataclasses import dataclass, field
 
 from mdp.common.dataclass import comparison
 
-from mdp.scenario.jacks.comparison.environment_parameters import EnvironmentParameters
+from mdp.scenario.jacks.model.environment_parameters import EnvironmentParameters
 
 
 @dataclass

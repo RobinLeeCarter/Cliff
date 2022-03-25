@@ -7,7 +7,7 @@ from mdp.scenario.racetrack.model.state import State
 from mdp.scenario.racetrack.model.action import Action
 from mdp.scenario.racetrack.model.grid_world import GridWorld
 from mdp.scenario.racetrack.model.dynamics import Dynamics
-from mdp.scenario.racetrack.comparison.environment_parameters import EnvironmentParameters
+from mdp.scenario.racetrack.model.environment_parameters import EnvironmentParameters
 
 from mdp.model.tabular.environment.tabular_environment import TabularEnvironment
 

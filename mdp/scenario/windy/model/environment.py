@@ -2,7 +2,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from mdp.scenario.windy.comparison.environment_parameters import EnvironmentParameters
+    from mdp.scenario.windy.model.environment_parameters import EnvironmentParameters
 from mdp.scenario.windy.model.grid_world import GridWorld
 from mdp.scenario.windy.model.dynamics import Dynamics
 

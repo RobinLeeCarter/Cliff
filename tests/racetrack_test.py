@@ -3,7 +3,7 @@ from __future__ import annotations
 from mdp import common
 from mdp.scenario.racetrack.model import action, grids, state
 from mdp.scenario.racetrack.model.environment import Environment
-from mdp.scenario.racetrack.comparison.environment_parameters import EnvironmentParameters
+from mdp.scenario.racetrack.model.environment_parameters import EnvironmentParameters
 
 
 def racetrack_test() -> bool:

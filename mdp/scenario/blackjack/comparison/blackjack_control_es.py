@@ -3,7 +3,7 @@ from __future__ import annotations
 from mdp import common
 from mdp.scenario.blackjack.comparison.comparison_builder import ComparisonBuilder
 from mdp.scenario.blackjack.comparison.comparison import Comparison
-from mdp.scenario.blackjack.comparison.environment_parameters import EnvironmentParameters
+from mdp.scenario.blackjack.model.environment_parameters import EnvironmentParameters
 from mdp.scenario.blackjack.comparison.settings import Settings
 
 

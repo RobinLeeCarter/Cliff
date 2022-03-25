@@ -5,7 +5,7 @@ import numpy as np
 
 if TYPE_CHECKING:
     from mdp.scenario.gambler.model.environment import Environment
-    from mdp.scenario.gambler.comparison.environment_parameters import EnvironmentParameters
+    from mdp.scenario.gambler.model.environment_parameters import EnvironmentParameters
 
 import utils
 from mdp.common import Multinoulli

@@ -6,7 +6,7 @@ import utils
 from mdp import common
 from mdp.model.tabular.environment import grid_world
 
-from mdp.scenario.racetrack.comparison.environment_parameters import EnvironmentParameters
+from mdp.scenario.racetrack.model.environment_parameters import EnvironmentParameters
 
 
 class GridWorld(grid_world.GridWorld):

@@ -4,7 +4,7 @@ from dataclasses import dataclass
 from mdp import common
 from mdp.scenario.random_walk.comparison.comparison_builder import ComparisonBuilder
 from mdp.scenario.random_walk.comparison.comparison import Comparison
-from mdp.scenario.random_walk.comparison.environment_parameters import EnvironmentParameters
+from mdp.scenario.random_walk.model.environment_parameters import EnvironmentParameters
 
 
 @dataclass(unsafe_hash=True)    # needed for multiprocessing where results may differ, potentially pickle

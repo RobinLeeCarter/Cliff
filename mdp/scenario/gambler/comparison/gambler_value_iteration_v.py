@@ -4,7 +4,7 @@ from dataclasses import dataclass
 from mdp import common
 from mdp.scenario.gambler.comparison.comparison_builder import ComparisonBuilder
 from mdp.scenario.gambler.comparison.comparison import Comparison
-from mdp.scenario.gambler.comparison.environment_parameters import EnvironmentParameters
+# from mdp.scenario.gambler.comparison.environment_parameters import EnvironmentParameters
 
 
 @dataclass
@@ -19,7 +19,7 @@ class Settings(common.Settings):
 class GamblerValueIterationV(ComparisonBuilder):
     def create(self):
         return Comparison(
-            environment_parameters=EnvironmentParameters(),
+            # environment_parameters=EnvironmentParameters(),
             comparison_settings=Settings(),
             settings_list=[
                 Settings(

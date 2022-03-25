@@ -3,7 +3,7 @@ from abc import ABC
 
 from mdp import common
 from mdp.scenario.base_comparison_builder import BaseComparisonBuilder
-from mdp.scenario.jacks.comparison.environment_parameters import EnvironmentParameters
+from mdp.scenario.jacks.model.environment_parameters import EnvironmentParameters
 
 
 class ComparisonBuilder(BaseComparisonBuilder, ABC):

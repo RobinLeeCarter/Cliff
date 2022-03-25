@@ -3,7 +3,7 @@ from __future__ import annotations
 from mdp import common
 from mdp.scenario.position_move.model import action, state
 from mdp.scenario.random_walk.model.environment import Environment
-from mdp.scenario.random_walk.comparison.environment_parameters import EnvironmentParameters
+from mdp.scenario.random_walk.model.environment_parameters import EnvironmentParameters
 
 
 def random_walk_test() -> bool:

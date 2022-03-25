@@ -8,7 +8,7 @@ from mdp import common
 
 if TYPE_CHECKING:
     from mdp.scenario.jacks.controller import Controller
-    from mdp.scenario.blackjack.comparison.environment_parameters import EnvironmentParameters
+    from mdp.scenario.blackjack.model.environment_parameters import EnvironmentParameters
 from mdp.model.tabular.tabular_model import TabularModel
 from mdp.scenario.blackjack.model.environment import Environment
 from mdp.scenario.blackjack.model.state import State

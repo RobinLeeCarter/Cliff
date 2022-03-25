@@ -7,7 +7,7 @@ import numpy as np
 if TYPE_CHECKING:
     from mdp.model.tabular.policy.tabular_policy import TabularPolicy
     from mdp.scenario.gambler.controller import Controller
-    from mdp.scenario.gambler.comparison.environment_parameters import EnvironmentParameters
+    from mdp.scenario.gambler.model.environment_parameters import EnvironmentParameters
 from mdp import common
 from mdp.model.tabular.tabular_model import TabularModel
 from mdp.scenario.gambler.model.environment import Environment

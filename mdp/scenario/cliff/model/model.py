@@ -4,7 +4,7 @@ from typing import Optional, TYPE_CHECKING
 
 if TYPE_CHECKING:
     from mdp.scenario.cliff.controller import Controller
-    from mdp.scenario.cliff.comparison.environment_parameters import EnvironmentParameters
+    from mdp.scenario.cliff.model.environment_parameters import EnvironmentParameters
 
 from mdp.scenario.position_move.model import model
 from mdp.scenario.cliff.model.environment import Environment

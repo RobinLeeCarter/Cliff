@@ -3,10 +3,11 @@ from dataclasses import dataclass
 
 from mdp import common
 from mdp.scenario.random_walk.model import grids
+from mdp.scenario.position_move.model.environment_parameters import PositionMoveEnvironmentParameters
 
 
 @dataclass
-class EnvironmentParameters(common.EnvironmentParameters):
+class EnvironmentParameters(PositionMoveEnvironmentParameters):
     environment_type: common.EnvironmentType = common.EnvironmentType.RANDOM_WALK
     actions_list: common.ActionsList = common.ActionsList.NO_ACTIONS
     grid: grids = grids.GRID

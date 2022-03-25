@@ -2,12 +2,12 @@ from __future__ import annotations
 from dataclasses import dataclass
 
 from mdp import common
-
 from mdp.scenario.racetrack.model import grids
+from mdp.model.tabular.environment.tabular_environment_parameters import TabularEnvironmentParameters
 
 
 @dataclass
-class EnvironmentParameters(common.EnvironmentParameters):
+class EnvironmentParameters(TabularEnvironmentParameters):
     environment_type: common.EnvironmentType = common.EnvironmentType.RACETRACK
     grid: grids = grids.TRACK_1
     min_velocity: int = 0

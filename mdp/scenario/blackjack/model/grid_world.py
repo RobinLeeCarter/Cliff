@@ -3,7 +3,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING, Optional
 
 if TYPE_CHECKING:
-    from mdp.scenario.blackjack.comparison.environment_parameters import EnvironmentParameters
+    from mdp.scenario.blackjack.model.environment_parameters import EnvironmentParameters
 
 import numpy as np
 

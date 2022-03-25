@@ -3,7 +3,7 @@ from typing import TYPE_CHECKING, Optional
 
 if TYPE_CHECKING:
     from mdp.scenario.racetrack.model.environment import Environment
-    from mdp.scenario.racetrack.comparison.environment_parameters import EnvironmentParameters
+    from mdp.scenario.racetrack.model.environment_parameters import EnvironmentParameters
     from mdp.scenario.racetrack.model.grid_world import GridWorld
 
 from mdp import common

@@ -3,7 +3,7 @@ from dataclasses import dataclass, field
 
 from mdp import common
 
-from mdp.scenario.cliff.comparison.environment_parameters import EnvironmentParameters
+from mdp.scenario.cliff.model.environment_parameters import EnvironmentParameters
 
 
 @dataclass

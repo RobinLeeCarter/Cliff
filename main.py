@@ -6,7 +6,7 @@ from mdp import common
 
 os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = "hide"
 
-comparison_type: common.ComparisonType = common.ComparisonType.CLIFF_ALPHA_START
+comparison_type: common.ComparisonType = common.ComparisonType.WINDY_TIMESTEP
 
 
 def main():

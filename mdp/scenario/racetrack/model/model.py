@@ -4,7 +4,7 @@ from typing import Optional, TYPE_CHECKING
 
 if TYPE_CHECKING:
     from mdp.scenario.racetrack.controller import Controller
-    from mdp.scenario.racetrack.comparison.environment_parameters import EnvironmentParameters
+    from mdp.scenario.racetrack.model.environment_parameters import EnvironmentParameters
 from mdp.model.tabular.tabular_model import TabularModel
 from mdp.scenario.racetrack.model.environment import Environment
 from mdp.scenario.racetrack.model.state import State

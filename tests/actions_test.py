@@ -1,11 +1,11 @@
 from __future__ import annotations
 
 from mdp import common
-from mdp.scenario.cliff.comparison.environment_parameters import EnvironmentParameters \
+from mdp.scenario.cliff.model.environment_parameters import EnvironmentParameters \
     as CliffEnvironmentParameters
 from mdp.scenario.cliff.model.environment import Environment \
     as CliffEnvironment
-from mdp.scenario.random_walk.comparison.environment_parameters import EnvironmentParameters\
+from mdp.scenario.random_walk.model.environment_parameters import EnvironmentParameters\
     as RandomWalkEnvironmentParameters
 from mdp.scenario.random_walk.model.environment import Environment \
     as RandomWalkEnvironment

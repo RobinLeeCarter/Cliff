@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from mdp import common
 from mdp.scenario.position_move.model import grid_world
-from mdp.scenario.windy.comparison import environment_parameters
+from mdp.scenario.windy.model import environment_parameters
 
 
 class GridWorld(grid_world.GridWorld):

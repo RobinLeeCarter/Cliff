@@ -1,10 +1,9 @@
 from __future__ import annotations
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 
 from mdp.common.dataclass import comparison
-from mdp.scenario.windy.comparison.environment_parameters import EnvironmentParameters
 
 
 @dataclass
 class Comparison(comparison.Comparison):
-    environment_parameters: EnvironmentParameters = field(default_factory=EnvironmentParameters)
+    environment_parameters: EnvironmentParametersmax_cars

@@ -19,7 +19,7 @@ class Comparison(ABC):
     """
     The parameters used by the Application during it's build() stage
     """
-    environment_parameters: EnvironmentParameters
+    environment_parameters: EnvironmentParameters = field(default_factory=EnvironmentParameters)
 
     # training session settings
     comparison_settings: Settings = field(default_factory=Settings)

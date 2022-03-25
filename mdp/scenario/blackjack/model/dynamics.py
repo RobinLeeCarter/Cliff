@@ -3,7 +3,7 @@ from typing import TYPE_CHECKING, Optional
 
 if TYPE_CHECKING:
     from mdp.scenario.blackjack.model.environment import Environment
-    from mdp.scenario.blackjack.comparison.environment_parameters import EnvironmentParameters
+    from mdp.scenario.blackjack.model.environment_parameters import EnvironmentParameters
 
 from mdp.common import Multinoulli
 from mdp.scenario.blackjack.model.state import State

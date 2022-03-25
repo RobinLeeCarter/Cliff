@@ -5,7 +5,7 @@ if TYPE_CHECKING:
     from mdp.model.tabular.policy.tabular_policy import TabularPolicy
 from mdp.scenario.gambler.model.state import State
 from mdp.scenario.gambler.model.action import Action
-from mdp.scenario.gambler.comparison.environment_parameters import EnvironmentParameters
+from mdp.scenario.gambler.model.environment_parameters import EnvironmentParameters
 from mdp.scenario.gambler.model.dynamics import Dynamics
 
 from mdp.model.tabular.environment.tabular_environment import TabularEnvironment

@@ -2,10 +2,11 @@ from __future__ import annotations
 from dataclasses import dataclass
 
 from mdp import common
+from mdp.model.tabular.environment.tabular_environment_parameters import TabularEnvironmentParameters
 
 
 @dataclass
-class EnvironmentParameters(common.EnvironmentParameters):
+class EnvironmentParameters(TabularEnvironmentParameters):
     environment_type: common.EnvironmentType = common.EnvironmentType.JACKS
     max_cars: int = 20
     max_transfers: int = 5

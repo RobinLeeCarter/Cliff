@@ -3,7 +3,7 @@ from __future__ import annotations
 from mdp import common
 from mdp.scenario.cliff.comparison.comparison_builder import ComparisonBuilder
 from mdp.scenario.cliff.comparison.comparison import Comparison
-from mdp.scenario.cliff.comparison.environment_parameters import EnvironmentParameters
+from mdp.scenario.cliff.model.environment_parameters import EnvironmentParameters
 
 
 class CliffAlphaEnd(ComparisonBuilder):

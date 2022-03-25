@@ -4,7 +4,7 @@ from dataclasses import dataclass
 from mdp import common
 from mdp.scenario.windy.comparison.comparison_builder import ComparisonBuilder
 from mdp.scenario.windy.comparison.comparison import Comparison
-from mdp.scenario.windy.comparison.environment_parameters import EnvironmentParameters
+from mdp.scenario.windy.model.environment_parameters import EnvironmentParameters
 
 
 @dataclass

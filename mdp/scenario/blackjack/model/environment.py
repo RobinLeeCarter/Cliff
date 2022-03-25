@@ -8,7 +8,7 @@ if TYPE_CHECKING:
 from mdp import common
 from mdp.scenario.blackjack.model.state import State
 from mdp.scenario.blackjack.model.action import Action
-from mdp.scenario.blackjack.comparison.environment_parameters import EnvironmentParameters
+from mdp.scenario.blackjack.model.environment_parameters import EnvironmentParameters
 from mdp.scenario.blackjack.model.grid_world import GridWorld
 from mdp.scenario.blackjack.model.dynamics import Dynamics
 
