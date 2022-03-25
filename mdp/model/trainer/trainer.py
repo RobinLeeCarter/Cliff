@@ -42,7 +42,7 @@ class Trainer:
         self.max_cum_timestep: int = 0  # max cumulative timestep across all runs
 
     @property
-    def breakdown(self) -> BaseBreakdown:
+    def breakdown(self) -> Optional[BaseBreakdown]:
         return self._breakdown
 
     @property
@@ -175,7 +175,8 @@ class Trainer:
 
     def _review_step(self):
         self.cum_timestep += 1
-        self._breakdown.review()
+        if self._breakdown:
+            self._breakdown.review()
 
     def _get_result(self, result_parameters: common.ResultParameters):
         """Build up Result object, deciding on what to include by referring to result_parameters"""

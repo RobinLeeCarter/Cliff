@@ -27,7 +27,7 @@ class Comparison(ABC):
     settings_list_multiprocessing: ParallelContextType = ParallelContextType.NONE
 
     # breakdown
-    breakdown_parameters: BreakdownParameters = field(default_factory=BreakdownParameters)
+    breakdown_parameters: Optional[BreakdownParameters] = None
 
     # 2D graph output
     graph2d_values: Optional[Graph2DValues] = None

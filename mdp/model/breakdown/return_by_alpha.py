@@ -21,11 +21,10 @@ class ReturnByAlpha(BaseBreakdown):
         self._y_label = "Average Return"
 
     def record(self):
-        trainer = self._trainer
-        settings = trainer.settings
+        settings = self._trainer.settings
         algorithm_type = settings.algorithm_parameters.algorithm_type
         alpha = settings.algorithm_parameters.alpha
-        total_return = trainer.episode.total_return
+        total_return = self._trainer.episode.total_return
         self._recorder[algorithm_type, alpha] = total_return
 
     def compile(self):

@@ -54,7 +54,8 @@ class BaseModel(Generic[Environment, Agent], ABC):
         # self.agent: Agent = Agent[State, Action](self.environment)
 
         # breakdowns themselves need comparison in current implementation so breakdown_parameters is not passed in
-        self.breakdown: Optional[BaseBreakdown] = self._breakdown_factory.create(self._comparison)
+        if self._comparison.breakdown_parameters:
+            self.breakdown = self._breakdown_factory.create(self._comparison)
         self.trainer: Trainer = Trainer(
             agent=self.agent,
             breakdown=self.breakdown,
