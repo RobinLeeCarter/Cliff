@@ -4,9 +4,9 @@ import time
 import random
 import numpy as np
 
-from mdp.scenario.position_move.model import action
-from mdp.scenario.cliff.model import environment_parameters
-from mdp.scenario.cliff.model.environment import Environment
+from mdp.task.position_move.model import action
+from mdp.task.cliff.model import environment_parameters
+from mdp.task.cliff.model.environment import Environment
 
 environment_parameters_ = environment_parameters.default
 environment = Environment(environment_parameters_)

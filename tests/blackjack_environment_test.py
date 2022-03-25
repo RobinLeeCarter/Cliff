@@ -2,9 +2,9 @@ from __future__ import annotations
 
 from mdp import common
 from mdp.application import Application
-from mdp.scenario.blackjack.model.state import State
-from mdp.scenario.blackjack.model.action import Action
-from mdp.scenario.blackjack.model.environment import Environment
+from mdp.task.blackjack.model.state import State
+from mdp.task.blackjack.model.action import Action
+from mdp.task.blackjack.model.environment import Environment
 
 
 def blackjack_test() -> bool:

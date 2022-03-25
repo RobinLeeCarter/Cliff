@@ -3,8 +3,8 @@ import time
 from typing import Generator
 
 from mdp import common
-from mdp.scenario.comparison_factory import ComparisonFactory
-from mdp.scenario.jacks.model.state import State
+from mdp.task.comparison_factory import ComparisonFactory
+from mdp.task.jacks.model.state import State
 
 scenario_factory = ComparisonFactory()
 scenario = scenario_factory.create(common.ComparisonType.JACKS_POLICY_ITERATION_V)

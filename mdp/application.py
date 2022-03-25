@@ -6,7 +6,7 @@ if TYPE_CHECKING:
     from mdp.model.base.base_model import BaseModel
     from mdp.view.base.base_view import BaseView
     from mdp.controller.base_controller import BaseController
-from mdp.scenario.comparison_factory import ComparisonFactory
+from mdp.task.comparison_factory import ComparisonFactory
 from mdp.mvc_factory import MVCFactory
 
 

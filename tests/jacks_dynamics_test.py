@@ -3,10 +3,10 @@ from __future__ import annotations
 from mdp.common import Multinoulli
 from mdp import common
 from mdp.application import Application
-from mdp.scenario.jacks.model.state import State
-from mdp.scenario.jacks.model.action import Action
-from mdp.scenario.jacks.model.environment import Environment
-from mdp.scenario.jacks.model.dynamics.dynamics import Dynamics
+from mdp.task.jacks.model.state import State
+from mdp.task.jacks.model.action import Action
+from mdp.task.jacks.model.environment import Environment
+from mdp.task.jacks.model.dynamics.dynamics import Dynamics
 
 Response = tuple[float, State]
 

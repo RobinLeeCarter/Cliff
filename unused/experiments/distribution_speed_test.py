@@ -2,7 +2,7 @@ import timeit
 import time
 
 from mdp import common
-from mdp.scenario.jacks.model.state import State
+from mdp.task.jacks.model.state import State
 
 states: list[State] = [
     State(is_terminal=False, ending_cars_1=1, ending_cars_2=2),

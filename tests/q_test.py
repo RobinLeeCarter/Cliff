@@ -2,10 +2,10 @@ from __future__ import annotations
 
 from mdp import common
 from mdp.model.tabular.value_function import state_action_function
-from mdp.scenario.cliff.model.environment_parameters import EnvironmentParameters
-from mdp.scenario.cliff.model.environment import Environment
-from mdp.scenario.position_move.model.action import Action
-from mdp.scenario.position_move.model.state import State
+from mdp.task.cliff.model.environment_parameters import EnvironmentParameters
+from mdp.task.cliff.model.environment import Environment
+from mdp.task.position_move.model.action import Action
+from mdp.task.position_move.model.state import State
 
 
 def q_test() -> bool:

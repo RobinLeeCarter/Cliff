@@ -4,9 +4,9 @@ import random
 
 from mdp import common
 from mdp.application import Application
-from mdp.scenario.gambler.model.state import State
-from mdp.scenario.gambler.model.action import Action
-from mdp.scenario.gambler.model.environment import Environment
+from mdp.task.gambler.model.state import State
+from mdp.task.gambler.model.action import Action
+from mdp.task.gambler.model.environment import Environment
 
 
 def gambler_test() -> bool:

@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from mdp import common
 from mdp.application import Application
-from mdp.scenario.cliff.view.view import View
+from mdp.task.cliff.view.view import View
 
 
 def view_test() -> bool:

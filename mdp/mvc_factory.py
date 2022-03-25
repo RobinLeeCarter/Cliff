@@ -6,37 +6,37 @@ from mdp.view.base.base_view import BaseView
 from mdp.controller.base_controller import BaseController
 from mdp import common
 
-from mdp.scenario.blackjack.model.model import Model as BlackjackModel
-from mdp.scenario.blackjack.view.view import View as BlackjackView
-from mdp.scenario.blackjack.controller import Controller as BlackjackController
+from mdp.task.blackjack.model.model import Model as BlackjackModel
+from mdp.task.blackjack.view.view import View as BlackjackView
+from mdp.task.blackjack.controller import Controller as BlackjackController
 
-from mdp.scenario.cliff.model.model import Model as CliffModel
-from mdp.scenario.cliff.view.view import View as CliffView
-from mdp.scenario.cliff.controller import Controller as CliffController
+from mdp.task.cliff.model.model import Model as CliffModel
+from mdp.task.cliff.view.view import View as CliffView
+from mdp.task.cliff.controller import Controller as CliffController
 
-from mdp.scenario.gambler.model.model import Model as GamblerModel
-from mdp.scenario.gambler.view.view import View as GamblerView
-from mdp.scenario.gambler.controller import Controller as GamblerController
+from mdp.task.gambler.model.model import Model as GamblerModel
+from mdp.task.gambler.view.view import View as GamblerView
+from mdp.task.gambler.controller import Controller as GamblerController
 
-from mdp.scenario.jacks.model.model import Model as JacksModel
-from mdp.scenario.jacks.view.view import View as JacksView
-from mdp.scenario.jacks.controller import Controller as JacksController
+from mdp.task.jacks.model.model import Model as JacksModel
+from mdp.task.jacks.view.view import View as JacksView
+from mdp.task.jacks.controller import Controller as JacksController
 
-from mdp.scenario.mountain_car.model.model import Model as MountainCarModel
-from mdp.scenario.mountain_car.view.view import View as MountainCarView
-from mdp.scenario.mountain_car.controller import Controller as MountainCarController
+from mdp.task.mountain_car.model.model import Model as MountainCarModel
+from mdp.task.mountain_car.view.view import View as MountainCarView
+from mdp.task.mountain_car.controller import Controller as MountainCarController
 
-from mdp.scenario.racetrack.model.model import Model as RacetrackModel
-from mdp.scenario.racetrack.view.view import View as RacetrackView
-from mdp.scenario.racetrack.controller import Controller as RacetrackController
+from mdp.task.racetrack.model.model import Model as RacetrackModel
+from mdp.task.racetrack.view.view import View as RacetrackView
+from mdp.task.racetrack.controller import Controller as RacetrackController
 
-from mdp.scenario.random_walk.model.model import Model as RandomWalkModel
-from mdp.scenario.random_walk.view.view import View as RandomWalkView
-from mdp.scenario.random_walk.controller import Controller as RandomWalkController
+from mdp.task.random_walk.model.model import Model as RandomWalkModel
+from mdp.task.random_walk.view.view import View as RandomWalkView
+from mdp.task.random_walk.controller import Controller as RandomWalkController
 
-from mdp.scenario.windy.model.model import Model as WindyModel
-from mdp.scenario.windy.view.view import View as WindyView
-from mdp.scenario.windy.controller import Controller as WindyController
+from mdp.task.windy.model.model import Model as WindyModel
+from mdp.task.windy.view.view import View as WindyView
+from mdp.task.windy.controller import Controller as WindyController
 
 MVCLookup = dict[common.EnvironmentType, tuple[Type[BaseModel], Type[BaseView], Type[BaseController]]]
 

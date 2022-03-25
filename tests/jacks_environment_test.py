@@ -5,7 +5,7 @@ from mdp.application import Application
 # from mdp.scenarios.jacks.model.state import State
 # from mdp.scenarios.jacks.model.action import Action
 # from mdp.scenarios.jacks.model.response import Response
-from mdp.scenario.jacks.model.environment import Environment
+from mdp.task.jacks.model.environment import Environment
 
 
 def jacks_test() -> bool:

@@ -3,8 +3,8 @@ from __future__ import annotations
 import numpy as np
 
 from mdp import common
-from mdp.scenario.cliff.model.environment_parameters import EnvironmentParameters
-from mdp.scenario.cliff.model.environment import Environment
+from mdp.task.cliff.model.environment_parameters import EnvironmentParameters
+from mdp.task.cliff.model.environment import Environment
 
 
 def grid_test() -> bool:
