@@ -16,7 +16,7 @@ _trainer: Trainer
 class ParallelTrainer:
     def __init__(self, trainer: Trainer, parallel_context_type: common.ParallelContextType):
         self._trainer: Trainer = trainer
-        self._parallel_context_type = parallel_context_type
+        self._parallel_context_type: common.ParallelContextType = parallel_context_type
         # must be disabled for multi-processor
         self._trainer.disable_step_callback()
 
@@ -50,8 +50,8 @@ class ParallelTrainer:
         self._unpack_results()
 
         # set up agent using final setting and apply the final result
-        self._trainer.agent.apply_settings(settings=self._settings_list[-1])
-        self._trainer.agent.apply_result(result=self._results[-1])
+        self._trainer.apply_settings(settings=self._settings_list[-1])
+        self._trainer.algorithm.apply_result(result=self._results[-1])
 
     def _set_result_parameters(self):
         final_settings = self._settings_list[-1]
@@ -73,9 +73,6 @@ class ParallelTrainer:
             unique_recorders = set(result.recorder for result in self._results)
             for recorder in unique_recorders:
                 self._recorder.add_recorder(recorder)
-
-        for settings, result in zip(self._settings_list, self._results):
-            settings.algorithm_title = result.algorithm_title
 
 
 def _global_train_wrapper(settings: common.Settings) -> common.Result:

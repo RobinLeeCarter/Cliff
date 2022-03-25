@@ -35,7 +35,7 @@ class GridView:
         self._user_event: common.UserEvent = common.UserEvent.NONE
 
         self._t: int = 0
-        self._episode: Optional[agent.Episode] = None
+        self._episode: Optional[agent.TabularEpisode] = None
 
         self._build_color_lookup()
 
@@ -72,7 +72,7 @@ class GridView:
             self._wait_for_event_of_interest()
             # self._handle_event()
 
-    def demonstrate(self, new_episode_request: Callable[[], agent.Episode]):
+    def demonstrate(self, new_episode_request: Callable[[], agent.TabularEpisode]):
         if self._display_v:
             self._load_gridworld()
         self.open_window()
@@ -80,7 +80,7 @@ class GridView:
         count = 0
         while True:
             count += 1
-            episode: agent.Episode = new_episode_request()
+            episode: agent.TabularEpisode = new_episode_request()
             print(f"max_t: {episode.max_t} \t total_return: {episode.total_return:.0f}")
             running_average += (1/count) * (episode.total_return - running_average)
             print(f"count: {count} \t running_average: {running_average:.1f}")
@@ -89,7 +89,7 @@ class GridView:
                 break
         self.close_window()
 
-    def display_episode(self, episode_: agent.Episode, show_trail: bool = True) -> common.UserEvent:
+    def display_episode(self, episode_: agent.TabularEpisode, show_trail: bool = True) -> common.UserEvent:
         # print(episode_.trajectory)
         # print(f"len(self._episode.trajectory) = {len(episode_.trajectory)}")
         self._copy_grid_into_background()
@@ -244,7 +244,7 @@ class GridView:
     def _draw_agent_at_state(self, state: environment.State):
         # row, col = self._grid_world.get_index(state.x, state.y)
         # print(f"_t={self._t} x={state.x} y={state.y} row={row} col={col}")
-        rect: pygame.Rect = self._draw_square(x=state.position.x, y=state.position.y,
+        rect: pygame.Rect = self._draw_square(x=state.position.vector, y=state.position.y,
                                               square=common.Square.AGENT, surface=self._background)
         self._screen.blit(source=self._background, dest=rect, area=rect)
         pygame.display.update(rect)
@@ -263,7 +263,7 @@ def view_test() -> bool:
     # print(pygame.freetype.get_init())
 
     environment_parameters = common.EnvironmentParameters(
-        environment_type=common.ScenarioType.CLIFF,
+        environment_type=common.EnvironmentType.CLIFF,
         actions_list=common.ActionsList.FOUR_MOVES
     )
     cliff = scenarios.environment_factory(environment_parameters)

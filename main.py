@@ -1,12 +1,14 @@
 from __future__ import annotations
 
-import os_environ_settings
-import mdp
+from mdp import Application
+from mdp import common
+
+
+comparison_type: common.ComparisonType = common.ComparisonType.WINDY_TIMESTEP
 
 
 def main():
-    os_environ_settings.dummy = None    # for pycharm code inspection only
-    mdp.Application(comparison_type=mdp.ComparisonType.RANDOM_WALK_EPISODE)
+    Application(comparison_type)
 
 
 if __name__ == '__main__':

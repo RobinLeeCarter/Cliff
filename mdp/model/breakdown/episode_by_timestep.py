@@ -1,14 +1,14 @@
 from __future__ import annotations
+import copy
 
 import numpy as np
 
-import utils
 from mdp import common
 from mdp.model.breakdown.recorder import Recorder
-from mdp.model.breakdown.breakdown import Breakdown
+from mdp.model.breakdown.base_breakdown import BaseBreakdown
 
 
-class EpisodeByTimestep(Breakdown):
+class EpisodeByTimestep(BaseBreakdown):
     def __init__(self, comparison: common.Comparison):
         super().__init__(comparison)
 
@@ -41,27 +41,27 @@ class EpisodeByTimestep(Breakdown):
 
         # collate output from self.recorder
         for settings in self.comparison.settings_list:
+            algorithm_type: common.AlgorithmType = settings.algorithm_parameters.algorithm_type
             values = np.array(
-                [self._recorder[settings.algorithm_parameters.algorithm_type, timestep]
+                [self._recorder[algorithm_type, timestep]
                  for timestep in timestep_array],
                 dtype=float
             )
+            title: str = self._trainer.algorithm_factory.get_algorithm_title(settings.algorithm_parameters)
             series_ = common.Series(
-                title=settings.algorithm_title,
-                identifiers={"algorithm_type": settings.algorithm_parameters.algorithm_type},
+                title=title,
+                identifiers={"algorithm_type": algorithm_type},
                 values=values
             )
             self.series_list.append(series_)
 
-    def get_graph_values(self) -> common.GraphValues:
-        graph_values: common.GraphValues = common.GraphValues(
-            x_series=self.x_series,
-            graph_series=self.series_list,
-            y_label=self._y_label,
-            x_min=0,
-            x_max=self._max_timestep,
-            y_min=0,
-            y_max=self.comparison.comparison_settings.training_episodes
-        )
-        utils.set_none_to_default(graph_values, self.comparison.graph_values)
-        return graph_values
+    def get_graph2d_values(self) -> common.Graph2DValues:
+        g: common.Graph2DValues = copy.deepcopy(self.comparison.graph2d_values)
+        g.x_series = self.x_series
+        g.graph_series = self.series_list
+        g.y_label = self._y_label
+        g.x_min = 0
+        g.x_max = self._max_timestep
+        g.y_min = 0
+        g.y_max = self.comparison.comparison_settings.training_episodes
+        return g

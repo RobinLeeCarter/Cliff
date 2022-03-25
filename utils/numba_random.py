@@ -6,7 +6,10 @@ from numba import njit
 
 @njit(cache=True)
 def p_choice(p: np.ndarray) -> int:
-    """Return an index value from a probability distribution p"""
+    """
+    :param p: probability distribution
+    :return: a drawn index value from p
+    """
     lo: int = 0
     hi: int = p.shape[0]
     # x: float = random.random()    # same speed
@@ -24,7 +27,10 @@ def p_choice(p: np.ndarray) -> int:
 
 @njit(cache=True)
 def cum_p_choice(cum_p: np.ndarray) -> int:
-    """Return an index value from a probability distribution p"""
+    """
+    :param cum_p: cumulative probability distribution
+    :return: a drawn index value from p
+    """
     lo: int = 0
     hi: int = cum_p.shape[0]
     # x: float = random.random()    # same speed

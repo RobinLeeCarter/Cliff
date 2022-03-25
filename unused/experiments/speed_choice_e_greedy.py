@@ -7,19 +7,19 @@ from numba import njit
 
 from mdp import common
 if TYPE_CHECKING:
-    from mdp.model.environment.environment import Environment
-from mdp.model.policy.policy import Policy
-from mdp.model.policy.deterministic import Deterministic
+    from mdp.model.tabular.environment.tabular_environment import TabularEnvironment
+from mdp.model.tabular.policy.tabular_policy import TabularPolicy
+from mdp.model.tabular.policy.deterministic import Deterministic
 
 rng: np.random.Generator = np.random.default_rng()
 
 
-class EGreedy(Policy):
-    def __init__(self, environment_: Environment, policy_parameters: common.PolicyParameters):
-        super().__init__(environment_, policy_parameters)
+class EGreedy(TabularPolicy):
+    def __init__(self, environment: TabularEnvironment, policy_parameters: common.PolicyParameters):
+        super().__init__(environment, policy_parameters)
         self.epsilon: float = self._policy_parameters.epsilon
         greedy_policy_parameters = common.PolicyParameters(
-            policy_type=common.PolicyType.DETERMINISTIC,
+            policy_type=common.PolicyType.TABULAR_DETERMINISTIC,
             store_matrix=False,
         )
         self.greedy_policy: Deterministic = Deterministic(self._environment, greedy_policy_parameters)

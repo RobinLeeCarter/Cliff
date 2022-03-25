@@ -2,7 +2,7 @@ import timeit
 import time
 
 from mdp import common
-from mdp.scenarios.jacks.model.state import State
+from mdp.task.jacks.model.state import State
 
 states: list[State] = [
     State(is_terminal=False, ending_cars_1=1, ending_cars_2=2),
@@ -12,7 +12,7 @@ states: list[State] = [
 ]
 probabilities: list[float] = [0.1, 0.2, 0.3, 0.4]
 
-distribution: common.Distribution[State] = common.Distribution()
+distribution: common.Multinoulli[State] = common.Multinoulli()
 dictionary: dict[State, float] = {}
 
 for state, probability in zip(states, probabilities):

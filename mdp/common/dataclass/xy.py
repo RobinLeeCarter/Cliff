@@ -1,11 +1,11 @@
 from __future__ import annotations
-import dataclasses
+from dataclasses import dataclass
 
 
-@dataclasses.dataclass(frozen=True)
+@dataclass(frozen=True)
 class XY:
     x: int
     y: int
 
     def as_tuple(self) -> tuple[int, int]:
-        return dataclasses.astuple(self)
+        return self.x, self.y

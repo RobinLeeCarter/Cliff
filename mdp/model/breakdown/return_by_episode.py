@@ -1,19 +1,20 @@
 from __future__ import annotations
+import copy
 
 import numpy as np
 
-import utils
 from mdp import common
-from mdp.model.breakdown import recorder, breakdown
+from mdp.model.breakdown.recorder import Recorder
+from mdp.model.breakdown.base_breakdown import BaseBreakdown
 
 
-class ReturnByEpisode(breakdown.Breakdown):
+class ReturnByEpisode(BaseBreakdown):
     def __init__(self, comparison: common.Comparison):
         super().__init__(comparison)
 
         # common.AlgorithmParameters, episode
         recorder_key_type = tuple[common.AlgorithmParameters, int]
-        self._recorder = recorder.Recorder[recorder_key_type]()
+        self._recorder = Recorder[recorder_key_type]()
         self._y_label = "Average Return"
 
     def record(self):
@@ -45,20 +46,20 @@ class ReturnByEpisode(breakdown.Breakdown):
                  for episode_counter in episode_array],
                 dtype=float
             )
+            algorithm_type: common.AlgorithmType = settings.algorithm_parameters.algorithm_type
+            title: str = self._trainer.algorithm_factory.get_algorithm_title(settings.algorithm_parameters)
             series = common.Series(
-                title=settings.algorithm_title,
-                identifiers={"algorithm_type": settings.algorithm_parameters.algorithm_type},
+                title=title,
+                identifiers={"algorithm_type": algorithm_type},
                 values=values
             )
             self.series_list.append(series)
 
-    def get_graph_values(self) -> common.GraphValues:
-        graph_values: common.GraphValues = common.GraphValues(
-            x_series=self.x_series,
-            graph_series=self.series_list,
-            y_label=self._y_label,
-            x_min=0,
-            x_max=self.comparison.comparison_settings.training_episodes,
-        )
-        utils.set_none_to_default(graph_values, self.comparison.graph_values)
-        return graph_values
+    def get_graph2d_values(self) -> common.Graph2DValues:
+        g: common.Graph2DValues = copy.deepcopy(self.comparison.graph2d_values)
+        g.x_series = self.x_series
+        g.graph_series = self.series_list
+        g.y_label = self._y_label
+        g.x_min = 0
+        g.x_max = self.comparison.comparison_settings.training_episodes
+        return g

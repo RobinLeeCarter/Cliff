@@ -3,17 +3,16 @@ from __future__ import annotations
 import random
 
 from mdp import common
-from mdp.scenarios import scenario_factory
-from mdp.scenarios.gambler.model.state import State
-from mdp.scenarios.gambler.model.action import Action
-from mdp.scenarios.gambler.model.environment import Environment
+from mdp.application import Application
+from mdp.task.gambler.model.state import State
+from mdp.task.gambler.model.action import Action
+from mdp.task.gambler.model.environment import Environment
 
 
 def gambler_test() -> bool:
-    scenario = scenario_factory.scenario_factory(common.ComparisonType.GAMBLER_VALUE_ITERATION_V)
-    scenario.build()
-    # noinspection PyProtectedMember
-    environment: Environment = scenario._model.environment
+    application = Application(common.ComparisonType.GAMBLER_VALUE_ITERATION_V, auto_run=False)
+    environment: Environment = application.model.environment
+    assert isinstance(environment, Environment)
 
     # comparison: common.Comparison = unused_comparisons.gambler_value_iteration_v()
     # environment = unused_environment_factory.environment_factory(comparison.environment_parameters)

@@ -1,0 +1,4 @@
+from mdp.common.distribution.discrete.discrete_distribution import DiscreteDistribution
+from mdp.common.distribution.discrete.multinoulli import Multinoulli
+from mdp.common.distribution.discrete.singular_distribution import SingularDistribution
+from mdp.common.distribution.discrete.uniform_multinoulli import UniformMultinoulli
