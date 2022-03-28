@@ -6,4 +6,4 @@ from mdp import common
 
 @dataclass
 class CompoundFeatureParameters(common.FeatureParameters):
-    features: list[common.FeatureParameters] = field(default_factory=list)
+    feature_parameters_list: list[common.FeatureParameters] = field(default_factory=list)

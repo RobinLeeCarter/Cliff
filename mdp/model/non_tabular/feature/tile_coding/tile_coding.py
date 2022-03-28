@@ -4,9 +4,12 @@ from typing import Optional, Callable, TYPE_CHECKING, TypeVar
 
 import numpy as np
 
+from mdp.model.non_tabular.feature.tile_coding.tiling_group_parameters import TilingGroupParameters
+
 if TYPE_CHECKING:
     from mdp.model.non_tabular.environment.dimension.dim_enum import DimEnum
     from mdp.model.non_tabular.environment.dimension.dims import Dims
+    from mdp.model.non_tabular.feature.tile_coding.tiling_coding_parameters import TileCodingParameters
 from mdp.model.non_tabular.feature.tile_coding.tiling_group import TilingGroup
 from mdp.model.non_tabular.feature.sparse_feature import SparseFeature
 from mdp.model.non_tabular.environment.non_tabular_state import NonTabularState
@@ -17,24 +20,20 @@ Action = TypeVar('Action', bound=NonTabularAction)
 
 
 class TileCoding(SparseFeature[State, Action]):
-    def __init__(self,
-                 dims: Dims,
-                 max_size: Optional[int] = None,
-                 use_dict: bool = True):
+    def __init__(self, dims: Dims, tile_coding_parameters: TileCodingParameters):
         """
         :param dims: the dimensions of the space being covered and whether continuous or categorical
-        :param max_size: optional: maximum tile number, will reuse from start if using a dict and show a warning
-        :param use_dict: pass False if wish to [Hash mod max_size] and avoid using a dict
         """
-        super().__init__(dims, max_size)
+        super().__init__(dims, tile_coding_parameters)
+        # max_size: optional: maximum tile number, will reuse from start if using a dict and show a warning
 
         # self._state_float_dimensions: dict[DimEnum, FloatDimension] = state_float_dimensions
         # self._state_category_dimensions: dict[DimEnum, CategoryDimension] = state_category_dimensions
         # self._action_category_dimensions: dict[DimEnum, CategoryDimension] = action_category_dimensions
         # self._max_size: Optional[int] = max_size
-        self._use_dict: bool = use_dict
+        self._use_dict: bool = tile_coding_parameters.use_dict
 
-        self._tiling_groups: list[TilingGroup] = []     # OK initialisation ???
+        self._tiling_groups: list[TilingGroup] = []
         self._total_tilings: int = 0
         self._total_tiles: int = 0
         self._exceeded_max_size: bool = False
@@ -48,6 +47,9 @@ class TileCoding(SparseFeature[State, Action]):
         self._tile_dict: dict[tuple, int] = {}
         # counter of tile_indexes for dictionary
         self._tile_index_counter: int = 0
+
+        for tiling_group_parameters in tile_coding_parameters.tiling_groups:
+            self._add(tiling_group_parameters)
 
     def add(self,
             included_dims: set[DimEnum],
@@ -64,12 +66,18 @@ class TileCoding(SparseFeature[State, Action]):
         if unspecified or None, will use the lowest power of 2 above 4k
         :param offset_per_dimension_fn: fn that returns offset units in each dimension given the number of dimensions
         """
+        tiling_group_parameters: TilingGroupParameters = TilingGroupParameters(
+            included_dims=included_dims,
+            tile_size_per_dim=tile_size_per_dim,
+            tiles_per_dim=tiles_per_dim,
+            tilings=tilings,
+            offset_per_dimension_fn=offset_per_dimension_fn
+        )
+        self._add(tiling_group_parameters)
+
+    def _add(self, tiling_group_parameters: TilingGroupParameters):
         tiling_group = TilingGroup(self._dims,
-                                   included_dims,
-                                   tile_size_per_dim,
-                                   tiles_per_dim,
-                                   tilings,
-                                   offset_per_dimension_fn)
+                                   tiling_group_parameters)
         self._tiling_groups.append(tiling_group)
         self._total_tilings += tiling_group.tilings
         if self._use_dict:

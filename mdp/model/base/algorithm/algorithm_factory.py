@@ -21,7 +21,7 @@ class AlgorithmFactory:
         self._name_lookup.update(tabular_algorithm_lookups.get_name_lookup())
         self._name_lookup.update(non_tabular_algorithm_lookups.get_name_lookup())
 
-    def create(self, algorithm_parameters: common.Settings.algorithm_parameters) -> BaseAlgorithm:
+    def create(self, algorithm_parameters: common.AlgorithmParameters) -> BaseAlgorithm:
         algorithm_type: common.AlgorithmType = algorithm_parameters.algorithm_type
         type_of_algorithm: Type[BaseAlgorithm] = self._algorithm_lookup[algorithm_type]
         algorithm_name: str = self._name_lookup[algorithm_type]

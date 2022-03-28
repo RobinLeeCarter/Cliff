@@ -4,8 +4,10 @@ from abc import ABC, abstractmethod
 
 import numpy as np
 
+
 if TYPE_CHECKING:
     from mdp.model.non_tabular.environment.dimension.dims import Dims
+from mdp import common
 from mdp.model.non_tabular.environment.non_tabular_state import NonTabularState
 from mdp.model.non_tabular.environment.non_tabular_action import NonTabularAction
 from mdp.model.non_tabular.feature.feature import Feature
@@ -20,8 +22,8 @@ class SparseFeature(Feature[State, Action], ABC):
     State Aggregation is a sparse feature
     Coarse-coding is also a sparse feature (if the features are binary)
     """
-    def __init__(self, dims: Dims, max_size: Optional[int] = None):
-        super().__init__(dims, max_size)
+    def __init__(self, dims: Dims, feature_parameters: common.FeatureParameters):
+        super().__init__(dims, feature_parameters)
         self._is_sparse: bool = True
 
     def __getitem__(self, item: Union[State, tuple[State, Action]]) -> np.ndarray:

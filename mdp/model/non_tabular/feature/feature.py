@@ -6,6 +6,7 @@ import numpy as np
 
 if TYPE_CHECKING:
     from mdp.model.non_tabular.environment.dimension.dims import Dims
+from mdp import common
 from mdp.model.non_tabular.environment.non_tabular_state import NonTabularState
 from mdp.model.non_tabular.environment.non_tabular_action import NonTabularAction
 
@@ -14,14 +15,14 @@ Action = TypeVar('Action', bound=NonTabularAction)
 
 
 class Feature(Generic[State, Action], ABC):
-    def __init__(self, dims: Dims, max_size: Optional[int] = None):
+    def __init__(self, dims: Dims, feature_parameters: common.FeatureParameters):
         """
         if sparse implement def _get_x_sparse if not sparse implement _get_x
         :param dims: the dimensions of the space being covered and whether continuous or categorical
-        :param max_size: maximise size of the feature vector returned (whether sparse or not)
+        :param feature_parameters: feature parameters
         """
         self._dims: Dims = dims
-        self._max_size: Optional[int] = max_size
+        self._max_size: Optional[int] = feature_parameters.max_size
         # is_sparse: whether the return will be just the 1 indices or a full vector, overridden in SparseFeature
         self._is_sparse: bool = False
 

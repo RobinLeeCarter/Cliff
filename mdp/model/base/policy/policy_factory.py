@@ -21,7 +21,7 @@ class PolicyFactory:
         self._name_lookup.update(tabular_policy_lookups.get_name_lookup())
         self._name_lookup.update(non_tabular_policy_lookups.get_name_lookup())
 
-    def create(self, policy_parameters: common.Settings.policy_parameters) -> BasePolicy:
+    def create(self, policy_parameters: common.PolicyParameters) -> BasePolicy:
         policy_type: common.PolicyType = policy_parameters.policy_type
         type_of_policy: Type[BasePolicy] = self._policy_lookup[policy_type]
         # policy_name: str = self._name_lookup[policy_type]

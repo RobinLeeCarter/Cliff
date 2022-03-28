@@ -87,6 +87,10 @@ class NonTabularEnvironment(BaseEnvironment[State, Action], ABC):
             self._last_state = state
 
     @property
+    def dims(self) -> Dims:
+        return self._dims
+
+    @property
     def actions_always_compatible(self) -> bool:
         return self._environment_parameters.actions_always_compatible
 

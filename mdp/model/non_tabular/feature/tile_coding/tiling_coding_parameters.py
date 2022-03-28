@@ -8,4 +8,4 @@ from mdp.model.non_tabular.feature.tile_coding.tiling_group_parameters import Ti
 @dataclass
 class TileCodingParameters(common.FeatureParameters):
     tiling_groups: list[TilingGroupParameters] = field(default_factory=list)
-    use_dict: bool = True
+    use_dict: bool = True   # pass False if wish to [Hash mod max_size] and avoid using a dict

@@ -4,10 +4,12 @@ from typing import Optional, Callable, TYPE_CHECKING
 
 import numpy as np
 
+
 if TYPE_CHECKING:
     from mdp.model.non_tabular.environment.dimension.dim_enum import DimEnum
     from mdp.model.non_tabular.environment.dimension.dims import Dims
     from mdp.model.non_tabular.environment.dimension.float_dimension import FloatDimension
+    from mdp.model.non_tabular.feature.tile_coding.tiling_group_parameters import TilingGroupParameters
 
 
 class TilingGroup:
@@ -23,25 +25,26 @@ class TilingGroup:
     """
     def __init__(self,
                  dims: Dims,
-                 included_dims: set[DimEnum],
-                 tile_size_per_dim: Optional[dict[DimEnum, float]] = None,
-                 tiles_per_dim: Optional[dict[DimEnum, int]] = None,
-                 tilings: Optional[int] = None,
-                 offset_per_dimension_fn: Optional[Callable[[int], np.ndarray]] = None):
+                 tiling_group_parameters: TilingGroupParameters):
         """
         :param dims: structure to holds all the information about the dimensions of the environment
-        :param included_dims: set of the dims to tile or not (based on dims, in any order)
-        For each dimension either specify tile_size or tiles or if leave blank tiles will equal tilings
-        :param tile_size_per_dim: tile_size (distance over which to generalise) of dims (in any order)
-        :param tiles_per_dim: number of tiles of dims (in any order)
-        :param tilings: number of tilings e.g. n=8, should be a power of 2 and >= 4k (k = number of included dimensions)
-        if unspecified or None, will use the lowest power of 2 above 4k
-        :param offset_per_dimension_fn: fn that takes the number of dimensions and returns offset units per dimension
         """
+        # :param included_dims: set of the dims to tile or not (based on dims, in any order)
+        # For each dimension either specify tile_size or tiles or if leave blank tiles will equal tilings
+        # :param tile_size_per_dim: tile_size (distance over which to generalise) of dims (in any order)
+        # :param tiles_per_dim: number of tiles of dims (in any order)
+        # :param tilings: number of tilings e.g. n=8, should be a power of 2 and >= 4k
+        #  (k = number of included dimensions)
+        # if unspecified or None, will use the lowest power of 2 above 4k
+        # :param offset_per_dimension_fn: fn that takes the number of dimensions and returns offset units per dimension
 
         # Unpack parameters
-
         self._dims: Dims = dims
+        included_dims: set[DimEnum] = tiling_group_parameters.included_dims
+        tile_size_per_dim: Optional[dict[DimEnum, float]] = tiling_group_parameters.tile_size_per_dim
+        tiles_per_dim: Optional[dict[DimEnum, int]] = tiling_group_parameters.tiles_per_dim
+        tilings: Optional[int] = tiling_group_parameters.tilings
+        offset_per_dimension_fn: Optional[Callable[[int], np.ndarray]] = tiling_group_parameters.offset_per_dimension_fn
 
         # convert included_dims to boolean arrays for each type of dimension, in correct order
         self._included_floats: np.ndarray = np.array(
