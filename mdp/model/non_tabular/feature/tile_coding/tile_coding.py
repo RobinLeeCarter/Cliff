@@ -22,13 +22,12 @@ class TileCoding(SparseFeature[State, Action]):
                  max_size: Optional[int] = None,
                  use_dict: bool = True):
         """
-        :param dims: structure to holds all the information about the dimensions of the environment
+        :param dims: the dimensions of the space being covered and whether continuous or categorical
         :param max_size: optional: maximum tile number, will reuse from start if using a dict and show a warning
         :param use_dict: pass False if wish to [Hash mod max_size] and avoid using a dict
         """
-        super().__init__(max_size)
+        super().__init__(dims, max_size)
 
-        self._dims: Dims = dims
         # self._state_float_dimensions: dict[DimEnum, FloatDimension] = state_float_dimensions
         # self._state_category_dimensions: dict[DimEnum, CategoryDimension] = state_category_dimensions
         # self._action_category_dimensions: dict[DimEnum, CategoryDimension] = action_category_dimensions
