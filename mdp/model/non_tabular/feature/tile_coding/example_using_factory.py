@@ -5,6 +5,7 @@ import enum
 from dataclasses import dataclass
 
 from mdp import common
+from mdp.model.non_tabular.feature.feature import Feature
 from mdp.model.non_tabular.feature.feature_factory import FeatureFactory
 from mdp.model.non_tabular.feature.tile_coding.tile_coding import TileCoding
 from mdp.model.non_tabular.feature.tile_coding.tiling_coding_parameters import TileCodingParameters
@@ -14,7 +15,7 @@ from mdp.model.non_tabular.environment.dimension.category_dimension import Categ
 from mdp.model.non_tabular.environment.dimension.dim_enum import DimEnum
 from mdp.model.non_tabular.environment.dimension.dims import Dims
 from mdp.model.non_tabular.environment.non_tabular_state import NonTabularState
-# from mdp.model.non_tabular.environment.placeholder_action import PlaceholderAction
+from mdp.model.non_tabular.environment.placeholder_action import PlaceholderAction
 
 
 class Dim(DimEnum):
@@ -51,8 +52,9 @@ def main():
             TilingGroupParameters(included_dims={Dim.X, Dim.Z}),
         ],
     )
-    feature_factory: FeatureFactory = FeatureFactory(dims)
-    tile_coding = feature_factory.create(tile_coding_parameters)
+    feature_factory: FeatureFactory[NonTabularState, PlaceholderAction] = \
+        FeatureFactory[NonTabularState, PlaceholderAction](dims)
+    tile_coding: Feature[NonTabularState, PlaceholderAction] = feature_factory.create(tile_coding_parameters)
     assert isinstance(tile_coding, TileCoding)
 
     # tile_coding: TileCoding[State, PlaceholderAction] = TileCoding[State, PlaceholderAction](dims=dims)

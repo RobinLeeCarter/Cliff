@@ -1,8 +1,7 @@
 from __future__ import annotations
-from typing import TYPE_CHECKING, Optional
+from typing import TYPE_CHECKING
 from abc import ABC, abstractmethod
 
-from mdp.model.non_tabular.value_function.linear_state_action_function import LinearStateActionFunction
 
 if TYPE_CHECKING:
     from mdp.model.non_tabular.agent.non_tabular_agent import NonTabularAgent
@@ -19,7 +18,6 @@ class EpisodicOnline(NonTabularAlgorithm, ABC):
                  ):
         super().__init__(agent, algorithm_parameters, name)
         self._alpha = self._algorithm_parameters.alpha
-        self.Q: Optional[LinearStateActionFunction] = None
 
     @staticmethod
     def get_title(name: str, algorithm_parameters: common.AlgorithmParameters) -> str:

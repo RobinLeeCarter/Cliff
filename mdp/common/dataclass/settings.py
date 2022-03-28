@@ -4,6 +4,7 @@ from typing import Optional
 
 from mdp.common.enums import DualPolicyRelationship, ParallelContextType
 from mdp.common.dataclass.algorithm_parameters import AlgorithmParameters
+from mdp.common.dataclass.feature_parameters import FeatureParameters
 from mdp.common.dataclass.policy_parameters import PolicyParameters
 from mdp.common.dataclass.result_parameters import ResultParameters
 
@@ -17,6 +18,8 @@ class Settings:
     policy_parameters: PolicyParameters = field(default_factory=PolicyParameters)
     behaviour_policy_parameters: Optional[PolicyParameters] = None
     dual_policy_relationship: DualPolicyRelationship = DualPolicyRelationship.SINGLE_POLICY
+
+    feature_parameters: FeatureParameters = field(default_factory=FeatureParameters)
 
     runs: int = 10
     runs_multiprocessing: Optional[ParallelContextType] = None

@@ -1,14 +1,11 @@
 from __future__ import annotations
-from typing import TYPE_CHECKING, Optional
+from typing import TYPE_CHECKING
 
 import numpy as np
-
-from mdp.model.non_tabular.value_function.state_action_function import StateActionFunction
 
 if TYPE_CHECKING:
     from mdp.model.non_tabular.agent.non_tabular_agent import NonTabularAgent
     from mdp import common
-
 from mdp.model.non_tabular.algorithm.abstract.episodic_online import EpisodicOnline
 
 
@@ -20,7 +17,6 @@ class EpisodicSarsa(EpisodicOnline):
                  ):
         super().__init__(agent, algorithm_parameters, name)
         self._alpha = self._algorithm_parameters.alpha
-        self.Q: Optional[StateActionFunction] = None
 
     def _start_episode(self):
         self._agent.choose_action()
