@@ -6,5 +6,5 @@ from mdp import common
 
 @dataclass
 class EnvironmentParameters(common.EnvironmentParameters):
-    environment_type: common.EnvironmentType = common.EnvironmentType.MOUNTAIN_CAR,
+    environment_type: common.EnvironmentType = common.EnvironmentType.MOUNTAIN_CAR
     actions_always_compatible: bool = True

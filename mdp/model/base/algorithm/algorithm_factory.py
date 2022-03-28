@@ -26,6 +26,8 @@ class AlgorithmFactory:
         type_of_algorithm: Type[BaseAlgorithm] = self._algorithm_lookup[algorithm_type]
         algorithm_name: str = self._name_lookup[algorithm_type]
 
+        # TODO: not convinced that algorithm_name should be passed in since it's the same for all instances
+        # class back to AlgorithmFactory with a static method? (circular?)
         algorithm: BaseAlgorithm = type_of_algorithm(self._agent,
                                                      algorithm_parameters,
                                                      algorithm_name)

@@ -83,6 +83,7 @@ class AlgorithmType(enum.IntEnum):
     TABULAR_VQ = enum.auto()
 
     # Non-tabular
+    NON_TABULAR_EPISODIC_SARSA = enum.auto()
 
 
 class PolicyType(enum.IntEnum):
@@ -101,6 +102,10 @@ class DualPolicyRelationship(enum.IntEnum):
     SINGLE_POLICY = enum.auto()
     LINKED_POLICIES = enum.auto()
     INDEPENDENT_POLICIES = enum.auto()
+
+
+class FeatureType(enum.IntEnum):
+    TILE_CODING = enum.auto()
 
 
 class ActionsList(enum.IntEnum):

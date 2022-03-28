@@ -15,7 +15,6 @@ class ConstantAlphaMC(EpisodicMonteCarlo):
                  ):
         super().__init__(agent, algorithm_parameters, name)
         self._alpha = self._algorithm_parameters.alpha
-        self.title = f"{self.name} α={self._alpha}"
         self._create_v()
 
     def _process_time_step(self, t: int):

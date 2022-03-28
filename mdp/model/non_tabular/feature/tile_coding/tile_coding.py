@@ -24,7 +24,7 @@ class TileCoding(SparseFeature[State, Action]):
         """
         :param dims: structure to holds all the information about the dimensions of the environment
         :param max_size: optional: maximum tile number, will reuse from start if using a dict and show a warning
-        :param use_dict: pass False is wish to Hash % max_size and avoid using a dict
+        :param use_dict: pass False if wish to [Hash mod max_size] and avoid using a dict
         """
         super().__init__(max_size)
 

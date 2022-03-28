@@ -29,9 +29,18 @@ class LinearStateActionFunction(StateActionFunction[State, Action]):
         # weights
         self.w: np.ndarray = np.full(shape=self.size, fill_value=initial_value, dtype=float)
 
+    def has_sparse_feature(self) -> bool:
+        return self.feature.is_sparse
+
     def __getitem__(self, state: State, action: Action) -> float:
-        self.feature.set_state_action(state, action)
-        return self.feature.dot_product_full_vector(self.w)
+        if state.is_terminal:
+            return 0.0
+        else:
+            self.feature.set_state_action(state, action)
+            return self.feature.dot_product_full_vector(self.w)
+
+    def get_gradient(self, state: State, action: Action) -> np.ndarray:
+        return self.feature.get_vector()
 
     def get_action_values(self, state: State, actions: list[Action]) -> np.ndarray:
         values: list[float] = []
@@ -43,3 +52,9 @@ class LinearStateActionFunction(StateActionFunction[State, Action]):
             value = self.feature.dot_product_full_vector(self.w)
             values.append(value)
         return np.array(values)
+
+    def update_weights(self, delta_w: np.ndarray):
+        self.w += delta_w
+
+    def update_weights_sparse(self, indices: np.ndarray, delta_w: float):
+        self.w[indices] += delta_w

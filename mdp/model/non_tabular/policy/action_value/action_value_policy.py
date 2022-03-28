@@ -1,5 +1,5 @@
 from __future__ import annotations
-from typing import TYPE_CHECKING, TypeVar
+from typing import TYPE_CHECKING, TypeVar, Optional
 
 from abc import ABC
 
@@ -19,7 +19,9 @@ class ActionValuePolicy(NonTabularPolicy[State, Action], ABC):
     def __init__(self,
                  environment: NonTabularEnvironment[State, Action],
                  policy_parameters: common.PolicyParameters,
-                 state_action_function: StateActionFunction[State, Action],
                  ):
         super().__init__(environment, policy_parameters)
+        self._state_action_function: Optional[StateActionFunction[State, Action]] = None
+
+    def set_state_action_function(self, state_action_function: StateActionFunction[State, Action]):
         self._state_action_function: StateActionFunction[State, Action] = state_action_function

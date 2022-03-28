@@ -17,6 +17,7 @@ class Feature(Generic[State, Action], ABC):
         if sparse implement def _get_x_sparse if not sparse implement _get_x
         :param max_size: maximise size of the feature vector returned (whether sparse or not)
         """
+        # :param dims: the dimensions of the space being covered and whether continuous or categorical
         self._max_size: Optional[int] = max_size
         # is_sparse: whether the return will be just the 1 indices or a full vector, overridden in SparseFeature
         self._is_sparse: bool = False

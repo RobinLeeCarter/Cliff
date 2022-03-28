@@ -19,7 +19,7 @@ class CompoundSparseFeature(SparseFeature[State, Action]):
         :param features: list of
         """
         super().__init__()
-        self._features = features
+        self._features: list[SparseFeature[State, Action]] = features
         self._max_size: Optional[int] = sum(feature.max_size for feature in self._features)
 
     def _get_sparse_vector(self) -> np.ndarray:

@@ -20,12 +20,10 @@ class EGreedyLinear(ActionValuePolicy[State, Action]):
     def __init__(self,
                  environment: NonTabularEnvironment[State, Action],
                  policy_parameters: common.PolicyParameters,
-                 state_action_function: StateActionFunction[State, Action],
-                 epsilon: float = 0.0
                  ):
-        super().__init__(environment, policy_parameters, state_action_function)
-        self.epsilon: float = epsilon
-        self.is_deterministic: bool = (epsilon == 0.0)
+        super().__init__(environment, policy_parameters)
+        self.epsilon: float = self._policy_parameters.epsilon
+        self.is_deterministic: bool = (self.epsilon == 0.0)
 
     def _draw_action(self, state: State) -> Action:
         """"

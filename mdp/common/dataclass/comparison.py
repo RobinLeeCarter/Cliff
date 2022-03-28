@@ -40,4 +40,5 @@ class Comparison(ABC):
         if isinstance(self.breakdown_parameters, BreakdownAlgorithmByAlpha):
             self.settings_list = self.breakdown_parameters.build_settings_list(self.comparison_settings)
 
-        assert self.settings_list
+        if not self.settings_list:
+            self.settings_list = [self.comparison_settings]
