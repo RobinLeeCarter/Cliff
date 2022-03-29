@@ -32,7 +32,7 @@ class Trainer:
                  verbose: bool = False
                  ):
         self._agent: BaseAgent = agent
-        self._is_non_tabular: bool = isinstance(self._agent, NonTabularAgent)
+        environment = self._agent.environment
         self._breakdown: Optional[BaseBreakdown] = breakdown
         self.settings: Optional[common.Settings] = None
 
@@ -42,11 +42,9 @@ class Trainer:
 
         self._algorithm_factory: Optional[AlgorithmFactory] = AlgorithmFactory(self._agent)
         self._algorithm: Optional[BaseAlgorithm] = None
-        self._policy_factory: PolicyFactory = PolicyFactory(self._agent.environment)
+        self._policy_factory: PolicyFactory = PolicyFactory(environment)
 
-        if self._is_non_tabular:
-            environment = self._agent.environment
-            assert isinstance(environment, NonTabularEnvironment)
+        if isinstance(environment, NonTabularEnvironment):
             self._feature_factory: FeatureFactory = FeatureFactory(environment.dims)
             self._value_function_factory: ValueFunctionFactory = ValueFunctionFactory()
 
@@ -101,8 +99,7 @@ class Trainer:
         self.settings = settings
         self._algorithm = self._algorithm_factory.create(settings.algorithm_parameters)
         self._algorithm.create_policies(self._policy_factory, settings)
-        if self._is_non_tabular:
-            assert isinstance(self._algorithm, NonTabularAlgorithm)
+        if isinstance(self._algorithm, NonTabularAlgorithm):
             self._algorithm.create_feature_and_value_function(
                 self._feature_factory, self._value_function_factory, settings)
         self._agent.apply_settings(self.settings)

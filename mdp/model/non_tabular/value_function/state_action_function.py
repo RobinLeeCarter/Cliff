@@ -1,5 +1,5 @@
 from __future__ import annotations
-from typing import Generic, TypeVar
+from typing import Generic, TypeVar, Optional
 from abc import ABC, abstractmethod
 
 import numpy as np
@@ -15,20 +15,23 @@ Action = TypeVar('Action', bound=NonTabularAction)
 
 class StateActionFunction(Generic[State, Action], ABC):
     def __init__(self,
-                 feature: Feature[State, Action],
+                 feature: Optional[Feature[State, Action]],
                  value_function_parameters: common.ValueFunctionParameters
                  ):
         """
         :param feature: fully formed feature (need max_size property to size the weight vector)
         :param value_function_parameters: how the function should be set up such as initial value
         """
-        self.feature: Feature[State, Action] = feature
-        self.initial_value: float = value_function_parameters.initial_value
+        self._feature: Optional[Feature[State, Action]] = feature
+        self._initial_value: float = value_function_parameters.initial_value
 
     @property
     def has_sparse_feature(self) -> bool:
         """determines whether functions like get_gradient return a vector or a vector of indices"""
-        return self.feature.is_sparse
+        if self._feature:
+            return self._feature.is_sparse
+        else:
+            return False
 
     @abstractmethod
     def __getitem__(self, state: State, action: Action) -> float:

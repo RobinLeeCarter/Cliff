@@ -44,7 +44,9 @@ class NonTabularAlgorithm(BaseAlgorithm, ABC):
                                           feature_factory: FeatureFactory,
                                           value_function_factory: ValueFunctionFactory,
                                           settings: common.Settings):
-        self._feature: Feature = feature_factory.create(settings.feature_parameters)
+        if settings.feature_parameters:
+            self._feature = feature_factory.create(settings.feature_parameters)
+            self._update_parameters_based_on_feature()
 
         if self._requires_v:
             self.V: StateFunction = value_function_factory.create_state_function(
@@ -59,6 +61,10 @@ class NonTabularAlgorithm(BaseAlgorithm, ABC):
         # e.g. behaviour policy is random and off-policy case
         self._link_policy(self._behaviour_policy)
         self._link_policy(self._target_policy)
+
+    def _update_parameters_based_on_feature(self):
+        """e.g. update alpha based on number of tilings"""
+        pass
 
     def _link_policy(self, policy: NonTabularPolicy):
         if policy.requires_feature:

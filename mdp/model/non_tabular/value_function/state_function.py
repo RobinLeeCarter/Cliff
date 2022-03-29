@@ -1,6 +1,6 @@
 from __future__ import annotations
 from abc import ABC, abstractmethod
-from typing import TypeVar, Generic
+from typing import TypeVar, Generic, Optional
 
 from mdp import common
 from mdp.model.non_tabular.environment.non_tabular_state import NonTabularState
@@ -12,20 +12,23 @@ State = TypeVar('State', bound=NonTabularState)
 
 class StateFunction(Generic[State], ABC):
     def __init__(self,
-                 feature: Feature[State, PlaceholderAction],
+                 feature: Optional[Feature[State, PlaceholderAction]],
                  value_function_parameters: common.ValueFunctionParameters
                  ):
         """
         :param feature: fully formed feature (need max_size property to size the weight vector)
         :param value_function_parameters: how the function should be set up such as initial value
         """
-        self.feature: Feature[State, PlaceholderAction] = feature
-        self.initial_value: float = value_function_parameters.initial_value
+        self._feature: Optional[Feature[State, PlaceholderAction]] = feature
+        self._initial_value: float = value_function_parameters.initial_value
 
     @property
     def has_sparse_feature(self) -> bool:
         """determines whether functions like get_gradient return a vector or a vector of indices"""
-        return self.feature.is_sparse
+        if self._feature:
+            return self._feature.is_sparse
+        else:
+            return False
 
     @abstractmethod
     def __getitem__(self, state: State) -> float:

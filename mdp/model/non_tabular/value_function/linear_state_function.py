@@ -25,11 +25,11 @@ class LinearStateFunction(StateFunction[State]):
         """
         super().__init__(feature, value_function_parameters)
 
-        self.size: int = self.feature.max_size
+        self.size: int = self._feature.max_size
         # weights
-        self.w: np.ndarray = np.full(shape=self.size, fill_value=self.initial_value, dtype=float)
+        self.w: np.ndarray = np.full(shape=self.size, fill_value=self._initial_value, dtype=float)
 
     def __getitem__(self, state: State) -> float:
-        self.feature.set_state(state)
-        return self.feature.dot_product_full_vector(self.w)
+        self._feature.set_state(state)
+        return self._feature.dot_product_full_vector(self.w)
 

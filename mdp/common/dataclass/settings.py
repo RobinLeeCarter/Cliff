@@ -21,8 +21,8 @@ class Settings:
     dual_policy_relationship: DualPolicyRelationship = DualPolicyRelationship.SINGLE_POLICY
 
     # non-tabular parameters
-    feature_parameters: FeatureParameters = field(default_factory=FeatureParameters)
-    value_function_parameters: ValueFunctionParameters = field(default_factory=ValueFunctionParameters)
+    feature_parameters: Optional[FeatureParameters] = None
+    value_function_parameters: Optional[ValueFunctionParameters] = None
 
     runs: int = 10
     runs_multiprocessing: Optional[ParallelContextType] = None

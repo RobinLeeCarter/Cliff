@@ -6,7 +6,7 @@ from abc import ABC, abstractmethod
 if TYPE_CHECKING:
     from mdp.model.non_tabular.agent.non_tabular_agent import NonTabularAgent
     from mdp import common
-
+from mdp.model.non_tabular.feature.tile_coding.tile_coding import TileCoding
 from mdp.model.non_tabular.algorithm.non_tabular_algorithm import NonTabularAlgorithm
 
 
@@ -22,6 +22,11 @@ class EpisodicOnline(NonTabularAlgorithm, ABC):
     @staticmethod
     def get_title(name: str, algorithm_parameters: common.AlgorithmParameters) -> str:
         return f"{name} α={algorithm_parameters.alpha}"
+
+    def _update_parameters_based_on_feature(self):
+        """update alpha based on number of tilings"""
+        if isinstance(self._feature, TileCoding):
+            self._alpha /= self._feature.tilings
 
     def do_episode(self, episode_length_timeout: int):
         self._agent.start_episode()

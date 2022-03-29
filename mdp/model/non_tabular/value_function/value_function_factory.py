@@ -1,5 +1,5 @@
 from __future__ import annotations
-from typing import TYPE_CHECKING, Type, TypeVar, Generic
+from typing import TYPE_CHECKING, Type, TypeVar, Generic, Optional
 
 if TYPE_CHECKING:
     from mdp.model.non_tabular.feature.feature import Feature
@@ -27,7 +27,7 @@ class ValueFunctionFactory(Generic[State, Action]):
         }
 
     def create_state_function(self,
-                              feature: Feature,
+                              feature: Optional[Feature],
                               value_function_parameters: common.ValueFunctionParameters) \
             -> StateFunction:
         value_function_type: common.ValueFunctionType = value_function_parameters.value_function_type
@@ -36,7 +36,7 @@ class ValueFunctionFactory(Generic[State, Action]):
         return value_function
 
     def create_state_action_function(self,
-                                     feature: Feature,
+                                     feature: Optional[Feature],
                                      value_function_parameters: common.ValueFunctionParameters) \
             -> StateActionFunction:
         value_function_type: common.ValueFunctionType = value_function_parameters.value_function_type

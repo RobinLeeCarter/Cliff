@@ -7,15 +7,15 @@ if TYPE_CHECKING:
     from mdp.task.mountain_car.controller import Controller
     from mdp.task.mountain_car.model.environment_parameters import EnvironmentParameters
     from mdp.model.non_tabular.feature.feature import Feature
-    from mdp import common
+    # from mdp import common
 from mdp.model.non_tabular.non_tabular_model import NonTabularModel
-from mdp.model.non_tabular.feature.tile_coding.tile_coding import TileCoding
+# from mdp.model.non_tabular.feature.tile_coding.tile_coding import TileCoding
 from mdp.task.mountain_car.model.state import State
 from mdp.task.mountain_car.model.action import Action
 from mdp.task.mountain_car.model.environment import Environment
 
-from mdp.model.non_tabular.environment.dimension.dims import Dims
-from mdp.task.mountain_car.enums import Dim
+# from mdp.model.non_tabular.environment.dimension.dims import Dims
+# from mdp.task.mountain_car.enums import Dim
 
 
 class Model(NonTabularModel[State, Action, Environment]):
@@ -27,19 +27,19 @@ class Model(NonTabularModel[State, Action, Environment]):
     def _create_environment(self, environment_parameters: EnvironmentParameters) -> Environment:
         return Environment(environment_parameters)
 
-    def build(self, comparison: common.Comparison):
-        super().build(comparison)
-        self._create_tile_coding()
-        # create tile_coding here
+    # def build(self, comparison: common.Comparison):
+    #     super().build(comparison)
+    #     # self._create_tile_coding()
+    #     # create tile_coding here
 
-    def _create_tile_coding(self):
-        dims: Dims = self.environment._dims
-        self._feature: TileCoding[State, Action] = TileCoding[State, Action](dims=dims)
-        self._feature.add(included_dims={Dim.POSITION, Dim.VELOCITY})  # , tilings=2 ** 4
-
-        print(f"total tilings = {self._feature.tilings}")
-        print(f"max_size = {self._feature.max_size}")
-
-        tilings = self._feature.tilings
-        alpha = 0.1 / tilings
+    # def _create_tile_coding(self):
+    #     dims: Dims = self.environment.dims
+    #     self._feature: TileCoding[State, Action] = TileCoding[State, Action](dims=dims)
+    #     self._feature.add(included_dims={Dim.POSITION, Dim.VELOCITY})  # , tilings=2 ** 4
+    #
+    #     print(f"total tilings = {self._feature.tilings}")
+    #     print(f"max_size = {self._feature.max_size}")
+    #
+    #     tilings = self._feature.tilings
+    #     alpha = 0.1 / tilings
 

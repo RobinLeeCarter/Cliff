@@ -1,5 +1,7 @@
 from __future__ import annotations
-from typing import TYPE_CHECKING, Type, TypeVar, Generic
+
+from types import NoneType
+from typing import TYPE_CHECKING, Type, TypeVar, Generic, Optional
 
 if TYPE_CHECKING:
     from mdp.model.non_tabular.feature.feature import Feature
@@ -23,9 +25,8 @@ class FeatureFactory(Generic[State, Action]):
             f.TILE_CODING: TileCoding
         }
 
-    def create(self, feature_parameters: common.FeatureParameters) -> Feature:
+    def create(self, feature_parameters: Optional[common.FeatureParameters]) -> Feature:
         feature_type: common.FeatureType = feature_parameters.feature_type
         type_of_feature: Type[Feature] = self._feature_lookup[feature_type]
-
         feature: Feature = type_of_feature[State, Action](self._dims, feature_parameters)
         return feature

@@ -26,31 +26,31 @@ class LinearStateActionFunction(StateActionFunction[State, Action]):
         """
         super().__init__(feature, value_function_parameters)
 
-        self.size: int = self.feature.max_size
+        self.size: int = self._feature.max_size
         # weights
-        self.w: np.ndarray = np.full(shape=self.size, fill_value=self.initial_value, dtype=float)
+        self.w: np.ndarray = np.full(shape=self.size, fill_value=self._initial_value, dtype=float)
 
     def has_sparse_feature(self) -> bool:
-        return self.feature.is_sparse
+        return self._feature.is_sparse
 
     def __getitem__(self, state: State, action: Action) -> float:
         if state.is_terminal:
             return 0.0
         else:
-            self.feature.set_state_action(state, action)
-            return self.feature.dot_product_full_vector(self.w)
+            self._feature.set_state_action(state, action)
+            return self._feature.dot_product_full_vector(self.w)
 
     def get_gradient(self, state: State, action: Action) -> np.ndarray:
-        return self.feature.get_vector()
+        return self._feature.get_vector()
 
     def get_action_values(self, state: State, actions: list[Action]) -> np.ndarray:
         values: list[float] = []
         # set state just once
-        self.feature.set_state(state)
+        self._feature.set_state(state)
         for action in actions:
-            self.feature.set_action(action)
+            self._feature.set_action(action)
             # will calculate vector and then use it
-            value = self.feature.dot_product_full_vector(self.w)
+            value = self._feature.dot_product_full_vector(self.w)
             values.append(value)
         return np.array(values)
 
