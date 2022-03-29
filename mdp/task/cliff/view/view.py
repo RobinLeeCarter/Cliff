@@ -4,7 +4,7 @@ from typing import TYPE_CHECKING, Optional
 if TYPE_CHECKING:
     from mdp.task.cliff.controller import Controller
 
-from mdp.task.position_move.view import view
+from mdp.task._position_move.view import view
 
 
 class View(view.View):

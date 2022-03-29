@@ -4,7 +4,7 @@ from typing import Optional
 from mdp.task.windy.model.model import Model
 from mdp.task.windy.view.view import View
 
-from mdp.task.position_move import controller
+from mdp.task._position_move import controller
 
 
 class Controller(controller.Controller[Model, View]):

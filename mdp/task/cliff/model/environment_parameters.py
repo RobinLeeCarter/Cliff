@@ -3,7 +3,7 @@ from dataclasses import dataclass
 
 from mdp import common
 from mdp.task.cliff.model import grids
-from mdp.task.position_move.model.environment_parameters import PositionMoveEnvironmentParameters
+from mdp.task._position_move.model.environment_parameters import PositionMoveEnvironmentParameters
 
 
 @dataclass

@@ -2,7 +2,7 @@ from __future__ import annotations
 from typing import Optional
 
 from mdp.view.tabular.tabular_view import TabularView
-from mdp.task.position_move.view.grid_view import GridView
+from mdp.task._position_move.view.grid_view import GridView
 
 
 class View(TabularView):

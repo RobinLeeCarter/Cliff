@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from mdp import common
-from mdp.task.position_move.model import action, state
+from mdp.task._position_move.model import action, state
 from mdp.task.random_walk.model.environment import Environment
 from mdp.task.random_walk.model.environment_parameters import EnvironmentParameters
 

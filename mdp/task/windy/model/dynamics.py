@@ -3,12 +3,12 @@ from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from mdp.common import EnvironmentParameters
-    from mdp.task.position_move.model.action import Action
+    from mdp.task._position_move.model.action import Action
     from mdp.task.windy.model.environment import Environment
     from mdp.task.windy.model.grid_world import GridWorld
-    from mdp.task.position_move.model.state import State
+    from mdp.task._position_move.model.state import State
 
-from mdp.task.position_move.model import dynamics
+from mdp.task._position_move.model import dynamics
 
 
 class Dynamics(dynamics.Dynamics):

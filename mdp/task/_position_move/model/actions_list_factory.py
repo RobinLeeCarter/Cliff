@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from mdp import common
-from mdp.task.position_move.model.action import Action
+from mdp.task._position_move.model.action import Action
 
 
 def actions_list_factory(actions_list: common.ActionsList) -> list[Action]:

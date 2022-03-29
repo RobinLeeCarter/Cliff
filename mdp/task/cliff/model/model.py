@@ -6,7 +6,7 @@ if TYPE_CHECKING:
     from mdp.task.cliff.controller import Controller
     from mdp.task.cliff.model.environment_parameters import EnvironmentParameters
 
-from mdp.task.position_move.model import model
+from mdp.task._position_move.model import model
 from mdp.task.cliff.model.environment import Environment
 
 

@@ -3,11 +3,11 @@ from typing import Optional, TYPE_CHECKING, TypeVar
 from abc import ABC
 
 if TYPE_CHECKING:
-    from mdp.task.position_move.controller import Controller
+    from mdp.task._position_move.controller import Controller
 from mdp.model.tabular.tabular_model import TabularModel
-from mdp.task.position_move.model import environment
-from mdp.task.position_move.model.state import State
-from mdp.task.position_move.model.action import Action
+from mdp.task._position_move.model import environment
+from mdp.task._position_move.model.state import State
+from mdp.task._position_move.model.action import Action
 
 Environment = TypeVar('Environment', bound=environment.Environment)
 

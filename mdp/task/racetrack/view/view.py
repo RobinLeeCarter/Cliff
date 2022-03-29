@@ -5,7 +5,7 @@ if TYPE_CHECKING:
     from mdp.task.racetrack.controller import Controller
 
 from mdp.view.tabular.tabular_view import TabularView
-from mdp.task.position.view.grid_view import GridView
+from mdp.task._position.view.grid_view import GridView
 
 
 class View(TabularView):

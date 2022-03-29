@@ -3,7 +3,7 @@ import time
 
 import random
 
-from mdp.task.position_move.model import action
+from mdp.task._position_move.model import action
 from mdp.task.cliff.model import environment_parameters
 from mdp.task.cliff.model.environment import Environment
 
