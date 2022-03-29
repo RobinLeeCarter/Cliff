@@ -2,9 +2,9 @@ from __future__ import annotations
 
 
 from mdp import common
-from mdp.task._position_move.model.state import State
-from mdp.task._position_move.model.grid_world import GridWorld
-from mdp.task._position_move.model import environment
+from mdp.task.position_move.model.state import State
+from mdp.task.position_move.model.grid_world import GridWorld
+from mdp.task.position_move.model import environment
 from mdp.task.cliff.model.dynamics import Dynamics
 from mdp.task.cliff.model.environment_parameters import EnvironmentParameters
 

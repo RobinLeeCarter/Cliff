@@ -3,14 +3,14 @@ from typing import TYPE_CHECKING, Optional
 
 if TYPE_CHECKING:
     from mdp.common import EnvironmentParameters
-    from mdp.task._position_move.model.action import Action
+    from mdp.task.position_move.model.action import Action
     from mdp.task.cliff.model.environment import Environment
 
 
 from mdp import common
 
-from mdp.task._position_move.model.state import State
-from mdp.task._position_move.model import dynamics
+from mdp.task.position_move.model.state import State
+from mdp.task.position_move.model import dynamics
 
 
 class Dynamics(dynamics.Dynamics):

@@ -3,7 +3,7 @@ from typing import Optional, TYPE_CHECKING
 
 if TYPE_CHECKING:
     from mdp.model.tabular.agent.tabular_episode import TabularEpisode
-    from mdp.task._position.model.state import State
+    from mdp.task.position.model.state import State
 
 from mdp import common
 from mdp.view.tabular.tabular_grid_view import TabularGridView

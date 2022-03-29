@@ -3,10 +3,10 @@ from typing import Optional, TYPE_CHECKING
 
 if TYPE_CHECKING:
     from mdp.model.tabular.agent.tabular_episode import TabularEpisode
-    from mdp.task._position_move.model.action import Action
-    from mdp.task._position_move.model.grid_world import GridWorld
+    from mdp.task.position_move.model.action import Action
+    from mdp.task.position_move.model.grid_world import GridWorld
 
-from mdp.task._position_move.model.state import State
+from mdp.task.position_move.model.state import State
 from mdp import common
 from mdp.view.tabular.tabular_grid_view import TabularGridView
 

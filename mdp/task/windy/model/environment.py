@@ -6,7 +6,7 @@ if TYPE_CHECKING:
 from mdp.task.windy.model.grid_world import GridWorld
 from mdp.task.windy.model.dynamics import Dynamics
 
-from mdp.task._position_move.model import environment
+from mdp.task.position_move.model import environment
 
 
 class Environment(environment.Environment):

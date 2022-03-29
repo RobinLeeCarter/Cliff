@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from mdp import common
-from mdp.task._position_move.model import action, state
+from mdp.task.position_move.model import action, state
 from mdp.task.cliff.model.environment_parameters import EnvironmentParameters
 from mdp.task.cliff.model.environment import Environment
 

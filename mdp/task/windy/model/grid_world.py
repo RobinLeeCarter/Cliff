@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from mdp import common
-from mdp.task._position_move.model import grid_world
+from mdp.task.position_move.model import grid_world
 from mdp.task.windy.model import environment_parameters
 
 

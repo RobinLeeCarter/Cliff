@@ -3,13 +3,13 @@ from typing import TYPE_CHECKING, Optional
 from abc import ABC
 
 if TYPE_CHECKING:
-    from mdp.task._position_move.model.environment import Environment
-    from mdp.task._position_move.model.grid_world import GridWorld
+    from mdp.task.position_move.model.environment import Environment
+    from mdp.task.position_move.model.grid_world import GridWorld
     from mdp.common import EnvironmentParameters
 
 from mdp import common
-from mdp.task._position_move.model.state import State
-from mdp.task._position_move.model.action import Action
+from mdp.task.position_move.model.state import State
+from mdp.task.position_move.model.action import Action
 
 from mdp.model.tabular.environment.tabular_dynamics import TabularDynamics
 

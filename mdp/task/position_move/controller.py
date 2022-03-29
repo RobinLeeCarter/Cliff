@@ -2,8 +2,8 @@ from __future__ import annotations
 from typing import Optional, TypeVar
 from abc import ABC
 
-from mdp.task._position_move.model import model
-from mdp.task._position_move.view import view
+from mdp.task.position_move.model import model
+from mdp.task.position_move.view import view
 
 from mdp import common
 from mdp.controller.tabular_controller import TabularController

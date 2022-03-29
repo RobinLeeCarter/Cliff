@@ -4,7 +4,7 @@ from typing import Optional
 import numpy as np
 
 from mdp import common
-from mdp.task._position_move.model import grid_world
+from mdp.task.position_move.model import grid_world
 
 from mdp.task.random_walk.model.environment_parameters import EnvironmentParameters
 

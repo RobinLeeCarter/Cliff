@@ -4,7 +4,7 @@ from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from mdp import common
-from mdp.task._position.model import state
+from mdp.task.position.model import state
 
 
 @dataclass(frozen=True)
