@@ -1,6 +1,5 @@
 from __future__ import annotations
 from dataclasses import dataclass, field
-from typing import Optional
 
 from mdp import common
 from mdp.model.non_tabular.feature.tile_coding.tiling_group_parameters import TilingGroupParameters

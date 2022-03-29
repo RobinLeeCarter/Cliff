@@ -1,6 +1,4 @@
 from __future__ import annotations
-
-from types import NoneType
 from typing import TYPE_CHECKING, Type, TypeVar, Generic, Optional
 
 if TYPE_CHECKING:

@@ -7,8 +7,7 @@ import utils
 if TYPE_CHECKING:
     from mdp import common
     from mdp.model.non_tabular.environment.non_tabular_environment import NonTabularEnvironment
-    from mdp.model.non_tabular.value_function.state_action_function import StateActionFunction
-from mdp.model.non_tabular.policy.action_value.action_value_policy import ActionValuePolicy
+    from mdp.model.non_tabular.policy.action_value.action_value_policy import ActionValuePolicy
 from mdp.model.non_tabular.environment.non_tabular_state import NonTabularState
 from mdp.model.non_tabular.environment.non_tabular_action import NonTabularAction
 

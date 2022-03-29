@@ -7,7 +7,6 @@ if TYPE_CHECKING:
     from mdp.model.base.agent.base_episode import BaseEpisode
     from mdp.model.breakdown.base_breakdown import BaseBreakdown
 from mdp import common
-from mdp.model.non_tabular.agent.non_tabular_agent import NonTabularAgent
 from mdp.model.non_tabular.environment.non_tabular_environment import NonTabularEnvironment
 
 from mdp.model.base.algorithm.algorithm_factory import AlgorithmFactory

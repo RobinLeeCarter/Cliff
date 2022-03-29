@@ -7,6 +7,7 @@ if TYPE_CHECKING:
     from mdp.model.tabular.policy.tabular_policy import TabularPolicy
 
 from mdp import common
+from mdp.task.position_move.model.environment_parameters import PositionMoveEnvironmentParameters
 from mdp.task.position_move.model.state import State
 from mdp.task.position_move.model.action import Action
 from mdp.task.position_move.model import actions_list_factory
@@ -17,8 +18,9 @@ from mdp.model.tabular.environment.tabular_environment import TabularEnvironment
 
 
 class Environment(TabularEnvironment[State, Action], ABC):
-    def __init__(self, environment_parameters: common.EnvironmentParameters):
+    def __init__(self, environment_parameters: PositionMoveEnvironmentParameters):
         super().__init__(environment_parameters)
+        self._environment_parameters: PositionMoveEnvironmentParameters = environment_parameters
         self.grid_world: Optional[GridWorld] = None
         self.dynamics: Optional[Dynamics] = None
 

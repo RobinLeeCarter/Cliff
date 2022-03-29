@@ -4,11 +4,12 @@ from typing import Optional
 import numpy as np
 
 from mdp import common
+from mdp.model.tabular.environment.tabular_environment_parameters import TabularEnvironmentParameters
 
 
 class GridWorld:
     """GridWorld doesn't know about states and actions it just deals in the rules of the grid"""
-    def __init__(self, environment_parameters: common.EnvironmentParameters):
+    def __init__(self, environment_parameters: TabularEnvironmentParameters):
         self._grid: np.ndarray = environment_parameters.grid
         self.max_y: int = self._grid.shape[0] - 1
         self.max_x: int = self._grid.shape[1] - 1

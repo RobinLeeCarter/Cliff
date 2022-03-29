@@ -6,10 +6,11 @@ from mdp.task.position_move.model.state import State
 from mdp.task.position_move.model.grid_world import GridWorld
 from mdp.task.position_move.model import environment
 from mdp.task.cliff.model.dynamics import Dynamics
+from mdp.task.cliff.model.environment_parameters import EnvironmentParameters
 
 
 class Environment(environment.Environment):
-    def __init__(self, environment_parameters: common.EnvironmentParameters):
+    def __init__(self, environment_parameters: EnvironmentParameters):
         super().__init__(environment_parameters)
         self.grid_world = GridWorld(self._environment_parameters)
         self.dynamics = Dynamics(environment=self, environment_parameters=self._environment_parameters)

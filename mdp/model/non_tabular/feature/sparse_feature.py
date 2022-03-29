@@ -1,5 +1,5 @@
 from __future__ import annotations
-from typing import Optional, Union, TypeVar, TYPE_CHECKING
+from typing import Union, TypeVar, TYPE_CHECKING
 from abc import ABC, abstractmethod
 
 import numpy as np
