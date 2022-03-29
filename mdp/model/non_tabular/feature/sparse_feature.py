@@ -42,7 +42,7 @@ class SparseFeature(Feature[State, Action], ABC):
             raise Exception("Size of x not specified")
 
     def get_vector(self) -> np.ndarray:
-        if not self._vector:
+        if self._vector is None:
             # can't use cached version so calculate
             self._vector = self._get_sparse_vector()
         return self._vector

@@ -83,7 +83,7 @@ class Feature(Generic[State, Action], ABC):
         pass
 
     def get_vector(self) -> np.ndarray:
-        if not self._vector:
+        if self._vector is None:
             # can't use cached version so calculate
             self._vector = self._get_full_vector()
         return self._vector

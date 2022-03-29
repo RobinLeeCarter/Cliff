@@ -7,10 +7,10 @@ if TYPE_CHECKING:
     from mdp.model.non_tabular.agent.non_tabular_agent import NonTabularAgent
     from mdp import common
 from mdp.model.non_tabular.feature.tile_coding.tile_coding import TileCoding
-from mdp.model.non_tabular.algorithm.non_tabular_algorithm import NonTabularAlgorithm
+from mdp.model.non_tabular.algorithm.abstract.nontabular_episodic import NonTabularEpisodic
 
 
-class EpisodicOnline(NonTabularAlgorithm, ABC):
+class NonTabularEpisodicOnline(NonTabularEpisodic, ABC):
     def __init__(self,
                  agent: NonTabularAgent,
                  algorithm_parameters: common.AlgorithmParameters,

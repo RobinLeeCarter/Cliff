@@ -7,10 +7,10 @@ class EnvironmentType(enum.IntEnum):
     CLIFF = enum.auto()
     GAMBLER = enum.auto()
     JACKS = enum.auto()
+    MOUNTAIN_CAR = enum.auto()
     RACETRACK = enum.auto()
     RANDOM_WALK = enum.auto()
     WINDY = enum.auto()
-    MOUNTAIN_CAR = enum.auto()
 
 
 class ComparisonType(enum.IntEnum):
@@ -32,6 +32,8 @@ class ComparisonType(enum.IntEnum):
     JACKS_POLICY_ITERATION_Q = enum.auto()
     JACKS_VALUE_ITERATION_V = enum.auto()
     JACKS_VALUE_ITERATION_Q = enum.auto()
+
+    MOUNTAIN_CAR_STANDARD = enum.auto()
 
     RACETRACK_EPISODE = enum.auto()
 

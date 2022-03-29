@@ -34,7 +34,8 @@ class StateActionFunction(Generic[State, Action], ABC):
             return False
 
     @abstractmethod
-    def __getitem__(self, state: State, action: Action) -> float:
+    def __getitem__(self, state_action: tuple[State, Action]) -> float:
+        state, action = state_action
         if state.is_terminal:
             return 0.0
         else:

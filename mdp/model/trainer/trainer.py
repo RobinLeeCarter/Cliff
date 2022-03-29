@@ -17,7 +17,8 @@ from mdp.model.non_tabular.value_function.value_function_factory import ValueFun
 from mdp.model.base.algorithm.base_algorithm import BaseAlgorithm
 from mdp.model.tabular.algorithm.tabular_algorithm import TabularAlgorithm
 from mdp.model.non_tabular.algorithm.non_tabular_algorithm import NonTabularAlgorithm
-from mdp.model.tabular.algorithm.abstract.episodic import Episodic
+from mdp.model.tabular.algorithm.abstract.tabular_episodic import TabularEpisodic
+from mdp.model.non_tabular.algorithm.abstract.nontabular_episodic import NonTabularEpisodic
 from mdp.model.tabular.algorithm.abstract.dynamic_programming import DynamicProgramming
 
 from mdp.model.trainer.parallel_runner import ParallelRunner
@@ -80,7 +81,7 @@ class Trainer:
         self.apply_settings(settings)
 
         match self._algorithm:
-            case Episodic():
+            case TabularEpisodic() | NonTabularEpisodic():
                 self._train_episodic()
             case DynamicProgramming():
                 self._train_dynamic_programming()
@@ -149,7 +150,7 @@ class Trainer:
             return self._get_result(result_parameters)
 
     def _do_episode(self, episode_counter: int):
-        assert isinstance(self._algorithm, Episodic)
+        assert isinstance(self._algorithm, TabularEpisodic) or isinstance(self._algorithm, NonTabularEpisodic)
 
         # for use by Breakdown
         self.episode_counter = episode_counter

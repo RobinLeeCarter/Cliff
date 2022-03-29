@@ -33,7 +33,8 @@ class LinearStateActionFunction(StateActionFunction[State, Action]):
     def has_sparse_feature(self) -> bool:
         return self._feature.is_sparse
 
-    def __getitem__(self, state: State, action: Action) -> float:
+    def __getitem__(self, state_action: tuple[State, Action]) -> float:
+        state, action = state_action
         if state.is_terminal:
             return 0.0
         else:

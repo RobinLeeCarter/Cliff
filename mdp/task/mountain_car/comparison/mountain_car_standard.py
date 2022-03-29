@@ -24,7 +24,7 @@ class Settings(common.Settings):
         epsilon=0.0
     )
     dual_policy_relationship: common.DualPolicyRelationship = common.DualPolicyRelationship.LINKED_POLICIES
-    feature_parameters = common.TileCodingParameters = TileCodingParameters(
+    feature_parameters: TileCodingParameters = TileCodingParameters(
         feature_type=common.FeatureType.TILE_CODING,
         tiling_group=TilingGroupParameters(
             included_dims={Dim.POSITION, Dim.VELOCITY, Dim.ACCELERATION}
@@ -36,7 +36,7 @@ class Settings(common.Settings):
 
 
 class MountainCarStandard(ComparisonBuilder):
-    def create(self):
+    def create(self) -> Comparison:
         return Comparison(
             environment_parameters=EnvironmentParameters(),
             comparison_settings=Settings(),

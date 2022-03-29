@@ -6,10 +6,10 @@ if TYPE_CHECKING:
     from mdp.model.tabular.agent.tabular_agent import TabularAgent
     from mdp.model.tabular.agent.tabular_episode import TabularEpisode
     from mdp import common
-from mdp.model.tabular.algorithm.abstract.episodic import Episodic
+from mdp.model.tabular.algorithm.abstract.tabular_episodic import TabularEpisodic
 
 
-class EpisodicMonteCarlo(Episodic, ABC):
+class EpisodicMonteCarlo(TabularEpisodic, ABC):
     def __init__(self,
                  agent: TabularAgent,
                  algorithm_parameters: common.AlgorithmParameters,

@@ -5,10 +5,10 @@ from abc import ABC, abstractmethod
 if TYPE_CHECKING:
     from mdp.model.tabular.agent.tabular_agent import TabularAgent
     from mdp import common
-from mdp.model.tabular.algorithm.abstract.episodic import Episodic
+from mdp.model.tabular.algorithm.abstract.tabular_episodic import TabularEpisodic
 
 
-class EpisodicOnline(Episodic, ABC):
+class TabularEpisodicOnline(TabularEpisodic, ABC):
     def __init__(self,
                  agent: TabularAgent,
                  algorithm_parameters: common.AlgorithmParameters,
