@@ -18,7 +18,7 @@ class Settings(common.Settings):
         initial_q_value=0.0,
     )
     policy_parameters: common.PolicyParameters = common.PolicyParameters(
-        policy_type=common.PolicyType.E_GREEDY_LINEAR,
+        policy_type=common.PolicyType.NON_TABULAR_E_GREEDY,
         epsilon=0.0
     )
     dual_policy_relationship: common.DualPolicyRelationship = common.DualPolicyRelationship.LINKED_POLICIES

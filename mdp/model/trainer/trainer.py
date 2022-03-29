@@ -2,22 +2,25 @@ from __future__ import annotations
 from typing import TYPE_CHECKING, Optional, Callable
 import multiprocessing
 
-from mdp.model.non_tabular.environment.non_tabular_environment import NonTabularEnvironment
-from mdp.model.non_tabular.feature.feature_factory import FeatureFactory
-
 if TYPE_CHECKING:
     from mdp.model.base.agent.base_agent import BaseAgent
     from mdp.model.base.agent.base_episode import BaseEpisode
     from mdp.model.breakdown.base_breakdown import BaseBreakdown
 from mdp import common
 from mdp.model.non_tabular.agent.non_tabular_agent import NonTabularAgent
-from mdp.model.base.policy.policy_factory import PolicyFactory
+from mdp.model.non_tabular.environment.non_tabular_environment import NonTabularEnvironment
+
 from mdp.model.base.algorithm.algorithm_factory import AlgorithmFactory
+from mdp.model.base.policy.policy_factory import PolicyFactory
+from mdp.model.non_tabular.feature.feature_factory import FeatureFactory
+from mdp.model.non_tabular.value_function.value_function_factory import ValueFunctionFactory
+
 from mdp.model.base.algorithm.base_algorithm import BaseAlgorithm
 from mdp.model.tabular.algorithm.tabular_algorithm import TabularAlgorithm
 from mdp.model.non_tabular.algorithm.non_tabular_algorithm import NonTabularAlgorithm
 from mdp.model.tabular.algorithm.abstract.episodic import Episodic
 from mdp.model.tabular.algorithm.abstract.dynamic_programming import DynamicProgramming
+
 from mdp.model.trainer.parallel_runner import ParallelRunner
 
 
@@ -45,6 +48,7 @@ class Trainer:
             environment = self._agent.environment
             assert isinstance(environment, NonTabularEnvironment)
             self._feature_factory: FeatureFactory = FeatureFactory(environment.dims)
+            self._value_function_factory: ValueFunctionFactory = ValueFunctionFactory()
 
         self.run_counter: int = 0
         self.episode_counter: int = 0
@@ -99,7 +103,8 @@ class Trainer:
         self._algorithm.create_policies(self._policy_factory, settings)
         if self._is_non_tabular:
             assert isinstance(self._algorithm, NonTabularAlgorithm)
-            self._algorithm.create_feature(self._feature_factory, settings.feature_parameters)
+            self._algorithm.create_feature_and_value_function(
+                self._feature_factory, self._value_function_factory, settings)
         self._agent.apply_settings(self.settings)
 
     def _train_episodic(self):

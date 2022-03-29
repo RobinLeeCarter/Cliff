@@ -94,8 +94,8 @@ class PolicyType(enum.IntEnum):
     TABULAR_RANDOM = enum.auto()
 
     # Non-tabular
-    E_GREEDY_LINEAR = enum.auto()
-    SOFTMAX_LINEAR = enum.auto()
+    NON_TABULAR_E_GREEDY = enum.auto()
+    NON_TABULAR_SOFTMAX_LINEAR = enum.auto()
 
 
 class DualPolicyRelationship(enum.IntEnum):
@@ -106,6 +106,11 @@ class DualPolicyRelationship(enum.IntEnum):
 
 class FeatureType(enum.IntEnum):
     TILE_CODING = enum.auto()
+
+
+class ValueFunctionType(enum.IntEnum):
+    LINEAR_STATE = enum.auto()
+    LINEAR_STATE_ACTION = enum.auto()
 
 
 class ActionsList(enum.IntEnum):

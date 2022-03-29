@@ -3,6 +3,8 @@ from typing import TYPE_CHECKING, TypeVar
 
 import numpy as np
 
+from mdp import common
+
 if TYPE_CHECKING:
     from mdp.model.non_tabular.feature.feature import Feature
 from mdp.model.non_tabular.value_function.state_action_function import StateActionFunction
@@ -15,19 +17,18 @@ Action = TypeVar('Action', bound=NonTabularAction)
 
 class LinearStateActionFunction(StateActionFunction[State, Action]):
     def __init__(self,
-                 feature: Feature,
-                 initial_value: float
+                 feature: Feature[State, Action],
+                 value_function_parameters: common.ValueFunctionParameters
                  ):
         """
         :param feature: fully formed feature (need max_size property to size the weight vector)
-        :param initial_value: initial value for the weights (else zero)
+        :param value_function_parameters: how the function should be set up such as initial value
         """
-        self.feature: Feature = feature
-        self.initial_value: float = initial_value
+        super().__init__(feature, value_function_parameters)
 
         self.size: int = self.feature.max_size
         # weights
-        self.w: np.ndarray = np.full(shape=self.size, fill_value=initial_value, dtype=float)
+        self.w: np.ndarray = np.full(shape=self.size, fill_value=self.initial_value, dtype=float)
 
     def has_sparse_feature(self) -> bool:
         return self.feature.is_sparse

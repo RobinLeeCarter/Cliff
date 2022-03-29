@@ -16,7 +16,7 @@ State = TypeVar('State', bound=NonTabularState)
 Action = TypeVar('Action', bound=NonTabularAction)
 
 
-class EGreedyLinear(ActionValuePolicy[State, Action]):
+class NonTabularEGreedy(ActionValuePolicy[State, Action]):
     def __init__(self,
                  environment: NonTabularEnvironment[State, Action],
                  policy_parameters: common.PolicyParameters,
@@ -32,7 +32,7 @@ class EGreedyLinear(ActionValuePolicy[State, Action]):
         """
         self._environment.build_possible_actions(state, build_array=False)
         possible_actions: list[Action] = self._environment.possible_actions_list
-        action_values: np.ndarray = self._state_action_function.get_action_values(state, possible_actions)
+        action_values: np.ndarray = self._Q.get_action_values(state, possible_actions)
         # could also jit this if needed
         if utils.uniform() > self.epsilon:
             max_index: int = int(np.argmax(action_values))
@@ -52,7 +52,7 @@ class EGreedyLinear(ActionValuePolicy[State, Action]):
         self._environment.build_possible_actions(state, build_array=False)
         possible_action_list: list[Action] = self._environment.possible_actions_list
 
-        action_values: np.ndarray = self._state_action_function.get_action_values(state, possible_action_list)
+        action_values: np.ndarray = self._Q.get_action_values(state, possible_action_list)
         max_index: int = int(np.argmax(action_values))
 
         non_greedy_p = self.epsilon / len(possible_action_list)
@@ -73,7 +73,7 @@ class EGreedyLinear(ActionValuePolicy[State, Action]):
         self._environment.build_possible_actions(state, build_array)
         possible_action_list: list[Action] = self._environment.possible_actions_list
 
-        action_values: np.ndarray = self._state_action_function.get_action_values(state, possible_action_list)
+        action_values: np.ndarray = self._Q.get_action_values(state, possible_action_list)
         max_index: int = int(np.argmax(action_values))
 
         if self.is_deterministic:

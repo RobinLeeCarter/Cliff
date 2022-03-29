@@ -1,5 +1,5 @@
 from __future__ import annotations
-from typing import TYPE_CHECKING, TypeVar
+from typing import TYPE_CHECKING, TypeVar, Optional
 from abc import ABC
 
 import numpy as np
@@ -20,9 +20,13 @@ class VectorParameterized(NonTabularPolicy[State, Action], ABC):
     def __init__(self,
                  environment: NonTabularEnvironment,
                  policy_parameters: common.PolicyParameters,
-                 feature: Feature[State, Action],
-                 initial_theta: float = 0.0,
                  ):
         super().__init__(environment, policy_parameters)
+        self._feature: Optional[Feature[State, Action]] = None
+        self._initial_theta: float = policy_parameters.initial_theta
+        self._theta: np.ndarray = np.empty(0, dtype=float)
+        self.requires_feature = True
+
+    def set_feature(self, feature: Feature[State, Action]):
         self._feature: Feature[State, Action] = feature
-        self._theta: np.ndarray = np.full(shape=feature.max_size, fill_value=initial_theta, dtype=float)
+        self._theta = np.full(shape=self._feature.max_size, fill_value=self._initial_theta, dtype=float)

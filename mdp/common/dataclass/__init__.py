@@ -11,6 +11,7 @@ from mdp.common.dataclass.graph3d_values import Graph3DValues
 from mdp.common.dataclass.grid_view_parameters import GridViewParameters
 from mdp.common.dataclass.environment_parameters import EnvironmentParameters
 from mdp.common.dataclass.feature_parameters import FeatureParameters
+from mdp.common.dataclass.value_function_parameters import ValueFunctionParameters
 from mdp.common.dataclass.breakdown_parameters import *
 from mdp.common.dataclass.result_parameters import ResultParameters
 from mdp.common.dataclass.comparison import Comparison

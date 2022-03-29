@@ -21,7 +21,8 @@ class ActionValuePolicy(NonTabularPolicy[State, Action], ABC):
                  policy_parameters: common.PolicyParameters,
                  ):
         super().__init__(environment, policy_parameters)
-        self._state_action_function: Optional[StateActionFunction[State, Action]] = None
+        self._Q: Optional[StateActionFunction[State, Action]] = None
+        self.requires_q = True
 
     def set_state_action_function(self, state_action_function: StateActionFunction[State, Action]):
-        self._state_action_function: StateActionFunction[State, Action] = state_action_function
+        self._Q: StateActionFunction[State, Action] = state_action_function

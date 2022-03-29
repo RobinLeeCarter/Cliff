@@ -7,6 +7,8 @@ import numpy as np
 if TYPE_CHECKING:
     from mdp import common
     from mdp.model.non_tabular.environment.non_tabular_environment import NonTabularEnvironment
+    from mdp.model.non_tabular.feature.feature import Feature
+    from mdp.model.non_tabular.value_function.state_action_function import StateActionFunction
 
 from mdp.model.base.policy.base_policy import BasePolicy
 from mdp.model.non_tabular.environment.non_tabular_state import NonTabularState
@@ -30,6 +32,15 @@ class NonTabularPolicy(Generic[State, Action], BasePolicy, ABC):
         self._possible_actions: list[Action] = []
         self._all_action_count: int = len(self._environment.actions)
         self._probabilities: np.ndarray = np.zeros(shape=self._all_action_count, dtype=float)
+
+        self.requires_feature: bool = False
+        self.requires_q: bool = False
+
+    def set_feature(self, feature: Feature[State, Action]):
+        raise Exception("NotImplemented")
+
+    def set_state_action_function(self, state_action_function: StateActionFunction[State, Action]):
+        raise Exception("NotImplemented")
 
     def __getitem__(self, state: State) -> Optional[Action]:
         if state.is_terminal:

@@ -17,6 +17,7 @@ class EpisodicSarsa(EpisodicOnline):
                  ):
         super().__init__(agent, algorithm_parameters, name)
         self._alpha = self._algorithm_parameters.alpha
+        self._requires_q = True
 
     def _start_episode(self):
         self._agent.choose_action()

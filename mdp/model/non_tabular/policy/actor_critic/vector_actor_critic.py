@@ -1,5 +1,5 @@
 from __future__ import annotations
-from typing import TYPE_CHECKING, TypeVar
+from typing import TYPE_CHECKING, TypeVar, Optional
 from abc import ABC
 
 import numpy as np
@@ -20,12 +20,19 @@ Action = TypeVar('Action', bound=NonTabularAction)
 class VectorActorCritic(NonTabularPolicy[State, Action], ABC):
     def __init__(self,
                  environment: NonTabularEnvironment[State, Action],
-                 policy_parameters: common.PolicyParameters,
-                 state_action_function: StateActionFunction[State, Action],
-                 feature: Feature[State, Action],
-                 initial_theta: float = 0.0,
+                 policy_parameters: common.PolicyParameters
                  ):
         super().__init__(environment, policy_parameters)
-        self._state_action_function: StateActionFunction[State, Action] = state_action_function
+        self._feature: Optional[Feature[State, Action]] = None
+        self._initial_theta: float = policy_parameters.initial_theta
+        self._theta: np.ndarray = np.empty(0, dtype=float)
+        self._Q: Optional[StateActionFunction[State, Action]] = None
+        self.requires_feature = True
+        self.requires_q = True
+
+    def set_feature(self, feature: Feature[State, Action]):
         self._feature: Feature[State, Action] = feature
-        self._theta: np.ndarray = np.full(shape=feature.max_size, fill_value=initial_theta, dtype=float)
+        self._theta = np.full(shape=self._feature.max_size, fill_value=self._initial_theta, dtype=float)
+
+    def set_state_action_function(self, state_action_function: StateActionFunction[State, Action]):
+        self._Q: StateActionFunction[State, Action] = state_action_function

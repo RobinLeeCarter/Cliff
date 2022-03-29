@@ -4,19 +4,31 @@ from abc import ABC, abstractmethod
 
 import numpy as np
 
+from mdp import common
 from mdp.model.non_tabular.environment.non_tabular_state import NonTabularState
 from mdp.model.non_tabular.environment.non_tabular_action import NonTabularAction
+from mdp.model.non_tabular.feature.feature import Feature
 
 State = TypeVar('State', bound=NonTabularState)
 Action = TypeVar('Action', bound=NonTabularAction)
 
 
 class StateActionFunction(Generic[State, Action], ABC):
-    """at it's most general a State Function returns a scalar from a state, how it does that is up to it"""
+    def __init__(self,
+                 feature: Feature[State, Action],
+                 value_function_parameters: common.ValueFunctionParameters
+                 ):
+        """
+        :param feature: fully formed feature (need max_size property to size the weight vector)
+        :param value_function_parameters: how the function should be set up such as initial value
+        """
+        self.feature: Feature[State, Action] = feature
+        self.initial_value: float = value_function_parameters.initial_value
+
     @property
     def has_sparse_feature(self) -> bool:
         """determines whether functions like get_gradient return a vector or a vector of indices"""
-        return False
+        return self.feature.is_sparse
 
     @abstractmethod
     def __getitem__(self, state: State, action: Action) -> float:

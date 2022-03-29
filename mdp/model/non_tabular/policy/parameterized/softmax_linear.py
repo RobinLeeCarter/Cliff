@@ -8,7 +8,6 @@ import utils
 if TYPE_CHECKING:
     from mdp import common
     from mdp.model.non_tabular.environment.non_tabular_environment import NonTabularEnvironment
-    from mdp.model.non_tabular.feature.feature import Feature
 from mdp.model.non_tabular.policy.parameterized.vector_parameterized import VectorParameterized
 from mdp.model.non_tabular.environment.non_tabular_state import NonTabularState
 from mdp.model.non_tabular.environment.non_tabular_action import NonTabularAction
@@ -21,13 +20,10 @@ class SoftmaxLinear(VectorParameterized[State, Action]):
     def __init__(self,
                  environment: NonTabularEnvironment[State, Action],
                  policy_parameters: common.PolicyParameters,
-                 feature: Feature[State, Action],
-                 initial_theta: float = 0.0,
-                 tau: float = 1.0  # temperature parameter
                  ):
-        super().__init__(environment, policy_parameters, feature, initial_theta)
-        self._tau: float = tau
-        self._uses_tau: bool = (tau != 1.0)
+        super().__init__(environment, policy_parameters)
+        self._tau: float = policy_parameters.tau
+        self._uses_tau: bool = (self._tau != 1.0)
 
     def _draw_action(self, state: State) -> Action:
         """"
