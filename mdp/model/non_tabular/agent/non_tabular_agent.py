@@ -14,10 +14,8 @@ Action = TypeVar('Action', bound=NonTabularAction)
 
 
 class NonTabularAgent(Generic[State, Action], BaseAgent):
-    def __init__(self,
-                 environment: NonTabularEnvironment[State, Action],
-                 verbose: bool = False):
-        super().__init__(environment, verbose)
+    def __init__(self, environment: NonTabularEnvironment[State, Action]):
+        super().__init__(environment)
         self._environment: NonTabularEnvironment[State, Action] = environment
 
         self._behaviour_policy: Optional[NonTabularPolicy[State, Action]] = None
@@ -111,7 +109,7 @@ class NonTabularAgent(Generic[State, Action], BaseAgent):
     def _store_rsa(self):
         self._episode.add_rsa(self.r, self.state, self.action)
         if self._verbose:
-            print(f"state = {self.state} \t action = {self.action}")
+            print(f"t={self.t} \t {self.state} \t {self.action}")
 
     def take_action(self):
         """With state and action are already set,

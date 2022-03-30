@@ -15,9 +15,8 @@ Action = TypeVar('Action', bound=TabularAction)
 
 class TabularAgent(Generic[State, Action], BaseAgent):
     def __init__(self,
-                 environment: TabularEnvironment[State, Action],
-                 verbose: bool = False):
-        super().__init__(environment, verbose)
+                 environment: TabularEnvironment[State, Action]):
+        super().__init__(environment)
         self._environment: TabularEnvironment[State, Action] = environment
 
         self._behaviour_policy: Optional[TabularPolicy] = None

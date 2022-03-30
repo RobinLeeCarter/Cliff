@@ -11,10 +11,9 @@ from mdp.model.base.policy.base_policy import BasePolicy
 
 class BaseAgent(ABC):
     def __init__(self,
-                 environment: BaseEnvironment,
-                 verbose: bool = False):
+                 environment: BaseEnvironment):
         self._environment: BaseEnvironment = environment
-        self._verbose: bool = verbose
+        self._verbose: bool = self._environment.verbose
 
         self._behaviour_policy: Optional[BasePolicy] = None
 
