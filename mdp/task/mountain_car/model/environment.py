@@ -26,18 +26,16 @@ class Environment(NonTabularEnvironment[State, Action]):
     def __init__(self, environment_parameters: EnvironmentParameters):
         super().__init__(environment_parameters)
         self._start_state_distribution: Optional[StartStateDistribution] = None
+        self._environment_parameters: EnvironmentParameters = environment_parameters
 
     def _build_actions(self):
-        self.actions = [
-            Action(acceleration=-1.0),
-            Action(acceleration=0.0),
-            Action(acceleration=1.0)
-        ]
+        self.actions = self._environment_parameters.actions
 
     def _build_dimensions(self):
         # insertion order is critical
-        self._dims.state_float[Dim.POSITION] = FloatDimension(min=-1.2, max=0.5)
-        self._dims.state_float[Dim.VELOCITY] = FloatDimension(min=-0.07, max=0.07)
+        e: EnvironmentParameters = self._environment_parameters
+        self._dims.state_float[Dim.POSITION] = FloatDimension(min=e.position_min, max=e.position_max)
+        self._dims.state_float[Dim.VELOCITY] = FloatDimension(min=e.velocity_min, max=e.velocity_max)
         self._dims.action_category[Dim.ACCELERATION] = CategoryDimension(possible_values=len(self.actions))
 
     def _build_start_state_distribution(self):

@@ -6,15 +6,16 @@ from mdp.model.non_tabular.feature.tile_coding.tiling_coding_parameters import T
 from mdp.model.non_tabular.feature.tile_coding.tiling_group_parameters import TilingGroupParameters
 from mdp.task.mountain_car.comparison.comparison_builder import ComparisonBuilder
 from mdp.task.mountain_car.comparison.comparison import Comparison
-from mdp.task.mountain_car.model.environment_parameters import EnvironmentParameters
 from mdp.task.mountain_car.enums import Dim
+
+# TODO: build episode multiprocessing
 
 
 @dataclass
 class Settings(common.Settings):
     runs: int = 1
-    training_episodes: int = 1
-    episode_print_frequency: int = 1
+    training_episodes: int = 9000
+    episode_print_frequency: int = 10
     # display_every_step: bool = True
     algorithm_parameters: common.AlgorithmParameters = common.AlgorithmParameters(
         algorithm_type=common.AlgorithmType.NON_TABULAR_EPISODIC_SARSA,
@@ -38,6 +39,11 @@ class Settings(common.Settings):
 class MountainCarStandard(ComparisonBuilder):
     def create(self) -> Comparison:
         return Comparison(
-            environment_parameters=EnvironmentParameters(),
+            environment_parameters=self._environment_parameters,
             comparison_settings=Settings(),
+            graph3d_values=common.Graph3DValues(
+                x_label="Position",
+                y_label="Velocity",
+                z_label="Time to go"
+            )
         )

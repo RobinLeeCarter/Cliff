@@ -4,7 +4,7 @@ from typing import Optional
 from mdp.task.mountain_car.model.model import Model
 from mdp.task.mountain_car.view.view import View
 
-# from mdp import common
+from mdp import common
 from mdp.controller.non_tabular_controller import NonTabularController
 
 
@@ -13,6 +13,11 @@ class Controller(NonTabularController[Model, View]):
         super().__init__()
         self._model: Optional[Model] = self._model
         self._view: Optional[View] = self._view
+
+    def output(self):
+        if self._comparison.graph3d_values:
+            graph3d_values: common.Graph3DValues = self._model.get_state_action_graph()
+            self._view.graph3d.make_plot(graph3d_values)
 
     # def build(self, comparison: common.Comparison):
     #     super().build(comparison)

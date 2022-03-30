@@ -24,5 +24,5 @@ class Controller(TabularController[Model, View]):
             self._view.grid_view.display_latest_step()
 
             if self._comparison.graph3d_values:
-                graph3d_values = self._model.get_state_function_graph(usable_ace)
+                graph3d_values: common.Graph3DValues = self._model.get_state_function_graph(usable_ace)
                 self._view.graph3d.make_plot(graph3d_values)

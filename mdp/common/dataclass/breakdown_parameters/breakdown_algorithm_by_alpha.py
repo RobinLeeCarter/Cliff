@@ -19,7 +19,7 @@ class BreakdownAlgorithmByAlpha(BreakdownParameters):
 
     def __post_init__(self):
         if not self.alpha_list:
-            self.alpha_list = utils.float_range(start=self.alpha_min, stop=self.alpha_max, step_size=self.alpha_step)
+            self.alpha_list = utils.float_range_step_size(start=self.alpha_min, stop=self.alpha_max, step_size=self.alpha_step)
 
     def build_settings_list(self, settings_template: Settings) -> list[Settings]:
         settings_list: list[Settings] = []
