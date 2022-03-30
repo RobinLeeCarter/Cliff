@@ -52,6 +52,13 @@ def n_choice(n: int) -> int:
 
 
 @njit(cache=True)
+def uniform_choice_from_int_array(arr: np.ndarray) -> int:
+    """Return a random value from a numpy int array"""
+    index = np.random.randint(arr.size)
+    return arr[index]
+
+
+@njit(cache=True)
 def uniform() -> float:
     """Return a random float uniformly from 0.0 to 1.0"""
     return np.random.uniform(0.0, 1.0)

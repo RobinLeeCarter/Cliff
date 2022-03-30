@@ -90,6 +90,8 @@ class NonTabularEnvironment(BaseEnvironment[State, Action], ABC):
     def dims(self) -> Dims:
         return self._dims
 
+    # TODO: Should this be inherent to the Environment not the Environment Parameters.
+    #  Just be a variable set in constructor?
     @property
     def actions_always_compatible(self) -> bool:
         return self._environment_parameters.actions_always_compatible
