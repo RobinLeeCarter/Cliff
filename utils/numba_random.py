@@ -54,8 +54,21 @@ def n_choice(n: int) -> int:
 @njit(cache=True)
 def uniform_choice_from_int_array(arr: np.ndarray) -> int:
     """Return a random value from a numpy int array"""
-    index = np.random.randint(arr.size)
-    return arr[index]
+    size: int = arr.size
+    if size == 1:
+        return arr[0]
+    else:
+        index = np.random.randint(size)
+        return arr[index]
+
+
+@njit(cache=True)
+def choose_argmax_index(values: np.ndarray) -> int:
+    """Return a random argmax index from a numpy float array"""
+    max_val: float = np.max(values)
+    max_indices: np.ndarray = np.flatnonzero(values == max_val)
+    index: int = uniform_choice_from_int_array(max_indices)
+    return index
 
 
 @njit(cache=True)

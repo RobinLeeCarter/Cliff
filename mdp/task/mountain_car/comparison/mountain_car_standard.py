@@ -38,6 +38,6 @@ class Settings(common.Settings):
 class MountainCarStandard(ComparisonBuilder):
     def create(self) -> Comparison:
         return Comparison(
-            environment_parameters=EnvironmentParameters(verbose=True),
+            environment_parameters=EnvironmentParameters(),
             comparison_settings=Settings(),
         )

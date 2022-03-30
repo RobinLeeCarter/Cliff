@@ -37,15 +37,11 @@ class NonTabularEGreedy(ActionValuePolicy[State, Action]):
         action_values: np.ndarray = self._Q.get_action_values(state, possible_actions)
         # could also jit this if needed
         if utils.uniform() > self.epsilon:
-            max_indices: np.ndarray = np.flatnonzero(action_values == np.max(action_values))
-            if max_indices.size > 1:
-                chosen_index: int = utils.uniform_choice_from_int_array(max_indices)
-                return possible_actions[chosen_index]
-            else:
-                return possible_actions[max_indices[0]]
+            index: int = utils.choose_argmax_index(action_values)
+            return possible_actions[index]
         else:
-            i = utils.n_choice(len(possible_actions))
-            return possible_actions[i]
+            index: int = utils.n_choice(len(possible_actions))
+            return possible_actions[index]
 
     def get_probability(self, state: State, action: Action) -> float:
         """

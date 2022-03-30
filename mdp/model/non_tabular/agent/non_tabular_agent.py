@@ -109,7 +109,7 @@ class NonTabularAgent(Generic[State, Action], BaseAgent):
     def _store_rsa(self):
         self._episode.add_rsa(self.r, self.state, self.action)
         if self._verbose:
-            print(f"t={self.t} \t {self.state} \t {self.action}")
+            print(f"t={self.t}\t{self.state} \t {self.action}")
 
     def take_action(self):
         """With state and action are already set,
