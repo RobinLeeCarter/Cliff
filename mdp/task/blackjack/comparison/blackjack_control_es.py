@@ -7,7 +7,8 @@ from mdp.task.blackjack.model.environment_parameters import EnvironmentParameter
 from mdp.task.blackjack.comparison.settings import Settings
 
 
-class BlackjackControlES(ComparisonBuilder):
+class BlackjackControlES(ComparisonBuilder,
+                         comparison_type=common.ComparisonType.BLACKJACK_CONTROL_ES):
     def create(self) -> Comparison:
         # self._comparison_settings.training_episodes = 100_000
         comparison = Comparison(

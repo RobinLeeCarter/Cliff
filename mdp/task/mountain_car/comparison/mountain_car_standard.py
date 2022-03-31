@@ -14,7 +14,7 @@ from mdp.task.mountain_car.enums import Dim
 @dataclass
 class Settings(common.Settings):
     runs: int = 1
-    training_episodes: int = 9000
+    training_episodes: int = 10
     episode_print_frequency: int = 10
     # display_every_step: bool = True
     algorithm_parameters: common.AlgorithmParameters = common.AlgorithmParameters(
@@ -36,7 +36,8 @@ class Settings(common.Settings):
     )
 
 
-class MountainCarStandard(ComparisonBuilder):
+class MountainCarStandard(ComparisonBuilder,
+                          comparison_type=common.ComparisonType.MOUNTAIN_CAR_STANDARD):
     def create(self) -> Comparison:
         return Comparison(
             environment_parameters=self._environment_parameters,

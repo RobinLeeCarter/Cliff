@@ -6,7 +6,8 @@ from mdp.task.jacks.comparison.comparison import Comparison
 from mdp.task.jacks.comparison.settings import Settings
 
 
-class JacksPolicyIterationV(ComparisonBuilder):
+class JacksPolicyIterationV(ComparisonBuilder,
+                            comparison_type=common.ComparisonType.JACKS_POLICY_ITERATION_V):
     def create(self) -> Comparison:
         graph3d_values = self._graph3d_values
         grid_view_parameters = self._grid_view_parameters

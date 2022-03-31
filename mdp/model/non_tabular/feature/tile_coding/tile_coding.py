@@ -10,6 +10,7 @@ if TYPE_CHECKING:
     from mdp.model.non_tabular.environment.dimension.dim_enum import DimEnum
     from mdp.model.non_tabular.environment.dimension.dims import Dims
     from mdp.model.non_tabular.feature.tile_coding.tiling_coding_parameters import TileCodingParameters
+from mdp import common
 from mdp.model.non_tabular.feature.tile_coding.tiling_group import TilingGroup
 from mdp.model.non_tabular.feature.sparse_feature import SparseFeature
 from mdp.model.non_tabular.environment.non_tabular_state import NonTabularState
@@ -19,7 +20,8 @@ State = TypeVar('State', bound=NonTabularState)
 Action = TypeVar('Action', bound=NonTabularAction)
 
 
-class TileCoding(SparseFeature[State, Action]):
+class TileCoding(SparseFeature[State, Action],
+                 feature_type=common.FeatureType.TILE_CODING):
     def __init__(self, dims: Dims, tile_coding_parameters: TileCodingParameters):
         """
         :param dims: the dimensions of the space being covered and whether continuous or categorical

@@ -7,7 +7,8 @@ from mdp.task.blackjack.model.environment_parameters import EnvironmentParameter
 from mdp.task.blackjack.comparison.settings import Settings
 
 
-class BlackjackEvaluationV(ComparisonBuilder):
+class BlackjackEvaluationV(ComparisonBuilder,
+                           comparison_type=common.ComparisonType.BLACKJACK_EVALUATION_V):
     def create(self) -> Comparison:
         return Comparison(
             environment_parameters=EnvironmentParameters(),

@@ -1,5 +1,5 @@
 from __future__ import annotations
-from typing import Optional, Union, TypeVar, Generic, TYPE_CHECKING
+from typing import Optional, Union, TypeVar, Generic, TYPE_CHECKING, Type
 from abc import ABC, abstractmethod
 
 import numpy as np
@@ -15,6 +15,15 @@ Action = TypeVar('Action', bound=NonTabularAction)
 
 
 class Feature(Generic[State, Action], ABC):
+    type_registry: dict[common.FeatureType, Type[Feature]] = {}
+
+    def __init_subclass__(cls,
+                          feature_type: Optional[common.FeatureType] = None,
+                          **kwargs):
+        super().__init_subclass__(**kwargs)
+        if feature_type:
+            Feature.type_registry[feature_type] = cls
+
     def __init__(self, dims: Dims, feature_parameters: common.FeatureParameters):
         """
         if sparse implement def _get_x_sparse if not sparse implement _get_x

@@ -28,7 +28,7 @@ class Model(TabularModel[State, Action, Environment]):
         return Environment(environment_parameters)
 
     def _display_step(self, episode: Optional[TabularEpisode]):
-        policy = self.target_policy
+        policy = self.algorithm.target_policy
         assert isinstance(policy, TabularPolicy)
         self.environment.update_grid_policy(policy)
         self._controller.display_step(episode)

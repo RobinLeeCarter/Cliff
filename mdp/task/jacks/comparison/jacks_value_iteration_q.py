@@ -6,7 +6,8 @@ from mdp.task.jacks.comparison.comparison import Comparison
 from mdp.task.jacks.comparison.settings import Settings
 
 
-class JacksValueIterationQ(ComparisonBuilder):
+class JacksValueIterationQ(ComparisonBuilder,
+                           comparison_type=common.ComparisonType.JACKS_VALUE_ITERATION_Q):
     def create(self) -> Comparison:
         graph3d_values = self._graph3d_values
 

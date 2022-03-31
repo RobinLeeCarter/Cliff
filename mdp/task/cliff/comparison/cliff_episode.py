@@ -15,7 +15,8 @@ class Settings(common.Settings):
     # display_every_step: bool = True
 
 
-class CliffEpisode(ComparisonBuilder):
+class CliffEpisode(ComparisonBuilder,
+                   comparison_type=common.ComparisonType.CLIFF_EPISODE):
     def create(self) -> Comparison:
         return Comparison(
             environment_parameters=EnvironmentParameters(),

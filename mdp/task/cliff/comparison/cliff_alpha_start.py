@@ -6,7 +6,8 @@ from mdp.task.cliff.comparison.comparison import Comparison
 from mdp.task.cliff.model.environment_parameters import EnvironmentParameters
 
 
-class CliffAlphaStart(ComparisonBuilder):
+class CliffAlphaStart(ComparisonBuilder,
+                      comparison_type=common.ComparisonType.CLIFF_ALPHA_START):
     def create(self) -> Comparison:
         return Comparison(
             environment_parameters=EnvironmentParameters(),

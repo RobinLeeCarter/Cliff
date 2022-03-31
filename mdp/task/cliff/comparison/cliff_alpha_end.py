@@ -6,7 +6,8 @@ from mdp.task.cliff.comparison.comparison import Comparison
 from mdp.task.cliff.model.environment_parameters import EnvironmentParameters
 
 
-class CliffAlphaEnd(ComparisonBuilder):
+class CliffAlphaEnd(ComparisonBuilder,
+                    comparison_type=common.ComparisonType.CLIFF_ALPHA_END):
     def create(self) -> Comparison:
         # TODO: Make work, once multiprocessing
         return Comparison(

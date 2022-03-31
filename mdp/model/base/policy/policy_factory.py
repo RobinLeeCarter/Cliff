@@ -3,7 +3,7 @@ from typing import TYPE_CHECKING, Type
 
 if TYPE_CHECKING:
     from mdp.model.base.policy.base_policy import BasePolicy
-from mdp.model.base.environment.base_environment import BaseEnvironment    # will this create a circular dep
+    from mdp.model.base.environment.base_environment import BaseEnvironment    # will this create a circular dep
 from mdp import common
 from mdp.model.tabular.policy import tabular_policy_lookups
 from mdp.model.non_tabular.policy import non_tabular_policy_lookups

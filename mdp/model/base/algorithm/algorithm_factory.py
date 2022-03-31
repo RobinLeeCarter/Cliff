@@ -8,6 +8,11 @@ from mdp.model.base.algorithm.base_algorithm import BaseAlgorithm
 from mdp.model.tabular.algorithm import tabular_algorithm_lookups
 from mdp.model.non_tabular.algorithm import non_tabular_algorithm_lookups
 
+from mdp.model.tabular.algorithm import tabular_algorithm_imports
+
+if tabular_algorithm_imports.dummy_list:
+    pass
+
 
 class AlgorithmFactory:
     def __init__(self, agent: BaseAgent):

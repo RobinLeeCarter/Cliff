@@ -16,7 +16,8 @@ class Settings(common.Settings):
     display_every_step: bool = False
 
 
-class GamblerValueIterationV(ComparisonBuilder):
+class GamblerValueIterationV(ComparisonBuilder,
+                             comparison_type=common.ComparisonType.GAMBLER_VALUE_ITERATION_V):
     def create(self):
         return Comparison(
             # environment_parameters=EnvironmentParameters(),

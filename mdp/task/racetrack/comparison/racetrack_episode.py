@@ -17,7 +17,8 @@ class Settings(common.Settings):
     dual_policy_relationship: common.DualPolicyRelationship = common.DualPolicyRelationship.LINKED_POLICIES
 
 
-class RacetrackEpisode(ComparisonBuilder):
+class RacetrackEpisode(ComparisonBuilder,
+                       comparison_type=common.ComparisonType.RACETRACK_EPISODE):
     def create(self):
         # TODO: Problem with the first step not learning and crashing?
         #  Try grids.TRACK_1 for example (3rd position crash)

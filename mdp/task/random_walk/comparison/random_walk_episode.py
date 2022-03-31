@@ -23,7 +23,8 @@ class Settings(common.Settings):
     algorithm_parameters: common.AlgorithmParameters = AlgorithmParameters()
 
 
-class RandomWalkEpisode(ComparisonBuilder):
+class RandomWalkEpisode(ComparisonBuilder,
+                        comparison_type=common.ComparisonType.RANDOM_WALK_EPISODE):
     def create(self):
         return Comparison(
             environment_parameters=EnvironmentParameters(),

@@ -29,12 +29,10 @@ from mdp.task.racetrack.comparison.racetrack_episode import RacetrackEpisode
 
 from mdp.task.random_walk.comparison.random_walk_episode import RandomWalkEpisode
 
-
 from mdp.task.windy.comparison.windy_timestep import WindyTimestep
+from mdp.task.windy.comparison.windy_timestep_random import WindyTimestepRandom
 
-ComparisonBuilderLookup = dict[common.ComparisonType,
-                               Type[BaseComparisonBuilder] |
-                               tuple[Type[BaseComparisonBuilder], dict[str, any]]]
+ComparisonBuilderLookup = dict[common.ComparisonType, Type[BaseComparisonBuilder]]
 
 
 class ComparisonFactory:
@@ -61,7 +59,7 @@ class ComparisonFactory:
             ct.RACETRACK_EPISODE: RacetrackEpisode,
             ct.RANDOM_WALK_EPISODE: RandomWalkEpisode,
             ct.WINDY_TIMESTEP: WindyTimestep,
-            ct.WINDY_TIMESTEP_RANDOM: (WindyTimestep, {"random_wind": True})
+            ct.WINDY_TIMESTEP_RANDOM: WindyTimestepRandom
         }
 
     def create(self, comparison_type: common.ComparisonType) -> common.Comparison:
@@ -71,16 +69,8 @@ class ComparisonFactory:
         return comparison
 
     def _create_comparison_builder(self) -> BaseComparisonBuilder:
-        type_of_comparison_builder: Type[BaseComparisonBuilder]
-        kwargs: dict[str, any] = {}
-
-        match self._lookup[self._comparison_type]:
-            case type() as type_of_comparison_builder:
-                pass
-            case type() as type_of_comparison_builder, dict() as kwargs:
-                pass
-            case _:
-                raise Exception("scenario type / args lookup failed")
-
-        comparison_builder: BaseComparisonBuilder = type_of_comparison_builder(**kwargs)
+        # type_of_comparison_builder: Type[BaseComparisonBuilder] = self._lookup[self._comparison_type]
+        type_of_comparison_builder: Type[BaseComparisonBuilder] = \
+            BaseComparisonBuilder.type_registry[self._comparison_type]
+        comparison_builder: BaseComparisonBuilder = type_of_comparison_builder()
         return comparison_builder
