@@ -15,7 +15,8 @@ from mdp.task.gambler.model.state import State
 from mdp.task.gambler.model.action import Action
 
 
-class Model(TabularModel[State, Action, Environment]):
+class Model(TabularModel[State, Action, Environment],
+            environment_type=common.EnvironmentType.GAMBLER):
     def __init__(self, verbose: bool = False):
         super().__init__(verbose)
         self._controller: Optional[Controller] = None

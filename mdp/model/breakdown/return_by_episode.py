@@ -8,7 +8,8 @@ from mdp.model.breakdown.recorder import Recorder
 from mdp.model.breakdown.base_breakdown import BaseBreakdown
 
 
-class ReturnByEpisode(BaseBreakdown):
+class ReturnByEpisode(BaseBreakdown,
+                      breakdown_type=common.BreakdownType.RETURN_BY_EPISODE):
     def __init__(self, comparison: common.Comparison):
         super().__init__(comparison)
 

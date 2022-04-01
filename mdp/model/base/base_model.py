@@ -1,5 +1,5 @@
 from __future__ import annotations
-from typing import Optional, TYPE_CHECKING, TypeVar, Generic
+from typing import Optional, TYPE_CHECKING, TypeVar, Generic, Type
 from abc import ABC, abstractmethod
 import multiprocessing
 
@@ -14,7 +14,7 @@ import utils
 from mdp import common
 from mdp.model.base.environment.base_environment import BaseEnvironment
 from mdp.model.base.agent.base_agent import BaseAgent
-from mdp.model.breakdown.breakdown_factory import BreakdownFactory
+from mdp.factory.breakdown_factory import BreakdownFactory
 from mdp.model.trainer.trainer import Trainer
 from mdp.model.trainer.parallel_trainer import ParallelTrainer
 
@@ -24,6 +24,15 @@ Agent = TypeVar('Agent', bound=BaseAgent)
 
 
 class BaseModel(Generic[Environment, Agent], ABC):
+    type_registry: dict[common.EnvironmentType, Type[BaseModel]] = {}
+
+    def __init_subclass__(cls,
+                          environment_type: Optional[common.EnvironmentType] = None,
+                          **kwargs):
+        super().__init_subclass__(**kwargs)
+        if environment_type:
+            BaseModel.type_registry[environment_type] = cls
+
     def __init__(self, verbose: bool = False):
         self.verbose: bool = verbose
         self.environment: Optional[Environment] = None

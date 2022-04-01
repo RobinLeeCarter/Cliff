@@ -7,8 +7,8 @@ import numpy as np
 if TYPE_CHECKING:
     from mdp import common
     from mdp.model.non_tabular.environment.non_tabular_environment import NonTabularEnvironment
-    from mdp.model.non_tabular.feature.feature import Feature
-    from mdp.model.non_tabular.value_function.state_action_function import StateActionFunction
+    from mdp.model.non_tabular.feature.base_feature import BaseFeature
+    from mdp.model.non_tabular.value_function.state_action.state_action_function import StateActionFunction
 
 from mdp.model.base.policy.base_policy import BasePolicy
 from mdp.model.non_tabular.environment.non_tabular_state import NonTabularState
@@ -36,7 +36,7 @@ class NonTabularPolicy(Generic[State, Action], BasePolicy, ABC):
         self.requires_feature: bool = False
         self.requires_q: bool = False
 
-    def set_feature(self, feature: Feature[State, Action]):
+    def set_feature(self, feature: BaseFeature[State, Action]):
         raise Exception("NotImplemented")
 
     def set_state_action_function(self, state_action_function: StateActionFunction[State, Action]):

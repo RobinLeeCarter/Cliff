@@ -1,13 +1,15 @@
 from __future__ import annotations
 from typing import Optional
 
+from mdp import common
 from mdp.task.cliff.model.model import Model
 from mdp.task.cliff.view.view import View
 
 from mdp.task.position_move import controller
 
 
-class Controller(controller.Controller[Model, View]):
+class Controller(controller.Controller[Model, View],
+                 environment_type=common.EnvironmentType.CLIFF):
     def __init__(self):
         super().__init__()
         self._model: Optional[Model] = self._model

@@ -8,7 +8,8 @@ from mdp.model.breakdown.recorder import Recorder
 from mdp.model.breakdown.base_breakdown import BaseBreakdown
 
 
-class EpisodeByTimestep(BaseBreakdown):
+class EpisodeByTimestep(BaseBreakdown,
+                        breakdown_type=common.BreakdownType.EPISODE_BY_TIMESTEP):
     def __init__(self, comparison: common.Comparison):
         super().__init__(comparison)
 

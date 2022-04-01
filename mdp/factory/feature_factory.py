@@ -3,7 +3,7 @@ from typing import TYPE_CHECKING, Type, TypeVar, Generic, Optional
 
 if TYPE_CHECKING:
     from mdp.model.non_tabular.environment.dimension.dims import Dims
-from mdp.model.non_tabular.feature.feature import Feature
+from mdp.model.non_tabular.feature.base_feature import BaseFeature
 from mdp import common
 
 from mdp.model.non_tabular.feature.tile_coding.tile_coding import TileCoding
@@ -20,10 +20,10 @@ class FeatureFactory(Generic[State, Action]):
     def __init__(self, dims: Dims):
         self._dims: Dims = dims
 
-    def create(self, feature_parameters: Optional[common.FeatureParameters]) -> Feature:
+    def create(self, feature_parameters: Optional[common.FeatureParameters]) -> BaseFeature:
         feature_type: common.FeatureType = feature_parameters.feature_type
-        type_of_feature: Type[Feature] = Feature.type_registry[feature_type]
-        feature: Feature = type_of_feature[State, Action](self._dims, feature_parameters)
+        type_of_feature: Type[BaseFeature] = BaseFeature.type_registry[feature_type]
+        feature: BaseFeature = type_of_feature[State, Action](self._dims, feature_parameters)
         return feature
 
 

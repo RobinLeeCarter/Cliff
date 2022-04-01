@@ -3,14 +3,14 @@ from typing import TYPE_CHECKING, Optional
 from abc import ABC
 
 if TYPE_CHECKING:
-    from mdp.model.non_tabular.value_function.state_function import StateFunction
-    from mdp.model.non_tabular.value_function.state_action_function import StateActionFunction
+    from mdp.model.non_tabular.value_function.state.state_function import StateFunction
+    from mdp.model.non_tabular.value_function.state_action.state_action_function import StateActionFunction
     from mdp.model.non_tabular.agent.non_tabular_agent import NonTabularAgent
     from mdp.model.non_tabular.policy.non_tabular_policy import NonTabularPolicy
     from mdp import common
-from mdp.model.non_tabular.feature.feature_factory import FeatureFactory
-from mdp.model.non_tabular.value_function.value_function_factory import ValueFunctionFactory
-from mdp.model.non_tabular.feature.feature import Feature
+from mdp.factory.feature_factory import FeatureFactory
+from mdp.factory.value_function_factory import ValueFunctionFactory
+from mdp.model.non_tabular.feature.base_feature import BaseFeature
 from mdp.model.base.algorithm.base_algorithm import BaseAlgorithm
 
 
@@ -21,7 +21,7 @@ class NonTabularAlgorithm(BaseAlgorithm, ABC):
                  ):
         super().__init__(agent, algorithm_parameters)
         self._agent: NonTabularAgent = agent
-        self._feature: Optional[Feature] = None
+        self._feature: Optional[BaseFeature] = None
         self._target_policy: Optional[NonTabularPolicy] = None
         self._behaviour_policy: Optional[NonTabularPolicy] = None     # if on-policy = self._policy
         self.V: Optional[StateFunction] = None

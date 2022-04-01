@@ -12,7 +12,8 @@ from mdp import common
 from mdp.controller.tabular_controller import TabularController
 
 
-class Controller(TabularController[Model, View]):
+class Controller(TabularController[Model, View],
+                 environment_type=common.EnvironmentType.JACKS):
     def __init__(self):
         super().__init__()
         self._model: Optional[Model] = self._model

@@ -18,7 +18,8 @@ from mdp.task.jacks.model.state import State
 from mdp.task.jacks.model.action import Action
 
 
-class Model(TabularModel[State, Action, Environment]):
+class Model(TabularModel[State, Action, Environment],
+            environment_type=common.EnvironmentType.JACKS):
     def __init__(self, verbose: bool = False):
         super().__init__(verbose)
         self._controller: Optional[Controller] = None

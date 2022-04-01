@@ -6,8 +6,8 @@ import numpy as np
 from mdp import common
 
 if TYPE_CHECKING:
-    from mdp.model.non_tabular.feature.feature import Feature
-from mdp.model.non_tabular.value_function.state_action_function import StateActionFunction
+    from mdp.model.non_tabular.feature.base_feature import BaseFeature
+from mdp.model.non_tabular.value_function.state_action.state_action_function import StateActionFunction
 from mdp.model.non_tabular.environment.non_tabular_state import NonTabularState
 from mdp.model.non_tabular.environment.non_tabular_action import NonTabularAction
 
@@ -15,9 +15,10 @@ State = TypeVar('State', bound=NonTabularState)
 Action = TypeVar('Action', bound=NonTabularAction)
 
 
-class LinearStateActionFunction(StateActionFunction[State, Action]):
+class LinearStateActionFunction(StateActionFunction[State, Action],
+                                value_function_type=common.ValueFunctionType.LINEAR_STATE_ACTION):
     def __init__(self,
-                 feature: Feature[State, Action],
+                 feature: BaseFeature[State, Action],
                  value_function_parameters: common.ValueFunctionParameters
                  ):
         """

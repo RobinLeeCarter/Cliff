@@ -3,12 +3,13 @@ from typing import TYPE_CHECKING, Optional
 
 if TYPE_CHECKING:
     from mdp.task.random_walk.controller import Controller
-
+from mdp import common
 from mdp.task.position_move.view import view
 from mdp.task.random_walk.view.grid_view import GridView
 
 
-class View(view.View):
+class View(view.View,
+           environment_type=common.EnvironmentType.RANDOM_WALK):
     def __init__(self):
         super().__init__()
         self._controller: Optional[Controller] = None

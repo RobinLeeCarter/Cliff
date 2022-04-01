@@ -7,7 +7,7 @@ import numpy as np
 if TYPE_CHECKING:
     from mdp import common
     from mdp.model.non_tabular.environment.non_tabular_environment import NonTabularEnvironment
-    from mdp.model.non_tabular.feature.feature import Feature
+    from mdp.model.non_tabular.feature.base_feature import BaseFeature
 from mdp.model.non_tabular.policy.non_tabular_policy import NonTabularPolicy
 from mdp.model.non_tabular.environment.non_tabular_state import NonTabularState
 from mdp.model.non_tabular.environment.non_tabular_action import NonTabularAction
@@ -22,11 +22,11 @@ class VectorParameterized(NonTabularPolicy[State, Action], ABC):
                  policy_parameters: common.PolicyParameters,
                  ):
         super().__init__(environment, policy_parameters)
-        self._feature: Optional[Feature[State, Action]] = None
+        self._feature: Optional[BaseFeature[State, Action]] = None
         self._initial_theta: float = policy_parameters.initial_theta
         self._theta: np.ndarray = np.empty(0, dtype=float)
         self.requires_feature = True
 
-    def set_feature(self, feature: Feature[State, Action]):
-        self._feature: Feature[State, Action] = feature
+    def set_feature(self, feature: BaseFeature[State, Action]):
+        self._feature: BaseFeature[State, Action] = feature
         self._theta = np.full(shape=self._feature.max_size, fill_value=self._initial_theta, dtype=float)

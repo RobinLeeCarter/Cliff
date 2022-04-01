@@ -4,18 +4,18 @@ import copy
 
 import numpy as np
 
-from mdp import common
-
 if TYPE_CHECKING:
     from mdp.task.jacks.controller import Controller
     from mdp.task.blackjack.model.environment_parameters import EnvironmentParameters
+from mdp import common
 from mdp.model.tabular.tabular_model import TabularModel
 from mdp.task.blackjack.model.environment import Environment
 from mdp.task.blackjack.model.state import State
 from mdp.task.blackjack.model.action import Action
 
 
-class Model(TabularModel[State, Action, Environment]):
+class Model(TabularModel[State, Action, Environment],
+            environment_type=common.EnvironmentType.BLACKJACK):
     def __init__(self, verbose: bool = False):
         super().__init__(verbose)
         self._controller: Optional[Controller] = None

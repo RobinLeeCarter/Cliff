@@ -8,7 +8,8 @@ from mdp.model.tabular.algorithm.tabular_algorithm import TabularAlgorithm
 from mdp.model.tabular.environment.tabular_environment import TabularEnvironment
 
 
-class RmsByEpisode(ReturnByEpisode):
+class RmsByEpisode(ReturnByEpisode,
+                   breakdown_type=common.BreakdownType.RMS_BY_EPISODE):
     def __init__(self, comparison: common.Comparison):
         super().__init__(comparison)
         self._y_label = "Average RMS error"
@@ -39,4 +40,3 @@ class RmsByEpisode(ReturnByEpisode):
                 count += 1
         rms_error = math.sqrt(squared_error / count)
         return rms_error
-

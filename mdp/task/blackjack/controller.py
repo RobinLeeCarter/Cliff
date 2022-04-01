@@ -7,7 +7,8 @@ from mdp.task.blackjack.model.model import Model
 from mdp.task.blackjack.view.view import View
 
 
-class Controller(TabularController[Model, View]):
+class Controller(TabularController[Model, View],
+                 environment_type=common.EnvironmentType.BLACKJACK):
     def __init__(self):
         super().__init__()
         self._model: Optional[Model] = None

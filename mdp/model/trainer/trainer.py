@@ -11,8 +11,8 @@ from mdp.model.non_tabular.environment.non_tabular_environment import NonTabular
 
 from mdp.factory.algorithm_factory import AlgorithmFactory
 from mdp.factory.policy_factory import PolicyFactory
-from mdp.model.non_tabular.feature.feature_factory import FeatureFactory
-from mdp.model.non_tabular.value_function.value_function_factory import ValueFunctionFactory
+from mdp.factory.feature_factory import FeatureFactory
+from mdp.factory.value_function_factory import ValueFunctionFactory
 
 from mdp.model.base.algorithm.base_algorithm import BaseAlgorithm
 from mdp.model.tabular.algorithm.tabular_algorithm import TabularAlgorithm

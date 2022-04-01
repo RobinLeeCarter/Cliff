@@ -14,15 +14,15 @@ State = TypeVar('State', bound=NonTabularState)
 Action = TypeVar('Action', bound=NonTabularAction)
 
 
-class Feature(Generic[State, Action], ABC):
-    type_registry: dict[common.FeatureType, Type[Feature]] = {}
+class BaseFeature(Generic[State, Action], ABC):
+    type_registry: dict[common.FeatureType, Type[BaseFeature]] = {}
 
     def __init_subclass__(cls,
                           feature_type: Optional[common.FeatureType] = None,
                           **kwargs):
         super().__init_subclass__(**kwargs)
         if feature_type:
-            Feature.type_registry[feature_type] = cls
+            BaseFeature.type_registry[feature_type] = cls
 
     def __init__(self, dims: Dims, feature_parameters: common.FeatureParameters):
         """

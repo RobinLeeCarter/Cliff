@@ -3,8 +3,8 @@ from typing import Optional, TypeVar, TYPE_CHECKING
 
 import numpy as np
 
-from mdp.model.non_tabular.feature.feature import Feature
-from mdp.model.non_tabular.feature.feature_factory import FeatureFactory
+from mdp.model.non_tabular.feature.base_feature import BaseFeature
+from mdp.factory.feature_factory import FeatureFactory
 
 if TYPE_CHECKING:
     from mdp.model.non_tabular.environment.dimension.dims import Dims
@@ -25,7 +25,7 @@ class CompoundSparseFeature(SparseFeature[State, Action]):
         """
         super().__init__(dims, compound_feature_parameters)
         feature_factory: FeatureFactory = FeatureFactory(dims)
-        self._features: list[Feature[State, Action]] = \
+        self._features: list[BaseFeature[State, Action]] = \
             [feature_factory.create(feature_parameters)
              for feature_parameters in compound_feature_parameters.feature_parameters_list]
         self._max_size: Optional[int] = sum(feature.max_size for feature in self._features)

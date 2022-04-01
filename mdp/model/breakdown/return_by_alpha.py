@@ -9,7 +9,8 @@ from mdp.model.breakdown.recorder import Recorder
 from mdp.model.breakdown.base_breakdown import BaseBreakdown
 
 
-class ReturnByAlpha(BaseBreakdown):
+class ReturnByAlpha(BaseBreakdown,
+                    breakdown_type=common.BreakdownType.RETURN_BY_ALPHA):
     def __init__(self, comparison: common.Comparison):
         super().__init__(comparison)
         assert isinstance(self.comparison.breakdown_parameters, common.BreakdownAlgorithmByAlpha)

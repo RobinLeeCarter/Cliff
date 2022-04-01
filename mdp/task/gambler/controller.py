@@ -1,14 +1,14 @@
 from __future__ import annotations
-
-
 from typing import Optional
 
+from mdp import common
 from mdp.task.gambler.model.model import Model
 from mdp.task.gambler.view.view import View
 from mdp.controller.tabular_controller import TabularController
 
 
-class Controller(TabularController[Model, View]):
+class Controller(TabularController[Model, View],
+                 environment_type=common.EnvironmentType.GAMBLER):
     def __init__(self):
         super().__init__()
         self._model: Optional[Model] = self._model

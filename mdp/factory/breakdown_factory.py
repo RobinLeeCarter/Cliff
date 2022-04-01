@@ -22,8 +22,18 @@ class BreakdownFactory:
     def create(self, comparison: common.Comparison) -> Optional[BaseBreakdown]:
         breakdown_type: common.BreakdownType = comparison.breakdown_parameters.breakdown_type
         if breakdown_type:
-            type_of_breakdown: Type[BaseBreakdown] = self._breakdown_lookup[breakdown_type]
+            type_of_breakdown: Type[BaseBreakdown] = BaseBreakdown.type_registry[breakdown_type]
             breakdown: BaseBreakdown = type_of_breakdown(comparison)
             return breakdown
         else:
             return None
+
+
+def __dummy():
+    """Stops Pycharm objecting to imports. The imports are needed to generate the registry."""
+    return [
+        ReturnByAlpha,
+        RmsByEpisode,
+        ReturnByEpisode,
+        EpisodeByTimestep
+    ]

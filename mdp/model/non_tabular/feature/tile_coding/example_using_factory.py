@@ -5,8 +5,8 @@ import enum
 from dataclasses import dataclass
 
 from mdp import common
-from mdp.model.non_tabular.feature.feature import Feature
-from mdp.model.non_tabular.feature.feature_factory import FeatureFactory
+from mdp.model.non_tabular.feature.base_feature import BaseFeature
+from mdp.factory.feature_factory import FeatureFactory
 from mdp.model.non_tabular.feature.tile_coding.tile_coding import TileCoding
 from mdp.model.non_tabular.feature.tile_coding.tiling_coding_parameters import TileCodingParameters
 from mdp.model.non_tabular.feature.tile_coding.tiling_group_parameters import TilingGroupParameters
@@ -54,7 +54,7 @@ def main():
     )
     feature_factory: FeatureFactory[NonTabularState, PlaceholderAction] = \
         FeatureFactory[NonTabularState, PlaceholderAction](dims)
-    tile_coding: Feature[NonTabularState, PlaceholderAction] = feature_factory.create(tile_coding_parameters)
+    tile_coding: BaseFeature[NonTabularState, PlaceholderAction] = feature_factory.create(tile_coding_parameters)
     assert isinstance(tile_coding, TileCoding)
 
     # tile_coding: TileCoding[State, PlaceholderAction] = TileCoding[State, PlaceholderAction](dims=dims)

@@ -1,5 +1,5 @@
 from __future__ import annotations
-from typing import TYPE_CHECKING, Optional, TypeVar, Generic
+from typing import TYPE_CHECKING, Optional, TypeVar, Generic, Type
 
 if TYPE_CHECKING:
     from mdp import common
@@ -13,6 +13,15 @@ View = TypeVar("View", bound=BaseView)
 
 
 class BaseController(Generic[Model, View]):
+    type_registry: dict[common.EnvironmentType, Type[BaseController]] = {}
+
+    def __init_subclass__(cls,
+                          environment_type: Optional[common.EnvironmentType] = None,
+                          **kwargs):
+        super().__init_subclass__(**kwargs)
+        if environment_type:
+            BaseController.type_registry[environment_type] = cls
+
     def __init__(self):
         self._model: Optional[Model] = None
         self._view: Optional[View] = None

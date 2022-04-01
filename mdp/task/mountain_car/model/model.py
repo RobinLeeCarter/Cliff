@@ -10,10 +10,10 @@ import utils
 if TYPE_CHECKING:
     from mdp.task.mountain_car.controller import Controller
     from mdp.task.mountain_car.model.environment_parameters import EnvironmentParameters
-    from mdp.model.non_tabular.feature.feature import Feature
+    from mdp.model.non_tabular.feature.base_feature import BaseFeature
     from mdp.model.non_tabular.environment.dimension.dims import Dims
     from mdp.model.non_tabular.environment.dimension.float_dimension import FloatDimension
-    from mdp.model.non_tabular.value_function.state_action_function import StateActionFunction
+    from mdp.model.non_tabular.value_function.state_action.state_action_function import StateActionFunction
 from mdp import common
 from mdp.model.non_tabular.non_tabular_model import NonTabularModel
 # from mdp.model.non_tabular.feature.tile_coding.tile_coding import TileCoding
@@ -26,11 +26,12 @@ from mdp.task.mountain_car.enums import Dim
 # from mdp.task.mountain_car.enums import Dim
 
 
-class Model(NonTabularModel[State, Action, Environment]):
+class Model(NonTabularModel[State, Action, Environment],
+            environment_type=common.EnvironmentType.MOUNTAIN_CAR):
     def __init__(self, verbose: bool = False):
         super().__init__(verbose)
         self._controller: Optional[Controller] = None
-        self._feature: Optional[Feature] = None
+        self._feature: Optional[BaseFeature] = None
 
     def _create_environment(self, environment_parameters: EnvironmentParameters) -> Environment:
         return Environment(environment_parameters)

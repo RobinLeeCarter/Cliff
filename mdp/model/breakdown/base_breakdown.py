@@ -1,7 +1,6 @@
 from __future__ import annotations
 from abc import ABC, abstractmethod
-from typing import Optional, TYPE_CHECKING
-
+from typing import Optional, TYPE_CHECKING, Type
 
 if TYPE_CHECKING:
     from mdp import common
@@ -10,6 +9,15 @@ if TYPE_CHECKING:
 
 
 class BaseBreakdown(ABC):
+    type_registry: dict[common.BreakdownType, Type[BaseBreakdown]] = {}
+
+    def __init_subclass__(cls,
+                          breakdown_type: Optional[common.BreakdownType] = None,
+                          **kwargs):
+        super().__init_subclass__(**kwargs)
+        if breakdown_type:
+            BaseBreakdown.type_registry[breakdown_type] = cls
+
     def __init__(self, comparison: common.Comparison):
         self.comparison: common.Comparison = comparison
         self.verbose: bool = self.comparison.breakdown_parameters.verbose

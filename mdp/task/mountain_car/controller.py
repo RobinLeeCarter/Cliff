@@ -8,7 +8,8 @@ from mdp import common
 from mdp.controller.non_tabular_controller import NonTabularController
 
 
-class Controller(NonTabularController[Model, View]):
+class Controller(NonTabularController[Model, View],
+                 environment_type=common.EnvironmentType.MOUNTAIN_CAR):
     def __init__(self):
         super().__init__()
         self._model: Optional[Model] = self._model

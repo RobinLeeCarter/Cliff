@@ -10,13 +10,13 @@ if TYPE_CHECKING:
 from mdp import common
 from mdp.model.non_tabular.environment.non_tabular_state import NonTabularState
 from mdp.model.non_tabular.environment.non_tabular_action import NonTabularAction
-from mdp.model.non_tabular.feature.feature import Feature
+from mdp.model.non_tabular.feature.base_feature import BaseFeature
 
 State = TypeVar('State', bound=NonTabularState)
 Action = TypeVar('Action', bound=NonTabularAction)
 
 
-class SparseFeature(Feature[State, Action], ABC):
+class SparseFeature(BaseFeature[State, Action], ABC):
     """
     Any feature that by default should return a sparse vector of just the indices that are 1
     State Aggregation is a sparse feature

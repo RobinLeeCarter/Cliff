@@ -7,31 +7,24 @@ import numpy as np
 from mdp import common
 from mdp.model.non_tabular.environment.non_tabular_state import NonTabularState
 from mdp.model.non_tabular.environment.non_tabular_action import NonTabularAction
-from mdp.model.non_tabular.feature.feature import Feature
+from mdp.model.non_tabular.feature.base_feature import BaseFeature
+from mdp.model.non_tabular.value_function.base_value_function import BaseValueFunction
 
 State = TypeVar('State', bound=NonTabularState)
 Action = TypeVar('Action', bound=NonTabularAction)
 
 
-class StateActionFunction(Generic[State, Action], ABC):
+class StateActionFunction(Generic[State, Action], BaseValueFunction, ABC):
     def __init__(self,
-                 feature: Optional[Feature[State, Action]],
+                 feature: Optional[BaseFeature[State, Action]],
                  value_function_parameters: common.ValueFunctionParameters
                  ):
         """
         :param feature: fully formed feature (need max_size property to size the weight vector)
         :param value_function_parameters: how the function should be set up such as initial value
         """
-        self._feature: Optional[Feature[State, Action]] = feature
-        self._initial_value: float = value_function_parameters.initial_value
-
-    @property
-    def has_sparse_feature(self) -> bool:
-        """determines whether functions like get_gradient return a vector or a vector of indices"""
-        if self._feature:
-            return self._feature.is_sparse
-        else:
-            return False
+        super().__init__(feature, value_function_parameters)
+        self._feature: Optional[BaseFeature[State, Action]] = feature
 
     @abstractmethod
     def __getitem__(self, state_action: tuple[State, Action]) -> float:
