@@ -4,7 +4,7 @@ from mdp import Application
 from mdp import common
 
 
-comparison_type: common.ComparisonType = common.ComparisonType.WINDY_TIMESTEP
+comparison_type: common.ComparisonType = common.ComparisonType.MOUNTAIN_CAR_STANDARD
 
 
 def main():
