@@ -5,17 +5,18 @@ import numpy as np
 
 if TYPE_CHECKING:
     from mdp.model.non_tabular.agent.non_tabular_agent import NonTabularAgent
-    from mdp import common
+from mdp import common
 from mdp.model.non_tabular.algorithm.abstract.nontabular_episodic_online import NonTabularEpisodicOnline
 
 
-class EpisodicSarsa(NonTabularEpisodicOnline):
+class EpisodicSarsa(NonTabularEpisodicOnline,
+                    algorithm_type=common.AlgorithmType.NON_TABULAR_EPISODIC_SARSA,
+                    algorithm_name="Episodic Sarsa"):
     def __init__(self,
                  agent: NonTabularAgent,
-                 algorithm_parameters: common.AlgorithmParameters,
-                 name: str
+                 algorithm_parameters: common.AlgorithmParameters
                  ):
-        super().__init__(agent, algorithm_parameters, name)
+        super().__init__(agent, algorithm_parameters)
         self._alpha = self._algorithm_parameters.alpha
         self._requires_q = True
 

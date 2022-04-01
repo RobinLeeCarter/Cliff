@@ -11,8 +11,7 @@ from mdp.model.tabular.algorithm.abstract.dynamic_programming import DynamicProg
 class DynamicProgrammingQ(DynamicProgramming, ABC):
     def __init__(self,
                  agent: TabularAgent,
-                 algorithm_parameters: common.AlgorithmParameters,
-                 name: str
+                 algorithm_parameters: common.AlgorithmParameters
                  ):
-        super().__init__(agent, algorithm_parameters, name)
+        super().__init__(agent, algorithm_parameters)
         self._create_q()

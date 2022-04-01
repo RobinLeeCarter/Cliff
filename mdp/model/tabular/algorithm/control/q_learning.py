@@ -7,13 +7,14 @@ from mdp import common
 from mdp.model.tabular.algorithm.abstract.episodic_online_control import EpisodicOnlineControl
 
 
-class QLearning(EpisodicOnlineControl):
+class QLearning(EpisodicOnlineControl,
+                algorithm_type=common.AlgorithmType.TABULAR_Q_LEARNING,
+                algorithm_name="Q-learning"):
     def __init__(self,
                  agent: TabularAgent,
-                 algorithm_parameters: common.AlgorithmParameters,
-                 name: str
+                 algorithm_parameters: common.AlgorithmParameters
                  ):
-        super().__init__(agent, algorithm_parameters, name)
+        super().__init__(agent, algorithm_parameters)
         self._alpha = self._algorithm_parameters.alpha
         self._create_q()
 

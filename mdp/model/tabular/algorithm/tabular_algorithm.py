@@ -17,10 +17,9 @@ from mdp.model.base.algorithm.base_algorithm import BaseAlgorithm
 class TabularAlgorithm(BaseAlgorithm, ABC):
     def __init__(self,
                  agent: TabularAgent,
-                 algorithm_parameters: common.AlgorithmParameters,
-                 name: str
+                 algorithm_parameters: common.AlgorithmParameters
                  ):
-        super().__init__(agent, algorithm_parameters, name)
+        super().__init__(agent, algorithm_parameters)
         self._agent: TabularAgent = agent
         self._environment: TabularEnvironment = self._agent.environment
         self._target_policy: Optional[TabularPolicy] = None

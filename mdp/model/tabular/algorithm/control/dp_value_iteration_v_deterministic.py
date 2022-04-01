@@ -12,13 +12,14 @@ from mdp.model.tabular.algorithm import linear_algebra as la
 from mdp.model.tabular.algorithm.abstract.dynamic_programming_v import DynamicProgrammingV
 
 
-class DpValueIterationV(DynamicProgrammingV):
+class DpValueIterationV(DynamicProgrammingV,
+                        algorithm_type=common.AlgorithmType.DP_VALUE_ITERATION_V,
+                        algorithm_name="Value Iteration DP (V)"):
     def __init__(self,
                  agent: TabularAgent,
-                 algorithm_parameters: common.AlgorithmParameters,
-                 name: str
+                 algorithm_parameters: common.AlgorithmParameters
                  ):
-        super().__init__(agent, algorithm_parameters, name)
+        super().__init__(agent, algorithm_parameters)
 
     def run(self):
         do_call_back: bool = bool(self._step_callback)

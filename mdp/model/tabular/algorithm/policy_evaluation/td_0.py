@@ -8,13 +8,14 @@ from mdp import common
 from mdp.model.tabular.algorithm.abstract.tabular_episodic_online import TabularEpisodicOnline
 
 
-class TD0(TabularEpisodicOnline):
+class TD0(TabularEpisodicOnline,
+          algorithm_type=common.AlgorithmType.TABULAR_TD_0,
+          algorithm_name="TD(0)"):
     def __init__(self,
                  agent: TabularAgent,
-                 algorithm_parameters: common.AlgorithmParameters,
-                 name: str
+                 algorithm_parameters: common.AlgorithmParameters
                  ):
-        super().__init__(agent, algorithm_parameters, name)
+        super().__init__(agent, algorithm_parameters)
         self._alpha = self._algorithm_parameters.alpha
         self._create_v()
 

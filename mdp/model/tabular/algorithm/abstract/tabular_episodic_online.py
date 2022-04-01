@@ -11,10 +11,9 @@ from mdp.model.tabular.algorithm.abstract.tabular_episodic import TabularEpisodi
 class TabularEpisodicOnline(TabularEpisodic, ABC):
     def __init__(self,
                  agent: TabularAgent,
-                 algorithm_parameters: common.AlgorithmParameters,
-                 name: str
+                 algorithm_parameters: common.AlgorithmParameters
                  ):
-        super().__init__(agent, algorithm_parameters, name)
+        super().__init__(agent, algorithm_parameters)
 
     @staticmethod
     def get_title(name: str, algorithm_parameters: common.AlgorithmParameters) -> str:

@@ -17,10 +17,9 @@ from mdp.model.base.algorithm.base_algorithm import BaseAlgorithm
 class NonTabularAlgorithm(BaseAlgorithm, ABC):
     def __init__(self,
                  agent: NonTabularAgent,
-                 algorithm_parameters: common.AlgorithmParameters,
-                 name: str
+                 algorithm_parameters: common.AlgorithmParameters
                  ):
-        super().__init__(agent, algorithm_parameters, name)
+        super().__init__(agent, algorithm_parameters)
         self._agent: NonTabularAgent = agent
         self._feature: Optional[Feature] = None
         self._target_policy: Optional[NonTabularPolicy] = None

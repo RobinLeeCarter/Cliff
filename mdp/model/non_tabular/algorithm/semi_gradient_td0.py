@@ -14,10 +14,9 @@ class SemiGradientTd0(NonTabularAlgorithm, ABC):
     # TODO: complete
     def __init__(self,
                  agent: NonTabularAgent,
-                 algorithm_parameters: common.AlgorithmParameters,
-                 name: str
+                 algorithm_parameters: common.AlgorithmParameters
                  ):
-        super().__init__(agent, algorithm_parameters, name)
+        super().__init__(agent, algorithm_parameters)
         # self._environment: NonTabularEnvironment = self._agent.environment
 
     def apply_result(self, result: common.Result):

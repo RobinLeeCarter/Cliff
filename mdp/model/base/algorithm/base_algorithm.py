@@ -1,5 +1,5 @@
 from __future__ import annotations
-from typing import TYPE_CHECKING, Optional
+from typing import TYPE_CHECKING, Optional, Type
 from abc import ABC, abstractmethod
 
 if TYPE_CHECKING:
@@ -10,23 +10,38 @@ from mdp.model.base.policy.base_policy import BasePolicy
 
 
 class BaseAlgorithm(ABC):
+    type_registry: dict[common.AlgorithmType, Type[BaseAlgorithm]] = {}
+    name_registry: dict[common.AlgorithmType, str] = {}
+
+    def __init_subclass__(cls,
+                          algorithm_type: Optional[common.AlgorithmType] = None,
+                          algorithm_name: Optional[str] = None,
+                          **kwargs):
+        super().__init_subclass__(**kwargs)
+        if algorithm_type:
+            BaseAlgorithm.type_registry[algorithm_type] = cls
+            BaseAlgorithm.name_registry[algorithm_type] = algorithm_name
+
     def __init__(self,
                  agent: BaseAgent,
-                 algorithm_parameters: common.AlgorithmParameters,
-                 name: str
+                 algorithm_parameters: common.AlgorithmParameters
                  ):
         self._agent: BaseAgent = agent
         # self._environment: GeneralEnvironment = self._agent.environment
         self._algorithm_parameters: common.AlgorithmParameters = algorithm_parameters
         self._verbose = self._algorithm_parameters.verbose
 
-        self.name: str = name
-        self.title: str = self.get_title(name, algorithm_parameters)
+        self.name: str = BaseAlgorithm.name_registry[algorithm_parameters.algorithm_type]
+        self.title: str = self.get_title(self.name, algorithm_parameters)
 
         self._gamma: float = self._agent.gamma
         self._target_policy: Optional[BasePolicy] = None
         self._behaviour_policy: Optional[BasePolicy] = None     # if on-policy = self._policy
         self._dual_policy_relationship: Optional[common.DualPolicyRelationship] = None
+
+    @staticmethod
+    def get_title(name: str, algorithm_parameters: common.AlgorithmParameters) -> str:
+        return name
 
     def __repr__(self):
         return f"{self.title}"
@@ -61,11 +76,6 @@ class BaseAlgorithm(ABC):
 
     def parameter_changes(self, iteration: int):
         pass
-
-    # noinspection PyUnusedLocal
-    @staticmethod
-    def get_title(name: str, algorithm_parameters: common.AlgorithmParameters) -> str:
-        return name
 
     @abstractmethod
     def apply_result(self, result: common.Result):

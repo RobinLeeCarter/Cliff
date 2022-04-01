@@ -8,13 +8,14 @@ from mdp.model.tabular.algorithm.abstract.episodic_monte_carlo import EpisodicMo
 from mdp.model.tabular.value_function.state_action_variable import StateActionVariable
 
 
-class McControlOffPolicy(EpisodicMonteCarlo):
+class McControlOffPolicy(EpisodicMonteCarlo,
+                         algorithm_type=common.AlgorithmType.MC_CONTROL_OFF_POLICY,
+                         algorithm_name="Off-policy MC Control"):
     def __init__(self,
                  agent: TabularAgent,
-                 algorithm_parameters: common.AlgorithmParameters,
-                 name: str
+                 algorithm_parameters: common.AlgorithmParameters
                  ):
-        super().__init__(agent, algorithm_parameters, name)
+        super().__init__(agent, algorithm_parameters)
         self._W: float = 1.0
         self._create_q()
         self._C = StateActionVariable(self._environment, initial_value=0.0)

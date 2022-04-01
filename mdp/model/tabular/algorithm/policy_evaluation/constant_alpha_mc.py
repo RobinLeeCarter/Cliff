@@ -7,13 +7,14 @@ from mdp import common
 from mdp.model.tabular.algorithm.abstract.episodic_monte_carlo import EpisodicMonteCarlo
 
 
-class ConstantAlphaMC(EpisodicMonteCarlo):
+class ConstantAlphaMC(EpisodicMonteCarlo,
+                      algorithm_type=common.AlgorithmType.MC_CONSTANT_ALPHA,
+                      algorithm_name="Constant-α MC"):
     def __init__(self,
                  agent: TabularAgent,
-                 algorithm_parameters: common.AlgorithmParameters,
-                 name: str
+                 algorithm_parameters: common.AlgorithmParameters
                  ):
-        super().__init__(agent, algorithm_parameters, name)
+        super().__init__(agent, algorithm_parameters)
         self._alpha = self._algorithm_parameters.alpha
         self._create_v()
 

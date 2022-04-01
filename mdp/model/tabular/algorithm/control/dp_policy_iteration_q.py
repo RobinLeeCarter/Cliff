@@ -9,13 +9,14 @@ from mdp.model.tabular.algorithm.policy_evaluation.dp_policy_evaluation_q_determ
 from mdp.model.tabular.algorithm.policy_improvement.dp_policy_improvement_q import DpPolicyImprovementQ
 
 
-class DpPolicyIterationQ(DpPolicyEvaluationQDeterministic, DpPolicyImprovementQ):
+class DpPolicyIterationQ(DpPolicyEvaluationQDeterministic, DpPolicyImprovementQ,
+                         algorithm_type=common.AlgorithmType.DP_POLICY_ITERATION_Q,
+                         algorithm_name="Policy Iteration DP (Q)"):
     def __init__(self,
                  agent: TabularAgent,
-                 algorithm_parameters: common.AlgorithmParameters,
-                 name: str
+                 algorithm_parameters: common.AlgorithmParameters
                  ):
-        super().__init__(agent, algorithm_parameters, name)
+        super().__init__(agent, algorithm_parameters)
 
     def run(self):
         if self._verbose:

@@ -12,10 +12,9 @@ from mdp.model.tabular.algorithm.abstract.tabular_episodic import TabularEpisodi
 class EpisodicMonteCarlo(TabularEpisodic, ABC):
     def __init__(self,
                  agent: TabularAgent,
-                 algorithm_parameters: common.AlgorithmParameters,
-                 name: str
+                 algorithm_parameters: common.AlgorithmParameters
                  ):
-        super().__init__(agent, algorithm_parameters, name)
+        super().__init__(agent, algorithm_parameters)
         self._episode: Optional[TabularEpisode] = None
         self._exit_episode: bool = False
         self._exploring_starts: bool = algorithm_parameters.exploring_starts

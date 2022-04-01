@@ -8,13 +8,14 @@ from mdp.model.tabular.algorithm.abstract.episodic_monte_carlo import EpisodicMo
 from mdp.model.tabular.value_function.state_action_variable import StateActionVariable
 
 
-class MCPredictionQ(EpisodicMonteCarlo):
+class MCPredictionQ(EpisodicMonteCarlo,
+                    algorithm_type=common.AlgorithmType.MC_PREDICTION_Q,
+                    algorithm_name="MC Prediction (Q)"):
     def __init__(self,
                  agent: TabularAgent,
-                 algorithm_parameters: common.AlgorithmParameters,
-                 name: str
+                 algorithm_parameters: common.AlgorithmParameters
                  ):
-        super().__init__(agent, algorithm_parameters, name)
+        super().__init__(agent, algorithm_parameters)
         self._create_q()
         self._N = StateActionVariable(self._environment, initial_value=0.0)
 

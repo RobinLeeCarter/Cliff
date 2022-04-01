@@ -10,13 +10,14 @@ from mdp.model.tabular.algorithm import linear_algebra as la
 from mdp.model.tabular.algorithm.abstract.dynamic_programming_v import DynamicProgrammingV
 
 
-class DpPolicyEvaluationVDeterministic(DynamicProgrammingV):
+class DpPolicyEvaluationVDeterministic(DynamicProgrammingV,
+                                       algorithm_type=common.AlgorithmType.DP_POLICY_EVALUATION_V_DETERMINISTIC,
+                                       algorithm_name="Policy Evaluation DP (V) Deterministic"):
     def __init__(self,
                  agent: TabularAgent,
-                 algorithm_parameters: common.AlgorithmParameters,
-                 name: str
+                 algorithm_parameters: common.AlgorithmParameters
                  ):
-        super().__init__(agent, algorithm_parameters, name)
+        super().__init__(agent, algorithm_parameters)
         # # policy_matrix[s, a] = π(a|s)
         # self.policy_matrix: np.ndarray = np.array([], float)
         # # self.state_transition_probabilities[s, a, s'] = p(s'|s,a)

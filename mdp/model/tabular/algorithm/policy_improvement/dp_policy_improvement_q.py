@@ -9,13 +9,14 @@ from mdp import common
 from mdp.model.tabular.algorithm.abstract.dynamic_programming_q import DynamicProgrammingQ
 
 
-class DpPolicyImprovementQ(DynamicProgrammingQ):
+class DpPolicyImprovementQ(DynamicProgrammingQ,
+                           algorithm_type=common.AlgorithmType.DP_POLICY_IMPROVEMENT_Q,
+                           algorithm_name="Policy Improvement DP (Q)"):
     def __init__(self,
                  agent: TabularAgent,
-                 algorithm_parameters: common.AlgorithmParameters,
-                 name: str
+                 algorithm_parameters: common.AlgorithmParameters
                  ):
-        super().__init__(agent, algorithm_parameters, name)
+        super().__init__(agent, algorithm_parameters)
 
     def run(self):
         do_call_back: bool = bool(self._step_callback)

@@ -13,10 +13,9 @@ from mdp.model.non_tabular.algorithm.abstract.nontabular_episodic import NonTabu
 class NonTabularEpisodicOnline(NonTabularEpisodic, ABC):
     def __init__(self,
                  agent: NonTabularAgent,
-                 algorithm_parameters: common.AlgorithmParameters,
-                 name: str
+                 algorithm_parameters: common.AlgorithmParameters
                  ):
-        super().__init__(agent, algorithm_parameters, name)
+        super().__init__(agent, algorithm_parameters)
         self._alpha = self._algorithm_parameters.alpha
 
     @staticmethod
