@@ -10,7 +10,7 @@ from mdp import common
 from mdp.model.non_tabular.environment.non_tabular_environment import NonTabularEnvironment
 
 from mdp.factory.algorithm_factory import AlgorithmFactory
-from mdp.model.base.policy.policy_factory import PolicyFactory
+from mdp.factory.policy_factory import PolicyFactory
 from mdp.model.non_tabular.feature.feature_factory import FeatureFactory
 from mdp.model.non_tabular.value_function.value_function_factory import ValueFunctionFactory
 

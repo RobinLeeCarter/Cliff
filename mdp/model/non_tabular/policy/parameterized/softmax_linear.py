@@ -6,8 +6,8 @@ from scipy import special
 
 import utils
 if TYPE_CHECKING:
-    from mdp import common
     from mdp.model.non_tabular.environment.non_tabular_environment import NonTabularEnvironment
+from mdp import common
 from mdp.model.non_tabular.policy.parameterized.vector_parameterized import VectorParameterized
 from mdp.model.non_tabular.environment.non_tabular_state import NonTabularState
 from mdp.model.non_tabular.environment.non_tabular_action import NonTabularAction
@@ -16,7 +16,9 @@ State = TypeVar('State', bound=NonTabularState)
 Action = TypeVar('Action', bound=NonTabularAction)
 
 
-class SoftmaxLinear(VectorParameterized[State, Action]):
+class SoftmaxLinear(VectorParameterized[State, Action],
+                    policy_type=common.PolicyType.NON_TABULAR_SOFTMAX_LINEAR,
+                    policy_name="softmax linear"):
     def __init__(self,
                  environment: NonTabularEnvironment[State, Action],
                  policy_parameters: common.PolicyParameters,

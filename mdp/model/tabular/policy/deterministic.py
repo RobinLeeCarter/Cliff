@@ -4,12 +4,14 @@ from typing import TYPE_CHECKING
 import numpy as np
 
 if TYPE_CHECKING:
-    from mdp import common
     from mdp.model.tabular.environment.tabular_environment import TabularEnvironment
+from mdp import common
 from mdp.model.tabular.policy.tabular_policy import TabularPolicy
 
 
-class Deterministic(TabularPolicy):
+class Deterministic(TabularPolicy,
+                    policy_type=common.PolicyType.TABULAR_DETERMINISTIC,
+                    policy_name="Deterministic"):
     def __init__(self, environment: TabularEnvironment, policy_parameters: common.PolicyParameters):
         super().__init__(environment, policy_parameters)
         state_count = len(self._environment.states)

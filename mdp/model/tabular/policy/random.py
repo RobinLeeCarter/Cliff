@@ -4,14 +4,15 @@ from typing import TYPE_CHECKING
 import numpy as np
 
 import utils
-
 if TYPE_CHECKING:
-    from mdp import common
     from mdp.model.tabular.environment.tabular_environment import TabularEnvironment
+from mdp import common
 from mdp.model.tabular.policy.tabular_policy import TabularPolicy
 
 
-class Random(TabularPolicy):
+class Random(TabularPolicy,
+             policy_type=common.PolicyType.TABULAR_RANDOM,
+             policy_name="Random"):
     def __init__(self, environment: TabularEnvironment, policy_parameters: common.PolicyParameters):
         super().__init__(environment, policy_parameters)
         if self._store_matrix:

@@ -11,7 +11,9 @@ from mdp.model.tabular.policy.deterministic import Deterministic
 from mdp.model.tabular.policy.tabular_policy import TabularPolicy
 
 
-class EGreedy(TabularPolicy):
+class EGreedy(TabularPolicy,
+              policy_type=common.PolicyType.TABULAR_E_GREEDY,
+              policy_name="ε-greedy"):
     def __init__(self, environment: TabularEnvironment, policy_parameters: common.PolicyParameters):
         super().__init__(environment, policy_parameters)
         self.epsilon: float = self._policy_parameters.epsilon

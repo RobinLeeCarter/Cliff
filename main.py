@@ -4,7 +4,7 @@ from mdp import Application
 from mdp import common
 
 
-comparison_type: common.ComparisonType = common.ComparisonType.WINDY_TIMESTEP_RANDOM
+comparison_type: common.ComparisonType = common.ComparisonType.RANDOM_WALK_EPISODE
 
 
 def main():

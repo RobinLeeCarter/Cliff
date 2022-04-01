@@ -4,7 +4,7 @@ from abc import ABC, abstractmethod
 
 if TYPE_CHECKING:
     from mdp.model.base.agent.base_agent import BaseAgent
-    from mdp.model.base.policy.policy_factory import PolicyFactory
+    from mdp.factory.policy_factory import PolicyFactory
 from mdp import common
 from mdp.model.base.policy.base_policy import BasePolicy
 

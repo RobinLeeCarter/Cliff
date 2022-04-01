@@ -60,6 +60,7 @@ class AlgorithmFactory:
 
 
 def __dummy():
+    """Stops Pycharm objecting to imports. The imports are needed to generate the registry."""
     return [
         # tabular
         DpPolicyEvaluationQDeterministic,

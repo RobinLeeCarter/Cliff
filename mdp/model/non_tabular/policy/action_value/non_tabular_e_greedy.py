@@ -7,8 +7,8 @@ import numpy as np
 
 import utils
 if TYPE_CHECKING:
-    from mdp import common
     from mdp.model.non_tabular.environment.non_tabular_environment import NonTabularEnvironment
+from mdp import common
 from mdp.model.non_tabular.policy.action_value.action_value_policy import ActionValuePolicy
 from mdp.model.non_tabular.environment.non_tabular_state import NonTabularState
 from mdp.model.non_tabular.environment.non_tabular_action import NonTabularAction
@@ -17,7 +17,9 @@ State = TypeVar('State', bound=NonTabularState)
 Action = TypeVar('Action', bound=NonTabularAction)
 
 
-class NonTabularEGreedy(ActionValuePolicy[State, Action]):
+class NonTabularEGreedy(ActionValuePolicy[State, Action],
+                        policy_type=common.PolicyType.NON_TABULAR_E_GREEDY,
+                        policy_name="ε-greedy"):
     def __init__(self,
                  environment: NonTabularEnvironment[State, Action],
                  policy_parameters: common.PolicyParameters,

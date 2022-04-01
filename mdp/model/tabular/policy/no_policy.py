@@ -1,9 +1,12 @@
 from __future__ import annotations
 
+from mdp import common
 from mdp.model.tabular.policy.tabular_policy import TabularPolicy
 
 
-class NoPolicy(TabularPolicy):
+class NoPolicy(TabularPolicy,
+               policy_type=common.PolicyType.TABULAR_NONE,
+               policy_name="No policy"):
     def _get_a(self, s: int) -> int:
         return -1        # None
 
