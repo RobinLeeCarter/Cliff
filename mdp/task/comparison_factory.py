@@ -1,5 +1,5 @@
 from __future__ import annotations
-from typing import Type, Optional
+from typing import Type
 
 from mdp.task.base_comparison_builder import BaseComparisonBuilder
 from mdp import common
@@ -36,41 +36,35 @@ ComparisonBuilderLookup = dict[common.ComparisonType, Type[BaseComparisonBuilder
 
 
 class ComparisonFactory:
-    def __init__(self):
-        self._comparison_type: Optional[common.ComparisonType] = None
-        ct = common.ComparisonType
-        self._lookup: ComparisonBuilderLookup = {
-            ct.BLACKJACK_CONTROL_ES: BlackjackControlES,
-            ct.BLACKJACK_EVALUATION_Q: BlackjackEvaluationQ,
-            ct.BLACKJACK_EVALUATION_V: BlackjackEvaluationV,
-            ct.CLIFF_ALPHA_END: CliffAlphaEnd,
-            ct.CLIFF_ALPHA_START: CliffAlphaStart,
-            ct.CLIFF_EPISODE: CliffEpisode,
-            ct.GAMBLER_VALUE_ITERATION_V: GamblerValueIterationV,
-            ct.JACKS_POLICY_EVALUATION_Q: JacksPolicyEvaluationQ,
-            ct.JACKS_POLICY_EVALUATION_V: JacksPolicyEvaluationV,
-            ct.JACKS_POLICY_IMPROVEMENT_Q: JacksPolicyImprovementQ,
-            ct.JACKS_POLICY_IMPROVEMENT_V: JacksPolicyImprovementV,
-            ct.JACKS_POLICY_ITERATION_Q: JacksPolicyIterationQ,
-            ct.JACKS_POLICY_ITERATION_V: JacksPolicyIterationV,
-            ct.JACKS_VALUE_ITERATION_Q: JacksValueIterationQ,
-            ct.JACKS_VALUE_ITERATION_V: JacksValueIterationV,
-            ct.MOUNTAIN_CAR_STANDARD: MountainCarStandard,
-            ct.RACETRACK_EPISODE: RacetrackEpisode,
-            ct.RANDOM_WALK_EPISODE: RandomWalkEpisode,
-            ct.WINDY_TIMESTEP: WindyTimestep,
-            ct.WINDY_TIMESTEP_RANDOM: WindyTimestepRandom
-        }
-
     def create(self, comparison_type: common.ComparisonType) -> common.Comparison:
-        self._comparison_type = comparison_type
-        comparison_builder: BaseComparisonBuilder = self._create_comparison_builder()
+        type_of_comparison_builder: Type[BaseComparisonBuilder] = \
+            BaseComparisonBuilder.type_registry[comparison_type]
+        comparison_builder: BaseComparisonBuilder = type_of_comparison_builder()
         comparison: common.Comparison = comparison_builder.create()
         return comparison
 
-    def _create_comparison_builder(self) -> BaseComparisonBuilder:
-        # type_of_comparison_builder: Type[BaseComparisonBuilder] = self._lookup[self._comparison_type]
-        type_of_comparison_builder: Type[BaseComparisonBuilder] = \
-            BaseComparisonBuilder.type_registry[self._comparison_type]
-        comparison_builder: BaseComparisonBuilder = type_of_comparison_builder()
-        return comparison_builder
+
+def __dummy():
+    """Stops Pycharm objecting to imports. The imports are needed to generate the registry."""
+    return [
+        BlackjackControlES,
+        BlackjackEvaluationQ,
+        BlackjackEvaluationV,
+        CliffAlphaEnd,
+        CliffAlphaStart,
+        CliffEpisode,
+        GamblerValueIterationV,
+        JacksPolicyEvaluationQ,
+        JacksPolicyEvaluationV,
+        JacksPolicyImprovementQ,
+        JacksPolicyImprovementV,
+        JacksPolicyIterationQ,
+        JacksPolicyIterationV,
+        JacksValueIterationQ,
+        JacksValueIterationV,
+        MountainCarStandard,
+        RacetrackEpisode,
+        RandomWalkEpisode,
+        WindyTimestep,
+        WindyTimestepRandom
+    ]

@@ -28,7 +28,7 @@ class FeatureFactory(Generic[State, Action]):
 
 
 def __dummy():
-    """Stops Pycharm objecting to imports. These are needed to generate the registry"""
+    """Stops Pycharm objecting to imports. The imports are needed to generate the registry."""
     return [
         TileCoding
     ]
