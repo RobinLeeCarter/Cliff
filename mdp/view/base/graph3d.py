@@ -37,8 +37,7 @@ class Graph3D:
 
     def pre_plot(self):
         self.fig = plt.figure()
-        self.ax = self.fig.add_subplot(111, projection='3d')
-        # self.ax = self.fig.subplots(projection='3d')          Fails
+        self.ax = self.fig.add_subplot(projection='3d')
 
     def plot(self, x_series: common.Series, y_series: common.Series, z_series: common.Series):
         x_grid, y_grid = np.meshgrid(x_series.values, y_series.values)
@@ -60,5 +59,6 @@ class Graph3D:
             self.ax.grid(True)
         if gv.has_legend:
             self.ax.legend()
+        self.fig.tight_layout(pad=0)
 
 

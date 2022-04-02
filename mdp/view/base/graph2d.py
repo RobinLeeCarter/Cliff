@@ -40,7 +40,7 @@ class Graph2D:
 
     def pre_plot(self):
         self.fig: figure.Figure = plt.figure()
-        self.ax: figure.Axes = self.fig.subplots()
+        self.ax: figure.Axes = self.fig.add_subplot()
 
     def plot(self, x_series: common.Series, graph_series: list[common.Series]):
         for series_ in graph_series:
@@ -57,6 +57,7 @@ class Graph2D:
             self.ax.grid(True)
         if gv.has_legend:
             self.ax.legend()
+        self.fig.tight_layout(pad=0)
 
     def moving_average_plot(self,
                             x_series: common.Series,

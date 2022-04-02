@@ -37,17 +37,17 @@ class Model(NonTabularModel[State, Action, Environment],
         return Environment(environment_parameters)
 
     def get_state_action_graph(self) -> common.Graph3DValues:
-        steps: int = 30
+        g: common.Graph3DValues = copy.copy(self._comparison.graph3d_values)
 
         dims: Dims = self.environment.dims
         position_dim: FloatDimension = dims.state_float[Dim.POSITION]
         velocity_dim: FloatDimension = dims.state_float[Dim.VELOCITY]
         position_values: list[float] = utils.float_range_steps(start=position_dim.min,
                                                                stop=position_dim.max,
-                                                               steps=steps)
+                                                               steps=g.steps)
         velocity_values: list[float] = utils.float_range_steps(start=velocity_dim.min,
                                                                stop=velocity_dim.max,
-                                                               steps=steps)
+                                                               steps=g.steps)
 
         x_values = np.array(position_values, dtype=float)
         y_values = np.array(velocity_values, dtype=float)
@@ -69,7 +69,6 @@ class Model(NonTabularModel[State, Action, Environment],
                 max_action_value: float = np.max(action_values)
                 z_values[y, x] = -max_action_value
 
-        g: common.Graph3DValues = copy.copy(self._comparison.graph3d_values)
         g.x_series = common.Series(title=g.x_label, values=x_values)
         g.y_series = common.Series(title=g.y_label, values=y_values)
         g.z_series = common.Series(title=g.z_label, values=z_values)

@@ -164,7 +164,7 @@ class TileCoding(SparseFeature[State, Action],
                     tile_index = self._tile_index_counter
                     self._tile_dict[full_tuple] = tile_index
                     self._tile_index_counter += 1
-                    if self._max_size is not None and self._tile_index_counter >= self._max_size:
+                    if self._max_size is not None and self._tile_index_counter > self._max_size:
                         # self._tile_index_counter %= self._max_size
                         self._exceeded_max_size = True
                         print(f"Warning: Collisions, tile dict indexes to exceed output size of {self._max_size}")

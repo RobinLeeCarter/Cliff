@@ -26,3 +26,4 @@ class Graph3DValues:
     has_grid: bool = False
     has_legend: bool = False
     multi_parameter: list = field(default_factory=list)
+    steps: Optional[int] = None

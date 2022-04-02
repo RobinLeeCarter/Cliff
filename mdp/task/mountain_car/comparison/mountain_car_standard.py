@@ -14,7 +14,7 @@ from mdp.task.mountain_car.enums import Dim
 @dataclass
 class Settings(common.Settings):
     runs: int = 1
-    training_episodes: int = 10
+    training_episodes: int = 100
     episode_print_frequency: int = 10
     # display_every_step: bool = True
     algorithm_parameters: common.AlgorithmParameters = common.AlgorithmParameters(
@@ -45,6 +45,7 @@ class MountainCarStandard(ComparisonBuilder,
             graph3d_values=common.Graph3DValues(
                 x_label="Position",
                 y_label="Velocity",
-                z_label="Time to go"
+                z_label="Time to go",
+                steps=30
             )
         )
