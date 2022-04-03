@@ -16,7 +16,7 @@ class MountainCarBatchSerial(ComparisonBuilder,
         return Comparison(
             environment_parameters=self._environment_parameters,
             comparison_settings=Settings(
-                training_episodes=20,
+                training_episodes=200,
                 algorithm_parameters=common.AlgorithmParameters(
                     algorithm_type=common.AlgorithmType.NON_TABULAR_EPISODIC_SARSA_BATCH,
                 ),

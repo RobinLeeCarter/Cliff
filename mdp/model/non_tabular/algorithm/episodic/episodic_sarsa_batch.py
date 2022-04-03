@@ -38,11 +38,13 @@ class EpisodicSarsaBatch(NonTabularEpisodicOnline, BatchEpisodes,
 
         if self.Q.has_sparse_feature:
             gradient_indices: np.ndarray = self.Q.get_gradient(ag.prev_state, ag.prev_action)
-            self.Q.update_delta_weights_sparse(indices=gradient_indices, delta_w=alpha_delta)
+            self.Q.update_delta_weights_sparse(indices=gradient_indices, delta_w=alpha_delta/2)
+            self.Q.update_weights_sparse(indices=gradient_indices, delta_w=alpha_delta/2)
         else:
             gradient_vector: np.ndarray = self.Q.get_gradient(ag.prev_state, ag.prev_action)
             delta_w: np.ndarray = alpha_delta * gradient_vector
-            self.Q.update_delta_weights(delta_w)
+            self.Q.update_delta_weights(delta_w/2)
+            self.Q.update_weights(delta_w/2)
 
     # end of process, multiprocessing
     def get_delta_weights(self) -> np.ndarray:
