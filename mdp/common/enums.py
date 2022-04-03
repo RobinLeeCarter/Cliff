@@ -137,7 +137,12 @@ class UserEvent(enum.IntEnum):
 
 
 class ParallelContextType(enum.IntEnum):
-    FORK_GLOBAL = enum.auto()
-    FORK_PICKLE = enum.auto()
-    SPAWN = enum.auto()
-    FORK_SERVER = enum.auto()
+    # https://docs.python.org/3/library/multiprocessing.html#contexts-and-start-methods
+    # https://docs.python.org/3/library/multiprocessing.html#module-multiprocessing.pool
+    # https://britishgeologicalsurvey.github.io/science/python-forking-vs-spawn/#what-happens-when-you-start-a-new-process
+    # https://stackoverflow.com/questions/64095876/multiprocessing-fork-vs-spawn
+    FORK_PICKLE = enum.auto()   # copy-on-write copy, with locks but no threads to unlock them (fast, not thread-safe)
+    FORK_GLOBAL = enum.auto()   # use a global object (e.g. trainer) to avoid pickling it in args (fastest)
+    SPAWN = enum.auto()         # launch fresh interpretters and reload current module, no locks (slower, thread-safe)
+    FORK_SERVER = enum.auto()   # have one process be a template and server to spawn copies as small as possible
+    #                             thread-safe, smaller memory consumption, unusual, good if doing lots of processes?

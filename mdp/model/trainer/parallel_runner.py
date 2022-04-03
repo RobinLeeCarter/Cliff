@@ -64,7 +64,6 @@ class ParallelRunner:
             return_recorder=True,
             return_cum_timestep=True,
 
-            return_algorithm_title=True,
             return_policy_vector=True,
             return_v_vector=True,
             return_q_matrix=True

@@ -202,9 +202,6 @@ class Trainer:
         if rp.return_recorder and self._breakdown:
             result.recorder = self._breakdown.recorder
 
-        if rp.return_algorithm_title:
-            result.algorithm_title = self._algorithm.title
-
         if isinstance(self._algorithm, TabularAlgorithm):
             if rp.return_policy_vector:
                 result.policy_vector = self._algorithm.target_policy.get_policy_vector()

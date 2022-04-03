@@ -58,7 +58,6 @@ class ParallelTrainer:
         for settings in self._settings_list:
             rp: common.ResultParameters = common.ResultParameters(
                 return_recorder=True,
-                return_algorithm_title=True
             )
             if settings == final_settings:
                 rp.return_policy_vector = True
@@ -75,6 +74,7 @@ class ParallelTrainer:
                 self._recorder.add_recorder(recorder)
 
 
+# Avoids pickling trainer?
 def _global_train_wrapper(settings: common.Settings) -> common.Result:
     return _trainer.train(settings, return_result=True)
 

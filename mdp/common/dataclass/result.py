@@ -10,7 +10,6 @@ if TYPE_CHECKING:
 
 @dataclass
 class Result:
-    algorithm_title: Optional[str] = None
     recorder: Optional[Recorder] = None
     policy_vector: Optional[np.ndarray] = None
     v_vector: Optional[np.ndarray] = None
