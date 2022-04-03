@@ -67,7 +67,7 @@ class LinearStateActionFunction(StateActionFunction[State, Action],
 
     # Delta weights
     def reset_delta_w(self):
-        self.delta_w: np.ndarray = self.delta_w.fill(0.0)
+        self.delta_w.fill(0.0)
 
     # def set_delta_weights(self, delta_w: np.ndarray):
     #     self.delta_w = delta_w

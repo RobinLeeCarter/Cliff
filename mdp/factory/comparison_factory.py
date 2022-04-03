@@ -24,6 +24,7 @@ from mdp.task.jacks.comparison.jacks_value_iteration_q import JacksValueIteratio
 from mdp.task.jacks.comparison.jacks_value_iteration_v import JacksValueIterationV
 
 from mdp.task.mountain_car.comparison.mountain_car_standard import MountainCarStandard
+from mdp.task.mountain_car.comparison.mountain_car_batch_serial import MountainCarBatchSerial
 
 from mdp.task.racetrack.comparison.racetrack_episode import RacetrackEpisode
 
@@ -63,6 +64,7 @@ def __dummy():
         JacksValueIterationQ,
         JacksValueIterationV,
         MountainCarStandard,
+        MountainCarBatchSerial,
         RacetrackEpisode,
         RandomWalkEpisode,
         WindyTimestep,

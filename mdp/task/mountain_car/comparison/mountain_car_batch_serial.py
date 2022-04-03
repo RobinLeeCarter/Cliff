@@ -10,11 +10,20 @@ from mdp.task.mountain_car.comparison.settings import Settings
 # from mdp.task.mountain_car.enums import Dim
 
 
-class MountainCarStandard(ComparisonBuilder,
-                          comparison_type=common.ComparisonType.MOUNTAIN_CAR_STANDARD):
+class MountainCarBatchSerial(ComparisonBuilder,
+                             comparison_type=common.ComparisonType.MOUNTAIN_CAR_BATCH_SERIAL):
     def create(self) -> Comparison:
         return Comparison(
             environment_parameters=self._environment_parameters,
-            comparison_settings=Settings(),
+            comparison_settings=Settings(
+                training_episodes=20,
+                algorithm_parameters=common.AlgorithmParameters(
+                    algorithm_type=common.AlgorithmType.NON_TABULAR_EPISODIC_SARSA_BATCH,
+                ),
+                value_function_parameters=common.ValueFunctionParameters(
+                    value_function_type=common.ValueFunctionType.LINEAR_STATE_ACTION,
+                    requires_delta_w=True
+                )
+            ),
             graph3d_values=self._graph3d_values
         )

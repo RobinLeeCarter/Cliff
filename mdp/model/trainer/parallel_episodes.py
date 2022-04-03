@@ -48,7 +48,7 @@ class ParallelEpisodes:
     def do_episode_batch(self, first_batch_episode: int):
         episode_counter_starts: list[int] = \
             [first_batch_episode + x
-             for x in range(start=0, stop=self._actual_episodes_per_batch, step=self._episodes_per_process)]
+             for x in range(0, self._actual_episodes_per_batch, self._episodes_per_process)]
         episodes_to_do: list[int] = list(itertools.repeat(self._episodes_per_process, self._processes))
         result_parameter_list: list[common.ResultParameters] = self._get_result_parameter_list()
 

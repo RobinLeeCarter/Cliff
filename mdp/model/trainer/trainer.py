@@ -168,9 +168,7 @@ class Trainer:
         if self._parallel_episodes:
             # train in parallel batches
             actual_episodes_per_batch: int = self._parallel_episodes.actual_episodes_per_batch
-            for first_batch_episode in range(start=1,
-                                             stop=settings.training_episodes + 1,
-                                             step=actual_episodes_per_batch):
+            for first_batch_episode in range(1, settings.training_episodes + 1, actual_episodes_per_batch):
                 self._parallel_episodes.do_episode_batch(first_batch_episode)
         else:
             # train in serial
@@ -178,9 +176,7 @@ class Trainer:
                 # train in batches of episodes
                 episodes_per_batch = self.settings.episodes_per_batch
                 training_episodes = settings.training_episodes
-                for first_batch_episode in range(start=1,
-                                                 stop=training_episodes + 1,
-                                                 step=episodes_per_batch):
+                for first_batch_episode in range(1, training_episodes + 1, episodes_per_batch):
                     episodes_to_do = min(training_episodes + 1 - first_batch_episode, episodes_per_batch)
                     self.do_episodes(episode_counter_start=first_batch_episode,
                                      episodes_to_do=episodes_to_do)
@@ -200,7 +196,7 @@ class Trainer:
                     ) -> Optional[common.Result]:
         assert isinstance(self._algorithm, BatchEpisodes)
         self._algorithm.start_episodes()
-        for episode_counter in range(start=episode_counter_start, stop=episode_counter_start + episodes_to_do):
+        for episode_counter in range(episode_counter_start, episode_counter_start + episodes_to_do):
             self._do_episode(episode_counter)
 
         if self._parallel_episodes:

@@ -34,6 +34,7 @@ class ComparisonType(enum.IntEnum):
     JACKS_VALUE_ITERATION_Q = enum.auto()
 
     MOUNTAIN_CAR_STANDARD = enum.auto()
+    MOUNTAIN_CAR_BATCH_SERIAL = enum.auto()
 
     RACETRACK_EPISODE = enum.auto()
 
