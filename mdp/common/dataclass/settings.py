@@ -37,7 +37,7 @@ class Settings:
     review_every_step: bool = False
     display_every_step: bool = False
 
-    batch_episodes: bool = False
+    # will only be used if the algorithm is_batch
     episodes_per_batch: int = 8     # ideally a multiple of the number of processors (cores/hyperthreads)
     episode_multiprocessing: Optional[ParallelContextType] = None
 

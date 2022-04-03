@@ -2,7 +2,8 @@ from __future__ import annotations
 from typing import TYPE_CHECKING, Optional, Callable
 import multiprocessing
 
-from mdp.model.non_tabular.algorithm.abstract.batch_mixin import BatchMixin
+from mdp.model.non_tabular.algorithm.abstract.batch_episodes import BatchEpisodes
+from mdp.model.trainer.parallel_episodes import ParallelEpisodes
 
 if TYPE_CHECKING:
     from mdp.model.base.agent.base_agent import BaseAgent
@@ -50,6 +51,9 @@ class Trainer:
             self._feature_factory: FeatureFactory = FeatureFactory(environment.dims)
             self._value_function_factory: ValueFunctionFactory = ValueFunctionFactory()
 
+        self._parallel_runner: Optional[ParallelRunner] = None
+        self._parallel_episodes: Optional[ParallelEpisodes] = None
+
         self.run_counter: int = 0
         self.episode_counter: int = 0
 
@@ -82,6 +86,22 @@ class Trainer:
     def train(self, settings: common.Settings, return_result: bool = False) -> Optional[common.Result]:
         self.apply_settings(settings)
 
+        daemon: bool = multiprocessing.current_process().daemon
+        if settings.runs_multiprocessing and not daemon:
+            # do runs in parallel
+            self._parallel_runner = ParallelRunner(self)
+        else:
+            # do runs in serial
+            self._parallel_runner = None
+            if settings.episode_multiprocessing \
+                    and self._algorithm.batch_episodes \
+                    and not daemon:
+                # do episodes in parallel
+                self._parallel_episodes = ParallelEpisodes(self)
+            else:
+                # do episodes in serial (with batch determined by self._algorithm.batch_episodes)
+                self._parallel_episodes = None
+
         match self._algorithm:
             case TabularEpisodic() | NonTabularEpisodic():
                 self._train_episodic()
@@ -110,19 +130,18 @@ class Trainer:
         settings = self.settings
         if (settings.review_every_step or settings.display_every_step) and self._agent.set_step_callback:
             self._agent.set_step_callback(self.step)
-        title: str = self._algorithm_factory.get_algorithm_title(settings.algorithm_parameters)
-        print(f"{title}: {settings.runs} runs")
+        # title: str = self._algorithm_factory.get_algorithm_title(settings.algorithm_parameters)
+        print(f"{self._algorithm.title}: {settings.runs} runs")
 
         self.max_cum_timestep = 0
-        if not settings.runs_multiprocessing or multiprocessing.current_process().daemon:
-            # train in serial if not multiprocessing or if a child process (daemon)
+        if self._parallel_runner:
+            # train in parallel
+            self._parallel_runner.do_runs()
+        else:
+            # train in serial
             for run_counter in range(1, settings.runs + 1):
                 self.do_run(run_counter)
                 self.max_cum_timestep = max(self.max_cum_timestep, self.cum_timestep)
-        else:
-            # train in parallel
-            self.parallel_runner = ParallelRunner(self)
-            self.parallel_runner.do_runs()
 
         if self._verbose:
             if isinstance(self._algorithm, TabularAlgorithm):
@@ -145,24 +164,50 @@ class Trainer:
         self.cum_timestep = 0
         # TODO: optionally generate and pre-process episodes in parallel e.g. for Blackjack
         #  according to a behavioural policy which then might change so perhaps in batches
-        for episode_counter in range(1, settings.training_episodes + 1):
-            self._do_episode(episode_counter)
+
+        if self._parallel_episodes:
+            # train in parallel batches
+            actual_episodes_per_batch: int = self._parallel_episodes.actual_episodes_per_batch
+            for first_batch_episode in range(start=1,
+                                             stop=settings.training_episodes + 1,
+                                             step=actual_episodes_per_batch):
+                self._parallel_episodes.do_episode_batch(first_batch_episode)
+        else:
+            # train in serial
+            if self._algorithm.batch_episodes:
+                # train in batches of episodes
+                episodes_per_batch = self.settings.episodes_per_batch
+                training_episodes = settings.training_episodes
+                for first_batch_episode in range(start=1,
+                                                 stop=training_episodes + 1,
+                                                 step=episodes_per_batch):
+                    episodes_to_do = min(training_episodes + 1 - first_batch_episode, episodes_per_batch)
+                    self.do_episodes(episode_counter_start=first_batch_episode,
+                                     episodes_to_do=episodes_to_do)
+            else:
+                # train one episode at a time
+                for episode_counter in range(1, settings.training_episodes + 1):
+                    self._do_episode(episode_counter)
 
         if result_parameters:
             return self._get_result(result_parameters)
 
-    # called from ParallelEpisodes
+    # called from ParallelEpisodes and above
     def do_episodes(self,
                     episode_counter_start: int,
                     episodes_to_do: int,
                     result_parameters: Optional[common.ResultParameters] = None
                     ) -> Optional[common.Result]:
-        assert isinstance(self._algorithm, BatchMixin)
+        assert isinstance(self._algorithm, BatchEpisodes)
         self._algorithm.start_episodes()
         for episode_counter in range(start=episode_counter_start, stop=episode_counter_start + episodes_to_do):
             self._do_episode(episode_counter)
-        if result_parameters:
-            return self._get_result(result_parameters)
+
+        if self._parallel_episodes:
+            if result_parameters:
+                return self._get_result(result_parameters)
+        else:
+            self._algorithm.apply_episodes()
 
     def _do_episode(self, episode_counter: int):
         assert isinstance(self._algorithm, TabularEpisodic) or isinstance(self._algorithm, NonTabularEpisodic)
@@ -228,7 +273,7 @@ class Trainer:
         if rp.return_cum_timestep:
             result.cum_timestep = self.cum_timestep
 
-        if rp.return_delta_w_vector and isinstance(self._algorithm, BatchMixin):
+        if rp.return_delta_w_vector and isinstance(self._algorithm, BatchEpisodes):
             result.delta_w_vector = self._algorithm.get_delta_weights()
 
         return result

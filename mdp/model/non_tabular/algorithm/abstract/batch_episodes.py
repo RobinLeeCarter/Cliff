@@ -4,7 +4,7 @@ from abc import ABC, abstractmethod
 import numpy as np
 
 
-class BatchMixin(ABC):
+class BatchEpisodes(ABC):
     # start of episodes
     @abstractmethod
     def start_episodes(self):
@@ -14,7 +14,11 @@ class BatchMixin(ABC):
     def get_delta_weights(self) -> np.ndarray:
         pass
 
-    # end of batch
+    # end of batch single-processing
+    def apply_episodes(self):
+        """for use with batch episodes but a single process"""
+
+    # end of batch multiprocessing
     def apply_delta_w_vectors(self, delta_w_vectors: list[np.ndarray]):
         delta_w_stack = np.stack(delta_w_vectors, axis=0)
         delta_w = np.sum(delta_w_stack, axis=0)

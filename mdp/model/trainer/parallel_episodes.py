@@ -5,7 +5,7 @@ import os
 import multiprocessing as mp
 import itertools
 
-from mdp.model.non_tabular.algorithm.abstract.batch_mixin import BatchMixin
+from mdp.model.non_tabular.algorithm.abstract.batch_episodes import BatchEpisodes
 
 if TYPE_CHECKING:
     from mdp.model.trainer.trainer import Trainer
@@ -23,7 +23,6 @@ class ParallelEpisodes:
 
         self._settings = self._trainer.settings
         # settings.result_parameters.return_cum_timestep = True
-        assert self._settings.batch_episodes
         self._parallel_context_type: Optional[common.ParallelContextType] = self._settings.episode_multiprocessing
         self._processes: int = os.cpu_count()
         self._episodes_per_process: int = int(math.ceil(self._settings.episodes_per_batch / self._processes))
@@ -46,10 +45,10 @@ class ParallelEpisodes:
     def actual_episodes_per_batch(self) -> int:
         return self._actual_episodes_per_batch
 
-    def do_episode_batch(self, episode_counter_batch_start: int):
+    def do_episode_batch(self, first_batch_episode: int):
         episode_counter_starts: list[int] = \
-            [episode_counter_batch_start + x
-                for x in range(start=0, stop=self._actual_episodes_per_batch, step=self._episodes_per_process)]
+            [first_batch_episode + x
+             for x in range(start=0, stop=self._actual_episodes_per_batch, step=self._episodes_per_process)]
         episodes_to_do: list[int] = list(itertools.repeat(self._episodes_per_process, self._processes))
         result_parameter_list: list[common.ResultParameters] = self._get_result_parameter_list()
 
@@ -90,7 +89,7 @@ class ParallelEpisodes:
                 self._recorder.add_recorder(recorder)
 
         algorithm = self._trainer.algorithm
-        if isinstance(algorithm, BatchMixin):
+        if isinstance(algorithm, BatchEpisodes):
             delta_w_vectors = [result.delta_w_vector for result in self._results]
             algorithm.apply_delta_w_vectors(delta_w_vectors)
 

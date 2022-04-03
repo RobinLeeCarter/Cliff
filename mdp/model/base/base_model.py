@@ -43,7 +43,7 @@ class BaseModel(Generic[Environment, Agent], ABC):
         self._breakdown_factory: BreakdownFactory = BreakdownFactory()
         self.breakdown: Optional[BaseBreakdown] = None
         self.trainer: Optional[Trainer] = None
-        self.parallel_trainer: Optional[ParallelTrainer] = None
+        self._parallel_trainer: Optional[ParallelTrainer] = None
 
         self._cont: bool = True
 
@@ -74,7 +74,7 @@ class BaseModel(Generic[Environment, Agent], ABC):
         if self.breakdown:
             self.breakdown.set_trainer(self.trainer)
         if self._comparison.settings_list_multiprocessing:
-            self.parallel_trainer = ParallelTrainer(self.trainer, self._comparison.settings_list_multiprocessing)
+            self._parallel_trainer = ParallelTrainer(self.trainer, self._comparison.settings_list_multiprocessing)
 
     @abstractmethod
     def _create_environment(self, environment_parameters: common.EnvironmentParameters) -> Environment:
@@ -87,15 +87,15 @@ class BaseModel(Generic[Environment, Agent], ABC):
     def run(self):
         timer: utils.Timer = utils.Timer()
         timer.start()
-        if not self._comparison.settings_list_multiprocessing or multiprocessing.current_process().daemon:
+        if self._parallel_trainer and not multiprocessing.current_process().daemon:
+            # train in parallel
+            self._parallel_trainer.train(self._comparison.settings_list)
+        else:
             # train in serial
             for settings in self._comparison.settings_list:
                 self.trainer.train(settings)
                 if not self._cont:
                     break
-        else:
-            # train in parallel
-            self.parallel_trainer.train(self._comparison.settings_list)
         timer.stop()
 
         if self.breakdown:

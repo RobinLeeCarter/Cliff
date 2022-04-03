@@ -7,10 +7,10 @@ if TYPE_CHECKING:
     from mdp.model.non_tabular.agent.non_tabular_agent import NonTabularAgent
 from mdp import common
 from mdp.model.non_tabular.algorithm.abstract.nontabular_episodic_online import NonTabularEpisodicOnline
-from mdp.model.non_tabular.algorithm.abstract.batch_mixin import BatchMixin
+from mdp.model.non_tabular.algorithm.abstract.batch_episodes import BatchEpisodes
 
 
-class EpisodicSarsaBatch(NonTabularEpisodicOnline, BatchMixin,
+class EpisodicSarsaBatch(NonTabularEpisodicOnline, BatchEpisodes,
                          algorithm_type=common.AlgorithmType.NON_TABULAR_EPISODIC_SARSA_BATCH,
                          algorithm_name="Episodic Sarsa Batch"):
     def __init__(self,
@@ -54,7 +54,6 @@ class EpisodicSarsaBatch(NonTabularEpisodicOnline, BatchMixin,
         """in the parent process, apply the accumulated delta_w from all of the child processes"""
         self.Q.update_weights(delta_w)
 
-    # end of batch, single-process. No need to do this in 2 steps. (not implemented yet)
-    def apply_delta_weights(self):
+    def apply_episodes(self):
         """for use with batch episodes but a single process"""
         self.Q.apply_delta_weights()
