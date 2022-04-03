@@ -6,7 +6,6 @@ from abc import ABC, abstractmethod
 if TYPE_CHECKING:
     from mdp.model.non_tabular.agent.non_tabular_agent import NonTabularAgent
     from mdp import common
-# from mdp.model.non_tabular.feature.tile_coding.tile_coding import TileCoding
 from mdp.model.non_tabular.algorithm.abstract.nontabular_episodic import NonTabularEpisodic
 
 

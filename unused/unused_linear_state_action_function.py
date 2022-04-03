@@ -1,9 +1,10 @@
 from __future__ import annotations
-from typing import TYPE_CHECKING, TypeVar, Optional
+from typing import TYPE_CHECKING, TypeVar
 
 import numpy as np
 
 from mdp import common
+from unused.unused_feature_weights import FeatureWeights
 
 if TYPE_CHECKING:
     from mdp.model.non_tabular.feature.base_feature import BaseFeature
@@ -26,13 +27,10 @@ class LinearStateActionFunction(StateActionFunction[State, Action],
         :param value_function_parameters: how the function should be set up such as initial value
         """
         super().__init__(feature, value_function_parameters)
-
-        self.size: int = self._feature.max_size
+        self.weights: FeatureWeights = FeatureWeights(feature, self._initial_value)
+        # self.size: int = self._feature.max_size
         # weights
-        self.w: np.ndarray = np.full(shape=self.size, fill_value=self._initial_value, dtype=float)
-        self.delta_w: Optional[np.ndarray] = None
-        if value_function_parameters.requires_delta_w:
-            self.delta_w: np.ndarray = np.zeros_like(self.w)
+        # self.w: np.ndarray = np.full(shape=self.size, fill_value=self._initial_value, dtype=float)
 
     def has_sparse_feature(self) -> bool:
         return self._feature.is_sparse
@@ -43,7 +41,7 @@ class LinearStateActionFunction(StateActionFunction[State, Action],
             return 0.0
         else:
             self._feature.set_state_action(state, action)
-            return self._feature.dot_product_full_vector(self.w)
+            return self._feature.dot_product_full_vector(self.weights.w)
 
     def get_gradient(self, state: State, action: Action) -> np.ndarray:
         return self._feature.get_vector()
@@ -55,31 +53,14 @@ class LinearStateActionFunction(StateActionFunction[State, Action],
         for action in actions:
             self._feature.set_action(action)
             # will calculate vector and then use it
-            value = self._feature.dot_product_full_vector(self.w)
+            value = self._feature.dot_product_full_vector(self.weights.w)
             values.append(value)
         return np.array(values)
 
     def update_weights(self, delta_w: np.ndarray):
-        self.w += delta_w
+        self.weights.update_weights(delta_w)
+        # self.w += delta_w
 
     def update_weights_sparse(self, indices: np.ndarray, delta_w: float):
-        self.w[indices] += delta_w
-
-    # Delta weights
-    def reset_delta_w(self):
-        self.delta_w: np.ndarray = self.delta_w.fill(0.0)
-
-    # def set_delta_weights(self, delta_w: np.ndarray):
-    #     self.delta_w = delta_w
-
-    def update_delta_weights(self, delta_w: np.ndarray):
-        self.delta_w += delta_w
-
-    def update_delta_weights_sparse(self, indices: np.ndarray, delta_w: float):
-        self.delta_w[indices] += delta_w
-
-    def get_delta_weights(self) -> np.ndarray:
-        return self.delta_w
-
-    def apply_delta_weights(self):
-        self.w += self.delta_w
+        self.weights.update_weights_sparse(indices, delta_w)
+        # self.w[indices] += delta_w

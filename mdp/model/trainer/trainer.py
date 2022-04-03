@@ -2,6 +2,8 @@ from __future__ import annotations
 from typing import TYPE_CHECKING, Optional, Callable
 import multiprocessing
 
+from mdp.model.non_tabular.algorithm.abstract.batch_mixin import BatchMixin
+
 if TYPE_CHECKING:
     from mdp.model.base.agent.base_agent import BaseAgent
     from mdp.model.base.agent.base_episode import BaseEpisode
@@ -155,6 +157,8 @@ class Trainer:
                     episodes_to_do: int,
                     result_parameters: Optional[common.ResultParameters] = None
                     ) -> Optional[common.Result]:
+        assert isinstance(self._algorithm, BatchMixin)
+        self._algorithm.start_episodes()
         for episode_counter in range(start=episode_counter_start, stop=episode_counter_start + episodes_to_do):
             self._do_episode(episode_counter)
         if result_parameters:
@@ -223,5 +227,8 @@ class Trainer:
 
         if rp.return_cum_timestep:
             result.cum_timestep = self.cum_timestep
+
+        if rp.return_delta_w_vector and isinstance(self._algorithm, BatchMixin):
+            result.delta_w_vector = self._algorithm.get_delta_weights()
 
         return result

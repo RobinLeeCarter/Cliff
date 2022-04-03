@@ -5,6 +5,8 @@ import os
 import multiprocessing as mp
 import itertools
 
+from mdp.model.non_tabular.algorithm.abstract.batch_mixin import BatchMixin
+
 if TYPE_CHECKING:
     from mdp.model.trainer.trainer import Trainer
     from mdp.model.breakdown.recorder import Recorder
@@ -86,6 +88,13 @@ class ParallelEpisodes:
             unique_recorders = set(result.recorder for result in self._results)
             for recorder in unique_recorders:
                 self._recorder.add_recorder(recorder)
+
+        algorithm = self._trainer.algorithm
+        if isinstance(algorithm, BatchMixin):
+            delta_w_vectors = [result.delta_w_vector for result in self._results]
+            algorithm.apply_delta_w_vectors(delta_w_vectors)
+
+        # *** Combine delta_w's here? ***
 
         # self._trainer.max_cum_timestep = max(result.cum_timestep for result in self._results)
 

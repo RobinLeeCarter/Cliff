@@ -86,6 +86,7 @@ class AlgorithmType(enum.IntEnum):
 
     # Non-tabular
     NON_TABULAR_EPISODIC_SARSA = enum.auto()
+    NON_TABULAR_EPISODIC_SARSA_BATCH = enum.auto()
 
 
 class PolicyType(enum.IntEnum):

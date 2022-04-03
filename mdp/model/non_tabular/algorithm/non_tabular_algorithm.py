@@ -9,7 +9,6 @@ if TYPE_CHECKING:
     from mdp.model.non_tabular.agent.non_tabular_agent import NonTabularAgent
     from mdp.model.non_tabular.policy.non_tabular_policy import NonTabularPolicy
     from mdp import common
-from mdp.model.non_tabular.algorithm.abstract.nontabular_episodic_batch import NonTabularEpisodicBatch
 from mdp.factory.feature_factory import FeatureFactory
 from mdp.factory.value_function_factory import ValueFunctionFactory
 from mdp.model.non_tabular.feature.base_feature import BaseFeature
@@ -75,10 +74,3 @@ class NonTabularAlgorithm(BaseAlgorithm, ABC):
                 policy.set_state_action_function(self.Q)
             else:
                 raise Exception("Policy requires Q but algorithm does not")
-
-    def apply_results(self, results: list[common.Result]):
-        if "return_delta_w_vector":
-            assert self._requires_q
-            assert isinstance(self, NonTabularEpisodicBatch)
-            delta_w_vectors = [result.delta_w_vector for result in results]
-            self.apply_delta_w_vectors(delta_w_vectors)

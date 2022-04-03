@@ -9,3 +9,4 @@ from mdp.common.enums import ValueFunctionType
 class ValueFunctionParameters:
     value_function_type: ValueFunctionType
     initial_value: float = 0.0
+    requires_delta_w: bool = False
