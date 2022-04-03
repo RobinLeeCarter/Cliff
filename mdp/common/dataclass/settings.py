@@ -37,6 +37,10 @@ class Settings:
     review_every_step: bool = False
     display_every_step: bool = False
 
+    batch_episodes: bool = False
+    episodes_per_batch: int = 8     # ideally a multiple of the number of processors (cores/hyperthreads)
+    episode_multiprocessing: Optional[ParallelContextType] = None
+
     # only used for parallel routines to determine what Trainer should return from the child process
     result_parameters: Optional[ResultParameters] = None
     # result_parameters: result_parameters_.ResultParameters = \

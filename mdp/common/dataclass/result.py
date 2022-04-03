@@ -15,3 +15,4 @@ class Result:
     v_vector: Optional[np.ndarray] = None
     q_matrix: Optional[np.ndarray] = None
     cum_timestep: Optional[int] = None
+    delta_w_vector: Optional[np.ndarray] = None

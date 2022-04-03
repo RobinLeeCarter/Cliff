@@ -2,6 +2,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 from abc import ABC, abstractmethod
 
+import numpy as np
 
 if TYPE_CHECKING:
     from mdp.model.non_tabular.agent.non_tabular_agent import NonTabularAgent
@@ -10,7 +11,7 @@ if TYPE_CHECKING:
 from mdp.model.non_tabular.algorithm.abstract.nontabular_episodic import NonTabularEpisodic
 
 
-class NonTabularEpisodicOnline(NonTabularEpisodic, ABC):
+class NonTabularEpisodicBatch(NonTabularEpisodic, ABC):
     def __init__(self,
                  agent: NonTabularAgent,
                  algorithm_parameters: common.AlgorithmParameters
@@ -41,3 +42,8 @@ class NonTabularEpisodicOnline(NonTabularEpisodic, ABC):
     @abstractmethod
     def _do_training_step(self):
         pass
+
+    def apply_delta_w_vectors(self, delta_w_vectors: list[np.ndarray]):
+        delta_w_stack = np.stack(delta_w_vectors, axis=0)
+        delta_w = np.sum(delta_w_stack, axis=0)
+        self.Q.update_weights(delta_w)

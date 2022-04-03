@@ -23,9 +23,6 @@ class EpisodicSarsa(NonTabularEpisodicOnline,
     def _start_episode(self):
         self._agent.choose_action()
 
-    def apply_result(self, result: common.Result):
-        raise Exception("apply_result not implemented")
-
     def _do_training_step(self):
         ag = self._agent
         ag.take_action()

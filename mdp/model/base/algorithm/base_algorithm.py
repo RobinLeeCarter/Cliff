@@ -1,6 +1,6 @@
 from __future__ import annotations
 from typing import TYPE_CHECKING, Optional, Type
-from abc import ABC, abstractmethod
+from abc import ABC
 
 if TYPE_CHECKING:
     from mdp.model.base.agent.base_agent import BaseAgent
@@ -77,6 +77,8 @@ class BaseAlgorithm(ABC):
     def parameter_changes(self, iteration: int):
         pass
 
-    @abstractmethod
+    def apply_results(self, results: list[common.Result]):
+        raise Exception("apply_results not implemented")
+
     def apply_result(self, result: common.Result):
-        pass
+        raise Exception("apply_result not implemented")

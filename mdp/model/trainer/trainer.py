@@ -149,6 +149,17 @@ class Trainer:
         if result_parameters:
             return self._get_result(result_parameters)
 
+    # called from ParallelEpisodes
+    def do_episodes(self,
+                    episode_counter_start: int,
+                    episodes_to_do: int,
+                    result_parameters: Optional[common.ResultParameters] = None
+                    ) -> Optional[common.Result]:
+        for episode_counter in range(start=episode_counter_start, stop=episode_counter_start + episodes_to_do):
+            self._do_episode(episode_counter)
+        if result_parameters:
+            return self._get_result(result_parameters)
+
     def _do_episode(self, episode_counter: int):
         assert isinstance(self._algorithm, TabularEpisodic) or isinstance(self._algorithm, NonTabularEpisodic)
 
