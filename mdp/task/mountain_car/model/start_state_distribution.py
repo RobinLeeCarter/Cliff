@@ -13,10 +13,10 @@ from mdp.task.mountain_car.model.state import State
 
 class StartStateDistribution(ContinuousDistribution[State]):
     def __init__(self, dims: Dims):
-        self._position_min = dims.state_float[Dim.POSITION].min
-        self._position_max = dims.state_float[Dim.POSITION].max
-        self._velocity_min = dims.state_float[Dim.VELOCITY].min
-        self._velocity_max = dims.state_float[Dim.VELOCITY].max
+        self._position_min = dims.state_float_dims[Dim.POSITION].min
+        self._position_max = dims.state_float_dims[Dim.POSITION].max
+        self._velocity_min = dims.state_float_dims[Dim.VELOCITY].min
+        self._velocity_max = dims.state_float_dims[Dim.VELOCITY].max
 
     def draw_one(self) -> State:
         # "Samples are uniformly distributed over the half-open interval [low, high)"

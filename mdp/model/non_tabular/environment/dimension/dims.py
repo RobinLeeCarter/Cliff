@@ -15,6 +15,6 @@ class Dims:
     structure to holds all the information about the dimensions of the environment
     note that dicts are documented as ordered in insertion order from Python 3.7 and this is relied upon
     """
-    state_float: dict[DimEnum, FloatDimension] = field(default_factory=dict)
-    state_category: dict[DimEnum, CategoryDimension] = field(default_factory=dict)
-    action_category: dict[DimEnum, CategoryDimension] = field(default_factory=dict)
+    state_float_dims: dict[DimEnum, FloatDimension] = field(default_factory=dict)
+    state_categories: dict[DimEnum, CategoryDimension] = field(default_factory=dict)
+    action_categories: dict[DimEnum, CategoryDimension] = field(default_factory=dict)

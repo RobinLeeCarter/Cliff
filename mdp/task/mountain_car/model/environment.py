@@ -34,16 +34,18 @@ class Environment(NonTabularEnvironment[State, Action]):
     def _build_dimensions(self):
         # insertion order is critical
         e: EnvironmentParameters = self._environment_parameters
-        self._dims.state_float[Dim.POSITION] = FloatDimension(min=e.position_min, max=e.position_max)
-        self._dims.state_float[Dim.VELOCITY] = FloatDimension(min=e.velocity_min, max=e.velocity_max)
-        self._dims.action_category[Dim.ACCELERATION] = CategoryDimension(possible_values=len(self.actions))
+        self._dims.state_float_dims[Dim.POSITION] = FloatDimension(min=e.position_min, max=e.position_max)
+        self._dims.state_float_dims[Dim.VELOCITY] = FloatDimension(min=e.velocity_min, max=e.velocity_max)
+
+        possible_accelerations = [action.acceleration for action in self.actions]
+        self._dims.action_categories[Dim.ACCELERATION] = CategoryDimension(possible_values=possible_accelerations)
 
     def _build_start_state_distribution(self):
         self._start_state_distribution = StartStateDistribution(self._dims)
 
     def _draw_response(self, state: State, action: Action) -> tuple[float, State]:
-        position_dim = self._dims.state_float[Dim.POSITION]
-        velocity_dim = self._dims.state_float[Dim.VELOCITY]
+        position_dim = self._dims.state_float_dims[Dim.POSITION]
+        velocity_dim = self._dims.state_float_dims[Dim.VELOCITY]
         new_position: float
         new_velocity: float
         is_terminal: bool = False

@@ -38,9 +38,9 @@ class State(NonTabularState):
 def main():
     # tile coder dimensions, limits, tilings
     dims: Dims = Dims()
-    dims.state_float[Dim.X] = FloatDimension(min=0.0, max=2.0 * np.pi, wrap_around=False)
-    dims.state_float[Dim.Y] = FloatDimension(min=0.0, max=2.0 * np.pi, wrap_around=False)
-    dims.state_category[Dim.Z] = CategoryDimension(possible_values=6)
+    dims.state_float_dims[Dim.X] = FloatDimension(min=0.0, max=2.0 * np.pi, wrap_around=False)
+    dims.state_float_dims[Dim.Y] = FloatDimension(min=0.0, max=2.0 * np.pi, wrap_around=False)
+    dims.state_categories[Dim.Z] = CategoryDimension(possible_values=6)
 
     # tile_coding_parameters = TileCodingParameters(
     #     feature_type=common.FeatureType.TILE_CODING,
@@ -74,8 +74,8 @@ def main():
     alpha = 0.1 / tilings
 
     # convinence only
-    dim_x = dims.state_float[Dim.X]
-    dim_y = dims.state_float[Dim.Y]
+    dim_x = dims.state_float_dims[Dim.X]
+    dim_y = dims.state_float_dims[Dim.Y]
     # dim_z = dims.state_category[Dim.Z]
 
     # take 10,000 samples of target function, output mse of batches of 100 points

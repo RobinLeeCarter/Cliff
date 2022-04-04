@@ -40,8 +40,8 @@ class Model(NonTabularModel[State, Action, Environment],
         g: common.Graph3DValues = copy.copy(self._comparison.graph3d_values)
 
         dims: Dims = self.environment.dims
-        position_dim: FloatDimension = dims.state_float[Dim.POSITION]
-        velocity_dim: FloatDimension = dims.state_float[Dim.VELOCITY]
+        position_dim: FloatDimension = dims.state_float_dims[Dim.POSITION]
+        velocity_dim: FloatDimension = dims.state_float_dims[Dim.VELOCITY]
         position_values: list[float] = utils.float_range_steps(start=position_dim.min,
                                                                stop=position_dim.max,
                                                                steps=g.steps)

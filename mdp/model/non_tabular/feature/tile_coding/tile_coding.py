@@ -220,6 +220,7 @@ class TileCoding(SparseFeature[State, Action],
         return self._total_tilings
 
     def build_complete_dict(self):
+        print("build_complete_dict")
         assert self._use_dict
         for tiling_group_index, tiling_group in enumerate(self._tiling_groups):
             tile_coord_list: list[tuple] = tiling_group.get_all_tile_coords()

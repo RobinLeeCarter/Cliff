@@ -6,4 +6,4 @@ from mdp.model.non_tabular.environment.dimension.dimension import Dimension
 
 @dataclass
 class CategoryDimension(Dimension):
-    possible_values: int
+    possible_values: list
