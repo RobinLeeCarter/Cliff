@@ -206,8 +206,6 @@ class Trainer:
             self._algorithm.apply_episodes()
 
     def _do_episode(self, episode_counter: int):
-        assert isinstance(self._algorithm, TabularEpisodic) or isinstance(self._algorithm, NonTabularEpisodic)
-
         # for use by Breakdown
         self.episode_counter = episode_counter
         if self._verbose or episode_counter % self.settings.episode_print_frequency == 0:
@@ -217,6 +215,7 @@ class Trainer:
             self.cum_timestep += 1  # start next episode from the next timestep
 
         self._algorithm.parameter_changes(episode_counter)
+        assert isinstance(self._algorithm, TabularEpisodic) or isinstance(self._algorithm, NonTabularEpisodic)
         self._algorithm.do_episode(self.settings.episode_length_timeout)
         episode = self._agent.episode
 

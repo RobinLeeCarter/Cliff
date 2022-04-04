@@ -1,4 +1,6 @@
 from __future__ import annotations
+
+import itertools
 import math
 from typing import Optional, Callable, TYPE_CHECKING
 
@@ -64,12 +66,12 @@ class TilingGroup:
         # restrict remaining code to just the dimensions the tiling is over
 
         # included float dimensions in the correct order
-        state_float: dict[DimEnum, FloatDimension] = \
+        state_float_dims: dict[DimEnum, FloatDimension] = \
             {dim: float_dimension for dim, float_dimension in self._dims.state_float.items() if dim in included_dims}
         # float_dimensions = k in book
-        float_dimension_count: int = len(state_float)
+        float_dimension_count: int = len(state_float_dims)
         # range minimum in each dimension
-        self._float_dim_min = np.array([float_dimension.min for float_dimension in state_float.values()])
+        self._float_dim_min = np.array([float_dimension.min for float_dimension in state_float_dims.values()])
 
         # decided on the number of tilings to use and check value rules if passed in
         if tilings is None:
@@ -96,26 +98,26 @@ class TilingGroup:
                     tiles_per_dim[dim] = self.calc_tiles(range_, tile_size)
         # put in correct order and use a default if neccesary
         requested_tiles: list[int] = \
-            [tiles_per_dim.get(dim, self._tilings) for dim, float_dimension in state_float.items()]
+            [tiles_per_dim.get(dim, self._tilings) for dim, float_dimension in state_float_dims.items()]
 
         # calibrate input, dividing by the range and multiplying by the number of tiles. So a tile maps to 1.0.
         # e.g. array([8, 8]) / array([6.28318531, 6.28318531]) = array([1.27323954, 1.27323954])
         self._float_norm_tiles = np.array([
             float(tiles) / float_dimension.range
-            for tiles, float_dimension in zip(requested_tiles, state_float.values())
+            for tiles, float_dimension in zip(requested_tiles, state_float_dims.values())
         ])
 
         # wrapped dimensions boolean array
-        self._float_wrapped_dim = np.array([dr.wrap_around for dr in state_float.values()], dtype=np.bool)
+        self._float_wrapped_dim = np.array([dr.wrap_around for dr in state_float_dims.values()], dtype=np.bool)
         self._has_wrapped: bool = np.sum(self._float_wrapped_dim) > 0
 
         # actual tiles per dimension (+ 1 extra tile needed for offset providing a full partitioning if not wrapped)
         # e.g. array([9, 9])
-        actual_tiles = np.array([
+        self._actual_tiles = np.array([
             tiles + int(not float_dimension.wrap_around)
-            for tiles, float_dimension in zip(requested_tiles, state_float.values())
+            for tiles, float_dimension in zip(requested_tiles, state_float_dims.values())
         ], dtype=np.int)
-        self._actual_tiles_for_wrapped: np.ndarray = actual_tiles[self._float_wrapped_dim]
+        self._actual_tiles_for_wrapped: np.ndarray = self._actual_tiles[self._float_wrapped_dim]
 
         # Calculate offsets
 
@@ -164,22 +166,22 @@ class TilingGroup:
          [0.875 0.625]]
         """
 
-        state_category_possible_values = np.array([
+        self._state_category_possible_values = np.array([
             category_dimension.possible_values
             for dim, category_dimension in self._dims.state_category.items()
             if dim in included_dims
         ], dtype=np.int)
 
-        action_category_possible_values = np.array([
+        self._action_category_possible_values = np.array([
             category_dimension.possible_values
             for dim, category_dimension in self._dims.action_category.items()
             if dim in included_dims
         ], dtype=np.int)
 
         self._total_tiles = self._tilings * \
-            np.prod(actual_tiles) * \
-            np.prod(state_category_possible_values) * \
-            np.prod(action_category_possible_values)
+            np.prod(self._actual_tiles) * \
+            np.prod(self._state_category_possible_values) * \
+            np.prod(self._action_category_possible_values)
 
         # tiling_dims e.g. array([9, 9])
         # 81 * array([0, 1, 2, 3, 4, 5, 6, 7])
@@ -227,6 +229,39 @@ class TilingGroup:
 
     def filter_action_categories(self, action_categories: np.ndarray) -> np.ndarray:
         return action_categories[self._included_action_category]
+
+    def get_all_tile_coords(self) -> list[tuple]:
+        range_sizes: list[int] = [self._tilings]
+        range_sizes.extend([int(tiles) for tiles in self._actual_tiles])
+        range_sizes.extend([int(pv) for pv in self._state_category_possible_values])
+        range_sizes.extend([int(pv) for pv in self._action_category_possible_values])
+
+        ranges: list = []
+        for range_size in range_sizes:
+            ranges.append(range(range_size))
+
+        tile_coord_list: list[tuple] = list(itertools.product(*ranges))
+        return tile_coord_list
+
+        # for tile_count in self._actual_tiles.shape:
+        #     range_sizes.append(tile_count)
+        # for value_count in self._state_category_possible_values.shape
+        #
+        # # tilings_array = np.arange(self._tilings)
+        # # # e.g. array([0, 1, 2, 3, 4, 5, 6, 7])
+        # tile_coords: list[int]
+        #
+        # for tiling in range(self._tilings):
+        #     tile_coords = [tiling]
+        #     for tile_count in self._actual_tiles.shape:
+        #         for tile_coord in range(tile_count):
+        #             tile_coords.append(tile_coord)
+        #
+        #
+        # self._total_tiles = self._tilings * \
+        #     np.prod(self._actual_tiles) * \
+        #     np.prod(self._state_category_possible_values) * \
+        #     np.prod(self._action_category_possible_values)
 
     @staticmethod
     def _first_odd_integers(number_of_dimensions: int) -> np.ndarray:  # e.g. 2 -> array([1, 3])

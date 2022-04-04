@@ -14,15 +14,19 @@ from mdp.model.base.policy.base_policy import BasePolicy
 class BaseAlgorithm(ABC):
     type_registry: dict[common.AlgorithmType, Type[BaseAlgorithm]] = {}
     name_registry: dict[common.AlgorithmType, str] = {}
+    # is_episodic: bool = False
 
     def __init_subclass__(cls,
                           algorithm_type: Optional[common.AlgorithmType] = None,
                           algorithm_name: Optional[str] = None,
+                          # is_episodic: bool = False,
                           **kwargs):
         super().__init_subclass__(**kwargs)
         if algorithm_type:
             BaseAlgorithm.type_registry[algorithm_type] = cls
             BaseAlgorithm.name_registry[algorithm_type] = algorithm_name
+        # if is_episodic:
+        #     cls.is_episodic = True
 
     def __init__(self,
                  agent: BaseAgent,

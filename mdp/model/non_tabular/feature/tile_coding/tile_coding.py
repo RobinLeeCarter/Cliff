@@ -38,10 +38,12 @@ class TileCoding(SparseFeature[State, Action],
         self._tiling_groups: list[TilingGroup] = []
         self._total_tilings: int = 0
         self._total_tiles: int = 0
-        self._exceeded_max_size: bool = False
+        self._reached_max_size: bool = False
 
         # state and action converted into tuples
         # this is stored for states so that when all actions are needed the state part is only done once
+        # one whole dictionary for each state
+        # tiling_group_index, tiling -> tile_coord + category_index
         self._state_tuples: dict[[int, int], tuple] = {}
         self._action_tuples: dict[int, tuple] = {}
 
@@ -49,9 +51,14 @@ class TileCoding(SparseFeature[State, Action],
         self._tile_dict: dict[tuple, int] = {}
         # counter of tile_indexes for dictionary
         self._tile_index_counter: int = 0
+        self._collision_warning: bool = False
 
         for tiling_group_parameters in tile_coding_parameters.tiling_groups:
             self._add(tiling_group_parameters)
+
+    @property
+    def use_dict(self) -> bool:
+        return self._use_dict
 
     def add(self,
             included_dims: set[DimEnum],
@@ -158,16 +165,18 @@ class TileCoding(SparseFeature[State, Action],
             # want to get value if present, else set value and increment
             tile_index = self._tile_dict.get(full_tuple)   # avoids raising KeyError
             if tile_index is None:
-                if self._exceeded_max_size:
+                if self._reached_max_size:
+                    if not self._collision_warning:
+                        self._collision_warning = True
+                        print(f"Warning: Collisions, switching to hash method because"
+                              f" tile dict indexes exceeded output size of {self._max_size}")
                     tile_index = hash(full_tuple) % self._max_size
                 else:
                     tile_index = self._tile_index_counter
                     self._tile_dict[full_tuple] = tile_index
                     self._tile_index_counter += 1
-                    if self._max_size is not None and self._tile_index_counter > self._max_size:
-                        # self._tile_index_counter %= self._max_size
-                        self._exceeded_max_size = True
-                        print(f"Warning: Collisions, tile dict indexes to exceed output size of {self._max_size}")
+                    if self._max_size is not None and self._tile_index_counter >= self._max_size:
+                        self._reached_max_size = True
         else:
             tile_index = hash(full_tuple) % self._max_size
         return tile_index
@@ -183,7 +192,7 @@ class TileCoding(SparseFeature[State, Action],
         (e.g., eligibility traces)."
         """
         if self._use_dict:
-            if self._exceeded_max_size:
+            if self._reached_max_size:
                 return self._max_size
             else:
                 return self._tile_index_counter + 1
@@ -209,3 +218,16 @@ class TileCoding(SparseFeature[State, Action],
         :return: total number of tilings from all tiling groups (used to set step-size alpha)
         """
         return self._total_tilings
+
+    def build_complete_dict(self):
+        assert self._use_dict
+        for tiling_group_index, tiling_group in enumerate(self._tiling_groups):
+            tile_coord_list: list[tuple] = tiling_group.get_all_tile_coords()
+            for tile_coord in tile_coord_list:
+                full_tuple = (tiling_group_index, ) + tile_coord
+                self._get_tile_index(full_tuple)
+        print(self._tile_index_counter)
+        # self._tile_dict[full_tuple] = self._tile_index_counter
+        # self._tile_index_counter += 1
+        # if self._max_size is not None and self._tile_index_counter >= self._max_size:
+        #     self._reached_max_size = True

@@ -58,19 +58,20 @@ class ParallelEpisodes:
                            episodes_to_do,
                            result_parameter_list)
                 # self._results = pool.map(_global_do_run_wrapper, args)
-                self._results = pool.starmap(_global_do_run_wrapper, args)
+                self._results = pool.starmap(_global_do_episodes_wrapper, args)
             else:
                 args = zip(itertools.repeat(self._trainer),
                            episode_counter_starts,
                            episodes_to_do,
                            result_parameter_list)
                 # self._results = pool.map(_train_map_wrapper, args)
-                self._results = pool.starmap(_do_run_starmap_wrapper, args)
+                self._results = pool.starmap(_do_episodes_starmap_wrapper, args)
 
         self._unpack_results()
 
         # the agent is already set up in trainer.trainer so just apply the final result to it
-        self._trainer.algorithm.apply_result(result=self._results[-1])
+        # TODO: should this be commented out or pass in function?
+        # self._trainer.algorithm.apply_result(result=self._results[-1])
 
     def _get_result_parameter_list(self) -> list[common.ResultParameters]:
         rp_norm: common.ResultParameters = common.ResultParameters(
@@ -98,17 +99,17 @@ class ParallelEpisodes:
         # self._trainer.max_cum_timestep = max(result.cum_timestep for result in self._results)
 
 
-def _global_do_run_wrapper(episode_counter_start: int,
-                           episodes_to_do: int,
-                           result_parameters: common.ResultParameters)\
+def _global_do_episodes_wrapper(episode_counter_start: int,
+                                episodes_to_do: int,
+                                result_parameters: common.ResultParameters)\
         -> common.Result:
     return _trainer.do_episodes(episode_counter_start, episodes_to_do, result_parameters)
 
 
-def _do_run_starmap_wrapper(trainer: Trainer,
-                            episode_counter_start: int,
-                            episodes_to_do: int,
-                            result_parameters: common.ResultParameters)\
+def _do_episodes_starmap_wrapper(trainer: Trainer,
+                                 episode_counter_start: int,
+                                 episodes_to_do: int,
+                                 result_parameters: common.ResultParameters)\
         -> common.Result:
     return trainer.do_episodes(episode_counter_start, episodes_to_do, result_parameters)
 

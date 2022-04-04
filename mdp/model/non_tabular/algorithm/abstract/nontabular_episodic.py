@@ -9,6 +9,7 @@ from mdp.model.non_tabular.algorithm.non_tabular_algorithm import NonTabularAlgo
 
 
 class NonTabularEpisodic(NonTabularAlgorithm, ABC):
+    # is_episodic=True):
     def __init__(self,
                  agent: NonTabularAgent,
                  algorithm_parameters: common.AlgorithmParameters
