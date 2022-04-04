@@ -24,6 +24,3 @@ class StartStateDistribution(ContinuousDistribution[State]):
         random_velocity = np.random.uniform(low=self._velocity_min, high=self._velocity_max)
         return State(is_terminal=False, position=random_position, velocity=random_velocity)
         # return State(is_terminal=False, position=random_position, velocity=0.0)
-
-    def print_hello(self):
-        print("hello")

@@ -28,6 +28,7 @@ class NonTabularEpisodicOnline(NonTabularEpisodic, ABC):
 
     def do_episode(self, episode_length_timeout: int):
         self._agent.start_episode()
+        # print(self._agent.state)
         self._start_episode()
         while (not self._agent.state.is_terminal)\
                 and self._agent.t < episode_length_timeout\

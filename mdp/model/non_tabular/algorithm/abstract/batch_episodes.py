@@ -21,7 +21,7 @@ class BatchEpisodes(ABC):
     # end of batch multiprocessing
     def apply_delta_w_vectors(self, delta_w_vectors: list[np.ndarray]):
         delta_w_stack = np.stack(delta_w_vectors, axis=0)
-        delta_w = np.sum(delta_w_stack, axis=0)
+        delta_w = np.average(delta_w_stack, axis=0)
         self.apply_delta_w_vector(delta_w)
 
     @abstractmethod

@@ -1,9 +1,13 @@
 from __future__ import annotations
+
+import time
 from typing import TYPE_CHECKING, Optional
 import math
 import os
 import multiprocessing as mp
 import itertools
+
+import numpy as np
 
 from mdp.model.non_tabular.algorithm.abstract.batch_episodes import BatchEpisodes
 
@@ -103,6 +107,7 @@ def _global_do_episodes_wrapper(episode_counter_start: int,
                                 episodes_to_do: int,
                                 result_parameters: common.ResultParameters)\
         -> common.Result:
+    np.random.seed((os.getpid() * int(time.time())) % 123456789)
     return _trainer.do_episodes(episode_counter_start, episodes_to_do, result_parameters)
 
 
@@ -111,6 +116,7 @@ def _do_episodes_starmap_wrapper(trainer: Trainer,
                                  episodes_to_do: int,
                                  result_parameters: common.ResultParameters)\
         -> common.Result:
+    np.random.seed((os.getpid() * int(time.time())) % 123456789)
     return trainer.do_episodes(episode_counter_start, episodes_to_do, result_parameters)
 
 

@@ -49,7 +49,7 @@ class NonTabularAlgorithm(BaseAlgorithm, ABC):
         if settings.feature_parameters:
             self._feature = feature_factory.create(settings.feature_parameters)
             self._update_parameters_based_on_feature()
-            if isinstance(self._feature, TileCoding):   # issubclass(type(self), BatchEpisodes) and
+            if isinstance(self._feature, TileCoding) and issubclass(type(self), BatchEpisodes):
                 if self._feature.use_dict:
                     self._feature.build_complete_dict()
 

@@ -5,9 +5,6 @@ from mdp import common
 from mdp.task.mountain_car.comparison.comparison_builder import ComparisonBuilder
 from mdp.task.mountain_car.comparison.comparison import Comparison
 from mdp.task.mountain_car.comparison.settings import Settings
-# from mdp.model.non_tabular.feature.tile_coding.tiling_coding_parameters import TileCodingParameters
-# from mdp.model.non_tabular.feature.tile_coding.tiling_group_parameters import TilingGroupParameters
-# from mdp.task.mountain_car.enums import Dim
 
 
 class MountainCarBatchParallel(ComparisonBuilder,
@@ -16,10 +13,11 @@ class MountainCarBatchParallel(ComparisonBuilder,
         return Comparison(
             environment_parameters=self._environment_parameters,
             comparison_settings=Settings(
-                training_episodes=8*10,
-                episode_multiprocessing=common.ParallelContextType.FORK_GLOBAL,
+                training_episodes=5600,
+                episodes_per_batch=8*100,
+                episode_multiprocessing=common.ParallelContextType.FORK_PICKLE,
                 algorithm_parameters=common.AlgorithmParameters(
-                    algorithm_type=common.AlgorithmType.NON_TABULAR_EPISODIC_SARSA_BATCH,
+                    algorithm_type=common.AlgorithmType.NON_TABULAR_EPISODIC_SARSA_BATCH
                 ),
                 value_function_parameters=common.ValueFunctionParameters(
                     value_function_type=common.ValueFunctionType.LINEAR_STATE_ACTION,
