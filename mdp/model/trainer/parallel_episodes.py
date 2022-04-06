@@ -1,14 +1,12 @@
 from __future__ import annotations
 
-import time
 from typing import TYPE_CHECKING, Optional
 import math
 import os
 import multiprocessing as mp
 import itertools
 
-import numpy as np
-
+import utils
 from mdp.model.non_tabular.algorithm.abstract.batch_episodes import BatchEpisodes
 
 if TYPE_CHECKING:
@@ -49,26 +47,27 @@ class ParallelEpisodes:
     def actual_episodes_per_batch(self) -> int:
         return self._actual_episodes_per_batch
 
-    def do_episode_batch(self, first_batch_episode: int):
+    def do_episode_batch(self, starting_episode: int):
+        seeds: list[int] = utils.Rng.get_seeds(number_of_seeds=self._processes)
         episode_counter_starts: list[int] = \
-            [first_batch_episode + x
+            [starting_episode + x
              for x in range(0, self._actual_episodes_per_batch, self._episodes_per_process)]
         episodes_to_do: list[int] = list(itertools.repeat(self._episodes_per_process, self._processes))
         result_parameter_list: list[common.ResultParameters] = self._get_result_parameter_list()
 
         with self._ctx.Pool(processes=self._processes) as pool:
             if self._use_global_trainer:
-                args = zip(episode_counter_starts,
-                           episodes_to_do,
-                           result_parameter_list)
-                # self._results = pool.map(_global_do_run_wrapper, args)
-                self._results = pool.starmap(_global_do_episodes_wrapper, args)
-            else:
-                args = zip(itertools.repeat(self._trainer),
+                args = zip(seeds,
                            episode_counter_starts,
                            episodes_to_do,
                            result_parameter_list)
-                # self._results = pool.map(_train_map_wrapper, args)
+                self._results = pool.starmap(_global_do_episodes_wrapper, args)
+            else:
+                args = zip(itertools.repeat(self._trainer),
+                           seeds,
+                           episode_counter_starts,
+                           episodes_to_do,
+                           result_parameter_list)
                 self._results = pool.starmap(_do_episodes_starmap_wrapper, args)
 
         self._unpack_results()
@@ -98,25 +97,25 @@ class ParallelEpisodes:
             delta_w_vectors = [result.delta_w_vector for result in self._results]
             algorithm.apply_delta_w_vectors(delta_w_vectors)
 
-        # *** Combine delta_w's here? ***
-
         # self._trainer.max_cum_timestep = max(result.cum_timestep for result in self._results)
 
 
-def _global_do_episodes_wrapper(episode_counter_start: int,
+def _global_do_episodes_wrapper(seed: int,
+                                episode_counter_start: int,
                                 episodes_to_do: int,
                                 result_parameters: common.ResultParameters)\
         -> common.Result:
-    np.random.seed((os.getpid() * int(time.time())) % 123456789)
+    utils.Rng.set_seed(seed)
     return _trainer.do_episodes(episode_counter_start, episodes_to_do, result_parameters)
 
 
 def _do_episodes_starmap_wrapper(trainer: Trainer,
+                                 seed: int,
                                  episode_counter_start: int,
                                  episodes_to_do: int,
                                  result_parameters: common.ResultParameters)\
         -> common.Result:
-    np.random.seed((os.getpid() * int(time.time())) % 123456789)
+    utils.Rng.set_seed(seed)
     return trainer.do_episodes(episode_counter_start, episodes_to_do, result_parameters)
 
 

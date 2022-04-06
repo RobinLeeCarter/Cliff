@@ -1,7 +1,14 @@
 from __future__ import annotations
+import random
 
 import numpy as np
 from numba import njit
+
+
+@njit(cache=True)
+def _set_seeds(numba_np_random_seed: int, numba_random_seed: int):
+    np.random.seed(numba_np_random_seed)
+    random.seed(numba_random_seed)
 
 
 @njit(cache=True)

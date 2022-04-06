@@ -13,8 +13,9 @@ class MountainCarBatchParallel(ComparisonBuilder,
         return Comparison(
             environment_parameters=self._environment_parameters,
             comparison_settings=Settings(
-                training_episodes=5600,
-                episodes_per_batch=8*100,
+                training_episodes=16,
+                episodes_per_batch=8,
+                episode_print_frequency=8,
                 episode_multiprocessing=common.ParallelContextType.FORK_PICKLE,
                 algorithm_parameters=common.AlgorithmParameters(
                     algorithm_type=common.AlgorithmType.NON_TABULAR_EPISODIC_SARSA_BATCH
@@ -24,5 +25,5 @@ class MountainCarBatchParallel(ComparisonBuilder,
                     requires_delta_w=True
                 )
             ),
-            graph3d_values=self._graph3d_values
+            # graph3d_values=self._graph3d_values
         )

@@ -22,5 +22,5 @@ class StartStateDistribution(ContinuousDistribution[State]):
         # "Samples are uniformly distributed over the half-open interval [low, high)"
         random_position = np.random.uniform(low=self._position_min, high=self._position_max)
         random_velocity = np.random.uniform(low=self._velocity_min, high=self._velocity_max)
-        return State(is_terminal=False, position=random_position, velocity=random_velocity)
-        # return State(is_terminal=False, position=random_position, velocity=0.0)
+        state = State(is_terminal=False, position=random_position, velocity=random_velocity)
+        return state

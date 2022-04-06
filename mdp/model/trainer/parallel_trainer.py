@@ -4,6 +4,7 @@ from typing import TYPE_CHECKING, Optional
 import multiprocessing as mp
 import itertools
 
+import utils
 from mdp import common
 
 if TYPE_CHECKING:
@@ -35,15 +36,17 @@ class ParallelTrainer:
 
     def train(self, settings_list: list[common.Settings]):
         self._settings_list = settings_list
+        seeds: list[int] = utils.Rng.get_seeds(number_of_seeds=len(self._settings_list))
 
         # have final settings return everything (if used in case of V and Q)
         self._set_result_parameters()
 
         with self._ctx.Pool() as pool:
             if self._use_global_trainer:
-                self._results = pool.map(_global_train_wrapper, self._settings_list)
+                args = zip(seeds, self._settings_list)
+                self._results = pool.starmap(_global_train_wrapper, args)
             else:
-                args = zip(itertools.repeat(self._trainer), self._settings_list)
+                args = zip(itertools.repeat(self._trainer), seeds, self._settings_list)
                 # self._results = pool.map(_train_map_wrapper, args)
                 self._results = pool.starmap(_train_starmap_wrapper, args)
 
@@ -75,11 +78,13 @@ class ParallelTrainer:
 
 
 # Avoids pickling trainer?
-def _global_train_wrapper(settings: common.Settings) -> common.Result:
+def _global_train_wrapper(seed: int, settings: common.Settings) -> common.Result:
+    utils.Rng.set_seed(seed)
     return _trainer.train(settings, return_result=True)
 
 
-def _train_starmap_wrapper(trainer: Trainer, settings: common.Settings) -> common.Result:
+def _train_starmap_wrapper(trainer: Trainer, seed: int, settings: common.Settings) -> common.Result:
+    utils.Rng.set_seed(seed)
     return trainer.train(settings, return_result=True)
 
 

@@ -4,6 +4,9 @@ from typing import TYPE_CHECKING, Optional
 import multiprocessing as mp
 import itertools
 
+import numpy as np
+
+import utils
 from mdp import common
 
 if TYPE_CHECKING:
@@ -39,15 +42,14 @@ class ParallelRunner:
 
     def do_runs(self):
         result_parameter_list: list[common.ResultParameters] = self._get_result_parameter_list()
+        seeds: list[int] = utils.Rng.get_seeds(number_of_seeds=self._runs)
 
         with self._ctx.Pool() as pool:
             if self._use_global_trainer:
-                args = zip(range(1, self._runs + 1), result_parameter_list)
-                # self._results = pool.map(_global_do_run_wrapper, args)
+                args = zip(seeds, range(1, self._runs + 1), result_parameter_list)
                 self._results = pool.starmap(_global_do_run_wrapper, args)
             else:
-                args = zip(itertools.repeat(self._trainer), range(1, self._runs + 1), result_parameter_list)
-                # self._results = pool.map(_train_map_wrapper, args)
+                args = zip(itertools.repeat(self._trainer), seeds, range(1, self._runs + 1), result_parameter_list)
                 self._results = pool.starmap(_do_run_starmap_wrapper, args)
 
         self._unpack_results()
@@ -84,13 +86,15 @@ class ParallelRunner:
         self._trainer.max_cum_timestep = max(result.cum_timestep for result in self._results)
 
 
-def _global_do_run_wrapper(run_counter: int, result_parameters: common.ResultParameters)\
+def _global_do_run_wrapper(seed: int, run_counter: int, result_parameters: common.ResultParameters)\
         -> common.Result:
+    utils.Rng.set_seed(seed)
     return _trainer.do_run(run_counter, result_parameters)
 
 
-def _do_run_starmap_wrapper(trainer: Trainer, run_counter: int, result_parameters: common.ResultParameters)\
+def _do_run_starmap_wrapper(trainer: Trainer, seed: int, run_counter: int, result_parameters: common.ResultParameters)\
         -> common.Result:
+    utils.Rng.set_seed(seed)
     return trainer.do_run(run_counter, result_parameters)
 
 

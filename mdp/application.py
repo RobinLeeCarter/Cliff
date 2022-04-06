@@ -1,6 +1,8 @@
 from __future__ import annotations
 from typing import TYPE_CHECKING, Optional
 
+import utils
+
 if TYPE_CHECKING:
     from mdp import common
     from mdp.model.base.base_model import BaseModel
@@ -11,14 +13,21 @@ from mdp.factory.mvc_factory import MVCFactory
 
 
 class Application:
-    def __init__(self, comparison_type: Optional[common.ComparisonType] = None, auto_run: bool = True):
+    def __init__(self,
+                 comparison_type: Optional[common.ComparisonType] = None,
+                 seed: Optional[int] = None,
+                 auto_run: bool = True):
         """
-        :param comparison_type: if comparison_type not passed then allow a build using a comparison argument
+        :param comparison_type: if comparison_type not passed then allow a build using a comparison argument.
+        :param seed: use a global seed for reproducible "random" results. This is passed into all processes/threads.
+        :param auto_run: run directly after build (default). Otherwise can do init, build and run separately.
         """
         self._comparison: Optional[common.Comparison] = None
         self.model: Optional[BaseModel] = None
         self.view: Optional[BaseView] = None
         self.controller: Optional[BaseController] = None
+        if seed is not None:
+            utils.Rng.set_seed(seed)
 
         self._comparison_factory: ComparisonFactory = ComparisonFactory()
         self._mvc_factory: MVCFactory = MVCFactory()
