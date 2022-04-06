@@ -2,8 +2,6 @@ from __future__ import annotations
 from typing import TYPE_CHECKING, Optional, Type
 from abc import ABC
 
-from mdp.model.non_tabular.algorithm.abstract.batch_episodes import BatchEpisodes
-
 if TYPE_CHECKING:
     from mdp.model.base.agent.base_agent import BaseAgent
     from mdp.factory.policy_factory import PolicyFactory
@@ -17,7 +15,7 @@ class BaseAlgorithm(ABC):
     tabular: bool = False
     dynamic_programming: bool = False
     episodic: bool = False
-    batches_episodes: bool = False
+    batch_episodes: bool = False
 
     def __init_subclass__(cls,
                           algorithm_type: Optional[common.AlgorithmType] = None,
@@ -25,7 +23,7 @@ class BaseAlgorithm(ABC):
                           tabular: bool = False,
                           dynamic_programming: bool = False,
                           episodic: bool = False,
-                          batches_episodes: bool = False,
+                          batch_episodes: bool = False,
                           **kwargs):
         super().__init_subclass__(**kwargs)
         if algorithm_type:
@@ -37,8 +35,8 @@ class BaseAlgorithm(ABC):
             cls.dynamic_programming = True
         if episodic:
             cls.episodic = True
-        if batches_episodes:
-            cls.batches_episodes = True
+        if batch_episodes:
+            cls.batch_episodes = True
 
     def __init__(self,
                  agent: BaseAgent,
@@ -56,7 +54,6 @@ class BaseAlgorithm(ABC):
         self._target_policy: Optional[BasePolicy] = None
         self._behaviour_policy: Optional[BasePolicy] = None     # if on-policy = self._policy
         self._dual_policy_relationship: Optional[common.DualPolicyRelationship] = None
-        self._batch_episodes: bool = issubclass(type(self), BatchEpisodes)
 
     @staticmethod
     def get_title(name: str, algorithm_parameters: common.AlgorithmParameters) -> str:
@@ -95,10 +92,6 @@ class BaseAlgorithm(ABC):
 
     def parameter_changes(self, iteration: int):
         pass
-
-    @property
-    def batch_episodes(self) -> bool:
-        return self._batch_episodes
 
     def apply_results(self, results: list[common.Result]):
         raise Exception("apply_results not implemented")

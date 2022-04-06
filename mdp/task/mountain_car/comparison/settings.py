@@ -14,6 +14,7 @@ class Settings(common.Settings):
     # display_every_step: bool = True
     algorithm_parameters: common.AlgorithmParameters = common.AlgorithmParameters(
         algorithm_type=common.AlgorithmType.NON_TABULAR_EPISODIC_SARSA,
+        alpha=0.5
     )
     policy_parameters: common.PolicyParameters = common.PolicyParameters(
         policy_type=common.PolicyType.NON_TABULAR_E_GREEDY,

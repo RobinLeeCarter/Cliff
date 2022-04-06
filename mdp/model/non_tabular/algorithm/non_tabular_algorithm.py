@@ -2,8 +2,6 @@ from __future__ import annotations
 from typing import TYPE_CHECKING, Optional
 from abc import ABC
 
-from mdp.model.non_tabular.algorithm.abstract.batch_episodes import BatchEpisodes
-from mdp.model.non_tabular.feature.tile_coding.tile_coding import TileCoding
 
 if TYPE_CHECKING:
     from mdp.model.non_tabular.value_function.state.state_function import StateFunction
@@ -12,6 +10,7 @@ if TYPE_CHECKING:
     from mdp.model.non_tabular.policy.non_tabular_policy import NonTabularPolicy
     from mdp import common
 from mdp.factory.feature_factory import FeatureFactory
+from mdp.model.non_tabular.feature.tile_coding.tile_coding import TileCoding
 from mdp.factory.value_function_factory import ValueFunctionFactory
 from mdp.model.non_tabular.feature.base_feature import BaseFeature
 from mdp.model.base.algorithm.base_algorithm import BaseAlgorithm
@@ -50,7 +49,7 @@ class NonTabularAlgorithm(BaseAlgorithm, ABC,
         if settings.feature_parameters:
             self._feature = feature_factory.create(settings.feature_parameters)
             self._update_parameters_based_on_feature()
-            if isinstance(self._feature, TileCoding) and issubclass(type(self), BatchEpisodes):
+            if self.batch_episodes and isinstance(self._feature, TileCoding):
                 if self._feature.use_dict:
                     self._feature.build_complete_dict()
 

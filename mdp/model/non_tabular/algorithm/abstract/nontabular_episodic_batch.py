@@ -3,8 +3,11 @@ from abc import ABC, abstractmethod
 
 import numpy as np
 
+from mdp.model.non_tabular.algorithm.abstract.nontabular_episodic_online import NonTabularEpisodicOnline
 
-class BatchEpisodes(ABC):
+
+class NonTabularEpisodicBatch(NonTabularEpisodicOnline, ABC,
+                              batch_episodes=True):
     # start of episodes
     @abstractmethod
     def start_episodes(self):

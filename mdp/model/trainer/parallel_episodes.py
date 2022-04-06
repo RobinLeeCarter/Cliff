@@ -7,7 +7,7 @@ import multiprocessing as mp
 import itertools
 
 import utils
-from mdp.model.non_tabular.algorithm.abstract.batch_episodes import BatchEpisodes
+from mdp.model.non_tabular.algorithm.abstract.nontabular_episodic_batch import NonTabularEpisodicBatch
 
 if TYPE_CHECKING:
     from mdp.model.trainer.trainer import Trainer
@@ -93,7 +93,8 @@ class ParallelEpisodes:
                 self._recorder.add_recorder(recorder)
 
         algorithm = self._trainer.algorithm
-        if isinstance(algorithm, BatchEpisodes):
+        if algorithm.batch_episodes:
+            assert isinstance(algorithm, NonTabularEpisodicBatch)
             delta_w_vectors = [result.delta_w_vector for result in self._results]
             algorithm.apply_delta_w_vectors(delta_w_vectors)
 

@@ -6,11 +6,10 @@ import numpy as np
 if TYPE_CHECKING:
     from mdp.model.non_tabular.agent.non_tabular_agent import NonTabularAgent
 from mdp import common
-from mdp.model.non_tabular.algorithm.abstract.nontabular_episodic_online import NonTabularEpisodicOnline
-from mdp.model.non_tabular.algorithm.abstract.batch_episodes import BatchEpisodes
+from mdp.model.non_tabular.algorithm.abstract.nontabular_episodic_batch import NonTabularEpisodicBatch
 
 
-class EpisodicSarsaBatch(NonTabularEpisodicOnline, BatchEpisodes,
+class EpisodicSarsaBatch(NonTabularEpisodicBatch,
                          algorithm_type=common.AlgorithmType.NON_TABULAR_EPISODIC_SARSA_BATCH,
                          algorithm_name="Episodic Sarsa Batch"):
     def __init__(self,

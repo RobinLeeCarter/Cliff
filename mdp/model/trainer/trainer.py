@@ -2,7 +2,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING, Optional, Callable
 import multiprocessing
 
-from mdp.model.non_tabular.algorithm.abstract.batch_episodes import BatchEpisodes
+from mdp.model.non_tabular.algorithm.abstract.nontabular_episodic_batch import NonTabularEpisodicBatch
 from mdp.model.trainer.parallel_episodes import ParallelEpisodes
 
 if TYPE_CHECKING:
@@ -196,7 +196,7 @@ class Trainer:
                     episodes_to_do: int,
                     result_parameters: Optional[common.ResultParameters] = None
                     ) -> Optional[common.Result]:
-        assert isinstance(self._algorithm, BatchEpisodes)
+        assert isinstance(self._algorithm, NonTabularEpisodicBatch)
         self._algorithm.start_episodes()
         for episode_counter in range(episode_counter_start, episode_counter_start + episodes_to_do):
             self._do_episode(episode_counter)
@@ -271,7 +271,8 @@ class Trainer:
         if rp.return_cum_timestep:
             result.cum_timestep = self.cum_timestep
 
-        if rp.return_delta_w_vector and isinstance(self._algorithm, BatchEpisodes):
+        if rp.return_delta_w_vector and self._algorithm.batch_episodes:
+            assert isinstance(self._algorithm, NonTabularEpisodicBatch)
             result.delta_w_vector = self._algorithm.get_delta_weights()
 
         return result

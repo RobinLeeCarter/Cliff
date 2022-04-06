@@ -78,20 +78,3 @@ class Model(NonTabularModel[State, Action, Environment],
         g.y_max = velocity_dim.max
         g.z_min = 0.0
         return g
-
-    # def build(self, comparison: common.Comparison):
-    #     super().build(comparison)
-    #     # self._create_tile_coding()
-    #     # create tile_coding here
-
-    # def _create_tile_coding(self):
-    #     dims: Dims = self.environment.dims
-    #     self._feature: TileCoding[State, Action] = TileCoding[State, Action](dims=dims)
-    #     self._feature.add(included_dims={Dim.POSITION, Dim.VELOCITY})  # , tilings=2 ** 4
-    #
-    #     print(f"total tilings = {self._feature.tilings}")
-    #     print(f"max_size = {self._feature.max_size}")
-    #
-    #     tilings = self._feature.tilings
-    #     alpha = 0.1 / tilings
-
