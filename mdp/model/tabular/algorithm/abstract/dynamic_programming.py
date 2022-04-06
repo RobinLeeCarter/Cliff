@@ -8,7 +8,8 @@ if TYPE_CHECKING:
 from mdp.model.tabular.algorithm.tabular_algorithm import TabularAlgorithm
 
 
-class DynamicProgramming(TabularAlgorithm, ABC):
+class DynamicProgramming(TabularAlgorithm, ABC,
+                         dynamic_programming=True):
     def __init__(self,
                  agent: TabularAgent,
                  algorithm_parameters: common.AlgorithmParameters

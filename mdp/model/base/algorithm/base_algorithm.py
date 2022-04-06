@@ -14,19 +14,31 @@ from mdp.model.base.policy.base_policy import BasePolicy
 class BaseAlgorithm(ABC):
     type_registry: dict[common.AlgorithmType, Type[BaseAlgorithm]] = {}
     name_registry: dict[common.AlgorithmType, str] = {}
-    # is_episodic: bool = False
+    tabular: bool = False
+    dynamic_programming: bool = False
+    episodic: bool = False
+    batches_episodes: bool = False
 
     def __init_subclass__(cls,
                           algorithm_type: Optional[common.AlgorithmType] = None,
                           algorithm_name: Optional[str] = None,
-                          # is_episodic: bool = False,
+                          tabular: bool = False,
+                          dynamic_programming: bool = False,
+                          episodic: bool = False,
+                          batches_episodes: bool = False,
                           **kwargs):
         super().__init_subclass__(**kwargs)
         if algorithm_type:
             BaseAlgorithm.type_registry[algorithm_type] = cls
             BaseAlgorithm.name_registry[algorithm_type] = algorithm_name
-        # if is_episodic:
-        #     cls.is_episodic = True
+        if tabular:
+            cls.tabular = True
+        if dynamic_programming:
+            cls.dynamic_programming = True
+        if episodic:
+            cls.episodic = True
+        if batches_episodes:
+            cls.batches_episodes = True
 
     def __init__(self,
                  agent: BaseAgent,

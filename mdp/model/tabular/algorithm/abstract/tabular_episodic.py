@@ -8,8 +8,8 @@ if TYPE_CHECKING:
 from mdp.model.tabular.algorithm.tabular_algorithm import TabularAlgorithm
 
 
-class TabularEpisodic(TabularAlgorithm, ABC):
-    # is_episodic=True):
+class TabularEpisodic(TabularAlgorithm, ABC,
+                      episodic=True):
     def __init__(self,
                  agent: TabularAgent,
                  algorithm_parameters: common.AlgorithmParameters

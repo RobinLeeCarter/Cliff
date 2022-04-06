@@ -8,8 +8,8 @@ if TYPE_CHECKING:
 from mdp.model.non_tabular.algorithm.non_tabular_algorithm import NonTabularAlgorithm
 
 
-class NonTabularEpisodic(NonTabularAlgorithm, ABC):
-    # is_episodic=True):
+class NonTabularEpisodic(NonTabularAlgorithm, ABC,
+                         episodic=True):
     def __init__(self,
                  agent: NonTabularAgent,
                  algorithm_parameters: common.AlgorithmParameters

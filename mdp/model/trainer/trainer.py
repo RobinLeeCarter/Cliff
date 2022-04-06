@@ -7,6 +7,7 @@ from mdp.model.trainer.parallel_episodes import ParallelEpisodes
 
 if TYPE_CHECKING:
     from mdp.model.base.agent.base_agent import BaseAgent
+    from mdp.model.base.environment.base_environment import BaseEnvironment
     from mdp.model.base.agent.base_episode import BaseEpisode
     from mdp.model.breakdown.base_breakdown import BaseBreakdown
 from mdp import common
@@ -35,7 +36,7 @@ class Trainer:
                  verbose: bool = False
                  ):
         self._agent: BaseAgent = agent
-        environment = self._agent.environment
+        environment: BaseEnvironment = self._agent.environment
         self._breakdown: Optional[BaseBreakdown] = breakdown
         self.settings: Optional[common.Settings] = None
 
@@ -102,15 +103,14 @@ class Trainer:
                 # do episodes in serial (with batch determined by self._algorithm.batch_episodes)
                 self._parallel_episodes = None
 
-        match self._algorithm:
-            case TabularEpisodic() | NonTabularEpisodic():
-                self._train_episodic()
-            case DynamicProgramming():
-                self._train_dynamic_programming()
-            case _:
-                raise NotImplementedError
+        if self._algorithm.episodic:
+            self._train_episodic()
+        elif self._algorithm.dynamic_programming:
+            self._train_dynamic_programming()
+        else:
+            raise NotImplementedError
 
-        if settings.algorithm_parameters.derive_v_from_q_as_final_step:
+        if self._algorithm.tabular and settings.algorithm_parameters.derive_v_from_q_as_final_step:
             assert isinstance(self._algorithm, TabularAlgorithm)
             self._algorithm.derive_v_from_q()
 
@@ -121,7 +121,8 @@ class Trainer:
         self.settings = settings
         self._algorithm = self._algorithm_factory.create(settings.algorithm_parameters)
         self._algorithm.create_policies(self._policy_factory, settings)
-        if isinstance(self._algorithm, NonTabularAlgorithm):
+        if not self._algorithm.tabular:
+            assert isinstance(self._algorithm, NonTabularAlgorithm)
             self._algorithm.create_feature_and_value_function(
                 self._feature_factory, self._value_function_factory, settings)
         self._agent.apply_settings(self.settings)
@@ -144,7 +145,8 @@ class Trainer:
                 self.max_cum_timestep = max(self.max_cum_timestep, self.cum_timestep)
 
         if self._verbose:
-            if isinstance(self._algorithm, TabularAlgorithm):
+            if self._algorithm.tabular:
+                assert isinstance(self._algorithm, TabularAlgorithm)
                 self._algorithm.print_q_coverage_statistics()
 
     def do_run(self,
@@ -257,7 +259,8 @@ class Trainer:
         if rp.return_recorder and self._breakdown:
             result.recorder = self._breakdown.recorder
 
-        if isinstance(self._algorithm, TabularAlgorithm):
+        if self._algorithm.tabular:
+            assert isinstance(self._algorithm, TabularAlgorithm)
             if rp.return_policy_vector:
                 result.policy_vector = self._algorithm.target_policy.get_policy_vector()
             if rp.return_v_vector and self._algorithm.V:

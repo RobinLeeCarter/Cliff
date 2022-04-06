@@ -17,7 +17,8 @@ from mdp.model.non_tabular.feature.base_feature import BaseFeature
 from mdp.model.base.algorithm.base_algorithm import BaseAlgorithm
 
 
-class NonTabularAlgorithm(BaseAlgorithm, ABC):
+class NonTabularAlgorithm(BaseAlgorithm, ABC,
+                          tabular=False):
     def __init__(self,
                  agent: NonTabularAgent,
                  algorithm_parameters: common.AlgorithmParameters

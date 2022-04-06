@@ -14,7 +14,8 @@ from mdp.model.tabular.value_function.state_action_function import StateActionFu
 from mdp.model.base.algorithm.base_algorithm import BaseAlgorithm
 
 
-class TabularAlgorithm(BaseAlgorithm, ABC):
+class TabularAlgorithm(BaseAlgorithm, ABC,
+                       tabular=True):
     def __init__(self,
                  agent: TabularAgent,
                  algorithm_parameters: common.AlgorithmParameters
