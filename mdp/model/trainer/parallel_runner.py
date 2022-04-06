@@ -4,8 +4,6 @@ from typing import TYPE_CHECKING, Optional
 import multiprocessing as mp
 import itertools
 
-import numpy as np
-
 import utils
 from mdp import common
 

@@ -4,10 +4,12 @@ import time
 import enum
 from dataclasses import dataclass
 
-# from mdp import common
+from mdp import common
+from mdp.model.non_tabular.feature.base_feature import BaseFeature
+from mdp.factory.feature_factory import FeatureFactory
 from mdp.model.non_tabular.feature.tile_coding.tile_coding import TileCoding
-# from mdp.model.non_tabular.feature.tile_coding.tiling_coding_parameters import TileCodingParameters
-# from mdp.model.non_tabular.feature.tile_coding.tiling_group_parameters import TilingGroupParameters
+from mdp.model.non_tabular.feature.tile_coding.tiling_coding_parameters import TileCodingParameters
+from mdp.model.non_tabular.feature.tile_coding.tiling_group_parameters import TilingGroupParameters
 from mdp.model.non_tabular.environment.dimension.float_dimension import FloatDimension
 from mdp.model.non_tabular.environment.dimension.category_dimension import CategoryDimension
 from mdp.model.non_tabular.environment.dimension.dim_enum import DimEnum
@@ -40,18 +42,22 @@ def main():
     dims: Dims = Dims()
     dims.state_float_dims[Dim.X] = FloatDimension(min=0.0, max=2.0 * np.pi, wrap_around=False)
     dims.state_float_dims[Dim.Y] = FloatDimension(min=0.0, max=2.0 * np.pi, wrap_around=False)
-    dims.state_categories[Dim.Z] = CategoryDimension(possible_values=6)
+    dims.state_categories[Dim.Z] = CategoryDimension(possible_values=[x for x in range(6)])
 
-    # tile_coding_parameters = TileCodingParameters(
-    #     feature_type=common.FeatureType.TILE_CODING,
-    #     tiling_groups=[
-    #         TilingGroupParameters(included_dims={Dim.X, Dim.Y}),
-    #         TilingGroupParameters(included_dims={Dim.Y, Dim.Z}),
-    #         TilingGroupParameters(included_dims={Dim.X, Dim.Z}),
-    #     ],
-    # )
+    tile_coding_parameters = TileCodingParameters(
+        feature_type=common.FeatureType.TILE_CODING,
+        tiling_groups=[
+            TilingGroupParameters(included_dims={Dim.X, Dim.Y}),
+            TilingGroupParameters(included_dims={Dim.Y, Dim.Z}),
+            TilingGroupParameters(included_dims={Dim.X, Dim.Z}),
+        ],
+    )
+    feature_factory: FeatureFactory[NonTabularState, PlaceholderAction] = \
+        FeatureFactory[NonTabularState, PlaceholderAction](dims)
+    tile_coding: BaseFeature[NonTabularState, PlaceholderAction] = feature_factory.create(tile_coding_parameters)
+    assert isinstance(tile_coding, TileCoding)
 
-    tile_coding: TileCoding[State, PlaceholderAction] = TileCoding[State, PlaceholderAction](dims=dims)
+    # tile_coding: TileCoding[State, PlaceholderAction] = TileCoding[State, PlaceholderAction](dims=dims)
     # tile_coding = TileCoding(dimension_ranges=dimensions_ranges, max_size=800, use_dict=False)
 
     # tile_size_per_dim = [dr for dr, tiles in dimensions_ranges, [8,8,0] ]
@@ -61,9 +67,9 @@ def main():
     # tile_coding.add(included_dims=np.array([False, True, False]), tilings=2 ** 4)  # , tilings=2 ** 4
     # tile_coding.add(included_dims=np.array([False, False, True]), tilings=2 ** 4)  # , tilings=2 ** 4
 
-    tile_coding.add(included_dims={Dim.X, Dim.Y})  # , tilings=2 ** 4
-    tile_coding.add(included_dims={Dim.Y, Dim.Z})  # , tilings=2 ** 4
-    tile_coding.add(included_dims={Dim.X, Dim.Z})  # , tilings=2 ** 4
+    # tile_coding.add(included_dims={Dim.X, Dim.Y})  # , tilings=2 ** 4
+    # tile_coding.add(included_dims={Dim.Y, Dim.Z})  # , tilings=2 ** 4
+    # tile_coding.add(included_dims={Dim.X, Dim.Z})  # , tilings=2 ** 4
 
     tilings = tile_coding.tilings
     print(f"total tilings = {tile_coding.tilings}")

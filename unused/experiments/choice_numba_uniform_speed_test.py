@@ -12,7 +12,7 @@ print(v)
 v = rng.uniform()
 print(v)
 
-v = utils.uniform()
+v = utils.unit_uniform()
 print(v)
 
 

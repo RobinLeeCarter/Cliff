@@ -38,7 +38,7 @@ class NonTabularEGreedy(ActionValuePolicy[State, Action],
         possible_actions: list[Action] = self._environment.possible_actions_list
         action_values: np.ndarray = self._Q.get_action_values(state, possible_actions)
         # could also jit this if needed
-        if utils.uniform() > self.epsilon:
+        if utils.unit_uniform() > self.epsilon:
             index: int = utils.choose_argmax_index(action_values)
             return possible_actions[index]
         else:

@@ -40,7 +40,7 @@ class EGreedy(TabularPolicy,
             return utils.p_choice(p=self._policy_matrix[s, :])
         else:
             # could also jit this if needed
-            if utils.uniform() > self.epsilon:
+            if utils.unit_uniform() > self.epsilon:
                 return self.greedy_policy[s]
             else:
                 # flat fairly slow at 9ms

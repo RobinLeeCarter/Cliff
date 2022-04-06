@@ -1,11 +1,9 @@
 from __future__ import annotations
 from typing import TYPE_CHECKING
 
-import numpy as np
-
+import utils
 if TYPE_CHECKING:
     from mdp.model.non_tabular.environment.dimension.dims import Dims
-
 from mdp.common.distribution.continuous import ContinuousDistribution
 from mdp.task.mountain_car.enums import Dim
 from mdp.task.mountain_car.model.state import State
@@ -20,7 +18,7 @@ class StartStateDistribution(ContinuousDistribution[State]):
 
     def draw_one(self) -> State:
         # "Samples are uniformly distributed over the half-open interval [low, high)"
-        random_position = np.random.uniform(low=self._position_min, high=self._position_max)
-        random_velocity = np.random.uniform(low=self._velocity_min, high=self._velocity_max)
+        random_position = utils.uniform(low=self._position_min, high=self._position_max)
+        random_velocity = utils.uniform(low=self._velocity_min, high=self._velocity_max)
         state = State(is_terminal=False, position=random_position, velocity=random_velocity)
         return state

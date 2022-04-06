@@ -79,6 +79,12 @@ def choose_argmax_index(values: np.ndarray) -> int:
 
 
 @njit(cache=True)
-def uniform() -> float:
-    """Return a random float uniformly from 0.0 to 1.0"""
+def uniform(low: float = 0.0, high: float = 1.0) -> float:
+    """Return a random float uniformly from low to high"""
+    return np.random.uniform(low, high)
+
+
+@njit(cache=True)
+def unit_uniform() -> float:
+    """Return a random float uniformly from 0.0 to 1.0 (as fast as possible)"""
     return np.random.uniform(0.0, 1.0)
