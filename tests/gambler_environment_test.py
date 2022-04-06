@@ -1,7 +1,6 @@
 from __future__ import annotations
 
-import random
-
+import utils
 from mdp import common
 from mdp.application import Application
 from mdp.task.gambler.model.state import State
@@ -112,7 +111,8 @@ def random_round(environment: Environment):
     state: State = environment.states[s]
     # noinspection PyProtectedMember
     max_stake = min(state.capital, environment._max_capital-state.capital)
-    stake = random.choice(range(1, max_stake+1))
+    stake: int = 1 + utils.n_choice(max_stake)
+    # stake = random.choice(range(1, max_stake+1))
     action = Action(stake=stake)
     print(state, action)
     reward, new_state = environment.from_state_perform_action(state, action)
