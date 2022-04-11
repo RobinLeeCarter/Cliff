@@ -3,6 +3,7 @@ from typing import TYPE_CHECKING, Optional
 
 import numpy as np
 
+from mdp.model.non_tabular.agent.non_tabular_episode import NonTabularEpisode
 from mdp.model.non_tabular.agent.reward_state_action import RewardStateAction
 from mdp.model.non_tabular.environment.non_tabular_action import NonTabularAction
 from mdp.model.non_tabular.environment.non_tabular_state import NonTabularState
@@ -11,13 +12,11 @@ if TYPE_CHECKING:
     from mdp.model.non_tabular.agent.non_tabular_agent import NonTabularAgent
 from mdp import common
 from mdp.model.non_tabular.algorithm.abstract.nontabular_episodic_batch import NonTabularEpisodicBatch
-from mdp.model.non_tabular.agent.non_tabular_episode import NonTabularEpisode
-from mdp.model.non_tabular.value_function.state_action.linear_state_action_function import LinearStateActionFunction
 
 
-class EpisodicSarsaSerialBatch(NonTabularEpisodicBatch,
-                               algorithm_type=common.AlgorithmType.NON_TABULAR_EPISODIC_SARSA_SERIAL_BATCH,
-                               algorithm_name="Episodic Sarsa Serial Batch"):
+class EpisodicSarsaParallelEpisodes(NonTabularEpisodicBatch,
+                                    algorithm_type=common.AlgorithmType.NON_TABULAR_EPISODIC_SARSA_PARALLEL_EPISODES,
+                                    algorithm_name="Episodic Sarsa Parallel Episodes"):
     def __init__(self,
                  agent: NonTabularAgent,
                  algorithm_parameters: common.AlgorithmParameters
@@ -25,15 +24,9 @@ class EpisodicSarsaSerialBatch(NonTabularEpisodicBatch,
         super().__init__(agent, algorithm_parameters)
         self._alpha = self._algorithm_parameters.alpha
         self._requires_q = True
+
         self._previous_q: float = 0.0
         self._previous_gradient: Optional[np.ndarray] = None
-
-        self._w_copy: Optional[np.ndarray] = None
-
-    def start_episodes(self):
-        super().start_episodes()
-        assert isinstance(self.Q, LinearStateActionFunction)
-        self._w_copy = self.Q.w.copy()
 
     def _start_episode(self):
         ag = self._agent
@@ -53,10 +46,12 @@ class EpisodicSarsaSerialBatch(NonTabularEpisodicBatch,
 
         if self.Q.has_sparse_feature:
             # gradient_indices: np.ndarray = self.Q.get_gradient(ag.prev_state, ag.prev_action)
+            # self.Q.update_delta_weights_sparse(indices=self._previous_gradient, delta_w=alpha_delta)
             self.Q.update_weights_sparse(indices=self._previous_gradient, delta_w=alpha_delta)
         else:
             # gradient_vector: np.ndarray = self.Q.get_gradient(ag.prev_state, ag.prev_action)
             delta_w: np.ndarray = alpha_delta * self._previous_gradient
+            # self.Q.update_delta_weights(delta_w)
             self.Q.update_weights(delta_w)
 
         if not ag.state.is_terminal:
@@ -66,13 +61,6 @@ class EpisodicSarsaSerialBatch(NonTabularEpisodicBatch,
     def _end_episode(self):
         if self._agent.state.is_terminal:
             self._episodes.append(self._agent.episode)
-
-    def apply_episodes(self):
-        """for use with batch episodes but a single process"""
-        # copy back original w and reapply episodes
-        assert isinstance(self.Q, LinearStateActionFunction)
-        self.Q.w = self._w_copy
-        super().apply_episodes()
 
     def _apply_episode(self, episode: NonTabularEpisode):
         reward: float

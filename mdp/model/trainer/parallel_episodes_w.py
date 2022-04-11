@@ -17,7 +17,7 @@ from mdp import common
 _trainer: Trainer
 
 
-class ParallelEpisodeDeltas:
+class ParallelEpisodesW:
     def __init__(self, trainer: Trainer):
         self._trainer: Trainer = trainer
         # must be disabled for multi-processor
@@ -54,6 +54,11 @@ class ParallelEpisodeDeltas:
              for x in range(0, self._actual_episodes_per_batch, self._episodes_per_process)]
         episodes_to_do: list[int] = list(itertools.repeat(self._episodes_per_process, self._processes))
         result_parameter_list: list[common.ResultParameters] = self._get_result_parameter_list()
+
+        algorithm = self._trainer.algorithm
+        if algorithm.batch_episodes:
+            assert isinstance(algorithm, NonTabularEpisodicBatch)
+            algorithm.start_episodes()
 
         with self._ctx.Pool(processes=self._processes) as pool:
             if self._use_global_trainer:

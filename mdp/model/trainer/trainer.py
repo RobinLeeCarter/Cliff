@@ -3,7 +3,9 @@ from typing import TYPE_CHECKING, Optional, Callable
 import multiprocessing
 
 from mdp.model.non_tabular.algorithm.abstract.nontabular_episodic_batch import NonTabularEpisodicBatch
+from mdp.model.non_tabular.algorithm.episodic.episodic_sarsa_parallel_w import EpisodicSarsaParallelW
 from mdp.model.trainer.parallel_episodes import ParallelEpisodes
+from mdp.model.trainer.parallel_episodes_w import ParallelEpisodesW
 
 if TYPE_CHECKING:
     from mdp.model.base.agent.base_agent import BaseAgent
@@ -53,7 +55,7 @@ class Trainer:
             self._value_function_factory: ValueFunctionFactory = ValueFunctionFactory()
 
         self._parallel_runner: Optional[ParallelRunner] = None
-        self._parallel_episodes: Optional[ParallelEpisodeDeltas] = None
+        self._parallel_episodes: Optional[ParallelEpisodes] = None
 
         self.run_counter: int = 0
         self.episode_counter: int = 0
@@ -98,7 +100,10 @@ class Trainer:
                     and self._algorithm.batch_episodes \
                     and not daemon:
                 # do episodes in parallel
-                self._parallel_episodes = ParallelEpisodes(self)
+                if isinstance(self.algorithm, EpisodicSarsaParallelW):
+                    self._parallel_episodes = ParallelEpisodesW(self)
+                else:
+                    self._parallel_episodes = ParallelEpisodes(self)
             else:
                 # do episodes in serial (with batch determined by self._algorithm.batch_episodes)
                 self._parallel_episodes = None
@@ -274,5 +279,9 @@ class Trainer:
         if rp.return_delta_w_vector and self._algorithm.batch_episodes:
             assert isinstance(self._algorithm, NonTabularEpisodicBatch)
             result.delta_w_vector = self._algorithm.get_delta_weights()
+
+        if rp.return_episodes and self._algorithm.batch_episodes:
+            assert isinstance(self._algorithm, NonTabularEpisodicBatch)
+            result.episodes = self._algorithm.episodes
 
         return result

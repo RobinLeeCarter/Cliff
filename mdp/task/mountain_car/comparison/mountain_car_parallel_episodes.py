@@ -7,8 +7,8 @@ from mdp.task.mountain_car.comparison.comparison import Comparison
 from mdp.task.mountain_car.comparison.settings import Settings
 
 
-class MountainCarBatchParallel(ComparisonBuilder,
-                               comparison_type=common.ComparisonType.MOUNTAIN_CAR_PARALLEL_BATCH):
+class MountainCarParallelEpisodes(ComparisonBuilder,
+                                  comparison_type=common.ComparisonType.MOUNTAIN_CAR_PARALLEL_EPISODES):
     def create(self) -> Comparison:
         # is the problem here that the other processes are in some sense off-policy?
         # in that the policy diverges from the last branching point
@@ -16,12 +16,12 @@ class MountainCarBatchParallel(ComparisonBuilder,
         return Comparison(
             environment_parameters=self._environment_parameters,
             comparison_settings=Settings(
-                training_episodes=8*100*5,
-                episodes_per_batch=8*100,
-                episode_print_frequency=100,
+                training_episodes=10000,
+                episodes_per_batch=8,
+                episode_print_frequency=800,
                 episode_multiprocessing=common.ParallelContextType.FORK_GLOBAL,
                 algorithm_parameters=common.AlgorithmParameters(
-                    algorithm_type=common.AlgorithmType.NON_TABULAR_EPISODIC_SARSA_BATCH,
+                    algorithm_type=common.AlgorithmType.NON_TABULAR_EPISODIC_SARSA_PARALLEL_EPISODES,
                     alpha=0.5
                 ),
                 value_function_parameters=common.ValueFunctionParameters(

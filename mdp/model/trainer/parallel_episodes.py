@@ -7,6 +7,7 @@ import multiprocessing as mp
 import itertools
 
 import utils
+from mdp.model.non_tabular.agent.non_tabular_episode import NonTabularEpisode
 from mdp.model.non_tabular.algorithm.abstract.nontabular_episodic_batch import NonTabularEpisodicBatch
 
 if TYPE_CHECKING:
@@ -55,6 +56,11 @@ class ParallelEpisodes:
         episodes_to_do: list[int] = list(itertools.repeat(self._episodes_per_process, self._processes))
         result_parameter_list: list[common.ResultParameters] = self._get_result_parameter_list()
 
+        algorithm = self._trainer.algorithm
+        if algorithm.batch_episodes:
+            assert isinstance(algorithm, NonTabularEpisodicBatch)
+            algorithm.start_episodes()
+
         with self._ctx.Pool(processes=self._processes) as pool:
             if self._use_global_trainer:
                 args = zip(seeds,
@@ -79,7 +85,7 @@ class ParallelEpisodes:
     def _get_result_parameter_list(self) -> list[common.ResultParameters]:
         rp_norm: common.ResultParameters = common.ResultParameters(
             return_recorder=True,
-            return_delta_w_vector=True,
+            return_episodes=True,
         )
         result_parameter_list: list[common.ResultParameters] = list(itertools.repeat(rp_norm, self._processes))
         return result_parameter_list
@@ -95,8 +101,11 @@ class ParallelEpisodes:
         algorithm = self._trainer.algorithm
         if algorithm.batch_episodes:
             assert isinstance(algorithm, NonTabularEpisodicBatch)
-            delta_w_vectors = [result.delta_w_vector for result in self._results]
-            algorithm.apply_delta_w_vectors(delta_w_vectors)
+            for result in self._results:
+                # noinspection PyTypeChecker
+                episodes: list[NonTabularEpisode] = result.episodes
+                algorithm.add_episodes(episodes)
+            algorithm.apply_episodes()
 
         # self._trainer.max_cum_timestep = max(result.cum_timestep for result in self._results)
 

@@ -1,11 +1,12 @@
 from __future__ import annotations
 from typing import TYPE_CHECKING, Optional
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 import numpy as np
 
 if TYPE_CHECKING:
     from mdp.model.breakdown.recorder import Recorder
+    from mdp.model.base.agent.base_episode import BaseEpisode
 
 
 @dataclass
@@ -16,3 +17,4 @@ class Result:
     q_matrix: Optional[np.ndarray] = None
     cum_timestep: Optional[int] = None
     delta_w_vector: Optional[np.ndarray] = None
+    episodes: list[BaseEpisode] = field(default_factory=list)

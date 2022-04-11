@@ -35,7 +35,8 @@ class ComparisonType(enum.IntEnum):
 
     MOUNTAIN_CAR_STANDARD = enum.auto()
     MOUNTAIN_CAR_SERIAL_BATCH = enum.auto()
-    MOUNTAIN_CAR_PARALLEL_BATCH = enum.auto()
+    MOUNTAIN_CAR_PARALLEL_EPISODES = enum.auto()
+    MOUNTAIN_CAR_PARALLEL_W = enum.auto()
 
     RACETRACK_EPISODE = enum.auto()
 
@@ -88,8 +89,9 @@ class AlgorithmType(enum.IntEnum):
 
     # Non-tabular
     NON_TABULAR_EPISODIC_SARSA = enum.auto()
-    NON_TABULAR_EPISODIC_SARSA_BATCH = enum.auto()
     NON_TABULAR_EPISODIC_SARSA_SERIAL_BATCH = enum.auto()
+    NON_TABULAR_EPISODIC_SARSA_PARALLEL_W = enum.auto()
+    NON_TABULAR_EPISODIC_SARSA_PARALLEL_EPISODES = enum.auto()
 
 
 class PolicyType(enum.IntEnum):

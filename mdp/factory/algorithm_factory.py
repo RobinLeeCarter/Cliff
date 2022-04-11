@@ -37,8 +37,9 @@ from mdp.model.tabular.algorithm.control.q_learning import QLearning
 
 # non-tabular
 from mdp.model.non_tabular.algorithm.episodic.episodic_sarsa import EpisodicSarsa
-from mdp.model.non_tabular.algorithm.episodic.episodic_sarsa_batch import EpisodicSarsaBatch
 from mdp.model.non_tabular.algorithm.episodic.episodic_sarsa_serial_batch import EpisodicSarsaSerialBatch
+from mdp.model.non_tabular.algorithm.episodic.episodic_sarsa_parallel_w import EpisodicSarsaParallelW
+from mdp.model.non_tabular.algorithm.episodic.episodic_sarsa_parallel_episodes import EpisodicSarsaParallelEpisodes
 
 
 class AlgorithmFactory:
@@ -91,6 +92,7 @@ def __dummy():
 
         # non-tabular
         EpisodicSarsa,
-        EpisodicSarsaBatch,
-        EpisodicSarsaSerialBatch
+        EpisodicSarsaSerialBatch,
+        EpisodicSarsaParallelW,
+        EpisodicSarsaParallelEpisodes,
     ]
