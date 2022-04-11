@@ -65,26 +65,26 @@ class EpisodicSarsaSerialBatch(NonTabularEpisodicBatch,
 
     def _end_episode(self):
         if self._agent.state.is_terminal:
-            self._episodes.append(self._agent.episode)
+            self._trajectories.append(self._agent.episode)
 
-    def apply_episodes(self):
+    def apply_trajectories(self):
         """for use with batch episodes but a single process"""
         # copy back original w and reapply episodes
         assert isinstance(self.Q, LinearStateActionFunction)
         self.Q.w = self._w_copy
-        super().apply_episodes()
+        super().apply_trajectories()
 
-    def _apply_episode(self, episode: NonTabularEpisode):
+    def _apply_trajectory(self, trajectory: NonTabularEpisode):
         reward: float
         state: Optional[NonTabularState]
         action: Optional[NonTabularAction]
 
-        reward_state_action: RewardStateAction = episode.trajectory[0]
+        reward_state_action: RewardStateAction = trajectory.trajectory[0]
         reward, state, action = reward_state_action.tuple
         self._previous_q = self.Q[state, action]
         self._previous_gradient = self.Q.get_gradient(state, action)
 
-        for reward_state_action in episode.trajectory:
+        for reward_state_action in trajectory.trajectory:
             reward, state, action = reward_state_action.tuple
             self._apply_sarsa(reward, state, action)
 

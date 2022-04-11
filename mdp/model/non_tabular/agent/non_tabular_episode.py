@@ -4,7 +4,7 @@ from typing import Optional, Callable, TYPE_CHECKING, TypeVar, Generic
 if TYPE_CHECKING:
     from mdp.model.non_tabular.environment.non_tabular_environment import NonTabularEnvironment
 
-from mdp.model.non_tabular.agent.reward_state_action import RewardStateAction
+from mdp.model.non_tabular.agent.reward_state_action import RewardStateAction, Trajectory
 
 from mdp.model.non_tabular.environment.non_tabular_state import NonTabularState
 from mdp.model.non_tabular.environment.non_tabular_action import NonTabularAction
@@ -27,7 +27,7 @@ class NonTabularEpisode(Generic[State, Action], BaseEpisode):
         # self.record_first_visits = record_first_visits
 
         # R0=0, S0, A0, R1, S1, A1, R2 ... S(T-1), A(T-1), R(T), S(T), A(T)=-1
-        self.trajectory: list[RewardStateAction] = []
+        self.trajectory: Trajectory = []
         self.terminates: bool = False
         self.T: Optional[int] = None
         self.G: list[float] = []

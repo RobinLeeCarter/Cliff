@@ -65,7 +65,7 @@ class EpisodicSarsaParallelW(NonTabularEpisodicBatch,
     def get_delta_weights(self) -> np.ndarray:
         return self.Q.get_delta_weights()
 
-    def _apply_episode(self, episode: NonTabularEpisode):
+    def _apply_trajectory(self, trajectory: NonTabularEpisode):
         pass
 
     def apply_delta_w_vector(self, delta_w: np.ndarray):

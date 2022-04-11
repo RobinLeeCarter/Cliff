@@ -18,3 +18,6 @@ class RewardStateAction(Generic[State, Action]):
     @property
     def tuple(self) -> tuple[float, State, Optional[Action]]:
         return self.r, self.state, self.action
+
+
+Trajectory = list[RewardStateAction]

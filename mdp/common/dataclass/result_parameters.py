@@ -10,4 +10,4 @@ class ResultParameters:
     return_q_matrix: bool = False
     return_cum_timestep: bool = False
     return_delta_w_vector: bool = False
-    return_episodes: bool = False
+    return_trajectories: bool = False

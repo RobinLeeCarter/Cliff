@@ -210,7 +210,7 @@ class Trainer:
             if result_parameters:
                 return self._get_result(result_parameters)
         else:
-            self._algorithm.apply_episodes()
+            self._algorithm.apply_trajectories()
 
     def _do_episode(self, episode_counter: int):
         # for use by Breakdown
@@ -280,8 +280,8 @@ class Trainer:
             assert isinstance(self._algorithm, NonTabularEpisodicBatch)
             result.delta_w_vector = self._algorithm.get_delta_weights()
 
-        if rp.return_episodes and self._algorithm.batch_episodes:
+        if rp.return_trajectories and self._algorithm.batch_episodes:
             assert isinstance(self._algorithm, NonTabularEpisodicBatch)
-            result.episodes = self._algorithm.episodes
+            result.trajectories = self._algorithm.trajectories
 
         return result

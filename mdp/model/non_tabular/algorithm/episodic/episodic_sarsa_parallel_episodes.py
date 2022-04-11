@@ -3,8 +3,7 @@ from typing import TYPE_CHECKING, Optional
 
 import numpy as np
 
-from mdp.model.non_tabular.agent.non_tabular_episode import NonTabularEpisode
-from mdp.model.non_tabular.agent.reward_state_action import RewardStateAction
+from mdp.model.non_tabular.agent.reward_state_action import RewardStateAction, Trajectory
 from mdp.model.non_tabular.environment.non_tabular_action import NonTabularAction
 from mdp.model.non_tabular.environment.non_tabular_state import NonTabularState
 
@@ -60,19 +59,19 @@ class EpisodicSarsaParallelEpisodes(NonTabularEpisodicBatch,
 
     def _end_episode(self):
         if self._agent.state.is_terminal:
-            self._episodes.append(self._agent.episode)
+            self._trajectories.append(self._agent.episode.trajectory)
 
-    def _apply_episode(self, episode: NonTabularEpisode):
+    def _apply_trajectory(self, trajectory: Trajectory):
         reward: float
         state: Optional[NonTabularState]
         action: Optional[NonTabularAction]
 
-        reward_state_action: RewardStateAction = episode.trajectory[0]
+        reward_state_action: RewardStateAction = trajectory[0]
         reward, state, action = reward_state_action.tuple
         self._previous_q = self.Q[state, action]
         self._previous_gradient = self.Q.get_gradient(state, action)
 
-        for reward_state_action in episode.trajectory:
+        for reward_state_action in trajectory:
             reward, state, action = reward_state_action.tuple
             self._apply_sarsa(reward, state, action)
 

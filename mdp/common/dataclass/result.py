@@ -6,7 +6,7 @@ import numpy as np
 
 if TYPE_CHECKING:
     from mdp.model.breakdown.recorder import Recorder
-    from mdp.model.base.agent.base_episode import BaseEpisode
+    from mdp.model.non_tabular.agent.reward_state_action import Trajectory
 
 
 @dataclass
@@ -17,4 +17,4 @@ class Result:
     q_matrix: Optional[np.ndarray] = None
     cum_timestep: Optional[int] = None
     delta_w_vector: Optional[np.ndarray] = None
-    episodes: list[BaseEpisode] = field(default_factory=list)
+    trajectories: list[Trajectory] = field(default_factory=list)    # non-tabular

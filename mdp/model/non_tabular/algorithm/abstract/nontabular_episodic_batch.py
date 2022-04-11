@@ -5,7 +5,7 @@ import numpy as np
 
 from mdp import common
 from mdp.model.non_tabular.agent.non_tabular_agent import NonTabularAgent
-from mdp.model.non_tabular.agent.non_tabular_episode import NonTabularEpisode
+from mdp.model.non_tabular.agent.reward_state_action import Trajectory
 from mdp.model.non_tabular.algorithm.abstract.nontabular_episodic_online import NonTabularEpisodicOnline
 
 
@@ -16,30 +16,30 @@ class NonTabularEpisodicBatch(NonTabularEpisodicOnline, ABC,
                  algorithm_parameters: common.AlgorithmParameters
                  ):
         super().__init__(agent, algorithm_parameters)
-        self._episodes: list[NonTabularEpisode] = []
+        self._trajectories: list[Trajectory] = []
 
     @property
-    def episodes(self) -> list[NonTabularEpisode]:
-        return self._episodes
+    def trajectories(self) -> list[Trajectory]:
+        return self._trajectories
 
     # start of episodes
     def start_episodes(self):
-        self._episodes = []
+        self._trajectories = []
 
     # end of episodes
     def get_delta_weights(self) -> np.ndarray:
         pass
 
-    def add_episodes(self, episodes: list[NonTabularEpisode]):
-        self._episodes.extend(episodes)
+    def add_trajectories(self, trajectories: list[Trajectory]):
+        self._trajectories.extend(trajectories)
 
     # end of batch single-processing
-    def apply_episodes(self):
-        for episode in self._episodes:
-            self._apply_episode(episode)
+    def apply_trajectories(self):
+        for trajectory in self._trajectories:
+            self._apply_trajectory(trajectory)
 
     @abstractmethod
-    def _apply_episode(self, episode: NonTabularEpisode):
+    def _apply_trajectory(self, trajectory: Trajectory):
         pass
 
     # end of batch multiprocessing
