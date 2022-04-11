@@ -23,6 +23,7 @@ class EpisodicSarsa(NonTabularEpisodicOnline,
     def _start_episode(self):
         self._agent.choose_action()
 
+    # @profile
     def _do_training_step(self):
         ag = self._agent
         ag.take_action()

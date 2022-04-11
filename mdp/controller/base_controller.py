@@ -1,5 +1,5 @@
 from __future__ import annotations
-from typing import TYPE_CHECKING, Optional, TypeVar, Generic, Type
+from typing import TYPE_CHECKING, Optional, TypeVar, Generic, Type, final
 
 if TYPE_CHECKING:
     from mdp import common
@@ -39,10 +39,13 @@ class BaseController(Generic[Model, View]):
         self._model.build(self._comparison)
         self._view.build(self._comparison)
 
-    def run(self):
-        # import cProfile
-        # cProfile.runctx('self._model.run()', globals(), locals(), 'model_run.prof')
-        self._model.run()
+    @final
+    def run(self, profile: bool):
+        if profile:
+            import cProfile
+            cProfile.runctx('self._model.run()', globals(), locals(), 'model_run.prof')
+        else:
+            self._model.run()
 
     def output(self):
         pass

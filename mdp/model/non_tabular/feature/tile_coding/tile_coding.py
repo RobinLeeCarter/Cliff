@@ -96,6 +96,7 @@ class TileCoding(SparseFeature[State, Action],
             # if self._size != 0 and self._total_tiles > self._size:
             #     print(f"Warning: total_tiles: {self._total_tiles} exceeds size: {self._size}")
 
+    # @profile
     def _do_state_computation(self):
         for tiling_group_index, tiling_group in enumerate(self._tiling_groups):
             # array of: tilings x included dimensions
@@ -111,6 +112,7 @@ class TileCoding(SparseFeature[State, Action],
             action_categories: np.ndarray = tiling_group.filter_action_categories(self._action.categories())
             self._action_tuples[tiling_group_index] = tuple(action_categories)
 
+    # @profile
     def _get_sparse_vector(self) -> np.ndarray:
         """return just the indexes of x which are 1 (rest are 0) (i.e. a list of tiles) using unpacked values"""
         tile_indexes: list[int] = []

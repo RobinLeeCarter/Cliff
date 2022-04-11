@@ -16,18 +16,21 @@ class Application:
     def __init__(self,
                  comparison_type: Optional[common.ComparisonType] = None,
                  seed: Optional[int] = None,
-                 auto_run: bool = True):
+                 auto_run: bool = True,
+                 profile: bool = False
+                 ):
         """
         :param comparison_type: if comparison_type not passed then allow a build using a comparison argument.
         :param seed: use a global seed for reproducible "random" results. This is passed into all processes/threads.
         :param auto_run: run directly after build (default). Otherwise can do init, build and run separately.
         """
         self._comparison: Optional[common.Comparison] = None
+        self._profile: bool = profile
+        if seed is not None:
+            utils.Rng.set_seed(seed)
         self.model: Optional[BaseModel] = None
         self.view: Optional[BaseView] = None
         self.controller: Optional[BaseController] = None
-        if seed is not None:
-            utils.Rng.set_seed(seed)
 
         self._comparison_factory: ComparisonFactory = ComparisonFactory()
         self._mvc_factory: MVCFactory = MVCFactory()
@@ -47,5 +50,5 @@ class Application:
         self.controller.build(comparison)
 
     def run(self):
-        self.controller.run()
+        self.controller.run(self._profile)
         self.controller.output()

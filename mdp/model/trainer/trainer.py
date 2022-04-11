@@ -53,7 +53,7 @@ class Trainer:
             self._value_function_factory: ValueFunctionFactory = ValueFunctionFactory()
 
         self._parallel_runner: Optional[ParallelRunner] = None
-        self._parallel_episodes: Optional[ParallelEpisodes] = None
+        self._parallel_episodes: Optional[ParallelEpisodeDeltas] = None
 
         self.run_counter: int = 0
         self.episode_counter: int = 0

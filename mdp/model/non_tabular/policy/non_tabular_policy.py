@@ -37,10 +37,10 @@ class NonTabularPolicy(Generic[State, Action], BasePolicy, ABC):
         self.requires_q: bool = False
 
     def set_feature(self, feature: BaseFeature[State, Action]):
-        raise Exception("NotImplemented")
+        raise Exception("set_feature NotImplemented")
 
     def set_state_action_function(self, state_action_function: StateActionFunction[State, Action]):
-        raise Exception("NotImplemented")
+        raise Exception("set_state_action_function NotImplemented")
 
     def __getitem__(self, state: State) -> Optional[Action]:
         if state.is_terminal:
@@ -77,4 +77,3 @@ class NonTabularPolicy(Generic[State, Action], BasePolicy, ABC):
         :return: probability distribution of all actions across list of standard actions for environment
         """
         pass
-
