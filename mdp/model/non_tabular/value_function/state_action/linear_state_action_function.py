@@ -46,6 +46,8 @@ class LinearStateActionFunction(StateActionFunction[State, Action],
             return self._feature.dot_product_full_vector(self.w)
 
     def get_gradient(self, state: State, action: Action) -> np.ndarray:
+        # for linear case the gradient doesn't depend on the state and action
+        assert action is not None
         return self._feature.get_vector()
 
     def get_action_values(self, state: State, actions: list[Action]) -> np.ndarray:

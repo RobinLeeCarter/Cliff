@@ -1,5 +1,5 @@
 from __future__ import annotations
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Optional
 
 import numpy as np
 
@@ -19,9 +19,14 @@ class EpisodicSarsa(NonTabularEpisodicOnline,
         super().__init__(agent, algorithm_parameters)
         self._alpha = self._algorithm_parameters.alpha
         self._requires_q = True
+        self._previous_q: float = 0.0
+        self._previous_gradient: Optional[np.ndarray] = None
 
     def _start_episode(self):
-        self._agent.choose_action()
+        ag = self._agent
+        ag.choose_action()
+        self._previous_q = self.Q[ag.state, ag.action]
+        self._previous_gradient = self.Q.get_gradient(ag.state, ag.action)
 
     # @profile
     def _do_training_step(self):
@@ -29,17 +34,22 @@ class EpisodicSarsa(NonTabularEpisodicOnline,
         ag.take_action()
         ag.choose_action()
 
-        target: float = ag.r + self._gamma * self.Q[ag.state, ag.action]
-        delta: float = target - self.Q[ag.prev_state, ag.prev_action]
+        current_q = self.Q[ag.state, ag.action]
+        target: float = ag.r + self._gamma * current_q
+        delta: float = target - self._previous_q
         alpha_delta: float = self._alpha * delta
 
         if self.Q.has_sparse_feature:
-            gradient_indices: np.ndarray = self.Q.get_gradient(ag.prev_state, ag.prev_action)
-            self.Q.update_weights_sparse(indices=gradient_indices, delta_w=alpha_delta)
+            # gradient_indices: np.ndarray = self.Q.get_gradient(ag.prev_state, ag.prev_action)
+            self.Q.update_weights_sparse(indices=self._previous_gradient, delta_w=alpha_delta)
         else:
-            gradient_vector: np.ndarray = self.Q.get_gradient(ag.prev_state, ag.prev_action)
-            delta_w: np.ndarray = alpha_delta * gradient_vector
+            # gradient_vector: np.ndarray = self.Q.get_gradient(ag.prev_state, ag.prev_action)
+            delta_w: np.ndarray = alpha_delta * self._previous_gradient
             self.Q.update_weights(delta_w)
+
+        if not ag.state.is_terminal:
+            self._previous_q = current_q
+            self._previous_gradient = self.Q.get_gradient(ag.state, ag.action)
 
         # self._target_policy[ag.prev_s] = self.Q.argmax[ag.prev_s]
         # print(f"a: {ag.a}"
