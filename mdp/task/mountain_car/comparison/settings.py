@@ -10,7 +10,8 @@ from mdp.task.mountain_car.enums import Dim
 @dataclass
 class Settings(common.Settings):
     runs: int = 1
-    episode_print_frequency: int = 100
+    training_episodes: int = 10000
+    episode_print_frequency: int = 1000
     # display_every_step: bool = True
     algorithm_parameters: common.AlgorithmParameters = common.AlgorithmParameters(
         algorithm_type=common.AlgorithmType.NON_TABULAR_EPISODIC_SARSA,

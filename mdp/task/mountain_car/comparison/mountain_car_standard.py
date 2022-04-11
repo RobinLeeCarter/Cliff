@@ -13,7 +13,8 @@ class MountainCarStandard(ComparisonBuilder,
         return Comparison(
             environment_parameters=self._environment_parameters,
             comparison_settings=Settings(
-                training_episodes=9000
+                training_episodes=1000,
+                episode_print_frequency=100
             ),
             graph3d_values=self._graph3d_values
         )

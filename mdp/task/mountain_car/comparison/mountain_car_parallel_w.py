@@ -16,9 +16,9 @@ class MountainCarParallelW(ComparisonBuilder,
         return Comparison(
             environment_parameters=self._environment_parameters,
             comparison_settings=Settings(
-                training_episodes=8*100*20,
-                episodes_per_batch=8*100,
-                episode_print_frequency=800,
+                training_episodes=10000,
+                episodes_per_batch=800,
+                episode_print_frequency=1000,
                 episode_multiprocessing=common.ParallelContextType.FORK_GLOBAL,
                 algorithm_parameters=common.AlgorithmParameters(
                     algorithm_type=common.AlgorithmType.NON_TABULAR_EPISODIC_SARSA_PARALLEL_W,

@@ -31,8 +31,10 @@ class LinearStateActionFunction(StateActionFunction[State, Action],
         # weights
         self.w: np.ndarray = np.full(shape=self.size, fill_value=self._initial_value, dtype=float)
         self.delta_w: Optional[np.ndarray] = None
+        self.original_w: Optional[np.ndarray] = None
         if value_function_parameters.requires_delta_w:
             self.delta_w: np.ndarray = np.zeros_like(self.w)
+            self.original_w: np.ndarray = self.w.copy()
 
     def has_sparse_feature(self) -> bool:
         return self._feature.is_sparse
@@ -67,11 +69,14 @@ class LinearStateActionFunction(StateActionFunction[State, Action],
     def update_weights_sparse(self, indices: np.ndarray, delta_w: float):
         self.w[indices] += delta_w
 
+    def copy_w(self):
+        self.original_w: np.ndarray = self.w.copy()
+
     # Delta weights
     def reset_delta_w(self):
+        self.delta_w.fill(0.0)
         # non_zero_w: int = np.count_nonzero(self.w)
         # print(f"{non_zero_w=}")
-        self.delta_w.fill(0.0)
 
     # def set_delta_weights(self, delta_w: np.ndarray):
     #     self.delta_w = delta_w
@@ -84,7 +89,8 @@ class LinearStateActionFunction(StateActionFunction[State, Action],
         self.delta_w[indices] += delta_w
 
     def get_delta_weights(self) -> np.ndarray:
-        return self.delta_w
+        # return self.delta_w
+        return self.w - self.original_w
 
     def apply_delta_weights(self):
         self.w += self.delta_w

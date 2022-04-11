@@ -51,6 +51,9 @@ class StateActionFunction(Generic[State, Action], BaseValueFunction, ABC):
     def update_weights_sparse(self, indices: np.ndarray, delta_w: float):
         pass
 
+    def copy_w(self):
+        raise Exception("Not implemented")
+
     # Delta weights
     def reset_delta_w(self):
         raise Exception("Not implemented")

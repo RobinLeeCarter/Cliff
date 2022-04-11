@@ -26,7 +26,8 @@ class EpisodicSarsaParallelW(NonTabularEpisodicBatch,
         self._previous_gradient: Optional[np.ndarray] = None
 
     def start_episodes(self):
-        self.Q.reset_delta_w()
+        self.Q.copy_w()
+        # self.Q.reset_delta_w()
 
     def _start_episode(self):
         ag = self._agent
@@ -46,12 +47,12 @@ class EpisodicSarsaParallelW(NonTabularEpisodicBatch,
 
         if self.Q.has_sparse_feature:
             # gradient_indices: np.ndarray = self.Q.get_gradient(ag.prev_state, ag.prev_action)
-            self.Q.update_delta_weights_sparse(indices=self._previous_gradient, delta_w=alpha_delta)
+            # self.Q.update_delta_weights_sparse(indices=self._previous_gradient, delta_w=alpha_delta)
             self.Q.update_weights_sparse(indices=self._previous_gradient, delta_w=alpha_delta)
         else:
             # gradient_vector: np.ndarray = self.Q.get_gradient(ag.prev_state, ag.prev_action)
             delta_w: np.ndarray = alpha_delta * self._previous_gradient
-            self.Q.update_delta_weights(delta_w)
+            # self.Q.update_delta_weights(delta_w)
             self.Q.update_weights(delta_w)
 
         if not ag.state.is_terminal:
