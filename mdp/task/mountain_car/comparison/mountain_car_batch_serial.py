@@ -11,14 +11,14 @@ from mdp.task.mountain_car.comparison.settings import Settings
 
 
 class MountainCarBatchSerial(ComparisonBuilder,
-                             comparison_type=common.ComparisonType.MOUNTAIN_CAR_BATCH_SERIAL):
+                             comparison_type=common.ComparisonType.MOUNTAIN_CAR_SERIAL_BATCH):
     def create(self) -> Comparison:
         return Comparison(
             environment_parameters=self._environment_parameters,
             comparison_settings=Settings(
-                training_episodes=20,
+                training_episodes=1000,
                 algorithm_parameters=common.AlgorithmParameters(
-                    algorithm_type=common.AlgorithmType.NON_TABULAR_EPISODIC_SARSA_BATCH,
+                    algorithm_type=common.AlgorithmType.NON_TABULAR_EPISODIC_SARSA_SERIAL_BATCH,
                     alpha=0.5
                 ),
                 value_function_parameters=common.ValueFunctionParameters(

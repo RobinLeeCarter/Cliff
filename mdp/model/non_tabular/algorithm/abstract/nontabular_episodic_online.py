@@ -35,8 +35,12 @@ class NonTabularEpisodicOnline(NonTabularEpisodic, ABC):
                 and self._agent.t < episode_length_timeout\
                 and self._agent.episode.cont:
             self._do_training_step()
+        self._end_episode()
 
     def _start_episode(self):
+        pass
+
+    def _end_episode(self):
         pass
 
     @abstractmethod

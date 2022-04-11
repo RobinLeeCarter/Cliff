@@ -29,7 +29,6 @@ class NonTabularEpisodicBatch(NonTabularEpisodicOnline, ABC,
         # print(f"{np.count_nonzero(delta_w)=}")
         self.apply_delta_w_vector(delta_w)
 
-    @abstractmethod
     def apply_delta_w_vector(self, delta_w: np.ndarray):
         """depends on the specific implementation of weights (in theory)"""
         pass

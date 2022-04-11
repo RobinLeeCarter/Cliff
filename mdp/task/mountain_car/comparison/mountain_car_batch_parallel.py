@@ -8,7 +8,7 @@ from mdp.task.mountain_car.comparison.settings import Settings
 
 
 class MountainCarBatchParallel(ComparisonBuilder,
-                               comparison_type=common.ComparisonType.MOUNTAIN_CAR_BATCH_PARALLEL):
+                               comparison_type=common.ComparisonType.MOUNTAIN_CAR_PARALLEL_BATCH):
     def create(self) -> Comparison:
         # is the problem here that the other processes are in some sense off-policy?
         # in that the policy diverges from the last branching point
