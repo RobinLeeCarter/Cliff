@@ -47,9 +47,12 @@ class LinearStateActionFunction(StateActionFunction[State, Action],
             self._feature.set_state_action(state, action)
             return self._feature.dot_product_full_vector(self.w)
 
+    def get_vector(self, state: State, action: Action) -> np.ndarray:
+        self._feature.set_state_action(state, action)
+        return self._feature.get_vector()
+
     def get_gradient(self, state: State, action: Action) -> np.ndarray:
-        # for linear case the gradient doesn't depend on the state and action
-        assert action is not None
+        self._feature.set_state_action(state, action)
         return self._feature.get_vector()
 
     def get_action_values(self, state: State, actions: list[Action]) -> np.ndarray:
@@ -58,7 +61,7 @@ class LinearStateActionFunction(StateActionFunction[State, Action],
         self._feature.set_state(state)
         for action in actions:
             self._feature.set_action(action)
-            # will calculate vector and then use it
+            # will calculate vector and then use it (overridden for sparse features)
             value = self._feature.dot_product_full_vector(self.w)
             values.append(value)
         return np.array(values)

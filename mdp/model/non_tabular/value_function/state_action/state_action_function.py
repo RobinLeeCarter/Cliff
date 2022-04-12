@@ -34,6 +34,9 @@ class StateActionFunction(Generic[State, Action], BaseValueFunction, ABC):
         else:
             raise NotImplementedError
 
+    def get_vector(self, state: State, action: Action) -> np.ndarray:
+        raise Exception("get_vector not implemented")
+
     @abstractmethod
     def get_gradient(self, state: State, action: Action) -> np.ndarray:
         pass

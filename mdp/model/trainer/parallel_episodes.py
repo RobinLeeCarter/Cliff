@@ -61,7 +61,6 @@ class ParallelEpisodes:
             assert isinstance(algorithm, NonTabularEpisodicBatch)
             algorithm.start_episodes()
 
-        print("parallel")
         with self._ctx.Pool(processes=self._processes) as pool:
             if self._use_global_trainer:
                 args = zip(seeds,
@@ -76,7 +75,6 @@ class ParallelEpisodes:
                            episodes_to_do,
                            result_parameter_list)
                 self._results = pool.starmap(_do_episodes_starmap_wrapper, args)
-        print("serial")
 
         self._unpack_results()
 
