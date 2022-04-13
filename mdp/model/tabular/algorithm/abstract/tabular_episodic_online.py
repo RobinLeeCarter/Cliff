@@ -2,8 +2,10 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 from abc import ABC, abstractmethod
 
+
 if TYPE_CHECKING:
     from mdp.model.tabular.agent.tabular_agent import TabularAgent
+    from mdp.model.tabular.agent.tabular_episode import TabularEpisode
     from mdp import common
 from mdp.model.tabular.algorithm.abstract.tabular_episodic import TabularEpisodic
 
@@ -19,13 +21,14 @@ class TabularEpisodicOnline(TabularEpisodic, ABC):
     def get_title(name: str, algorithm_parameters: common.AlgorithmParameters) -> str:
         return f"{name} α={algorithm_parameters.alpha}"
 
-    def do_episode(self, episode_length_timeout: int):
+    def do_episode(self) -> TabularEpisode:
         self._agent.start_episode()
         self._start_episode()
         while (not self._agent.is_terminal)\
-                and self._agent.t < episode_length_timeout\
+                and self._agent.t < self._episode_length_timeout\
                 and self._agent.episode.cont:
             self._do_training_step()
+        return self._agent.episode
 
     def _start_episode(self):
         pass

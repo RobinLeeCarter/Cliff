@@ -4,6 +4,7 @@ from abc import ABC, abstractmethod
 
 if TYPE_CHECKING:
     from mdp.model.tabular.agent.tabular_agent import TabularAgent
+    from mdp.model.tabular.agent.tabular_episode import TabularEpisode
     from mdp import common
 from mdp.model.tabular.algorithm.tabular_algorithm import TabularAlgorithm
 
@@ -15,10 +16,13 @@ class TabularEpisodic(TabularAlgorithm, ABC,
                  algorithm_parameters: common.AlgorithmParameters
                  ):
         super().__init__(agent, algorithm_parameters)
-        self.first_visit: bool = self._algorithm_parameters.first_visit
+        self._first_visit: bool = self._algorithm_parameters.first_visit
+        self._episode_length_timeout: int = 1
 
-    # TODO: should episode_length_timeout be passed in each time or be a property defaulted by algorithm_parameters
-    # TODO: return episode?
+    def apply_settings(self, settings: common.Settings):
+        self._episode_length_timeout = settings.episode_length_timeout
+        super().apply_settings(settings)
+
     @abstractmethod
-    def do_episode(self, episode_length_timeout: int):
+    def do_episode(self) -> TabularEpisode:
         pass

@@ -24,9 +24,10 @@ class EpisodicBatch(TabularEpisodic, ABC):
     def episode(self) -> Optional[TabularEpisode]:
         return self._episode
 
-    def do_episode(self, episode_length_timeout: int):
-        episode = self._agent.generate_episode(episode_length_timeout, self._exploring_starts)
+    def do_episode(self) -> TabularEpisode:
+        episode = self._agent.generate_episode(self._episode_length_timeout, self._exploring_starts)
         self.process_episode(episode)
+        return episode
         # self._episode = self._agent.generate_episode(episode_length_timeout, self._exploring_starts)
         # self._pre_process_episode()
         # self._exit_episode = False

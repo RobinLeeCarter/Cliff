@@ -25,8 +25,8 @@ class McControlOnPolicy(EpisodicMonteCarlo,
 
     def _process_time_step(self, t: int):
         # only do updates on the time-steps that should be done
-        if (self.first_visit and self._episode.is_first_visit[t]) \
-                or not self.first_visit:
+        if (self._first_visit and self._episode.is_first_visit[t]) \
+                or not self._first_visit:
             s, a, target = self._episode.get_s_a_g(t)
             delta = target - self.Q[s, a]
             self._N[s, a] += 1.0

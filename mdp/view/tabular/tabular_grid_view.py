@@ -172,14 +172,14 @@ class TabularGridView(ABC):
                 break
         self.close_window()
 
-    def display_episode(self, episode_: TabularEpisode) -> common.UserEvent:
+    def display_episode(self, episode: TabularEpisode) -> common.UserEvent:
         # print(episode_.trajectory)
         # print(f"len(self._episode.trajectory) = {len(episode_.trajectory)}")
         self._copy_grid_into_background()
         self._draw_frame_on_background()
 
         # self._put_background_on_screen()
-        self._episode = episode_
+        self._episode = episode
         self._t = 0
         while self._user_event != common.UserEvent.QUIT and self._t <= self._episode.max_t:
             # need to pass through for terminal state to display penultimate state
@@ -187,18 +187,18 @@ class TabularGridView(ABC):
             # if keys[pygame.K_SPACE]:
             #     self.user_event = enums.enums.UserEvent.SPACE
             # else:
-            self._frame_on_background_for_t(episode_, self._t)
+            self._frame_on_background_for_t(episode, self._t)
             self._put_background_on_screen()
             self._wait_for_event_of_interest()
             # self._handle_event(show_trail)
             self._t += 1
         return self._user_event
 
-    def _frame_on_background_latest(self, episode_: TabularEpisode):
+    def _frame_on_background_latest(self, episode: TabularEpisode):
         """draw frame onto background for the latest state, action (& previous) from in-progress episode"""
         pass
 
-    def _frame_on_background_for_t(self, episode_: TabularEpisode, t: int):
+    def _frame_on_background_for_t(self, episode: TabularEpisode, t: int):
         """draw frame onto background for S(t), A(t) (& previous) from episode"""
         pass
 

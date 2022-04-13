@@ -70,6 +70,9 @@ class BaseAlgorithm(ABC):
     def behaviour_policy(self) -> Optional[BasePolicy]:
         return self._behaviour_policy
 
+    def apply_settings(self, settings: common.Settings):
+        self._agent.apply_settings(settings)
+
     def create_policies(self, policy_factory: PolicyFactory, settings: common.Settings):
         primary_policy = policy_factory.create(settings.policy_parameters)
         self._dual_policy_relationship = settings.dual_policy_relationship

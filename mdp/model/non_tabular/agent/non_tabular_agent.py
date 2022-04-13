@@ -49,12 +49,12 @@ class NonTabularAgent(Generic[State, Action], BaseAgent):
     def set_step_callback(self, step_callback: Optional[Callable[[], bool]] = None):
         self._step_callback = step_callback
 
-    def generate_episodes(self,
-                          num_episodes: int,
-                          episode_length_timeout: Optional[int] = None
-                          ) -> list[NonTabularEpisode]:
-        return [self.generate_episode(episode_length_timeout)
-                for _ in range(num_episodes)]
+    # def generate_episodes(self,
+    #                       num_episodes: int,
+    #                       episode_length_timeout: Optional[int] = None
+    #                       ) -> list[NonTabularEpisode]:
+    #     return [self.generate_episode(episode_length_timeout)
+    #             for _ in range(num_episodes)]
 
     def generate_episode(self,
                          episode_length_timeout: Optional[int] = None,
@@ -77,19 +77,12 @@ class NonTabularAgent(Generic[State, Action], BaseAgent):
 
     def start_episode(self):
         """Gets initial state and sets initial reward to None"""
-        env = self._environment
-
         if self._verbose:
             print("start episode...")
+        self._episode = NonTabularEpisode(self._environment, self.gamma, self._step_callback)
         self.t = 0
-
-        self._episode = NonTabularEpisode(env, self.gamma, self._step_callback)
-
-        # get starting state, reward will be None
         self.state = self._environment.draw_start_state()
         self.action = None
-        # self.s = env.start_s()
-        # self.is_terminal = self.state.is_terminal
         self.r = 0.0
 
     def choose_action(self):

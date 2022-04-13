@@ -47,12 +47,12 @@ class BaseAgent(ABC):
     def set_step_callback(self, step_callback: Optional[Callable[[], bool]] = None):
         self._step_callback = step_callback
 
-    def generate_episodes(self,
-                          num_episodes: int,
-                          episode_length_timeout: Optional[int] = None
-                          ) -> list[BaseEpisode]:
-        return [self.generate_episode(episode_length_timeout)
-                for _ in range(num_episodes)]
+    # def generate_episodes(self,
+    #                       num_episodes: int,
+    #                       episode_length_timeout: Optional[int] = None
+    #                       ) -> list[BaseEpisode]:
+    #     return [self.generate_episode(episode_length_timeout)
+    #             for _ in range(num_episodes)]
 
     @abstractmethod
     def generate_episode(self,

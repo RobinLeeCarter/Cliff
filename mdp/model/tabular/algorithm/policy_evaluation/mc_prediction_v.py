@@ -29,8 +29,8 @@ class MCPredictionV(EpisodicMonteCarlo,
 
     def _process_time_step(self, t: int):
         # only do updates on the time-steps that should be done
-        if (self.first_visit and self._episode.is_first_visit[t]) \
-                or not self.first_visit:
+        if (self._first_visit and self._episode.is_first_visit[t]) \
+                or not self._first_visit:
             s = self._episode[t].s
             target = self._episode.G[t]
             delta = target - self.V[s]

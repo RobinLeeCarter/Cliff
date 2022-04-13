@@ -10,12 +10,12 @@ from mdp.view.tabular.tabular_grid_view import TabularGridView
 
 
 class GridView(TabularGridView):
-    def _frame_on_background_latest(self, episode_: TabularEpisode):
-        last_state: Optional[State] = episode_.last_state
+    def _frame_on_background_latest(self, episode: TabularEpisode):
+        last_state: Optional[State] = episode.last_state
         agent_position: common.XY = last_state.position
         prev_position: Optional[common.XY] = None
 
-        prev_state: Optional[State] = episode_.prev_state
+        prev_state: Optional[State] = episode.prev_state
         if prev_state:
             prev_position = prev_state.position
 

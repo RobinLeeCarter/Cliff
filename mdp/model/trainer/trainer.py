@@ -125,12 +125,12 @@ class Trainer:
     def apply_settings(self, settings: common.Settings):
         self.settings = settings
         self._algorithm = self._algorithm_factory.create(settings.algorithm_parameters)
+        self._algorithm.apply_settings(settings)
         self._algorithm.create_policies(self._policy_factory, settings)
         if not self._algorithm.tabular:
             assert isinstance(self._algorithm, NonTabularAlgorithm)
             self._algorithm.create_feature_and_value_function(
                 self._feature_factory, self._value_function_factory, settings)
-        self._agent.apply_settings(self.settings)
 
     def _train_episodic(self):
         settings = self.settings
@@ -217,14 +217,12 @@ class Trainer:
         self.episode_counter = episode_counter
         if self._verbose or episode_counter % self.settings.episode_print_frequency == 0:
             print(f"episode_counter = {episode_counter}")
-
         if not self.settings.review_every_step and self.cum_timestep != 0:
             self.cum_timestep += 1  # start next episode from the next timestep
-
         self._algorithm.parameter_changes(episode_counter)
+
         assert isinstance(self._algorithm, TabularEpisodic) or isinstance(self._algorithm, NonTabularEpisodic)
-        self._algorithm.do_episode(self.settings.episode_length_timeout)
-        episode = self._agent.episode
+        episode: BaseEpisode = self._algorithm.do_episode()
 
         if self._verbose:
             max_t = episode.max_t
