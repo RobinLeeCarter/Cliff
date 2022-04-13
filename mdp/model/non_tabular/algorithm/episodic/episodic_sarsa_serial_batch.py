@@ -3,19 +3,18 @@ from typing import TYPE_CHECKING, Optional
 
 import numpy as np
 
-from mdp.model.non_tabular.agent.reward_state_action import RewardStateAction
+from mdp.model.non_tabular.agent.reward_state_action import RewardStateAction, Trajectory
 from mdp.model.non_tabular.environment.non_tabular_action import NonTabularAction
 from mdp.model.non_tabular.environment.non_tabular_state import NonTabularState
 
 if TYPE_CHECKING:
     from mdp.model.non_tabular.agent.non_tabular_agent import NonTabularAgent
 from mdp import common
-from mdp.model.non_tabular.algorithm.abstract.nontabular_episodic_batch import NonTabularEpisodicBatch
-from mdp.model.non_tabular.agent.non_tabular_episode import NonTabularEpisode
+from mdp.model.non_tabular.algorithm.abstract.nontabular_episodic_online_batch import NonTabularEpisodicOnlineBatch
 from mdp.model.non_tabular.value_function.state_action.linear_state_action_function import LinearStateActionFunction
 
 
-class EpisodicSarsaSerialBatch(NonTabularEpisodicBatch,
+class EpisodicSarsaSerialBatch(NonTabularEpisodicOnlineBatch,
                                algorithm_type=common.AlgorithmType.NON_TABULAR_EPISODIC_SARSA_SERIAL_BATCH,
                                algorithm_name="Episodic Sarsa Serial Batch"):
     def __init__(self,
@@ -47,6 +46,7 @@ class EpisodicSarsaSerialBatch(NonTabularEpisodicBatch,
         ag.choose_action()
 
         current_q = self.Q[ag.state, ag.action]
+        # self.Q.get_vector(ag.state, ag.action)
         target: float = ag.r + self._gamma * current_q
         delta: float = target - self._previous_q
         alpha_delta: float = self._alpha * delta
@@ -65,7 +65,7 @@ class EpisodicSarsaSerialBatch(NonTabularEpisodicBatch,
 
     def _end_episode(self):
         if self._agent.state.is_terminal:
-            self._trajectories.append(self._agent.episode)
+            self._trajectories.append(self._agent.episode.trajectory)
 
     def apply_trajectories(self):
         """for use with batch episodes but a single process"""
@@ -74,17 +74,17 @@ class EpisodicSarsaSerialBatch(NonTabularEpisodicBatch,
         self.Q.w = self._w_copy
         super().apply_trajectories()
 
-    def _apply_trajectory(self, trajectory: NonTabularEpisode):
+    def _apply_trajectory(self, trajectory: Trajectory):
         reward: float
         state: Optional[NonTabularState]
         action: Optional[NonTabularAction]
 
-        reward_state_action: RewardStateAction = trajectory.trajectory[0]
+        reward_state_action: RewardStateAction = trajectory[0]
         reward, state, action = reward_state_action.tuple
         self._previous_q = self.Q[state, action]
         self._previous_gradient = self.Q.get_gradient(state, action)
 
-        for reward_state_action in trajectory.trajectory:
+        for reward_state_action in trajectory:
             reward, state, action = reward_state_action.tuple
             self._apply_sarsa(reward, state, action)
 

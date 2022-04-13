@@ -9,8 +9,8 @@ from mdp.model.non_tabular.agent.reward_state_action import Trajectory
 from mdp.model.non_tabular.algorithm.abstract.nontabular_episodic_online import NonTabularEpisodicOnline
 
 
-class NonTabularEpisodicBatch(NonTabularEpisodicOnline, ABC,
-                              batch_episodes=True):
+class NonTabularEpisodicOnlineBatch(NonTabularEpisodicOnline, ABC,
+                                    batch_episodes=True):
     def __init__(self,
                  agent: NonTabularAgent,
                  algorithm_parameters: common.AlgorithmParameters

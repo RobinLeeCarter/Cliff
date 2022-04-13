@@ -30,6 +30,7 @@ class NonTabularEpisodicOnline(NonTabularEpisodic, ABC):
                 and self._agent.t < self._episode_length_timeout\
                 and self._agent.episode.cont:
             self._do_training_step()
+            # TODO: post_training_step() for batch processing and perhaps other things (wrap in an if?)
         self._end_episode()
         return self._agent.episode
 

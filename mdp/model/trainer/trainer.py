@@ -2,7 +2,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING, Optional, Callable
 import multiprocessing
 
-from mdp.model.non_tabular.algorithm.abstract.nontabular_episodic_batch import NonTabularEpisodicBatch
+from mdp.model.non_tabular.algorithm.abstract.nontabular_episodic_online_batch import NonTabularEpisodicOnlineBatch
 from mdp.model.non_tabular.algorithm.episodic.episodic_sarsa_parallel_w import EpisodicSarsaParallelW
 from mdp.model.trainer.parallel_episodes import ParallelEpisodes
 from mdp.model.trainer.parallel_episodes_w import ParallelEpisodesW
@@ -201,7 +201,7 @@ class Trainer:
                     episodes_to_do: int,
                     result_parameters: Optional[common.ResultParameters] = None
                     ) -> Optional[common.Result]:
-        assert isinstance(self._algorithm, NonTabularEpisodicBatch)
+        assert isinstance(self._algorithm, NonTabularEpisodicOnlineBatch)
         self._algorithm.start_episodes()
         for episode_counter in range(episode_counter_start, episode_counter_start + episodes_to_do):
             self._do_episode(episode_counter)
@@ -275,11 +275,11 @@ class Trainer:
             result.cum_timestep = self.cum_timestep
 
         if rp.return_delta_w_vector and self._algorithm.batch_episodes:
-            assert isinstance(self._algorithm, NonTabularEpisodicBatch)
+            assert isinstance(self._algorithm, NonTabularEpisodicOnlineBatch)
             result.delta_w_vector = self._algorithm.get_delta_weights()
 
         if rp.return_trajectories and self._algorithm.batch_episodes:
-            assert isinstance(self._algorithm, NonTabularEpisodicBatch)
+            assert isinstance(self._algorithm, NonTabularEpisodicOnlineBatch)
             result.trajectories = self._algorithm.trajectories
 
         return result

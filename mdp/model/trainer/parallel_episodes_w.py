@@ -7,7 +7,7 @@ import multiprocessing as mp
 import itertools
 
 import utils
-from mdp.model.non_tabular.algorithm.abstract.nontabular_episodic_batch import NonTabularEpisodicBatch
+from mdp.model.non_tabular.algorithm.abstract.nontabular_episodic_online_batch import NonTabularEpisodicOnlineBatch
 
 if TYPE_CHECKING:
     from mdp.model.trainer.trainer import Trainer
@@ -57,7 +57,7 @@ class ParallelEpisodesW:
 
         algorithm = self._trainer.algorithm
         if algorithm.batch_episodes:
-            assert isinstance(algorithm, NonTabularEpisodicBatch)
+            assert isinstance(algorithm, NonTabularEpisodicOnlineBatch)
             algorithm.start_episodes()
 
         with self._ctx.Pool(processes=self._processes) as pool:
@@ -99,7 +99,7 @@ class ParallelEpisodesW:
 
         algorithm = self._trainer.algorithm
         if algorithm.batch_episodes:
-            assert isinstance(algorithm, NonTabularEpisodicBatch)
+            assert isinstance(algorithm, NonTabularEpisodicOnlineBatch)
             delta_w_vectors = [result.delta_w_vector for result in self._results]
             algorithm.apply_delta_w_vectors(delta_w_vectors)
 

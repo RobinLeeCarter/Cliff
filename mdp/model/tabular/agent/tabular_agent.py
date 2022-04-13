@@ -152,7 +152,8 @@ class TabularAgent(Generic[State, Action], BaseAgent):
 
         if self.is_terminal:
             # add terminating step here as should not select another action
-            self._episode.add_rsa(self.r, self.s, self.a, self.is_terminal)
+            self._store_rsa()
+            # self._episode.add_rsa(self.r, self.s, self.a, self.is_terminal)
 
     def _print_step(self):
         state: TabularState = self._environment.states[self.s]

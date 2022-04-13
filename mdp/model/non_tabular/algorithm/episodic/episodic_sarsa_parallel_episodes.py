@@ -10,10 +10,10 @@ from mdp.model.non_tabular.environment.non_tabular_state import NonTabularState
 if TYPE_CHECKING:
     from mdp.model.non_tabular.agent.non_tabular_agent import NonTabularAgent
 from mdp import common
-from mdp.model.non_tabular.algorithm.abstract.nontabular_episodic_batch import NonTabularEpisodicBatch
+from mdp.model.non_tabular.algorithm.abstract.nontabular_episodic_online_batch import NonTabularEpisodicOnlineBatch
 
 
-class EpisodicSarsaParallelEpisodes(NonTabularEpisodicBatch,
+class EpisodicSarsaParallelEpisodes(NonTabularEpisodicOnlineBatch,
                                     algorithm_type=common.AlgorithmType.NON_TABULAR_EPISODIC_SARSA_PARALLEL_EPISODES,
                                     algorithm_name="Episodic Sarsa Parallel Episodes"):
     def __init__(self,
@@ -45,12 +45,10 @@ class EpisodicSarsaParallelEpisodes(NonTabularEpisodicBatch,
 
         if self.Q.has_sparse_feature:
             # gradient_indices: np.ndarray = self.Q.get_gradient(ag.prev_state, ag.prev_action)
-            # self.Q.update_delta_weights_sparse(indices=self._previous_gradient, delta_w=alpha_delta)
             self.Q.update_weights_sparse(indices=self._previous_gradient, delta_w=alpha_delta)
         else:
             # gradient_vector: np.ndarray = self.Q.get_gradient(ag.prev_state, ag.prev_action)
             delta_w: np.ndarray = alpha_delta * self._previous_gradient
-            # self.Q.update_delta_weights(delta_w)
             self.Q.update_weights(delta_w)
 
         if not ag.state.is_terminal:

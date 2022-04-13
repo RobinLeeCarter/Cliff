@@ -35,6 +35,10 @@ class NonTabularAgent(Generic[State, Action], BaseAgent):
         # trainer callback
         self._step_callback: Optional[Callable[[], bool]] = None
 
+        # whether to record feature_vectors (for parallel processing passout via Result object)
+        # TODO: Wire this up
+        self.record_feature_trajectory: bool = False
+
     @property
     def environment(self) -> NonTabularEnvironment[State, Action]:
         return self._environment
@@ -79,7 +83,10 @@ class NonTabularAgent(Generic[State, Action], BaseAgent):
         """Gets initial state and sets initial reward to None"""
         if self._verbose:
             print("start episode...")
-        self._episode = NonTabularEpisode(self._environment, self.gamma, self._step_callback)
+        self._episode = NonTabularEpisode(self._environment,
+                                          self.gamma,
+                                          self._step_callback,
+                                          self.record_feature_trajectory)
         self.t = 0
         self.state = self._environment.draw_start_state()
         self.action = None
@@ -121,7 +128,7 @@ class NonTabularAgent(Generic[State, Action], BaseAgent):
 
         if self.state.is_terminal:
             # add terminating step here as should not select another action
-            self._episode.add_rsa(self.r, self.state, self.action)
+            self._store_rsa()
 
     def _print_step(self):
         print(f"t={self.t} \t state = {self.state} \t action = {self.action}")

@@ -29,6 +29,7 @@ class EpisodicSarsa(NonTabularEpisodicOnline,
         self._previous_gradient = self.Q.get_gradient(ag.state, ag.action)
 
     # @profile
+    # TODO: use multiple inheritance or something to avoid repition of this method and perhaps othere
     def _do_training_step(self):
         ag = self._agent
         ag.take_action()
