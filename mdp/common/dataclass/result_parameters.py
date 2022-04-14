@@ -11,3 +11,4 @@ class ResultParameters:
     return_cum_timestep: bool = False
     return_delta_w_vector: bool = False
     return_trajectories: bool = False
+    return_feature_trajectories: bool = False

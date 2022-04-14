@@ -88,10 +88,11 @@ class AlgorithmType(enum.IntEnum):
     TABULAR_VQ = enum.auto()
 
     # Non-tabular
-    NON_TABULAR_EPISODIC_SARSA = enum.auto()
-    NON_TABULAR_EPISODIC_SARSA_SERIAL_BATCH = enum.auto()
-    NON_TABULAR_EPISODIC_SARSA_PARALLEL_W = enum.auto()
-    NON_TABULAR_EPISODIC_SARSA_PARALLEL_EPISODES = enum.auto()
+    NT_SARSA = enum.auto()
+    NT_SARSA_PARALLEL_DELTA_W = enum.auto()
+    NT_SARSA_SERIAL_TRAJECTORIES = enum.auto()
+    NT_SARSA_PARALLEL_TRAJECTORIES = enum.auto()
+    NT_SARSA_PARALLEL_FEATURE_TRAJECTORIES = enum.auto()
 
 
 class PolicyType(enum.IntEnum):
@@ -152,3 +153,9 @@ class ParallelContextType(enum.IntEnum):
     SPAWN = enum.auto()         # launch fresh interpretters and reload current module, no locks (slower, thread-safe)
     FORK_SERVER = enum.auto()   # have one process be a template and server to spawn copies as small as possible
     #                             thread-safe, smaller memory consumption, unusual, good if doing lots of processes?
+
+
+class BatchEpisodes(enum.IntEnum):
+    DELTA_WEIGHTS = enum.auto()
+    TRAJECTORIES = enum.auto()
+    FEATURE_TRAJECTORIES = enum.auto()

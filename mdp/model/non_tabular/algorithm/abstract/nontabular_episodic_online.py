@@ -34,12 +34,6 @@ class NonTabularEpisodicOnline(NonTabularEpisodic, ABC):
         self._end_episode()
         return self._agent.episode
 
-    def _start_episode(self):
-        pass
-
-    def _end_episode(self):
-        pass
-
     @abstractmethod
     def _do_training_step(self):
         pass

@@ -2,8 +2,11 @@ from __future__ import annotations
 from typing import TYPE_CHECKING, Optional, Callable
 import multiprocessing
 
-from mdp.model.non_tabular.algorithm.abstract.nontabular_episodic_online_batch import NonTabularEpisodicOnlineBatch
-from mdp.model.non_tabular.algorithm.episodic.episodic_sarsa_parallel_w import EpisodicSarsaParallelW
+from mdp.model.non_tabular.algorithm.batch_mixin.batch__episodic import BatchEpisodic
+from mdp.model.non_tabular.algorithm.batch_mixin.batch_delta_weights import BatchDeltaWeights
+from mdp.model.non_tabular.algorithm.batch_mixin.batch_feature_trajectories import BatchFeatureTrajectories
+from mdp.model.non_tabular.algorithm.batch_mixin.batch_trajectories import BatchTrajectories
+from mdp.model.non_tabular.algorithm.episodic.sarsa.sarsa_parallel_delta_weights import SarsaParallelDeltaWeights
 from mdp.model.trainer.parallel_episodes import ParallelEpisodes
 from mdp.model.trainer.parallel_episodes_w import ParallelEpisodesW
 
@@ -100,7 +103,7 @@ class Trainer:
                     and self._algorithm.batch_episodes \
                     and not daemon:
                 # do episodes in parallel
-                if isinstance(self.algorithm, EpisodicSarsaParallelW):
+                if isinstance(self.algorithm, SarsaParallelDeltaWeights):
                     self._parallel_episodes = ParallelEpisodesW(self)
                 else:
                     self._parallel_episodes = ParallelEpisodes(self)
@@ -169,14 +172,13 @@ class Trainer:
         self._algorithm.initialize()
 
         self.cum_timestep = 0
-        # TODO: optionally generate and pre-process episodes in parallel e.g. for Blackjack
-        #  according to a behavioural policy which then might change so perhaps in batches
 
         if self._parallel_episodes:
             # train in parallel batches
             actual_episodes_per_batch: int = self._parallel_episodes.actual_episodes_per_batch
             for first_batch_episode in range(1, settings.training_episodes + 1, actual_episodes_per_batch):
                 self._parallel_episodes.do_episode_batch(first_batch_episode)
+            return self._get_result(result_parameters)
         else:
             # train in serial
             if self._algorithm.batch_episodes:
@@ -185,15 +187,11 @@ class Trainer:
                 training_episodes = settings.training_episodes
                 for first_batch_episode in range(1, training_episodes + 1, episodes_per_batch):
                     episodes_to_do = min(training_episodes + 1 - first_batch_episode, episodes_per_batch)
-                    self.do_episodes(episode_counter_start=first_batch_episode,
-                                     episodes_to_do=episodes_to_do)
+                    self.do_episodes(episode_counter_start=first_batch_episode, episodes_to_do=episodes_to_do)
             else:
                 # train one episode at a time
                 for episode_counter in range(1, settings.training_episodes + 1):
                     self._do_episode(episode_counter)
-
-        if result_parameters:
-            return self._get_result(result_parameters)
 
     # called from ParallelEpisodes and above
     def do_episodes(self,
@@ -201,16 +199,14 @@ class Trainer:
                     episodes_to_do: int,
                     result_parameters: Optional[common.ResultParameters] = None
                     ) -> Optional[common.Result]:
-        assert isinstance(self._algorithm, NonTabularEpisodicOnlineBatch)
+        assert isinstance(self._algorithm, BatchEpisodic)
         self._algorithm.start_episodes()
         for episode_counter in range(episode_counter_start, episode_counter_start + episodes_to_do):
             self._do_episode(episode_counter)
+        self._algorithm.end_episodes()
 
         if self._parallel_episodes:
-            if result_parameters:
-                return self._get_result(result_parameters)
-        else:
-            self._algorithm.apply_trajectories()
+            return self._get_result(result_parameters)
 
     def _do_episode(self, episode_counter: int):
         # for use by Breakdown
@@ -274,12 +270,19 @@ class Trainer:
         if rp.return_cum_timestep:
             result.cum_timestep = self.cum_timestep
 
-        if rp.return_delta_w_vector and self._algorithm.batch_episodes:
-            assert isinstance(self._algorithm, NonTabularEpisodicOnlineBatch)
-            result.delta_w_vector = self._algorithm.get_delta_weights()
+        if rp.return_delta_w_vector:
+            if self._algorithm.batch_episodes == common.BatchEpisodes.DELTA_WEIGHTS:
+                assert isinstance(self._algorithm, BatchDeltaWeights)
+                result.delta_w_vector = self._algorithm.get_delta_weights()
 
-        if rp.return_trajectories and self._algorithm.batch_episodes:
-            assert isinstance(self._algorithm, NonTabularEpisodicOnlineBatch)
-            result.trajectories = self._algorithm.trajectories
+        if rp.return_trajectories:
+            if self._algorithm.batch_episodes == common.BatchEpisodes.TRAJECTORIES:
+                assert isinstance(self._algorithm, BatchTrajectories)
+                result.trajectories = self._algorithm.trajectories
+
+        if rp.return_feature_trajectories:
+            if self._algorithm.batch_episodes == common.BatchEpisodes.FEATURE_TRAJECTORIES:
+                assert isinstance(self._algorithm, BatchFeatureTrajectories)
+                result.feature_trajectories = self._algorithm.feature_trajectories
 
         return result

@@ -9,15 +9,14 @@ from mdp import common
 from mdp.model.non_tabular.algorithm.abstract.nontabular_episodic_online import NonTabularEpisodicOnline
 
 
-class EpisodicSarsa(NonTabularEpisodicOnline,
-                    algorithm_type=common.AlgorithmType.NON_TABULAR_EPISODIC_SARSA,
-                    algorithm_name="Episodic Sarsa"):
+class Sarsa(NonTabularEpisodicOnline,
+            algorithm_type=common.AlgorithmType.NT_SARSA,
+            algorithm_name="Sarsa"):
     def __init__(self,
                  agent: NonTabularAgent,
                  algorithm_parameters: common.AlgorithmParameters
                  ):
         super().__init__(agent, algorithm_parameters)
-        self._alpha = self._algorithm_parameters.alpha
         self._requires_q = True
         self._previous_q: float = 0.0
         self._previous_gradient: Optional[np.ndarray] = None
@@ -28,8 +27,6 @@ class EpisodicSarsa(NonTabularEpisodicOnline,
         self._previous_q = self.Q[ag.state, ag.action]
         self._previous_gradient = self.Q.get_gradient(ag.state, ag.action)
 
-    # @profile
-    # TODO: use multiple inheritance or something to avoid repition of this method and perhaps othere
     def _do_training_step(self):
         ag = self._agent
         ag.take_action()
@@ -51,13 +48,3 @@ class EpisodicSarsa(NonTabularEpisodicOnline,
         if not ag.state.is_terminal:
             self._previous_q = current_q
             self._previous_gradient = self.Q.get_gradient(ag.state, ag.action)
-
-        # self._target_policy[ag.prev_s] = self.Q.argmax[ag.prev_s]
-        # print(f"a: {ag.a}"
-        #       f"\tQ[curr]: {self.Q[ag.s, ag.a]}"
-        #       f"\tQ[prev]: {self.Q[ag.prev_s, ag.prev_a]}"
-        #       f"\tdelta: {delta}"
-        #       f"\talpha: {self._alpha}")
-
-        # previous verison: update policy to be in-line with Q by recalculation every time
-        # ag.policy[ag.prev_s] = self.Q.argmax_over_actions(ag.prev_s)

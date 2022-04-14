@@ -4,7 +4,7 @@ from typing import Optional, TypeVar, TYPE_CHECKING
 
 if TYPE_CHECKING:
     from mdp.model.tabular.agent.tabular_episode import TabularEpisode
-from mdp.model.tabular.algorithm.abstract.tabular_episodic import TabularEpisodic
+# from mdp.model.tabular.algorithm.abstract.tabular_episodic import TabularEpisodic
 from mdp.controller.base_controller import BaseController
 from mdp.model.tabular.tabular_model import TabularModel
 from mdp.view.tabular.tabular_view import TabularView

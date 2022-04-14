@@ -7,8 +7,9 @@ import multiprocessing as mp
 import itertools
 
 import utils
-from mdp.model.non_tabular.agent.reward_state_action import Trajectory
-from mdp.model.non_tabular.algorithm.abstract.nontabular_episodic_online_batch import NonTabularEpisodicOnlineBatch
+from mdp.model.non_tabular.algorithm.batch_mixin.batch__episodic import BatchEpisodic
+from mdp.model.non_tabular.algorithm.batch_mixin.batch_feature_trajectories import BatchFeatureTrajectories
+from mdp.model.non_tabular.algorithm.batch_mixin.batch_trajectories import BatchTrajectories
 
 if TYPE_CHECKING:
     from mdp.model.trainer.trainer import Trainer
@@ -58,7 +59,7 @@ class ParallelEpisodes:
 
         algorithm = self._trainer.algorithm
         if algorithm.batch_episodes:
-            assert isinstance(algorithm, NonTabularEpisodicOnlineBatch)
+            assert isinstance(algorithm, BatchEpisodic)
             algorithm.start_episodes()
 
         with self._ctx.Pool(processes=self._processes) as pool:
@@ -99,12 +100,17 @@ class ParallelEpisodes:
                 self._recorder.add_recorder(recorder)
 
         algorithm = self._trainer.algorithm
-        if algorithm.batch_episodes:
-            assert isinstance(algorithm, NonTabularEpisodicOnlineBatch)
-            for result in self._results:
-                trajectories: list[Trajectory] = result.trajectories
-                algorithm.add_trajectories(trajectories)
-            algorithm.apply_trajectories()
+        match algorithm.batch_episodes:
+            case common.BatchEpisodes.TRAJECTORIES:
+                assert isinstance(algorithm, BatchTrajectories)
+                for result in self._results:
+                    algorithm.add_trajectories(result.trajectories)
+                algorithm.apply_trajectories()
+            case common.BatchEpisodes.FEATURE_TRAJECTORIES:
+                assert isinstance(algorithm, BatchFeatureTrajectories)
+                for result in self._results:
+                    algorithm.add_feature_trajectories(result.feature_trajectories)
+                algorithm.apply_feature_trajectories()
 
         # self._trainer.max_cum_timestep = max(result.cum_timestep for result in self._results)
 

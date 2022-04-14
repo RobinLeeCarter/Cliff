@@ -15,7 +15,7 @@ class BaseAlgorithm(ABC):
     tabular: bool = False
     dynamic_programming: bool = False
     episodic: bool = False
-    batch_episodes: bool = False
+    batch_episodes: Optional[common.BatchEpisodes] = None
 
     def __init_subclass__(cls,
                           algorithm_type: Optional[common.AlgorithmType] = None,
@@ -23,7 +23,7 @@ class BaseAlgorithm(ABC):
                           tabular: bool = False,
                           dynamic_programming: bool = False,
                           episodic: bool = False,
-                          batch_episodes: bool = False,
+                          batch_episodes: Optional[common.BatchEpisodes] = None,
                           **kwargs):
         super().__init_subclass__(**kwargs)
         if algorithm_type:
@@ -35,8 +35,9 @@ class BaseAlgorithm(ABC):
             cls.dynamic_programming = True
         if episodic:
             cls.episodic = True
+        # TODO: convert batch_episodes to an enum with default of None or NO_BATCHING
         if batch_episodes:
-            cls.batch_episodes = True
+            cls.batch_episodes = batch_episodes
 
     def __init__(self,
                  agent: BaseAgent,

@@ -1,45 +1,26 @@
 from __future__ import annotations
 from abc import ABC, abstractmethod
+from typing import TYPE_CHECKING
 
 import numpy as np
 
+if TYPE_CHECKING:
+    from mdp.model.non_tabular.agent.non_tabular_agent import NonTabularAgent
 from mdp import common
-from mdp.model.non_tabular.agent.non_tabular_agent import NonTabularAgent
-from mdp.model.non_tabular.agent.reward_state_action import Trajectory
-from mdp.model.non_tabular.algorithm.abstract.nontabular_episodic_online import NonTabularEpisodicOnline
+from mdp.model.non_tabular.algorithm.batch_mixin.batch__episodic import BatchEpisodic
 
 
-class NonTabularEpisodicOnlineBatch(NonTabularEpisodicOnline, ABC,
-                                    batch_episodes=True):
+class BatchDeltaWeights(BatchEpisodic, ABC,
+                        batch_episodes=common.BatchEpisodes.DELTA_WEIGHTS):
     def __init__(self,
                  agent: NonTabularAgent,
                  algorithm_parameters: common.AlgorithmParameters
                  ):
         super().__init__(agent, algorithm_parameters)
-        self._trajectories: list[Trajectory] = []
-
-    @property
-    def trajectories(self) -> list[Trajectory]:
-        return self._trajectories
-
-    # start of episodes
-    def start_episodes(self):
-        self._trajectories = []
 
     # end of episodes
-    def get_delta_weights(self) -> np.ndarray:
-        pass
-
-    def add_trajectories(self, trajectories: list[Trajectory]):
-        self._trajectories.extend(trajectories)
-
-    # end of batch single-processing
-    def apply_trajectories(self):
-        for trajectory in self._trajectories:
-            self._apply_trajectory(trajectory)
-
     @abstractmethod
-    def _apply_trajectory(self, trajectory: Trajectory):
+    def get_delta_weights(self) -> np.ndarray:
         pass
 
     # end of batch multiprocessing
@@ -50,6 +31,7 @@ class NonTabularEpisodicOnlineBatch(NonTabularEpisodicOnline, ABC,
         # print(f"{np.count_nonzero(delta_w)=}")
         self.apply_delta_w_vector(delta_w)
 
+    @abstractmethod
     def apply_delta_w_vector(self, delta_w: np.ndarray):
         """depends on the specific implementation of weights (in theory)"""
         pass
@@ -57,5 +39,5 @@ class NonTabularEpisodicOnlineBatch(NonTabularEpisodicOnline, ABC,
 
     # def unpack_delta_w_vectors(self, delta_w_vectors: list[np.ndarray]) -> np.ndarray:
     #     delta_w_stack = np.stack(delta_w_vectors, axis=0)
-    #     delta_w = np.sum(delta_w_stack, axis=0)
+    #     delta_w = np.average(delta_w_stack, axis=0)
     #     return delta_w

@@ -2,6 +2,7 @@ from __future__ import annotations
 from typing import Type, TYPE_CHECKING
 
 from mdp import common
+
 if TYPE_CHECKING:
     from mdp.model.base.agent.base_agent import BaseAgent
 from mdp.model.base.algorithm.base_algorithm import BaseAlgorithm
@@ -32,14 +33,16 @@ from mdp.model.tabular.algorithm.control.mc_control_on_policy import McControlOn
 from mdp.model.tabular.algorithm.control.mc_control_off_policy import McControlOffPolicy
 from mdp.model.tabular.algorithm.control.vq import VQ
 from mdp.model.tabular.algorithm.control.expected_sarsa import ExpectedSarsa
-from mdp.model.tabular.algorithm.control.sarsa import Sarsa
+from mdp.model.tabular.algorithm.control.sarsa import Sarsa as TabularSarsa
 from mdp.model.tabular.algorithm.control.q_learning import QLearning
 
 # non-tabular
-from mdp.model.non_tabular.algorithm.episodic.episodic_sarsa import EpisodicSarsa
-from mdp.model.non_tabular.algorithm.episodic.episodic_sarsa_serial_batch import EpisodicSarsaSerialBatch
-from mdp.model.non_tabular.algorithm.episodic.episodic_sarsa_parallel_w import EpisodicSarsaParallelW
-from mdp.model.non_tabular.algorithm.episodic.episodic_sarsa_parallel_episodes import EpisodicSarsaParallelEpisodes
+from mdp.model.non_tabular.algorithm.episodic.sarsa.sarsa import Sarsa as NonTabularSarsa
+from mdp.model.non_tabular.algorithm.episodic.sarsa.sarsa_serial_trajectories import SarsaSerialTrajectories
+from mdp.model.non_tabular.algorithm.episodic.sarsa.sarsa_parallel_delta_weights import SarsaParallelDeltaWeights
+from mdp.model.non_tabular.algorithm.episodic.sarsa.sarsa_parallel_trajectories import SarsaParallelTrajectories
+from mdp.model.non_tabular.algorithm.episodic.sarsa.sarsa_parallel_feature_trajectories import \
+    SarsaParallelFeatureTrajectories
 
 
 class AlgorithmFactory:
@@ -87,12 +90,13 @@ def __dummy():
         TD0,
         ExpectedSarsa,
         QLearning,
-        Sarsa,
+        TabularSarsa,
         VQ,
 
         # non-tabular
-        EpisodicSarsa,
-        EpisodicSarsaSerialBatch,
-        EpisodicSarsaParallelW,
-        EpisodicSarsaParallelEpisodes,
+        NonTabularSarsa,
+        SarsaSerialTrajectories,
+        SarsaParallelDeltaWeights,
+        SarsaParallelTrajectories,
+        SarsaParallelFeatureTrajectories,
     ]

@@ -14,7 +14,7 @@ class Settings(common.Settings):
     episode_print_frequency: int = 1000
     # display_every_step: bool = True
     algorithm_parameters: common.AlgorithmParameters = common.AlgorithmParameters(
-        algorithm_type=common.AlgorithmType.NON_TABULAR_EPISODIC_SARSA,
+        algorithm_type=common.AlgorithmType.NT_SARSA,
         alpha=0.5
     )
     policy_parameters: common.PolicyParameters = common.PolicyParameters(

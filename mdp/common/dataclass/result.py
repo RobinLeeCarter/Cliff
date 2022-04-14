@@ -7,6 +7,7 @@ import numpy as np
 if TYPE_CHECKING:
     from mdp.model.breakdown.recorder import Recorder
     from mdp.model.non_tabular.agent.reward_state_action import Trajectory
+    from mdp.model.non_tabular.agent.reward_feature_vector import FeatureTrajectory
 
 
 @dataclass
@@ -17,4 +18,6 @@ class Result:
     q_matrix: Optional[np.ndarray] = None
     cum_timestep: Optional[int] = None
     delta_w_vector: Optional[np.ndarray] = None
-    trajectories: list[Trajectory] = field(default_factory=list)    # non-tabular
+    # non-tabular
+    trajectories: list[Trajectory] = field(default_factory=list)
+    feature_trajectories: list[FeatureTrajectory] = field(default_factory=list)
