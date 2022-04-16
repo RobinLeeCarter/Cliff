@@ -3,18 +3,15 @@ from typing import TYPE_CHECKING, Optional
 
 import numpy as np
 
-from mdp.model.non_tabular.algorithm.batch_mixin.batch_trajectories import BatchTrajectories
-from mdp.model.non_tabular.algorithm.episodic.sarsa.sarsa_apply_trajectory_mixin import SarsaApplyTrajectoryMixin
-from mdp.model.non_tabular.algorithm.episodic.sarsa.sarsa import Sarsa
-
 if TYPE_CHECKING:
     from mdp.model.non_tabular.agent.non_tabular_agent import NonTabularAgent
 from mdp import common
 from mdp.model.non_tabular.value_function.state_action.linear_state_action_function import LinearStateActionFunction
+from mdp.model.non_tabular.algorithm.episodic.sarsa.sarsa_trajectories import SarsaTrajectories
 
 
-class SarsaSerialTrajectories(Sarsa, BatchTrajectories, SarsaApplyTrajectoryMixin,
-                              algorithm_type=common.AlgorithmType.NT_SARSA_SERIAL_TRAJECTORIES,
+class SarsaTrajectoriesSerial(SarsaTrajectories,
+                              algorithm_type=common.AlgorithmType.NT_SARSA_TRAJECTORIES_SERIAL,
                               algorithm_name="Sarsa Serial Trajectories"):
     """requires Q be a LinearStateActionFunction"""
     def __init__(self,

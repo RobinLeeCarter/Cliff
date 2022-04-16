@@ -21,7 +21,7 @@ class MountainCarParallelEpisodes(ComparisonBuilder,
                 episode_print_frequency=100,
                 episode_multiprocessing=common.ParallelContextType.FORK_GLOBAL,
                 algorithm_parameters=common.AlgorithmParameters(
-                    algorithm_type=common.AlgorithmType.NT_SARSA_PARALLEL_TRAJECTORIES,
+                    algorithm_type=common.AlgorithmType.NT_SARSA_TRAJECTORIES_PARALLEL,
                     alpha=0.5
                 ),
                 value_function_parameters=common.ValueFunctionParameters(

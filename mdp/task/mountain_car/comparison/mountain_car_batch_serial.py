@@ -19,7 +19,7 @@ class MountainCarBatchSerial(ComparisonBuilder,
                 training_episodes=1000,
                 episodes_per_batch=80,
                 algorithm_parameters=common.AlgorithmParameters(
-                    algorithm_type=common.AlgorithmType.NT_SARSA_SERIAL_TRAJECTORIES,
+                    algorithm_type=common.AlgorithmType.NT_SARSA_TRAJECTORIES_SERIAL,
                     alpha=0.5
                 ),
                 value_function_parameters=common.ValueFunctionParameters(

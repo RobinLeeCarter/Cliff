@@ -38,11 +38,11 @@ from mdp.model.tabular.algorithm.control.q_learning import QLearning
 
 # non-tabular
 from mdp.model.non_tabular.algorithm.episodic.sarsa.sarsa import Sarsa as NonTabularSarsa
-from mdp.model.non_tabular.algorithm.episodic.sarsa.sarsa_serial_trajectories import SarsaSerialTrajectories
-from mdp.model.non_tabular.algorithm.episodic.sarsa.sarsa_parallel_delta_weights import SarsaParallelDeltaWeights
-from mdp.model.non_tabular.algorithm.episodic.sarsa.sarsa_parallel_trajectories import SarsaParallelTrajectories
-from mdp.model.non_tabular.algorithm.episodic.sarsa.sarsa_parallel_feature_trajectories import \
-    SarsaParallelFeatureTrajectories
+from mdp.model.non_tabular.algorithm.episodic.sarsa.sarsa_trajectories_serial import SarsaTrajectoriesSerial
+from mdp.model.non_tabular.algorithm.episodic.sarsa.sarsa_delta_weights_parallel import SarsaDeltaWeightsParallel
+from mdp.model.non_tabular.algorithm.episodic.sarsa.sarsa_trajectories_parallel import SarsaTrajectoriesParallel
+from mdp.model.non_tabular.algorithm.episodic.sarsa.sarsa_feature_trajectories_parallel import \
+    SarsaFeatureTrajectoriesParallel
 
 
 class AlgorithmFactory:
@@ -95,8 +95,8 @@ def __dummy():
 
         # non-tabular
         NonTabularSarsa,
-        SarsaSerialTrajectories,
-        SarsaParallelDeltaWeights,
-        SarsaParallelTrajectories,
-        SarsaParallelFeatureTrajectories,
+        SarsaTrajectoriesSerial,
+        SarsaDeltaWeightsParallel,
+        SarsaTrajectoriesParallel,
+        SarsaFeatureTrajectoriesParallel,
     ]

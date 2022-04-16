@@ -89,10 +89,10 @@ class AlgorithmType(enum.IntEnum):
 
     # Non-tabular
     NT_SARSA = enum.auto()
-    NT_SARSA_PARALLEL_DELTA_W = enum.auto()
-    NT_SARSA_SERIAL_TRAJECTORIES = enum.auto()
-    NT_SARSA_PARALLEL_TRAJECTORIES = enum.auto()
-    NT_SARSA_PARALLEL_FEATURE_TRAJECTORIES = enum.auto()
+    NT_SARSA_DELTA_WEIGHTS_PARALLEL = enum.auto()
+    NT_SARSA_TRAJECTORIES_SERIAL = enum.auto()
+    NT_SARSA_TRAJECTORIES_PARALLEL = enum.auto()
+    NT_SARSA_FEATURE_TRAJECTORIES_PARALLEL = enum.auto()
 
 
 class PolicyType(enum.IntEnum):

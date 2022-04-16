@@ -8,8 +8,8 @@ from mdp.model.non_tabular.algorithm.batch_mixin.batch_feature_trajectories impo
 from mdp import common
 
 
-class SarsaParallelFeatureTrajectories(Sarsa, BatchFeatureTrajectories,
-                                       algorithm_type=common.AlgorithmType.NT_SARSA_PARALLEL_FEATURE_TRAJECTORIES,
+class SarsaFeatureTrajectoriesParallel(Sarsa, BatchFeatureTrajectories,
+                                       algorithm_type=common.AlgorithmType.NT_SARSA_FEATURE_TRAJECTORIES_PARALLEL,
                                        algorithm_name="Sarsa Parallel Feature Trajectories"):
     def _apply_feature_trajectory(self, feature_trajectory: FeatureTrajectory):
         reward: float

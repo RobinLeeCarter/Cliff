@@ -6,7 +6,7 @@ from mdp.model.non_tabular.algorithm.batch_mixin.batch__episodic import BatchEpi
 from mdp.model.non_tabular.algorithm.batch_mixin.batch_delta_weights import BatchDeltaWeights
 from mdp.model.non_tabular.algorithm.batch_mixin.batch_feature_trajectories import BatchFeatureTrajectories
 from mdp.model.non_tabular.algorithm.batch_mixin.batch_trajectories import BatchTrajectories
-from mdp.model.non_tabular.algorithm.episodic.sarsa.sarsa_parallel_delta_weights import SarsaParallelDeltaWeights
+from mdp.model.non_tabular.algorithm.episodic.sarsa.sarsa_delta_weights_parallel import SarsaDeltaWeightsParallel
 from mdp.model.trainer.parallel_episodes import ParallelEpisodes
 from mdp.model.trainer.parallel_episodes_w import ParallelEpisodesW
 
@@ -103,7 +103,7 @@ class Trainer:
                     and self._algorithm.batch_episodes \
                     and not daemon:
                 # do episodes in parallel
-                if isinstance(self.algorithm, SarsaParallelDeltaWeights):
+                if isinstance(self.algorithm, SarsaDeltaWeightsParallel):
                     self._parallel_episodes = ParallelEpisodesW(self)
                 else:
                     self._parallel_episodes = ParallelEpisodes(self)

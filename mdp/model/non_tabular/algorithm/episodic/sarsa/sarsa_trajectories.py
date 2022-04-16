@@ -6,12 +6,13 @@ from typing import Optional
 import numpy as np
 
 from mdp.model.non_tabular.agent.reward_state_action import RewardStateAction, Trajectory
+from mdp.model.non_tabular.algorithm.batch_mixin.batch_trajectories import BatchTrajectories
 from mdp.model.non_tabular.algorithm.episodic.sarsa.sarsa import Sarsa
 from mdp.model.non_tabular.environment.non_tabular_action import NonTabularAction
 from mdp.model.non_tabular.environment.non_tabular_state import NonTabularState
 
 
-class SarsaApplyTrajectoryMixin(Sarsa, ABC):
+class SarsaTrajectories(Sarsa, BatchTrajectories, ABC):
     def _apply_trajectory(self, trajectory: Trajectory):
         reward: float
         state: Optional[NonTabularState]

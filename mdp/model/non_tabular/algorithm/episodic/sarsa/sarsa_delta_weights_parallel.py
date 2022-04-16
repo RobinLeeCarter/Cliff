@@ -7,8 +7,8 @@ from mdp.model.non_tabular.algorithm.episodic.sarsa.sarsa import Sarsa
 from mdp import common
 
 
-class SarsaParallelDeltaWeights(Sarsa, BatchDeltaWeights,
-                                algorithm_type=common.AlgorithmType.NT_SARSA_PARALLEL_DELTA_W,
+class SarsaDeltaWeightsParallel(Sarsa, BatchDeltaWeights,
+                                algorithm_type=common.AlgorithmType.NT_SARSA_DELTA_WEIGHTS_PARALLEL,
                                 algorithm_name="Sarsa Parallel Delta Weights"):
     def start_episodes(self):
         # have Q make a copy so can compare later to calculate the delta
