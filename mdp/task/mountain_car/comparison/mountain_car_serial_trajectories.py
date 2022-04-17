@@ -10,8 +10,8 @@ from mdp.task.mountain_car.comparison.settings import Settings
 # from mdp.task.mountain_car.enums import Dim
 
 
-class MountainCarBatchSerial(ComparisonBuilder,
-                             comparison_type=common.ComparisonType.MOUNTAIN_CAR_SERIAL_BATCH):
+class MountainCarSerialTrajectories(ComparisonBuilder,
+                                    comparison_type=common.ComparisonType.MOUNTAIN_CAR_SERIAL_TRAJECTORIES):
     def create(self) -> Comparison:
         return Comparison(
             environment_parameters=self._environment_parameters,

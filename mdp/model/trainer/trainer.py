@@ -207,7 +207,7 @@ class Trainer:
             self._do_episode(episode_counter)
         self._algorithm.end_episodes()
 
-        if self._parallel_episodes:
+        if result_parameters:
             return self._get_result(result_parameters)
 
     def _do_episode(self, episode_counter: int):
