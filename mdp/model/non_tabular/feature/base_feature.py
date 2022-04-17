@@ -106,10 +106,10 @@ class BaseFeature(Generic[State, Action], ABC):
     def dot_product(feature_vector: np.ndarray, normal_vector: np.ndarray) -> float:
         return float(np.dot(feature_vector, normal_vector))
 
-    def get_dot_products(self, state: State, actions: list[Action], normal_vector: np.ndarray):
-        matrix: np.ndarray = self.get_matrix(state, actions)
-        result: np.ndarray = self.matrix_product(matrix, normal_vector)
-        return result
+    # def get_dot_products(self, state: State, actions: list[Action], normal_vector: np.ndarray):
+    #     matrix: np.ndarray = self.get_matrix(state, actions)
+    #     result: np.ndarray = self.matrix_product(matrix, normal_vector)
+    #     return result
 
     def get_matrix(self, state: State, actions: list[Action]) -> np.ndarray:
         """returns either a matrix of feature vectors (1 row per action)

@@ -61,23 +61,11 @@ class SoftmaxLinear(VectorParameterized[State, Action],
         return probabilities
 
     def get_action_values(self, state: State, actions: list[Action]) -> np.ndarray:
-        values: list[float] = []
-        # set state just once
-        self._feature.set_state(state)
-        for action in actions:
-            self._feature.set_action(action)
-            feature_vector: np.ndarray = self._feature.get_vector()
-            value: float = self._feature.dot_product(feature_vector, self._theta)
-            values.append(value)
-        values_array = np.array(values)
-        return values_array
-
-    def get_action_values2(self, state: State, actions: list[Action]) -> np.ndarray:
         feature_matrix: np.ndarray = self._feature.get_matrix(state, actions)
         values_array: np.ndarray = self._feature.matrix_product(feature_matrix, self._theta)
         return values_array
 
-    def get_action_values3(self, state: State, actions: list[Action]) -> np.ndarray:
-        values_array: np.ndarray = self._feature.get_dot_products(state, actions, self._theta)
-        return values_array
+    # def get_action_values3(self, state: State, actions: list[Action]) -> np.ndarray:
+    #     values_array: np.ndarray = self._feature.get_dot_products(state, actions, self._theta)
+    #     return values_array
 
