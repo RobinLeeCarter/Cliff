@@ -22,10 +22,6 @@ class MountainCarSerialTrajectories(ComparisonBuilder,
                     algorithm_type=common.AlgorithmType.NT_SARSA_TRAJECTORIES_SERIAL,
                     alpha=0.5
                 ),
-                value_function_parameters=common.ValueFunctionParameters(
-                    value_function_type=common.ValueFunctionType.LINEAR_STATE_ACTION,
-                    requires_delta_w=True
-                )
             ),
             graph3d_values=self._graph3d_values
         )

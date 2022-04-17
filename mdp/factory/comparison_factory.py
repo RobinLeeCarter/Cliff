@@ -27,6 +27,8 @@ from mdp.task.mountain_car.comparison.mountain_car_standard import MountainCarSt
 from mdp.task.mountain_car.comparison.mountain_car_serial_trajectories import MountainCarSerialTrajectories
 from mdp.task.mountain_car.comparison.mountain_car_parallel_weights import MountainCarParallelWeights
 from mdp.task.mountain_car.comparison.mountain_car_parallel_trajectories import MountainCarParallelTrajectories
+from mdp.task.mountain_car.comparison.mountain_car_parallel_feature_trajectories import \
+    MountainCarParallelFeatureTrajectories
 
 from mdp.task.racetrack.comparison.racetrack_episode import RacetrackEpisode
 
@@ -73,6 +75,7 @@ def __dummy():
         MountainCarSerialTrajectories,
         MountainCarParallelWeights,
         MountainCarParallelTrajectories,
+        MountainCarParallelFeatureTrajectories,
 
         RacetrackEpisode,
 
