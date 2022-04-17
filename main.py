@@ -8,10 +8,11 @@ from mdp import common, Application
 # comparison_type: common.ComparisonType = common.ComparisonType.GAMBLER_VALUE_ITERATION_V
 # comparison_type: common.ComparisonType = common.ComparisonType.JACKS_POLICY_ITERATION_V
 # comparison_type: common.ComparisonType = common.ComparisonType.MOUNTAIN_CAR_STANDARD
-# comparison_type: common.ComparisonType = common.ComparisonType.MOUNTAIN_CAR_SERIAL_TRAJECTORIES
-# comparison_type: common.ComparisonType = common.ComparisonType.MOUNTAIN_CAR_PARALLEL_WEIGHTS
-# comparison_type: common.ComparisonType = common.ComparisonType.MOUNTAIN_CAR_PARALLEL_TRAJECTORIES
-comparison_type: common.ComparisonType = common.ComparisonType.MOUNTAIN_CAR_PARALLEL_FEATURE_TRAJECTORIES
+# comparison_type: common.ComparisonType = common.ComparisonType.MOUNTAIN_CAR_WEIGHTS_PARALLEL
+# comparison_type: common.ComparisonType = common.ComparisonType.MOUNTAIN_CAR_TRAJECTORIES_SERIAL
+# comparison_type: common.ComparisonType = common.ComparisonType.MOUNTAIN_CAR_TRAJECTORIES_PARALLEL
+comparison_type: common.ComparisonType = common.ComparisonType.MOUNTAIN_CAR_FEATURE_TRAJECTORIES_SERIAL
+# comparison_type: common.ComparisonType = common.ComparisonType.MOUNTAIN_CAR_FEATURE_TRAJECTORIES_PARALLEL
 # comparison_type: common.ComparisonType = common.ComparisonType.RACETRACK_EPISODE
 # comparison_type: common.ComparisonType = common.ComparisonType.RANDOM_WALK_EPISODE
 # comparison_type: common.ComparisonType = common.ComparisonType.WINDY_TIMESTEP
