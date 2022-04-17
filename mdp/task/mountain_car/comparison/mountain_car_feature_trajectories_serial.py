@@ -7,10 +7,10 @@ from mdp.task.mountain_car.comparison.comparison import Comparison
 from mdp.task.mountain_car.comparison.settings import Settings
 
 
-class MountainCarFeatureTrajectoriesSerial(ComparisonBuilder,
-                                           comparison_type=
-                                           common.ComparisonType.MOUNTAIN_CAR_FEATURE_TRAJECTORIES_SERIAL
-                                           ):
+class MountainCarFeatureTrajectoriesSerial(
+    ComparisonBuilder,
+    comparison_type=common.ComparisonType.MOUNTAIN_CAR_FEATURE_TRAJECTORIES_SERIAL
+        ):
     def create(self) -> Comparison:
         # is the problem here that the other processes are in some sense off-policy?
         # in that the policy diverges from the last branching point
