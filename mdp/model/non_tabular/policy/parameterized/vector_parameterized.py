@@ -23,10 +23,12 @@ class VectorParameterized(NonTabularPolicy[State, Action], ABC):
                  ):
         super().__init__(environment, policy_parameters)
         self._feature: Optional[BaseFeature[State, Action]] = None
+        self._has_sparse_feature: bool = False
         self._initial_theta: float = policy_parameters.initial_theta
         self._theta: np.ndarray = np.empty(0, dtype=float)
         self.requires_feature = True
 
     def set_feature(self, feature: BaseFeature[State, Action]):
         self._feature: BaseFeature[State, Action] = feature
+        self._has_sparse_feature = self._feature.is_sparse
         self._theta = np.full(shape=self._feature.max_size, fill_value=self._initial_theta, dtype=float)

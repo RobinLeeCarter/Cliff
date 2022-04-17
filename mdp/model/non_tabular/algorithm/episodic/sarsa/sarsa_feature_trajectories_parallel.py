@@ -17,8 +17,8 @@ class SarsaFeatureTrajectoriesParallel(Sarsa, BatchFeatureTrajectories,
 
         reward_feature_vector: RewardFeatureVector = feature_trajectory[0]
         reward, feature_vector = reward_feature_vector.tuple
-        self._previous_q = self.Q.get_feature_vector_value[feature_vector]
-        self._previous_gradient = self.Q.get_feature_vector_gradient(feature_vector)
+        self._previous_q = self.Q.calc_value(feature_vector)
+        self._previous_gradient = self.Q.calc_gradient(feature_vector)
 
         for reward_feature_vector in feature_trajectory[1:]:
             self._apply_reward_feature_vector(*reward_feature_vector.tuple)
@@ -26,7 +26,7 @@ class SarsaFeatureTrajectoriesParallel(Sarsa, BatchFeatureTrajectories,
     def _apply_reward_feature_vector(self,
                                      reward: float,
                                      feature_vector: np.ndarray):
-        current_q = self.Q.get_feature_vector_value(feature_vector)
+        current_q = self.Q.calc_value(feature_vector)
         target: float = reward + self._gamma * current_q
         delta: float = target - self._previous_q
         alpha_delta: float = self._alpha * delta
@@ -41,4 +41,4 @@ class SarsaFeatureTrajectoriesParallel(Sarsa, BatchFeatureTrajectories,
 
         # check if last one, perhaps doesn't matter
         self._previous_q = current_q
-        self._previous_gradient = self.Q.get_feature_vector_gradient(feature_vector)
+        self._previous_gradient = self.Q.calc_gradient(feature_vector)

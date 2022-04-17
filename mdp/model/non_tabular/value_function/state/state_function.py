@@ -2,6 +2,8 @@ from __future__ import annotations
 from abc import ABC, abstractmethod
 from typing import TypeVar, Generic, Optional
 
+import numpy as np
+
 from mdp import common
 from mdp.model.non_tabular.environment.non_tabular_state import NonTabularState
 from mdp.model.non_tabular.environment.placeholder_action import PlaceholderAction
@@ -25,4 +27,17 @@ class StateFunction(Generic[State], BaseValueFunction, ABC):
 
     @abstractmethod
     def __getitem__(self, state: State) -> float:
+        if state.is_terminal:
+            return 0.0
+        else:
+            raise Exception("Not implemented")
+
+    @abstractmethod
+    def get_gradient(self, state: State) -> np.ndarray:
         pass
+
+    def calc_value(self, feature_vector: np.ndarray) -> float:
+        raise Exception("Not implemented")
+
+    def calc_gradient(self, feature_vector: np.ndarray) -> np.ndarray:
+        raise Exception("Not implemented")

@@ -1,5 +1,5 @@
 from __future__ import annotations
-from typing import TYPE_CHECKING, TypeVar
+from typing import TYPE_CHECKING, TypeVar, Optional
 
 import numpy as np
 
@@ -29,8 +29,25 @@ class LinearStateFunction(StateFunction[State],
         self.size: int = self._feature.max_size
         # weights
         self.w: np.ndarray = np.full(shape=self.size, fill_value=self._initial_value, dtype=float)
+        self._feature_vector: Optional[np.ndarray] = None
 
     def __getitem__(self, state: State) -> float:
-        self._feature.set_state(state)
-        return self._feature.dot_product_full_vector(self.w)
+        value: float
+        if state.is_terminal:
+            value = 0.0
+        else:
+            self._feature_vector = self._feature[state]
+            value = self.calc_value(self._feature_vector)
+        return value
 
+    def get_gradient(self, state: State) -> np.ndarray:
+        self._feature_vector = self._feature[state]
+        gradient = self.calc_gradient(self._feature_vector)
+        return gradient
+
+    def calc_value(self, feature_vector: np.ndarray) -> float:
+        value: float = self._feature.dot_product(feature_vector, self.w)
+        return value
+
+    def calc_gradient(self, feature_vector: np.ndarray) -> np.ndarray:
+        return feature_vector

@@ -32,10 +32,7 @@ class StateActionFunction(Generic[State, Action], BaseValueFunction, ABC):
         if state.is_terminal:
             return 0.0
         else:
-            raise NotImplementedError
-
-    def get_vector(self, state: State, action: Action) -> np.ndarray:
-        raise Exception("get_vector not implemented")
+            raise Exception("Not implemented")
 
     @abstractmethod
     def get_gradient(self, state: State, action: Action) -> np.ndarray:
@@ -46,6 +43,13 @@ class StateActionFunction(Generic[State, Action], BaseValueFunction, ABC):
         """efficiently calculate multiple state-action values using the fact that the state is the same for all"""
         pass
 
+    def calc_value(self, feature_vector: np.ndarray) -> float:
+        raise Exception("Not implemented")
+
+    def calc_gradient(self, feature_vector: np.ndarray) -> np.ndarray:
+        raise Exception("Not implemented")
+
+    # Weights
     @abstractmethod
     def update_weights(self, delta_w: np.ndarray):
         pass
@@ -58,15 +62,6 @@ class StateActionFunction(Generic[State, Action], BaseValueFunction, ABC):
         raise Exception("Not implemented")
 
     # Delta weights
-    def reset_delta_w(self):
-        raise Exception("Not implemented")
-
-    def update_delta_weights(self, delta_w: np.ndarray):
-        raise Exception("Not implemented")
-
-    def update_delta_weights_sparse(self, indices: np.ndarray, delta_w: float):
-        raise Exception("Not implemented")
-
     def get_delta_weights(self) -> np.ndarray:
         raise Exception("Not implemented")
 

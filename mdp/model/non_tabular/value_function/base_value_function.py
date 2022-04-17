@@ -25,12 +25,12 @@ class BaseValueFunction(ABC):
         :param value_function_parameters: how the function should be set up such as initial value
         """
         self._feature: Optional[BaseFeature] = feature
+        self._has_sparse_feature: bool = False
+        if self._feature:
+            self._has_sparse_feature = self._feature.is_sparse
         self._initial_value: float = value_function_parameters.initial_value
 
     @property
     def has_sparse_feature(self) -> bool:
         """determines whether functions like get_gradient return a vector or a vector of indices"""
-        if self._feature:
-            return self._feature.is_sparse
-        else:
-            return False
+        return self._has_sparse_feature

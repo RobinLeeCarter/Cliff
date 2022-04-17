@@ -35,8 +35,8 @@ class ComparisonType(enum.IntEnum):
 
     MOUNTAIN_CAR_STANDARD = enum.auto()
     MOUNTAIN_CAR_SERIAL_BATCH = enum.auto()
-    MOUNTAIN_CAR_PARALLEL_EPISODES = enum.auto()
-    MOUNTAIN_CAR_PARALLEL_W = enum.auto()
+    MOUNTAIN_CAR_PARALLEL_TRAJECTORIES = enum.auto()
+    MOUNTAIN_CAR_PARALLEL_WEIGHTS = enum.auto()
 
     RACETRACK_EPISODE = enum.auto()
 

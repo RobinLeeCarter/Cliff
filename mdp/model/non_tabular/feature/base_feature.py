@@ -97,10 +97,33 @@ class BaseFeature(Generic[State, Action], ABC):
             self._vector = self._get_full_vector()
         return self._vector
 
-    def dot_product_full_vector(self, full_vector: np.ndarray) -> float:
-        return float(np.dot(full_vector, self.get_vector()))
-
     @abstractmethod
     def _get_full_vector(self) -> np.ndarray:
         """return the full feature vector using state and action values"""
         pass
+
+    @staticmethod
+    def dot_product(feature_vector: np.ndarray, normal_vector: np.ndarray) -> float:
+        return float(np.dot(feature_vector, normal_vector))
+
+    def get_dot_products(self, state: State, actions: list[Action], normal_vector: np.ndarray):
+        matrix: np.ndarray = self.get_matrix(state, actions)
+        result: np.ndarray = self.matrix_product(matrix, normal_vector)
+        return result
+
+    def get_matrix(self, state: State, actions: list[Action]) -> np.ndarray:
+        """returns either a matrix of feature vectors (1 row per action)
+        or if a sparse feature a matrix of just the indexes that 1 for that action"""
+        self.set_state(state)
+        feature_vectors: list[np.ndarray] = []
+        for action in actions:
+            self.set_action(action)
+            feature_vector: np.ndarray = self.get_vector()
+            feature_vectors.append(feature_vector)
+        matrix: np.ndarray = np.vstack(feature_vectors)
+        return matrix
+
+    @staticmethod
+    def matrix_product(feature_matrix: np.ndarray, normal_vector: np.ndarray) -> np.ndarray:
+        result: np.ndarray = np.dot(feature_matrix, normal_vector)
+        return result

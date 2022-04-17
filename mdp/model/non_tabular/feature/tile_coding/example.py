@@ -113,7 +113,9 @@ def main():
         for j, yj in enumerate(y):
             state = State(is_terminal=False, x=xi, y=yj, z=7)
             tile_coding.set_state(state)
-            z[i, j] = tile_coding.dot_product_full_vector(w)
+            feature_vector: np.ndarray = tile_coding.get_vector()
+            # tile_coding is sparse
+            z[i, j] = float(np.sum(w[feature_vector]))
 
     # plot
     fig = plt.figure()

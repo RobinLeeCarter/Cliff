@@ -30,30 +30,28 @@ class LinearStateActionFunction(StateActionFunction[State, Action],
         self.size: int = self._feature.max_size
         # weights
         self.w: np.ndarray = np.full(shape=self.size, fill_value=self._initial_value, dtype=float)
+        self._feature_vector: Optional[np.ndarray] = None
+
         self.delta_w: Optional[np.ndarray] = None
         self.original_w: Optional[np.ndarray] = None
         if value_function_parameters.requires_delta_w:
             self.delta_w: np.ndarray = np.zeros_like(self.w)
             self.original_w: np.ndarray = self.w.copy()
 
-    def has_sparse_feature(self) -> bool:
-        return self._feature.is_sparse
-
     def __getitem__(self, state_action: tuple[State, Action]) -> float:
         state, action = state_action
+        value: float
         if state.is_terminal:
-            return 0.0
+            value = 0.0
         else:
-            self._feature.set_state_action(state, action)
-            return self._feature.dot_product_full_vector(self.w)
-
-    def get_vector(self, state: State, action: Action) -> np.ndarray:
-        self._feature.set_state_action(state, action)
-        return self._feature.get_vector()
+            self._feature_vector = self._feature[state, action]
+            value = self.calc_value(self._feature_vector)
+        return value
 
     def get_gradient(self, state: State, action: Action) -> np.ndarray:
-        self._feature.set_state_action(state, action)
-        return self._feature.get_vector()
+        self._feature_vector = self._feature[state, action]
+        gradient = self.calc_gradient(self._feature_vector)
+        return gradient
 
     def get_action_values(self, state: State, actions: list[Action]) -> np.ndarray:
         values: list[float] = []
@@ -61,11 +59,29 @@ class LinearStateActionFunction(StateActionFunction[State, Action],
         self._feature.set_state(state)
         for action in actions:
             self._feature.set_action(action)
-            # will calculate vector and then use it (overridden for sparse features)
-            value = self._feature.dot_product_full_vector(self.w)
+            feature_vector = self._feature.get_vector()
+            value: float = self._feature.dot_product(feature_vector, self.w)
             values.append(value)
-        return np.array(values)
+        values_array: np.ndarray = np.array(values)
+        return values_array
 
+    def get_action_values2(self, state: State, actions: list[Action]) -> np.ndarray:
+        feature_matrix: np.ndarray = self._feature.get_matrix(state, actions)
+        values_array: np.ndarray = self._feature.matrix_product(feature_matrix, self.w)
+        return values_array
+
+    def get_action_values3(self, state: State, actions: list[Action]) -> np.ndarray:
+        values_array: np.ndarray = self._feature.get_dot_products(state, actions, self.w)
+        return values_array
+
+    def calc_value(self, feature_vector: np.ndarray) -> float:
+        value: float = self._feature.dot_product(feature_vector, self.w)
+        return value
+
+    def calc_gradient(self, feature_vector: np.ndarray) -> np.ndarray:
+        return feature_vector
+
+    # Weights
     def update_weights(self, delta_w: np.ndarray):
         self.w += delta_w
 
@@ -76,21 +92,6 @@ class LinearStateActionFunction(StateActionFunction[State, Action],
         self.original_w: np.ndarray = self.w.copy()
 
     # Delta weights
-    def reset_delta_w(self):
-        self.delta_w.fill(0.0)
-        # non_zero_w: int = np.count_nonzero(self.w)
-        # print(f"{non_zero_w=}")
-
-    # def set_delta_weights(self, delta_w: np.ndarray):
-    #     self.delta_w = delta_w
-
-    # TODO: remove this step and just calculate delta_w once at the end as: after - before
-    def update_delta_weights(self, delta_w: np.ndarray):
-        self.delta_w += delta_w
-
-    def update_delta_weights_sparse(self, indices: np.ndarray, delta_w: float):
-        self.delta_w[indices] += delta_w
-
     def get_delta_weights(self) -> np.ndarray:
         # return self.delta_w
         return self.w - self.original_w

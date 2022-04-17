@@ -24,6 +24,7 @@ class SparseFeature(BaseFeature[State, Action], ABC):
     """
     def __init__(self, dims: Dims, feature_parameters: common.FeatureParameters):
         super().__init__(dims, feature_parameters)
+        # TODO: Make is_sparse a class variable
         self._is_sparse: bool = True
 
     def __getitem__(self, item: Union[State, tuple[State, Action]]) -> np.ndarray:
@@ -47,10 +48,15 @@ class SparseFeature(BaseFeature[State, Action], ABC):
             self._vector = self._get_sparse_vector()
         return self._vector
 
-    def dot_product_full_vector(self, full_vector: np.ndarray) -> float:
-        return float(np.sum(full_vector[self.get_vector()]))
-
     @abstractmethod
     def _get_sparse_vector(self) -> np.ndarray:
         """return just the indexes of x which are 1 (rest are 0) using unpacked values"""
         pass
+
+    @staticmethod
+    def dot_product(feature_vector: np.ndarray, normal_vector: np.ndarray) -> float:
+        return float(np.sum(normal_vector[feature_vector]))
+
+    @staticmethod
+    def matrix_product(feature_matrix: np.ndarray, normal_vector: np.ndarray) -> np.ndarray:
+        return np.sum(normal_vector[feature_matrix], axis=1)

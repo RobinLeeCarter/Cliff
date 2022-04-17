@@ -144,10 +144,10 @@ class Trainer:
 
         self.max_cum_timestep = 0
         if self._parallel_runner:
-            # train in parallel
+            # parallel runs
             self._parallel_runner.do_runs()
         else:
-            # train in serial
+            # serial runs
             for run_counter in range(1, settings.runs + 1):
                 self.do_run(run_counter)
                 self.max_cum_timestep = max(self.max_cum_timestep, self.cum_timestep)
@@ -174,13 +174,12 @@ class Trainer:
         self.cum_timestep = 0
 
         if self._parallel_episodes:
-            # train in parallel batches
+            # parallel episodes in batches
             actual_episodes_per_batch: int = self._parallel_episodes.actual_episodes_per_batch
             for first_batch_episode in range(1, settings.training_episodes + 1, actual_episodes_per_batch):
                 self._parallel_episodes.do_episode_batch(first_batch_episode)
-            return self._get_result(result_parameters)
         else:
-            # train in serial
+            # serial episodes in batches
             if self._algorithm.batch_episodes:
                 # train in batches of episodes
                 episodes_per_batch = self.settings.episodes_per_batch
@@ -189,9 +188,12 @@ class Trainer:
                     episodes_to_do = min(training_episodes + 1 - first_batch_episode, episodes_per_batch)
                     self.do_episodes(episode_counter_start=first_batch_episode, episodes_to_do=episodes_to_do)
             else:
-                # train one episode at a time
+                # serial episodes not in batches (simply one at a time)
                 for episode_counter in range(1, settings.training_episodes + 1):
                     self._do_episode(episode_counter)
+
+        if result_parameters:
+            return self._get_result(result_parameters)
 
     # called from ParallelEpisodes and above
     def do_episodes(self,

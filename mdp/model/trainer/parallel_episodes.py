@@ -58,9 +58,8 @@ class ParallelEpisodes:
         result_parameter_list: list[common.ResultParameters] = self._get_result_parameter_list()
 
         algorithm = self._trainer.algorithm
-        if algorithm.batch_episodes:
-            assert isinstance(algorithm, BatchEpisodic)
-            algorithm.start_episodes()
+        assert isinstance(algorithm, BatchEpisodic)
+        algorithm.start_episodes()
 
         with self._ctx.Pool(processes=self._processes) as pool:
             if self._use_global_trainer:
