@@ -6,9 +6,9 @@ from mdp.model.non_tabular.algorithm.batch_mixin.batch__episodic import BatchEpi
 from mdp.model.non_tabular.algorithm.batch_mixin.batch_delta_weights import BatchDeltaWeights
 from mdp.model.non_tabular.algorithm.batch_mixin.batch_feature_trajectories import BatchFeatureTrajectories
 from mdp.model.non_tabular.algorithm.batch_mixin.batch_trajectories import BatchTrajectories
-from mdp.model.non_tabular.algorithm.episodic.sarsa.sarsa_delta_weights_parallel import SarsaDeltaWeightsParallel
+# from mdp.model.non_tabular.algorithm.episodic.sarsa.sarsa_delta_weights_parallel import SarsaDeltaWeightsParallel
 from mdp.model.trainer.parallel_episodes import ParallelEpisodes
-from mdp.model.trainer.parallel_episodes_w import ParallelEpisodesW
+# from mdp.model.trainer.parallel_episodes_w import ParallelEpisodesW
 
 if TYPE_CHECKING:
     from mdp.model.base.agent.base_agent import BaseAgent
@@ -103,10 +103,7 @@ class Trainer:
                     and self._algorithm.batch_episodes \
                     and not daemon:
                 # do episodes in parallel
-                if isinstance(self.algorithm, SarsaDeltaWeightsParallel):
-                    self._parallel_episodes = ParallelEpisodesW(self)
-                else:
-                    self._parallel_episodes = ParallelEpisodes(self)
+                self._parallel_episodes = ParallelEpisodes(self)
             else:
                 # do episodes in serial (with batch determined by self._algorithm.batch_episodes)
                 self._parallel_episodes = None
@@ -272,18 +269,14 @@ class Trainer:
         if rp.return_cum_timestep:
             result.cum_timestep = self.cum_timestep
 
-        if rp.return_delta_w_vector:
-            if self._algorithm.batch_episodes == common.BatchEpisodes.DELTA_WEIGHTS:
+        match rp.return_batch_episodes:
+            case common.BatchEpisodes.DELTA_WEIGHTS:
                 assert isinstance(self._algorithm, BatchDeltaWeights)
                 result.delta_w_vector = self._algorithm.get_delta_weights()
-
-        if rp.return_trajectories:
-            if self._algorithm.batch_episodes == common.BatchEpisodes.TRAJECTORIES:
+            case common.BatchEpisodes.TRAJECTORIES:
                 assert isinstance(self._algorithm, BatchTrajectories)
                 result.trajectories = self._algorithm.trajectories
-
-        if rp.return_feature_trajectories:
-            if self._algorithm.batch_episodes == common.BatchEpisodes.FEATURE_TRAJECTORIES:
+            case common.BatchEpisodes.FEATURE_TRAJECTORIES:
                 assert isinstance(self._algorithm, BatchFeatureTrajectories)
                 result.feature_trajectories = self._algorithm.feature_trajectories
 

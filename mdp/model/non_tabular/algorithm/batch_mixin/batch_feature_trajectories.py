@@ -2,11 +2,14 @@ from __future__ import annotations
 from abc import ABC, abstractmethod
 from typing import TYPE_CHECKING
 
+import numpy as np
+
 if TYPE_CHECKING:
     from mdp.model.non_tabular.agent.non_tabular_agent import NonTabularAgent
     from mdp.model.non_tabular.agent.reward_feature_vector import FeatureTrajectory
 from mdp import common
 from mdp.model.non_tabular.algorithm.batch_mixin.batch__episodic import BatchEpisodic
+from mdp.model.non_tabular.agent.reward_feature_vector import RewardFeatureVector, FeatureTrajectory
 
 
 class BatchFeatureTrajectories(BatchEpisodic, ABC,
@@ -25,6 +28,19 @@ class BatchFeatureTrajectories(BatchEpisodic, ABC,
     # start of episodes
     def start_episodes(self):
         self._feature_trajectories = []
+
+    def _append_feature_trajectory(self):
+        feature_vector: np.ndarray = self._feature.get_vector()
+        r: float = self._agent.r
+        reward_feature_vector: RewardFeatureVector = RewardFeatureVector(
+            feature_vector=feature_vector,
+            r=r
+        )
+        self._agent.episode.feature_trajectory.append(reward_feature_vector)
+
+    def _end_episode(self):
+        if self._agent.state.is_terminal:
+            self._feature_trajectories.append(self._agent.episode.feature_trajectory)
 
     # feature trajectory processing
     def add_feature_trajectories(self, feature_trajectories: list[FeatureTrajectory]):

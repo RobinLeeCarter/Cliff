@@ -2,11 +2,13 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 from abc import ABC, abstractmethod
 
+
 if TYPE_CHECKING:
     from mdp.model.non_tabular.agent.non_tabular_agent import NonTabularAgent
     from mdp.model.non_tabular.agent.non_tabular_episode import NonTabularEpisode
-    from mdp import common
+from mdp import common
 from mdp.model.non_tabular.algorithm.abstract.nontabular_episodic import NonTabularEpisodic
+from mdp.model.non_tabular.algorithm.batch_mixin.batch_feature_trajectories import BatchFeatureTrajectories
 from mdp.model.non_tabular.feature.tile_coding.tile_coding import TileCoding
 
 
@@ -30,7 +32,9 @@ class NonTabularEpisodicOnline(NonTabularEpisodic, ABC):
                 and self._agent.t < self._episode_length_timeout\
                 and self._agent.episode.cont:
             self._do_training_step()
-            # TODO: post_training_step() for batch processing and perhaps other things (wrap in an if?)
+            if self.batch_episodes == common.BatchEpisodes.FEATURE_TRAJECTORIES:
+                assert isinstance(self, BatchFeatureTrajectories)
+                self._append_feature_trajectory()
         self._end_episode()
         return self._agent.episode
 

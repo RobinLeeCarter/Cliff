@@ -1,13 +1,11 @@
 from __future__ import annotations
 from typing import Optional, Callable, TYPE_CHECKING, TypeVar, Generic
 
-import numpy as np
-
 if TYPE_CHECKING:
     from mdp.model.non_tabular.environment.non_tabular_environment import NonTabularEnvironment
 
 from mdp.model.non_tabular.agent.reward_state_action import RewardStateAction, Trajectory
-from mdp.model.non_tabular.agent.reward_feature_vector import RewardFeatureVector, FeatureTrajectory
+from mdp.model.non_tabular.agent.reward_feature_vector import FeatureTrajectory
 
 from mdp.model.non_tabular.environment.non_tabular_state import NonTabularState
 from mdp.model.non_tabular.environment.non_tabular_action import NonTabularAction
@@ -22,8 +20,7 @@ class NonTabularEpisode(Generic[State, Action], BaseEpisode):
     def __init__(self,
                  environment: NonTabularEnvironment[State, Action],
                  gamma: float,
-                 step_callback: Optional[Callable[[], bool]] = None,
-                 record_feature_trajectory: bool = False):
+                 step_callback: Optional[Callable[[], bool]] = None):
         super().__init__(environment, gamma, step_callback)
         self._environment: NonTabularEnvironment = environment
         # self.gamma: float = gamma
@@ -38,7 +35,6 @@ class NonTabularEpisode(Generic[State, Action], BaseEpisode):
 
         self.cont: bool = True
 
-        self._record_feature_trajectory: bool = record_feature_trajectory
         self._feature_trajectory: FeatureTrajectory = []
 
     @property
@@ -81,13 +77,9 @@ class NonTabularEpisode(Generic[State, Action], BaseEpisode):
     def add_rsa(self,
                 reward: float,
                 state: State,
-                action: Optional[Action],
-                feature_vector: Optional[np.ndarray] = None):
+                action: Optional[Action]):
         rsa = RewardStateAction(reward, state, action)
         self._trajectory.append(rsa)
-        if self._record_feature_trajectory:
-            reward_feature_vector = RewardFeatureVector(reward, feature_vector)
-            self._feature_trajectory.append(reward_feature_vector)
         if state.is_terminal:
             self.terminates = True
             self.T = len(self._trajectory) - 1

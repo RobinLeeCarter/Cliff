@@ -7,9 +7,9 @@ from mdp import common, Application
 # comparison_type: common.ComparisonType = common.ComparisonType.CLIFF_ALPHA_START
 # comparison_type: common.ComparisonType = common.ComparisonType.GAMBLER_VALUE_ITERATION_V
 # comparison_type: common.ComparisonType = common.ComparisonType.JACKS_POLICY_ITERATION_V
-comparison_type: common.ComparisonType = common.ComparisonType.MOUNTAIN_CAR_STANDARD
+# comparison_type: common.ComparisonType = common.ComparisonType.MOUNTAIN_CAR_STANDARD
 # comparison_type: common.ComparisonType = common.ComparisonType.MOUNTAIN_CAR_SERIAL_TRAJECTORIES
-# comparison_type: common.ComparisonType = common.ComparisonType.MOUNTAIN_CAR_PARALLEL_WEIGHTS
+comparison_type: common.ComparisonType = common.ComparisonType.MOUNTAIN_CAR_PARALLEL_WEIGHTS
 # comparison_type: common.ComparisonType = common.ComparisonType.MOUNTAIN_CAR_PARALLEL_TRAJECTORIES
 # comparison_type: common.ComparisonType = common.ComparisonType.RACETRACK_EPISODE
 # comparison_type: common.ComparisonType = common.ComparisonType.RANDOM_WALK_EPISODE

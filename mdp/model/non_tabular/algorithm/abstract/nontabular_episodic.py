@@ -22,14 +22,6 @@ class NonTabularEpisodic(NonTabularAlgorithm, ABC,
         super().apply_settings(settings)
         self._episode_length_timeout = settings.episode_length_timeout
 
-    # start of episodes (used for batch processing)
-    def start_episodes(self):
-        pass
-
-    # end of episodes (used for batch processing)
-    def end_episodes(self):
-        pass
-
     @abstractmethod
     def do_episode(self) -> NonTabularEpisode:
         pass

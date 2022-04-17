@@ -8,6 +8,7 @@ import itertools
 
 import utils
 from mdp.model.non_tabular.algorithm.batch_mixin.batch__episodic import BatchEpisodic
+from mdp.model.non_tabular.algorithm.batch_mixin.batch_delta_weights import BatchDeltaWeights
 from mdp.model.non_tabular.algorithm.batch_mixin.batch_feature_trajectories import BatchFeatureTrajectories
 from mdp.model.non_tabular.algorithm.batch_mixin.batch_trajectories import BatchTrajectories
 
@@ -85,7 +86,7 @@ class ParallelEpisodes:
     def _get_result_parameter_list(self) -> list[common.ResultParameters]:
         rp_norm: common.ResultParameters = common.ResultParameters(
             return_recorder=True,
-            return_trajectories=True,
+            return_batch_episodes=self._trainer.algorithm.batch_episodes,
         )
         result_parameter_list: list[common.ResultParameters] = list(itertools.repeat(rp_norm, self._processes))
         return result_parameter_list
@@ -100,6 +101,10 @@ class ParallelEpisodes:
 
         algorithm = self._trainer.algorithm
         match algorithm.batch_episodes:
+            case common.BatchEpisodes.DELTA_WEIGHTS:
+                assert isinstance(algorithm, BatchDeltaWeights)
+                delta_w_vectors = [result.delta_w_vector for result in self._results]
+                algorithm.apply_delta_w_vectors(delta_w_vectors)
             case common.BatchEpisodes.TRAJECTORIES:
                 assert isinstance(algorithm, BatchTrajectories)
                 for result in self._results:
