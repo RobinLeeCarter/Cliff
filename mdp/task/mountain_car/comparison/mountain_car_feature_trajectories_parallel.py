@@ -18,7 +18,7 @@ class MountainCarFeatureTrajectoriesParallel(ComparisonBuilder,
         return Comparison(
             environment_parameters=self._environment_parameters,
             comparison_settings=Settings(
-                training_episodes=1600,
+                training_episodes=8000,
                 episodes_per_batch=800,
                 episode_print_frequency=100,
                 episode_multiprocessing=common.ParallelContextType.FORK_GLOBAL,

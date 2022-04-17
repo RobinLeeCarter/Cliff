@@ -29,9 +29,9 @@ class SarsaFeatureTrajectoriesSerial(SarsaFeatureTrajectories,
 
     def end_episodes(self):
         # immediately reapply episodes
-        self._apply_trajectories()
+        self._apply_feature_trajectories()
 
-    def _apply_trajectories(self):
+    def _apply_feature_trajectories(self):
         """for use with batch episodes but a single process"""
         # copy back original w and reapply episodes
         assert isinstance(self.Q, LinearStateActionFunction)
