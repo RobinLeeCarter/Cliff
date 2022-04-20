@@ -17,6 +17,7 @@ class Sarsa(NonTabularEpisodicOnline,
                  algorithm_parameters: common.AlgorithmParameters
                  ):
         super().__init__(agent, algorithm_parameters)
+        # TODO: _requires_q should be a class variable
         self._requires_q = True
         self._previous_q: float = 0.0
         self._previous_gradient: Optional[np.ndarray] = None
@@ -34,6 +35,9 @@ class Sarsa(NonTabularEpisodicOnline,
 
         current_q = self.Q[ag.state, ag.action]
         target: float = ag.r + self._gamma * current_q
+        # TODO: previous_q might have changed if w has been updated by another process,
+        #  perhaps store previous feature_vector and recalculate?
+        #  and perhaps implement transactions on self.Q
         delta: float = target - self._previous_q
         alpha_delta: float = self._alpha * delta
 

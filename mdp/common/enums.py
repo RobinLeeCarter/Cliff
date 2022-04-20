@@ -34,11 +34,12 @@ class ComparisonType(enum.IntEnum):
     JACKS_VALUE_ITERATION_Q = enum.auto()
 
     MOUNTAIN_CAR_STANDARD = enum.auto()
+    MOUNTAIN_CAR_SHARED_WEIGHTS_PARALLEL = enum.auto()
+    MOUNTAIN_CAR_DELTA_WEIGHTS_PARALLEL = enum.auto()
     MOUNTAIN_CAR_TRAJECTORIES_SERIAL = enum.auto()
     MOUNTAIN_CAR_TRAJECTORIES_PARALLEL = enum.auto()
     MOUNTAIN_CAR_FEATURE_TRAJECTORIES_SERIAL = enum.auto()
     MOUNTAIN_CAR_FEATURE_TRAJECTORIES_PARALLEL = enum.auto()
-    MOUNTAIN_CAR_WEIGHTS_PARALLEL = enum.auto()
 
     RACETRACK_EPISODE = enum.auto()
 
@@ -91,6 +92,7 @@ class AlgorithmType(enum.IntEnum):
 
     # Non-tabular
     NT_SARSA = enum.auto()
+    NT_SARSA_SHARED_WEIGHTS_PARALLEL = enum.auto()
     NT_SARSA_DELTA_WEIGHTS_PARALLEL = enum.auto()
     NT_SARSA_TRAJECTORIES_SERIAL = enum.auto()
     NT_SARSA_TRAJECTORIES_PARALLEL = enum.auto()
@@ -123,6 +125,7 @@ class FeatureType(enum.IntEnum):
 class ValueFunctionType(enum.IntEnum):
     LINEAR_STATE = enum.auto()
     LINEAR_STATE_ACTION = enum.auto()
+    LINEAR_STATE_ACTION_SHARED_WEIGHTS = enum.auto()
 
 
 class ActionsList(enum.IntEnum):
@@ -159,6 +162,7 @@ class ParallelContextType(enum.IntEnum):
 
 
 class BatchEpisodes(enum.IntEnum):
+    SHARED_WEIGHTS = enum.auto()
     DELTA_WEIGHTS = enum.auto()
     TRAJECTORIES = enum.auto()
     FEATURE_TRAJECTORIES = enum.auto()

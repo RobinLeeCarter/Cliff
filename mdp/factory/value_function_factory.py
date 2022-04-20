@@ -10,6 +10,8 @@ from mdp.model.non_tabular.value_function.state.state_function import StateFunct
 from mdp.model.non_tabular.value_function.state_action.state_action_function import StateActionFunction
 from mdp.model.non_tabular.value_function.state.linear_state_function import LinearStateFunction
 from mdp.model.non_tabular.value_function.state_action.linear_state_action_function import LinearStateActionFunction
+from mdp.model.non_tabular.value_function.state_action.linear_state_action_shared_weights import \
+    LinearStateActionSharedWeights
 
 from mdp.model.non_tabular.environment.non_tabular_state import NonTabularState
 from mdp.model.non_tabular.environment.non_tabular_action import NonTabularAction
@@ -46,4 +48,5 @@ def __dummy():
     return [
         LinearStateFunction,
         LinearStateActionFunction,
+        LinearStateActionSharedWeights,
     ]

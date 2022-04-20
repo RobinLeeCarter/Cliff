@@ -4,13 +4,17 @@ from typing import TYPE_CHECKING, Optional
 import math
 import os
 import multiprocessing as mp
+from multiprocessing.managers import SharedMemoryManager
 import itertools
+
+import numpy as np
 
 import utils
 from mdp.model.non_tabular.algorithm.batch_mixin.batch__episodic import BatchEpisodic
 from mdp.model.non_tabular.algorithm.batch_mixin.batch_delta_weights import BatchDeltaWeights
 from mdp.model.non_tabular.algorithm.batch_mixin.batch_feature_trajectories import BatchFeatureTrajectories
 from mdp.model.non_tabular.algorithm.batch_mixin.batch_trajectories import BatchTrajectories
+
 
 if TYPE_CHECKING:
     from mdp.model.trainer.trainer import Trainer
@@ -20,7 +24,7 @@ from mdp import common
 _trainer: Trainer
 
 
-class ParallelEpisodes:
+class ParallelEpisodesSharedWeights:
     def __init__(self, trainer: Trainer):
         self._trainer: Trainer = trainer
         # must be disabled for multi-processor
@@ -50,7 +54,7 @@ class ParallelEpisodes:
     def actual_episodes_per_batch(self) -> int:
         return self._actual_episodes_per_batch
 
-    def do_episode_batch(self, starting_episode: int):
+    def do_episode_batch(self, starting_episode: int, weights: np.ndarray):
         seeds: list[int] = utils.Rng.get_seeds(number_of_seeds=self._processes)
         episode_counter_starts: list[int] = \
             [starting_episode + x
@@ -62,20 +66,31 @@ class ParallelEpisodes:
         assert isinstance(algorithm, BatchEpisodic)
         algorithm.start_episodes()
 
-        with self._ctx.Pool(processes=self._processes) as pool:
-            if self._use_global_trainer:
-                args = zip(seeds,
-                           episode_counter_starts,
-                           episodes_to_do,
-                           result_parameter_list)
-                self._results = pool.starmap(_global_do_episodes_wrapper, args)
-            else:
-                args = zip(itertools.repeat(self._trainer),
-                           seeds,
-                           episode_counter_starts,
-                           episodes_to_do,
-                           result_parameter_list)
-                self._results = pool.starmap(_do_episodes_starmap_wrapper, args)
+        # TODO: possibly don't want to do this for each batch
+        # TODO: make generic enough to be combined with parallel_episodes.py
+        with SharedMemoryManager() as shared_memory_manager:
+            shared_weights: utils.SharedArrayWrapper = \
+                utils.SharedArrayWrapper(shared_memory_manager=shared_memory_manager, source=weights)
+            shared_weights_doors: list[utils.SharedArrayDoor] = \
+                list(itertools.repeat(shared_weights.door, self._processes))
+
+            with self._ctx.Pool(processes=self._processes) as pool:
+                if self._use_global_trainer:
+                    args = zip(seeds,
+                               episode_counter_starts,
+                               episodes_to_do,
+                               shared_weights_doors,
+                               result_parameter_list)
+                    self._results = pool.starmap(_global_do_episodes_wrapper, args)
+                else:
+                    args = zip(itertools.repeat(self._trainer),
+                               seeds,
+                               episode_counter_starts,
+                               episodes_to_do,
+                               shared_weights_doors,
+                               result_parameter_list)
+                    self._results = pool.starmap(_do_episodes_starmap_wrapper, args)
+            shared_weights.copy_back()
 
         self._unpack_results()
 
@@ -86,7 +101,6 @@ class ParallelEpisodes:
     def _get_result_parameter_list(self) -> list[common.ResultParameters]:
         rp_norm: common.ResultParameters = common.ResultParameters(
             return_recorder=True,
-            return_batch_episodes=self._trainer.algorithm.batch_episodes,
         )
         result_parameter_list: list[common.ResultParameters] = list(itertools.repeat(rp_norm, self._processes))
         return result_parameter_list
@@ -122,11 +136,13 @@ class ParallelEpisodes:
 def _global_do_episodes_wrapper(seed: int,
                                 episode_counter_start: int,
                                 episodes_to_do: int,
+                                shared_weights_door: utils.SharedArrayDoor,
                                 result_parameters: common.ResultParameters)\
         -> common.Result:
     utils.Rng.set_seed(seed)
     return _trainer.do_episodes(episode_counter_start=episode_counter_start,
                                 episodes_to_do=episodes_to_do,
+                                shared_weights_door=shared_weights_door,
                                 result_parameters=result_parameters)
 
 
@@ -134,11 +150,13 @@ def _do_episodes_starmap_wrapper(trainer: Trainer,
                                  seed: int,
                                  episode_counter_start: int,
                                  episodes_to_do: int,
+                                 shared_weights_door: utils.SharedArrayDoor,
                                  result_parameters: common.ResultParameters)\
         -> common.Result:
     utils.Rng.set_seed(seed)
     return trainer.do_episodes(episode_counter_start=episode_counter_start,
                                episodes_to_do=episodes_to_do,
+                               shared_weights_door=shared_weights_door,
                                result_parameters=result_parameters)
 
 

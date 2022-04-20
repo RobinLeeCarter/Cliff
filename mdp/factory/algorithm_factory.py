@@ -38,6 +38,7 @@ from mdp.model.tabular.algorithm.control.q_learning import QLearning
 
 # non-tabular
 from mdp.model.non_tabular.algorithm.episodic.sarsa.sarsa import Sarsa as NonTabularSarsa
+from mdp.model.non_tabular.algorithm.episodic.sarsa.sarsa_shared_weights_parallel import SarsaSharedWeightsParallel
 from mdp.model.non_tabular.algorithm.episodic.sarsa.sarsa_delta_weights_parallel import SarsaDeltaWeightsParallel
 from mdp.model.non_tabular.algorithm.episodic.sarsa.sarsa_trajectories_serial import SarsaTrajectoriesSerial
 from mdp.model.non_tabular.algorithm.episodic.sarsa.sarsa_trajectories_parallel import SarsaTrajectoriesParallel
@@ -97,6 +98,7 @@ def __dummy():
 
         # non-tabular
         NonTabularSarsa,
+        SarsaSharedWeightsParallel,
         SarsaDeltaWeightsParallel,
         SarsaTrajectoriesSerial,
         SarsaTrajectoriesParallel,

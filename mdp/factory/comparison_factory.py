@@ -24,8 +24,9 @@ from mdp.task.jacks.comparison.jacks_value_iteration_q import JacksValueIteratio
 from mdp.task.jacks.comparison.jacks_value_iteration_v import JacksValueIterationV
 
 from mdp.task.mountain_car.comparison.mountain_car_standard import MountainCarStandard
+from mdp.task.mountain_car.comparison.mountain_car_shared_weights_parallel import MountainCarSharedWeightsParallel
+from mdp.task.mountain_car.comparison.mountain_car_delta_weights_parallel import MountainCarDeltaWeightsParallel
 from mdp.task.mountain_car.comparison.mountain_car_trajectories_serial import MountainCarTrajectoriesSerial
-from mdp.task.mountain_car.comparison.mountain_car_weights_parallel import MountainCarWeightsParallel
 from mdp.task.mountain_car.comparison.mountain_car_trajectories_parallel import MountainCarTrajectoriesParallel
 from mdp.task.mountain_car.comparison.mountain_car_feature_trajectories_serial import \
     MountainCarFeatureTrajectoriesSerial
@@ -74,7 +75,8 @@ def __dummy():
         JacksValueIterationV,
 
         MountainCarStandard,
-        MountainCarWeightsParallel,
+        MountainCarSharedWeightsParallel,
+        MountainCarDeltaWeightsParallel,
         MountainCarTrajectoriesSerial,
         MountainCarTrajectoriesParallel,
         MountainCarFeatureTrajectoriesSerial,

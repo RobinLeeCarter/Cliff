@@ -2,18 +2,21 @@ from __future__ import annotations
 from typing import Optional
 from multiprocessing import Lock
 from multiprocessing.shared_memory import SharedMemory
-from multiprocessing.managers import SharedMemoryManager
+from multiprocessing.managers import SharedMemoryManager, BaseManager
 
 import numpy as np
 
-from multiprocessing_shared_memory.shared_array_door import SharedArrayDoor
+from utils.shared_array_door import SharedArrayDoor
 
 
 class SharedArrayWrapper:
     def __init__(self, *,
-                 shared_memory_manager: Optional[SharedMemoryManager] = None,
+                 shared_memory_manager: Optional[BaseManager] = None,
                  source: Optional[np.ndarray] = None,
                  shared_array_door: Optional[SharedArrayDoor] = None):
+        # Pycharm or Python type checking fix
+        if shared_memory_manager is not None:
+            assert isinstance(shared_memory_manager, SharedMemoryManager)
         self._shared_memory_manager: Optional[SharedMemoryManager] = shared_memory_manager
         self._source: Optional[np.ndarray] = source
         self._door: Optional[SharedArrayDoor] = shared_array_door
