@@ -17,8 +17,8 @@ class MountainCarTrajectoriesSerial(ComparisonBuilder,
             environment_parameters=self._environment_parameters,
             comparison_settings=Settings(
                 training_episodes=1000,
-                episodes_per_batch=80,
-                episode_print_frequency=80,
+                episodes_per_batch=8,
+                episode_print_frequency=100,
                 algorithm_parameters=common.AlgorithmParameters(
                     algorithm_type=common.AlgorithmType.NT_SARSA_TRAJECTORIES_SERIAL,
                     alpha=0.5

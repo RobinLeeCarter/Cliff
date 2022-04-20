@@ -16,8 +16,8 @@ class Application:
     def __init__(self,
                  comparison_type: Optional[common.ComparisonType] = None,
                  seed: Optional[int] = None,
-                 auto_run: bool = True,
-                 profile: bool = False
+                 profile: bool = False,
+                 auto_run: bool = True
                  ):
         """
         :param comparison_type: if comparison_type not passed then allow a build using a comparison argument.

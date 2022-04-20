@@ -19,7 +19,7 @@ comparison_type: common.ComparisonType = common.ComparisonType.MOUNTAIN_CAR_FEAT
 
 
 def main():
-    Application(comparison_type=comparison_type, profile=False)
+    Application(comparison_type=comparison_type, profile=True)
 
 
 if __name__ == '__main__':

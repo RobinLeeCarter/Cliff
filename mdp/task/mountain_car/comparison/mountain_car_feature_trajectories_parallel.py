@@ -18,13 +18,13 @@ class MountainCarFeatureTrajectoriesParallel(
         return Comparison(
             environment_parameters=self._environment_parameters,
             comparison_settings=Settings(
-                training_episodes=8000,
+                training_episodes=1000,
                 episodes_per_batch=80,
                 episode_print_frequency=100,
                 episode_multiprocessing=common.ParallelContextType.FORK_GLOBAL,
                 algorithm_parameters=common.AlgorithmParameters(
                     algorithm_type=common.AlgorithmType.NT_SARSA_FEATURE_TRAJECTORIES_PARALLEL,
-                    alpha=0.3
+                    alpha=0.5
                 ),
             ),
             graph3d_values=self._graph3d_values
