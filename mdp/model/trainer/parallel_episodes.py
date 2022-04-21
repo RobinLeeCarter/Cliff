@@ -40,7 +40,7 @@ class ParallelEpisodes:
 
         # if self._parallel_context_type is None it should fail here
         context_str = common.parallel_context_str[self._parallel_context_type]
-        self._ctx: mp.context.BaseContext = mp.get_context(context_str)
+        self._context: mp.context.BaseContext = mp.get_context(context_str)
         self._use_global_trainer: bool = (self._parallel_context_type == common.ParallelContextType.FORK_GLOBAL)
         if self._use_global_trainer:
             global _trainer
@@ -62,7 +62,7 @@ class ParallelEpisodes:
         assert isinstance(algorithm, BatchEpisodic)
         algorithm.start_episodes()
 
-        with self._ctx.Pool(processes=self._processes) as pool:
+        with self._context.Pool(processes=self._processes) as pool:
             if self._use_global_trainer:
                 args = zip(seeds,
                            episode_counter_starts,

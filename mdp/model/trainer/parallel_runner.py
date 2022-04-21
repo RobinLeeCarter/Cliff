@@ -32,7 +32,7 @@ class ParallelRunner:
 
         # if self._parallel_context_type is None it should fail here
         context_str = common.parallel_context_str[self._parallel_context_type]
-        self._ctx: mp.context.BaseContext = mp.get_context(context_str)
+        self._context: mp.context.BaseContext = mp.get_context(context_str)
         self._use_global_trainer: bool = (self._parallel_context_type == common.ParallelContextType.FORK_GLOBAL)
         if self._use_global_trainer:
             global _trainer
@@ -42,7 +42,7 @@ class ParallelRunner:
         result_parameter_list: list[common.ResultParameters] = self._get_result_parameter_list()
         seeds: list[int] = utils.Rng.get_seeds(number_of_seeds=self._runs)
 
-        with self._ctx.Pool() as pool:
+        with self._context.Pool() as pool:
             if self._use_global_trainer:
                 args = zip(seeds, range(1, self._runs + 1), result_parameter_list)
                 self._results = pool.starmap(_global_do_run_wrapper, args)

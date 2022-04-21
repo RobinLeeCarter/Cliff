@@ -10,6 +10,7 @@ import itertools
 import numpy as np
 
 import utils
+from utils import SharedArrayWrapper, SharedArrayDoor
 from mdp.model.non_tabular.algorithm.batch_mixin.batch__episodic import BatchEpisodic
 from mdp.model.non_tabular.algorithm.batch_mixin.batch_delta_weights import BatchDeltaWeights
 from mdp.model.non_tabular.algorithm.batch_mixin.batch_feature_trajectories import BatchFeatureTrajectories
@@ -22,6 +23,7 @@ if TYPE_CHECKING:
 from mdp import common
 
 _trainer: Trainer
+_door: SharedArrayDoor
 
 
 class ParallelEpisodesSharedWeights:
@@ -44,17 +46,22 @@ class ParallelEpisodesSharedWeights:
 
         # if self._parallel_context_type is None it should fail here
         context_str = common.parallel_context_str[self._parallel_context_type]
-        self._ctx: mp.context.BaseContext = mp.get_context(context_str)
+        self._context: mp.context.BaseContext = mp.get_context(context_str)
         self._use_global_trainer: bool = (self._parallel_context_type == common.ParallelContextType.FORK_GLOBAL)
         if self._use_global_trainer:
             global _trainer
             _trainer = self._trainer
 
+        self._weights: Optional[np.ndarray] = None
+
     @property
     def actual_episodes_per_batch(self) -> int:
         return self._actual_episodes_per_batch
 
-    def do_episode_batch(self, starting_episode: int, weights: np.ndarray):
+    def set_weights(self, weights: np.ndarray):
+        self._weights = weights
+
+    def do_episode_batch(self, starting_episode: int):
         seeds: list[int] = utils.Rng.get_seeds(number_of_seeds=self._processes)
         episode_counter_starts: list[int] = \
             [starting_episode + x
@@ -69,17 +76,17 @@ class ParallelEpisodesSharedWeights:
         # TODO: possibly don't want to do this for each batch
         # TODO: make generic enough to be combined with parallel_episodes.py
         with SharedMemoryManager() as shared_memory_manager:
-            shared_weights: utils.SharedArrayWrapper = \
-                utils.SharedArrayWrapper(shared_memory_manager=shared_memory_manager, source=weights)
-            shared_weights_doors: list[utils.SharedArrayDoor] = \
-                list(itertools.repeat(shared_weights.door, self._processes))
+            shared_weights: SharedArrayWrapper = \
+                SharedArrayWrapper().build(self._context, shared_memory_manager, source=self._weights)
 
-            with self._ctx.Pool(processes=self._processes) as pool:
+            with self._context.Pool(processes=self._processes,
+                                    initializer=_init,
+                                    initargs=(shared_weights.door, )) as pool:
+                # TODO: pass seeds in init_args also
                 if self._use_global_trainer:
                     args = zip(seeds,
                                episode_counter_starts,
                                episodes_to_do,
-                               shared_weights_doors,
                                result_parameter_list)
                     self._results = pool.starmap(_global_do_episodes_wrapper, args)
                 else:
@@ -87,9 +94,8 @@ class ParallelEpisodesSharedWeights:
                                seeds,
                                episode_counter_starts,
                                episodes_to_do,
-                               shared_weights_doors,
                                result_parameter_list)
-                    self._results = pool.starmap(_do_episodes_starmap_wrapper, args)
+                    self._results = pool.starmap(_do_episodes_wrapper, args)
             shared_weights.copy_back()
 
         self._unpack_results()
@@ -133,30 +139,35 @@ class ParallelEpisodesSharedWeights:
         # self._trainer.max_cum_timestep = max(result.cum_timestep for result in self._results)
 
 
+def _init(door: SharedArrayDoor):
+    global _door
+    _door = door
+
+
 def _global_do_episodes_wrapper(seed: int,
                                 episode_counter_start: int,
                                 episodes_to_do: int,
-                                shared_weights_door: utils.SharedArrayDoor,
                                 result_parameters: common.ResultParameters)\
         -> common.Result:
+    global _door
     utils.Rng.set_seed(seed)
     return _trainer.do_episodes(episode_counter_start=episode_counter_start,
                                 episodes_to_do=episodes_to_do,
-                                shared_weights_door=shared_weights_door,
+                                shared_weights_door=_door,
                                 result_parameters=result_parameters)
 
 
-def _do_episodes_starmap_wrapper(trainer: Trainer,
-                                 seed: int,
-                                 episode_counter_start: int,
-                                 episodes_to_do: int,
-                                 shared_weights_door: utils.SharedArrayDoor,
-                                 result_parameters: common.ResultParameters)\
+def _do_episodes_wrapper(trainer: Trainer,
+                         seed: int,
+                         episode_counter_start: int,
+                         episodes_to_do: int,
+                         result_parameters: common.ResultParameters)\
         -> common.Result:
+    global _door
     utils.Rng.set_seed(seed)
     return trainer.do_episodes(episode_counter_start=episode_counter_start,
                                episodes_to_do=episodes_to_do,
-                               shared_weights_door=shared_weights_door,
+                               shared_weights_door=_door,
                                result_parameters=result_parameters)
 
 

@@ -2,6 +2,8 @@ from __future__ import annotations
 from typing import TYPE_CHECKING, Optional, Callable
 import multiprocessing
 
+import numpy as np
+
 import utils
 from mdp.model.non_tabular.algorithm.batch_mixin.batch__episodic import BatchEpisodic
 from mdp.model.non_tabular.algorithm.batch_mixin.batch_delta_weights import BatchDeltaWeights
@@ -9,6 +11,8 @@ from mdp.model.non_tabular.algorithm.batch_mixin.batch_feature_trajectories impo
 from mdp.model.non_tabular.algorithm.batch_mixin.batch_shared_weights import BatchSharedWeights
 from mdp.model.non_tabular.algorithm.batch_mixin.batch_trajectories import BatchTrajectories
 # from mdp.model.non_tabular.algorithm.episodic.sarsa.sarsa_delta_weights_parallel import SarsaDeltaWeightsParallel
+from mdp.model.non_tabular.value_function.state_action.linear_state_action_shared_weights import \
+    LinearStateActionSharedWeights
 from mdp.model.trainer.parallel_episodes import ParallelEpisodes
 # from mdp.model.trainer.parallel_episodes_w import ParallelEpisodesW
 from mdp.model.trainer.parallel_episodes_shared_weights import ParallelEpisodesSharedWeights
@@ -178,6 +182,15 @@ class Trainer:
 
         if self._parallel_episodes:
             # parallel episodes in batches
+            if self._algorithm.batch_episodes == common.BatchEpisodes.SHARED_WEIGHTS:
+                assert isinstance(self._parallel_episodes, ParallelEpisodesSharedWeights)
+                assert isinstance(self._algorithm, NonTabularEpisodic)
+                assert isinstance(self._algorithm.Q, LinearStateActionSharedWeights)
+                q: LinearStateActionSharedWeights = self._algorithm.Q
+                # noinspection PyTypeChecker
+                weights: np.ndarray = q.w
+                self._parallel_episodes.set_weights(weights)
+
             actual_episodes_per_batch: int = self._parallel_episodes.actual_episodes_per_batch
             for first_batch_episode in range(1, settings.training_episodes + 1, actual_episodes_per_batch):
                 self._parallel_episodes.do_episode_batch(first_batch_episode)

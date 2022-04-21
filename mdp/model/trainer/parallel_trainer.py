@@ -28,7 +28,7 @@ class ParallelTrainer:
             self._recorder = self._trainer.breakdown.recorder
 
         context_str = common.parallel_context_str[self._parallel_context_type]
-        self._ctx: mp.context.BaseContext = mp.get_context(context_str)
+        self._context: mp.context.BaseContext = mp.get_context(context_str)
         self._use_global_trainer: bool = (self._parallel_context_type == common.ParallelContextType.FORK_GLOBAL)
         if self._use_global_trainer:
             global _trainer
@@ -41,7 +41,7 @@ class ParallelTrainer:
         # have final settings return everything (if used in case of V and Q)
         self._set_result_parameters()
 
-        with self._ctx.Pool() as pool:
+        with self._context.Pool() as pool:
             if self._use_global_trainer:
                 args = zip(seeds, self._settings_list)
                 self._results = pool.starmap(_global_train_wrapper, args)

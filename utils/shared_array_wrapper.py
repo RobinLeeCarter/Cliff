@@ -1,6 +1,7 @@
 from __future__ import annotations
 from typing import Optional
 from multiprocessing import Lock
+from multiprocessing.context import BaseContext
 from multiprocessing.shared_memory import SharedMemory
 from multiprocessing.managers import SharedMemoryManager, BaseManager
 
@@ -10,27 +11,11 @@ from utils.shared_array_door import SharedArrayDoor
 
 
 class SharedArrayWrapper:
-    def __init__(self, *,
-                 shared_memory_manager: Optional[BaseManager] = None,
-                 source: Optional[np.ndarray] = None,
-                 shared_array_door: Optional[SharedArrayDoor] = None):
-        # Pycharm or Python type checking fix
-        if shared_memory_manager is not None:
-            assert isinstance(shared_memory_manager, SharedMemoryManager)
-        self._shared_memory_manager: Optional[SharedMemoryManager] = shared_memory_manager
-        self._source: Optional[np.ndarray] = source
-        self._door: Optional[SharedArrayDoor] = shared_array_door
-
+    def __init__(self):
+        self._source: Optional[np.ndarray] = None
         self._shared_memory: Optional[SharedMemory] = None
         self._array: Optional[np.ndarray] = None
-        # self._lock: Optional[Lock] = None
-
-        if shared_memory_manager is not None and source is not None:
-            # parent process
-            self._copy_in(source)
-        elif shared_array_door is not None:
-            # child process
-            self._attach()
+        self._door: Optional[SharedArrayDoor] = None
 
     @property
     def array(self) -> np.ndarray:
@@ -44,37 +29,33 @@ class SharedArrayWrapper:
     def lock(self) -> Lock:
         return self._door.lock
 
-    def _copy_in(self, source: np.ndarray):
-        self._shared_memory = self._shared_memory_manager.SharedMemory(size=source.nbytes)
+    def build(self,
+              context: BaseContext,
+              shared_memory_manager: BaseManager,
+              source: np.ndarray) -> SharedArrayWrapper:
+        # Pycharm or Python(?) type-checking fix
+        assert isinstance(shared_memory_manager, SharedMemoryManager)
+
+        self._source = source
+        self._shared_memory = shared_memory_manager.SharedMemory(size=source.nbytes)
         self._array: np.ndarray = np.ndarray(shape=source.shape, dtype=source.dtype, buffer=self._shared_memory.buf)
-        # shared_array_manager=self)
         np.copyto(src=source, dst=self._array)
-        # self._lock = Lock()
+
         self._door = SharedArrayDoor(
-            lock=Lock(),
+            lock=context.Lock(),
             name=self._shared_memory.name,
             shape=source.shape,
             dtype=source.dtype
         )
+        return self
 
-    def _attach(self):
+    def attach(self, shared_array_door: SharedArrayDoor) -> SharedArrayWrapper:
+        self._door = shared_array_door
         self._shared_memory = SharedMemory(self._door.name)
         self._array: np.ndarray = np.ndarray(shape=self._door.shape,
                                              dtype=self._door.dtype,
                                              buffer=self._shared_memory.buf)
-        # shared_array_manager=self)
-        # self._lock: Lock = door.lock
-
-    # def acquire(self):
-    #     self._lock.acquire()
-    #
-    # # possible usage?
-    # def fetch(self) -> np.ndarray:
-    #     self._lock.acquire()
-    #     return self._array
-    #
-    # def release(self):
-    #     self._lock.release()
+        return self
 
     def copy_back(self):
         np.copyto(src=self._array, dst=self._source)

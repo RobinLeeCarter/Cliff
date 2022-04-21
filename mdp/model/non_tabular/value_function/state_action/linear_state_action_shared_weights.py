@@ -38,7 +38,10 @@ class LinearStateActionSharedWeights(LinearStateActionFunction[State, Action],
 
     def get_action_values(self, state: State, actions: list[Action]) -> np.ndarray:
         feature_matrix: np.ndarray = self._feature.get_matrix(state, actions)
-        with self._w_lock:
+        if self._w_lock:
+            with self._w_lock:
+                values_array: np.ndarray = self._feature.matrix_product(feature_matrix, self.w)
+        else:
             values_array: np.ndarray = self._feature.matrix_product(feature_matrix, self.w)
         return values_array
 
@@ -47,15 +50,24 @@ class LinearStateActionSharedWeights(LinearStateActionFunction[State, Action],
     #     return values_array
 
     def calc_value(self, feature_vector: np.ndarray) -> float:
-        with self._w_lock:
+        if self._w_lock:
+            with self._w_lock:
+                value: float = self._feature.dot_product(feature_vector, self.w)
+        else:
             value: float = self._feature.dot_product(feature_vector, self.w)
         return value
 
     # Weights
     def update_weights(self, delta_w: np.ndarray):
-        with self._w_lock:
+        if self._w_lock:
+            with self._w_lock:
+                self.w += delta_w
+        else:
             self.w += delta_w
 
     def update_weights_sparse(self, indices: np.ndarray, delta_w: float):
-        with self._w_lock:
+        if self._w_lock:
+            with self._w_lock:
+                self.w[indices] += delta_w
+        else:
             self.w[indices] += delta_w
