@@ -16,8 +16,8 @@ class MountainCarSharedWeightsParallel(ComparisonBuilder,
         return Comparison(
             environment_parameters=self._environment_parameters,
             comparison_settings=Settings(
-                training_episodes=1600,
-                episodes_per_batch=1600,    # fails if this is large, why? might be previous_q being wrong
+                training_episodes=3200,
+                episodes_per_batch=3200,    # fails if this is large, why? might be previous_q being wrong
                 episode_print_frequency=100,    # store feature for all (s, a) looked up for n-step also?
                 episode_multiprocessing=common.ParallelContextType.FORK_GLOBAL,
                 algorithm_parameters=common.AlgorithmParameters(

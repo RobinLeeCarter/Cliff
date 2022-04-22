@@ -37,12 +37,12 @@ class LinearStateActionSharedWeights(LinearStateActionFunction[State, Action],
         self.w = shared_w.array
 
     def get_action_values(self, state: State, actions: list[Action]) -> np.ndarray:
-        feature_matrix: np.ndarray = self._feature.get_matrix(state, actions)
+        self._feature_matrix: np.ndarray = self._feature.get_matrix(state, actions)
         if self._w_lock:
             with self._w_lock:
-                values_array: np.ndarray = self._feature.matrix_product(feature_matrix, self.w)
+                values_array: np.ndarray = self._feature.matrix_product(self._feature_matrix, self.w)
         else:
-            values_array: np.ndarray = self._feature.matrix_product(feature_matrix, self.w)
+            values_array: np.ndarray = self._feature.matrix_product(self._feature_matrix, self.w)
         return values_array
 
     # def get_action_values3(self, state: State, actions: list[Action]) -> np.ndarray:
