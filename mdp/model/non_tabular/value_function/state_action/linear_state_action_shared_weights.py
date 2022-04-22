@@ -20,7 +20,8 @@ Action = TypeVar('Action', bound=NonTabularAction)
 
 
 class LinearStateActionSharedWeights(LinearStateActionFunction[State, Action],
-                                     value_function_type=common.ValueFunctionType.LINEAR_STATE_ACTION_SHARED_WEIGHTS):
+                                     value_function_type=common.ValueFunctionType.LINEAR_STATE_ACTION_SHARED_WEIGHTS,
+                                     shared_weights=True):
     def __init__(self,
                  feature: BaseFeature[State, Action],
                  value_function_parameters: common.ValueFunctionParameters

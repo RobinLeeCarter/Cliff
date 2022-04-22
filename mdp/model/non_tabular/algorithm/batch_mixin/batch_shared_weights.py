@@ -23,9 +23,9 @@ class BatchSharedWeights(BatchEpisodic, ABC,
 
     def attach_to_shared_weights(self, shared_weights_door: utils.SharedArrayDoor):
         self._shared_w = utils.SharedArrayWrapper().attach(shared_weights_door)
-        # TODO: devise a better solution: class variable SharedWeights?
-        assert isinstance(self.Q, LinearStateActionSharedWeights)
-        self.Q.attach_to_shared_weights(shared_w=self._shared_w)
+        if self.Q.shared_weights:
+            assert isinstance(self.Q, LinearStateActionSharedWeights)
+            self.Q.attach_to_shared_weights(shared_w=self._shared_w)
 
     def end_episodes(self):
         self._shared_w.close()
