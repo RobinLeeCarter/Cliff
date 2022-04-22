@@ -115,8 +115,7 @@ class NonTabularAgent(Generic[State, Action], BaseAgent):
             if self._behaviour_policy.has_feature_vector and self._behaviour_policy.feature_vector is not None:
                 feature_vector = self._behaviour_policy.feature_vector
             else:
-                self._feature.set_state_action(self.state, self.action)
-                feature_vector = self._feature.get_vector()
+                feature_vector = self._feature[self.state, self.action]
         else:
             feature_vector = None
         return feature_vector

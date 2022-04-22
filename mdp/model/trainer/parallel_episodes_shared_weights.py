@@ -36,6 +36,8 @@ class ParallelEpisodesSharedWeights:
         # settings.result_parameters.return_cum_timestep = True
         self._parallel_context_type: Optional[common.ParallelContextType] = self._settings.episode_multiprocessing
         self._processes: int = min(os.cpu_count(), self._settings.episodes_per_batch)
+        # TODO: Remove
+        self._processes = 1
         self._episodes_per_process: int = int(math.ceil(self._settings.episodes_per_batch / self._processes))
         self._actual_episodes_per_batch: int = self._processes * self._episodes_per_process
 

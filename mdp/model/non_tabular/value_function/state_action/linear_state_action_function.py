@@ -40,6 +40,7 @@ class LinearStateActionFunction(StateActionFunction[State, Action],
             self.delta_w: np.ndarray = np.zeros_like(self.w)
             self.original_w: np.ndarray = self.w.copy()
 
+    # combined methods
     def __getitem__(self, state_action: tuple[State, Action]) -> float:
         state, action = state_action
         value: float
@@ -60,13 +61,20 @@ class LinearStateActionFunction(StateActionFunction[State, Action],
         values_array: np.ndarray = self._feature.matrix_product(self._feature_matrix, self.w)
         return values_array
 
+    # @property
+    # def feature(self) -> Optional[BaseFeature[State, Action]]:
+    #     return self._feature
+
     @property
     def feature_matrix(self) -> Optional[np.ndarray]:
         return self._feature_matrix
 
-    # def get_action_values3(self, state: State, actions: list[Action]) -> np.ndarray:
-    #     values_array: np.ndarray = self._feature.get_dot_products(state, actions, self.w)
-    #     return values_array
+    # component methods to separate out interaction with w as much as possible
+    # def get_feature_vector(self, state: State, action: Action) -> np.ndarray:
+    #     return self._feature[state, action]
+    #
+    # def get_feature_matrix(self, state: State, actions: list[Action]) -> np.ndarray:
+    #     return self._feature.get_matrix(state, actions)
 
     def calc_value(self, feature_vector: np.ndarray) -> float:
         value: float = self._feature.dot_product(feature_vector, self.w)
