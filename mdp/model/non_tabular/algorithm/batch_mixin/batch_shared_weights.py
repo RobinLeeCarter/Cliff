@@ -12,7 +12,8 @@ from mdp.model.non_tabular.value_function.state_action.linear_state_action_share
 
 
 class BatchSharedWeights(BatchEpisodic, ABC,
-                         batch_episodes=common.BatchEpisodes.SHARED_WEIGHTS):
+                         batch_episodes=common.BatchEpisodes.SHARED_WEIGHTS,
+                         store_feature_vectors=True):
     def __init__(self,
                  agent: NonTabularAgent,
                  algorithm_parameters: common.AlgorithmParameters

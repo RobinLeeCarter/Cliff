@@ -31,9 +31,6 @@ class NonTabularAlgorithm(BaseAlgorithm, ABC,
         self.Q: Optional[StateActionFunction] = None
         # self._environment: NonTabularEnvironment = self._agent.environment
 
-        self._requires_v: bool = False
-        self._requires_q: bool = False
-
     @property
     def target_policy(self) -> Optional[NonTabularPolicy]:
         return self._target_policy
@@ -53,11 +50,11 @@ class NonTabularAlgorithm(BaseAlgorithm, ABC,
                 if self._feature.use_dict:
                     self._feature.build_complete_dict()
 
-        if self._requires_v:
+        if self.has_v:
             self.V: StateFunction = value_function_factory.create_state_function(
                 self._feature, settings.value_function_parameters
             )
-        if self._requires_q:
+        if self.has_q:
             self.Q: StateActionFunction = value_function_factory.create_state_action_function(
                 self._feature, settings.value_function_parameters
             )
@@ -67,6 +64,11 @@ class NonTabularAlgorithm(BaseAlgorithm, ABC,
         self._link_policy(self._behaviour_policy)
         self._link_policy(self._target_policy)
 
+        if self.store_feature_vectors or self.store_feature_trajectories:
+            self._agent.store_feature_vectors = self.store_feature_vectors
+            self._agent.store_feature_trajectories = self.store_feature_trajectories
+            self._agent.set_feature(self._feature)
+
     def _update_parameters_based_on_feature(self):
         """e.g. update alpha based on number of tilings"""
         pass
@@ -75,7 +77,7 @@ class NonTabularAlgorithm(BaseAlgorithm, ABC,
         if policy.requires_feature:
             policy.set_feature(self._feature)
         if policy.requires_q:
-            if self._requires_q:
+            if self.has_q:
                 policy.set_state_action_function(self.Q)
             else:
                 raise Exception("Policy requires Q but algorithm does not")

@@ -1,11 +1,13 @@
 from __future__ import annotations
 from typing import Optional, Callable, TYPE_CHECKING, TypeVar, Generic
 
+import numpy as np
+
 if TYPE_CHECKING:
     from mdp.model.non_tabular.environment.non_tabular_environment import NonTabularEnvironment
 
 from mdp.model.non_tabular.agent.reward_state_action import RewardStateAction, Trajectory
-from mdp.model.non_tabular.agent.reward_feature_vector import FeatureTrajectory
+from mdp.model.non_tabular.agent.reward_feature_vector import FeatureTrajectory, RewardFeatureVector
 
 from mdp.model.non_tabular.environment.non_tabular_state import NonTabularState
 from mdp.model.non_tabular.environment.non_tabular_action import NonTabularAction
@@ -20,12 +22,17 @@ class NonTabularEpisode(Generic[State, Action], BaseEpisode):
     def __init__(self,
                  environment: NonTabularEnvironment[State, Action],
                  gamma: float,
-                 step_callback: Optional[Callable[[], bool]] = None):
+                 store_feature_vectors: bool,
+                 store_feature_trajectories: bool,
+                 step_callback: Optional[Callable[[], bool]] = None,
+                 ):
         super().__init__(environment, gamma, step_callback)
         self._environment: NonTabularEnvironment = environment
         # self.gamma: float = gamma
         # self._step_callback: Optional[Callable[[], bool]] = step_callback
         # self.record_first_visits = record_first_visits
+        self._store_feature_vectors: bool = store_feature_vectors
+        self._store_feature_trajectories: bool = store_feature_trajectories
 
         # R0=0, S0, A0, R1, S1, A1, R2 ... S(T-1), A(T-1), R(T), S(T), A(T)=None
         self._trajectory: Trajectory = []
@@ -74,12 +81,22 @@ class NonTabularEpisode(Generic[State, Action], BaseEpisode):
             return None
 
     # @profile
-    def add_rsa(self,
-                reward: float,
-                state: State,
-                action: Optional[Action]):
-        rsa = RewardStateAction(reward, state, action)
-        self._trajectory.append(rsa)
+    def add_step(self,
+                 reward: float,
+                 state: State,
+                 action: Optional[Action],
+                 feature_vector: Optional[np.ndarray] = None,  # pass None if not storing feature vectors
+                 ):
+        if self._store_feature_vectors:
+            reward_state_action = RewardStateAction(reward, state, action, feature_vector)
+        else:
+            reward_state_action = RewardStateAction(reward, state, action, None)
+        self._trajectory.append(reward_state_action)
+
+        if self._store_feature_trajectories:
+            reward_feature_vector = RewardFeatureVector(reward, feature_vector)
+            self._feature_trajectory.append(reward_feature_vector)
+
         if state.is_terminal:
             self.terminates = True
             self.T = len(self._trajectory) - 1

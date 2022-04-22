@@ -16,7 +16,8 @@ Action = TypeVar('Action', bound=NonTabularAction)
 
 
 class LinearStateActionFunction(StateActionFunction[State, Action],
-                                value_function_type=common.ValueFunctionType.LINEAR_STATE_ACTION):
+                                value_function_type=common.ValueFunctionType.LINEAR_STATE_ACTION,
+                                has_feature_matrix=True):
     def __init__(self,
                  feature: BaseFeature[State, Action],
                  value_function_parameters: common.ValueFunctionParameters
@@ -31,6 +32,7 @@ class LinearStateActionFunction(StateActionFunction[State, Action],
         # weights
         self.w: np.ndarray = np.full(shape=self.size, fill_value=self._initial_value, dtype=float)
         self._feature_vector: Optional[np.ndarray] = None
+        self._feature_matrix: Optional[np.ndarray] = None
 
         self.delta_w: Optional[np.ndarray] = None
         self.original_w: Optional[np.ndarray] = None
@@ -54,9 +56,13 @@ class LinearStateActionFunction(StateActionFunction[State, Action],
         return gradient
 
     def get_action_values(self, state: State, actions: list[Action]) -> np.ndarray:
-        feature_matrix: np.ndarray = self._feature.get_matrix(state, actions)
-        values_array: np.ndarray = self._feature.matrix_product(feature_matrix, self.w)
+        self._feature_matrix: np.ndarray = self._feature.get_matrix(state, actions)
+        values_array: np.ndarray = self._feature.matrix_product(self._feature_matrix, self.w)
         return values_array
+
+    @property
+    def feature_matrix(self) -> Optional[np.ndarray]:
+        return self._feature_matrix
 
     # def get_action_values3(self, state: State, actions: list[Action]) -> np.ndarray:
     #     values_array: np.ndarray = self._feature.get_dot_products(state, actions, self.w)

@@ -16,6 +16,10 @@ class BaseAlgorithm(ABC):
     dynamic_programming: bool = False
     episodic: bool = False
     batch_episodes: Optional[common.BatchEpisodes] = None
+    has_v: bool = False
+    has_q: bool = False
+    store_feature_vectors: bool = False
+    store_feature_trajectories: bool = False
 
     def __init_subclass__(cls,
                           algorithm_type: Optional[common.AlgorithmType] = None,
@@ -24,20 +28,31 @@ class BaseAlgorithm(ABC):
                           dynamic_programming: bool = False,
                           episodic: bool = False,
                           batch_episodes: Optional[common.BatchEpisodes] = None,
+                          has_v: bool = False,
+                          has_q: bool = False,
+                          store_feature_vectors: bool = False,
+                          store_feature_trajectories: bool = False,
                           **kwargs):
         super().__init_subclass__(**kwargs)
         if algorithm_type:
             BaseAlgorithm.type_registry[algorithm_type] = cls
             BaseAlgorithm.name_registry[algorithm_type] = algorithm_name
         if tabular:
-            cls.tabular = True
+            cls.tabular = tabular
         if dynamic_programming:
-            cls.dynamic_programming = True
+            cls.dynamic_programming = dynamic_programming
         if episodic:
-            cls.episodic = True
-        # TODO: convert batch_episodes to an enum with default of None or NO_BATCHING
+            cls.episodic = episodic
         if batch_episodes:
             cls.batch_episodes = batch_episodes
+        if has_v:
+            cls.has_v = has_v
+        if has_q:
+            cls.has_q = has_q
+        if store_feature_vectors:
+            cls.store_feature_vectors = store_feature_vectors
+        if store_feature_trajectories:
+            cls.store_feature_trajectories = store_feature_trajectories
 
     def __init__(self,
                  agent: BaseAgent,

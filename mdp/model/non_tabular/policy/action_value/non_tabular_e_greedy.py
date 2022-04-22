@@ -6,12 +6,15 @@ from typing import TYPE_CHECKING, TypeVar
 import numpy as np
 
 import utils
+
+
 if TYPE_CHECKING:
     from mdp.model.non_tabular.environment.non_tabular_environment import NonTabularEnvironment
 from mdp import common
 from mdp.model.non_tabular.policy.action_value.action_value_policy import ActionValuePolicy
 from mdp.model.non_tabular.environment.non_tabular_state import NonTabularState
 from mdp.model.non_tabular.environment.non_tabular_action import NonTabularAction
+from mdp.model.non_tabular.value_function.state_action.linear_state_action_function import LinearStateActionFunction
 
 State = TypeVar('State', bound=NonTabularState)
 Action = TypeVar('Action', bound=NonTabularAction)
@@ -40,10 +43,14 @@ class NonTabularEGreedy(ActionValuePolicy[State, Action],
         # could also jit this if needed
         if utils.unit_uniform() > self.epsilon:
             index: int = utils.choose_argmax_index(action_values)
-            return possible_actions[index]
         else:
             index: int = utils.n_choice(len(possible_actions))
-            return possible_actions[index]
+
+        if self._Q.has_feature_matrix:
+            assert isinstance(self._Q, LinearStateActionFunction)
+            self._feature_vector = self._Q.feature_matrix[index]
+
+        return possible_actions[index]
 
     def get_probability(self, state: State, action: Action) -> float:
         """
@@ -58,6 +65,9 @@ class NonTabularEGreedy(ActionValuePolicy[State, Action],
         non_greedy_p = self.epsilon / len(possible_action_list)
 
         action_values: np.ndarray = self._Q.get_action_values(state, possible_action_list)
+        if self._Q.has_feature_matrix:
+            assert isinstance(self._Q, LinearStateActionFunction)
+            self._feature_vector = self._Q.feature_matrix[action_index]
         max_indices: np.ndarray = np.flatnonzero(action_values == np.max(action_values))
 
         if action_index in max_indices:

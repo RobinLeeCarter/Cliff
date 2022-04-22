@@ -1,8 +1,11 @@
 from __future__ import annotations
 from typing import Optional, TYPE_CHECKING, Callable, TypeVar, Generic
 
+import numpy as np
+
 if TYPE_CHECKING:
     from mdp.model.non_tabular.environment.non_tabular_environment import NonTabularEnvironment
+    from mdp.model.non_tabular.feature.base_feature import BaseFeature
 from mdp.model.non_tabular.agent.non_tabular_episode import NonTabularEpisode
 from mdp.model.non_tabular.policy.non_tabular_policy import NonTabularPolicy
 from mdp.model.base.agent.base_agent import BaseAgent
@@ -17,10 +20,13 @@ class NonTabularAgent(Generic[State, Action], BaseAgent):
     def __init__(self, environment: NonTabularEnvironment[State, Action]):
         super().__init__(environment)
         self._environment: NonTabularEnvironment[State, Action] = environment
-
         self._behaviour_policy: Optional[NonTabularPolicy[State, Action]] = None
-
         self._episode: Optional[NonTabularEpisode[State, Action]] = None
+
+        self.store_feature_vectors: bool = False
+        self.store_feature_trajectories: bool = False
+        self._feature: Optional[BaseFeature[State, Action]] = None
+        self._feature_vector: Optional[np.ndarray] = None
 
         # always refers to values for time-step t
         self.r: float = 0.0
@@ -45,6 +51,9 @@ class NonTabularAgent(Generic[State, Action], BaseAgent):
 
     def set_behaviour_policy(self, policy: NonTabularPolicy[State, Action]):
         self._behaviour_policy = policy
+
+    def set_feature(self, feature: BaseFeature[State, Action]):
+        self._feature = feature
 
     def set_step_callback(self, step_callback: Optional[Callable[[], bool]] = None):
         self._step_callback = step_callback
@@ -81,6 +90,8 @@ class NonTabularAgent(Generic[State, Action], BaseAgent):
             print("start episode...")
         self._episode = NonTabularEpisode(self._environment,
                                           self.gamma,
+                                          self.store_feature_vectors,
+                                          self.store_feature_trajectories,
                                           self._step_callback)
         self.t = 0
         self.state = self._environment.draw_start_state()
@@ -95,14 +106,23 @@ class NonTabularAgent(Generic[State, Action], BaseAgent):
         Note that the action is NOT applied yet.
         """
         self.action = self._behaviour_policy[self.state]
-        self._store_rsa()
+        self._feature_vector = self._get_feature_vector()
+        self._store_step()
 
-    # def assign_action(self, action: Action):
-    #     self.action = action
-    #     self._store_rsa()
+    def _get_feature_vector(self) -> np.ndarray:
+        feature_vector: Optional[np.ndarray]
+        if self.store_feature_vectors or self.store_feature_trajectories:
+            if self._behaviour_policy.feature_vector:
+                feature_vector = self._behaviour_policy.feature_vector
+            else:
+                self._feature.set_state_action(self.state, self.action)
+                feature_vector = self._feature.get_vector()
+        else:
+            feature_vector = None
+        return feature_vector
 
-    def _store_rsa(self):
-        self._episode.add_rsa(self.r, self.state, self.action)
+    def _store_step(self):
+        self._episode.add_step(self.r, self.state, self.action, self._feature_vector)
         if self._verbose:
             print(f"t={self.t}\t{self.state} \t {self.action}")
 
@@ -123,7 +143,7 @@ class NonTabularAgent(Generic[State, Action], BaseAgent):
 
         if self.state.is_terminal:
             # add terminating step here as should not select another action
-            self._store_rsa()
+            self._store_step()
 
     def _print_step(self):
         print(f"t={self.t} \t state = {self.state} \t action = {self.action}")

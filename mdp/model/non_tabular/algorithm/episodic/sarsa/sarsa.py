@@ -11,14 +11,13 @@ from mdp.model.non_tabular.algorithm.abstract.nontabular_episodic_online import 
 
 class Sarsa(NonTabularEpisodicOnline,
             algorithm_type=common.AlgorithmType.NT_SARSA,
-            algorithm_name="Sarsa"):
+            algorithm_name="Sarsa",
+            has_q=True):
     def __init__(self,
                  agent: NonTabularAgent,
                  algorithm_parameters: common.AlgorithmParameters
                  ):
         super().__init__(agent, algorithm_parameters)
-        # TODO: _requires_q should be a class variable
-        self._requires_q = True
         self._previous_q: float = 0.0
         self._previous_gradient: Optional[np.ndarray] = None
 

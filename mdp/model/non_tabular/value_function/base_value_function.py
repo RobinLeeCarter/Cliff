@@ -8,13 +8,17 @@ from mdp.model.non_tabular.feature.base_feature import BaseFeature
 
 class BaseValueFunction(ABC):
     type_registry: dict[common.ValueFunctionType, Type[BaseValueFunction]] = {}
+    has_feature_matrix: bool = False
 
     def __init_subclass__(cls,
                           value_function_type: Optional[common.ValueFunctionType] = None,
+                          has_feature_matrix: bool = False,
                           **kwargs):
         super().__init_subclass__(**kwargs)
         if value_function_type:
             BaseValueFunction.type_registry[value_function_type] = cls
+        if has_feature_matrix:
+            cls.has_feature_matrix = has_feature_matrix
 
     def __init__(self,
                  feature: Optional[BaseFeature],

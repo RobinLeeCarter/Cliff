@@ -32,9 +32,15 @@ class NonTabularPolicy(Generic[State, Action], BasePolicy, ABC):
         self._possible_actions: list[Action] = []
         self._all_action_count: int = len(self._environment.actions)
         self._probabilities: np.ndarray = np.zeros(shape=self._all_action_count, dtype=float)
+        # if policy choice can calculate this too then do else None
+        self._feature_vector: Optional[np.ndarray] = None
 
         self.requires_feature: bool = False
         self.requires_q: bool = False
+
+    @property
+    def feature_vector(self) -> Optional[np.ndarray]:
+        return self._feature_vector
 
     def set_feature(self, feature: BaseFeature[State, Action]):
         raise Exception("set_feature NotImplemented")
