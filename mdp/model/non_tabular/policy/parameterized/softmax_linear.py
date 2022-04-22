@@ -18,7 +18,8 @@ Action = TypeVar('Action', bound=NonTabularAction)
 
 class SoftmaxLinear(VectorParameterized[State, Action],
                     policy_type=common.PolicyType.NON_TABULAR_SOFTMAX_LINEAR,
-                    policy_name="softmax linear"):
+                    policy_name="softmax linear",
+                    has_feature_vector=True):
     def __init__(self,
                  environment: NonTabularEnvironment[State, Action],
                  policy_parameters: common.PolicyParameters,

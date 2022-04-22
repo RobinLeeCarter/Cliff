@@ -112,7 +112,7 @@ class NonTabularAgent(Generic[State, Action], BaseAgent):
     def _get_feature_vector(self) -> np.ndarray:
         feature_vector: Optional[np.ndarray]
         if self.store_feature_vectors or self.store_feature_trajectories:
-            if self._behaviour_policy.feature_vector:
+            if self._behaviour_policy.has_feature_vector and self._behaviour_policy.feature_vector is not None:
                 feature_vector = self._behaviour_policy.feature_vector
             else:
                 self._feature.set_state_action(self.state, self.action)

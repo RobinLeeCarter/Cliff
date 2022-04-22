@@ -17,7 +17,9 @@ State = TypeVar('State', bound=NonTabularState)
 Action = TypeVar('Action', bound=NonTabularAction)
 
 
-class VectorActorCritic(NonTabularPolicy[State, Action], ABC):
+class VectorActorCritic(NonTabularPolicy[State, Action], ABC,
+                        requires_feature=True,
+                        requires_q=True):
     def __init__(self,
                  environment: NonTabularEnvironment[State, Action],
                  policy_parameters: common.PolicyParameters
@@ -27,8 +29,6 @@ class VectorActorCritic(NonTabularPolicy[State, Action], ABC):
         self._initial_theta: float = policy_parameters.initial_theta
         self._theta: np.ndarray = np.empty(0, dtype=float)
         self._Q: Optional[StateActionFunction[State, Action]] = None
-        self.requires_feature = True
-        self.requires_q = True
 
     def set_feature(self, feature: BaseFeature[State, Action]):
         self._feature: BaseFeature[State, Action] = feature

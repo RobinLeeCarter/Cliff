@@ -16,7 +16,8 @@ State = TypeVar('State', bound=NonTabularState)
 Action = TypeVar('Action', bound=NonTabularAction)
 
 
-class VectorParameterized(NonTabularPolicy[State, Action], ABC):
+class VectorParameterized(NonTabularPolicy[State, Action], ABC,
+                          requires_feature=True):
     def __init__(self,
                  environment: NonTabularEnvironment,
                  policy_parameters: common.PolicyParameters,
@@ -26,7 +27,6 @@ class VectorParameterized(NonTabularPolicy[State, Action], ABC):
         self._has_sparse_feature: bool = False
         self._initial_theta: float = policy_parameters.initial_theta
         self._theta: np.ndarray = np.empty(0, dtype=float)
-        self.requires_feature = True
 
     def set_feature(self, feature: BaseFeature[State, Action]):
         self._feature: BaseFeature[State, Action] = feature

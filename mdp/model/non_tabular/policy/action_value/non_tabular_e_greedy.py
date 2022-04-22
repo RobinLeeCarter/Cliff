@@ -22,7 +22,8 @@ Action = TypeVar('Action', bound=NonTabularAction)
 
 class NonTabularEGreedy(ActionValuePolicy[State, Action],
                         policy_type=common.PolicyType.NON_TABULAR_E_GREEDY,
-                        policy_name="ε-greedy"):
+                        policy_name="ε-greedy",
+                        has_feature_vector=True):
     def __init__(self,
                  environment: NonTabularEnvironment[State, Action],
                  policy_parameters: common.PolicyParameters,

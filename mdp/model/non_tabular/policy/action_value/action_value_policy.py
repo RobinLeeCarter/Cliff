@@ -15,14 +15,14 @@ State = TypeVar('State', bound=NonTabularState)
 Action = TypeVar('Action', bound=NonTabularAction)
 
 
-class ActionValuePolicy(NonTabularPolicy[State, Action], ABC):
+class ActionValuePolicy(NonTabularPolicy[State, Action], ABC,
+                        requires_q=True):
     def __init__(self,
                  environment: NonTabularEnvironment[State, Action],
                  policy_parameters: common.PolicyParameters,
                  ):
         super().__init__(environment, policy_parameters)
         self._Q: Optional[StateActionFunction[State, Action]] = None
-        self.requires_q = True
 
     def set_state_action_function(self, state_action_function: StateActionFunction[State, Action]):
         self._Q: StateActionFunction[State, Action] = state_action_function

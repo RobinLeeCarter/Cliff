@@ -35,9 +35,6 @@ class NonTabularPolicy(Generic[State, Action], BasePolicy, ABC):
         # if policy choice can calculate this too then do else None
         self._feature_vector: Optional[np.ndarray] = None
 
-        self.requires_feature: bool = False
-        self.requires_q: bool = False
-
     @property
     def feature_vector(self) -> Optional[np.ndarray]:
         return self._feature_vector
