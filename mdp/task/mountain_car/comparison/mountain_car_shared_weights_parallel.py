@@ -25,7 +25,7 @@ class MountainCarSharedWeightsParallel(ComparisonBuilder,
                     alpha=0.5
                 ),
                 value_function_parameters=common.ValueFunctionParameters(
-                    value_function_type=common.ValueFunctionType.LINEAR_STATE_ACTION,
+                    value_function_type=common.ValueFunctionType.LINEAR_STATE_ACTION_SHARED_WEIGHTS,
                 )
             ),
             graph3d_values=self._graph3d_values

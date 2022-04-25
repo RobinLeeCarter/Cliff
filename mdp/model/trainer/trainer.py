@@ -11,7 +11,7 @@ from mdp.model.non_tabular.algorithm.batch_mixin.batch_feature_trajectories impo
 from mdp.model.non_tabular.algorithm.batch_mixin.batch_shared_weights import BatchSharedWeights
 from mdp.model.non_tabular.algorithm.batch_mixin.batch_trajectories import BatchTrajectories
 # from mdp.model.non_tabular.algorithm.episodic.sarsa.sarsa_delta_weights_parallel import SarsaDeltaWeightsParallel
-from mdp.model.non_tabular.value_function.state_action.linear_state_action_function import LinearStateActionFunction
+# from mdp.model.non_tabular.value_function.state_action.linear_state_action_function import LinearStateActionFunction
 from mdp.model.non_tabular.value_function.state_action.linear_state_action_shared_weights import \
     LinearStateActionSharedWeights
 from mdp.model.trainer.parallel_episodes import ParallelEpisodes
@@ -186,8 +186,8 @@ class Trainer:
             if self._algorithm.batch_episodes == common.BatchEpisodes.SHARED_WEIGHTS:
                 assert isinstance(self._parallel_episodes, ParallelEpisodesSharedWeights)
                 assert isinstance(self._algorithm, NonTabularEpisodic)
-                assert isinstance(self._algorithm.Q, LinearStateActionFunction)
-                q: LinearStateActionFunction = self._algorithm.Q
+                assert isinstance(self._algorithm.Q, LinearStateActionSharedWeights)
+                q: LinearStateActionSharedWeights = self._algorithm.Q
                 # noinspection PyTypeChecker
                 weights: np.ndarray = q.w
                 self._parallel_episodes.set_weights(weights)

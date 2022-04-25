@@ -1,6 +1,6 @@
 from __future__ import annotations
 from typing import Optional
-from multiprocessing import Lock
+from multiprocessing import RLock
 from multiprocessing.context import BaseContext
 from multiprocessing.shared_memory import SharedMemory
 from multiprocessing.managers import SharedMemoryManager, BaseManager
@@ -26,7 +26,7 @@ class SharedArrayWrapper:
         return self._door
 
     @property
-    def lock(self) -> Lock:
+    def lock(self) -> RLock:
         return self._door.lock
 
     def build(self,
@@ -42,7 +42,7 @@ class SharedArrayWrapper:
         np.copyto(src=source, dst=self._array)
 
         self._door = SharedArrayDoor(
-            lock=context.Lock(),
+            lock=context.RLock(),
             name=self._shared_memory.name,
             shape=source.shape,
             dtype=source.dtype

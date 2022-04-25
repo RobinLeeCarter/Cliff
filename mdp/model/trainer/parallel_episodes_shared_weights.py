@@ -37,7 +37,7 @@ class ParallelEpisodesSharedWeights:
         self._parallel_context_type: Optional[common.ParallelContextType] = self._settings.episode_multiprocessing
         self._processes: int = min(os.cpu_count(), self._settings.episodes_per_batch)
         # TODO: Remove
-        self._processes = 1
+        self._processes = 8
         self._episodes_per_process: int = int(math.ceil(self._settings.episodes_per_batch / self._processes))
         self._actual_episodes_per_batch: int = self._processes * self._episodes_per_process
 
@@ -56,12 +56,12 @@ class ParallelEpisodesSharedWeights:
 
         self._weights: Optional[np.ndarray] = None
 
+    def set_weights(self, weights: np.ndarray):
+        self._weights = weights
+
     @property
     def actual_episodes_per_batch(self) -> int:
         return self._actual_episodes_per_batch
-
-    def set_weights(self, weights: np.ndarray):
-        self._weights = weights
 
     def do_episode_batch(self, starting_episode: int):
         seeds: list[int] = utils.Rng.get_seeds(number_of_seeds=self._processes)

@@ -1,11 +1,11 @@
 from __future__ import annotations
 from dataclasses import dataclass
-from multiprocessing import Lock
+from multiprocessing import RLock
 
 
 @dataclass(frozen=True)
 class SharedArrayDoor:
-    lock: Lock
+    lock: RLock
     name: str
     shape: tuple[int]
     dtype: type
