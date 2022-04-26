@@ -91,11 +91,11 @@ def _train_wrapper(seed: int,
                    ) -> common.Result:
     utils.Rng.set_seed(seed)
     if profile:
+        print("profiling child process train()")
         import cProfile
         cProfile.runctx('_trainer.train(settings, return_result=True)',
                         globals(),
                         locals(),
                         '.profiles/train_child.prof')
-        print("train_child profiling")
     result: common.Result = _trainer.train(settings, return_result=True)
     return result

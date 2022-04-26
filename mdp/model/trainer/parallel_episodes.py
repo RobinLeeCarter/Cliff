@@ -144,6 +144,7 @@ def _do_episodes_wrapper(seed: int,
     global _trainer, _door
     utils.Rng.set_seed(seed)
     if profile:
+        print("profiling child process do_episodes()")
         import cProfile
         cProfile.runctx("""
 _trainer.do_episodes(episode_counter_start=episode_counter_start,
@@ -153,7 +154,6 @@ _trainer.do_episodes(episode_counter_start=episode_counter_start,
                         globals(),
                         locals(),
                         '.profiles/do_episodes_child.prof')
-        print("do_episodes_child profiling")
     result: common.Result = _trainer.do_episodes(episode_counter_start=episode_counter_start,
                                                  episodes_to_do=episodes_to_do,
                                                  shared_weights_door=_door,

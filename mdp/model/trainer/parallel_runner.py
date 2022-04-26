@@ -100,11 +100,11 @@ def _do_run_wrapper(seed: int,
                     ) -> common.Result:
     utils.Rng.set_seed(seed)
     if profile:
+        print("profiling child process do_run()")
         import cProfile
         cProfile.runctx('_trainer.do_run(run_counter, result_parameters)',
                         globals(),
                         locals(),
                         '.profiles/do_runs_child.prof')
-        print("do_runs_child profiling")
     result: common.Result = _trainer.do_run(run_counter, result_parameters)
     return result
