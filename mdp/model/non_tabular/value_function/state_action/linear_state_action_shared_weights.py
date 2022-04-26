@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import os
 from typing import TYPE_CHECKING, TypeVar, Optional
 from multiprocessing import RLock
 
@@ -40,7 +39,6 @@ class LinearStateActionSharedWeights(LinearStateActionFunction[State, Action],
 
     def get_action_values(self, state: State, actions: list[Action]) -> np.ndarray:
         self._feature_matrix: np.ndarray = self._feature.get_matrix(state, actions)
-        print(f"{os.getpid()=} {self._w_lock=}\n")
         with self._w_lock:
             values_array: np.ndarray = self._feature.matrix_product(self._feature_matrix, self.w)
         # if self._w_lock:
