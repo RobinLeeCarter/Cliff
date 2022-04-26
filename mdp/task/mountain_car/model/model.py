@@ -65,7 +65,7 @@ class Model(NonTabularModel[State, Action, Environment],
                 )
                 # self.environment.build_possible_actions(state, build_array=False)
                 # possible_actions: list[Action] = self.environment.possible_actions_list
-                action_values: np.ndarray = q.get_action_values2(state, possible_actions)
+                action_values: np.ndarray = q.get_action_values(state, possible_actions)
                 max_action_value: float = np.max(action_values)
                 z_values[y, x] = -max_action_value
 

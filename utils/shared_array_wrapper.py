@@ -16,6 +16,8 @@ class SharedArrayWrapper:
         self._shared_memory: Optional[SharedMemory] = None
         self._array: Optional[np.ndarray] = None
         self._door: Optional[SharedArrayDoor] = None
+        self._lock: Optional[RLock] = None
+        self._counter: int = 0
 
     @property
     def array(self) -> np.ndarray:
@@ -27,7 +29,7 @@ class SharedArrayWrapper:
 
     @property
     def lock(self) -> RLock:
-        return self._door.lock
+        return self._lock
 
     def build(self,
               context: BaseContext,
@@ -47,15 +49,29 @@ class SharedArrayWrapper:
             shape=source.shape,
             dtype=source.dtype
         )
+        self._lock = self._door.lock
         return self
 
     def attach(self, shared_array_door: SharedArrayDoor) -> SharedArrayWrapper:
         self._door = shared_array_door
+        self._lock = self._door.lock
         self._shared_memory = SharedMemory(self._door.name)
         self._array: np.ndarray = np.ndarray(shape=self._door.shape,
                                              dtype=self._door.dtype,
                                              buffer=self._shared_memory.buf)
         return self
+
+    def acquire(self):
+        if self._lock:
+            if self._counter == 0:
+                self._lock.acquire()
+            self._counter += 1
+
+    def release(self):
+        if self._lock:
+            if self._counter == 1:
+                self._lock.release()
+            self._counter -= 1
 
     def copy_back(self):
         np.copyto(src=self._array, dst=self._source)
