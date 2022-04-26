@@ -13,7 +13,6 @@ class Rng:
     """
     _rng: np.random.Generator
     max_val: int = np.iinfo(np.int32).max
-    _child_seed_set: bool = False
 
     @classmethod
     def get(cls) -> np.random.Generator:
@@ -28,12 +27,6 @@ class Rng:
     def set_seed(cls, seed: int):
         cls._rng = np.random.default_rng(seed)
         cls._set_others()
-
-    @classmethod
-    def set_child_seed_if_not_set_already_for_pid(cls, seed: int):
-        if not cls._child_seed_set:
-            cls.set_seed(seed + os.getpid())
-            cls._child_seed_set = True
 
     @classmethod
     def _set_others(cls):
