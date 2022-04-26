@@ -13,7 +13,7 @@ class CliffAlphaStart(ComparisonBuilder,
             environment_parameters=EnvironmentParameters(),
             comparison_settings=common.Settings(
                 runs=10,
-                # runs_multiprocessing=common.ParallelContextType.FORK_GLOBAL,
+                # runs_multiprocessing=common.ParallelContextType.FORK,
                 training_episodes=100,
                 # display_every_step=True,
             ),

@@ -44,7 +44,7 @@ class ParallelEpisodes:
             self._recorder = self._trainer.breakdown.recorder
 
         # if self._parallel_context_type is None it will fail here
-        context_str = common.parallel_context_str[self._parallel_context_type]
+        context_str: str = common.parallel_context_str[self._parallel_context_type]
         self._context: mp.context.BaseContext = mp.get_context(context_str)
 
         self._weights_to_share: Optional[np.ndarray] = None
@@ -93,10 +93,6 @@ class ParallelEpisodes:
                 shared_weights.copy_back()
 
         self._unpack_results()
-
-        # the agent is already set up in trainer.trainer so just apply the final result to it
-        # TODO: should this be commented out or pass in function?
-        # self._trainer.algorithm.apply_result(result=self._results[-1])
 
     def _get_result_parameter_list(self) -> list[common.ResultParameters]:
         rp_norm: common.ResultParameters = common.ResultParameters(
@@ -154,9 +150,9 @@ def _do_episodes_wrapper(seed: int,
         import cProfile
         cProfile.runctx("""
 result = _trainer.do_episodes(episode_counter_start=episode_counter_start,
-                                      episodes_to_do=episodes_to_do,
-                                      shared_weights_door=_door,
-                                      result_parameters=result_parameters)""",
+                              episodes_to_do=episodes_to_do,
+                              shared_weights_door=_door,
+                              result_parameters=result_parameters)""",
                         globals(),
                         locals(),
                         'do_episodes_child.prof')

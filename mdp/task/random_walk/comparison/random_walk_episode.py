@@ -15,7 +15,7 @@ class AlgorithmParameters(common.AlgorithmParameters):
 @dataclass
 class Settings(common.Settings):
     runs: int = 100
-    # runs_multiprocessing: common.ParallelContextType =common.ParallelContextType.FORK_GLOBAL
+    # runs_multiprocessing: common.ParallelContextType =common.ParallelContextType.FORK
     training_episodes: int = 100
     policy_parameters: common.PolicyParameters = common.PolicyParameters(
         policy_type=common.PolicyType.TABULAR_NONE

@@ -1,4 +1,6 @@
 from __future__ import annotations
+
+import os
 from typing import TYPE_CHECKING, Optional
 
 import multiprocessing as mp
@@ -17,9 +19,12 @@ _trainer: Trainer
 class ParallelTrainer:
     def __init__(self, trainer: Trainer, parallel_context_type: common.ParallelContextType):
         self._trainer: Trainer = trainer
-        self._parallel_context_type: common.ParallelContextType = parallel_context_type
         # must be disabled for multi-processor
         self._trainer.disable_step_callback()
+
+        self._profile_child: bool = False
+        self._parallel_context_type: common.ParallelContextType = parallel_context_type
+        self._processes: int = os.cpu_count()
 
         self._settings_list: list[common.Settings] = []
         self._results: list[common.Result] = []
@@ -27,28 +32,28 @@ class ParallelTrainer:
         if self._trainer.breakdown:
             self._recorder = self._trainer.breakdown.recorder
 
-        context_str = common.parallel_context_str[self._parallel_context_type]
+        context_str: str = common.parallel_context_str[self._parallel_context_type]
         self._context: mp.context.BaseContext = mp.get_context(context_str)
-        self._use_global_trainer: bool = (self._parallel_context_type == common.ParallelContextType.FORK_GLOBAL)
-        if self._use_global_trainer:
-            global _trainer
-            _trainer = self._trainer
 
     def train(self, settings_list: list[common.Settings]):
         self._settings_list = settings_list
-        seeds: list[int] = utils.Rng.get_seeds(number_of_seeds=len(self._settings_list))
+        settings_count = len(self._settings_list)
+        seeds: list[int] = utils.Rng.get_seeds(number_of_seeds=settings_count)
+        profiles: list[bool] = [False for _ in range(settings_count)]
+        if self._profile_child:
+            profiles[0] = True
 
         # have final settings return everything (if used in case of V and Q)
         self._set_result_parameters()
 
-        with self._context.Pool() as pool:
-            if self._use_global_trainer:
-                args = zip(seeds, self._settings_list)
-                self._results = pool.starmap(_global_train_wrapper, args)
-            else:
-                args = zip(itertools.repeat(self._trainer), seeds, self._settings_list)
-                # self._results = pool.map(_train_map_wrapper, args)
-                self._results = pool.starmap(_train_starmap_wrapper, args)
+        with self._context.Pool(processes=self._processes,
+                                initializer=_init,
+                                initargs=(self._trainer, )
+                                ) as pool:
+            args = zip(seeds,
+                       profiles,
+                       self._settings_list)
+            self._results = pool.starmap(_train_wrapper, args)
 
         self._unpack_results()
 
@@ -57,16 +62,16 @@ class ParallelTrainer:
         self._trainer.algorithm.apply_result(result=self._results[-1])
 
     def _set_result_parameters(self):
-        final_settings = self._settings_list[-1]
-        for settings in self._settings_list:
-            rp: common.ResultParameters = common.ResultParameters(
+        for settings in self._settings_list[:-1]:
+            settings.result_parameters = common.ResultParameters(
                 return_recorder=True,
             )
-            if settings == final_settings:
-                rp.return_policy_vector = True
-                rp.return_v_vector = True   # will return only if exists
-                rp.return_q_matrix = True   # will return only if exists
-            settings.result_parameters = rp
+        self._settings_list[-1].result_parameters = common.ResultParameters(
+            return_recorder=True,
+            return_policy_vector=True,
+            return_v_vector=True,  # will return only if exists
+            return_q_matrix=True   # will return only if exists
+            )
 
     def _unpack_results(self):
         # combine the recorders returned by the processes into a single recorder (self._recorder)
@@ -77,18 +82,23 @@ class ParallelTrainer:
                 self._recorder.add_recorder(recorder)
 
 
-# Avoids pickling trainer?
-def _global_train_wrapper(seed: int, settings: common.Settings) -> common.Result:
+def _init(trainer: Trainer):
+    global _trainer
+    _trainer = trainer
+
+
+def _train_wrapper(seed: int,
+                   profile: bool,
+                   settings: common.Settings
+                   ) -> common.Result:
     utils.Rng.set_seed(seed)
-    return _trainer.train(settings, return_result=True)
-
-
-def _train_starmap_wrapper(trainer: Trainer, seed: int, settings: common.Settings) -> common.Result:
-    utils.Rng.set_seed(seed)
-    return trainer.train(settings, return_result=True)
-
-
-# def _train_map_wrapper(train_tuple: tuple[Trainer, common.Settings]) -> common.Result:
-#     # created so that chucksize can be set in map
-#     trainer, settings = train_tuple
-#     return trainer.train(settings)
+    result: Optional[common.Result] = None
+    if profile:
+        import cProfile
+        cProfile.runctx('result = _trainer.train(settings, return_result=True)',
+                        globals(),
+                        locals(),
+                        'train_child.prof')
+    else:
+        result = _trainer.train(settings, return_result=True)
+    return result

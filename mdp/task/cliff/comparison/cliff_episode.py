@@ -42,7 +42,7 @@ class CliffEpisode(ComparisonBuilder,
                     alpha=0.5
                 )),
             ],
-            # settings_list_multiprocessing=common.ParallelContextType.SPAWN,
+            # settings_list_multiprocessing=common.ParallelContextType.FORK,
             graph2d_values=common.Graph2DValues(
                 has_grid=True,
                 has_legend=True,
