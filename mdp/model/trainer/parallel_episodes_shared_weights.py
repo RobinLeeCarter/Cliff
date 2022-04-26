@@ -16,7 +16,6 @@ from mdp.model.non_tabular.algorithm.batch_mixin.batch_delta_weights import Batc
 from mdp.model.non_tabular.algorithm.batch_mixin.batch_feature_trajectories import BatchFeatureTrajectories
 from mdp.model.non_tabular.algorithm.batch_mixin.batch_trajectories import BatchTrajectories
 
-
 if TYPE_CHECKING:
     from mdp.model.trainer.trainer import Trainer
     from mdp.model.breakdown.recorder import Recorder
@@ -36,7 +35,6 @@ class ParallelEpisodesSharedWeights:
         # settings.result_parameters.return_cum_timestep = True
         self._parallel_context_type: Optional[common.ParallelContextType] = self._settings.episode_multiprocessing
         self._processes: int = min(os.cpu_count(), self._settings.episodes_per_batch)
-        # TODO: Remove
         self._processes = 8
         self._episodes_per_process: int = int(math.ceil(self._settings.episodes_per_batch / self._processes))
         self._actual_episodes_per_batch: int = self._processes * self._episodes_per_process
@@ -50,9 +48,9 @@ class ParallelEpisodesSharedWeights:
         context_str = common.parallel_context_str[self._parallel_context_type]
         self._context: mp.context.BaseContext = mp.get_context(context_str)
         self._use_global_trainer: bool = (self._parallel_context_type == common.ParallelContextType.FORK_GLOBAL)
-        if self._use_global_trainer:
-            global _trainer
-            _trainer = self._trainer
+        # if self._use_global_trainer:
+        #     global _trainer
+        #     _trainer = self._trainer
 
         self._weights: Optional[np.ndarray] = None
 
@@ -75,7 +73,6 @@ class ParallelEpisodesSharedWeights:
         assert isinstance(algorithm, BatchEpisodic)
         algorithm.start_episodes()
 
-        # TODO: possibly don't want to do this for each batch
         # TODO: make generic enough to be combined with parallel_episodes.py
         with SharedMemoryManager() as shared_memory_manager:
             shared_weights: SharedArrayWrapper = \
@@ -83,7 +80,7 @@ class ParallelEpisodesSharedWeights:
 
             with self._context.Pool(processes=self._processes,
                                     initializer=_init,
-                                    initargs=(shared_weights.door, )) as pool:
+                                    initargs=(self._trainer, shared_weights.door)) as pool:
                 # TODO: pass seeds in init_args also
                 if self._use_global_trainer:
                     args = zip(seeds,
@@ -141,37 +138,52 @@ class ParallelEpisodesSharedWeights:
         # self._trainer.max_cum_timestep = max(result.cum_timestep for result in self._results)
 
 
-def _init(door: SharedArrayDoor):
-    global _door
+def _init(trainer: Trainer, door: SharedArrayDoor):
+    global _trainer, _door
+    _trainer = trainer
     _door = door
 
 
 def _global_do_episodes_wrapper(seed: int,
                                 episode_counter_start: int,
                                 episodes_to_do: int,
-                                result_parameters: common.ResultParameters)\
+                                result_parameters: common.ResultParameters) \
         -> common.Result:
-    global _door
+    global _door, _trainer
     utils.Rng.set_seed(seed)
-    return _trainer.do_episodes(episode_counter_start=episode_counter_start,
-                                episodes_to_do=episodes_to_do,
-                                shared_weights_door=_door,
-                                result_parameters=result_parameters)
+    profile = (episode_counter_start == -1)
+    result: Optional[common.Result] = None
+    if profile:
+        import cProfile
+        cProfile.runctx("""
+result: common.Result = _trainer.do_episodes(episode_counter_start=episode_counter_start,
+                                             episodes_to_do=episodes_to_do,
+                                             shared_weights_door=_door,
+                                             result_parameters=result_parameters)""",
+                        globals(),
+                        locals(),
+                        'do_episodes_child.prof')
+    else:
+        result: common.Result = _trainer.do_episodes(episode_counter_start=episode_counter_start,
+                                                     episodes_to_do=episodes_to_do,
+                                                     shared_weights_door=_door,
+                                                     result_parameters=result_parameters)
+    return result
 
 
 def _do_episodes_wrapper(trainer: Trainer,
                          seed: int,
                          episode_counter_start: int,
                          episodes_to_do: int,
-                         result_parameters: common.ResultParameters)\
+                         result_parameters: common.ResultParameters) \
         -> common.Result:
     global _door
     utils.Rng.set_seed(seed)
-    return trainer.do_episodes(episode_counter_start=episode_counter_start,
-                               episodes_to_do=episodes_to_do,
-                               shared_weights_door=_door,
-                               result_parameters=result_parameters)
-
+    result: common.Result = trainer.do_episodes(episode_counter_start=episode_counter_start,
+                                                episodes_to_do=episodes_to_do,
+                                                shared_weights_door=_door,
+                                                result_parameters=result_parameters)
+    return result
 
 # def _train_map_wrapper(train_tuple: tuple[Trainer, common.Settings]) -> common.Result:
 #     # created so that chucksize can be set in map
