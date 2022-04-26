@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import os
+
 import numpy as np
 import random
 from utils import numba_random
@@ -11,6 +13,7 @@ class Rng:
     """
     _rng: np.random.Generator
     max_val: int = np.iinfo(np.int32).max
+    _child_seed_set: bool = False
 
     @classmethod
     def get(cls) -> np.random.Generator:
@@ -27,6 +30,12 @@ class Rng:
         cls._set_others()
 
     @classmethod
+    def set_child_seed_if_not_set_already_for_pid(cls, seed: int):
+        if not cls._child_seed_set:
+            cls.set_seed(seed + os.getpid())
+            cls._child_seed_set = True
+
+    @classmethod
     def _set_others(cls):
         seeds = cls._rng.integers(low=0, high=cls.max_val, size=4)
         # np.random.seed(os.getpid() * (time.time_ns() % 12345) % 1234556789)
@@ -38,7 +47,12 @@ class Rng:
     @classmethod
     def get_seeds(cls, number_of_seeds: int) -> list[int]:
         # noinspection PyTypeChecker
-        return cls._rng.integers(low=0, high=cls.max_val, size=number_of_seeds).tolist()
+        return cls._rng.integers(low=0, high=cls.max_val//2, size=number_of_seeds).tolist()
+
+    @classmethod
+    def get_seed(cls) -> int:
+        # noinspection PyTypeChecker
+        return cls._rng.integers(low=0, high=cls.max_val//2, size=1)[0]
 
 
 Rng.set_by_entropy()

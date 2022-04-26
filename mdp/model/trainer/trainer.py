@@ -10,13 +10,9 @@ from mdp.model.non_tabular.algorithm.batch_mixin.batch_delta_weights import Batc
 from mdp.model.non_tabular.algorithm.batch_mixin.batch_feature_trajectories import BatchFeatureTrajectories
 from mdp.model.non_tabular.algorithm.batch_mixin.batch_shared_weights import BatchSharedWeights
 from mdp.model.non_tabular.algorithm.batch_mixin.batch_trajectories import BatchTrajectories
-# from mdp.model.non_tabular.algorithm.episodic.sarsa.sarsa_delta_weights_parallel import SarsaDeltaWeightsParallel
-# from mdp.model.non_tabular.value_function.state_action.linear_state_action_function import LinearStateActionFunction
 from mdp.model.non_tabular.value_function.state_action.linear_state_action_shared_weights import \
     LinearStateActionSharedWeights
 from mdp.model.trainer.parallel_episodes import ParallelEpisodes
-# from mdp.model.trainer.parallel_episodes_w import ParallelEpisodesW
-from mdp.model.trainer.parallel_episodes_shared_weights import ParallelEpisodesSharedWeights
 
 if TYPE_CHECKING:
     from mdp.model.base.agent.base_agent import BaseAgent
@@ -66,7 +62,7 @@ class Trainer:
             self._value_function_factory: ValueFunctionFactory = ValueFunctionFactory()
 
         self._parallel_runner: Optional[ParallelRunner] = None
-        self._parallel_episodes: Optional[ParallelEpisodes | ParallelEpisodesSharedWeights] = None
+        self._parallel_episodes: Optional[ParallelEpisodes] = None
 
         self.run_counter: int = 0
         self.episode_counter: int = 0
@@ -111,10 +107,7 @@ class Trainer:
                     and self._algorithm.batch_episodes \
                     and not daemon:
                 # do episodes in parallel
-                if self._algorithm.batch_episodes == common.BatchEpisodes.SHARED_WEIGHTS:
-                    self._parallel_episodes = ParallelEpisodesSharedWeights(self)
-                else:
-                    self._parallel_episodes = ParallelEpisodes(self)
+                self._parallel_episodes = ParallelEpisodes(self)
             else:
                 # do episodes in serial (with batch determined by self._algorithm.batch_episodes)
                 self._parallel_episodes = None
@@ -184,13 +177,14 @@ class Trainer:
         if self._parallel_episodes:
             # parallel episodes in batches
             if self._algorithm.batch_episodes == common.BatchEpisodes.SHARED_WEIGHTS:
-                assert isinstance(self._parallel_episodes, ParallelEpisodesSharedWeights)
+                # TODO: generalise this
+                assert isinstance(self._parallel_episodes, ParallelEpisodes)
                 assert isinstance(self._algorithm, NonTabularEpisodic)
                 assert isinstance(self._algorithm.Q, LinearStateActionSharedWeights)
                 q: LinearStateActionSharedWeights = self._algorithm.Q
                 # noinspection PyTypeChecker
                 weights: np.ndarray = q.w
-                self._parallel_episodes.set_weights(weights)
+                self._parallel_episodes.set_weights_to_share(weights)
 
             actual_episodes_per_batch: int = self._parallel_episodes.actual_episodes_per_batch
             for first_batch_episode in range(1, settings.training_episodes + 1, actual_episodes_per_batch):

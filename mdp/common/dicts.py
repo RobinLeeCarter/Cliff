@@ -10,8 +10,7 @@ policy_name: dict[PolicyType, str] = {
 }
 
 parallel_context_str: dict[ParallelContextType, str] = {
-    ParallelContextType.FORK_GLOBAL: 'fork',
-    ParallelContextType.FORK_PICKLE: 'fork',
+    ParallelContextType.FORK: 'fork',
     ParallelContextType.SPAWN: 'spawn',
     ParallelContextType.FORK_SERVER: 'forkserver'
 }

@@ -76,7 +76,7 @@ class RandomWalkEpisode(ComparisonBuilder,
                     )
                 ),
             ],
-            settings_list_multiprocessing=common.ParallelContextType.FORK_GLOBAL,
+            settings_list_multiprocessing=common.ParallelContextType.FORK,
             graph2d_values=common.Graph2DValues(
                 has_grid=True,
                 has_legend=True,
