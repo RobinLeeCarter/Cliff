@@ -144,23 +144,21 @@ def _do_episodes_wrapper(seed: int,
         -> common.Result:
     global _trainer, _door
     utils.Rng.set_seed(seed)
-
-    result: Optional[common.Result] = None
     if profile:
         import cProfile
         cProfile.runctx("""
-result = _trainer.do_episodes(episode_counter_start=episode_counter_start,
-                              episodes_to_do=episodes_to_do,
-                              shared_weights_door=_door,
-                              result_parameters=result_parameters)""",
+_trainer.do_episodes(episode_counter_start=episode_counter_start,
+                     episodes_to_do=episodes_to_do,
+                     shared_weights_door=_door,
+                     result_parameters=result_parameters)""",
                         globals(),
                         locals(),
                         'do_episodes_child.prof')
-    else:
-        result = _trainer.do_episodes(episode_counter_start=episode_counter_start,
-                                      episodes_to_do=episodes_to_do,
-                                      shared_weights_door=_door,
-                                      result_parameters=result_parameters)
+        print("do_episodes_child profiling")
+    result: common.Result = _trainer.do_episodes(episode_counter_start=episode_counter_start,
+                                                 episodes_to_do=episodes_to_do,
+                                                 shared_weights_door=_door,
+                                                 result_parameters=result_parameters)
     return result
 
 # def _train_map_wrapper(train_tuple: tuple[Trainer, common.Settings]) -> common.Result:

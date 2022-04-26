@@ -4,7 +4,6 @@ import os
 from typing import TYPE_CHECKING, Optional
 
 import multiprocessing as mp
-import itertools
 
 import utils
 from mdp import common
@@ -22,7 +21,7 @@ class ParallelTrainer:
         # must be disabled for multi-processor
         self._trainer.disable_step_callback()
 
-        self._profile_child: bool = False
+        self._profile_child: bool = True
         self._parallel_context_type: common.ParallelContextType = parallel_context_type
         self._processes: int = os.cpu_count()
 
@@ -92,13 +91,12 @@ def _train_wrapper(seed: int,
                    settings: common.Settings
                    ) -> common.Result:
     utils.Rng.set_seed(seed)
-    result: Optional[common.Result] = None
     if profile:
         import cProfile
-        cProfile.runctx('result = _trainer.train(settings, return_result=True)',
+        cProfile.runctx('_trainer.train(settings, return_result=True)',
                         globals(),
                         locals(),
                         'train_child.prof')
-    else:
-        result = _trainer.train(settings, return_result=True)
+        print("train_child profiling")
+    result: common.Result = _trainer.train(settings, return_result=True)
     return result

@@ -10,7 +10,7 @@ from mdp.task.cliff.model.environment_parameters import EnvironmentParameters
 @dataclass
 class Settings(common.Settings):
     runs: int = 50
-    runs_multiprocessing: common.ParallelContextType = common.ParallelContextType.FORK
+    # runs_multiprocessing: common.ParallelContextType = common.ParallelContextType.FORK
     training_episodes: int = 500
     # display_every_step: bool = True
 
@@ -42,7 +42,7 @@ class CliffEpisode(ComparisonBuilder,
                     alpha=0.5
                 )),
             ],
-            # settings_list_multiprocessing=common.ParallelContextType.FORK,
+            settings_list_multiprocessing=common.ParallelContextType.FORK,
             graph2d_values=common.Graph2DValues(
                 has_grid=True,
                 has_legend=True,
