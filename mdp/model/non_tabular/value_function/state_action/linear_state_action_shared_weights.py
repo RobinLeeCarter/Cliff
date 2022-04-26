@@ -1,7 +1,7 @@
 from __future__ import annotations
-
-from multiprocessing import Lock
 from typing import TYPE_CHECKING, TypeVar, Optional
+from multiprocessing import RLock
+from contextlib import contextmanager
 
 import numpy as np
 
@@ -19,6 +19,19 @@ State = TypeVar('State', bound=NonTabularState)
 Action = TypeVar('Action', bound=NonTabularAction)
 
 
+@contextmanager
+def optional_rlock(rlock: Optional[RLock]):
+    # Code to acquire resource
+    if rlock:
+        rlock.acquire()
+    try:
+        yield rlock
+    finally:
+        # Code to release resource
+        if rlock:
+            rlock.release()
+
+
 class LinearStateActionSharedWeights(LinearStateActionFunction[State, Action],
                                      value_function_type=common.ValueFunctionType.LINEAR_STATE_ACTION_SHARED_WEIGHTS,
                                      shared_weights=True):
@@ -31,7 +44,7 @@ class LinearStateActionSharedWeights(LinearStateActionFunction[State, Action],
         :param value_function_parameters: how the function should be set up such as initial value
         """
         super().__init__(feature, value_function_parameters)
-        self._w_lock: Optional[Lock] = None
+        self._w_lock: Optional[RLock] = None
 
     def attach_to_shared_weights(self, shared_w: SharedArrayWrapper):
         self._w_lock = shared_w.lock
@@ -39,11 +52,13 @@ class LinearStateActionSharedWeights(LinearStateActionFunction[State, Action],
 
     def get_action_values(self, state: State, actions: list[Action]) -> np.ndarray:
         self._feature_matrix: np.ndarray = self._feature.get_matrix(state, actions)
-        if self._w_lock:
-            with self._w_lock:
-                values_array: np.ndarray = self._feature.matrix_product(self._feature_matrix, self.w)
-        else:
+        with optional_rlock(self._w_lock):
             values_array: np.ndarray = self._feature.matrix_product(self._feature_matrix, self.w)
+        # if self._w_lock:
+        #     with self._w_lock:
+        #         values_array: np.ndarray = self._feature.matrix_product(self._feature_matrix, self.w)
+        # else:
+        #     values_array: np.ndarray = self._feature.matrix_product(self._feature_matrix, self.w)
         return values_array
 
     # def get_action_values3(self, state: State, actions: list[Action]) -> np.ndarray:
@@ -51,24 +66,30 @@ class LinearStateActionSharedWeights(LinearStateActionFunction[State, Action],
     #     return values_array
 
     def calc_value(self, feature_vector: np.ndarray) -> float:
-        if self._w_lock:
-            with self._w_lock:
-                value: float = self._feature.dot_product(feature_vector, self.w)
-        else:
+        with optional_rlock(self._w_lock):
             value: float = self._feature.dot_product(feature_vector, self.w)
+        # if self._w_lock:
+        #     with self._w_lock:
+        #         value: float = self._feature.dot_product(feature_vector, self.w)
+        # else:
+        #     value: float = self._feature.dot_product(feature_vector, self.w)
         return value
 
     # Weights
     def update_weights(self, delta_w: np.ndarray):
-        if self._w_lock:
-            with self._w_lock:
-                self.w += delta_w
-        else:
+        with optional_rlock(self._w_lock):
             self.w += delta_w
+        # if self._w_lock:
+        #     with self._w_lock:
+        #         self.w += delta_w
+        # else:
+        #     self.w += delta_w
 
     def update_weights_sparse(self, indices: np.ndarray, delta_w: float):
-        if self._w_lock:
-            with self._w_lock:
-                self.w[indices] += delta_w
-        else:
+        with optional_rlock(self._w_lock):
             self.w[indices] += delta_w
+        # if self._w_lock:
+        #     with self._w_lock:
+        #         self.w[indices] += delta_w
+        # else:
+        #     self.w[indices] += delta_w

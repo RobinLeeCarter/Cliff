@@ -20,7 +20,7 @@ comparison_type: common.ComparisonType = common.ComparisonType.MOUNTAIN_CAR_SHAR
 
 
 def main():
-    Application(comparison_type=comparison_type, profile=True)
+    Application(comparison_type=comparison_type, profile=False)
 
 
 if __name__ == '__main__':

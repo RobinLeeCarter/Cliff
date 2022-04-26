@@ -16,8 +16,8 @@ class MountainCarSharedWeightsParallel(ComparisonBuilder,
         return Comparison(
             environment_parameters=self._environment_parameters,
             comparison_settings=Settings(
-                training_episodes=10000,
-                episodes_per_batch=10000,
+                training_episodes=1000,
+                episodes_per_batch=1000,
                 episode_print_frequency=100,
                 episode_multiprocessing=common.ParallelContextType.FORK,
                 algorithm_parameters=common.AlgorithmParameters(

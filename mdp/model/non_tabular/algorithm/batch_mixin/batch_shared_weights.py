@@ -1,6 +1,6 @@
 from __future__ import annotations
 from abc import ABC
-from multiprocessing import Lock
+from multiprocessing import RLock
 from typing import TYPE_CHECKING, Optional
 
 
@@ -21,11 +21,11 @@ class BatchSharedWeights(BatchEpisodic, ABC,
                  ):
         super().__init__(agent, algorithm_parameters)
         self._shared_w: Optional[utils.SharedArrayWrapper] = None
-        self._w_lock: Optional[Lock] = None
+        self._w_lock: Optional[RLock] = None
 
     def attach_to_shared_weights(self, shared_weights_door: utils.SharedArrayDoor):
         self._shared_w = utils.SharedArrayWrapper().attach(shared_weights_door)
-        self._w_lock: Lock = self._shared_w.lock
+        self._w_lock: RLock = self._shared_w.lock
         # TODO: use self.Q.has_w
         assert isinstance(self.Q, LinearStateActionFunction)
         self.Q.w = self._shared_w.array
