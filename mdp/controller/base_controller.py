@@ -40,10 +40,10 @@ class BaseController(Generic[Model, View]):
         self._view.build(self._comparison)
 
     @final
-    def run(self, profile: bool):
-        if profile:
+    def run(self):
+        if self._comparison.profile:
             import cProfile
-            cProfile.runctx('self._model.run()', globals(), locals(), 'model_run.prof')
+            cProfile.runctx('self._model.run()', globals(), locals(), '.profiles/model_run.prof')
         else:
             self._model.run()
 

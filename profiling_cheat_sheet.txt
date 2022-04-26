@@ -2,7 +2,7 @@ kernprof -l -v main.py
 
 python -m line_profiler Profiles\main.py.lprof
 
-snakeviz model_run.prof
-snakeviz train_child.prof
-snakeviz do_runs_child.prof
-snakeviz do_episodes_child.prof
+snakeviz .profiles/model_run.prof
+snakeviz .profiles/train_child.prof
+snakeviz .profiles/do_runs_child.prof
+snakeviz .profiles/do_episodes_child.prof

@@ -69,6 +69,7 @@ class BaseModel(Generic[Environment, Agent], ABC):
             agent=self.agent,
             breakdown=self.breakdown,
             model_step_callback=self._display_step,
+            profile=self._comparison.profile,
             verbose=False
         )
         if self.breakdown:

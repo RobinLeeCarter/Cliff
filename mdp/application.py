@@ -37,6 +37,8 @@ class Application:
 
         if comparison_type:
             self._comparison: common.Comparison = self._comparison_factory.create(comparison_type)
+            if self._profile:
+                self._comparison.profile = True
             self.build(self._comparison)
             if auto_run:
                 self.run()
@@ -50,5 +52,5 @@ class Application:
         self.controller.build(comparison)
 
     def run(self):
-        self.controller.run(self._profile)
+        self.controller.run()
         self.controller.output()

@@ -42,6 +42,7 @@ class Trainer:
                  agent: BaseAgent,
                  breakdown: Optional[BaseBreakdown],
                  model_step_callback: Optional[Callable[[Optional[BaseEpisode]], None]] = None,
+                 profile: bool = False,
                  verbose: bool = False
                  ):
         self._agent: BaseAgent = agent
@@ -50,6 +51,7 @@ class Trainer:
         self.settings: Optional[common.Settings] = None
 
         self._model_step_callback: Optional[Callable[[Optional[BaseEpisode]], None]] = model_step_callback
+        self.profile = profile
         self._verbose = verbose
         self._cont: bool = True
 

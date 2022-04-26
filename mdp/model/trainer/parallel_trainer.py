@@ -21,7 +21,6 @@ class ParallelTrainer:
         # must be disabled for multi-processor
         self._trainer.disable_step_callback()
 
-        self._profile_child: bool = True
         self._parallel_context_type: common.ParallelContextType = parallel_context_type
         self._processes: int = os.cpu_count()
 
@@ -39,7 +38,7 @@ class ParallelTrainer:
         settings_count = len(self._settings_list)
         seeds: list[int] = utils.Rng.get_seeds(number_of_seeds=settings_count)
         profiles: list[bool] = [False for _ in range(settings_count)]
-        if self._profile_child:
+        if self._trainer.profile:
             profiles[0] = True
 
         # have final settings return everything (if used in case of V and Q)
@@ -96,7 +95,7 @@ def _train_wrapper(seed: int,
         cProfile.runctx('_trainer.train(settings, return_result=True)',
                         globals(),
                         locals(),
-                        'train_child.prof')
+                        '.profiles/train_child.prof')
         print("train_child profiling")
     result: common.Result = _trainer.train(settings, return_result=True)
     return result

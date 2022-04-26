@@ -31,7 +31,6 @@ class ParallelEpisodes:
         self._trainer.disable_step_callback()
 
         self._settings = self._trainer.settings
-        self._profile_child: bool = False
         # settings.result_parameters.return_cum_timestep = True
         self._parallel_context_type: Optional[common.ParallelContextType] = self._settings.episode_multiprocessing
         self._processes: int = min(os.cpu_count(), self._settings.episodes_per_batch)
@@ -59,7 +58,7 @@ class ParallelEpisodes:
     def do_episode_batch(self, starting_episode: int):
         seeds: list[int] = utils.Rng.get_seeds(number_of_seeds=self._processes)
         profiles: list[bool] = [False for _ in range(self._processes)]
-        if self._profile_child:
+        if self._trainer.profile:
             profiles[0] = True
         episode_counter_starts: list[int] = \
             [starting_episode + x
@@ -153,7 +152,7 @@ _trainer.do_episodes(episode_counter_start=episode_counter_start,
                      result_parameters=result_parameters)""",
                         globals(),
                         locals(),
-                        'do_episodes_child.prof')
+                        '.profiles/do_episodes_child.prof')
         print("do_episodes_child profiling")
     result: common.Result = _trainer.do_episodes(episode_counter_start=episode_counter_start,
                                                  episodes_to_do=episodes_to_do,

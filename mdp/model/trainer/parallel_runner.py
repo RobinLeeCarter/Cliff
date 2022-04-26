@@ -23,7 +23,6 @@ class ParallelRunner:
         self._trainer.disable_step_callback()
 
         self._settings = self._trainer.settings
-        self._profile_child: bool = True
         # settings.result_parameters.return_cum_timestep = True
         self._parallel_context_type: Optional[common.ParallelContextType] = self._settings.runs_multiprocessing
         self._processes: int = os.cpu_count()
@@ -42,7 +41,7 @@ class ParallelRunner:
         result_parameter_list: list[common.ResultParameters] = self._get_result_parameter_list()
         seeds: list[int] = utils.Rng.get_seeds(number_of_seeds=self._runs)
         profiles: list[bool] = [False for _ in range(self._runs)]
-        if self._profile_child:
+        if self._trainer.profile:
             profiles[0] = True
 
         with self._context.Pool(processes=self._processes,
@@ -105,7 +104,7 @@ def _do_run_wrapper(seed: int,
         cProfile.runctx('_trainer.do_run(run_counter, result_parameters)',
                         globals(),
                         locals(),
-                        'do_runs_child.prof')
+                        '.profiles/do_runs_child.prof')
         print("do_runs_child profiling")
     result: common.Result = _trainer.do_run(run_counter, result_parameters)
     return result

@@ -36,6 +36,9 @@ class Comparison(ABC):
     # grid view output
     grid_view_parameters: Optional[GridViewParameters] = None
 
+    # profile
+    profile: bool = False
+
     def __post_init__(self):
         if isinstance(self.breakdown_parameters, BreakdownAlgorithmByAlpha):
             self.settings_list = self.breakdown_parameters.build_settings_list(self.comparison_settings)
