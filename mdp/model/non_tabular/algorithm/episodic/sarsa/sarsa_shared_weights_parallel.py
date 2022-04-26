@@ -63,7 +63,6 @@ class SarsaSharedWeightsParallel(Sarsa, BatchSharedWeights,
             else:
                 # gradient_vector: np.ndarray = self.Q.get_gradient(ag.prev_state, ag.prev_action)
                 delta_w: np.ndarray = alpha_delta * previous_gradient
-                # TODO: fix so weights are unchanged
                 self.Q.update_weights(delta_w)
 
         if not ag.state.is_terminal:

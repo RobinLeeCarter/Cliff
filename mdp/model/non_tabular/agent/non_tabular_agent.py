@@ -106,18 +106,16 @@ class NonTabularAgent(Generic[State, Action], BaseAgent):
         Note that the action is NOT applied yet.
         """
         self.action = self._behaviour_policy[self.state]
-        self._feature_vector = self._get_feature_vector()
+        if self.store_feature_vectors or self.store_feature_trajectories:
+            self._feature_vector = self._get_feature_vector()
         self._store_step()
 
     def _get_feature_vector(self) -> np.ndarray:
-        feature_vector: Optional[np.ndarray]
-        if self.store_feature_vectors or self.store_feature_trajectories:
-            if self._behaviour_policy.has_feature_vector and self._behaviour_policy.feature_vector is not None:
-                feature_vector = self._behaviour_policy.feature_vector
-            else:
-                feature_vector = self._feature[self.state, self.action]
+        feature_vector: np.ndarray
+        if self._behaviour_policy.has_feature_vector and self._behaviour_policy.feature_vector is not None:
+            feature_vector = self._behaviour_policy.feature_vector
         else:
-            feature_vector = None
+            feature_vector = self._feature[self.state, self.action]
         return feature_vector
 
     def _store_step(self):
